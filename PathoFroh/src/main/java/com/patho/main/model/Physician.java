@@ -1,0 +1,243 @@
+package com.patho.main.model;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
+import javax.persistence.Version;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.SelectBeforeUpdate;
+import org.hibernate.envers.Audited;
+
+import com.patho.main.common.ContactRole;
+import com.patho.main.common.Dialog;
+import com.patho.main.model.interfaces.ArchivAble;
+import com.patho.main.model.interfaces.ID;
+import com.patho.main.model.user.HistoUser;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@Entity
+@Audited
+@SelectBeforeUpdate(true)
+@DynamicUpdate(true)
+@SequenceGenerator(name = "physician_sequencegenerator", sequenceName = "physician_sequence")
+@Getter
+@Setter
+@Slf4j
+public class Physician implements Serializable, ArchivAble, ID {
+
+	private static final long serialVersionUID = 7358147861813210904L;
+
+	@Id
+	@GeneratedValue(generator = "physician_sequencegenerator")
+	@Column(unique = true, nullable = false)
+	private long id;
+
+	@Version
+	private long version;
+
+	/**
+	 * clinic internal title
+	 */
+	@Column(columnDefinition = "VARCHAR")
+	private String clinicRole;
+
+	/**
+	 * Number of the employee
+	 */
+	@Column(columnDefinition = "VARCHAR")
+	private String employeeNumber;
+
+	/**
+	 * Loginname of the physician
+	 */
+	@Column(columnDefinition = "VARCHAR")
+	private String uid;
+
+	/**
+	 * List of all contactRoles
+	 */
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Enumerated(EnumType.STRING)
+	@Fetch(value = FetchMode.SUBSELECT)
+	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
+	private Set<ContactRole> associatedRoles;
+
+	/**
+	 * Person data of the physician
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	private Person person;
+
+	/**
+	 * Transitory, if fetched from ldap this variable contains the dn objects name.
+	 */
+	@Transient
+	private String dnObjectName;
+
+	/**
+	 * If true this object is archived
+	 */
+	@Column
+	private boolean archived;
+
+	/**
+	 * On every selection of the physician, this number will be increased. The
+	 * physicians can be ordered according to this value. So often used physicians
+	 * will be displayed first.
+	 */
+	@Column
+	private int priorityCount;
+
+	/**
+	 * Standard constructor for hibernate
+	 */
+	public Physician() {
+	}
+
+	/**
+	 * Constructor with id
+	 * 
+	 * @param id
+	 */
+	public Physician(long id) {
+		this.id = id;
+	}
+
+	/**
+	 * Constructor setting person
+	 * 
+	 * @param person
+	 */
+	public Physician(Person person) {
+		this.person = person;
+	}
+
+	public Set<ContactRole> getAssociatedRoles() {
+		if (associatedRoles == null)
+			associatedRoles = new HashSet<ContactRole>();
+
+		return associatedRoles;
+	}
+
+	/********************************************************
+	 * Transient
+	 ********************************************************/
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Physician && ((Physician) obj).getId() == getId())
+			return true;
+		return super.equals(obj);
+	}
+
+	/**
+	 * Used for gui, can only handle arrays
+	 * 
+	 * @return
+	 */
+	@Transient
+	public ContactRole[] getAssociatedRolesAsArray() {
+		return (ContactRole[]) getAssociatedRoles().toArray(new ContactRole[associatedRoles.size()]);
+	}
+
+	public void setAssociatedRolesAsArray(ContactRole[] associatedRoles) {
+		this.associatedRoles = new HashSet<>(Arrays.asList(associatedRoles));
+	}
+
+	/**
+	 * Returns true if physician has role
+	 * 
+	 * @param role
+	 */
+	@Transient
+	public boolean hasAssociateRole(ContactRole role) {
+		for (ContactRole contactRole : getAssociatedRoles()) {
+			if (contactRole == role)
+				return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns true if no role is associate
+	 * 
+	 * @return
+	 */
+	@Transient
+	public boolean hasNoAssociateRole() {
+		if (getAssociatedRoles().size() == 0)
+			return true;
+		return false;
+	}
+
+	/**
+	 * Returns true if no role is associate
+	 * 
+	 * @return
+	 */
+	@Transient
+	public void addAssociateRole(ContactRole role) {
+		getAssociatedRoles().add(role);
+	}
+
+	@Transient
+	public boolean isClinicEmployee() {
+		return getPerson().getOrganizsations().stream().anyMatch(p -> p.isIntern());
+	}
+
+	/********************************************************
+	 * Transient
+	 ********************************************************/
+
+	/********************************************************
+	 * Interace archive able
+	 ********************************************************/
+	@Override
+	public boolean isArchived() {
+		return archived;
+	}
+
+	@Override
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
+
+	@Override
+	@Transient
+	public String getTextIdentifier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	@Transient
+	public Dialog getArchiveDialog() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/********************************************************
+	 * Interace archive able
+	 ********************************************************/
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.deleteDiagnosisRevisionDialog.headline']}">
+			<f:param
+				value="#{dialog.deleteDiagnosisRevisionDialog.diagnosisRevision.name}" />
+		</h:outputFormat></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+<h:body styleClass="histoDialogStyle">
+	<h:form id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2">
+				<h:outputFormat
+					value="#{msg['dialog.deleteDiagnosisRevisionDialog.headline']}">
+					<f:param
+						value="#{dialog.deleteDiagnosisRevisionDialog.diagnosisRevision.name}" />
+				</h:outputFormat>
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+				<h:outputLabel
+					value="#{msg['dialog.deleteDiagnosisRevisionDialog.text']}"></h:outputLabel>
+			</h:panelGrid>
+
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="right">
+					<p:commandButton value="#{msg['general.delete']}"
+						icon="fa fa-fw fa-trash">
+						<f:actionListener
+							binding="#{dialog.deleteDiagnosisRevisionDialog.deleteAndHide()}" />
+					</p:commandButton>
+
+					<!-- Abort button -->
+					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+						immediate="true" icon="fa fa-times-circle"
+						actionListener="#{dialog.deleteDiagnosisRevisionDialog.hideDialog()}" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+
+
+	</h:form>
+</h:body>
+</html>

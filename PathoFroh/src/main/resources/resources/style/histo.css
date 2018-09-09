@@ -1,0 +1,986 @@
+.tt{padding:0px}
+body {
+	margin: 0px !important;
+	font-size: 0.8em !important;
+}
+
+/************************************* DEFAULT TABLE *************************************/
+/*******************************************/
+/* Default table containter, no padding at all*/
+.defaultListingTableContainer {
+	width: 100%;
+}
+
+.defaultListingTableContainer>tbody>tr>td, .defaultListingTableContainer>tbody>tr,
+	.defaultListingTableContainer>tbody, .defaultListingTableContainer {
+	padding: 0px !important;
+	border-collapse: collapse !important;
+	border: 0px !important;
+	border-spacing: 0px !important;
+}
+/* Default table containter, no padding at all*/
+
+/*******************************************/
+/* Default table container for two spacings*/
+.defaultListingTableTwoLineContainer {
+	width: 100%;
+}
+
+.defaultListingTableTwoLineContainer>tbody>tr>td:nth-child(1),
+	.defaultListingTableTwoLineContainer>tbody>tr>td:nth-child(3) {
+	width: 47%;
+	vertical-align: top !important;
+}
+
+.defaultListingTableTwoLineContainer>tbody>tr>td:nth-child(2) {
+	width: 6%;
+}
+/* Default table container for two spacings*/
+
+/*******************************************/
+/* Default table container for three spacings*/
+.defaultListingTableThreeLineContainer {
+	width: 100%;
+}
+
+.defaultListingTableThreeLineContainer>tbody>tr>td:nth-child(1),
+	.defaultListingTableThreeLineContainer>tbody>tr>td:nth-child(3),
+	.defaultListingTableThreeLineContainer>tbody>tr>td:nth-child(5) {
+	width: 30%;
+	vertical-align: top !important;
+}
+
+.defaultListingTableThreeLineContainer>tbody>tr>td:nth-child(2),
+	.defaultListingTableThreeLineContainer>tbody>tr>td:nth-child(4) {
+	width: 5%;
+}
+/* Default table container for three spacings*/
+
+/*******************************************/
+/* Default table for listing inputfields, one col*/
+.defaultListingTable {
+	width: 100%;
+}
+
+.defaultListingTable td {
+	padding: 3px;
+}
+
+.defaultListingTable .big-text {
+	font-size: 1.2em !important;
+}
+
+.defaultListingTable label {
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+	font-size: 1.0em !important;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 22px;
+}
+/* Default table for listing inputfields, one col*/
+
+/*******************************************/
+/* Default table for listing inputfields, two cols*/
+.defaultListingTableFirstColumEnummeration {
+	width: 100%;
+}
+
+.defaultListingTableFirstColumEnummeration>tbody>tr>td:first-child {
+	min-width: 150px;
+	width: 200px;
+}
+
+.defaultListingTableFirstColumEnummeration>tbody>tr>td:first-child label
+	{
+	font-size: 1.2em !important;
+}
+
+.defaultListingTableFirstColumEnummeration .big-text {
+	font-size: 1.2em !important;
+}
+
+.defaultListingTableFirstColumEnummeration td {
+	padding: 3px !important;
+}
+
+.defaultListingTableFirstColumEnummeration input {
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+	font-size: 1.0em !important;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 22px;
+}
+
+.defaultListingTableFirstColumEnummeration label {
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+	font-size: 1.0em !important;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 22px;
+}
+
+/*******************************************/
+/* Colunm orientation for all */
+.defaultListingTableColumnTop {
+	vertical-align: top;
+	padding-top: 10px !important;
+}
+
+.defaultListingTableColumnAuto {
+	width: auto !important;
+	min-width: auto !important;
+}
+
+.defaultListingTableColumn2 {
+	width: 2% !important;
+	min-width: 2% !important;
+}
+
+.defaultListingTableColumn10 {
+	width: 10% !important;
+	min-width: 10% !important;
+}
+
+.defaultListingTableColumn15 {
+	width: 15% !important;
+	min-width: 15% !important;
+}
+
+.defaultListingTableColumn20 {
+	width: 20%;
+}
+
+.defaultListingTableColumn25 {
+	width: 25%;
+}
+
+.defaultListingTableColumn30 {
+	width: 30%;
+}
+
+.defaultListingTableColumn40 {
+	width: 40%;
+}
+
+.defaultListingTableColumn100px {
+	width: 100px !important;
+	min-width: 100px !important;
+}
+
+.defaultListingTableColumn150px {
+	width: 150px !important;
+	min-width: 150px !important;
+}
+
+/************************************* DEFAULT TABLE *************************************/
+/************************************* Fonts *************************************/
+.bold-text {
+	font-weight: bold;
+}
+
+.standardFont, .standardFont label, .standardFont input {
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+	font-size: 15px !important;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 22px;
+}
+
+.smallFont, .smallFont label, .smallFont input {
+	font-size: 0.8em !important;
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+	font-style: normal;
+	font-variant: normal;
+}
+/************************************* Fonts *************************************/
+/* Auto width for menu on top */
+ul.ui-menu-child {
+	white-space: nowrap;
+	width: 200px !important;
+}
+
+/* Default table for listing inputfields*/
+.noBorders>tr, .noBorders>td, .noBorders {
+	border: none !important;
+}
+
+.noBordersAll tr, .noBordersAll td, .noBordersAll tbody, .noBordersAll {
+	border: none !important;
+}
+
+.collapsedBorders>tr, .collapsedBorders>td, .collapsedBorders {
+	border-collapse: collapse !important;
+}
+
+.collapsedBordersAll tr, .collapsedBordersAll td, .collapsedBordersAll {
+	border-collapse: collapse !important;
+}
+
+.noPaddingAll tr, .noPaddingAll td, .noPaddingAll {
+	padding: 0px !important;
+}
+
+.noPadding>tr, .noPadding>td, .noPadding {
+	padding: 0px !important;
+}
+
+.smallPaddingAll tr, .smallPaddingAll td, .smallPaddingAll {
+	padding: 3px !important;
+}
+
+.smallPaddingVerticalAll tr, .smallPaddingVerticalAll td,
+	.smallPaddingVerticalAll {
+	padding: 3px 0px !important;
+}
+
+.verticalAlignMiddleAll tr, .verticalAlignMiddleAll td,
+	.verticalAlignMiddleAll {
+	vertical-align: middle !important;
+}
+
+.verticalAlignTop>tr, .verticalAlignTop>td, .verticalAlignTop {
+	vertical-align: top !important;
+}
+
+.verticalAlignTopAll tr, .verticalAlignTopAll td, .verticalAlignTopAll {
+	vertical-align: top !important;
+}
+
+.horizontalAlignCenterAll tr, .horizontalAlignCenterAll td,
+	.horizontalAlignCenterAll {
+	text-align: center;
+}
+
+/* Kleiner Knopf */
+.smallButton .ui-button-text {
+	padding-top: 0.2em !important;
+	padding-bottom: 0.2em !important;
+}
+
+.smallInputText {
+	padding: 4px !important;
+	font-size: 12px !important;
+	font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
+	box-shadow: none !important;
+}
+
+/* Kleines InputField */
+.smallInput .ui-inputfield {
+	padding: 2px 7px !important;
+}
+
+/* Kleines InputField */
+.smallSpinner.ui-inputfield {
+	padding: 2px 22px 2px 5px !important;
+}
+
+.smallCheckbox {
+	padding-top: 4px;
+	height: 16px !important;
+}
+
+.icon-green {
+	color: green;
+}
+
+.icon-purple {
+	color: purple;
+}
+
+.icon-orange {
+	color: orange;
+}
+
+.icon-grey {
+	color: #555555;
+}
+
+.icon-red {
+	color: red;
+}
+
+/* Highlighted datatable, even rows background is different, hover and selected is different*/
+.highlightedDataTable  tr.ui-datatable-odd>td {
+	background-color: #f2f2f2;
+}
+
+.highlightedDataTable tr.ui-state-highlight>td {
+	background-color: #fcf1b8;
+}
+
+.highlightedDataTable tr.ui-state-highlight>td label {
+	font-weight: bold !important;
+}
+
+.highlightedDataTable tr.ui-state-hover>td {
+	background-color: #fcf1b8;
+}
+
+.noUnderlineAtLink {
+	text-decoration: none !important;
+}
+
+.noUnderlineAtLink:hover {
+	font-weight: bold;
+}
+
+/* hides the header of a p:datatable */
+.hide-column-names table thead tr {
+	display: none;
+}
+/* hides the tbody border of a p:datatable */
+.hide-tbody-borer tbody {
+	border: none !important;
+}
+
+.smallCalendarInput input {
+	width: 150px !important;
+}
+
+.buttonLeftMarginInList {
+	margin-left: 0.5em !important;
+}
+
+.buttonRighMarginInList {
+	margin-right: 0.5em !important;
+}
+
+.buttonRighMarginInListExtended {
+	margin-right: 1em !important;
+}
+
+/* style of the input field of an onSelect primefaces element */
+.customSerachSelectMenu .ui-inputfield {
+	padding: 2px 7px;
+}
+
+/* style of the popup menu*/
+.customSerachSelectMenuPanel {
+	padding: 0px;
+}
+
+/* style of the popup menu*/
+.customSerachSelectMenuPanel .ui-selectonemenu-filter {
+	width: 77% !important;
+	padding: 3px 7px;
+}
+
+/* removes the box shadow from SelectCheckboxMenu*/
+.customSelectCheckboxMenu .ui-inputfield {
+	box-shadow: none;
+}
+
+/* workaround for quick contacts, menu is displayed above button*/
+.customSelectCheckboxMenuContactDialogPannel {
+	bottom: 35px !important;
+	top: auto !important;
+}
+
+/* width of splitButtons*/
+.customSplitButton {
+	width: 300px !important;
+}
+
+/* Overwrites chkbox for vertical middle align, used in settings dialog */
+.ui-chkbox {
+	vertical-align: 0px !important;
+}
+
+/* Small Datalist  */
+.smallDataList div {
+	border: none;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+.smallDataList .ui-datalist-content {
+	background: none;
+}
+
+.smallDataList .ui-datalist-data {
+	margin: 0px;
+}
+
+/* Small Datatable columns */
+.smallDatatable td {
+	padding: 1px 6px !important;
+}
+
+/* Line break for \r\n */
+.preformatted {
+	white-space: pre-wrap;
+}
+
+.customBackground .ui-inputfield {
+	background: inherit !important;
+	color: inherit !important;
+}
+
+.animatedProgress .ui-progressbar-value {
+	background-image: url("gfx/progress.gif");
+}
+
+.defaultOverlayPanel>div {
+	padding: 4px !important;
+}
+
+.selectOverlayPanel .ui-datatable .ui-column-filter {
+	width: 95% !important;
+	padding: 4px !important;
+	font-size: 12px !important;
+	font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
+	box-shadow: none !important;
+	font-style: normal !important;
+	font-variant: normal !important;
+}
+/*
+	######################################## Header ########################################
+*/
+/* Style of the header submenu*/
+.headerSubMenuStyle {
+	width: 200px !important;
+}
+/*
+	######################################## Header ########################################
+*/
+/*
+	######################################## Navigatoin ########################################
+*/
+.navigation {
+	padding: 0px !important;
+}
+
+/* Search container */
+.navigation .searchContainer {
+	width: 100%;
+	text-align: center;
+	background: #e6e6e6
+		url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness")
+		50% 50% repeat-x;
+}
+
+/* Search field in search container */
+.navigation .searchContainer .seachFiled {
+	width: 95%;
+	margin: 3px 0px 3px 3px;
+}
+
+/*
+	navigation Table
+*/
+.navigationDataTable .contentTable td {
+	border: 0px !important;
+	padding: 2px 0px !important;
+}
+
+.navigationDataTable .contentTable tr {
+	background: none;
+}
+
+/*
+	navigation Table
+*/
+.navigationDataTable th, .navigationDataTable  td {
+	padding: 4px 14px !important;
+}
+
+/*
+	navigation Table hover
+*/
+.navigationDataTable .ui-state-hover {
+	background: #e6e6e6 !important;
+}
+
+.navigationDataTable .contentTable .info {
+	font-size: 0.7em;
+}
+
+.navigationDataTable .ui-datatable-scrollable-theadclone {
+	display: none;
+}
+
+/* hiding unnecessary header background*/
+.navigationDataTable .ui-datatable-scrollable-header {
+	background: none !important;
+}
+
+/*
+	######################################## Navigatoin ########################################
+*/
+
+/*
+	######################################## Content ########################################
+*/
+.content {
+	padding: 0px !important;
+}
+
+/*
+	################# Header #################
+*/
+/* Padding for header Layout */
+.content .header {
+	height: 33px;
+	padding: 0px !important;
+	background: #e6e6e6
+		url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness")
+		50% 50% repeat-x;
+}
+
+/* Distance between buttons in header */
+.content .header .buttonMarginLeft {
+	margin-left: 10px
+}
+
+.content .header .headerRight {
+	float: right;
+}
+/*
+	################# Header #################
+*/
+
+/*
+	################# Body #################
+*/
+/* Body no padding */
+.content .body {
+	padding: 0px !important;
+	height: calc( 100vh - 33px ) !important;
+}
+
+/* contentHolder settings*/
+.content .body .contentHolder {
+	padding: 0px;
+	border: none;
+	border-collapse: collapse;
+}
+
+/* 	################# Body ################# */
+
+/* ################# Stainings ################# */
+
+/* TabView f�r Diangosen und Objektr�ger */
+.content .body .tabView .ui-tabs-panel {
+	padding: 2px 0px;
+}
+
+/* Tabelle f�r F�rbungen */
+.stainingTable {
+	width: 100%;
+	border-collapse: collapse !important;
+	border-spacing: 0px;
+}
+
+.stainingTable tbody {
+	border: none !important;
+}
+
+/* BorderRadius f�r header Zeile in F�rbungstabelle */
+.stainingTable thead tr th:first-child {
+	border-radius: 3px 0px 0px 3px;
+}
+
+.stainingTable thead tr th:last-child {
+	border-radius: 0px 3px 3px 0px;
+}
+
+/* Alle R�nder f�r die F�rbungstabelle entfernen*/
+.stainingTable  td, .stainingTable tr {
+	border-collapse: collapse !important;
+	border: none !important;
+	border-spacing: 0px !important;
+}
+
+/* Gr��e des Auftragsfeldes */
+.stainingTable .columnSample {
+	width: 12%;
+}
+
+/* Gr��e des Blockfeldes*/
+.stainingTable .columnBlock {
+	width: 12%;
+}
+
+/* Gr��e des Choosefeldes*/
+.stainingTable .columnChoose {
+	width: 3%;
+	padding: 2px 5px;
+}
+
+/* Gr��e des Objekttr�gerfeldes*/
+.stainingTable .columnStainingID {
+	width: 19%;
+}
+
+.stainingTable .columnCommentary {
+	width: auto%;
+}
+
+/* Gr��e des F�rbungsfeldes*/
+.stainingTable .columnStaining {
+	width: 8%;
+}
+
+/* Gr��e des Statusfeldes*/
+.stainingTable .columnStatus {
+	width: 9%;
+	text-align: center;
+}
+
+/* Gr��e des Optionenfeldes*/
+.stainingTable .columnOptions {
+	width: 10%;
+}
+
+/* Alle Unterstriche bei links interhalb der F�rbungstabelle entfernen*/
+.stainingTable a:-webkit-any-link {
+	text-decoration: none !important;
+}
+
+/* Highlighted datatable, even rows background is different, hover and selected is different*/
+.stainingTable  .datatable-odd {
+	background-color: #f2f2f2;
+}
+
+/* Gr��e der inplaceInput Felder*/
+.content .body   .inplaceInput .ui-inputfield {
+	padding: 0px 0px 0px 5px;
+	width: 60% !important;
+	border-radius: 0px !important;
+}
+
+.content .body   .inplaceInput .ui-inplace-display {
+	min-width: 20px !important;
+	background: black;
+	display: block;
+}
+
+.content .body   .inplaceInput .ui-inputfield.ui-state-focus {
+	box-shadow: none !important;
+	border-radius: 0px !important;
+}
+
+/*	################# Stainings ################# */
+
+/* ######################################## Content ######################################## */
+
+/*	######################################## Dialog ######################################## */
+
+
+/*	################# Default Dialog ################# */
+/* newest Dialog */
+.defaultDialogLayout {
+	padding: 1em 1em 1em 1em !important;
+}
+
+.defaultDialogLayout .dialogHeader {
+	font-size: 20px;
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+}
+
+.defaultDialogLayout .dialogHeader a:-webkit-any-link {
+	color: #555555;
+	font-size: 15px;
+}
+
+.defaultDialogLayout .dialogContent {
+	font-size: 15px !important;
+	padding-bottom: 0.5em;
+}
+
+.defaultDialogLayout .buttonContainer {
+	position: absolute !important;
+	bottom: 0.5em !important;
+	vertical-align: bottom !important;
+}
+
+/* Dialog header */
+.defaulDilaogHeaderDivWithBackground {
+	padding: 8px 10px;
+	color: black;
+	font-weight: bold;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 1.1em;
+	background: #cccccc
+		url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness)
+		50% 50% repeat-x;
+}
+
+.defaulDilaogHeaderDivWithBackground,
+	.defaulDilaogHeaderDivWithBackground a:-webkit-any-link {
+	color: #555555;
+	font-size: 15px;
+}
+
+/*	################# Default Dialog ################# */
+
+/*	################# BigDialog ################# */
+/* contacts.xhtml */
+/* Layout for big dialogs*/
+.bigDialog {
+	padding: 0px !important;
+	border: 0px !important;
+}
+
+.bigDialog .buttonContainer {
+	width: 1023px !important;
+}
+
+.bigDialog  .contentDiv {
+	height: 540px;
+}
+
+/*	################# BigDialog ################# */
+
+/*	################# infoDialog ################# */
+/* notification_already_performed.xhtml
+/* Layout for all info dialogs*/
+.infoDialog {
+	padding: 0px !important;
+	border: 0px !important;
+	overflow: hidden;
+}
+
+.infoDialog .buttonContainer {
+	width: 100%;
+}
+
+.infoDialog  .contentDiv {
+	height: 200px;
+	padding: 5px;
+}
+
+.infoDialog .infoTable {
+	width: 100%;
+}
+
+.infoDialog .infoTable .textColumn {
+	width: 150px;
+	padding-left: 10px !important;
+}
+
+/*	################# infoDialog ################# */
+
+/*	################# Settings ################# */
+/* Settings Dialog*/
+.settingsDialogLayout {
+	padding: 0px !important;
+	margin: 0px !important;
+	overflow-x: hidden;
+}
+
+/* Layout in the tabview center tab*/
+.settingsDialogLayout .settingsPannel .settingsTabView .tabLayout {
+	height: 555px;
+	width: 100%
+}
+
+/* Settings Pannel + tab view */
+.settingsDialogLayout .settingsPannel, .settingsDialogLayout .settingsPannel .ui-panel-content,
+	.settingsDialogLayout  .settingsPannel .ui-widget-content {
+	padding: 0px !important;
+	border: 0px !important;
+	border-collapse: collapse;
+}
+
+/* Settings tab view hight + width*/
+.settingsDialogLayout .settingsPannel .settingsTabView {
+	width: 100%;
+	height: 564px;
+}
+
+/* Layout in the tabview center tab, center div*/
+.settingsDialogLayout .settingsPannel .contentDiv {
+	padding: 1px 1px 1px 0px !important;
+	height: 530px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+/* Layout in the tabview center tab, bottom div*/
+.settingsDialogLayout .settingsPannel .bottomDiv {
+	padding: 1px 1px 1px 0px !important;
+	height: 35px;
+	position: absolute !important;
+	bottom: 1px !important;
+	vertical-align: bottom !important;
+	width: 787px;
+}
+
+/* Background Color tab view on the left sinde */
+.settingsDialogLayout .settingsPannel .settingsTabView .ui-tabs-nav {
+	background: none;
+	width: 22% !important;
+}
+
+/* Tabs on the left side style */
+.settingsDialogLayout .settingsPannel .settingsTabView .ui-tabs-nav li {
+	border: 1px solid #a8a8a8;
+	border-radius: 3px;
+	float: left;
+	width: 100%;
+	margin-left: 1px !important;
+}
+
+/* withd of the tab content on the right*/
+.settingsDialogLayout .settingsPannel .settingsTabView .ui-tabs-panels {
+	width: 77% !important;
+	min-width: 780px;
+}
+
+/* Content Pannel on the right side, header style*/
+.settingsDialogLayout .settingsPannel .settingsTabView .ui-tabs-panels .contentPannel .ui-widget-header
+	{
+	padding: 4px 0px 4px 10px !important;
+	font-weight: bold !important;
+	color: #4f4f4f !important;
+	text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.7) !important;
+	margin-bottom: 1px;
+}
+
+/* Log View : Datatable on the right */
+.settingsDialogLayout .settingsPannel .settingsTabView .ui-tabs-panels .historyDataTable
+	{
+	width: 100%;
+	font-size: 0.8em !important;
+}
+
+/*	################# Settings ################# */
+
+/*	################# Contact ################# */
+/* Layout f�r den ContactSelect Datatable */
+.contactDataTable {
+	width: 100%;
+}
+
+/* UL f�r Auflistung der standardrolle*/
+.contactDataTable .roleList {
+	padding-left: 20px !important;
+	margin: 0px !important;
+}
+
+/* jede zweite zeile mit einem anderen Hintergrund */
+.contactDataTable tr:nth-child(even) td {
+	background-color: #f9f9f9;
+}
+
+.contactDataTable td:nth-child(1), .contactDataTable th:nth-child(1) {
+	width: auto !important;
+}
+
+.contactDataTable td:nth-child(2), .contactDataTable th:nth-child(2) {
+	width: 250px !important;
+}
+
+.contactDataTable td:nth-child(3), .contactDataTable th:nth-child(3) {
+	width: 250px !important;
+}
+
+.contactDataTable td:nth-child(4), .contactDataTable th:nth-child(4) {
+	width: 20px !important;
+}
+
+.contactDataTable td:nth-child(5), .contactDataTable th:nth-child(5) {
+	width: 20px !important;
+}
+
+.contactDataTable td:nth-child(6), .contactDataTable th:nth-child(6) {
+	width: 20px !important;
+}
+/*	################# Contact ################# */
+
+/*	################# print dialog ################# */
+.miniSpinner {
+	width: 32px;
+}
+
+.miniSpinner .ui-spinner-input {
+	padding: 2px 2px 2px 2px !important;
+	width: 10px;
+}
+/*	################# print dialog ################# */
+
+/*	################# addPatient dialog ################# */
+
+/*
+	Style for Form Table
+*/
+/* Table containing the search fiedls*/
+.patientSearchTable {
+	margin-top: 5px;
+	margin-bottom: 5px
+}
+
+.patientSearchTable tr, .patientSearchTable td {
+	border: none !important;
+}
+
+/* Table containing serach field, category column */
+.patientSearchTable .categoryColum {
+	vertical-align: top;
+	padding-top: 5px !important;
+	width: 100px;
+}
+
+/* Table containing the inputfields */
+.patientSearchTable .inputTable tr, .patientSearchTable .inputTable td {
+	border: none !important;
+}
+
+.patientSearchTable .inputTable td {
+	padding: 0px !important;
+	padding-left: 10px;
+	font-family: Arial, sans-serif;
+	font-size: 0.8em !important;
+	font-style: italic;
+}
+
+/*	################# addPatient dialog ################# */
+
+/*	################# create Task dialog ################# */
+.taskSpinner .ui-spinner-input {
+	padding: 2px 20px 2px 7px !important;
+	width: 60px;
+}
+
+/*	################# create Task dialog ################# */
+
+/*	################# council dialog ################# */
+.councilDialog .ui-g-3 {
+	padding: 0px;
+}
+
+.councilDialog .customCouncilTable td {
+	padding: 2px 0px 2px 0px !important;
+	background-color: inherit !important;
+}
+
+/*	################# council dialog ################# */
+
+/*	######################################## Dialog ######################################## */
+.truncate {
+	max-width: 160px;
+	width: 160 px\9;
+}
+
+.truncate>div {
+	width: 160 px\9;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	-ms-text-overflow: ellipsis;
+	display: block;
+	position: absolute;
+}
+
+//
+Css
+.test.ui-selectcheckboxmenu-panel {
+	position: relative;
+	bottom: 0px !important;
+}

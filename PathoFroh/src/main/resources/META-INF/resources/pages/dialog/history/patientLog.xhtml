@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.addSlide.Headline']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+
+<h:body styleClass="histoDialogStyle">
+
+	<h:form id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.createTask.Headline']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+			<p:dataTable var="log" styleClass="defaultHistoDataTable"
+				scrollable="true" scrollHeight="510"
+				value="#{dialog.patientLogDialog.patientLog}"
+				resizableColumns="false">
+				<p:column headerText="ID" style="width:50px;text-align:center">
+					<h:outputLabel value="#{log.id}"></h:outputLabel>
+				</p:column>
+				<p:column headerText="Datum" style="width:100px;text-align:center">
+					<h:outputLabel value="#{log.timestamp}"></h:outputLabel>
+				</p:column>
+				<p:column headerText="Benutzer" style="width:100px;">
+					<h:outputLabel value="#{log.logInfo.histoUser.username}"></h:outputLabel>
+				</p:column>
+				<p:column headerText="Aktion">
+					<h:outputLabel value="#{log.logInfo.logString}"></h:outputLabel>
+				</p:column>
+			</p:dataTable>
+		</div>
+
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" styleClass="right">
+					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
+						icon="fa fa-times-circle"
+						actionListener="#{dialog.patientLogDialog.hideDialog()}" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

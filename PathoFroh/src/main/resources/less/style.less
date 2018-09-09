@@ -1,0 +1,828 @@
+@import "common.less";
+
+// style for a normal table with colored rows
+// .defaultHistoTable , columnWidth , columnWidthPercent
+
+// Default container with no horizontal padding
+// .defaultHistoHiddenTableContainer
+
+// Invisible container with normal horizontal td padding
+// .listingHistoHiddenTableContainer
+
+// default scroll data table layout
+// .defaultHistoDataTable 
+
+// big scroll data table layout without border
+// .bigHistoDataTable 
+
+// data table with no automatic background color
+// .noBackgroundHistoDataTable 
+	
+// separator
+// defaultHistoSeperatorTable
+/*
+ * Default Body Style
+ */
+
+
+body {
+	margin: 0px !important;
+	.histo_font();
+	overflow-x: hidden;
+	overflow-y: hidden;
+	
+	// bold big font
+	.bigFont {
+		.histo_font();
+		font-weight: bold ! important;
+	}
+	
+	/**
+	 * Default Button, fixing the fontsize
+	 */
+	button {
+		.ui-button-icon-left{
+			font-size:14px;
+		}
+		
+		.ui-button-text {
+			padding-top: 2px !important;
+			padding-bottom: 2px !important;
+		}
+		
+		.histo_font(12px);
+		padding-top: 1px !important;
+		padding-bottom: 1px !important;
+	}
+	
+	/**
+	 * Smaller radio button
+	 */
+	.ui-radiobutton {
+		padding: 4px !important;
+		.ui-radiobutton-box{
+			width:12px;
+			height:12px;
+			.ui-radiobutton-icon{
+				margin: -2px 0px 0px -1px;
+			}
+		}
+	}
+	
+	/**
+	 * small input field
+	 */
+	.ui-inputfield {
+		box-shadow: none !important;
+		padding: 4px !important;
+		.histo_font();
+	}	
+	
+	// generating icon colors, icon-green
+	.generate-incon-colors(@icon-names,@icon-colors,@icon-length);
+	
+	// smaller checkbox
+	.ui-chkbox-box {
+		width: 13px !important;
+		height: 13px !important;
+		
+		.ui-chkbox-icon{
+			width: 13px !important;
+			height: 13px !important;
+			margin: -2px 0px 0px -1px;
+		}
+			
+	}
+	
+	/* style of the input field of an onSelect primefaces element */
+	.searchSelectMenu .ui-inputfield {
+		padding: 2px 7px;
+	}
+
+	/* style of the popup menu*/
+	.searchSelectMenuPanel {
+		padding: 0px;
+		.ui-selectonemenu-filter {
+			width: 77% !important;
+			padding: 3px 7px;
+		}
+	}
+
+	// growl position at the botton left
+	.ui-growl {   
+	    position:fixed;
+	    top: 60px;
+	    right: 10px;
+	    width: 360px;
+	    height: 110px;
+	    z-index:9999; 
+	}
+	
+	/* Title bar for dialogues */
+	.ui-dialog-titlebar {
+		display: none !important;
+	}
+
+	.tieredMenuOptions{
+		t-index:1000;
+	}
+
+	// no underline for links	
+	a {
+		text-decoration: none ! important;
+	}
+	
+	// custom background marker 
+	.customBackground .ui-inputfield {
+		background: inherit !important;
+		color: inherit !important;
+	}
+	
+	/* Padding for overlay pannel in views */
+	.histoOverlayPanel>div {
+		padding: 2px !important;
+	}
+	
+	/* style of the popup SelectOneMenu*/
+	.iconFixForSelectOneMenu {
+		padding: 0px;
+		
+		/* style of the popup menu*/
+		.ui-selectonemenu-filter {
+			width: 77% !important;
+			padding: 3px 7px;
+		}
+	}
+	
+	/* style of the popup menu*/
+	.ui-selectonemenu-panel{
+		padding: 0px;
+		/* style of the popup menu*/
+		.ui-selectonemenu-filter {
+			width: 77% !important;
+			padding: 3px 7px;
+		}
+	}
+	
+	// fix for width of child splitbuttons
+	.ui-splitbuttonmenu{
+		.ui-menuitem-link{
+			width:100% !important;	
+		}		
+	}
+	
+	// width for menu in the right upper corner
+	ul.ui-menu-child{
+	    white-space: nowrap;
+	     width: 175px !important;
+	}
+	
+	.customEvenRowBackground{
+		background-color: @alternate_row_background_color;
+	}
+}
+
+
+
+
+
+/*
+ * Class for normal table with scrollable body
+ */
+.dynamicScrollTable (@colorRow: true) {
+	width: 100%;
+	thead {
+		display: block;
+		padding: 0px ! important;
+		td {
+			border: 1px solid #d3d3d3;
+			background: #e6e6e6 url(/Histo2016/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x;
+		}
+
+		td , label {
+			font-size: 14px;
+			font-weight: normal;
+			color: @header_text_color ! important;
+		}
+	}
+
+	tbody {
+		padding: 0px ! important;
+		display: block;
+		overflow-y: auto;
+		overflow-x: hidden;
+		& when (@colorRow=true) {
+			tr:nth-child(even) td {
+				background-color: @alternate_row_background_color;
+			}
+		}
+
+		tr , td {
+			border-width: 0px ! important;
+			border-spacing: 0px;
+		}
+
+		.headline {
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		tr.alternate_row_background td {
+			background-color: @alternate_row_background_color;
+		}
+	}
+
+	tr {
+		width: 100%;
+		display: table;
+	}
+
+	th , td , label {
+		padding: 4px ! important;
+		.histo_font();
+	}
+
+	.ui-inputfield {
+		box-shadow: none;
+	}
+}
+
+// style for a normal table with colored rows
+.defaultHistoTable{
+	.histoTable (true);
+}
+
+/*
+ * Class for a normal table layout
+ */
+.histoTable(@colorRow: true){
+	border: none !important;
+	border-spacing: 0px !important;
+	width: 100% !important;
+	table-layout: auto !important;
+	
+	>tbody{
+		>tr>td{
+				border: none !important;
+				width: auto;
+				white-space: normal;
+		}
+		
+		& when (@colorRow=true) {
+			>tr.even>td {
+				border: 1px solid transparent;
+				background-color: @alternate_row_background_color;
+			}
+		}
+	}
+	
+	th, td {
+		padding: 3px 4px;
+		.histo_font();
+	}
+	
+	// columnWidths of table px
+	.column_width(10,"columnWidth",25,"px");
+	
+	// columnWidths of table percent
+	.column_width(20,"columnWidthPercent",5,"%");
+	
+	// common table classes include
+	.tableCommonClasses();
+}
+
+/**
+ * Default container with no horizontal padding
+ */
+.defaultHistoHiddenTableContainer{
+	.histoHiddenTableContainer (false);
+}
+
+/**
+ * Invisible container with normal horizontal td padding
+ */
+.listingHistoHiddenTableContainer{
+	.histoHiddenTableContainer (true);
+}
+
+/**
+ * Table with no spacing. Should contain defaultHistoTables
+ */
+.histoHiddenTableContainer(@horizontalPadding: false){
+	
+	padding: 0px !important;
+	border-collapse: collapse !important;
+	border: 0px !important;
+	border-spacing: 0px !important;
+	width: auto;
+	
+	>tbody>tr>td, >tbody>tr, >tbody{
+		border-collapse: collapse !important;
+		border: 0px !important;
+		border-spacing: 0px !important;
+		
+		& when (@horizontalPadding=true) {
+			padding: 0px 3px !important;
+		}
+		
+		& when (@horizontalPadding=false) {
+			padding: 0px !important;
+		}
+	}
+	
+	& when (@horizontalPadding=true) {
+		>tbody>tr>td:first-child{
+			padding-left:0px !important;
+		}
+	}
+
+	// columnWidths of table px
+	.column_width(10,"columnWidth",25,"px");
+	
+	// columnWidths of table percent
+	.column_width(20,"columnWidthPercent",5,"%");
+	
+	// common table classes include
+	.tableCommonClasses();
+} 
+
+/*
+ * Separator for dialogs 
+ *
+ *	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+ *		<p:separator />
+ *	</h:panelGrid>
+ */
+.defaultHistoSeperatorTable{
+	width: 100%;
+	label {
+		.histo_font(14);
+		font-weight: bold !important;
+		color: #555555;
+	}
+	
+	hr{
+		width: 100%;
+	}
+}
+
+
+// default scroll data table layout
+.defaultHistoDataTable {
+	.histoDataTable (true, true);
+}
+
+// big scroll data table layout without border
+.bigHistoDataTable {
+	.histoDataTable (true, false);
+}
+
+// data table with no automatic background color
+.noBackgroundHistoDataTable {
+	.histoDataTable (false, true);
+}
+
+
+/* 
+ * scroll data table layout
+ * and normal data table
+ * scroll has to be used with sync length javascript
+ */
+.histoDataTable(@colorRow: true, @border: true){
+	width: 100%;
+	white-space: normal;
+	
+	// header
+	.ui-datatable-scrollable-header{
+		table{
+			thead{
+				tr{
+					width:100%;
+				
+					th, td{
+						padding: @defualt_padding;
+						.histo_font();					
+					}
+				}
+			}
+		}
+	}
+	
+	// body
+	.ui-datatable-scrollable-body{
+		& when (@border=true) {
+			border-bottom: 1px solid rgb(211, 211, 211) !important;
+			border-left: 1px solid rgb(211, 211, 211) !important;
+			border-right: 1px solid rgb(211, 211, 211) !important;
+		}
+
+		table{
+			
+			border-right: none !important;
+			border-left: 0px !important;
+				
+			// hide header
+			thead{
+				display: none;
+			}
+		
+			// body style
+			tbody{
+				border-right: none !important;
+				border-left: 0px !important;
+				
+				tr{
+					width:100%;
+					border-left: 0px !important;
+					border-right: none !important;
+					
+					td{
+						border: 1px solid transparent;
+						border-spacing: 0px 1px;
+					}
+					
+					td:first-child{
+						border-left: 0px !important;
+					}
+					
+					td:last-child{
+						border-right: none !important;
+					}
+					
+					// manual background color
+					td.manual-column-color {
+						border: 1px solid transparent;
+						background-color: @alternate_row_background_color;
+					}
+					
+				}
+				
+				& when (@colorRow=true) {
+					tr.ui-datatable-even>td {
+						border: 1px solid transparent;
+						background-color: @alternate_row_background_color;
+					}
+				}
+				
+				// highlighted 
+				tr.ui-state-highlight {
+					border: 1px solid transparent;
+					td, label{
+						border: 1px solid transparent;
+						background-color: @highlighted_row_background !important;
+						font-weight: bold !important;
+					}
+				}
+				
+				// hover display
+				tr.ui-state-hover{
+					border: 1px solid transparent;
+					td, label{
+						border: 1px solid transparent;
+						background-color: @highlighted_row_background !important;
+					}
+				}
+				
+			}
+			
+			// font style
+			th , td , label {
+				padding: @defualt_padding;
+				.histo_font();
+			}
+			
+			.ui-inputfield {
+				box-shadow: none;
+			}
+		
+		}
+	}
+	
+	// normal datatable
+	.ui-datatable-tablewrapper{
+		
+		table{
+			thead{
+				tr{
+					width:100%;
+				
+					th, td{
+						padding: @defualt_padding;
+						.histo_font();					
+					}
+				}
+			}
+			
+			// body style
+			tbody{
+				border-right: none !important;
+				border-left: 0px !important;
+				
+				tr{
+					width:100%;
+					border-left: 0px !important;
+					border-right: none !important;
+					
+					td{
+						border: 1px solid transparent;
+						border-spacing: 0px 1px;
+					}
+					
+					td:first-child{
+						border-left: 0px !important;
+					}
+					
+					td:last-child{
+						border-right: none !important;
+					}
+					
+					// manual background color
+					td.manual-column-color {
+						border: 1px solid transparent;
+						background-color: @alternate_row_background_color;
+					}
+					
+				}
+				
+				// auto background color
+				& when (@colorRow=true) {
+					tr.ui-datatable-even>td {
+						border: 1px solid transparent;
+						background-color: @alternate_row_background_color;
+					}
+				}
+				
+				// highlighted 
+				tr.ui-state-highlight {
+					border: 1px solid transparent;
+					td, label{
+						border: 1px solid transparent;
+						background-color: @highlighted_row_background !important;
+						font-weight: bold !important;
+					}
+				}
+				
+				// hover display
+				tr.ui-state-hover{
+					border: 1px solid transparent;
+					td, label{
+						border: 1px solid transparent;
+						background-color: @highlighted_row_background !important;
+					}
+				}
+				
+				// font style
+				th , td , label {
+					padding: @defualt_padding;
+					.histo_font();
+				}
+		
+				th.icon , td.icon {
+					padding-left: 2px;
+				}
+			
+				.ui-inputfield {
+					box-shadow: none;
+				}
+			}
+		}
+	}
+
+	// columnWidths of table px
+	.column_width(10,"columnWidth",25,"px");
+		
+	// no link color for table
+	a {
+		text-decoration: none !important;
+	}
+
+	// hiding focus 
+	:focus {
+    	outline:none !important;
+	}
+}
+
+div.contentSpaceContainer {
+	padding: 4px ! important;
+	.histo_font();	
+}
+
+table.contentSpaceContainer {
+	border: none;
+	border-spacing: 0px;
+	width: 100%;
+	table-layout: auto ! important;
+	tbody > tr > td {
+		border: none ! important;
+		border-spacing: 0px ! important;
+		width: auto;
+		white-space: nowrap;
+	}
+
+	tbody > tr > td > label , tbody > tr > td {
+		padding: 4px ! important;
+		.histo_font();	
+	}
+
+	> tbody .headline {
+		font-size: 14px ! important;
+		font-weight: bold;
+	}
+}
+
+/* Accordion style */
+div.contentAccordionPannel{
+	
+	// header
+	div.ui-accordion-header{
+		padding-top: 2px;
+		padding-bottom: 2px;
+		border: 1px solid #d3d3d3;
+		border-radius: 0px !important;
+	}
+	
+	// selected header background
+	div.ui-accordion-header.ui-state-active{
+		background: #e6e6e6 url(/Histo2016/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x !important;
+    	font-weight: normal;
+    	color: #555555;
+	}
+	
+	// body padding
+	div.ui-accordion-content{
+		padding: 0px;
+		
+		> table{ 
+			> tbody > tr, > tbody > tr > td {
+				padding: 0px ;
+				border: none ;
+				border-spacing: 0px ;
+				border-collapse: collapse;
+			}
+		}
+	}
+	
+	// hiding focus 
+	:focus {
+    	outline:none !important;
+	}
+}
+
+/*
+ * Dialog Sytle
+ */
+.histoDialogStyle{
+	padding: 0px !important;
+	border: 0px !important;
+	overflow: hidden;
+	height: 100vh;
+	position: relative;
+	
+	div.dialogHeader{
+		padding: 2px 5px;
+		font-weight: bold;
+		background: #cccccc url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness)	50% 50% repeat-x;
+		color: #555555;
+		.histo_font(14px);	
+		
+		a:-webkit-any-link{
+			color: #555555;
+			font-size: 15px;
+		}
+	}
+	
+	div.dialogContent{
+		padding: 4px 2px 2px 2px;
+		padding-bottom: 0.5em;
+		height: calc(100vh - 73px);
+		width: clac(100% - 4px);
+	}
+	
+	.dialogCommonClasses;
+}
+
+/**
+ * Style for tab dialog
+ */
+.histoTabDialogStyle{
+	padding: 0px !important;
+	border: 0px !important;
+	overflow: hidden;
+	height: 100vh;
+	
+	.dialogHeader{
+		padding: 2px 5px;
+		font-weight: bold;
+		background: #cccccc url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness)	50% 50% repeat-x;
+		color: #555555;
+		.histo_font(14px);	
+		
+		a:-webkit-any-link{
+			color: #555555;
+			font-size: 15px;
+		}
+	}
+	
+	.dialogContainer{
+		width: 100%;
+		height: calc(100vh - 33px);
+		.histo_noPadding();
+		
+		// columns 1 +2
+		>tbody>tr{
+			
+			>td:nth-child(1){
+				width: 200px;
+				.histo_noPadding();
+				vertical-align: top;
+			}
+			
+			>td:nth-child(2){
+				.histo_noPadding();
+				vertical-align: top;
+			}
+		}
+		
+		// navigation table
+		.navigationTable {
+			width: 97%;
+			
+			button:first-of-type {
+				margin-top: 1px !important;
+			}
+			
+			button {
+				border: 1px solid #a8a8a8;
+				border-radius: 3px;
+				width: calc(100% - 1px);
+				margin-left: 1px;
+				border-bottom-left-radius: 0px;
+				border-top-left-radius: 0px;
+				
+				&.childButton {
+					margin-left: 20px;
+					width: calc(100% - 20px);
+				}
+				
+				&:focus {
+					outline: none !important;
+				}
+				
+				&.selectedButton {
+					background: #ffffff !important;
+				}
+				span {
+					float: left;
+				}
+			}
+		}
+		
+		// content
+		.dialogContent {
+			height: ~"calc(100vh - 27px)";
+			width: 100%;
+			overflow-x: hidden;
+			overflow-y: auto;
+			position: relative;
+			
+			.headerPannel {
+				padding: 2px 5px;
+				font-weight: bold;
+				background: #cccccc url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness)	50% 50% repeat-x;
+				color: #555555;
+				margin-top: 1px;
+				.histo_font(14px);	
+				
+				a:-webkit-any-link{
+					color: #555555;
+					font-size: 15px;
+				}
+		
+				display: block;
+				width: ~"calc(100% - 12px)";
+				border: 1px solid #a8a8a8;
+				border-radius: 3px;
+				margin-bottom: 2px;
+			}
+			
+			.bodyPannel {
+				width: ~"calc(100% - 5px)";
+				display: block;
+			}
+			
+			.bodyPannelFull {
+				width: 100%;
+				display: block;
+			}
+			
+			.bodyPannelScroll {
+				width: 100%;
+				height: ~"calc(100vh - 110px)";
+				display: block;
+				overflow-y: scroll;
+			}
+			
+			.dialogCommonClasses;
+		}
+	}
+}

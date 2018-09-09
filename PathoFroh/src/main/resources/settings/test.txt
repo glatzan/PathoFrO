@@ -1,0 +1,5 @@
+Testen:
+-> User Dialog speicher, ob auch personendaten gespeichert werden 
+	genericDAO.save(user, "log.user.role.changed", new Object[] { user.toString() });
+	genericDAO.save(user.getPhysician().getPerson(), "log.user.role.changed", new Object[] { user.toString() });
+-> User Dialog update from ldap, und ob speicherung von dem physician funktioniert

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel
+			value="#{msg['dialog.settings.diagnosis.list.headline']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannelFull">
+
+		<p:dataTable var="diagnosisPreset" style="width:100%;"
+			scrollable="true" scrollHeight="460" draggableRows="true"
+			value="#{settingsDialogHandler.diagnosisTab.diagnosisPresets}"
+			styleClass="highlightedDataTable noBordersAll collapsedBordersAll">
+
+			<p:column sortBy="#{diagnosisPreset.diagnosisText}"
+				headerText="#{msg['dialog.settings.diagnosis.list.diagnosis']}"
+				style="width:40%">
+				<h:outputText value="#{diagnosisPreset.diagnosis}" />
+			</p:column>
+
+			<p:column sortBy="#{diagnosisPreset.name}"
+				headerText="#{msg['dialog.settings.diagnosis.list.category']}"
+				style="width:auto">
+				<h:outputText value="#{diagnosisPreset.category}" />
+			</p:column>
+
+
+			<p:column
+				headerText="#{msg['dialog.settings.diagnosis.list.commentary']}"
+				style="width:20%">
+				<h:outputLabel value="#{diagnosisPreset.commentary}">
+					<f:converter converterId="org.histo.ui.TruncateConverter"
+						truncateAt="40" />
+					<f:attribute name="truncateAt" value="40" />
+					<f:attribute name="continuationMark" value="..." />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column style="width:7%; text-align:center;">
+				<f:facet name="header">
+					<i class="fa fa-cog"
+						title="#{msg['dialog.settings.diagnosis.list.options']}" />
+				</f:facet>
+				<p:commandLink
+					title="#{msg[dialog.settings.diagnosis.list.options.edit]}"
+					actionListener="#{settingsDialogHandler.diagnosisTab.prepareEditDiagnosisPreset(diagnosisPreset)}"
+					update="@form" partialSubmit="true" process="@this">
+					<i class="fa fa-fw fa-cog" />
+				</p:commandLink>
+			</p:column>
+
+			<p:ajax event="rowReorder" update="@form" process="@form"
+				partialSubmit="true"
+				listener="#{settingsDialogHandler.diagnosisTab.onReorderList}" />
+		</p:dataTable>
+	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="2" styleClass="newTableContainer left">
+				<p:selectBooleanCheckbox styleClass="smallCheckbox"></p:selectBooleanCheckbox>
+				<h:outputLabel style="margin-left:5px;"
+					value="#{msg['dialog.settings.diagnosis.list.checkbox.archived']}"></h:outputLabel>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<p:commandButton
+					value="#{msg['dialog.settings.diagnosis.list.button.new']}"
+					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
+					actionListener="#{settingsDialogHandler.diagnosisTab.prepareNewDiagnosisPreset()}"
+					update="@form"></p:commandButton>
+
+				<p:commandButton value="#{msg['general.close']}"
+					icon="fa fa-times-circle" partialSubmit="true" process="@this"
+					actionListener="#{settingsDialogHandler.hideDialog()}" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+</ui:composition>

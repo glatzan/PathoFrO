@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:histo="http://java.sun.com/jsf/composite/components"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<!-- navigation -->
+	<h:panelGrid columns="2" id="breadCrumbstTable"
+		styleClass="breadCrumbs onClickUpdate reloadPDF"
+		columnClasses="columnWidthMin">
+		<h:outputFormat value="#{msg['body.worklist.report.headline']}">
+			<f:param
+				value="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskID}" />
+		</h:outputFormat>
+
+		<h:outputFormat value="#{msg['body.worklist.report.headline2']}"
+			rendered="#{globalEditViewHandler.reportView.selectedData ne null}">
+			<f:param
+				value="#{globalEditViewHandler.reportView.selectedData.diagnosis.name}" />
+		</h:outputFormat>
+
+	</h:panelGrid>
+
+	<p:panel style="width: 100%"
+		styleClass="defaultHistoHiddenTableContainer">
+
+		<h:panelGrid columns="2"
+			styleClass="listingHistoHiddenTableContainer " style="width:100%"
+			columnClasses="columnTop,columnWidth250">
+
+			<h:panelGrid id="pdfcontent"
+				styleClass="defaultHistoHiddenTableContainer onClickUpdate #{globalEditViewHandler.reportView.generatingSelectedPDF ? 'reloadPDF' : ''}"
+				style="width:calc(100% - 20px)">
+				<pe:documentViewer style="margin-left:5px;height:calc(100vh - 75px)"
+					rendered="#{globalEditViewHandler.reportView.selectedContainer ne null}"
+					value="#{globalEditViewHandler.reportView.getPDF()}"
+					download="#{globalEditViewHandler.reportView.selectedContainer.name}" />
+
+				<h:panelGrid columns="1"
+					rendered="#{globalEditViewHandler.reportView.selectedContainer eq null}"
+					styleClass="defaultHistoHiddenTableContainer"
+					style="width: 100% !important;height: calc(100vh - 75px) !important;"
+					columnClasses="columnMiddle">
+					<h:panelGrid columns="1" style="width: 100% !important;"
+						styleClass="defaultHistoHiddenTableContainer"
+						columnClasses="columnHorizontalCenter">
+						<p:graphicImage value="/gfx/ajax-loader1.gif"></p:graphicImage>
+						<h:outputLabel styleClass="hugeFont"
+							value="#{msg['body.worklist.report.generating']}"></h:outputLabel>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+
+
+			<p:scrollPanel styleClass="histoScrollPanelStyle" id="pdfScroller"
+				style="height:calc(100vh - 75px);">
+				<c:forEach varStatus="dataStatus"
+					items="#{globalEditViewHandler.reportView.data}" var="data">
+
+					<h:panelGrid columns="1" columnClasses="columnTop, columnTop "
+						id="bild2" style="width:100% ; "
+						styleClass="defaultHistoHiddenTableContainer onClickUpdate #{dataStatus.even ? 'customEvenRowBackground' : ''}">
+
+						<h:panelGrid columns="2" styleClass="defaultHistoTable"
+							style="margin-left:5px;" columnClasses="columnWidth75,">
+							<!-- name -->
+							<h:outputText value="#{msg['body.worklist.report.name']}"
+								styleClass="bigFont" />
+							<h:outputText value="#{data.pdf.name}" styleClass="bigFont">
+								<f:converter converterId="org.histo.ui.TruncateConverter" />
+								<f:attribute name="truncateAt" value="35" />
+								<f:attribute name="continuationMark" value="..." />
+							</h:outputText>
+
+							<!-- created -->
+							<h:outputText value="#{msg['body.worklist.report.createOn']}"></h:outputText>
+							<h:outputText value="#{data.pdf.audit.createdOn}">
+								<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+							</h:outputText>
+
+							<!-- type -->
+							<h:outputText value="#{msg['body.worklist.report.typ']}"></h:outputText>
+							<h:outputLabel
+								value="#{msg['enum.documentType.'.concat(data.pdf.type)]}" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" columnClasses="columnHorizontalCenter"
+							id="imgContainer" style="width:100%;margin-bottom:10px;"
+							styleClass="#{data.loading ? 'reloadPDF' : ''} defaultHistoHiddenTableContainer">
+							<p:commandLink rendered="#{!data.loading}"
+								update="@(.onClickUpdate)"
+								actionListener="#{globalEditViewHandler.reportView.setSelectedPDF(data)}">
+								<p:graphicImage height="325" cache="false"
+									value="#{globalEditViewHandler.reportView.getThumbnail()}"
+									style="border: 1px solid black;" width="230">
+									<f:param name="id" value="#{data.pdf.thumbnail}" />
+								</p:graphicImage>
+							</p:commandLink>
+
+							<h:panelGroup style="display:block; height:325px; width:230px;"
+								rendered="#{data.loading}">
+								<p:graphicImage value="/gfx/ajax-loader1.gif"></p:graphicImage>
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:panelGrid>
+					<p:separator style="margin-top: 0px;margin-bottom: 0px;"
+						rendered="#{!dataStatus.last}" />
+				</c:forEach>
+
+				<p:poll
+					autoStart="#{globalEditViewHandler.reportView.generatingPDFs}"
+					interval="1" update="@(.reloadPDF)"
+					stop="#{globalEditViewHandler.reportView.generationCompleted}"
+					listener="#{globalEditViewHandler.reportView.updateData()}"></p:poll>
+			</p:scrollPanel>
+		</h:panelGrid>
+		<script>
+			$(document)
+					.ready(
+							function() {
+								// setting scrollspeed
+								setScrollPanelScrollSpeed("contentForm:pdfScroller");
+								// updating scrollElement for displaying the scroll bar correctly
+								updateAndAutoScrollToSelectedElement('contentForm:pdfScroller');
+							});
+		</script>
+	</p:panel>
+</ui:composition>

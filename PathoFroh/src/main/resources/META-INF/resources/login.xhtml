@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<h:head>
+	<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+
+<h:body>
+	<form method="post" action="/perform_login"
+		onsubmit="blockForLogin(true);">
+
+		<div
+			style="height: 100vh; width: 100vw; vertical-align: middle; display: table-cell;">
+
+			<h:panelGrid columns="1"
+				styleClass="defaultHistoHiddenTableContainer" id="loginTable"
+				style="margin-left: auto;margin-right: auto; width:auto !important">
+				<h:panelGrid styleClass="defaultHistoTable" columns="2">
+
+					<p:outputLabel for="username" value="#{msg['login.user.name']}:" />
+					<p:inputText id="username" name='username' label="username"
+						widgetVar="inputName" />
+
+					<p:outputLabel for="password"
+						value="#{msg['login.user.password']}:" />
+					<p:password id="password" label="password" widgetVar="inputPw"
+						name='password' />
+
+				</h:panelGrid>
+
+				<h:panelGrid styleClass="defaultHistoTable"
+					style="width:100%;margin-top:20px;" columns="1"
+					columnClasses="columnHorizontalCenter">
+					<h:commandButton id="login" widgetVar="submitBTn"
+						onclick="blockForLogin(true);"
+						value="#{msg['login.user.button.login']}" style="width:75%" />
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:outputText value="#{sessionScope['loginFailMessage']}"
+				rendered="#{not empty sessionScope['loginFailMessage']}"
+				styleClass="highlight" />
+		</div>
+
+		<pe:blockUI target="loginTable" widgetVar="blockLoginTable">
+			<p:graphicImage value="/gfx/ajax-loader1.gif" id="loadingGif" />
+		</pe:blockUI>
+	</form>
+
+	<ui:include src="/template/growl.xhtml" />
+
+	<!-- disable loginbutton -->
+	<script type="text/javascript">
+		/* Blocking Gui for loading data */
+		function blockForLogin(block) {
+			if (block) {
+				PF('submitBTn').disable();
+				PF('blockLoginTable').block();
+			} else {
+				PF('submitBTn').enable();
+				PF('blockLoginTable').unblock();
+			}
+		}
+
+		/* display error message on failed login*/
+		$(document).ready(
+				function() {
+					var param = "#{sessionScope['loginFailedMessage']}";
+					if (param) {
+						updateGlobalGrowl("globalGrowl", 'Login-Fehler', param,
+								'error');
+					}
+				});
+	</script>
+
+	<!-- resetting  -->
+	<f:view afterPhase="#{loginHandler.removeLoginFailedMessagedAttribute}" />
+
+
+</h:body>
+</html>

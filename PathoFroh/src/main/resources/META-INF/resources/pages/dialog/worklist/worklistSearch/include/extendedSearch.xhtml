@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel value="#{msg['dialog.worklistsearch.scifi.headline']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannel">
+		<h:panelGrid columns="2" id="favouriteContent"
+			styleClass="newStyleListingTable">
+			<p:outputLabel value="Probe" />
+			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
+				filterMatchMode="startsWith"
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.material}">
+				<f:selectItems
+					value="#{worklistSearchDialog.extendedSearchTab.materialList}"
+					var="material" itemLabel="#{material.name}"
+					itemValue="#{material.name}" />
+			</p:selectOneMenu>
+
+			<p:outputLabel value="Operateur" />
+			<p:selectCheckboxMenu id="roleSelectCheckbox" multiple="true"
+				filter="true" filterMatchMode="startsWith" label="Auswhälen"
+				panelStyle="width:250px"
+				converter="#{worklistSearchDialog.extendedSearchTab.allPhysicianTransformer}"
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.surgeons}">
+
+				<f:selectItems var="physician"
+					value="#{worklistSearchDialog.extendedSearchTab.allPhysicians}"
+					itemValue="#{physician}" itemLabel="#{physician.person.fullName}" />
+
+			</p:selectCheckboxMenu>
+
+			<p:outputLabel value="Unterschrift" />
+			<p:selectCheckboxMenu multiple="true" filter="true"
+				filterMatchMode="startsWith" label="Auswhälen"
+				panelStyle="width:250px"
+				converter="#{worklistSearchDialog.extendedSearchTab.allPhysicianTransformer}"
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.signature}">
+
+				<f:selectItems var="physician"
+					value="#{worklistSearchDialog.extendedSearchTab.allPhysicians}"
+					itemValue="#{physician}" itemLabel="#{physician.person.fullName}" />
+
+			</p:selectCheckboxMenu>
+
+			<p:outputLabel value="Vorgeschichte" />
+			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
+				filterMatchMode="startsWith"
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.caseHistory}">
+				<f:selectItems
+					value="#{worklistSearchDialog.extendedSearchTab.caseHistoryList}"
+					var="history" itemLabel="#{history.value}"
+					itemValue="#{history.value}" />
+			</p:selectOneMenu>
+
+			<p:outputLabel value="Befund" />
+			<p:inputText
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.diagnosisText}"></p:inputText>
+
+			<p:outputLabel value="Diagnose" />
+			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
+				filterMatchMode="startsWith"
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.diagnosis}">
+				<f:selectItems
+					value="#{worklistSearchDialog.extendedSearchTab.diagnosisPresets}"
+					var="diagnosis" itemLabel="#{diagnosis.diagnosis}"
+					itemValue="#{diagnosis.diagnosis}" />
+			</p:selectOneMenu>
+
+			<p:outputLabel value="Malign" />
+
+			<p:triStateCheckbox
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.malign}" />
+
+
+			<p:outputLabel value="Auge" />
+			<p:selectOneMenu
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.eye}">
+				<f:selectItems value="#{enumProvider.eyes}" var="eye"
+					itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}" />
+
+			</p:selectOneMenu>
+
+			<p:outputLabel value="Station" />
+			<p:selectOneMenu id="wards"
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.ward}"
+				editable="true">
+				<f:selectItems
+					value="#{worklistSearchDialog.extendedSearchTab.wardList}"
+					itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
+			</p:selectOneMenu>
+
+			<h:panelGroup>
+				<p:outputLabel value="Staining" />
+				<p:commandLink title="#{msg['body.statiningView.newStaining']}"
+					actionListener="#{dialog.addSlidesDialog.initAndPrepareBean()}">
+					<i class="fa fa-fw fa-paint-brush"></i>
+					<p:ajax event="dialogReturn"
+						listener="#{worklistSearchDialog.extendedSearchTab.onSelectStainingDialogReturn}"
+						update="@form" />
+				</p:commandLink>
+			</h:panelGroup>
+			<p:dataTable var="staining" styleClass="defaultHistoDataTable"
+				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.stainings}">
+				<f:facet name="header">
+					<h:outputLabel value="Färbung"></h:outputLabel>
+				</f:facet>
+
+				<p:column>
+					<h:outputLabel value="#{staining.name}"></h:outputLabel>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="1" styleClass="newTableContainer left">
+			</h:panelGrid>
+
+			<h:panelGrid columns="3" styleClass="newTableContainer right">
+				<p:commandButton value="#{msg['general.select']}"
+					icon="fa fa-search" widgetVar="serachBtn"
+					onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
+					process="@form">
+					<f:actionListener
+						binding="#{worklistSearchDialog.extendedSearchTab.selectAsWorklist()}" />
+					<f:actionListener
+						binding="#{worklistSearchDialog.hideDialog()}" />
+				</p:commandButton>
+
+				<p:commandButton value="#{msg['general.export']}" icon="fa fa-copy"
+					widgetVar="exportBtn"
+					onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
+					process="@form">
+					<f:actionListener
+						binding="#{worklistSearchDialog.extendedSearchTab.exportWorklist()}" />
+				</p:commandButton>
+
+				<p:commandButton value="#{msg['general.close']}" immediate="true"
+					widgetVar="closeBtn" icon="fa fa-times-circle">
+					<f:actionListener
+						binding="#{worklistSearchDialog.hideDialog()}" />
+				</p:commandButton>
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+</ui:composition>

@@ -1,0 +1,295 @@
+jsf:
+  projectStage: Development
+  faceletsSkipComments: true
+  primefaces:
+    theme: smoothness
+    fontAwesome: true
+    
+spring: 
+  datasource:
+    url: jdbc:postgresql://localhost/histo2
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate: 
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        use-new-id-generator-mappings: true
+        ddl-auto: none
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
+        type: trace
+    hibernate.ddl-auto: none
+  output:
+    ansi:
+      enabled: always
+  aop:
+    auto: false
+  messages:
+    basename: messages/messages
+  freemarker:
+    checkTemplateLocation:  false
+
+logging:
+  file: test.log
+  path: D:/
+  level: 
+    org:
+      springframework:
+        security: ERROR
+      # disable lob error
+      hibernate:
+        engine: 
+          jdbc:
+            env:
+              internal:
+                LobCreatorBuilderImpl: ERROR
+patho:
+  common:
+     ####### Task View #######
+    taskView:
+      tasksPerPage: 25
+      tasksPerPageOptions:
+        - 25
+        - 50
+        - 100
+  ####### LDAP #######
+  ldap:
+    ldapUrl: ldap://ldap.ukl.uni-freiburg.de/
+    baseDn: dc=ukl,dc=uni-freiburg,dc=de
+    userParentDn: people
+    userDn: uid
+  ####### JWT #######
+  jwt:   
+    secret: 7w!z%C*F)J@NcRfUjXn2r5u8x/A?D(G+
+    tokenPrefix: Bearer 
+    headerString: Authorization
+  ####### JSON #######
+  json:
+    patientByPizUrl: http://auginfo/piz/$piz
+    patientByNameSurnameBirthday: http://auginfo/piz?name=$name&vorname=$surname&geburtsdatum=$birthday
+  ####### MAIL #######
+  mail:
+    server: smtp.ukl.uni-freiburg.de
+    port: 465
+    ssl: true
+    debug: false
+    systemMail: augenklinik.histologie@uniklinik-freiburg.de
+    systemName: Histologisches Labor der Augenklinik Freiburg
+    adminAddresses:
+      - andreas.glatz@uniklinik-freiburg.de
+    errorAddresses:
+      - andreas.glatz@uniklinik-freiburg.de
+    factory:
+      basePath: classpath:/templates/mail
+  ####### SETTINGS #######
+  printer:
+    cupsPrinter:
+      host: 10.210.21.254/printers/
+      port: 631
+      printerForRoom: http://10.210.21.11:3009/DB/PLS/ip2room/ip/$ip
+    lablePrinter:
+      printer:
+        -
+          name: Aug-Histo-Etikettendrucker-1
+          id: 1
+          location: Histologie-Labor
+          address: 10.250.7.242
+          port: 21
+          userName: admin
+          password: 1234
+          timeout: 1000
+        -
+          name: Aug-Histo-Etikettendrucker-2
+          id: 2
+          location: Histologie-Labor
+          address: 10.250.7.239
+          port: 21
+          userName: admin
+          password: 1234
+          timeout: 1000     
+  ####### SETTINGS ####### 
+  settings:     
+    fileSettings:
+      thumbnailDPI: 50
+      fileRepository: D:/patho
+      workDirectory: fileRepository:pdf
+      auxDirectory: fileRepository:pdf/tmp
+      errorDirectory: fileRepository:pdf/error
+      printDirectory: fileRepository:pdf/print
+      programInfo: fileRepository:.patho
+      programVersionInfo: classpath:settings/version.txt
+      copyFromClasspathToWorkDirectory:
+        - "classpath:templates/print/_*"
+      cleanup: true
+      keepErrorFiles: true
+    defaultNotification:
+      defaultNotifications:
+        -
+          role: SURGEON
+          notificationTyps: 
+            -
+              EMAIL
+        -
+          role: CLINIC_PHYSICIAN
+          notificationTyps:
+            -
+              EMAIL
+        -
+          role: EXTERNAL_SURGEON
+          notificationTyps:
+            -
+              LETTER 
+    defaultDocuments:
+      diagnosisApprovedDocument: 10
+      diagnosisReportForUsers: 10
+      taskCreationDocument: 2
+      notificationDefaultEmailDocument: 10
+      notificationDefaultEmail: 2
+      notificationDefaultFaxDocument: 10
+      notificationDefaultLetterDocument: 10
+      notificationDefaultPrintDocument: 11
+      notificationSendReport: 1000
+      slideLabelDocument: 100
+      slideLableTestDocument: 150
+      printerTestDocument: 0
+      emptyPage : classpath:templates/print/emptyPage.pdf
+      lablePrinterTestPage: test.zpl
+      cupsPrinterTestPage: classpath:templates/print/testPage.pdf
+  ####### Print Documents #######
+    documents:
+      - 
+        id: 0
+        name: Eingangsbogen
+        content: classpath:templates/print/USchein_full.tex
+        content2:
+        type: U_REPORT
+        attributes:
+        templateName: com.patho.main.template.print.CaseCertificate
+        defaultOfType: false
+        transientContent: true
+        hidden: false
+      -
+        id: 1
+        name: Eingangsbogen bedrucken
+        content: classpath:templates/print/USchein_empty.tex
+        content2: 
+        type: U_REPORT_EMTY
+        attributes: 
+        templateName: com.patho.main.template.print.CaseCertificate
+        defaultOfType: false
+        transientContent: true
+        hidden: false
+      -
+        id: 2
+        name: Eingangsbogen bedrucken, umgekehrt
+        content: classpath:templates/print/USchein_empty_rotated180.tex
+        content2: 
+        type: U_REPORT_EMTY
+        attributes: media:keyword:default,tray1
+        emplateName: com.patho.main.template.print.CaseCertificate
+        defaultOfType: false
+        transientContent: true
+        hidden: false
+      -
+        id: 10
+        name: Befundbericht
+        content: classpath:templates/print/Report_Intern.tex
+        content2: 
+        type: DIAGNOSIS_REPORT
+        attributes: sides:keyword:one-side
+        templateName: com.patho.main.template.print.DiagnosisReport
+        defaultOfType: true
+        transientContent: false
+        hidden: false
+        duplexPrinting : true
+        printEvenPageCount : true
+      -
+        id: 11
+        name: Befundbericht - ohne Logo
+        content: classpath:templates/print/Report_Intern_noLogo.tex
+        content2: 
+        type: DIAGNOSIS_REPORT
+        attributes: "sides:keyword:one-side#media:keyword:default,tray2"
+        templateName: com.patho.main.template.print.DiagnosisReport
+        defaultOfType: false
+        transientContent: false
+        hidden: false
+        duplexPrinting : true
+        printEvenPageCount : true
+      -
+        id: 20
+        name: Befundbericht extern
+        content: classpath:templates/print/Report_Extern.tex
+        content2: 
+        type: DIAGNOSIS_REPORT_EXTERN
+        attributes: sides:keyword:one-side
+        templateName: com.patho.main.template.print.DiagnosisReport
+        defaultOfType: true
+        transientContent: false
+        hidden: false
+        duplexPrinting : true
+        printEvenPageCount : true
+      -
+        id: 21
+        name: Befundbericht extern - ohne Logo
+        content: classpath:templates/print/Report_Extern_noLogo.tex
+        content2: 
+        type: DIAGNOSIS_REPORT_EXTERN
+        attributes: "sides:keyword:one-side#media:keyword:default,tray2"
+        templateName: com.patho.main.template.print.DiagnosisReport
+        defaultOfType: true
+        transientContent: false
+        hidden: false
+        duplexPrinting : true
+        printEvenPageCount : true
+      -
+        id: 50
+        name: Konsil
+        content: classpath:templates/print/council.tex
+        content2: 
+        type: COUNCIL_REQUEST
+        attributes: 
+        templateName: com.patho.main.template.print.CouncilReport
+        defaultOfType: true
+        transientContent: false
+        hidden: false
+      -
+        id: 100
+        name: Default Slide Lable
+        content: classpath:templates/print_label/defaultLable.zpl
+        content2: 
+        type: LABLE
+        attributes: 
+        templateName: com.patho.main.template.print.SlideLable
+        defaultOfType: true
+        transientContent: false
+        hidden: false
+      -
+        id: 150
+        name: Test Slide Lable
+        content: classpath:templates/print_label/testLable.zpl
+        content2: 
+        type: TEST_LABLE
+        attributes: 
+        templateName: com.patho.main.template.print.SlideLable
+        defaultOfType: true
+        transientContent: false
+        hidden: false
+      -
+        id: 1000
+        name: Send Report
+        content: classpath:templates/print/SendReport.tex
+        content2: 
+        attributes: 
+        type: NOTIFICATION_SEND_REPORT
+        templateName: com.patho.main.template.print.SendReport
+        defaultOfType: true
+        transientContent: false
+        hidden: false
+      
+           
+              

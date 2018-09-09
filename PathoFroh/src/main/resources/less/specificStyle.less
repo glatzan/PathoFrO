@@ -1,0 +1,80 @@
+@import "style.less";
+
+.userDialog_FavouriteListTable{
+	.dynamicScrollTable (true);
+
+	tr {
+		display: table;
+		td:nth-child(1) {
+		width: auto;
+	}
+		td:nth-child(2) {
+		width: 40%;
+		}
+		td:nth-child(3) {
+		width: 20px !important;
+	}
+	}
+}
+
+// class for normal table with scrollable tbody
+.printDialog_AdressTable {
+	.dynamicScrollTable (false);
+	tbody {
+		height: 175px;
+	}
+
+	tr td:nth-child(1) {
+		width: 25px;
+	}
+
+	tr td:nth-child(2) {
+		width: 35px;
+	}
+
+	tr td:nth-child(3) {
+		width: 80px;
+	}
+
+	tr td:nth-child(4) {
+		width: auto;
+	}
+
+	tr td:nth-child(5) {
+		width: 15px;
+	}
+}
+
+.worklistSearchDialog_FavouriteSearchTable {
+	.histoDataTable (true);
+	width: 98%;
+
+	tr td:nth-child(1), th:nth-child(1){
+		width: 30% !important;
+	}
+
+	tr td:nth-child(2), th:nth-child(2) {
+		width: auto !important;
+	}
+	
+	tr td:nth-child(3), th:nth-child(3) {
+		width: 3% !important;
+	}
+}
+
+.addSlide_StainingTable{
+	.histoDataTable (true, false);
+	
+	div.ui-datatable-scrollable-header{
+		display: none;	
+	}
+	
+}
+
+// tooltip with for navigation tree in the pdfOrganizer dialog
+body.pdfOrganizer{
+	.ui-tooltip, .qtip-content {
+		width: 500px;
+	}
+}
+

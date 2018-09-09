@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel value="#{msg['dialog.userSettings.general']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannel">
+
+		<h:panelGrid columns="2" styleClass="defaultHistoTable"
+			columnClasses="columnWidth200 columnHeading columnTop,">
+
+			<!-- standard view -->
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.defaultView']}" />
+
+			<p:selectOneMenu
+				title="#{msg['dialog.userSettings.general.defaultView.text']}"
+				value="#{userSettingsDialog.user.settings.defaultView}">
+
+				<f:selectItems
+					value="#{userSettingsDialog.generalTab.availableViews}" var="page"
+					itemLabel="#{msg['enum.pages.'.concat(page)]}" />
+			</p:selectOneMenu>
+
+			<!-- background color of inputfields -->
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.inputFieldColor']}" />
+			<p:colorPicker
+				value="#{userSettingsDialog.user.settings.inputFieldColor}" />
+
+			<!-- font color of inputfields -->
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.inputFieldFontColor']}" />
+			<p:colorPicker
+				value="#{userSettingsDialog.user.settings.inputFieldFontColor}" />
+
+		</h:panelGrid>
+
+		<!-- seperator -->
+		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+			<p:separator />
+			<h:outputLabel value="#{msg['dialog.userSettings.general.worklist']}" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" styleClass="defaultHistoTable"
+			columnClasses="columnWidth200 columnHeading columnTop,">
+			<!-- standard work list -->
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.defaultWorklist']}" />
+			<p:selectOneMenu
+				title="#{msg['dialog.userSettings.general.defaultWorklist.text']}"
+				value="#{userSettingsDialog.user.settings.worklistToLoad}">
+
+				<f:selectItems
+					value="#{userSettingsDialog.generalTab.availableWorklistsToLoad}"
+					var="page"
+					itemLabel="#{msg['enum.worklistSearchOption.'.concat(page)]}" />
+			</p:selectOneMenu>
+
+			<!-- sorting -->
+			<h:outputLabel value="#{msg['dialog.userSettings.general.sorting']}" />
+
+			<h:panelGrid columns="2"
+				styleClass="listingHistoHiddenTableContainer">
+				<p:selectOneMenu
+					title="#{msg['dialog.userSettings.general.sorting.text']}"
+					value="#{userSettingsDialog.user.settings.worklistSortOrder}">
+					<f:selectItem
+						itemLabel="#{msg['dialog.worklistorder.sorting.tasknumber']}"
+						itemValue="TASK_ID" />
+					<f:selectItem
+						itemLabel="#{msg['dialog.worklistorder.sorting.piz']}"
+						itemValue="PIZ" />
+					<f:selectItem
+						itemLabel="#{msg['dialog.worklistorder.sorting.name']}"
+						itemValue="NAME" />
+					<f:selectItem
+						itemLabel="#{msg['dialog.worklistorder.sorting.priority']}"
+						itemValue="PRIORITY" />
+				</p:selectOneMenu>
+
+				<p:selectBooleanButton styleClass="smallButton"
+					value="#{userSettingsDialog.user.settings.worklistSortOrderAsc}"
+					style="margin-left:15px;"
+					onLabel="#{msg['dialog.userSettings.general.sorting.asc']}"
+					offLabel="#{msg['dialog.userSettings.general.sorting.desc']}" />
+			</h:panelGrid>
+
+			<!-- hide inactive tasks -->
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.hideNonActiveTasks']}" />
+			<p:selectBooleanCheckbox
+				value="#{userSettingsDialog.user.settings.worklistHideNoneActiveTasks}"
+				title="#{msg['dialog.userSettings.general.hideNonActiveTasks.text']}" />
+
+			<!-- auto update worklist -->
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.autoUpdate']}" />
+			<p:selectBooleanCheckbox
+				value="#{userSettingsDialog.user.settings.worklistAutoUpdate}"
+				title="#{msg['dialog.userSettings.general.autoUpdate.text']}" />
+
+			<!-- auto update worklist -->
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.alternatePatientAddMode']}" />
+			<p:selectBooleanCheckbox
+				value="#{userSettingsDialog.user.settings.alternatePatientAddMode}"
+				title="#{msg['dialog.userSettings.general.alternatePatientAddMode.text']}" />
+
+			<!-- on click add task-->
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.alternatePatientAddMode.oneClickAdd']}" />
+			<p:selectBooleanCheckbox
+				value="#{userSettingsDialog.user.settings.addTaskWithSingelClick}"
+				title="#{msg['dialog.userSettings.general.alternatePatientAddMode.oneClickAdd.text']}" />
+
+		</h:panelGrid>
+
+		<!-- seperator -->
+		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+			<p:separator />
+			<h:outputLabel
+				value="#{msg['dialog.userSettings.general.miscellaneous']}" />
+		</h:panelGrid>
+
+	</p:outputPanel>
+
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2">
+			<h:panelGrid columns="1" styleClass="left">
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="right">
+				<p:commandButton value="#{msg['general.save']}"
+					icon="fa fa-check-circle-o" partialSubmit="true" process="@form">
+					<f:actionListener
+						binding="#{userSettingsDialog.saveUserSettings()}" />
+					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+				</p:commandButton>
+
+				<p:commandButton value="#{msg['general.close']}"
+					icon="fa fa-times-circle">
+					<f:actionListener
+						binding="#{userSettingsDialog.resetUserSettings()}" />
+					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+				</p:commandButton>
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+</ui:composition>

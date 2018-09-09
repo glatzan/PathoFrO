@@ -1,0 +1,62 @@
+package com.patho.main.action.handler;
+
+import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.patho.main.action.DialogHandlerAction;
+import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.model.PDFContainer;
+import com.patho.main.model.interfaces.DataList;
+import com.patho.main.util.event.PatientMergeEvent;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Controller
+@Scope("session")
+public class PatientViewHandlerAction {
+
+	@Autowired
+	private WorklistViewHandlerAction worklistViewHandlerAction;
+
+	public void showTaskMediaDialog() {
+//		// init dialog for patient and task
+//		dialogHandlerAction.getMediaDialog().initBean(globalEditViewHandler.getWorklistData().getWorklist().getSelectedPatient(),
+//				new DataList[] { globalEditViewHandler.getWorklistData().getWorklist().getSelectedTask() }, false);
+//
+//		// enabeling upload to task
+//		dialogHandlerAction.getMediaDialog().enableUpload(new DataList[] { globalEditViewHandler.getWorklistData().getWorklist().getSelectedTask() },
+//				new DocumentType[] { DocumentType.U_REPORT, DocumentType.COUNCIL_REPLY,
+//						DocumentType.BIOBANK_INFORMED_CONSENT, DocumentType.OTHER });
+//
+//		// setting info text
+//		dialogHandlerAction.getMediaDialog().setActionDescription(resourceBundle.get("dialog.pdfOrganizer.headline.info.task",
+//				globalEditViewHandler.getWorklistData().getWorklist().getSelectedTask().getTaskID()));
+//
+//		// show dialog
+//		dialogHandlerAction.getMediaDialog().prepareDialog();
+	}
+
+	/**
+	 * Is called on return of the patient data edit dialog, if a merge event had
+	 * happened the worklist is updated.
+	 * 
+	 * @param event
+	 */
+	public void onEditPatientDataReturn(SelectEvent event) {
+		log.debug("On EditPatient-Dialog return");
+		if (event.getObject() != null && event.getObject() instanceof PatientMergeEvent) {
+			PatientMergeEvent p = (PatientMergeEvent) event.getObject();
+			
+			// if merge source was archived, remove it from worklist
+			if(p.getMergeFrom().isArchived())
+				worklistViewHandlerAction.removePatientFromCurrentWorklist(p.getMergeFrom());
+			else
+				worklistViewHandlerAction.replacePatientInCurrentWorklist(p.getMergeFrom());
+			
+			worklistViewHandlerAction.replacePatientInCurrentWorklist(p.getMergeTo());
+		}
+	}
+}

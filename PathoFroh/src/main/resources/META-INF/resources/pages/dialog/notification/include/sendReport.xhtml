@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel
+			value="#{msg['dialog.notification.tab.sendReport.headline']} " />
+		<h:outputText
+			rendered="#{dialogHandlerAction.mediaDialog.PDFContainerToRender ne null}"
+			value="#{dialogHandlerAction.mediaDialog.PDFContainerToRender.audit.createdOn}">
+			<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm" />
+		</h:outputText>
+	</p:outputPanel>
+
+
+	<p:outputPanel styleClass="bodyPannel"
+		rendered="#{dialogHandlerAction.notificationDialog.sendReportTab.sendReportAvailable}"
+		style="height: calc(100vh - 130px)">
+		<p:media player="pdf" cache="true"
+			value="#{dialogHandlerAction.mediaDialog.pdfContent}" width="100%"
+			height="460px" />
+	</p:outputPanel>
+
+	<h:panelGrid columns="1" styleClass="newTableContainer"
+		rendered="#{!dialogHandlerAction.notificationDialog.sendReportTab.sendReportAvailable}"
+		style="width: 100% !important;height: calc( 100vh - 110px )!important;"
+		columnClasses="columnMiddle columnTextCenter">
+
+		<h:outputLabel styleClass="hugeFont"
+			value="#{msg['dialog.notification.tab.sendReport.completedAndNoReport']}"></h:outputLabel>
+	</h:panelGrid>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="2" styleClass="newTableContainer left">
+				<p:selectOneMenu
+					rendered="#{dialogHandlerAction.notificationDialog.sendReportTab.sendReportAvailable}"
+					converter="#{dialogHandlerAction.notificationDialog.sendReportTab.sendReportConverter}"
+					title="#{msg['body.worklist.header.view']}"
+					value="#{dialogHandlerAction.mediaDialog.PDFContainerToRender}">
+
+					<f:selectItems
+						value="#{dialogHandlerAction.mediaDialog.selectedDatalist.attachedPdfs}"
+						var="pdf"
+						itemLabel="#{msg['dialog.notification.tab.sendReport.report']} #{mainHandlerAction.date(pdf.audit.createdOn, 'HH:MM:ss - dd.mm.yyyy')}"
+						itemValue="#{pdf}" />
+
+					<p:ajax event="change" process="@this" partialSubmit="@this"
+						update="@form"></p:ajax>
+
+				</p:selectOneMenu>
+
+				<!-- Download -->
+				<p:commandButton
+					rendered="#{dialogHandlerAction.notificationDialog.sendReportTab.sendReportAvailable}"
+					value="#{msg['dialog.notification.tab.sendReport.button.download']}"
+					icon="fa fa-download" ajax="false"
+					disabled="#{dialogHandlerAction.mediaDialog.PDFContainerToRender eq null}"
+					title="#{msg['dialog.notification.tab.sendReport.button.download.text']}">
+					<p:fileDownload
+						value="#{dialogHandlerAction.mediaDialog.pdfContent}" />
+				</p:commandButton>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="3" styleClass="newTableContainer right">
+				<!-- reperform send -->
+				<p:commandButton
+					value="#{msg['dialog.notification.tab.sendReport.button.resend']}"
+					icon="fa fa-mail-forward" update="@form"
+					title="#{msg['dialog.notification.tab.sendReport.button.resend.text']}"
+					actionListener="#{dialogHandlerAction.notificationDialog.sendReportTab.repeatNotification()}" />
+
+				<h:panelGroup>
+					<!--  archive task and end notification phase -->
+					<p:splitButton
+						value="#{msg['dialog.notification.tab.sendReport.button.archive']}"
+						rendered="#{!dialogHandlerAction.notificationDialog.generalTab.temporaryNotification and userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
+						onclick="$('#adminForm\\:archiveTaskDialog').click();"
+						icon="fa fa-archive">
+
+						<!-- end notification phase -->
+						<p:menuitem
+							value="#{msg['dialog.notification.tab.sendReport.button.end']}"
+							icon="fa fa-volume-off"
+							onclick="$('#adminForm\\:endNotificationPhase').click();" />
+					</p:splitButton>
+
+					<!-- end diagnosis phase if other things diagnosis are not approved jet -->
+					<p:splitButton
+						value="#{msg['dialog.notification.tab.sendReport.button.end']}"
+						rendered="#{dialogHandlerAction.notificationDialog.generalTab.temporaryNotification or !userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
+						disabled="#{!dialogHandlerAction.notificationDialog.task.taskStatus.editable}"
+						onclick="$('#adminForm\\:endNotificationPhase').click();"
+						icon="fa fa-volume-off">
+
+						<!--  archive task and end notification phase -->
+						<p:menuitem
+							value="#{msg['dialog.notification.tab.sendReport.button.archive']}"
+							icon="fa fa-archive"
+							disabled="#{!userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
+							onclick="$('#adminForm\\:archiveTaskDialog').click();" />
+					</p:splitButton>
+
+					<p:commandButton id="archiveTaskDialog" style="display:none"
+						actionListener="#{dialogHandlerAction.archiveTaskDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+						<p:ajax event="dialogReturn"
+							listener="#{dialogHandlerAction.notificationDialog.sendReportTab.onReturnDialog}" />
+					</p:commandButton>
+
+					<!-- end diagnosis phase -->
+					<p:commandButton id="endNotificationPhase" style="display:none"
+						actionListener="#{dialogHandlerAction.notificationPhaseExitDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+						<p:ajax event="dialogReturn"
+							listener="#{dialogHandlerAction.notificationDialog.sendReportTab.onReturnDialog}" />
+					</p:commandButton>
+				</h:panelGroup>
+
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+
+</ui:composition>

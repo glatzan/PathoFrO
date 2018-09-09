@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title><h:outputLabel
+			value="#{msg['dialog.cotactNotification.headline']}" /></title>
+	<h:outputStylesheet name="histo.css" value="histo.css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+<h:body styleClass="defaultDialogLayout infoDialog">
+
+	<h:form id="dialogContent">
+
+		<div class="defaulDilaogHeaderDivWithBackground">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="noBordersAll noPaddingAll collapsedBordersAll">
+				<h:outputLabel
+					value="#{msg['dialog.cotactNotification.headline']} (#{dialogHandlerAction.contactNotificationDialog.associatedContact.person.fullName})" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					styleClass="noUnderlineAtLink"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="contentDiv">
+			<h:panelGrid columns="1" styleClass="defaultListingTable">
+				<p:dataTable var="notifications"
+					styleClass="smallDatatable highlightedDataTable noBordersAll"
+					scrollable="true" scrollHeight="300"
+					value="#{dialogHandlerAction.contactNotificationDialog.associatedContact.notifications}">
+
+					<!-- Name -->
+					<p:column
+						headerText="#{msg['dialog.cotactNotification.notificationType']}"
+						style="width: auto !important">
+
+						<ui:fragment
+							rendered="#{notifications.notificationTyp eq 'EMAIL'}">
+							<i class="fa fa-envelope icon-grey" />
+						</ui:fragment>
+
+						<ui:fragment rendered="#{notifications.notificationTyp eq 'FAX'}">
+							<i class="fa fa-fax icon-grey" />
+						</ui:fragment>
+
+						<ui:fragment
+							rendered="#{notifications.notificationTyp eq 'LETTER'}">
+							<i class="fa fa-pencil-square-o icon-grey" />
+						</ui:fragment>
+
+						<ui:fragment
+							rendered="#{notifications.notificationTyp eq 'PHONE'}">
+							<i class="fa fa-phone icon-grey" />
+						</ui:fragment>
+
+						<ui:fragment
+							rendered="#{notifications.notificationTyp eq 'PRINT'}">
+							<i class="fa fa-print icon-grey" />
+						</ui:fragment>
+
+						<h:outputLabel style="margin-left: 10px;"
+							value="#{msg['enum.notificationType.'.concat(notifications.notificationTyp)]}" />
+					</p:column>
+
+					<p:column headerText="#{msg['dialog.cotactNotification.activ']}"
+						style="width:15% !important;  text-align:center; ">
+						<p:selectBooleanCheckbox value="#{notifications.active}"
+							disabled="true" />
+					</p:column>
+
+					<p:column
+						headerText="#{msg['dialog.cotactNotification.performed']}"
+						style="width:15% !important;  text-align:center; ">
+
+						<ui:fragment
+							rendered="#{notifications.performed and !notifications.failed}">
+							<i class="fa fa-check icon-green"
+								title="#{msg['dialog.contacts.performed']}" />
+						</ui:fragment>
+
+						<ui:fragment
+							rendered="#{notifications.performed and notifications.failed}">
+							<i class="fa fa-fw fa-times-circle icon-red"
+								title="#{msg['dialog.contacts.failed']}: #{notifications.commentary}" />
+						</ui:fragment>
+
+					</p:column>
+
+					<p:column headerText="#"
+						style="width:15px !important;  text-align:center; ">
+						<p:commandLink styleClass="noUnderlineAtLink" update="@form"
+							disabled="#{notifications.performed}"
+							title="#{msg['dialog.cotactNotification.remove.text']}"
+							actionListener="#{dialogHandlerAction.contactNotificationDialog.removeNotificationAndUpdate(notifications)}">
+							<i class="fa fa-times" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2"
+				styleClass="defaultListingTableFirstColumEnummeration"
+				columnClasses="defaultListingTableColumn10,">
+				<h:outputLabel value="#{msg['dialog.cotactNotification.role']}"
+					style="margin-left:10px" />
+				<p:selectOneMenu
+					value="#{dialogHandlerAction.contactNotificationDialog.associatedContact.role}">
+					<f:selectItems
+						value="#{dialogHandlerAction.contactNotificationDialog.selectableRoles}"
+						var="role" itemLabel="#{msg['enum.contactRole.'.concat(role)]}"
+						itemValue="#{role}" />
+
+					<p:ajax event="change"
+						listener="#{dialogHandlerAction.contactNotificationDialog.saveRoleChange()}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2" style="width:100%"
+				styleClass="noBordersAll collapsedBordersAll noPaddingAll">
+
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="1" style="margin-left: 20px;">
+						<p:menuButton styleClass="smallButton"
+							value="#{msg['dialog.cotactNotification.button.add']}"
+							model="#{dialogHandlerAction.contactNotificationDialog.model}">
+						</p:menuButton>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" style="float:right;">
+					<p:commandButton value="#{msg['general.close']}"
+						styleClass="smallButton buttonRighMarginInList"
+						partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
+						process="@this"
+						actionListener="#{dialogHandlerAction.contactNotificationDialog.hideDialog()}"></p:commandButton>
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

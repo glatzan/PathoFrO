@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:histo="http://java.sun.com/jsf/composite/components">
+
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.userEdit.headline']}">
+			<f:param
+				value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+		</h:outputFormat></title>
+	<h:outputStylesheet name="histo.css" value="histo.css" />
+	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+<h:body styleClass="contentInputDialog">
+
+	<h:outputScript library="scripts" name="selectCheckboxMenuTop.js" />
+
+	<h:form enctype="multipart/form-data" id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="newTableContainer">
+				<h:outputFormat value="#{msg['dialog.userEdit.headline']}">
+					<f:param
+						value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+				</h:outputFormat>
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					styleClass="noUnderlineAtLink"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+			<h:panelGrid columns="5" styleClass="newStyleListingTable"
+				columnClasses="columnLabelContainer150, , , ,">
+				<!-- User -->
+				<h:outputLabel value="#{msg['dialog.userEdit.user']}"
+					styleClass="bigFont" />
+
+				<!-- User name -->
+				<h:outputLabel value="#{msg['dialog.userEdit.user.name']}" />
+				<p:inputText required="true"
+					value="#{dialogHandlerAction.editUserDialog.user.username}" />
+
+				<!-- User role -->
+				<h:outputLabel value="#{msg['dialog.userEdit.user.role']}" />
+				<p:selectOneMenu style="margin-top:1px;"
+					title="#{msg['body.worklist.header.view']}"
+					value="#{dialogHandlerAction.editUserDialog.user.group}"
+					converter="#{dialogHandlerAction.editUserDialog.groupTransformer}"
+					disabled="#{!userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_USER')}">
+
+					<p:ajax event="change" execute="histoUser" partialSubmit="true"
+						listener="#{dialogHandlerAction.editUserDialog.onChangeUserGroup()}"></p:ajax>
+
+					<f:selectItems value="#{dialogHandlerAction.editUserDialog.groups}"
+						var="group" itemValue="#{group}" itemLabel="#{group.name}" />
+
+				</p:selectOneMenu>
+
+				<!-- Person -->
+				<h:outputLabel value="#{msg['component.personDataMask.person']}"
+					styleClass="bigFont" />
+
+				<!-- Title -->
+				<h:outputLabel value="#{msg['component.personDataMask.title']}" />
+				<p:selectOneMenu style="width:100px" editable="true"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.title}">
+					<f:selectItem itemLabel="" itemValue="" />
+					<f:selectItem
+						itemLabel="#{msg['component.personDataMask.title.dr']}"
+						itemValue="#{msg['component.personDataMask.title.dr']}" />
+					<f:selectItem
+						itemLabel="#{msg['component.personDataMask.title.prof']}"
+						itemValue="#{msg['component.personDataMask.title.prof']}" />
+				</p:selectOneMenu>
+
+				<!-- birthday -->
+				<h:outputLabel value="#{msg['component.personDataMask.birthday']}" />
+				<p:calendar id="birthday" name="bday" autocomplete="bday"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.birthday}"
+					locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true" />
+
+				<h:outputLabel value="" />
+
+				<!-- Name -->
+				<h:outputLabel value="#{msg['component.personDataMask.lastname']}" />
+				<p:inputText name="lname" autocomplete="family-name" required="true"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.lastName}" />
+
+				<!-- gender -->
+				<h:outputLabel value="#{msg['component.personDataMask.gender']}" />
+				<p:selectOneMenu style="width:100px" name="sex" autocomplete="sex"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.gender}">
+					<f:selectItem
+						itemLabel="#{msg['component.personDataMask.gender.select']}"
+						itemValue="#{null}" />
+					<f:selectItem
+						itemLabel="#{msg['component.personDataMask.gender.unknown']}"
+						itemValue="UNKNOWN" />
+					<f:selectItem
+						itemLabel="#{msg['component.personDataMask.gender.male']}"
+						itemValue="MALE" />
+					<f:selectItem
+						itemLabel="#{msg['component.personDataMask.gender.female']}"
+						itemValue="FEMALE" />
+				</p:selectOneMenu>
+
+				<h:outputLabel value="" />
+
+				<!-- firstName -->
+				<h:outputLabel value="#{msg['component.personDataMask.firstName']}" />
+				<p:inputText name="fname" autocomplete="given-name" required="true"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.firstName}" />
+
+				<h:outputLabel value="" />
+				<h:outputLabel value="" />
+
+				<!-- address -->
+				<h:outputLabel value="#{msg['component.personDataMask.adress']}"
+					styleClass="bigFont" />
+
+				<!-- street -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.contact.street']}" />
+				<p:inputText name="street-address" autocomplete="street-address"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.street}" />
+
+				<h:outputText value="" />
+				<h:outputText value="" />
+
+				<h:outputLabel value="" />
+
+				<!-- address addition one -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.contact.additionOne']}" />
+				<p:inputText
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.addressadditon}" />
+
+				<!-- address addition two -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.contact.additionTwo']}" />
+				<p:inputText
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.addressadditon2}" />
+
+				<h:outputLabel value="" />
+
+				<!-- Postcode -->
+				<h:outputLabel value="#{msg['component.personDataMask.adress.plz']}" />
+				<p:inputText style="width:75px;"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.postcode}"
+					name="postal-code" autocomplete="postal-code" />
+
+				<!-- Town -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.contact.town']}" />
+				<p:inputText name="city" autocomplete="address-level2"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.town}" />
+
+
+				<!-- miscellaneous -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.miscellaneous']}"
+					styleClass="bigFont" />
+
+				<!-- phone -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.contact.phone']}" />
+				<p:inputText
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.phone}"
+					name="phone" autocomplete="tel" />
+
+				<!-- fax -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.miscellaneous.fax']}" />
+				<p:inputText
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.fax}"
+					name="fax" autocomplete="fax" />
+
+				<h:outputLabel value="" />
+
+				<!-- mobile -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.miscellaneous.mobile']}" />
+				<p:inputText
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.phone}"
+					name="phone" autocomplete="tel" />
+
+				<!-- mail -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.miscellaneous.mail']}" />
+				<p:inputText name="mail" autocomplete="mail"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.email}" />
+
+				<!-- program settings-->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.clinicSpecific']}"
+					styleClass="bigFont" />
+
+				<!-- auto update -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.clinicSpecific.autoUpdate']}" />
+				<p:selectBooleanCheckbox styleClass="smallCheckbox"
+					title="#{msg['component.personDataMask.clinicSpecific.autoUpdate.text']}"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.autoUpdate}">
+				</p:selectBooleanCheckbox>
+
+				<!-- clinical function -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.clinicSpecific.clinicFunction']}" />
+				<p:inputText required="true"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.clinicRole}" />
+
+			</h:panelGrid>
+
+			<!-- Function -->
+			<h:panelGrid columns="2" styleClass="newStyleListingTable"
+				columnClasses="columnLabelContainer150, ">
+				<!-- role -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.programRole']}"
+					styleClass="bigFont" />
+
+				<p:selectCheckboxMenu updateLabel="true"
+					styleClass="customSelectCheckboxMenu" style="width:90%"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.associatedRolesAsArray}"
+					multiple="true">
+					<f:selectItems var="role"
+						value="#{dialogHandlerAction.editUserDialog.allRoles}"
+						itemValue="#{role}"
+						itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
+
+					<p:ajax partialSubmit="true" process="@this" />
+				</p:selectCheckboxMenu>
+
+				<!-- default notification  -->
+				<h:outputLabel
+					title="#{msg['component.personDataMask.defaultAddress.text']}"
+					value="#{msg['component.personDataMask.defaultAddress']}"
+					styleClass="bigFont" />
+					
+				<p:selectOneMenu style="margin-top:1px;"
+					title="#{msg['component.personDataMask.defaultAddress.text']}"
+					value="#{dialogHandlerAction.editUserDialog.person.defaultAddress}"
+					converter="#{dialogHandlerAction.editUserDialog.organizationTransformer}"
+					disabled="#{!userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_USER')}">
+
+					<f:selectItem value="#{null}" itemLabel="#{msg['component.personDataMask.defaultAddress.none']}"></f:selectItem>
+
+					<f:selectItems
+						value="#{dialogHandlerAction.editUserDialog.person.organizsations}"
+						var="group" itemValue="#{group}" itemLabel="#{group.name}" />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+
+			<!-- Organization -->
+			<h:panelGrid columns="2" styleClass="newStyleListingTable"
+				columnClasses="columnLabelContainer150, ">
+
+				<h:outputLabel
+					value="#{msg['component.personDataMask.organization']}"
+					styleClass="bigFont" />
+
+				<p:dataTable var="organization" style="width:90%;" scrollable="true"
+					id="organizationTab" scrollHeight="75" draggableRows="true"
+					styleClass="newStyleDataTable"
+					value="#{dialogHandlerAction.editUserDialog.user.physician.person.organizsations}">
+
+					<p:column
+						headerText="#{msg['component.personDataMask.organization.name']}">
+						<h:outputText value="#{organization.name}" />
+					</p:column>
+
+					<p:column
+						headerText="#{msg['component.personDataMask.organization.note']}">
+						<h:outputLabel value="#{organization.note}">
+							<f:converter converterId="org.histo.ui.TruncateConverter" />
+							<f:attribute name="truncateAt" value="50" />
+							<f:attribute name="continuationMark" value="..." />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column style="width:15px">
+						<ui:fragment rendered="#{organization.intern}">
+							<i class="fa fa-fw fa-check-circle icon-green"
+								style="margin-left: 5px"
+								title="#{msg['component.personDataMask.organization.clinicIntern']}" />
+						</ui:fragment>
+					</p:column>
+
+					<p:column style="width:30px">
+						<f:facet name="header">
+							<p:commandLink id="upload"
+								title="#{msg['component.personDataMask.organization.add']}" process="@this"
+								actionListener="#{dialogHandlerAction.organizationListDialog.initAndPrepareBean(true)}">
+								<p:ajax event="dialogReturn" update="@form" process="@form"
+									listener="#{dialogHandlerAction.editUserDialog.onReturnOrganizationDialog}" />
+								<i class="fa fa-plus" />
+							</p:commandLink>
+						</f:facet>
+						<p:commandLink
+							actionListener="#{dialogHandlerAction.editUserDialog.removeFromOrganization(organization)}"
+							update="@form" partialSubmit="true" process="@this"
+							title="#{msg['component.personDataMask.organization.remove']}">
+							<i class="fa fa-remove" style="margin-left: 8px" />
+						</p:commandLink>
+					</p:column>
+
+				</p:dataTable>
+			</h:panelGrid>
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2" style="width:100%"
+				styleClass="newTableContainer">
+
+				<h:panelGrid columns="1" styleClass="newTableContainer left">
+					<h:panelGroup>
+
+						<p:splitButton value="#{msg['general.refresh']}"
+							onclick="PF('refreshBtn').jq.click();return false;"
+							icon="fa fa-fw fa-undo">
+							<p:menuitem value="#{msg['general.delete']}"
+								onclick="PF('deleteBtn').jq.click();return false;"
+								icon="fa fa-fw fa-trash" />
+						</p:splitButton>
+
+						<!-- Delete -->
+						<p:commandButton immediate="true" id="deleteBtn"
+							widgetVar="deleteBtn" style="display:none">
+							<f:actionListener
+								binding="#{dialogHandlerAction.editUserDialog.prepareDeleteUser()}"></f:actionListener>
+
+							<p:ajax event="dialogReturn"
+								listener="#{dialogHandlerAction.editUserDialog.onDeleteDialogReturn}"
+								update="@form" />
+						</p:commandButton>
+
+						<!-- Refresh -->
+						<p:commandButton id="refreshBtn" style="display:none" update="@form"
+							widgetVar="refreshBtn" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+							<f:actionListener
+								binding="#{dialogHandlerAction.editUserDialog.updateDataFromLdap()}"></f:actionListener>
+						</p:commandButton>
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="newTableContainer right">
+					<!-- Save button -->
+					<p:commandButton value="#{msg['general.save']}" update="@form"
+						icon="fa fa-check-circle-o">
+						<f:actionListener
+							binding="#{dialogHandlerAction.editUserDialog.saveUser()}"></f:actionListener>
+						<f:actionListener
+							binding="#{dialogHandlerAction.editUserDialog.hideDialog()}"></f:actionListener>
+					</p:commandButton>
+
+					<!-- Close button -->
+					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+						update="@form" immediate="true" icon="fa fa-times-circle">
+						<f:actionListener
+							binding="#{dialogHandlerAction.editUserDialog.hideDialog()}"></f:actionListener>
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+		<ui:include src="../../../template/blockUi.xhtml"></ui:include>
+	</h:form>
+</h:body>
+</html>

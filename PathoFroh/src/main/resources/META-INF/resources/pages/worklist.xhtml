@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+<h:body>
+
+	<ui:composition template="../template/layout.xhtml">
+		<!-- Header -->
+		<ui:define name="header">
+			<ui:include src="worklist/include/header.xhtml" />
+		</ui:define>
+
+		<!-- Navigation -->
+		<ui:define name="navigation">
+			<ui:include src="worklist/include/patientList.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="content">
+			<p:scrollPanel styleClass="bodyScrollPanelStyle" id="contentScrollPane">
+				<h:panelGroup id="contentPanel">
+					<ui:include src="#{globalEditViewHandler.navigationData.getCenterView()}"></ui:include>
+				</h:panelGroup>
+			</p:scrollPanel>
+
+			<!-- scrollspeed of scrollpane -->
+			<script type="text/javascript">
+				$(document).ready(function() {
+					setScrollPanelScrollSpeed("contentForm:contentScrollPane");
+				});
+			</script>
+		</ui:define>
+
+		<ui:define name="globalInclude">
+			<h:form id="globalCommandsForm">
+				<!-- update all, for resize update -->
+				<p:remoteCommand name="refreshOnResize" process="@form"
+					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+					update="navigationForm:patientList contentForm headerForm growlForm" />
+
+				<!-- update conten, btn because of click event -->
+				<p:commandButton id="refreshContentBtn" style="display:none" 
+					update="navigationForm:patientList contentForm headerForm" />
+
+			</h:form>
+
+			<!-- function for refreshing ui on resize -->
+			<script type="text/javascript">
+				var resizeTimeout;
+
+				window.onresize = function(event) {
+					clearTimeout(resizeTimeout);
+					resizeTimeout = setTimeout(refreshOnResize, 500);
+				}
+			</script>
+
+			<h:outputScript library="scripts" name="commonFunctions.js" />
+
+			<ui:include src="../template/idleMonitor.xhtml" />
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

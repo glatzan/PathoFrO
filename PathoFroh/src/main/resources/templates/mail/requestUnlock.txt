@@ -1,0 +1,2 @@
+Subject: %name%, %username%, %clinicRole% erbittet eine Freischaltung
+Body: %name%, %username%, %clinicRole% erbittet eine Freischaltung

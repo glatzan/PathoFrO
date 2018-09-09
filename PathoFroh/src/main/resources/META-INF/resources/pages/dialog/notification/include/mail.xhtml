@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel value="#{msg['dialog.notification.tab.mail.headline']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannel">
+		<h:panelGrid columns="2" styleClass="newStyleListingTable"
+			style="width:100%" columnClasses="columnLabelContainer150, ">
+
+			<!-- Use Mail -->
+			<h:outputLabel value="#{msg['dialog.notification.tab.mail.use']}"
+				styleClass="bigFont" />
+			<p:selectBooleanCheckbox
+				value="#{dialogHandlerAction.notificationDialog.mailTab.containerList.use}"
+				title="#{msg['dialog.notification.tab.mail.use.text']}">
+				<p:ajax event="change" process="@this" update="@form" />
+			</p:selectBooleanCheckbox>
+
+			<!-- subject -->
+			<h:outputLabel value="#{msg['dialog.notification.tab.mail.subject']}"
+				styleClass="bigFont" />
+			<h:inputText
+				value="#{dialogHandlerAction.notificationDialog.mailTab.mailSubject}"
+				style="width:95%"
+				disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}" />
+
+			<!-- Text -->
+			<h:outputLabel value="#{msg['dialog.notification.tab.mail.text']}"
+				styleClass="bigFont" />
+			<h:inputTextarea
+				value="#{dialogHandlerAction.notificationDialog.mailTab.mailBody}"
+				style="width:95%"
+				disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}"
+				rows="10" />
+
+			<!-- Individual address -->
+			<h:outputLabel
+				value="#{msg['dialog.notification.tab.mail.individualAddress']}"
+				styleClass="bigFont" />
+			<p:selectBooleanCheckbox
+				disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}"
+				value="#{dialogHandlerAction.notificationDialog.mailTab.containerList.individualAddresses}"
+				title="#{msg['dialog.notification.tab.mail.individualAddress.text']}">
+				<p:ajax event="change" process="@this" update="@form" />
+			</p:selectBooleanCheckbox>
+
+			<!-- pdf template -->
+			<h:outputLabel
+				value="#{msg['dialog.notification.tab.mail.pdfTemplate']}"
+				styleClass="bigFont" />
+			<p:selectOneMenu
+				value="#{dialogHandlerAction.notificationDialog.mailTab.containerList.defaultReport}"
+				converter="#{dialogHandlerAction.notificationDialog.mailTab.templateTransformer}"
+				disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}">
+
+				<f:selectItem itemValue="#{null}"
+					itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}"></f:selectItem>
+
+				<f:selectItems
+					value="#{dialogHandlerAction.notificationDialog.mailTab.templateList}"
+					var="template" itemLabel="#{template.name}" itemValue="#{template}" />
+
+				<p:ajax update="@this" event="change" process="@this" />
+			</p:selectOneMenu>
+
+			<!-- receiver -->
+			<h:outputLabel
+				value="#{msg['dialog.notification.tab.mail.receiver']}"
+				styleClass="bigFont" />
+
+			<p:dataTable var="container" scrollable="true" scrollHeight="160"
+				style="width:96%" styleClass="newStyleDataTable"
+				value="#{dialogHandlerAction.notificationDialog.mailTab.containerList.container}">
+
+				<!-- name of receiver -->
+				<p:column
+					headerText="#{msg['dialog.notification.tab.mail.receiver.name']}"
+					style="width:auto">
+					<h:outputText value="#{container.contact.person.fullName}" />
+					<ui:fragment rendered="#{container.notification.failed}">
+						<i class="fa fa-fw fa-times-circle icon-red"
+							title="#{msg['dialog.notification.tab.mail.receiver.failedAndRetry']}: #{container.notification.commentary}" />
+					</ui:fragment>
+				</p:column>
+
+				<!-- email -->
+				<p:column
+					headerText="#{msg['dialog.notification.tab.mail.receiver.email']}"
+					style="width:auto">
+					<p:inputText value="#{container.contactAddress}"
+						disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use or !container.perform}"
+						style="width:98%" />
+				</p:column>
+
+				<!-- perform notification on user -->
+				<p:column style="width:7%">
+					<f:facet name="header">
+						<i class="fa fa-check-circle-o "
+							title="#{msg['dialog.notification.tab.mail.receiver.use']}" />
+					</f:facet>
+
+					<p:selectBooleanCheckbox
+						disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}"
+						value="#{container.perform}">
+						<p:ajax event="change" update="@form" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+
+				<!-- options -->
+				<p:column style="width:10%; text-align:center;">
+					<f:facet name="header">
+						<i class="fa fa-file-pdf-o"
+							title="#{msg['dialog.notification.tab.mail.receiver.pdf.info']}" />
+					</f:facet>
+
+					<!-- add pdf, if pdf == null -->
+					<p:commandLink styleClass="noUnderlineAtLink"
+						rendered="#{container.pdf eq null and container.perform}"
+						disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}"
+						title="#{msg['dialog.notification.tab.mail.receiver.pdf.info']}"
+						execute="@this" onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						actionListener="#{dialogHandlerAction.notificationDialog.openSelectPDFDialog(dialogHandlerAction.notificationDialog.task, container.contact)}">
+
+						<f:attribute name="container" value="#{container}" />
+
+						<p:ajax event="dialogReturn" update="@form" process="@form"
+							listener="#{dialogHandlerAction.notificationDialog.onSelectPDFDialogReturn}">
+						</p:ajax>
+
+						<i class="fa fa-fw fa-file-pdf-o" />
+					</p:commandLink>
+
+					<!-- show pdf, if pdf != null -->
+					<p:commandLink styleClass="noUnderlineAtLink"
+						rendered="#{container.pdf ne null and container.perform}"
+						title="#{msg['dialog.notification.tab.mail.receiver.pdf.show']}"
+						execute="@this"
+						disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}"
+						actionListener="#{dialogHandlerAction.notificationDialog.openMediaViewDialog(container.pdf)}">
+
+						<i class="fa fa-search icon-grey" />
+					</p:commandLink>
+
+					<!-- remove pdf, if pdf != null -->
+					<p:commandLink styleClass="noUnderlineAtLink"
+						style="margin-left: 10px;"
+						rendered="#{container.pdf ne null and container.perform}"
+						title="#{msg['dialog.notification.tab.mail.receiver.pdf.remove']}"
+						execute="@this"
+						disabled="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}"
+						update="@form" actionListener="#{container.setPdf(null)}">
+
+						<i class="fa fa-close icon-grey" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="1" styleClass="newTableContainer left">
+				<!-- Contact -->
+				<p:commandButton process="@form"
+					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
+					icon="fa fa-fw fa-cog"
+					actionListener="#{dialogHandlerAction.contactDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+					<p:ajax event="dialogReturn" update="@form"
+						listener="#{dialogHandlerAction.notificationDialog.mailTab.updateData()}" />
+				</p:commandButton>
+			</h:panelGrid>
+
+			<h:panelGrid columns="3" styleClass="newTableContainer right">
+				<!-- previouse -->
+				<p:commandButton value="#{msg['general.back']}"
+					icon="fa fa-fw fa-arrow-left"
+					actionListener="#{dialogHandlerAction.notificationDialog.previousTab()}"
+					process="@form" update="@form" />
+
+				<!-- next -->
+				<p:commandButton value="#{msg['general.next']}"
+					icon="fa fa-fw fa-arrow-right"
+					actionListener="#{dialogHandlerAction.notificationDialog.nextTab()}"
+					process="@form" update="@form" />
+
+				<!-- close -->
+				<p:commandButton value="#{msg['general.close']}"
+					icon="fa fa-times-circle" process="@form"
+					actionListener="#{dialogHandlerAction.notificationDialog.hideDialog()}" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+</ui:composition>

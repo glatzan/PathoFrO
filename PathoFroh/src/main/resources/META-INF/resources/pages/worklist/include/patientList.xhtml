@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:poll
+		interval="#{globalEditViewHandler.worklistData.worklist.udpateInterval}"
+		update=":navigationForm:patientList"
+		oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+		rendered="#{globalEditViewHandler.worklistData.worklist.autoUpdate}"
+		stop="#{!globalEditViewHandler.worklistData.worklist.autoUpdate}"
+		listener="#{worklistViewHandlerAction.currentWokrlistHandler.autoReloadCurrentWorklist()}" />
+
+	<h:outputScript library="scripts" name="updateAndScrollScrollPanel.js" />
+
+	<!-- submit function for search -->
+	<script type="text/javascript">
+			function submitQuickSearch(event) {
+		
+			if (event.keyCode == 13 || event.keyCode == 10) {
+				PF('submitQuickSearchBtn').jq.click();
+				return true;
+			}
+
+			return false;
+		}
+
+		function autoSumbitQuickSeach(event) {
+			if (event.keyCode != 13 &amp;&amp; event.keyCode != 10) {
+				
+				var strg = $('#navigationForm\\:searchField').val();
+	
+				var found = strg.match(/^\d{8}$/g);
+				if(found != null){
+					// TODO						
+				}
+					
+			}
+		}
+	</script>
+
+	<!-- Search -->
+	<h:panelGrid columns="1"
+		styleClass="defaultHistoHiddenTableContainer headerTable">
+
+		<h:panelGrid columns="2" styleClass="histoTable">
+			<!-- search field -->
+			<h:panelGroup>
+				<p:focus for="searchField" />
+				<p:inputText placeholder="#{msg.headSearch}" id="searchField"
+					styleClass="seachFiled"
+					value="#{globalEditViewHandler.quickSearch}"
+					onkeyup="autoSumbitQuickSeach(event);"
+					onkeypress="if(submitQuickSearch(event)){ return false;}">
+				</p:inputText>
+			</h:panelGroup>
+
+			<p:commandButton id="submitQuickSearchBtn"
+				widgetVar="submitQuickSearchBtn"
+				actionListener="#{globalEditViewHandler.quickSearch()}"
+				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+				update="navigationForm:patientList navigationForm:searchField contentForm headerForm"
+				icon="fa fa-mail-forward">
+				<p:ajax event="dialogReturn"
+					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+					update="navigationForm:patientList navigationForm:searchField contentForm headerForm @this" />
+			</p:commandButton>
+
+		</h:panelGrid>
+	</h:panelGrid>
+
+	<!-- Navigation -->
+	<h:panelGrid columns="2" styleClass="patientNavigationHeader">
+		<h:outputLabel value="#{msg['body.worklist.navigation.headline']}"
+			styleClass="icon-grey" />
+
+		<h:panelGroup styleClass="buttonContainer">
+			<!-- Button UP -->
+			<p:commandLink title="#{msg['body.worklist.navigation.button.up']}"
+				actionListener="#{worklistViewHandlerAction.selectNextTask()}"
+				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+				update="navigationForm:patientList contentForm headerForm">
+				<i class="fa fa-arrow-circle-up"></i>
+			</p:commandLink>
+
+			<!-- Button Down -->
+			<p:commandLink title="#{msg['body.worklist.navigation.button.down']}"
+				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+				actionListener="#{worklistViewHandlerAction.selectPreviouseTask()}"
+				update="navigationForm:patientList contentForm headerForm">
+				<i class="fa fa-arrow-circle-down"></i>
+			</p:commandLink>
+
+			<!-- Button Sort -->
+			<p:commandLink title="#{msg['body.worklist.navigation.button.sort']}"
+				actionListener="#{worklistSettingsDialog.initAndPrepareBeanForSorting()}">
+				<i class="fa fa-th-list"></i>
+				<p:ajax event="dialogReturn"
+					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+					update="navigationForm contentForm headerForm" />
+			</p:commandLink>
+
+			<!-- Worklist settings -->
+			<p:commandLink
+				title="#{msg['body.worklist.navigation.button.settings']}"
+				actionListener="#{worklistSettingsDialog.initAndPrepareBeanForSettings()}">
+				<i class="fa fa-wrench"></i>
+				<p:ajax event="dialogReturn"
+					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+					update="navigationForm contentForm headerForm" />
+			</p:commandLink>
+
+			<!-- Worklist change -->
+			<p:commandLink partialSubmit="true" process="@this"
+				rendered="#{userHandlerAction.currentUserHasPermission('USER_WORKLIST')}"
+				title="#{msg['body.worklist.navigation.button.changelist']}"
+				actionListener="#{worklistSearchDialog.initAndPrepareBean()}">
+				<i class="fa fa-search"></i>
+				<p:ajax event="dialogReturn"
+					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+					update="navigationForm contentForm headerForm" />
+			</p:commandLink>
+
+			<!-- Worklist clear -->
+			<p:commandLink partialSubmit="true" process="@this"
+				title="#{msg['body.worklist.navigation.button.changelist']}"
+				actionListener="#{worklistViewHandlerAction.clearWorklist(globalEditViewHandler.worklistData.worklist)}"
+				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+				update="navigationForm contentForm headerForm">
+				<i class="fa fa-times-circle-o"></i>
+			</p:commandLink>
+		</h:panelGroup>
+	</h:panelGrid>
+
+	<!-- Nav Table -->
+	<p:scrollPanel styleClass="patientScrollPanelStyle" mode=""
+		id="patientNavigationScroll">
+		<p:dataTable var="patient" id="patientList"
+			value="#{globalEditViewHandler.worklistData.worklist.items}"
+			selectionMode="single" rowIndexVar="rowIdx"
+			selection="#{globalEditViewHandler.worklistData.worklist.selectedPatient}"
+			rowKey="#{patient.id}" styleClass="patientNavigationBody">
+
+			<p:ajax event="rowSelect"
+				update="navigationForm:patientList contentForm headerForm"
+				listener="#{worklistViewHandlerAction.goToSelectPatient(globalEditViewHandler.worklistData.worklist.selectedPatient.id)}" />
+
+			<p:column>
+				<h:panelGrid styleClass="defaultHistoHiddenTableContainer"
+					columns="2" columnClasses="columnWidth150 columnTop, columnTop">
+
+					<!-- Header -->
+					<h:panelGrid styleClass="defaultHistoTable" columns="1"
+						columnClasses="columnWidth150,">
+
+						<h:outputText
+							value="#{patient.person.lastName}, #{patient.person.firstName}" />
+
+						<h:outputText
+							value="PIZ: #{patient.piz ne 0 ? patient.piz : 'none'}" />
+
+						<h:outputText value="#{patient.person.birthday}"
+							rendered="#{patient.person.birthday ne null}">
+							<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+						</h:outputText>
+						<h:outputText rendered="#{patient.person.birthday eq null}"
+							value="" />
+						<h:outputText value="" />
+					</h:panelGrid>
+
+					<!-- tasks -->
+					<h:panelGrid styleClass="defaultHistoHiddenTableContainer"
+						columns="1">
+						<!-- task list -->
+						<p:repeat var="task" value="#{patient.tasks}">
+
+							<!-- opaque if not active or action pending -->
+							<h:panelGroup
+								rendered="#{task.taskStatus.active or (!globalEditViewHandler.worklistData.worklist.showActiveTasksExplicit and task.taskStatus.actionPending) or globalEditViewHandler.worklistData.worklist.showNoneActiveTasks}"
+								style="#{task.taskStatus.active or (!globalEditViewHandler.worklistData.worklist.showActiveTasksExplicit and task.taskStatus.actionPending) ? '' : ' opacity: 0.3;'}">
+								<!-- rendere if something is to do (or active task only) or showNoneActiveTasks -->
+								<p:commandLink partialSubmit="true" process="@this"
+									actionListener="#{worklistViewHandlerAction.onSelectTaskAndPatient(task.id)}"
+									update="headerForm contentForm navigationForm:patientList">
+
+									<h:outputLabel value="#{task.taskID}"
+										style="#{globalEditViewHandler.worklistData.worklist.selectedTask eq task ? 'text-decoration: underline;font-weight:bold' : ''};" />
+								</p:commandLink>
+
+								<p:repeat var="favouriteList" value="#{task.favouriteLists}">
+									<p:commandLink
+										disabled="#{favouriteList.command eq null or favouriteList.command eq ''}"
+										style="opacity: 1;margin-left: 5px;"
+										styleClass="noUnderlineAtLink"
+										rendered="#{favouriteList.useIcon}"
+										actionListener="#{globalEditViewHandler.executeCommand(favouriteList.command, task)}"
+										process="@this" update="@this">
+										<i style="color: ##{favouriteList.iconColor}"
+											class="fa #{favouriteList.icon}"
+											title="#{favouriteList.infoText}" />
+									</p:commandLink>
+								</p:repeat>
+
+								<!-- Pendings completed -->
+								<h:panelGroup rendered="#{task.taskStatus.finalizeable}">
+									<i style="margin-left: 5px;"
+										class="fa fa-check-circle icon-green"
+										title="#{msg['body.worklist.navigation.activtasks.pendencies']}" />
+								</h:panelGroup>
+
+								<!-- archived -->
+								<h:panelGroup rendered="#{task.finalized}">
+									<i style="margin-left: 5px;" class="fa fa-archive"
+										title="#{msg['body.worklist.navigation.activtasks.archived']}" />
+								</h:panelGroup>
+
+								<!-- priority -->
+								<h:panelGroup rendered="#{task.taskPriority ne 'NONE' }">
+									<i style="margin-left: 5px;"
+										class="fa fa-exclamation #{task.taskPriority eq 'HIGH' ? 'icon-orange' : 'icon-red'}"
+										title="#{msg['body.worklist.navigation.activtasks.priority']}" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<br />
+						</p:repeat>
+					</h:panelGrid>
+
+				</h:panelGrid>
+			</p:column>
+
+		</p:dataTable>
+
+	</p:scrollPanel>
+
+	<!-- scrollspeed of scrollpane -->
+	<script type="text/javascript">
+     $(document).ready(function () {
+    	 setScrollPanelScrollSpeed("navigationForm:patientNavigationScroll");
+     });
+	</script>
+
+	<p:contextMenu for="patientList">
+		<p:menuitem value="Entfernen" icon="ui-icon-close"
+			actionListener="#{worklistViewHandlerAction.removePatientFromCurrentWorklist(globalEditViewHandler.worklistData.worklist.selectedPatient)}"
+			update="navigationForm:patientList contentForm headerForm" />
+	</p:contextMenu>
+</ui:composition>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:histo="http://java.sun.com/jsf/composite/components">
+
+<h:head>
+</h:head>
+
+<h:body>
+	<!-- Close button -->
+	<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+		icon="fa fa-times-circle">
+		<f:actionListener
+			binding="#{dialogHandlerAction.stainingEditDialog.hideDialog()}"></f:actionListener>
+	</p:commandButton>
+
+
+	<!-- Save button -->
+	<p:commandButton value="#{msg['general.save']}" icon="fa fa-save">
+		<f:actionListener
+			binding="#{dialogHandlerAction.stainingEditDialog.saveStaining(dialogHandlerAction.stainingEditDialog.stainingPrototype)}"></f:actionListener>
+		<f:actionListener
+			binding="#{dialogHandlerAction.stainingEditDialog.hideDialog()}"></f:actionListener>
+	</p:commandButton>
+
+	<!-- *************************************** Icons table -->
+
+	<!-- undo fa-undo -->
+	<!-- delete fa-times -->
+
+	<!-- **************************************** Icons links -->
+
+	<!-- new -->
+	<!-- fa-plus-circle -->
+
+	<!-- **************************************** Icons button -->
+	<!-- confirm fa-check-circle-o -->
+	<!-- select fa-check-circle-o -->
+	<!-- save fa-check-circle-o -->
+	<!-- create fa-plus-circle -->
+	<!-- abort fa-times-circle -->
+	<!-- searhc fa-search -->
+	<!-- delete fa fa-fw fa-trash -->
+	<!-- close fa-times-circle -->
+	<!-- edit fa fa-fw fa-pencil -->
+	<!-- upoad fa fa-cloud-upload -->
+	
+	<!-- edit -->
+	<p:commandLink title="#{msg['dialog.settings.material.edit']}"
+		actionListener="#{settingsDialogHandler.getTab('StaticListTab').prepareEditListItem(item)}"
+		styleClass="noUnderlineAtLink" update=":adminForm:tabview:staticLists"
+		process="@this" partialSubmit="true">
+		<i class="fa fa-fw fa-cog" />
+	</p:commandLink>
+
+	<!-- delete -->
+	<p:commandLink title="#{msg['dialog.settings.material.edit']}"
+		rendered="#{!item.archived}" styleClass="noUnderlineAtLink"
+		actionListener="#{settingsDialogHandler.getTab('StaticListTab').archiveListItem(item, true)}"
+		update=":adminForm:tabview:staticLists" process="@this"
+		partialSubmit="true">
+		<i class="fa fa-fw fa-times-circle" />
+	</p:commandLink>
+
+
+
+	<!-- close dialog an open as queque -->
+	<!-- show only button for print dialog, workaround for closing and showing dialogs -->
+	<p:commandButton id="printBtnShowOnly" style="display:none"
+		actionListener="#{mainHandlerAction.showDialog('PRINT')}">
+		<p:ajax event="dialogReturn" update="contentForm" />
+	</p:commandButton>
+
+	<!-- show only button for council dialog, workaround for closing and showing dialogs -->
+	<p:commandButton id="councilBtnShowOnly" style="display:none"
+		actionListener="#{mainHandlerAction.showDialog('COUNCIL')}">
+		<p:ajax event="dialogReturn" update="contentForm" />
+	</p:commandButton>
+</h:body>
+</html>

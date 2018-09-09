@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.staingingPhaseExit.headline']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+
+<h:body styleClass="histoDialogStyle">
+	<h:form id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.staingingPhaseExit.headline']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+			<h:panelGrid columns="1" styleClass="defaultHistoTable"
+				columnClasses="columnLongText">
+				<h:outputLabel value="#{msg['dialog.staingingPhaseExit.text']}"></h:outputLabel>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				style="margin-left:10px">
+				<!-- notify -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.stainingPhaseExitDialog.data.goToDiagnosisPhase}">
+					<p:ajax event="change" update="@form" process="@form" />
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.staingingPhaseExit.checkBox.diagnosisPhase']}" />
+
+				<h:outputLabel value=" " />
+				<h:outputLabel value=" " />
+
+				<!-- remove from staining list -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.stainingPhaseExitDialog.data.removeFromStainingList}">
+					<p:ajax update="@form" process="@form" event="change" />
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.staingingPhaseExit.checkBox.removeFromDiangosisList']}" />
+
+				<!-- end phase -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.stainingPhaseExitDialog.data.endStainingPhase}" />
+				<h:outputLabel
+					value="#{msg['dialog.staingingPhaseExit.checkBox.endStaining']}" />
+
+				<h:outputLabel value=" " />
+				<h:outputLabel value=" " />
+
+				<!-- remove from worklist -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.stainingPhaseExitDialog.data.removeFromWorklist}" />
+				<h:outputLabel
+					value="#{msg['dialog.staingingPhaseExit.checkBox.removeFromWorklist']}" />
+			</h:panelGrid>
+
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="right" id="buttonContainer">
+					<!-- Ok button -->
+					<p:commandButton value="#{msg['general.ok']}" id="closeBtn"
+						icon="fa fa-check-circle-o">
+						<f:actionListener
+							binding="#{dialog.stainingPhaseExitDialog.exitPhaseAndClose()}" />
+					</p:commandButton>
+
+					<!-- abort -->
+					<p:commandButton value="#{msg['general.abort']}"
+						icon="fa fa-times-circle"
+						actionListener="#{dialog.stainingPhaseExitDialog.hideDialog()}"></p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+
+
+	</h:form>
+</h:body>
+</html>

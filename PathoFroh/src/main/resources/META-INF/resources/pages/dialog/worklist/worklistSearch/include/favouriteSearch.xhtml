@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel
+			value="#{msg['dialog.worklistsearch.favouriteList.headline']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannel">
+		<h:panelGrid columns="1" id="favouriteContent"
+			styleClass="newStyleListingTable">
+
+			<p:dataTable var="favouriteListContainer" style="width:100%;"
+				sortBy="#{favouriteListContainer.type}" scrollable="true"
+				expandableRowGroups="true" scrollHeight="450"
+				id="favouriteListTable"
+				rowKey="#{favouriteListContainer.favouriteList.id}"
+				styleClass="worklistSearchDialog_FavouriteSearchTable"
+				selectionMode="single"
+				selection="#{worklistSearchDialog.favouriteSearchTab.selectedContainer}"
+				value="#{worklistSearchDialog.favouriteSearchTab.containers}">
+
+				<p:headerRow>
+					<p:column colspan="3">
+						<h:outputText
+							value="#{msg['dialog.userSettings.favouriteLists.list.'.concat(favouriteListContainer.type)]}" />
+					</p:column>
+				</p:headerRow>
+
+				<p:column
+					headerText="#{msg['dialog.worklistsearch.favouriteList.table.name']}"
+					style="width:30%">
+					<h:outputText value="#{favouriteListContainer.favouriteList.name}"></h:outputText>
+				</p:column>
+
+				<p:column
+					headerText="#{msg['dialog.worklistsearch.favouriteList.table.commentary']}">
+					<h:outputText
+						value="#{favouriteListContainer.favouriteList.commentary}"></h:outputText>
+				</p:column>
+
+				<p:column
+					headerText="#{msg['dialog.worklistsearch.favouriteList.table.options']}">
+					<p:commandLink
+						title="#{msg['dialog.settings.person.list.options.edit']}"
+						actionListener="#{favouriteListEditDialog.initAndPrepareBean(favouriteListContainer.favouriteList)}"
+						process="@this" partialSubmit="true">
+						<p:ajax event="dialogReturn" update="@form" />
+						<i class="fa fa-fw fa-pencil" />
+					</p:commandLink>
+				</p:column>
+
+				<p:ajax event="rowSelect" update="@form" />
+
+				<p:ajax event="rowDblselect"
+					oncomplete="sumbitOnDblSelect();return false;" />
+			</p:dataTable>
+
+			<p:remoteCommand name="sumbitOnDblSelect">
+				<f:actionListener
+					binding="#{worklistSearchDialog.favouriteSearchTab.selectAsWorklist()}" />
+				<f:actionListener
+					binding="#{worklistSearchDialog.hideDialog()}" />
+			</p:remoteCommand>
+		</h:panelGrid>
+	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="1" styleClass="newTableContainer left">
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<p:commandButton value="#{msg['general.select']}"
+					icon="fa fa-search" widgetVar="serachBtn"
+					disabled="#{worklistSearchDialog.favouriteSearchTab.selectedContainer eq null}"
+					onclick="disableButton(true, 'serachBtn', 'closeBtn')"
+					process="@form">
+					<f:actionListener
+						binding="#{worklistSearchDialog.favouriteSearchTab.selectAsWorklist()}" />
+					<f:actionListener
+						binding="#{worklistSearchDialog.hideDialog()}" />
+				</p:commandButton>
+
+				<p:commandButton value="#{msg['general.close']}" immediate="true"
+					widgetVar="closeBtn" icon="fa fa-times-circle">
+					<f:actionListener
+						binding="#{worklistSearchDialog.hideDialog()}" />
+				</p:commandButton>
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+</ui:composition>

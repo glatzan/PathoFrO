@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.pdfOrganizer.headline']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+
+<h:body styleClass="histoDialogStyle pdfOrganizer">
+	<h:form id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.pdfOrganizer.headline']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+
+			<h:panelGrid columns="2"
+				styleClass="defaultHistoHiddenTableContainer"
+				columnClasses="columnTop columnWidth250, columnTop"
+				style="width:100%">
+				<p:panelGrid styleClass="defaultHistoHiddenTableContainer"
+					style="background: black; height: 655px">
+					<p:row>
+						<p:column styleClass="columnTop">
+							<!-- scrolling -->
+							<p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody"
+								style="height:400px;">
+								<!-- navigation tree -->
+								<p:tree value="#{dialog.pdfOrganizer.root}" var="node"
+									styleClass="histoTree" style="width:99%" id="menuTree"
+									selectionMode="single" draggable="true" droppable="true"
+									dropRestrict="pdf"
+									selection="#{dialog.pdfOrganizer.selectedNode}">
+
+									<p:ajax event="select"
+										update="dialogContent:content dialogContent:printBtnContainer dialogContent:buttonBtnContainer dialogContent:pdfInfo"
+										listener="#{dialog.pdfOrganizer.displaySelectedContainer()}" />
+
+									<p:ajax event="dragdrop" onstart="setMouseEnterEvents(false)"
+										listener="#{dialog.pdfOrganizer.onDragDrop}"
+										update="dialogContent:menuTree"
+										oncomplete="setMouseEnterEvents(true)" />
+
+									<!-- root -->
+									<p:treeNode expandedIcon="ui-icon-folder-open"
+										collapsedIcon="ui-icon-folder-collapsed">
+										<h:outputText value="#{node}" />
+									</p:treeNode>
+
+									<!-- patient -->
+									<p:treeNode type="dropAble_Patient" expandedIcon="fa fa-user"
+										collapsedIcon="fa fa-user">
+										<h:outputText value="#{node.getPerson().getFullName()}" />
+									</p:treeNode>
+
+									<!-- Task -->
+									<p:treeNode type="dropAble_Task"
+										expandedIcon="ui-icon-folder-open"
+										collapsedIcon="ui-icon-folder-collapsed">
+										<h:outputText value="#{node.taskID}" />
+									</p:treeNode>
+
+									<!-- bio bank -->
+									<p:treeNode type="dropAble_Biobank" expandedIcon="fa fa-tree"
+										collapsedIcon="fa fa-tree">
+										<h:outputText value="Biobank" />
+									</p:treeNode>
+
+									<!-- pdfs -->
+									<p:treeNode type="pdf" icon="fa fa-file-pdf-o">
+										<h:panelGrid columns="1" styleClass="mouseEntryEventElemnt"
+											id="bine">
+											<f:passThroughAttribute name="tvalue" value="#{node.id}" />
+
+											<!-- name -->
+											<h:outputText value="#{node.name}" id="treeNode">
+												<f:converter converterId="org.histo.ui.TruncateConverter" />
+												<f:attribute name="truncateAt" value="25" />
+												<f:attribute name="continuationMark" value="..." />
+											</h:outputText>
+										</h:panelGrid>
+
+										<!-- tooltip -->
+										<pe:tooltip for="bine" onShow="updatef1#{node.id}()"
+											mouseTracking="true" myPosition="top left" adjustX="10"
+											adjustY="10">
+
+											<p:remoteCommand name="updatef1#{node.id}" update="bild2" />
+
+											<h:panelGrid columns="2"
+												columnClasses="columnTop, columnLeft" id="bild2"
+												style="width:100%"
+												styleClass="defaultHistoHiddenTableContainer">
+												<h:panelGrid columns="2" styleClass="defaultHistoTable">
+													<!-- name -->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.name']}" />
+													<h:outputText value="#{node.name}">
+														<f:converter converterId="org.histo.ui.TruncateConverter" />
+														<f:attribute name="truncateAt" value="35" />
+														<f:attribute name="continuationMark" value="..." />
+													</h:outputText>
+
+													<!-- created date-->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.createdOn']}"></h:outputText>
+													<h:outputText value="#{node.audit.createdOn}">
+														<f:convertDateTime type="date"
+															pattern="dd.MM.yyyy HH:mm:ss" />
+													</h:outputText>
+
+													<!-- created name-->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.createdBy']}"></h:outputText>
+													<h:outputText value="#{node.audit.createdBy}">
+													</h:outputText>
+
+													<!-- updated date-->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.updatedOn']}"></h:outputText>
+													<h:outputText
+														style="#{node.audit.updatedOn eq 0 ? 'display:none' : ''}"
+														value="#{node.audit.updatedOn}">
+														<f:convertDateTime type="date"
+															pattern="dd.MM.yyyy HH:mm:ss" />
+													</h:outputText>
+
+													<!-- updated name-->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.updatedBy']}"></h:outputText>
+													<h:outputText value="#{node.audit.updatedBy}">
+													</h:outputText>
+
+													<!-- type -->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.type']}"></h:outputText>
+													<h:outputLabel
+														value="#{msg['enum.documentType.'.concat(node.type)]}" />
+
+													<!-- commentary -->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.commentary']}"></h:outputText>
+													<h:outputText value="#{node.commentary}"
+														title="#{node.commentary}">
+														<f:converter converterId="org.histo.ui.TruncateConverter" />
+														<f:attribute name="truncateAt" value="35" />
+														<f:attribute name="continuationMark" value="..." />
+													</h:outputText>
+												</h:panelGrid>
+
+												<!-- preview image -->
+												<h:panelGrid columns="1" styleClass="defaultHistoTable">
+													<p:graphicImage
+														value="#{dialog.pdfOrganizer.getThumbnail()}"
+														style="border: 1px solid black; float: right;"
+														width="200px" cache="false" alt="unable to load image" />
+												</h:panelGrid>
+											</h:panelGrid>
+										</pe:tooltip>
+
+										<p:remoteCommand name="updateToolTip#{node.id}"
+											actionListener="#{dialog.pdfOrganizer.setTooltip(node)}" />
+
+									</p:treeNode>
+								</p:tree>
+
+								<!-- content menu for navigation tree -->
+								<p:contextMenu for="menuTree" nodeType="pdf">
+									<p:menuitem
+										disabled="#{dialog.pdfOrganizer.displayPDF.restricted}"
+										value="#{msg['dialog.pdfOrganizer.tree.menu.edit']}"
+										onclick="$('#dialogContent\\:editBTN').click();"
+										icon="fa fa-pencil" />
+									<p:menuitem
+										disabled="#{dialog.pdfOrganizer.displayPDF.restricted}"
+										value="#{msg['dialog.pdfOrganizer.tree.menu.delete']}"
+										update="@form"
+										actionListener="#{dialog.pdfOrganizer.deletePDFContainer()}"
+										onclick="$('#dialogContent\\:deleteBTN').click();"
+										icon="fa fa-trash" />
+								</p:contextMenu>
+
+								<h:panelGroup>
+
+									<!-- edit button -->
+									<p:commandButton style="display: none" id="editBTN"
+										actionListener="#{dialog.pdfOrganizer.editPDFContainer()}">
+										<p:ajax event="dialogReturn"
+											listener="#{dialog.pdfOrganizer.onDefaultDialogReturn}"
+											update="dialogContent:menuTree dialogContent:printBtnContainer dialogContent:buttonBtnContainer"></p:ajax>
+									</p:commandButton>
+
+									<!-- delete button -->
+									<p:commandButton style="display: none" id="deleteBTN"
+										actionListener="#{dialog.pdfOrganizer.deletePDFContainer()}">
+
+										<p:ajax event="dialogReturn"
+											listener="#{dialog.pdfOrganizer.onDefaultDialogReturn}"
+											update="@form"></p:ajax>
+									</p:commandButton>
+
+								</h:panelGroup>
+
+							</p:scrollPanel>
+
+							<!-- PDF INFO -->
+							<h:panelGroup id="pdfInfo">
+								<h:panelGrid columns="2" styleClass="defaultHistoTable"
+									style="margin-top:5px;"
+									rendered="#{dialog.pdfOrganizer.displayPDF ne null}">
+									<!-- name -->
+									<h:outputText value="#{msg['dialog.pdfOrganizer.files.name']}" />
+									<h:outputText value="#{dialog.pdfOrganizer.displayPDF.name}"
+										title="#{dialog.pdfOrganizer.displayPDF.name}">
+										<f:converter converterId="org.histo.ui.TruncateConverter" />
+										<f:attribute name="truncateAt" value="35" />
+										<f:attribute name="continuationMark" value="..." />
+									</h:outputText>
+
+									<!-- created date-->
+									<h:outputText
+										value="#{msg['dialog.pdfOrganizer.files.createdOn']}"></h:outputText>
+									<h:outputText
+										value="#{dialog.pdfOrganizer.displayPDF.audit.createdOn}">
+										<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
+									</h:outputText>
+
+									<!-- created name-->
+									<h:outputText
+										value="#{msg['dialog.pdfOrganizer.files.createdBy']}"></h:outputText>
+									<h:outputText
+										value="#{dialog.pdfOrganizer.displayPDF.audit.createdBy}">
+									</h:outputText>
+
+									<!-- updated date-->
+									<h:outputText
+										value="#{msg['dialog.pdfOrganizer.files.updatedOn']}"></h:outputText>
+									<h:outputText
+										style="#{dialog.pdfOrganizer.displayPDF.audit.updatedOn eq 0 ? 'display:none' : ''}"
+										value="#{dialog.pdfOrganizer.displayPDF.audit.updatedOn}">
+										<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
+									</h:outputText>
+
+									<!-- updated name-->
+									<h:outputText
+										value="#{msg['dialog.pdfOrganizer.files.updatedBy']}"></h:outputText>
+									<h:outputText
+										value="#{dialog.pdfOrganizer.displayPDF.audit.updatedBy}">
+									</h:outputText>
+
+									<!-- type -->
+									<h:outputText value="#{msg['dialog.pdfOrganizer.files.type']}"></h:outputText>
+									<h:outputLabel
+										value="#{msg['enum.documentType.'.concat(dialog.pdfOrganizer.displayPDF.type)]}" />
+
+									<!-- commentary -->
+									<h:outputText
+										value="#{msg['dialog.pdfOrganizer.files.commentary']}"></h:outputText>
+
+									<h:outputText
+										value="#{dialog.pdfOrganizer.displayPDF.commentary}"
+										title="#{dialog.pdfOrganizer.displayPDF.commentary}">
+										<f:converter converterId="org.histo.ui.TruncateConverter" />
+										<f:attribute name="truncateAt" value="35" />
+										<f:attribute name="continuationMark" value="..." />
+									</h:outputText>
+								</h:panelGrid>
+							</h:panelGroup>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column styleClass="columnBottom">
+							<!-- upload -->
+							<h:outputLabel value="#{msg['dialog.pdfOrganizer.upload']}"></h:outputLabel>
+							<p:fileUpload style="width:300px;" update="@form"
+								fileUploadListener="#{dialog.pdfOrganizer.handleFileUpload}"
+								mode="advanced" auto="true" sizeLimit="10000000"
+								allowTypes="/(\.|\/)(pdf)$/" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+				<!-- document viewer -->
+				<h:panelGrid id="content"
+					styleClass="defaultHistoHiddenTableContainer noupdate"
+					style="width:calc(100% - 5px)">
+					<pe:documentViewer height="650" style="margin-left:5px;"
+						class="noupdate"
+						rendered="#{dialog.pdfOrganizer.getDisplayPDF() ne null}"
+						value="#{dialog.pdfOrganizer.getPDF()}"
+						download="extensions-rocks.pdf" />
+				</h:panelGrid>
+
+			</h:panelGrid>
+			<script>
+				$(document).ready(function() {
+					setMouseEnterEvents(true);
+					setScrollPanelScrollSpeed("dialogContent:scrollBody");
+				});
+
+				// mouse entry event for tree nodes
+				function setMouseEnterEvents() {
+					$(".mouseEntryEventElemnt").each(
+							function(index) {
+
+								$(this).mouseenter(
+										function() {
+											eval("updateToolTip"
+													+ $(this).attr("tvalue")
+													+ "()");
+											//PF('tooltipOverlay').show($(this).attr("id"));
+										});
+
+								$(this).mouseleave(function() {
+									//PF('tooltipOverlay').hide();
+								});
+
+							});
+				}
+			</script>
+
+			<p:overlayPanel></p:overlayPanel>
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="5" styleClass="left" id="printBtnContainer">
+
+					<!-- print -->
+					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.print']}"
+						disabled="#{dialog.pdfOrganizer.displayPDF eq null}"
+						icon="fa fa-print"
+						actionListener="#{dialog.pdfOrganizer.displayPrintNotification(userHandlerAction.selectedPrinter.print(dialog.pdfOrganizer.displayPDF))}"></p:commandButton>
+
+					<!-- select printer -->
+					<p:selectOneMenu styleClass="customSerachSelectMenu"
+						panelStyleClass="customSerachSelectMenuPanel"
+						converter="#{printService.cupsPrinter.printerTransformer}"
+						value="#{userHandlerAction.selectedPrinter}" filter="true"
+						filterMatchMode="contains">
+
+						<f:selectItems value="#{printService.cupsPrinter.printer}"
+							var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
+					</p:selectOneMenu>
+
+					<!-- download button -->
+					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.open']}"
+						icon="fa fa-download" ajax="false"
+						disabled="#{dialog.pdfOrganizer.displayPDF eq null}">
+						<p:fileDownload value="#{dialog.pdfOrganizer.getPDF()}" />
+					</p:commandButton>
+
+					<!-- edit button -->
+					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.edit']}"
+						icon="fa fa-pencil"
+						disabled="#{dialog.pdfOrganizer.displayPDF eq null or dialog.pdfOrganizer.displayPDF.restricted}"
+						actionListener="#{dialog.pdfOrganizer.editPDFContainer(dialog.pdfOrganizer.displayPDF)}">
+
+						<p:ajax event="dialogReturn"
+							listener="#{dialog.pdfOrganizer.onDefaultDialogReturn}"
+							update="dialogContent:menuTree dialogContent:printBtnContainer dialogContent:buttonBtnContainer"></p:ajax>
+					</p:commandButton>
+
+					<!-- delete button -->
+					<p:commandButton
+						value="#{msg['dialog.pdfOrganizer.button.delete']}"
+						disabled="#{dialog.pdfOrganizer.displayPDF eq null or dialog.pdfOrganizer.displayPDF.restricted}"
+						icon="fa fa-trash"
+						actionListener="#{dialog.pdfOrganizer.deletePDFContainer(dialog.pdfOrganizer.displayPDF)}">
+
+						<p:ajax event="dialogReturn"
+							listener="#{dialog.pdfOrganizer.onDefaultDialogReturn}"
+							update="@form"></p:ajax>
+					</p:commandButton>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="right" id="buttonBtnContainer">
+
+					<!-- upload button -->
+					<p:commandButton
+						value="#{msg['dialog.pdfOrganizer.button.upload']}"
+						icon="fa fa-cloud-upload"
+						actionListener="#{dialog.uploadDialog.initAndPrepareBean(dialog.pdfOrganizer.dataLists,dialog.pdfOrganizer.patient).initilizeUploadFileTypes()}">
+
+						<p:ajax event="dialogReturn"
+							listener="#{dialog.pdfOrganizer.onDefaultDialogReturn}"
+							update="@form"></p:ajax>
+					</p:commandButton>
+
+					<!-- Close button -->
+					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
+						icon="fa fa-times-circle"
+						actionListener="#{dialog.pdfOrganizer.hideDialog()}" />
+
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.addSlide.Headline']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+
+<h:body styleClass="histoDialogStyle">
+	<h:form id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.addSlide.Headline']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+			<p:accordionPanel styleClass="contentAccordionPannel"
+				style="height:320px" value="#{dialog.addSlidesDialog.container}"
+				var="container">
+				<p:tab title="#{container.type}">
+					<h:panelGrid columns="2" cellpadding="5">
+						<p:dataTable var="stainingHolder"
+							styleClass="defaultHistoDataTable"
+							rowKey="#{stainingHolder.prototype.id}"
+							selection="#{container.selectedPrototypes}" scrollable="true"
+							scrollHeight="250" value="#{container.prototpyes}">
+
+							<p:column selectionMode="multiple"
+								style="width:16px;text-align:center" />
+
+							<p:column style="width: *;" headerText="Färbung">
+								<h:outputText value="#{stainingHolder.prototype.name}" />
+							</p:column>
+
+							<p:column style="width: 70px;" headerText="Anzahl">
+								<p:spinner value="#{stainingHolder.count}" min="1" max="100"
+									size="4">
+									<p:ajax process="@this" />
+								</p:spinner>
+							</p:column>
+
+							<p:ajax event="rowSelect" update=":dialogContent:buttonContainer"></p:ajax>
+							<p:ajax event="rowUnselect"
+								update=":dialogContent:buttonContainer"></p:ajax>
+							<p:ajax event="rowSelectCheckbox"
+								update=":dialogContent:buttonContainer"></p:ajax>
+							<p:ajax event="rowUnselectCheckbox"
+								update=":dialogContent:buttonContainer"></p:ajax>
+						</p:dataTable>
+					</h:panelGrid>
+				</p:tab>
+			</p:accordionPanel>
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				style="margin-top:10px;"
+				rendered="#{!dialog.addSlidesDialog.selectMode}"
+				columnClasses="columnWidth150," id="commentaryTable">
+				<!-- silde commentary -->
+				<h:outputLabel value="#{msg['dialog.addSlide.commentray']}" />
+				<p:selectOneMenu style="width: 90%"
+					value="#{dialog.addSlidesDialog.commentary}" editable="true">
+
+					<f:selectItems value="#{dialog.addSlidesDialog.slideCommentary}"
+						var="commentary" itemLabel="#{commentary.value}"
+						itemValue="#{commentary.value}" />
+
+				</p:selectOneMenu>
+
+				<!-- is restaining -->
+				<h:panelGroup>
+					<h:outputLabel value="#{msg['dialog.addSlide.restaining']}"
+						id="retainingText" />
+					<p:tooltip for="retainingText">
+						<h:outputLabel value="#{msg['dialog.addSlide.restaining.text']}" />
+					</p:tooltip>
+				</h:panelGroup>
+				<p:selectBooleanCheckbox
+					value="#{dialog.addSlidesDialog.restaining}" />
+
+
+				<!-- as completed -->
+				<h:panelGroup>
+					<h:outputLabel value="#{msg['dialog.addSlide.asCompleted']}"
+						id="asCompletedText" />
+					<p:tooltip for="asCompletedText">
+						<h:outputLabel value="#{msg['dialog.addSlide.asCompleted.text']}" />
+					</p:tooltip>
+				</h:panelGroup>
+				<p:selectBooleanCheckbox
+					value="#{dialog.addSlidesDialog.asCompleted}" />
+			</h:panelGrid>
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="right" id="buttonContainer">
+					<!-- confirm -->
+					<p:commandButton value="#{msg['general.create']}"
+						icon="fa fa-check-circle-o"
+						process="@this :dialogContent:commentaryTable"
+						disabled="#{!dialog.addSlidesDialog.isStainingSelected()}">
+						<f:actionListener
+							binding="#{dialog.addSlidesDialog.addSlidesAndHide()}"></f:actionListener>
+					</p:commandButton>
+
+					<!-- Abort button -->
+					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+						actionListener="#{dialog.addSlidesDialog.hideDialog()}"
+						icon="fa fa-times-circle"></p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

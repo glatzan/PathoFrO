@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.accounting.headline']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+
+<h:body styleClass="histoDialogStyle">
+	<h:form id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.accounting.headline']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					styleClass="noUnderlineAtLink"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+			<h:panelGrid columns="4" styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.accounting.date.from']}"></h:outputLabel>
+				<p:calendar value="#{dialog.accountingDataDialog.fromDate}"
+					locale="de" navigator="true" pattern="yyyy-MMM-dd">
+					<p:ajax event="dateSelect" update="dialogContent:accountingTable dialogContent:leftBtn"
+						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
+					<f:ajax event="change" execute="@this"
+						update="dialogContent:accountingTable dialogContent:leftBtn"
+						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
+				</p:calendar>
+
+				<h:outputLabel value="#{msg['dialog.accounting.date.to']}"></h:outputLabel>
+				<p:calendar value="#{dialog.accountingDataDialog.toDate}"
+					locale="de" navigator="true" pattern="yyyy-MMM-dd">
+					<p:ajax event="dateSelect" update="dialogContent:accountingTable dialogContent:leftBtn"
+						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
+					<f:ajax event="change" execute="@this"
+						update="dialogContent:accountingTable dialogContent:leftBtn"
+						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
+				</p:calendar>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="1" styleClass="defaultHistoTable"
+				id="accountingTable">
+				<p:dataTable var="accountingData" scrollable="true"
+					id="accountingDataDataTable" scrollHeight="470"
+					styleClass="defaultHistoDataTable"
+					value="#{dialog.accountingDataDialog.accountingData}">
+					<p:column headerText="#{msg['dialog.accounting.table.date']}">
+						<h:outputText value="#{accountingData.date}">
+							<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{msg['dialog.accounting.table.piz']}">
+						<h:outputText value="#{accountingData.piz}" />
+					</p:column>
+
+					<p:column headerText="#{msg['dialog.accounting.table._4800']}">
+						<h:outputText value="#{accountingData._4800}" />
+					</p:column>
+
+					<p:column headerText="#{msg['dialog.accounting.table._4802']}">
+						<h:outputText value="#{accountingData._4802}" />
+					</p:column>
+
+					<p:column headerText="#{msg['dialog.accounting.table._4815']}">
+						<h:outputText value="#{accountingData._4015}" />
+					</p:column>
+
+					<p:column headerText="#{msg['dialog.accounting.table._4815Imu']}">
+						<h:outputText value="#{accountingData._4815Imu}" />
+					</p:column>
+
+				</p:dataTable>
+			</h:panelGrid>
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left" id="leftBtn">
+					<!-- export -->
+					<p:commandButton value="#{msg['dialog.accounting.button.export']}" icon="fa fa-download"
+						ajax="false">
+						<p:dataExporter type="xls" target="accountingDataDataTable"
+							fileName="#{dialog.accountingDataDialog.getExportFileName()}" pageOnly="true" />
+					</p:commandButton>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" styleClass="right">
+
+					<!-- Abort button -->
+					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
+						icon="fa fa-times-circle"
+						actionListener="#{dialog.accountingDataDialog.hideDialog()}" />
+
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

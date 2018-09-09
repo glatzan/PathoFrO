@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel
+			value="#{msg['dialog.settings.diagnosis.editTemplate.headline']}" />
+	</p:outputPanel>
+	
+	<p:outputPanel styleClass="bodyPannelFull">
+		<p:panelGrid columns="1" styleClass="noBordersAll collapsedBordersAll"
+			style="width:100%">
+			<p:editor
+				value="#{settingsDialogHandler.diagnosisTab.selectedDiagnosisPreset.extendedDiagnosisText}">
+			</p:editor>
+		</p:panelGrid>
+	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="1" styleClass="newTableContainer left">
+			</h:panelGrid>
+
+			<h:panelGrid columns="4" styleClass="newTableContainer right">
+				<p:commandButton value="#{msg['general.ok']}"
+					icon="fa fa-fw fa-floppy-o" process="@form" partialSubmit="true"
+					update="@form"
+					actionListener="#{settingsDialogHandler.diagnosisTab.discardEditDiagnosisPresetTemplate()}" />
+				<!-- close -->
+				<p:commandButton value="#{msg['general.close']}"
+					icon="fa fa-times-circle" partialSubmit="true" process="@this"
+					actionListener="#{settingsDialogHandler.hideDialog()}" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+
+
+</ui:composition>

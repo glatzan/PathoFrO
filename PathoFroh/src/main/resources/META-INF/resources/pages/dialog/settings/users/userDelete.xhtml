@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.userDelete.headline']}">
+			<f:param
+				value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+		</h:outputFormat></title>
+	<h:outputStylesheet name="histo.css" value="histo.css" />
+	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+
+<h:body styleClass="contentInputDialog">
+
+	<h:form id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="newTableContainer">
+				<h:outputFormat value="#{msg['dialog.userDelete.headline']}">
+					<f:param
+						value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+				</h:outputFormat>
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					styleClass="noUnderlineAtLink"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+			<h:panelGrid columns="1" styleClass="newStyleListingTable"
+				columnClasses="columnLongText">
+				<h:outputFormat value="#{msg['dialog.userDelete.text']}">
+					<f:param
+						value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+				</h:outputFormat>
+			</h:panelGrid>
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2" style="width:100%"
+				styleClass="newTableContainer">
+
+				<h:panelGrid columns="1" styleClass="newTableContainer left">
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="newTableContainer right">
+					<!-- Delete button -->
+					<p:commandButton value="#{msg['general.delete']}" widgetVar="userDeleteBtn"
+						id="userDeleteBtn" icon="fa fa-fw fa-trash"
+						onclick="disableButton(true, 'userDeleteBtn', 'closeBtn')">
+						<f:actionListener
+							binding="#{dialogHandlerAction.editUserDialog.deleteUser()}" />
+
+						<p:ajax event="dialogReturn" 
+							listener="#{dialogHandlerAction.editUserDialog.hideDialog()}"
+							update="@form" />
+					</p:commandButton>
+
+					<!-- abort -->
+					<p:commandButton value="#{msg['general.abort']}" id="closeBtn" widgetVar="closeBtn"
+						icon="fa fa-times-circle"
+						actionListener="#{dialogHandlerAction.editUserDialog.hideDialog()}"></p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+
+	</h:form>
+</h:body>
+</html>

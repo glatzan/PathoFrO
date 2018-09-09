@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+<h:head>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+
+<h:body styleClass="histoTabDialogStyle">
+	<h:form id="adminForm">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.searchPatient.headline']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					immediate="true" styleClass="noUnderlineAtLink">
+					<f:actionListener binding="#{dialog.searchPatientDialog.hideDialog()}" />
+					<i class="fa fa-fw fa-times icon-grey" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<h:panelGrid columns="2" styleClass="dialogContainer">
+			<p:outputPanel id="navigationTable" styleClass="navigationTable">
+				<c:forEach items="#{dialog.searchPatientDialog.tabs}" var="tab"
+					varStatus="loop">
+					<p:commandButton value="#{msg[tab.name]}" immediate="true"
+						disabled="#{tab.disabled}"
+						styleClass="#{tab eq dialog.searchPatientDialog.selectedTab ? 'selectedButton' : ''}"
+						actionListener="#{dialog.searchPatientDialog.onTabChange(tab)}"
+						update="navigationTable dialogContent" />
+				</c:forEach>
+			</p:outputPanel>
+			<p:outputPanel id="dialogContent" styleClass="dialogContent">
+				<ui:include
+					src="#{dialog.searchPatientDialog.selectedTab.centerInclude}" />
+			</p:outputPanel>
+		</h:panelGrid>
+	</h:form>
+
+</h:body>
+</html>
+

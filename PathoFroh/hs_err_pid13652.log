@@ -1,0 +1,421 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x0000000072a6f28a, pid=13652, tid=0x000000000000100c
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_152-b16) (build 1.8.0_152-b16)
+# Java VM: Dynamic Code Evolution 64-Bit Server VM (25.71-b01-dcevmlight-30 mixed mode windows-amd64 compressed oops)
+# Problematic frame:
+# V  [jvm.dll+0xef28a]
+#
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   https://github.com/dcevm/dcevm/issues
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000001558a000):  JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, id=4108, stack(0x0000000015fe0000,0x00000000160e0000)]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x000000000000019a
+
+Registers:
+RAX=0x0000000000000024, RBX=0x0000000000000000, RCX=0x0000000000000000, RDX=0x000000001558a000
+RSP=0x00000000160df020, RBP=0x00000000160df190, RSI=0x00000000000000f9, RDI=0x0000000000000000
+R8 =0x0000000000000001, R9 =0x0000000015590a50, R10=0x0000000023467220, R11=0x0000000000000053
+R12=0x0000000000000054, R13=0x0000000000000000, R14=0x00000000160df620, R15=0x0000000000000024
+RIP=0x0000000072a6f28a, EFLAGS=0x0000000000010202
+
+Top of Stack: (sp=0x00000000160df020)
+0x00000000160df020:   00000000000001f8 0000000100fb6a38
+0x00000000160df030:   0000000000000000 0000000000000000
+0x00000000160df040:   0000000023467220 000000001558a000
+0x00000000160df050:   0000000000000023 0000000072bd4b72
+0x00000000160df060:   0000000000000000 0000000015595270
+0x00000000160df070:   0000000021bc93b0 000000001558a000
+0x00000000160df080:   0000000000000000 0000000072b2e82f
+0x00000000160df090:   0000000000000000 00000000000000f9
+0x00000000160df0a0:   0000000000000057 0000000000000057
+0x00000000160df0b0:   00000000160df201 0000000100fb6a38
+0x00000000160df0c0:   000000001558a000 0000000000000000
+0x00000000160df0d0:   0000000100fb6a38 000000000000000a
+0x00000000160df0e0:   0000000015569d70 000000001558abe8
+0x00000000160df0f0:   00000000000003d8 000000001558a810
+0x00000000160df100:   0000000000000024 0000000100fce6e0
+0x00000000160df110:   00000000000000c7 000000001558a800 
+
+Instructions: (pc=0x0000000072a6f28a)
+0x0000000072a6f26a:   48 8b cf e8 de fe ff ff 48 8b 5c 24 30 48 83 c4
+0x0000000072a6f27a:   20 5f c3 cc cc cc 48 89 5c 24 08 57 48 83 ec 60
+0x0000000072a6f28a:   80 b9 9a 01 00 00 02 48 8b fa 48 8b d9 73 21 48
+0x0000000072a6f29a:   8d 4c 24 20 e8 fd 55 10 00 4c 8b c7 b2 01 48 8b 
+
+
+Register to memory mapping:
+
+RAX=0x0000000000000024 is an unknown value
+RBX=0x0000000000000000 is an unknown value
+RCX=0x0000000000000000 is an unknown value
+RDX=0x000000001558a000 is a thread
+RSP=0x00000000160df020 is pointing into the stack for thread: 0x000000001558a000
+RBP=0x00000000160df190 is pointing into the stack for thread: 0x000000001558a000
+RSI=0x00000000000000f9 is an unknown value
+RDI=0x0000000000000000 is an unknown value
+R8 =0x0000000000000001 is an unknown value
+R9 =0x0000000015590a50 is an unknown value
+R10=0x0000000023467220 is pointing into metadata
+R11=0x0000000000000053 is an unknown value
+R12=0x0000000000000054 is an unknown value
+R13=0x0000000000000000 is an unknown value
+R14=0x00000000160df620 is pointing into the stack for thread: 0x000000001558a000
+R15=0x0000000000000024 is an unknown value
+
+
+Stack: [0x0000000015fe0000,0x00000000160e0000],  sp=0x00000000160df020,  free space=1020k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0xef28a]
+V  [jvm.dll+0x1ae82f]
+V  [jvm.dll+0x1af5a7]
+V  [jvm.dll+0x22ba90]
+V  [jvm.dll+0x17fa88]
+V  [jvm.dll+0x3229b4]
+C  [jdwp.dll+0x9e6b]
+C  [jdwp.dll+0xf168]
+C  [jdwp.dll+0x1f5b9]
+C  [jdwp.dll+0x1f78e]
+V  [jvm.dll+0x198ef8]
+V  [jvm.dll+0x22608f]
+V  [jvm.dll+0x2767ea]
+C  [msvcr100.dll+0x21d9f]
+C  [msvcr100.dll+0x21e3b]
+C  [KERNEL32.DLL+0x11fe4]
+C  [ntdll.dll+0x6cb31]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x000000001e243800 JavaThread "Thread-199" daemon [_thread_blocked, id=13880, stack(0x000000002d080000,0x000000002d180000)]
+  0x000000001e279800 JavaThread "Thread-126" daemon [_thread_blocked, id=6660, stack(0x0000000028780000,0x0000000028880000)]
+  0x000000001e275000 JavaThread "Thread-125" daemon [_thread_blocked, id=6940, stack(0x0000000028680000,0x0000000028780000)]
+  0x000000001e274800 JavaThread "Thread-124" daemon [_thread_blocked, id=16368, stack(0x0000000028580000,0x0000000028680000)]
+  0x000000001e273800 JavaThread "Thread-123" daemon [_thread_blocked, id=14716, stack(0x0000000028480000,0x0000000028580000)]
+  0x000000001e277800 JavaThread "Thread-122" daemon [_thread_in_Java, id=9828, stack(0x0000000028380000,0x0000000028480000)]
+  0x000000001e273000 JavaThread "Thread-121" daemon [_thread_blocked, id=7572, stack(0x0000000028280000,0x0000000028380000)]
+  0x000000001e276000 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=9492, stack(0x0000000022b80000,0x0000000022c80000)]
+  0x000000001e279000 JavaThread "MyExecutor-1" [_thread_blocked, id=2488, stack(0x0000000022a80000,0x0000000022b80000)]
+  0x000000001e26b800 JavaThread "DestroyJavaVM" [_thread_blocked, id=16072, stack(0x0000000004e30000,0x0000000004f30000)]
+  0x000000001e272000 JavaThread "http-nio-8080-AsyncTimeout" daemon [_thread_blocked, id=13596, stack(0x0000000020cb0000,0x0000000020db0000)]
+  0x000000001e26a800 JavaThread "http-nio-8080-Acceptor-0" daemon [_thread_in_native, id=6872, stack(0x0000000020bb0000,0x0000000020cb0000)]
+  0x000000001e270000 JavaThread "http-nio-8080-ClientPoller-1" daemon [_thread_in_native, id=10688, stack(0x0000000020ab0000,0x0000000020bb0000)]
+  0x000000001e26f000 JavaThread "http-nio-8080-ClientPoller-0" daemon [_thread_in_native, id=4204, stack(0x00000000209b0000,0x0000000020ab0000)]
+  0x000000001e271800 JavaThread "http-nio-8080-exec-10" daemon [_thread_blocked, id=13160, stack(0x00000000208b0000,0x00000000209b0000)]
+  0x000000001e26e800 JavaThread "http-nio-8080-exec-9" daemon [_thread_blocked, id=2104, stack(0x00000000207b0000,0x00000000208b0000)]
+  0x000000001e26c000 JavaThread "http-nio-8080-exec-8" daemon [_thread_blocked, id=14020, stack(0x00000000206b0000,0x00000000207b0000)]
+  0x000000001e26d000 JavaThread "http-nio-8080-exec-7" daemon [_thread_blocked, id=7488, stack(0x00000000205b0000,0x00000000206b0000)]
+  0x000000001e26d800 JavaThread "http-nio-8080-exec-6" daemon [_thread_blocked, id=10328, stack(0x00000000204b0000,0x00000000205b0000)]
+  0x000000001e270800 JavaThread "http-nio-8080-exec-5" daemon [_thread_blocked, id=11792, stack(0x00000000203b0000,0x00000000204b0000)]
+  0x00000000155d0000 JavaThread "http-nio-8080-exec-4" daemon [_thread_blocked, id=11372, stack(0x00000000202b0000,0x00000000203b0000)]
+  0x00000000155cb800 JavaThread "http-nio-8080-exec-3" daemon [_thread_blocked, id=1928, stack(0x00000000201b0000,0x00000000202b0000)]
+  0x000000001ac56000 JavaThread "http-nio-8080-exec-2" daemon [_thread_blocked, id=7056, stack(0x00000000200b0000,0x00000000201b0000)]
+  0x000000001ac5b000 JavaThread "http-nio-8080-exec-1" daemon [_thread_blocked, id=14696, stack(0x000000001ffb0000,0x00000000200b0000)]
+  0x000000001ac58000 JavaThread "NioBlockingSelector.BlockPoller-1" daemon [_thread_in_native, id=10572, stack(0x000000001feb0000,0x000000001ffb0000)]
+  0x000000001ac5a800 JavaThread "Live Reload Server" daemon [_thread_in_native, id=11216, stack(0x000000001fdb0000,0x000000001feb0000)]
+  0x000000001ac56800 JavaThread "File Watcher" daemon [_thread_blocked, id=8764, stack(0x000000001fbb0000,0x000000001fcb0000)]
+  0x000000001ac55000 JavaThread "HikariPool-1 housekeeper" daemon [_thread_blocked, id=8380, stack(0x000000001d3e0000,0x000000001d4e0000)]
+  0x000000001ac59000 JavaThread "PostgreSQL-JDBC-SharedTimer-1" daemon [_thread_blocked, id=12736, stack(0x000000001d2e0000,0x000000001d3e0000)]
+  0x00000000155d1000 JavaThread "container-0" [_thread_blocked, id=5548, stack(0x000000001d0e0000,0x000000001d1e0000)]
+  0x00000000155ce800 JavaThread "ContainerBackgroundProcessor[StandardEngine[Tomcat]]" daemon [_thread_blocked, id=16332, stack(0x000000001cfe0000,0x000000001d0e0000)]
+  0x0000000016d03000 JavaThread "Service Thread" daemon [_thread_blocked, id=15096, stack(0x00000000178e0000,0x00000000179e0000)]
+  0x0000000016b5f000 JavaThread "C1 CompilerThread3" daemon [_thread_in_vm, id=15004, stack(0x00000000177e0000,0x00000000178e0000)]
+  0x0000000016b5c800 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=836, stack(0x00000000176e0000,0x00000000177e0000)]
+  0x0000000016b8f800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=7908, stack(0x00000000175e0000,0x00000000176e0000)]
+  0x0000000016b8c800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=16104, stack(0x00000000174e0000,0x00000000175e0000)]
+  0x0000000016a5a800 JavaThread "Thread-4" daemon [_thread_blocked, id=10796, stack(0x00000000171e0000,0x00000000172e0000)]
+  0x0000000016a86000 JavaThread "HotSwap Dispatcher" daemon [_thread_blocked, id=5996, stack(0x00000000170e0000,0x00000000171e0000)]
+  0x0000000016918800 JavaThread "HotSwap Watcher" daemon [_thread_blocked, id=16100, stack(0x0000000016fe0000,0x00000000170e0000)]
+  0x00000000169ad000 JavaThread "Thread-1" daemon [_thread_in_native, id=13428, stack(0x0000000016ee0000,0x0000000016fe0000)]
+  0x0000000015599800 JavaThread "JDWP Command Reader" daemon [_thread_in_native, id=14608, stack(0x00000000161e0000,0x00000000162e0000)]
+  0x0000000015598000 JavaThread "JDWP Event Helper Thread" daemon [_thread_blocked, id=976, stack(0x00000000160e0000,0x00000000161e0000)]
+=>0x000000001558a000 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, id=4108, stack(0x0000000015fe0000,0x00000000160e0000)]
+  0x000000001557f800 JavaThread "Attach Listener" daemon [_thread_blocked, id=6972, stack(0x0000000015ba0000,0x0000000015ca0000)]
+  0x000000001557d800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=13092, stack(0x0000000015aa0000,0x0000000015ba0000)]
+  0x0000000015565800 JavaThread "Finalizer" daemon [_thread_blocked, id=15640, stack(0x0000000015880000,0x0000000015980000)]
+  0x00000000050a5800 JavaThread "Reference Handler" daemon [_thread_blocked, id=3268, stack(0x0000000015780000,0x0000000015880000)]
+
+Other Threads:
+  0x000000000509e000 VMThread [stack: 0x0000000015680000,0x0000000015780000] [id=8808]
+  0x0000000016d0a800 WatcherThread [stack: 0x00000000179e0000,0x0000000017ae0000] [id=5112]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x0000000004faeb00] CodeCache_lock - owner thread: 0x0000000016b5f000
+
+Heap:
+ def new generation   total 78720K, used 6698K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K,   6% used [0x0000000080000000, 0x00000000804afe20, 0x0000000084460000)
+  from space 8704K,  21% used [0x0000000084ce0000, 0x0000000084ebaa60, 0x0000000085560000)
+  to   space 8704K,   0% used [0x0000000084460000, 0x0000000084460000, 0x0000000084ce0000)
+ tenured generation   total 174784K, used 109741K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  62% used [0x00000000aaaa0000, 0x00000000b15cb638, 0x00000000b15cb800, 0x00000000b5550000)
+ Metaspace       used 112084K, capacity 117654K, committed 117888K, reserved 1150976K
+  class space    used 15045K, capacity 16203K, committed 16256K, reserved 1048576K
+
+Card table byte_map: [0x00000000145c0000,0x00000000149d0000] byte_map_base: 0x00000000141c0000
+
+Polling page: 0x0000000004dd0000
+
+CodeCache: size=245760Kb used=25181Kb max_used=33468Kb free=220578Kb
+ bounds [0x0000000005200000, 0x00000000072c0000, 0x0000000014200000]
+ total_blobs=13041 nmethods=12296 adapters=663
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 166.613 Thread 0x0000000016b5f000 17634       1       org.hotswap.agent.javassist.bytecode.AttributeInfo::read (477 bytes)
+Event: 166.973 Thread 0x0000000016b5f000 nmethod 17634 0x00000000072b3a10 code [0x00000000072b3e80, 0x00000000072b5208]
+Event: 167.488 Thread 0x0000000016b5f000 17703       1       java.io.DataInputStream::readFully (63 bytes)
+Event: 167.488 Thread 0x0000000016b5f000 nmethod 17703 0x00000000053ad1d0 code [0x00000000053ad360, 0x00000000053ad648]
+Event: 167.793 Thread 0x0000000016b5f000 17676       1       java.lang.String::toLowerCase (439 bytes)
+Event: 167.794 Thread 0x0000000016b5f000 nmethod 17676 0x0000000005619790 code [0x0000000005619a00, 0x000000000561a578]
+Event: 168.040 Thread 0x0000000016b5f000 17678       1       java.lang.String::hashCode (55 bytes)
+Event: 168.040 Thread 0x0000000016b5f000 nmethod 17678 0x00000000054a6ed0 code [0x00000000054a7020, 0x00000000054a7170]
+Event: 168.231 Thread 0x0000000016b5f000 17750       1       java.lang.String::replace (127 bytes)
+Event: 168.231 Thread 0x0000000016b5f000 nmethod 17750 0x000000000533b550 code [0x000000000533b6c0, 0x000000000533b9f0]
+
+GC Heap History (10 events):
+Event: 52.139 GC heap before
+{Heap before GC invocations=68 (full 4):
+ def new generation   total 78720K, used 73692K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K, 100% used [0x0000000080000000, 0x0000000084460000, 0x0000000084460000)
+  from space 8704K,  42% used [0x0000000084460000, 0x00000000847f7170, 0x0000000084ce0000)
+  to   space 8704K,   0% used [0x0000000084ce0000, 0x0000000084ce0000, 0x0000000085560000)
+ tenured generation   total 174784K, used 102535K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  58% used [0x00000000aaaa0000, 0x00000000b0ec1d48, 0x00000000b0ec1e00, 0x00000000b5550000)
+ Metaspace       used 108324K, capacity 114214K, committed 114432K, reserved 1146880K
+  class space    used 14842K, capacity 16019K, committed 16128K, reserved 1048576K
+Event: 52.160 GC heap after
+Heap after GC invocations=69 (full 4):
+ def new generation   total 78720K, used 8704K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K,   0% used [0x0000000080000000, 0x0000000080000000, 0x0000000084460000)
+  from space 8704K, 100% used [0x0000000084ce0000, 0x0000000085560000, 0x0000000085560000)
+  to   space 8704K,   0% used [0x0000000084460000, 0x0000000084460000, 0x0000000084ce0000)
+ tenured generation   total 174784K, used 103284K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  59% used [0x00000000aaaa0000, 0x00000000b0f7d150, 0x00000000b0f7d200, 0x00000000b5550000)
+ Metaspace       used 108324K, capacity 114214K, committed 114432K, reserved 1146880K
+  class space    used 14842K, capacity 16019K, committed 16128K, reserved 1048576K
+}
+Event: 89.922 GC heap before
+{Heap before GC invocations=69 (full 4):
+ def new generation   total 78720K, used 78720K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K, 100% used [0x0000000080000000, 0x0000000084460000, 0x0000000084460000)
+  from space 8704K, 100% used [0x0000000084ce0000, 0x0000000085560000, 0x0000000085560000)
+  to   space 8704K,   0% used [0x0000000084460000, 0x0000000084460000, 0x0000000084ce0000)
+ tenured generation   total 174784K, used 103284K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  59% used [0x00000000aaaa0000, 0x00000000b0f7d150, 0x00000000b0f7d200, 0x00000000b5550000)
+ Metaspace       used 108592K, capacity 114574K, committed 114688K, reserved 1148928K
+  class space    used 14875K, capacity 16063K, committed 16128K, reserved 1048576K
+Event: 89.939 GC heap after
+Heap after GC invocations=70 (full 4):
+ def new generation   total 78720K, used 1042K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K,   0% used [0x0000000080000000, 0x0000000080000000, 0x0000000084460000)
+  from space 8704K,  11% used [0x0000000084460000, 0x0000000084564a40, 0x0000000084ce0000)
+  to   space 8704K,   0% used [0x0000000084ce0000, 0x0000000084ce0000, 0x0000000085560000)
+ tenured generation   total 174784K, used 109741K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  62% used [0x00000000aaaa0000, 0x00000000b15cb638, 0x00000000b15cb800, 0x00000000b5550000)
+ Metaspace       used 108592K, capacity 114574K, committed 114688K, reserved 1148928K
+  class space    used 14875K, capacity 16063K, committed 16128K, reserved 1048576K
+}
+Event: 136.781 GC heap before
+{Heap before GC invocations=70 (full 4):
+ def new generation   total 78720K, used 71058K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K, 100% used [0x0000000080000000, 0x0000000084460000, 0x0000000084460000)
+  from space 8704K,  11% used [0x0000000084460000, 0x0000000084564a40, 0x0000000084ce0000)
+  to   space 8704K,   0% used [0x0000000084ce0000, 0x0000000084ce0000, 0x0000000085560000)
+ tenured generation   total 174784K, used 109741K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  62% used [0x00000000aaaa0000, 0x00000000b15cb638, 0x00000000b15cb800, 0x00000000b5550000)
+ Metaspace       used 108594K, capacity 114574K, committed 114688K, reserved 1148928K
+  class space    used 14875K, capacity 16063K, committed 16128K, reserved 1048576K
+Event: 136.788 GC heap after
+Heap after GC invocations=71 (full 4):
+ def new generation   total 78720K, used 1022K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K,   0% used [0x0000000080000000, 0x0000000080000000, 0x0000000084460000)
+  from space 8704K,  11% used [0x0000000084ce0000, 0x0000000084ddfae8, 0x0000000085560000)
+  to   space 8704K,   0% used [0x0000000084460000, 0x0000000084460000, 0x0000000084ce0000)
+ tenured generation   total 174784K, used 109741K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  62% used [0x00000000aaaa0000, 0x00000000b15cb638, 0x00000000b15cb800, 0x00000000b5550000)
+ Metaspace       used 108594K, capacity 114574K, committed 114688K, reserved 1148928K
+  class space    used 14875K, capacity 16063K, committed 16128K, reserved 1048576K
+}
+Event: 163.452 GC heap before
+{Heap before GC invocations=71 (full 4):
+ def new generation   total 78720K, used 71038K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K, 100% used [0x0000000080000000, 0x0000000084460000, 0x0000000084460000)
+  from space 8704K,  11% used [0x0000000084ce0000, 0x0000000084ddfae8, 0x0000000085560000)
+  to   space 8704K,   0% used [0x0000000084460000, 0x0000000084460000, 0x0000000084ce0000)
+ tenured generation   total 174784K, used 109741K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  62% used [0x00000000aaaa0000, 0x00000000b15cb638, 0x00000000b15cb800, 0x00000000b5550000)
+ Metaspace       used 109225K, capacity 115038K, committed 115200K, reserved 1148928K
+  class space    used 14908K, capacity 16103K, committed 16128K, reserved 1048576K
+Event: 163.475 GC heap after
+Heap after GC invocations=72 (full 4):
+ def new generation   total 78720K, used 1648K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K,   0% used [0x0000000080000000, 0x0000000080000000, 0x0000000084460000)
+  from space 8704K,  18% used [0x0000000084460000, 0x00000000845fc330, 0x0000000084ce0000)
+  to   space 8704K,   0% used [0x0000000084ce0000, 0x0000000084ce0000, 0x0000000085560000)
+ tenured generation   total 174784K, used 109741K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  62% used [0x00000000aaaa0000, 0x00000000b15cb638, 0x00000000b15cb800, 0x00000000b5550000)
+ Metaspace       used 109225K, capacity 115038K, committed 115200K, reserved 1148928K
+  class space    used 14908K, capacity 16103K, committed 16128K, reserved 1048576K
+}
+Event: 168.276 GC heap before
+{Heap before GC invocations=72 (full 4):
+ def new generation   total 78720K, used 71664K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K, 100% used [0x0000000080000000, 0x0000000084460000, 0x0000000084460000)
+  from space 8704K,  18% used [0x0000000084460000, 0x00000000845fc330, 0x0000000084ce0000)
+  to   space 8704K,   0% used [0x0000000084ce0000, 0x0000000084ce0000, 0x0000000085560000)
+ tenured generation   total 174784K, used 109741K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  62% used [0x00000000aaaa0000, 0x00000000b15cb638, 0x00000000b15cb800, 0x00000000b5550000)
+ Metaspace       used 111927K, capacity 117520K, committed 117632K, reserved 1150976K
+  class space    used 15036K, capacity 16202K, committed 16256K, reserved 1048576K
+Event: 168.287 GC heap after
+Heap after GC invocations=73 (full 4):
+ def new generation   total 78720K, used 1898K [0x0000000080000000, 0x0000000085560000, 0x00000000aaaa0000)
+  eden space 70016K,   0% used [0x0000000080000000, 0x0000000080000000, 0x0000000084460000)
+  from space 8704K,  21% used [0x0000000084ce0000, 0x0000000084ebaa60, 0x0000000085560000)
+  to   space 8704K,   0% used [0x0000000084460000, 0x0000000084460000, 0x0000000084ce0000)
+ tenured generation   total 174784K, used 109741K [0x00000000aaaa0000, 0x00000000b5550000, 0x0000000100000000)
+   the space 174784K,  62% used [0x00000000aaaa0000, 0x00000000b15cb638, 0x00000000b15cb800, 0x00000000b5550000)
+ Metaspace       used 111927K, capacity 117520K, committed 117632K, reserved 1150976K
+  class space    used 15036K, capacity 16202K, committed 16256K, reserved 1048576K
+}
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 54.462 Thread 0x000000001e270800 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'> (0x0000000080b2d8d8) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\runtime\sharedRuntime.cpp, line 605]
+Event: 54.548 Thread 0x000000001ac56000 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'> (0x0000000080f84320) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\runtime\sharedRuntime.cpp, line 605]
+Event: 54.548 Thread 0x000000001ac56000 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'> (0x0000000080f85458) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\runtime\sharedRuntime.cpp, line 605]
+Event: 54.549 Thread 0x000000001ac56000 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'> (0x0000000080f8f440) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\runtime\sharedRuntime.cpp, line 605]
+Event: 54.555 Thread 0x000000001ac56000 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'> (0x0000000081089430) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\runtime\sharedRuntime.cpp, line 605]
+Event: 164.654 Thread 0x000000001ac56800 Exception <a 'java/lang/NullPointerException'> (0x00000000816ae980) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\interpreter\linkResolver.cpp, line 1197]
+Event: 165.327 Thread 0x000000001ac56800 Exception <a 'java/lang/NullPointerException'> (0x0000000081970980) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\interpreter\linkResolver.cpp, line 1197]
+Event: 165.332 Thread 0x000000001ac56800 Exception <a 'java/lang/NullPointerException'> (0x00000000819a5d50) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\interpreter\linkResolver.cpp, line 1197]
+Event: 168.358 Thread 0x000000001e273000 Exception <a 'java/lang/UnsupportedOperationException'> (0x00000000802fa338) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\prims\jni.cpp, line 710]
+Event: 168.358 Thread 0x000000001e273000 Exception <a 'java/lang/UnsupportedOperationException'> (0x00000000802fa338) thrown at [C:\Jenkins\workspace\DCEVM-8u152\jdk\JDK1.8.0_152-x64\k\product\oops\nocompressed\slave\dcevm-win\hotspot\src\share\vm\prims\jni.cpp, line 710]
+
+Events (10 events):
+Event: 168.372 Thread 0x0000000016b5f000 flushing nmethod 0x0000000005b04190
+Event: 168.372 Thread 0x0000000016b5f000 flushing nmethod 0x0000000005b05090
+Event: 168.373 Thread 0x0000000016b5f000 flushing nmethod 0x0000000005b05510
+Event: 168.373 Thread 0x0000000016b5f000 flushing nmethod 0x0000000005b057d0
+Event: 168.373 Thread 0x0000000016b5f000 flushing nmethod 0x0000000005b05a90
+Event: 168.373 loading class org/zeroturnaround/javarebel/Integration
+Event: 168.373 loading class org/zeroturnaround/javarebel/Integration done
+Event: 168.373 Thread 0x0000000016b5f000 flushing nmethod 0x0000000005b05e10
+Event: 168.373 Thread 0x0000000016b5f000 flushing nmethod 0x0000000005b060d0
+Event: 168.374 Thread 0x0000000016b5f000 flushing nmethod 0x0000000005b06550
+
+
+Dynamic libraries:
+0x00007ff6c8a60000 - 0x00007ff6c8a97000 	C:\Program Files\Java\jdk1.8.0_152\bin\javaw.exe
+0x00007ff87e260000 - 0x00007ff87e440000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ff87d9a0000 - 0x00007ff87da4e000 	C:\Windows\System32\KERNEL32.DLL
+0x00007ff87a6b0000 - 0x00007ff87a916000 	C:\Windows\System32\KERNELBASE.dll
+0x00007ff87bd20000 - 0x00007ff87bdc1000 	C:\Windows\System32\ADVAPI32.dll
+0x00007ff87b810000 - 0x00007ff87b8ad000 	C:\Windows\System32\msvcrt.dll
+0x00007ff87bc90000 - 0x00007ff87bceb000 	C:\Windows\System32\sechost.dll
+0x00007ff87db40000 - 0x00007ff87dc5f000 	C:\Windows\System32\RPCRT4.dll
+0x00007ff87d810000 - 0x00007ff87d99f000 	C:\Windows\System32\USER32.dll
+0x00007ff87afc0000 - 0x00007ff87afe0000 	C:\Windows\System32\win32u.dll
+0x00007ff87dab0000 - 0x00007ff87dad8000 	C:\Windows\System32\GDI32.dll
+0x00007ff87ab40000 - 0x00007ff87acd3000 	C:\Windows\System32\gdi32full.dll
+0x00007ff87aaa0000 - 0x00007ff87ab3b000 	C:\Windows\System32\msvcp_win.dll
+0x00007ff87a920000 - 0x00007ff87aa15000 	C:\Windows\System32\ucrtbase.dll
+0x00007ff86c290000 - 0x00007ff86c4f9000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.16299.611_none_15c7d8029365981f\COMCTL32.dll
+0x00007ff87d430000 - 0x00007ff87d737000 	C:\Windows\System32\combase.dll
+0x00007ff87aa20000 - 0x00007ff87aa92000 	C:\Windows\System32\bcryptPrimitives.dll
+0x00007ff87bcf0000 - 0x00007ff87bd1d000 	C:\Windows\System32\IMM32.DLL
+0x00000000731e0000 - 0x00000000732b2000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\msvcr100.dll
+0x0000000072980000 - 0x00000000731d1000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\dcevm\jvm.dll
+0x00007ff87d7e0000 - 0x00007ff87d7e8000 	C:\Windows\System32\PSAPI.DLL
+0x00007ff85f1c0000 - 0x00007ff85f1c9000 	C:\Windows\SYSTEM32\WSOCK32.dll
+0x00007ff877480000 - 0x00007ff8774a3000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007ff875340000 - 0x00007ff87534a000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007ff87b8b0000 - 0x00007ff87b91c000 	C:\Windows\System32\WS2_32.dll
+0x00007ff877420000 - 0x00007ff87744a000 	C:\Windows\SYSTEM32\WINMMBASE.dll
+0x00007ff87a660000 - 0x00007ff87a6aa000 	C:\Windows\System32\cfgmgr32.dll
+0x0000000072970000 - 0x000000007297f000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\verify.dll
+0x0000000072940000 - 0x0000000072969000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\java.dll
+0x0000000072900000 - 0x0000000072935000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\jdwp.dll
+0x00000000728f0000 - 0x00000000728f8000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\npt.dll
+0x00000000728c0000 - 0x00000000728e3000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\instrument.dll
+0x00000000728a0000 - 0x00000000728b6000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\zip.dll
+0x00007ff87bff0000 - 0x00007ff87d428000 	C:\Windows\System32\SHELL32.dll
+0x00007ff87bdd0000 - 0x00007ff87be76000 	C:\Windows\System32\shcore.dll
+0x00007ff87afe0000 - 0x00007ff87b727000 	C:\Windows\System32\windows.storage.dll
+0x00007ff87da50000 - 0x00007ff87daa1000 	C:\Windows\System32\shlwapi.dll
+0x00007ff87a640000 - 0x00007ff87a651000 	C:\Windows\System32\kernel.appcore.dll
+0x00007ff87a5d0000 - 0x00007ff87a61c000 	C:\Windows\System32\powrprof.dll
+0x00007ff87a620000 - 0x00007ff87a63b000 	C:\Windows\System32\profapi.dll
+0x0000000072890000 - 0x0000000072899000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\dt_socket.dll
+0x00007ff83b070000 - 0x00007ff83b086000 	C:\Windows\system32\napinsp.dll
+0x00007ff83b050000 - 0x00007ff83b06a000 	C:\Windows\system32\pnrpnsp.dll
+0x00007ff874300000 - 0x00007ff874318000 	C:\Windows\system32\NLAapi.dll
+0x00007ff879e40000 - 0x00007ff879ea6000 	C:\Windows\System32\mswsock.dll
+0x00007ff879c10000 - 0x00007ff879cc6000 	C:\Windows\SYSTEM32\DNSAPI.dll
+0x00007ff87dc60000 - 0x00007ff87dc68000 	C:\Windows\System32\NSI.dll
+0x00007ff879bd0000 - 0x00007ff879c09000 	C:\Windows\SYSTEM32\IPHLPAPI.DLL
+0x00007ff861d60000 - 0x00007ff861d6e000 	C:\Windows\System32\winrnr.dll
+0x00007ff853810000 - 0x00007ff853825000 	C:\Windows\System32\wshbth.dll
+0x00007ff86b0d0000 - 0x00007ff86b140000 	C:\Windows\System32\fwpuclnt.dll
+0x00007ff87a110000 - 0x00007ff87a135000 	C:\Windows\SYSTEM32\bcrypt.dll
+0x00007ff869940000 - 0x00007ff86994a000 	C:\Windows\System32\rasadhlp.dll
+0x0000000072870000 - 0x000000007288a000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\net.dll
+0x0000000072850000 - 0x0000000072861000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\nio.dll
+0x0000000072840000 - 0x000000007284d000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\management.dll
+0x00007ff87a000000 - 0x00007ff87a017000 	C:\Windows\SYSTEM32\CRYPTSP.dll
+0x00007ff879a40000 - 0x00007ff879a73000 	C:\Windows\system32\rsaenh.dll
+0x00007ff87a4e0000 - 0x00007ff87a509000 	C:\Windows\SYSTEM32\USERENV.dll
+0x00007ff87a020000 - 0x00007ff87a02b000 	C:\Windows\SYSTEM32\CRYPTBASE.dll
+0x00007ff874440000 - 0x00007ff874456000 	C:\Windows\SYSTEM32\dhcpcsvc6.DLL
+0x00007ff875380000 - 0x00007ff87539a000 	C:\Windows\SYSTEM32\dhcpcsvc.DLL
+0x00000000726a0000 - 0x0000000072838000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\awt.dll
+0x00007ff87b740000 - 0x00007ff87b805000 	C:\Windows\System32\OLEAUT32.dll
+0x00007ff878a40000 - 0x00007ff878ac8000 	C:\Windows\SYSTEM32\apphelp.dll
+0x0000000072670000 - 0x0000000072694000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\sunec.dll
+0x0000000072490000 - 0x00000000724ca000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\kcms.dll
+0x00007ff878e30000 - 0x00007ff878e5a000 	C:\Windows\system32\DWMAPI.DLL
+0x00007ff878d40000 - 0x00007ff878dd5000 	C:\Windows\system32\uxtheme.dll
+0x0000000072460000 - 0x000000007248a000 	C:\Program Files\Java\jdk1.8.0_152\jre\bin\dcpr.dll
+0x00007ff8720b0000 - 0x00007ff872278000 	C:\Windows\SYSTEM32\dbghelp.dll
+
+VM Arguments:
+jvm_args: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:54226 -javaagent:C:/Users/andi/.m2/repository/org/springframework/spring-instrument/5.0.6.RELEASE/spring-instrument-5.0.6.RELEASE.jar -javaagent:C:/Users/andi/.m2/repository/org/aspectj/aspectjweaver/1.8.13/aspectjweaver-1.8.13.jar -javaagent:C:/Users/andi/Documents/develop/hotswap-agent-core-1.3.0.jar=autoHotswap=true -Xms256m -Xmx2G -Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider -Xverify:none -XX:TieredStopAtLevel=1 -Dfile.encoding=UTF-8 
+java_command: com.patho.main.PathoFrohApplication
+java_class_path (initial): C:\Program Files\Java\jdk1.8.0_152\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\access-bridge-64.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\cldrdata.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\dnsns.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\jaccess.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\jfxrt.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\localedata.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\nashorn.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\sunec.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\sunjce_provider.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\sunmscapi.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\sunpkcs11.jar;C:\Program Files\Java\jdk1.8.0_152\jre\lib\ext\zipfs.jar;C:\Users\andi\eclipse-workspace\PathoFroh\target\classes;C:\Users\andi\.m2\repository\org\springframework\boot\spring-boot-starter\2.0.2.RELEASE\spring-boot-starter-2.0.2.RELEASE.jar;C:\Users\andi\.m2\repository\org\springframework\boot\spring-boot\2.0.2.RELEASE\spring-boot-2.0.2.RELEASE.jar;C:\Users\andi\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\2.0.2.RELEASE\spring-boot-autoconfigure-2.0.2.RELEASE.jar;C:\Users\andi\.m2\repository\org\springframework\boot\spring-boot-starter-logging\2.0.2.RELEASE\spring-boot-starter-logging-2.0.2.RELEASE.jar;C:\Users\andi\.m2\repository\ch\qos\logback\logback-classic\1.2.3\logback-classic-1.2.3.jar;C:\Users\andi\.m2\repository\ch\qos\logback\logback-core\1.2.3\logback-core-1.2.3.jar;C:\Users\andi\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.10.0\log4j-to-slf4j-2.10.0.jar;C:\Users\andi\.m2\repository\org\apache\logging\log4j\log4j-api\2.10.0\log4j
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:\Program Files\Java\jdk1.8.0_152\jre\bin;C:/Program Files/Java/jre1.8.0_181/bin/server;C:/Program Files/Java/jre1.8.0_181/bin;C:/Program Files/Java/jre1.8.0_181/lib/amd64;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Git\cmd;C:\Program Files\TortoiseGit\bin;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files\nodejs\;C:\Program Files\Calibre2\;C:\Users\andi\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\andi\AppData\Roaming\npm;C:\Users\andi\Documents\develop\eclipse;
+USERNAME=andi
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 60 Stepping 3, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 16299 (10.0.16299.431)
+
+CPU:total 8 (initial active 8) (4 cores per cpu, 2 threads per core) family 6 model 60 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2
+
+Memory: 4k page, physical 8271256k(1141832k free), swap 13251992k(2855408k free)
+
+vm_info: Dynamic Code Evolution 64-Bit Server VM (25.71-b01-dcevmlight-30) for windows-amd64 JRE (1.8.0), built on Feb 14 2018 07:21:37 by "Administrator" with MS VC++ 10.0 (VS2010)
+
+time: Sun Sep 02 11:03:41 2018
+elapsed time: 168 seconds (0d 0h 2m 48s)
+

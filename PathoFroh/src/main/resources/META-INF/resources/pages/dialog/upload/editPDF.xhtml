@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:histo="http://java.sun.com/jsf/composite/components">
+
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.editPDFDialog.healine']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+<h:body styleClass="histoDialogStyle">
+
+	<h:form enctype="multipart/form-data" id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.editPDFDialog.healine']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+			<h:panelGrid styleClass="defaultHistoTable" columns="2"
+				columnClasses="columnWidth125">
+
+				<!-- name -->
+				<h:outputLabel value="#{msg['dialog.editPDFDialog.name']}"></h:outputLabel>
+				<p:inputText style="width: 80%"
+					value="#{dialog.editPDFDialog.container.name}">
+					<p:ajax event="change" process="@form" />
+				</p:inputText>
+
+				<!-- commentary -->
+				<h:outputLabel value="#{msg['dialog.editPDFDialog.commentary']}"></h:outputLabel>
+				<p:inputTextarea style="width: 80%"
+					value="#{dialog.editPDFDialog.container.commentary}">
+					<p:ajax event="change" process="@form" />
+				</p:inputTextarea>
+
+				<!-- types -->
+				<h:outputLabel value="#{msg['dialog.editPDFDialog.type']}"></h:outputLabel>
+				<p:selectOneMenu styleClass="customSerachSelectMenu"
+					panelStyleClass="customSerachSelectMenuPanel"
+					value="#{dialog.editPDFDialog.container.type}" filter="true"
+					filterMatchMode="contains">
+
+					<f:selectItems value="#{dialog.editPDFDialog.availableFileTypes}"
+						var="type" itemLabel="#{msg['enum.documentType.'.concat(type)]}"
+						itemValue="#{type}" />
+
+					<p:ajax event="change" process="@form" />
+				</p:selectOneMenu>
+
+				<!-- editable -->
+				<h:outputLabel value="#{msg['dialog.editPDFDialog.restricted']}"></h:outputLabel>
+				<p:selectBooleanCheckbox disabled="true"
+					value="#{dialog.editPDFDialog.container.restricted}">
+					<p:ajax event="change" process="@form" />
+				</p:selectBooleanCheckbox>
+
+				<!-- path -->
+				<h:outputLabel value="#{msg['dialog.editPDFDialog.path']}"></h:outputLabel>
+				<p:inputText style="width: 80%" disabled="true"
+					value="#{dialog.editPDFDialog.container.path}">
+					<p:ajax event="change" process="@form" />
+				</p:inputText>
+
+				<!-- thumbnail -->
+				<h:outputLabel value="#{msg['dialog.editPDFDialog.thumbnail']}"></h:outputLabel>
+				<p:inputText style="width: 80%" disabled="true"
+					value="#{dialog.editPDFDialog.container.thumbnail}">
+					<p:ajax event="change" process="@form" />
+				</p:inputText>
+			</h:panelGrid>
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="right">
+					<p:commandButton value="#{msg['general.save']}"
+						icon="fa fa-check-circle-o"
+						actionListener="#{dialog.editPDFDialog.saveAndHide()}" />
+
+					<!-- close -->
+					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
+						icon="fa fa-times-circle"
+						actionListener="#{dialog.editPDFDialog.hideDialog()}" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

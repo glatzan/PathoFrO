@@ -1,0 +1,1076 @@
+ -XXaltjvm=dcevm -javaagent:C:/Users/andi/Documents/develop/hotswap-agent-1.3.0.jar=autoHotswap=true
+https://dzone.com/articles/hot-swap-java-bytecode-on-runtime
+
+// speed for rendering 
+-Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider
+
+[{"printer":"10.250.3.227","tuerschild":"10.250.0.101","ip":"10.250.0.252","bemerkung":"Amulanz\/EG W2-U01 (Fenster)   aktuell:   18:03:73:1E:85:AD     AUG-11961 ","roomid":361,"aktiv":"A","aufrufwartekreis":"AUG-EG-W-2","laufrichtung":"L","zeitpunkt":"2015-05-18 07:31:01","aufruftext":"U1"}]
+http://10.210.21.11:3009/DB/PLS/ip2room/ip/10.250.0.252
+
+ 
+
+-> less https://github.com/palantir/eclipse-less
+--> your-project/.settings/com.palantir.less.prefs
+--> srcFiles=WebContent/resources/style/style.less;WebContent/resources/style/specificStyle.less;WebContent/resources/style/common.less
+-> atmosphere https://forum.primefaces.org/viewtopic.php?t=48289
+-> UTF 8 Tomcat: -Dfile.encoding=UTF8
+-> plink windows set PATH=C:\path\to\putty\directory;%PATH%
+-> https://vladmihalcea.com/2015/02/09/hibernate-locking-patterns-how-does-optimistic_force_increment-lock-mode-work/
+-> Session Refresh: http://stackoverflow.com/questions/3642919/javax-faces-application-viewexpiredexception-view-could-not-be-restored
+// generierung befundbericht final
+//					if (userHandlerAction.getCurrentUser().getSettings().isPdfPreviewOnDiagnosisApproval()) {
+//						// generating final diagnosis report
+//						if (dialogHandlerAction.getPrintDialog().getPdfContainer()
+//								.getType() != DocumentType.DIAGNOSIS_REPORT) {
+//							dialogHandlerAction.getPrintDialog()
+//									.setDefaultTemplateOfType(DocumentType.DIAGNOSIS_REPORT);
+//						}
+//
+//						dialogHandlerAction.getPrintDialog().getPdfContainer()
+//								.setType(DocumentType.DIAGNOSIS_REPORT_COMPLETED);
+//
+//						pdfDAO.attachPDF(getTask().getPatient(), getTask(),
+//								dialogHandlerAction.getPrintDialog().getPdfContainer());
+//					}
+
+helper getPrinterForIP => sub { my ($self, $ip)=@_;
+    my $room = Mojo::UserAgent->new->get('http://10.210.21.11:3009/DB/PLS/ip2room/ip/'.$ip)->res->json->[0]->{aufruftext};
+    return sprintf("Amb-U%02d", $1) if $room =~/U([0-9]+)$/oi;
+};
+
+
+select flist.id, flist.name, coalesce(bool_or(fitem.task_id = 1),false) As containsTask from favouritelist flist 
+left join favouritepermissionsgroup fgroup on fgroup.favouritelist_id = flist.id  
+left join favouritepermissionsuser fuser on fuser.favouritelist_id = flist.id
+left join favouritelistitem fitem on fitem.favouritelist_id = flist.id
+left join favouritelist_histouser hideList on hideList.favouritelist_id = flist.id
+
+where (owner_id = 1 or fgroup.group_id = 1 or fuser.user_id = 1) and (hideList.hidelistforuser_id IS NULL or hideList.hidelistforuser_id != 1) GROUP BY flist.id 
+
+create view patientmenumodel as select patient.id, person.lastname, person.firstname, person.title, patient.piz, person.birthday from patient, person, contact where patient.person_id = person.id and person.contact_id = contact.id
+create view taskmenumodel as select task.id, task.taskid, task.taskpriority, task.duedate, task.parent_id from task
+
+Next Changes:
+-> patienten 1502 und 1503 löschen
+-> Patient menu aufräumen 
+-> recht für patient merge einführen
+
+-> Diangosen benachrichtigung per brief bei jedem einstellen
+-> wenn konsil aussteht keine archivirung
+-> Operateure über liste laden
+-> Zählung A 1,2 B 2 = 3 Blöcke (Blockzählung)
+-> anzeige der organisation im eingangsbuch
+
+-> patienten löschen
+-> suche mit umlauten -> daniel
+-> suche mit umlauten in quick search regex alpha (erkennt kein ö usw)
+-> färbungen auf klick priority umstellen
+
+-> versehendlich ausgeführte benachrichtigungen, markieren, kontakt dialog verbessern
+
+-> contentForm:contentPanel fest, das jede seite diese hat, udpate im header von contentForm:contentPanel anstelle von contentform
+
+-> Warnung wenn der Auftrag noch in Arbeitslisten ist
+
+-> navigation buttons gehen nicht mehr richtig
+-> search physician dialog with return handler
+
+-> beim auswählen des eingangbuches fall auswählen, nicht ersten fall
+
+-> Nicht bei jeder Druckoption wird des hinterlegte Drucker angezeigt, evtl. "Globale kleine Schaltfläche" auf Hauptansicht , dann muss es nicht in jedem kleinen Fenster stehen
+
+-> Task archivieren nur wenn befunder angegeben ist 
+-> Warnung wenn der Auftrag noch in Arbeitslisten ist
+
+-> Aus Uitl in Selectors kopieren  
+-> Benchrichtigung: Im Service Telefonnummern aktivieren
+
+-> pdf beim drucken ggf speicher
+
+Testen:
+-> Test piz range from 6-8 (geht nicht)
+ 
+Urgent Changes 
+TODO: Methoden in SampleServie in eine Transaction setzten (für loggin logstring per transaction)
+TODO: Biobankeinwilligung beide Seiten (2 pdf-Dateien) auf einmal hochladen
+TODO: Externe Proben: PIZ anlegen?
+TODO: Favouriten-Listen für Benutzer zugänglich machen
+TODO: Erweiterte Suche 
+TODO: Datenbankabfragen in globaleidt handler shiften
+TODO: Benuter müssen sich auf die Benachrichtigungsliste setzten können
+
+Long-term Changes 
+TODO: Beim schließen des Settings-dialoges auch gruppenrichtilinien neu laden
+TODO: Settings-Dialog überarbeiten tabellen und datatables auf neuen style ändern
+TODO: Nach 3 monaten soll dearchiviertung nicht mehr möglich sein
+TODO: Versionfehler beim �ffnen von dialogen handeln
+TODO: object f�r Arbeitsliste muss kopiert werden, wird momentan sofort �bernommen
+TODO: Konsil listenabfragen statisch, zur geschwindikeitsverbesserung
+TODO: loggin �berarbeiten, methoden in generica dat shiften
+TODO: log in settings rework
+TODO: Individelle Adressen beim drucken sollten aus personen gespeichert werden?
+TODO: Wenn Aufträge gelöscht werden müssen pdf mit gelöscht werden..
+TODO: Freischaltungs link
+TODO: Gruppendialog-Edit validate form
+TODO: Synchronizie organizations (nicht updaten durch klinik datenbank beachten)
+
+Graphic Changes
+-> Suchfelder als Solche Kennzeichnen (Lupensymbol) -> (in overlay dialogen, zb. Diagosen view)
+-> PDF Maker als Drucker hinterlegen (zum Testen/Ansehen der Ausdrucke)
+-> Zahrand zum kontakt bearbeiten (alle) in diagnosen view
+-> Auftrag hinzufügen (man muss Pixelgenau auf das + Clicken, schaltfläche geht nicht)
+
+! = fix
+* = change
++ = added
+- = removed
+
+-> 1.7
+-> erstellen von patientin in der pdv
+
+-> 1.6
+-> Create Task Dialog, Material mit Overlaypannel anpassen, Create Task material auswahl css
+-> Ärzte aus klinikbackend übernehmen
+-> Felder für ausleih befund (externer befund) im task create menu
+
+https://tex.stackexchange.com/questions/344799/how-can-i-escape-plain-text
+
+SQL:
+alter table histouser add created_on bigint;
+alter table histouser add updated_on bigint;
+alter table histouser add createdby_id bigint;
+alter table histouser add updatedby_id bigint;
+alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
+
+alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
+alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
+
+
+
++v 2.0.0
+++++: 
+++++: Umstellung des Systems auf Spring Boot
+++++:
+
+SQL:
+/* audth for task container */
+Alter table task add createdOn bigint;
+Alter table task add createdBy character varying(10);
+Alter table task add updatedOn bigint;
+Alter table task add updatedBy character varying(10);
+Alter table task_aud add createdOn bigint;
+Alter table task_aud add createdBy character varying(10);
+Alter table task_aud add updatedOn bigint;
+Alter table task_aud add updatedBy character varying(10);
+UPDATE task SET createdOn = creationdate;
+UPDATE task_aud SET createdOn = creationdate;
+update task set updatedOn = 0;
+update task_aud set updatedOn = 0;
+Alter table task drop column creationdate; 
+Alter table task_aud drop column creationdate; 
+
+/* audth for pdf container */
+Alter table pdfcontainer add createdOn bigint;
+Alter table pdfcontainer add createdBy character varying(10);
+Alter table pdfcontainer add updatedOn bigint;
+Alter table pdfcontainer add updatedBy character varying(10);
+Alter table pdfcontainer_aud add createdOn bigint;
+Alter table pdfcontainer_aud add createdBy character varying(10);
+Alter table pdfcontainer_aud add updatedOn bigint;
+Alter table pdfcontainer_aud add updatedBy character varying(10);
+UPDATE pdfcontainer SET createdOn = creationdate;
+UPDATE pdfcontainer_aud SET createdOn = creationdate;
+update pdfcontainer set updatedOn = 0;
+update pdfcontainer_aud set updatedOn = 0;
+Alter table pdfcontainer drop column creationdate; 
+Alter table pdfcontainer_aud drop column creationdate; 
+
+/* adding path for pdf files */
+Alter table pdfcontainer add path character varying(255);
+Alter table pdfcontainer_aud add path character varying(255);
+Alter table pdfcontainer add thumbnail character varying(255);
+Alter table pdfcontainer_aud add thumbnail character varying(255);
+/* restricted field, if true the node can not be moved*/
+Alter table pdfcontainer add restricted boolean;
+Alter table pdfcontainer_aud add restricted boolean;
+update pdfcontainer set restricted = false;
+update pdfcontainer_aud set restricted = false;
+/* interal commentary for associating pdf to diagnoses*/
+Alter table pdfcontainer add internal character varying(10);
+Alter table pdfcontainer_aud add internal character varying(10);
+
+
+/* View For task display*/
+CREATE OR REPLACE VIEW taskoverview AS
+Select 
+	task.id, 
+	task.taskId, 
+	task.dateofreceipt, 
+	case when task.stainingcompletiondate != 0 then true else false end as stainingcompleted, 
+	case when task.diagnosiscompletiondate != 0 then true else false end as diagnosiscompleted, 
+	case when task.notificationcompletiondate != 0 then true else false end as notificationcompleted, 
+	task.finalized, 
+	task.taskpriority,
+	pers.title, 
+	pers.firstname, 
+	pers.lastname,
+	pers.birthday 
+	from task as task 
+		left join patient pat on pat.id = task.parent_id 
+		left join person as pers on pers.id = pat.person_id;
+
+/* PLv8 extension*/
+CREATE EXTENSION plv8;
+
+/* level function */
+create or replace function get_slide_count_level(str text) returns int as $$ 
+	var reg = /^(I*)([a-zA-Z]?)([0-9]*)$/;
+	var arr = reg.exec(str);
+ 
+	if(arr != null){
+   		if(arr[3] != '')
+    		return 3;
+   		else if(arr[2] != '')
+    		return 2;
+   		else if(arr[1] != '')
+    		return 1;
+	}
+ 	return 0;
+$$ language plv8;
+
+ /* Counting function */
+create or replace function get_slide_count(str text) returns int as $$
+	var res = str.split(/[ ,\+]+/);
+
+	if(res.length == 1){
+		return 1;
+	}else{
+		var counter = 0;
+  		var level = 0;
+
+    	for(i = 0; i < res.length; i++){
+      		var t = res[i];
+      		var next =  i+1 < res.length ? res[i+1] : null;
+
+      		var levelT = plv8.execute('SELECT get_slide_count_level(\'' + t + '\')')[0]['get_slide_count_level'];
+      		var levelN = next != null ? plv8.execute( 'SELECT get_slide_count_level(\''+next+'\')')[0]['get_slide_count_level'] : 0;
+      
+      		//plv8.elog(NOTICE,"Level vs " +levelT + " ("+t+") " + levelN +" ("+next+")");
+		
+     		if(levelT >= levelN){
+        		counter++;
+      		}
+      
+      		if(levelN == 0)
+        		break;
+
+    	}
+    	return counter;
+    }
+$$ language plv8;
+
+							
++v 1.5.4 (10.05.2018)
+++++: Favouriten-Listen kategorien
+
++v 1.5.3 (09.05.2018)
+++++: Duplexdrucken kann im Druck-Dialog ausgewählt werden
+++++: Option für Dokumente mit ungrader Seitenanzahl im Duplexdruck hinzugefügt, die eine gerade Anzahl an Seiten ausdrucken lässt (Für Briefbögen wichtig)
+++++: Druck-Templates können individell für Duplexdruck ausgewählt werden. 
+
++v 1.5.2 (08.05.2018)
++++*: Auftrag-Erstellen Dialog überarbeitet
+++++: Favouritenliste für das Zurücksenden von Proben hinzugefügt
+++++: Im Auftrag-Erstell Dialog kann nun ausgewählt werden, dass eine Probe zurückgesendet werden soll.
++++!: Ansicht der Favouriten-Listen im Admin-Menu erweitert.
+
+SQL:
+/* boolean for manualEdit*/
+alter table favouritelist add hidelist boolean;
+update favouritelist set hidelist = false;
+
+INSERT INTO favouritelist (id, defaultlist, globalview, name,manueledit, useicon,usedumplist,hidelist) VALUES (53, true, true, 'Proben Rücksendung erfolgt', true,false,false,true);
+/* setting favourite list icon permission to admin = 7, moderator = 6, physicain = 5, mta = 4 */
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 53, 7);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 53, 6);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 53, 5);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 53, 4);
+
+INSERT INTO favouritelist (id, defaultlist, globalview, name,manueledit, useicon, icon, infotext, usedumplist,dumplist_id, dumpcommentary, hidelist) VALUES (52, true, true, 'Proben zurücksenden', true,true, 'fa-dropbox', 'Proben zurücksenden', true, 53,'Auftrag wurde aus Liste $oldList verschoben. ($date, $time Uhr)', true);
+/* setting favourite list icon permission to admin = 7, moderator = 6, physicain = 5, mta = 4 */
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 52, 7);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 52, 6);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 52, 5);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 52, 4);
+
+update favouritelist set hideList = true where id = 50;
+update favouritelist set hideList = true where id = 51;
+
+->>>>> bis hier auf server
+
++v 1.5.1 (06.05.2018)
+++++: Liste zum Einscannen hinzugefügt.
+++++: Liste zum Ablegen von eingescannten Fällen hinzugefügt.
++++!: Growl verdeckt nun nicht mehr das Menu
+++++: Dialog zum Verschieben von Favouriten-Listen in Dumpliste implementiert.
+++++: Growl-Nachrichten für Favouriten-Listen hinzufügen, entfernen und bewegen implementiert.
+++++: In der MTA Arbeitsliste werden Einträge der Einscannliste angezeigt.
+
+SQL:
+/* boolean for manualEdit*/
+alter table favouritelist add manueledit boolean;
+update favouritelist set manueledit = false;
+
+INSERT INTO favouritelist (id, defaultlist, globalview, name,manueledit, useicon,usedumplist) VALUES (51, true, true, 'Eingescannte Fälle', true,false,false);
+/* setting favourite list icon permission to admin = 7, moderator = 6, physicain = 5, mta = 4 */
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 51, 7);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 51, 6);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 51, 5);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 51, 4);
+
+INSERT INTO favouritelist (id, defaultlist, globalview, name,manueledit, useicon,icon,infotext,usedumplist, dumplist_id, dumpcommentary) VALUES (50, true, true, 'Einscannliste', true,true,'fa-camera-retro','Einscannen',true,51,'Auftrag wurde aus Liste $oldList verschoben. ($date, $time Uhr)');
+/* setting favourite list icon permission to admin = 7, moderator = 6, physicain = 5, mta = 4 */
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 50, 7);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 50, 6);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 50, 5);
+INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouritelist_id, group_id) VALUES ((SELECT max(id)+1 FROM favouritepermissionsgroup),false, true, true, 50, 4);
+
++v 1.5
+++++: Favouritenlisten können jetzt Icons mit Farbe haben, diese werden in der Arbeitsliste angezeigt.
+++++: Administratoren können Icons von Färbelisten funktionen zuweisen.
+++++: Ablageliste für Favouritenlisten eingeführt.
+++++: Rechte für Favouritenlisten mit Icons und Icon Commands implementiert
+++++: Dialog zum Entfernen von Aufträgen aus einer Favouriten liste implementiert. Diese wird angezeigt, wenn eine Ablageliste definiert wurde.
++++!: Fehler beim suchen nach Pizen behoben, welcher Patienten dupliziert.
+	
+SQL:
+
+/* field for dumplist*/
+alter table favouritelist add dumplist_id bigint;
+alter table favouritelist add usedumplist boolean;
+update favouritelist set usedumplist = false;
+alter table favouritelist add dumpcommentary character varying;
+ALTER TABLE ONLY favouritelist ADD CONSTRAINT favouritelist_dumplist_fkey FOREIGN KEY (dumplist_id) REFERENCES favouritelist(id);
+
+/* icon use */
+Alter table favouritelist add useicon boolean;
+update favouritelist set useicon = false;
+Alter table favouritelist add icon character varying;
+Alter table favouritelist add infotext character varying;
+Alter table favouritelist add command  character varying;
+Alter table favouritelist add iconcolor character varying(7);
+
+/* icon staining list */
+update favouritelist set icon = 'fa-image icon-green' where id = 1;
+update favouritelist set infotext = 'Färbung ausstehend' where id = 1;
+update favouritelist set useicon = true where id = 1;
+/* icon re staining list */
+update favouritelist set icon = 'fa-image icon-orange' where id = 4;
+update favouritelist set infotext = 'Nachfärbung ausstehend' where id = 4;
+update favouritelist set useicon = true where id = 4;
+/*stay in staining list*/
+update favouritelist set icon = 'fa-image icon-purple' where id = 6;
+update favouritelist set infotext = 'Keine Färbeungen ausstehend, in Arbeitsliste verbleibend' where id = 6;
+update favouritelist set useicon = true where id = 6;
+/*diagnosis list*/
+update favouritelist set icon = 'fa-eye icon-green' where id = 2;
+update favouritelist set infotext = 'Befundung ausstehend' where id = 2;
+update favouritelist set useicon = true where id = 2;
+/* re diagnosis list*/
+update favouritelist set icon = 'fa-eye icon-orange' where id = 5;
+update favouritelist set infotext = 'Nachbefundung ausstehend' where id = 5;
+update favouritelist set useicon = true where id = 5;
+/*stay in diagnosis list*/
+update favouritelist set icon = 'fa-eye icon-purple' where id = 7;
+update favouritelist set infotext = 'Keine Diagnose ausstehend, in Arbeitsliste verbleibend' where id = 7;
+update favouritelist set useicon = true where id = 7;
+/*notfication list*/
+update favouritelist set icon = 'fa-volume-up icon-green' where id = 3;
+update favouritelist set infotext = 'Benachrichtigungen ausstehend' where id = 3;
+update favouritelist set useicon = true where id = 3;
+/*stay in notfication list*/
+update favouritelist set icon = 'fa-volume-up icon-purple' where id = 8;
+update favouritelist set infotext = 'Keine Benachrichtigung ausstehend, in Arbeitsliste verbleibend' where id = 8;
+update favouritelist set useicon = true where id = 8;
+/*stay in scann list*/
+update favouritelist set icon = 'fa-camera icon-blue' where id = 50;
+update favouritelist set infotext = 'Slides einscannen' where id = 50;
+update favouritelist set useicon = true where id = 50;
+/*council mta*/
+update favouritelist set icon = 'fa-stethoscope icon-orange' where id = 9;
+update favouritelist set infotext = 'Absenden des Konsils durch Labor steht aus' where id = 9;
+update favouritelist set useicon = true where id = 9;
+update favouritelist set command = 'dialog:councilDialogHandler' where id = 9;
+/*council secretary*/
+update favouritelist set icon = 'fa-stethoscope icon-orange' where id = 10;
+update favouritelist set infotext = 'Absenden des Konsils durch Sekretariat steht aus' where id = 10;
+update favouritelist set useicon = true where id = 10;
+update favouritelist set command = 'dialog:councilDialogHandler' where id = 10;
+/*council pending*/
+update favouritelist set icon = 'fa-stethoscope icon-red' where id = 11;
+update favouritelist set infotext = 'Warten auf Konsil-Bericht' where id = 11;
+update favouritelist set useicon = true where id = 11;
+update favouritelist set command = 'dialog:councilDialogHandler' where id = 11;
+/*council completet*/
+update favouritelist set icon = 'fa-stethoscope icon-purple' where id = 12;
+update favouritelist set infotext = 'Konsilbericht liegt vor' where id = 12;
+update favouritelist set useicon = true where id = 12;
+update favouritelist set command = 'dialog:councilDialogHandler' where id = 12;
+
+
+/* renaming old use favourite permission*/
+update histogroup_permissions set permissions = 'FAVOURITE_LIST_USE' where permissions = 'USER_FAVOURITE_LIST';
+/* setting favourite list icon permission to admin = 7, moderator = 6, physicain = 5, mta = 4 */
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'FAVOURITE_LIST_ICON');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'FAVOURITE_LIST_ICON');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'FAVOURITE_LIST_ICON');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'FAVOURITE_LIST_ICON');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'FAVOURITE_LIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'FAVOURITE_LIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'FAVOURITE_LIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'FAVOURITE_LIST');
+/* favourite list iconn command only for admin*/
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'FAVOURITE_LIST_ICON_COMMAND');
+
++v 1.4.5 (22.04.2018)
++++!: Patientensuche mit Name und Geburtsdatum funktioniert wieder richtig.
++++!: Fehler beim erstellen von Nachbefunden behoben-
++++*: Fehlerseite für Datenbankfehler implementiert, behebt das Dealock-Problem sobald man einen fehlerhaften Fall angeklickt hatte.
+++++: Patienten können jetzt zusammengeführt werden. (Über Patienten Menu)
+
++v 1.4.4 (19.03.2018)
++++*: Anführungszeichen werden im Befund korrekt dargestellt.
+
++v 1.4.3 (18.03.2018)
++++!: Fehlerhaftes Tag im Organisations-Erstellen Dialog entfernt.
+++++: Für Personen kann jetzt die standard benachrichtigungs Adresse ausgewählt werden.
++++*: Auftrag wird jetzt komplett neu geladen wenn diesr über die Arbeitsliste ausgewählt wird.
++++*: Auftrag wird jetzt komplett neu geladen wenn man den Dialog für Globale-Einstellungen verlässt.
++++*: Benachrichtigungen gehen jetzt primär an die ausgewählte benachrichtigungs Adresse. 
+++++: Wird ein Ausdruck für einen Kontakt gemacht, wird dies nun wieder geloggt. 
+
+SQL:
+/* Adding field for default address*/
+alter table person add defaultaddress_id bigint;
+alter table person_aud add defaultaddress_id bigint;
+/* constraint for default address */
+ALTER TABLE ONLY person ADD CONSTRAINT person_defaultaddress_fkey FOREIGN KEY (defaultaddress_id) REFERENCES organization(id);
+
++v 1.4.2 (17.03.2018)
++++!: Automatische Benachrichtigung funktioniert nun korrekt mit Briefen
++++*: Nachträgliche Änderung der Gruppeneinstellungen werden jetzt für die Benutzer übernommen.
++++*: Recht zum Anzeigen des PDFs in der Befundbericht-Ansicht eingeführt. (Wenn gesetzt, wird der Befundbericht auch angezeigt, wenn der Befund noch nicht abgeschlossen ist).
+
+SQL:
+/* Adding USER_ALWAYS_SHOW_IN_WORKLIST_REPORT rights to groups */
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'USER_ALWAYS_SHOW_IN_WORKLIST_REPORT');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'USER_ALWAYS_SHOW_IN_WORKLIST_REPORT');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'USER_ALWAYS_SHOW_IN_WORKLIST_REPORT');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'USER_ALWAYS_SHOW_IN_WORKLIST_REPORT');
+
++v 1.4.1 (13.03.2018)
++++!: Scrollbar in der Befundansicht repariert. 
+++++: Patient kann im DocsCal geöffnet werden.
++++!: Arbeitsliste wird richtig aktualisiert wenn eine Patient hinzugefügt wird.
++++*: Specialchars werden nun bei der PDF-Erstellung ignoriert.
+++++: Externe Einsender bekommen jetzt standardmäßig Briefe anstelle von Emails
++++*: Im Befundbericht wird nur noch Einsender/Operateur/Augenarzt angezeigt wenn einer vorhanden ist.
++++*: Label für Labeldrucker angepasst
++++*: Im Brief wird nun beim Maligne-Feld die Nummer der malignen Probe angezeigt. 
+
++v 1.4.0 (11.03.2018)
++++*: Beim Erstellen von Färbungen wird jetzt zwischen immun und normalen Färbungen unterschieden.
++++*: Dringlichkeit eines Auftrages wird auch nach der Archivierung angezeigt.
+++++: SciFi (Science Finder) implementiert. Dieser ermöglicht das deutlich geneauer Suche nach Aufträgen
++++*: Nicht aktive Aufträge werden jetzt ausgegraut
++++!: Einloggen ist jetzt auch mölgich, wenn die automatische Aktualisierung mit dem Klinik-Backend für den Benutzer ausgestellt ist.
++++!: Logeinträge werden nicht mehr doppelt angezeigt.
+++++: Wird eine neue Nachfärbung angelegt und besteht bisher noch kein Nachbefund, wird ein Dialog angezeigt um einen Nachbefund zu erstellen.
++++*: OverlayPanels zur Bennung von Proben funktioniert nun zuverlässiger.
+++++: Kommentarfeld für Aufträge eingeführt.
+
+SQL:
+/* Adding address additions*/
+Alter table contact add addressadditon character varying;
+Alter table contact_aud add addressadditon character varying;
+Alter table contact add addressadditon2 character varying;
+Alter table contact_aud add addressadditon2 character varying;
+/* Adding commentary for mtas*/
+Alter table task add commentary character varying;
+Alter table task_aud add commentary character varying;
+
++v 1.3.3 (21.02.2018)
++++*: Patientensuche erzeugt keine doppelten Patienten mehr
++++*: Kleinen Fehler beim Auswählen eines Druckers im Benachrichtigungs-Dialog behoben.
+
++v 1.3.2 (18.02.2018)
++++!: Dialog zum dearchivieren eines Auftrages wieder funktionstüchtig.
+++++: Ein Grund beim dearchivieren muss angeben werden.
++++*: Ansicht für normale Benutzer verbessert.
+
+SQL:
+INSERT INTO listitem VALUES (102, false, 0, 'TASK_RESTORE', 'Rechtschreibkorrekturen');
+INSERT INTO listitem VALUES (103, false, 1, 'TASK_RESTORE', 'Diagnoserevision');
+ 
++v 1.3.1 (14.02.2017)
++++!: Etiketten können wieder ausgedruckt werden.
++++!: Temprärere Fix für Druck-Dialog
++++!: Focus Fix für Eingangsbuch und Befundansicht
+
++v 1.3.1 (12.02.2017)
++++*: Plz in Befundbericht angepasst.
++++!: Arbeitsliste wird jetzt nach dem Auswählen richtig sortiert.
++++!: Auswahl der Ansichten verbessert.
+++++: Favouriten-Listen können nun geladen werden
++++*: Abschließen der einzelnen Phasen angepasst und verbessert.
++++*: Dialog zur Benachrichtigung erweitert und angepasst
+
+SQL:
+/* Columns for renew*/
+alter table associatedcontactnotification add renewed boolean;
+alter table associatedcontactnotification_aud add renewed boolean;
+update associatedcontactnotification set renewed = false;
+update associatedcontactnotification_aud set renewed = false;
+/* remove old settings column */
+Alter table histosettings drop column pdfpreviewondiagnosisapproval;
+/* spelling error*/
+ALTER TABLE diagnosisrevision RENAME COLUMN compleationDate TO completionDate;
+ALTER TABLE diagnosisrevision_aud RENAME COLUMN compleationDate TO completionDate;
+/* deleting old column */
+Alter table diagnosisrevision drop column rediagnosis; 
+Alter table diagnosisrevision_aud drop column rediagnosis; 
+/* adding notification column*/
+alter table diagnosisrevision add notificationdate bigint;
+update diagnosisrevision set notificationdate = 0;
+alter table diagnosisrevision_aud add notificationdate bigint;
+update diagnosisrevision_aud set notificationdate = 0;
+/* fild for notification pending*/
+alter table diagnosisrevision add notificationpending boolean;
+update diagnosisrevision set notificationpending = false;
+alter table diagnosisrevision_aud add notificationpending boolean;
+update diagnosisrevision_aud set notificationpending = false;
+
++v 1.3.0 (05.02.2018)
++++*: Unterschrift ist nun pro Befund möglich.
+++++: Löschen von Befunden implementiert.
++++*: Umbenennen von Befunden jetzt über eine Dialog möglich.
++++!: Verfügbare Arbeitslisten repariert 
++++*: Kommentare für Färbungen können nach abschließen der Färbung nicht mehr bearbeitet werden.
+++++: Scrollen der Datenansicht unabhängig vom Rest ist jetzt implementiert.
+
+SQL:
+/* removing diagnosis container constraint form diangosis revision*/
+alter table diagnosisrevision drop constraint fk4lv3sjkvkxbr3hylgbo3hciej;
+/* adding columns from diagnosis container to diagnosis revision */
+alter table diagnosisrevision add signatureone_id bigint;
+alter table diagnosisrevision add signaturetwo_id bigint;
+alter table diagnosisrevision add signaturedate bigint;
+alter table diagnosisrevision_aud add signatureone_id bigint;
+alter table diagnosisrevision_aud add signaturetwo_id bigint;
+alter table diagnosisrevision_aud add signaturedate bigint;
+/* copie data from contaienr to revsion */
+update diagnosisrevision as r set parent_id = c.parent_id, signatureone_id = c.signatureone_id, signaturetwo_id = c.signaturetwo_id, signaturedate = c.signaturedate from diagnosiscontainer as c where r.parent_id = c.id;
+/* changing sequencenbumber to position*/
+ALTER TABLE diagnosisrevision RENAME COLUMN sequencenumber TO position;
+ALTER TABLE diagnosisrevision_aud RENAME COLUMN sequencenumber TO position;
+ALTER TABLE diagnosisrevision ALTER COLUMN position DROP NOT NULL;
+ALTER TABLE diagnosisrevision_aud ALTER COLUMN position DROP NOT NULL;
+/* adding signature constrains*/
+ALTER TABLE ONLY diagnosisrevision ADD CONSTRAINT diagnosisrevision_signatureone_fkey FOREIGN KEY (signatureone_id) REFERENCES signature(id);
+ALTER TABLE ONLY diagnosisrevision ADD CONSTRAINT diagnosisrevision_signaturetwo_fkey FOREIGN KEY (signaturetwo_id) REFERENCES signature(id);
+/* parent constraint*/
+ALTER TABLE ONLY diagnosisrevision ADD CONSTRAINT diagnosisrevision_task_fkey FOREIGN KEY (parent_id) REFERENCES task(id);
+/* removing diagnosis container + aud*/
+DROP TABLE diagnosisContainer;
+DROP TABLE diagnosisContainer_aud;
+DROP SEQUENCE diagnosisContainer_sequence;
+
+/* fix available worklists for users*/
+Delete from histosettings_availableworklists a using histosettings h, histouser u where a.histosettings_id=h.id and u.settings_id = h.id and u.group_id = 3;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'EMPTY_LIST', 0 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 3;
+
+/* fix available worklists for mta*/
+Delete from histosettings_availableworklists a using histosettings h, histouser u where a.histosettings_id=h.id and u.settings_id = h.id and u.group_id = 4;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'EMPTY_LIST', 0 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 4;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'DIAGNOSIS_LIST', 1 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 4;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'STAINING_LIST', 2 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 4;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'NOTIFICATION_LIST', 3 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 4;
+
+/* fix available worklists for physician*/
+Delete from histosettings_availableworklists a using histosettings h, histouser u where a.histosettings_id=h.id and u.settings_id = h.id and u.group_id = 5;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'EMPTY_LIST', 0 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 5;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'DIAGNOSIS_LIST', 1 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 5;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'STAINING_LIST', 2 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 5;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'NOTIFICATION_LIST', 3 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 5;
+
+/* fix available worklists for moderator*/
+Delete from histosettings_availableworklists a using histosettings h, histouser u where a.histosettings_id=h.id and u.settings_id = h.id and u.group_id = 6;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'EMPTY_LIST', 0 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 6;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'DIAGNOSIS_LIST', 1 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 6;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'STAINING_LIST', 2 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 6;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'NOTIFICATION_LIST', 3 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 6;
+
+/* fix available worklists for admin*/
+Delete from histosettings_availableworklists a using histosettings h, histouser u where a.histosettings_id=h.id and u.settings_id = h.id and u.group_id = 7;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'EMPTY_LIST', 0 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 7;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'DIAGNOSIS_LIST', 1 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 7;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'STAINING_LIST', 2 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 7;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'NOTIFICATION_LIST', 3 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 7;
+
+/* deleting default worklists for groups*/
+Delete from histosettings_availableworklists where histosettings_id = 12;
+Delete from histosettings_availableworklists where histosettings_id = 11;
+Delete from histosettings_availableworklists where histosettings_id = 10;
+Delete from histosettings_availableworklists where histosettings_id = 9;
+Delete from histosettings_availableworklists where histosettings_id = 8;
+Delete from histosettings_availableworklists where histosettings_id = 7;
+Delete from histosettings_availableworklists where histosettings_id = 6;
+
+/* adding  default worklists for groups*/
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (12, 'DIAGNOSIS_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (12, 'STAINING_LIST',1);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (12, 'NOTIFICATION_LIST',2);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (12, 'EMPTY_LIST',3);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (11, 'DIAGNOSIS_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (11, 'STAINING_LIST',1);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (11, 'NOTIFICATION_LIST',2);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (11, 'EMPTY_LIST',3);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (10, 'DIAGNOSIS_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (10, 'STAINING_LIST',1);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (10, 'NOTIFICATION_LIST',2);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (10, 'EMPTY_LIST',3);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (9, 'DIAGNOSIS_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (9, 'STAINING_LIST',1);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (9, 'NOTIFICATION_LIST',2);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (9, 'EMPTY_LIST',3);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (8, 'EMPTY_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (7, 'EMPTY_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (6, 'EMPTY_LIST',0);
+
++v 1.2.12 (30.01.2017)
++++*: Ip der Label-Drucker angepasst
++++*: Konsil-PDF Vorlage angepasst
+++++: Kopf zum Abschließen der Färbung einzelner Objektträger hinzugefügt.
++++*: Wenn der Auftrag in der Befundungs-Phase ist, werden automtaisch Nachfärbungen beim Erstellen von neuen Färbungen ausgewählt.
+
+
++v 1.2.11 (28.01.2017)
+++++: Growl-Benachrichtigugen werden jetzt auch von Dialogen angezeigt (Im Hauptfenster)
+
++v 1.2.10 (23.01.2017)
+++++: Können automatisch für den Raum ausgewählt werden.
++++*: Ausdrucke kommen nicht mehr standardmäßig beim dem ersten CUPS Drucker heraus, wenn kein Drucker ausgewählt wurde. 
+++++: Externer Befundbericht hinzugefügt.
++++*: Wenn nur eine Probe angelegt ist werden für Blöcke große Buchstaben verwendet, wenn mehrere Proben vorhaden sind dann kleine Buchstaben.
++++*: Eingabe im Schnell-Suchfeld wird nach abschicken gelöscht.
+
+SQL:
+update histosettings set preferedprinter = 0;
+alter table histosettings ALTER COLUMN preferedprinter TYPE bigint using preferedprinter::bigint
+
++v 1.2.9 (18.01.2017)
++++!: Verfügbare Arbeitslisten repariert (funktionierte nicht korrekt)
+
++v 1.2.8 (17.01.2017)
++++!: Patienten-Auswahl repariert.
+
++v 1.2.7 (17.01.2017)
++++*: Der Ausgewählte Patient/Auftrag in der Arbeitsliste wird jetzt immer sichtbar angezeigt (Arbeitsliste scrollt automatisch).
++++*: Wenn ein Operateur/Hausarzt ausgewählt wird, steigt dieser in seiner Priorität. Operateure/Hausärzte werden jetzt nach Priorität sortiert. 
++++*: Personen die bereits mit einer Funktion einem Auftrag zugeordnet sind, werden mit einer Warnung versehen.
++++*: Organisations-Dialog überarbeitet.
+
++v 1.2.6 (17.01.2017)
++++!: Laden von Listen sobald ein andere View als die Auftragsliste angezeigt wird, geht wieder.
++++!: Beim Hinzufügen von Fällen aus der Auftragsliste wird, wenn der Auftrag in der Arbeitsliste vorhanden ist, der Fall ausgewählt (wenn nicht vorhanden hinzugefügt und ausgewählt) und dann mit dem zweiten Klick wird der Auftrag erst angezeigt. 
++++!: Temporärer Fix beim Ausdrucken von Briefen (bis neue Druckfunktion fertig). Adressen werden wieder korrekt angezeigt.
++++!: PDF Vorlage für interne Briefe erzeugt bei langen Diagnosen jetzt an der richtigen Stelle einen Seitenumbruch.
+
++v 1.2.5 (16.01.2017)
++++!: Email-Templates werden wieder korrekt eingelesen.
++++!: Externe Personen/Ärzte können wieder wie gewohnt eingegeben werden (Settings-Dialog).
++++*: Aus dem Operateur-Auswahl-Dialog können Operateure jetzt auch gelöscht werden.
+
+SQL:
+alter table physician add prioritycount int;
+UPDATE physician SET prioritycount = 0;
+alter table physician_aud add prioritycount int;
+UPDATE physician_aud SET prioritycount = 0;
+
++v 1.2.4 (12.01.2017)
++++!: Listen Sortierung (Auf oder Absteigend) wird korrekt übernommen.
++++!: Ärzte werden beim Deaktivieren/Verstecken korrekt versteckt.
++++!: Name des Patienten, Geb. Datum und PIZ werden auf Befundseiten ab Seite 2 in der Kopfzeile angezeigt.
+++++: Im Personen-Hinzufügen Dialog befindet sich jetzt ein Kopf zum Erstellen von neunen Organisationen.
++++!: Proben I wird beim Löschen von allen weiteren Proben nun korrekt umbenannt.
+
++v 1.2.3 (08.01.2017)
++++!: PDFs werden an Emails bei Befundbenachrichtigung korrekt angehängt.
++++!: Anzahl der Seiten in der Auftragsliste wird korrekt angezeigt. 
+++++: Namen von Befundung/Nachbefundung kann jetzt nachträglich geändert werden.
++++*: Overlay-Panels können in der Befundungsansicht und im Eingangsbuch jetzt mit Enter geschlossen/gespeichert werden.
++++!: Daten-Lock und ein dadurch entstehenden Ressourcen-Leak repariert.
+
++v 1.2.2 (08.01.2017)
++++!: Anzahl der Ausdrucke wird korrekt übernommen
++++!: Kopf zum Hinzufügen von Patienten funktioniert wieder richtig.
+
++v 1.2.1 (08.01.2017)
++++*: Benachrichtigungs-Dialog auf neues Layout angepasst, Benachrichtigungs-Vorgang verbessert.
++++*: Phasen Übergänge angepasst.
++++!: Schnell-Suche übernimmt die eingegeben Name richtig in die globale Suche
++++!: Beim Löschen der Arbeitsliste wird die List mit allen Aufträgen korrekt angezeigt.
++++!: Patienten-Kopf im Befundbericht - ohne Logo wird korrekt angezeigt
++++*: Befundbericht PDF überarbeitet.
++++!: Unterschriften für Aufträge können korrekt gelöscht werden.
++++*: Im Patienten-Hinzufügen-Dialog wird bei Patienten die in der lokalen Datenbank bekannt sind "Aufrufen" anstelle von "Hinzufügen" angezeigt.
++++!: Uhrzeit im Sendebericht stimmt jetzt.
+
+SQL:
+/* drop unused column of diagnosis */
+Alter table diagnosisrevision drop column diagnosiscompleted; 
+
++v 1.2.0 (04.01.2017)
++++*: Neue-Färbung Dialog an neues Layout angepasst.
++++*: Eingangsbuch an neues Layout angepasst.
++++*: Organisations-Dialog an neues Layout angepasst.
+++++: Daten von Ärzten können markiert werden, so dass sie nicht mehr automatisch mit der Klinik-Datenbank abgeglichen werden.
++++*: Gruppe "Nicht freigeschaltet" in Deaktiviert/Ausgeblendet umbenannt.
+++++: Eigene Eingabemaske für Benutzer, Benutzername kann jetzt nachträglich verändert werden.
+++++: Gruppe kann als deaktivierte Gruppe markiert werden, Benutzer dieser Gruppe sind gesperrt und werden in der Benutzerübersicht nicht angezeigt (Anzeige kann per Option aktiviert werden).
++++*: Security-Context geupdated.
+++++: Beim Schließen des Administrations-Dialoges werden alle Gui-Listen neu geladen.
++++*: Manuell Änderungen des Materialnamens werden nun sofort gespeichert.
++++*: Return in Feldern mit Overlay-Panel erzeugt jetzt eine Umbruch anstelle das Overlay-Panel zu öffnen.
++++*: Material kann jetzt wie die Diagnose mit einem Overlay-Panel ausgewählt werden.
++++*: Patienten suchen Button neben die Ansichtsauswahl verlegt
+
+SQL:
+/* spelling correction */
+ALTER TABLE sample RENAME COLUMN materilapreset_id TO materialpreset_id;
+/* Renamin first group*/
+update histogroup set name = 'Deaktiviert/Archiviert' where id = 1;
+/* add userDeactived field to histgroup*/
+Alter table histogroup  add userdeactivated boolean;
+update histogroup set userdeactivated = false;
+/* rename to histouser */
+ALTER TABLE log RENAME COLUMN useracc_id TO histouser_id;
+/* log length */
+alter table log ALTER COLUMN logstring TYPE text;
+/* setting startview of guest group*/
+update histosettings set startview = 'GUEST' where id = 7;
+/* enable autoupdate of persons */
+update person set autoupdate = true;
+/* setting true as default */
+ALTER TABLE person ALTER COLUMN autoupdate SET DEFAULT true;
+/* adding archvied column to organization*/
+alter table organization add archived boolean;
+update organization set archived = false;
+alter table organization_aud add archived boolean;
+update organization_aud set archived = false;
+
++v 1.1.0 (30.12.2017)
++++*: Benutzerinterface für normale Programmbenutzer fertiggestellt.
++++*: Normale Programmbenutzer finden nur noch Patienten die sich in der lokalen Datenbank befinden.
++++*: In der Arbeitsliste können Patienten jetzt auf mit einem Klick auf die Namen ausgewählt werden.
+++++: Rechte zum Verwenden von Favoritenlisten implementiert.
+++++: Option zum Hinzufügen von Aufträgen mit einem Klick implementiert. (Normalerweise wird zunächst der Patient in der Arbeitsliste angezeigt, beim zweiten Klick der Auftrag)
++++*: Inhalt des Gruppen-Dialog auf mehrere Tabs aufgeteilt.
++++*: Info-Dialog auf neues Layout geändert, Versionsanzeige intern geändert.
++++*: Benutzeransicht überarbeitet und verbessert.
++++*: GUI wird neu berechnet, sobald das Browser-Fenster in der Größe geändert wurde.
++++*: Benennung der Rechte vereinheitlicht.
+++++: Rechte zum Löschen von Auftragen und hochladen von PDFs für Patienten implementiert.
+++++: Rechte zum Editieren und Hinzufügen von Patienten implementiert.
++++!: Auftragsliste wird beim Einloggen korrekt geladen.
++++!: Globale Anzeige von Fehlern/Infos funktioniert wieder richtig.
+++++: Dialog zum Hinzufügen von Patienten auf anlegen von Klinik-Patienten vorbereitet.
++++!: Im Dialog zum Hinzufügen von Patienten erscheint der Cursor jetzt zuverlässig im PIZ-Feld .
++++*: Neues Layout für Tab-Dialoge.
++++!: Schnell-Suche funktioniert jetzt auch richtig mit Namen (Nachname; oder Nachname, Vorname; oder Vorname Nachname).
++++*: Dialog zum Hinzufügen von Patienten überarbeitet und erweitert.
++++*: Suchfunktion für die Arbeitsliste überarbeitet und erweitert.
+++++: Brief ohne Klinik-Logo kann gedruckt werden.
++++!: Befundbericht bedrucken um 180 gedreht, geht wieder.
++++!: Beim Erstellen neuer Färbungen wird in der Auftragsübersicht der Auftrag nicht mehr als "Färbung abgeschlossen" angezeigt.
++++*: Datum der Unterschrift wird aktualisiert, sobald die Befundung beendet wird.
++++!: Patienten-Daten werden wieder richtig angezeigt.
+
+SQL:
+alter table histosettings add startview integer;
+alter table histosettings ALTER COLUMN defaultview TYPE character varying(255);
+alter table histosettings ALTER COLUMN startview TYPE character varying(255);
+update histosettings set startview = 'WORKLIST_TASKS';
+update histosettings set defaultview = 'WORKLIST_DIAGNOSIS' where defaultview = '9';
+update histosettings set defaultview = 'WORKLIST_RECEIPTLOG' where defaultview = '8';
+update histosettings set defaultview = 'WORKLIST_TASKS' where defaultview = '6';
+update histosettings set defaultview = 'GUEST' where defaultview = '1';
+update histosettings set defaultview = 'WORKLIST_REPORT' where defaultview = '3';
+update histosettings set defaultview = 'WORKLIST_REPORT' where id = 8;
+update histosettings_availableviews set availableviews = 'WORKLIST_REPORT' where availableviews = 'USERLIST';
+update histosettings_availableviews set position = 2 where histosettings_id = 8 and availableviews = 'WORKLIST_REPORT';
+INSERT INTO histosettings_availableviews (histosettings_id, availableviews, position) VALUES (8, 'WORKLIST_TASKS',0);
+INSERT INTO histosettings_availableviews (histosettings_id, availableviews, position) VALUES (8, 'WORKLIST_PATIENT',1);
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS' where permissions = 'SHOW_SETTINGS_DIALOG';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_USER' where permissions = 'EDIT_USER_SETTINGS';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_GROUP' where permissions = 'EDIT_GROUP_SETTINGS';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_DIAGNOSES' where permissions = 'EDIT_DIAGNOSES_SETTINGS';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_MATERIAL' where permissions = 'EDIT_MATERIAL_SETTINGS';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_STAINING' where permissions = 'EDIT_STAINING_SETTINGS';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_LISTS' where permissions = 'EDIT_ITEM_LISTS_SETTINGS';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_FAVOURITE' where permissions = 'EDIT_FAVOURITE_LIST_SETTINGS';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_PHYSICIAN' where permissions = 'EDIT_PHYSICIANS_SETTINGS';
+update histogroup_permissions set permissions = 'PROGRAM_SETTINGS_ORGANIZAZIONS' where permissions = 'EDIT_ORGANIZATIONS_SETTINGS';
+update histogroup_permissions set permissions = 'TASK_EDIT' where permissions = 'EDIT_TASK';
+update histogroup_permissions set permissions = 'TASK_EDIT_ID' where permissions = 'EDIT_TASK_ID';
+update histogroup_permissions set permissions = 'TASK_EDIT_ARCHIVE' where permissions = 'ARCHIVE_TASK';
+update histogroup_permissions set permissions = 'TASK_EDIT_RESTORE' where permissions = 'RESOTRE_TASK';
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'PATIENT_EDIT_ADD_EXTERN');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'PATIENT_EDIT_ADD_CLINIC');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'PATIENT_EDIT');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATIENT_EDIT_ADD_EXTERN');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATIENT_EDIT_ADD_CLINIC');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATIENT_EDIT');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'PATIENT_EDIT_ADD_EXTERN');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'PATIENT_EDIT_ADD_CLINIC');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'PATIENT_EDIT');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'PATIENT_EDIT_ADD_EXTERN');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'PATIENT_EDIT_ADD_CLINIC');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'PATIENT_EDIT');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'PATIENT_EDIT_UPLOAD_DATA');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'TASK_EDIT_DELETE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'TASK_EDIT_DELETE_EDITED');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'TASK_EDIT_NEW');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATIENT_EDIT_UPLOAD_DATA');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'TASK_EDIT_DELETE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'TASK_EDIT_DELETE_EDITED');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'TASK_EDIT_NEW');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'PATIENT_EDIT_UPLOAD_DATA');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'TASK_EDIT_DELETE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'TASK_EDIT_NEW');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'PATIENT_EDIT_UPLOAD_DATA');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'TASK_EDIT_DELETE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'TASK_EDIT_NEW');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'WORKLIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'WORKLIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'WORKLIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'WORKLIST');
+CREATE TABLE histosettings_availableworklists (histosettings_id bigint NOT NULL, availableworklists character varying(255), "position" integer NOT NULL );
+ALTER TABLE histosettings_availableviews OWNER TO postgres;
+ALTER TABLE ONLY histosettings_availableworklists ADD CONSTRAINT histosettings_availableworklists_pkey PRIMARY KEY (histosettings_id, "position");
+ALTER TABLE ONLY histosettings_availableworklists ADD CONSTRAINT histosettings_availableworklists_constraint FOREIGN KEY (histosettings_id) REFERENCES histosettings(id);
+Alter table histosettings add addtaskwithsingelclick boolean;
+update histosettings set addtaskwithsingelclick = false;
+update histosettings set addtaskwithsingelclick = true where id = 8;
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (12, 'DIAGNOSIS_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (12, 'STAINING_LIST',1);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (12, 'NOTIFICATION_LIST',2);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (12, 'EMTY_LIST',3);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (11, 'DIAGNOSIS_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (11, 'STAINING_LIST',1);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (11, 'NOTIFICATION_LIST',2);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (11, 'EMTY_LIST',3);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (10, 'DIAGNOSIS_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (10, 'STAINING_LIST',1);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (10, 'NOTIFICATION_LIST',2);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (10, 'EMTY_LIST',3);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (9, 'DIAGNOSIS_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (9, 'STAINING_LIST',1);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (9, 'NOTIFICATION_LIST',2);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (9, 'EMTY_LIST',3);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (8, 'EMTY_LIST',0);
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) VALUES (7, 'EMTY_LIST',0);
+/* changing worklistto load from int to string enum */
+alter table histosettings ALTER COLUMN worklisttoload TYPE character varying(255);
+update histosettings set worklisttoload = 'DIAGNOSIS_LIST' where worklisttoload = '1';
+update histosettings set worklisttoload = 'STAINING_LIST' where worklisttoload = '0';
+/* setting all users to default view*/
+update histosettings set defaultview = 'WORKLIST_REPORT' from histouser as u where u.settings_id = histosettings.id and u.group_id = 3;
+/* users should load task immediately */
+update histosettings set addtaskwithsingelclick = true from histouser as u where u.settings_id = histosettings.id and u.group_id = 3;
+/* user to empty worklist*/
+update histosettings set worklisttoload = 'EMTY_LIST' from histouser as u where u.settings_id = histosettings.id and u.group_id = 3;
+/* changing permission to users permission*/
+update histogroup_permissions set permissions = 'USER_WORKLIST' where permissions = 'WORKLIST';
+/* setting user + favourite lists permission to admin = 7, moderator = 6, physicain = 5, mta = 4 */
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'USER');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'USER_FAVOURITE_LIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'USER');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'USER_FAVOURITE_LIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'USER');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'USER_FAVOURITE_LIST');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'USER');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'USER_FAVOURITE_LIST');
+/* setting empty_list for all users*/
+INSERT INTO histosettings_availableworklists (histosettings_id, availableworklists, position) select h.id, 'EMTY_LIST', 0 from  histosettings as h, histouser as u where  u.settings_id = h.id and u.group_id = 3;
+/* spelling correction for emty*/
+update histosettings_availableworklists set availableworklists = 'EMPTY_LIST' where availableworklists = 'EMTY_LIST';
+update histosettings set worklisttoload = 'EMPTY_LIST' where worklisttoload = 'EMTY_LIST';
+
++v 1.0.14
++++*: Arbeitsliste grafisch und funktionell verbessert, scrollen ist jetzt möglich.
+++++: Kopf zum leeren der Arbeitsliste hinzugefügt.
++++!: Das Menu wird bei Verwendung der Navigations-Pfeile richtige aktualisiert.
++++*: Nach hinzufügen oder Suchen eines Patienten/Auftrages/Objektträger-ID wird die Arbeitsliste neu sortiert.
+++++: Befund kann jetzt via Button in der Befundungsansicht abgeschlossen werden.
++++*: Hintergrundfärbung der Diagnosen-Tabelle umgedreht.
++++!: Schnell-Suche funktioniert wieder wie erwartet.
++++*: Zähler für Objektträger in Auftrag verlegt.
+
+SQL:
+alter table task add slidecounter integer;
+alter table task_aud add slidecounter integer;
+update task set slidecounter = 0;
+Alter table block drop column uniqueSlideCounter; 
+Alter table block_aud drop column uniqueSlideCounter; 
+ALTER TABLE slide RENAME COLUMN uniqueidinblock TO uniqueidintask;
+ALTER TABLE slide_aud RENAME COLUMN uniqueidinblock TO uniqueidintask;
+
++v 1.0.13
++++*: Grafische Anpassungen am Druck-Dialog, leere Adress-Option hinzugefügt.
++++!: Wird ein Auftrag aus der Auftragsliste geladen, kam es bisher zu einem Fehler, dieser wurde behoben.
++++*: Befundberichte werden nach der Benachrichtigung ausgedruckt, Feld für die Anzahl hinzugefügt.
++++!: Beim Erstellen eines Auftrags werden Aufklärungen nicht mehr aus einer Vorherigen Auftragserstellung übernommen.
++++!: Benachrichtigungs-Dialog kann wieder über das Menu geöffnet werden.
+++++: Material kann manuell beim Erstellen eines Auftrages eingegeben werden.
++++!: Fehler beim Suchen nach Patienten ohne Auftrag behoben.
+
+SQL:
+Alter table person add autoUpdate boolean;
+update person set autoUpdate = false;
+Alter table person_aud add autoUpdate boolean;
+Alter table physician drop column manuallyAltered; 
+Alter table physician_aud drop column manuallyAltered; 
+alter table patient_pdfcontainer drop constraint uk_c7n1md70xsclk1c5w9yiaucl9;
+alter table task_pdfcontainer drop constraint uk_rp12j1tw0yxecu9bt0b0ym72t;
+alter table biobank_pdfcontainer drop constraint uk_8gmung1gnute185q5scwax2kk;
+alter table council_pdfcontainer drop constraint uk_6ux59funlxk7rbbi0ejs7ir7w;
+
++v 1.0.12
++++*: Aufträge werden in der Auftragsübersicht entsprechend ihrer Auftragsnummer sortiert, nicht mehr entsprechend ihrer internen ID.
++++*: Färbe-, Befundungs- und Benachrichtiguns-Prozess angepasst und entsprechende Köpfe für die einzelne Phase im Menu eingebaut.
+++++: Auftrag kann archiviert/dearchiviert werden, entsprechende Rechte eingeführt.
++++*: Login-Button wird gesperrt sobald ein Login erfolgt
++++*: Probe/Block/Objektträger archivieren wurde in löschen umbenannt
++++*: Aktuelle Versicherung wird nun angezeigt, anstelle von privat/regulär im Diagnosis View
+++++: Auftrags-Nummer kann nachträglich verändert werden
+++++: Recht für Änderung der Auftrags-Nummer eingeführt
+
+SQL:
+Alter table task add insurance character varying;
+Alter table task_aud  add insurance character varying;
+Alter table task drop column editable; 
+Alter table task_aud drop column editable; 
+Alter table patient drop column privateInsurance; 
+Alter table patient_aud  drop column privateInsurance;
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'TASK_EDIT_ID');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'TASK_EDIT_ID');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'TASK_EDIT_ID');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'TASK_EDIT_ID');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'TASK_EDIT_ARCHIVE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'TASK_EDIT_ARCHIVE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'TASK_EDIT_ARCHIVE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'TASK_EDIT_ARCHIVE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'TASK_EDIT_RESTORE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'TASK_EDIT_RESTORE');
+
++v 1.0.11
++++*: Ist nur eine Probe vorhanden, wird kein Name im Diagnosen-View mehr angezeigt.
++++!: Diagnosen und Proben werden im Diagnosen-View wieder richtig angezeigt.
++++!: Hover-Texte angepasst.
+++++: Funktionsoberarzt/Ärztin als Auswahl bei Diagnosen-Unterschrift hinzugefügt 
++++*: Auftragsnummer darf maximal 6 Zahlen enthalten, ein neuer Auftrag kann nur noch mit gültiger Auftragsnummer erstellt werden.
++++!: Rechtschreibfehler korrigiert.
++++*: Im Operateurauswahl-Dialog kann der Operateur jetzt auch beim Klicken auf den Namen ausgewählt werden.
++++*: Ist keine Vorlage für einen Diagnose-Text vorhanden, wird der link zum Kopieren der Vorlage ausgeraut.
++++*: Einlog-Routine überarbeitet, Redirect jetzt möglich, Fehlermeldung bei falschen Benutzerdaten.
++++!: Malignität im Befundbericht wird richtig angezeigt, Satz über die Gültigkeit des Berichtes hinzugefügt.
++++!: Editieren von externen Patienten geht wieder.
++++!: Logeinträge werde nicht mehr mehrfach angezeigt.
++++*: Die Generierung eines Befundberichtes nach Abschließen der Diagnose ist jetzt optional, kann unter Benutzereistellung aktiviert werden.
++++!: Programm-Gruppen können Benutzer wieder richtig zugewiesen werden.
++++*: Beim Einloggen wird Groß/Kleinschreibung des Benutzernamens ignoriert.
++++*: Sessiontimout auf 12h gesetzt.
++++*: Passwort wird wieder abgefragt, war zur Debugzwecken deaktiviert.
+
++v 1.0.10
+++++: Warnung wird bei doppelter Tasknummern angezeigt.
++++*: Konsile sind nicht mehr bearbeitbar, wenn Auftrag finalisiert wurde.
++++!: Konsile werden richtig gespeichert.
+++++: Konsil-Dialog kann aus der Auftragsübersicht, über das Konsil-Icon aufgerufen werden.
+++++: Auftragsnummer manuell anpassbar, Programm zählt bei der höchsten Nummer des laufenden Jahres weiter.
++++*: Beim Konsil ausdrucken wird der Konsil-Dialog nicht mehr geschlossen.
+++++: Konsile enthalten mehr Felder zum Dokumentieren von versendeten und zurückgekommen Proben.
+
++v 1.0.9
++++*: Gruppenrichtlinien.
++++*: Geschwindigkeit des Programmes deutlich gesteigert.
+++++: Favouritenlisten für Benutzer.
+++++: Favouritenlisten können freigegeben werden (Benutzer, Gruppe, Global).
+++++: Umgedrehter Eingangsbogen, Dokument-Vorlagen können nun Attribute zugewiesen werden.
+			
++v 1.0.8
++++!: Kopieren der vorgefertigten Diagnose-Text funktioniert wieder.
+++++: Faxen ist über den Druck-Dialog möglich.
+++++: Löschen von Aufträgen, die noch nicht bearbeitet wurden, ist möglich.
++++*: Es können keine doppelten Auftragsnummern mehr angelegt werden.
++++*: Versionsverwaltung verbessert.
++++!: Rechtschreibkorrekturen.
++++!: Konsile können wieder gedruckt werden.
++++!: Diagnose-Benachrichtigungs-Dialog funktioniert wieder und wurde überarbeitet.
++++!: Nach und Vorname werden in der richtigen Reinfolge angezeigt.
++++*: Eingabefeld der Vorgeschichte vergrößert.
++++*: Befundbericht überarbeitet und angepasst.
++++*: Etikettendrucken ist nun Thread-Save.
++++*: LDAP-Requests sind nun Thread-Save.
++++!: Kontakt-Dialog verursacht keine Fehler mehr beim Suchen nach Personen.
+++++: Fehlermeldung, falls Drucker nicht erreichbar ist.
+++++: Dialog für schnelle Nachfärbungen implementiert.
+++++: Aufträge können gelöscht werden, wenn sie noch nicht bearbeitet wurden.
+++++: Benutzer können vor dem ersten Login freigeschaltet werden.
+++++: Chargen für Färbungen können angelegt werden.
+
++v 1.0.4 - 1.0.7
++++!: Viel Bug-Fixes, interne Verbesserungen
+
++v 1.0.3
++++*: Patienten hinzufügen funktioniert jetzt mit Barcode-Scanner.
++++*: Konsile-Dialog überarbeitet, Konsile werden jetzt je nach Status in Favoritenlisten eingeteilt.
++++!: Sortierung der Arbeitsliste überarbeitet.
++++*: Navigationsknöpfe der Arbeitsliste überarbeitet.
++++!: Benennung von Blöcken funktioniert wieder richtig.
+
++v 1.0.2
+++++: Erweiterte Suche funktionsfähig.
+
++v 1.0.1
++++*: Session-Timeout hochgesetzt.
+
++v 1.0.0
++++: Erste Veröffentlichung.
+
++v 0.0.9 & pre
++++*: Patienten-Daten im Navigations-Menu werden wieder richtig angezeigt.
+++++: Änderungen am Auftrag werden verboten, sobald dieser nicht mehr bearbeitbar ist.
+++++: Dialog für schnelleres Nachfärben
+++++: Sende-Report wird erstellt, sobald die Benachrichtigung abgeschlossen wurde.
++++*: Doppelte Adressfelder entfernt (intern).
+++++: Erneuest durchführen der Benachrichtigung möglich.
++++!: Etiketten drucken funktioniert wieder richtig.
+++++: Faxen funktioniert auf Windows.
+++++: GlobaleSettings eingeführt, jetzt Thread-Save (intern).
++++!: Kontakt-Dialog geht wieder richtig. Wurde mit neuem Layout überarbeitet
+++++: Personen können Organisationen hinzugefügt werden.
+++++: Organisationen eingeführt. Werden beim ersten Einloggen erstellt, falls dem Programm noch nicht bekannt.
+++++: Versionsfehler (Datenbank Version) werden dem Benutzer angezeigt.
++++*: Konsil-Status wird in der Patientenübersicht angezeigt.
++++*: Schnell-Suche verbessert.
++++!: Versionskonflikt beim Löschen von Organisationen behoben.
++++!: Arbeitsliste kann wieder richtig sortiert werden.
+++++: Individuelle Benutzereinstellungen.
+++++: Geschlecht wird jetzt zuverlässig aus dem LDAP ausgelesen.
+++++: Favouritenlisten implementiert.
++++!: Block-Benennung geht wieder richtig.
+++++: Biobank hinzugefügt.
+++++: Rollen für Ärzte hinzugefügt.
++++: .....

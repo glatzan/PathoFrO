@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><h:outputFormat
+			value="#{msg['dialog.diagnosisPhaseExit.headline']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+<h:body styleClass="histoDialogStyle">
+	<h:form id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2">
+				<h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.headline']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+		<div class="dialogContent">
+
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.text']}"></h:outputLabel>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				style="margin-left:10px">
+				<h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.notify']}" />
+				<p:selectOneMenu
+					disabled="#{!dialog.diagnosisPhaseExitDialog.data.goToNotificationPhase}"
+					converter="#{dialog.diagnosisPhaseExitDialog.diagnosisRevisionTransformer}"
+					style="width:80%"
+					value="#{dialog.diagnosisPhaseExitDialog.data.selectedRevision}">
+
+					<f:selectItems
+						value="#{dialog.diagnosisPhaseExitDialog.diagnosisRevisions}"
+						var="diagnosis" itemLabel="#{diagnosis.name}"
+						itemValue="#{diagnosis}" />
+
+				</p:selectOneMenu>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				style="margin-left:10px; margin-top:10px">
+				<!-- notify -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.diagnosisPhaseExitDialog.data.goToNotificationPhase}">
+					<p:ajax event="change" update="@form" process="@form" />
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.diagnosisPhaseExit.checkBox.notificationPhase']}" />
+
+				<h:outputLabel value=" " />
+				<h:outputLabel value=" " />
+
+				<!-- remove from diagnosis list -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.diagnosisPhaseExitDialog.data.removeFromDiangosisList}">
+					<p:ajax update="@form" process="@form" event="change" />
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.diagnosisPhaseExit.checkBox.removeFromDiangosisList']}" />
+
+				<!-- end phase -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.diagnosisPhaseExitDialog.data.endDiangosisPhase}" />
+				<h:outputLabel
+					value="#{msg['dialog.diagnosisPhaseExit.checkBox.endDiangosis']}" />
+				<h:outputLabel value=" " />
+				<h:outputLabel value=" " />
+
+				<!-- remove from worklist -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.diagnosisPhaseExitDialog.data.removeFromWorklist}" />
+				<h:outputLabel
+					value="#{msg['dialog.diagnosisPhaseExit.checkBox.removeFromWorklist']}" />
+			</h:panelGrid>
+
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="right" id="buttonContainer">
+					<p:commandButton
+						value="#{msg['dialog.diagnosisPhaseExit.button.notify']}"
+						icon="fa fa-check-circle-o">
+						<f:actionListener
+							binding="#{dialog.diagnosisPhaseExitDialog.exitPhaseAndClose()}" />
+					</p:commandButton>
+
+					<!-- Abort button -->
+					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+						icon="fa fa-times-circle"
+						actionListener="#{dialog.diagnosisPhaseExitDialog.hideDialog()}" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+
+	</h:form>
+</h:body>
+</html>

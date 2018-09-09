@@ -1,0 +1,2 @@
+Subject: Fehlermeldung PathoFro ($histoUser.username)
+Body: $bodyText
