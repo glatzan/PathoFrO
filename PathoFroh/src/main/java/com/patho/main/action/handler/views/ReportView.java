@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
@@ -33,9 +34,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Configurable
-public class ReportView {
-
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class ReportView extends AbstractTaskView {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -57,24 +56,25 @@ public class ReportView {
 	 * If true the update poll will be stoped
 	 */
 	private boolean generationCompleted;
-	
+
 	/**
 	 * True if selected pdf is currently generating
 	 */
 	private boolean generatingSelectedPDF;
 
-	
+	public ReportView(GlobalEditViewHandler globalEditViewHandler) {
+		super(globalEditViewHandler);
+	}
 
-	public Task loadReportData(Task task) {
+	public void loadView() {
 		data = new ArrayList<DiagnosisReportData>();
-
-		if (task == null)
-			return null;
 
 		setGeneratingPDFs(false);
 		setSelectedContainer(null);
 		setGeneratingSelectedPDF(false);
 		setGenerationCompleted(false);
+
+		Task task = getTask();
 
 		for (int i = 0; i < task.getDiagnosisRevisions().size(); i++) {
 			DiagnosisRevision revision = HistoUtil.getNElement(task.getDiagnosisRevisions(), i);
@@ -104,7 +104,7 @@ public class ReportView {
 			setSelectedPDF(data.get(0));
 		}
 
-		return task;
+		setTask(task);
 	}
 
 	public void updateData() {
@@ -113,7 +113,7 @@ public class ReportView {
 		if (isGeneratingSelectedPDF()) {
 			setSelectedPDF(getSelectedData());
 		}
-		
+
 		boolean loading = getData().stream().anyMatch(p -> p.isLoading());
 		setGenerationCompleted(!loading);
 		setGeneratingPDFs(loading);
@@ -215,5 +215,4 @@ public class ReportView {
 			}
 		}
 	}
-
 }

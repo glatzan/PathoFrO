@@ -9,38 +9,39 @@
 <h:head>
 	<title><h:outputFormat
 			value="#{msg['dialog.contacts.headline']}" /></title>
-	<h:outputStylesheet name="histo.css" value="histo.css" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="defaultDialogLayout bigDialog">
+<h:body styleClass="histoDialogStyle">
 	<h:form id="dialogContent">
 
-		<div class="defaulDilaogHeaderDivWithBackground">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="noBordersAll noPaddingAll collapsedBordersAll">
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2">
 				<h:outputLabel value="#{msg['dialog.contacts.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 			</h:panelGrid>
 		</div>
 
-		<div class="contentDiv">
-			<h:panelGrid columns="1" styleClass="defaultListingTable">
-				<p:dataTable var="contactHolder"
-					styleClass="smallDatatable highlightedDataTable noBordersAll"
-					scrollable="true" scrollHeight="390" draggableRows="true"
-					value="#{dialogHandlerAction.contactDialog.contacts}">
+		<div class="dialogContent">
+
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+				<p:dataTable var="contactHolder" styleClass="defaultHistoDataTable"
+					id="contactDatas" scrollable="true" scrollHeight="430"
+					draggableRows="true" value="#{dialog.contactDialog.contacts}">
 
 					<!-- Name -->
 					<p:column headerText="#{msg['dialog.contacts.table.name']}"
 						style="width: auto !important"
 						filterBy="#{contactHolder.contact.person.lastName}"
 						filterMatchMode="contains">
-						<h:outputText value="#{contactHolder.contact.person.fullName}" />
+						<h:outputText
+							value="#{contactHolder.contact.person.getFullName()}" />
 					</p:column>
 
 					<p:column headerText="#{msg['dialog.contacts.table.function']}"
@@ -50,12 +51,12 @@
 					</p:column>
 
 					<p:column headerText="#{msg['dialog.contacts.table.notification']}">
+
 						<p:dataList var="notifications"
 							rendered="#{contactHolder.contact.notifications.size() gt 0}"
-							styleClass="smallDataList"
+							styleClass="histoDataList"
 							value="#{contactHolder.contact.notifications}">
 							<p:column>
-
 								<ui:fragment
 									rendered="#{notifications.notificationTyp eq 'EMAIL'}">
 									<i class="fa fa-envelope icon-grey" />
@@ -81,8 +82,7 @@
 									<i class="fa fa-print icon-grey" />
 								</ui:fragment>
 
-								<span style="marign-left: 10px;">
-									<h:outputText
+								<span style="marign-left: 10px;"> <h:outputText
 										value="#{msg['enum.notificationType.'.concat(notifications.notificationTyp)]}"></h:outputText>
 								</span>
 
@@ -97,6 +97,7 @@
 									<i class="fa fa-fw fa-times-circle icon-red"
 										title="#{msg['dialog.contacts.failed']}: #{notifications.commentary}" />
 								</ui:fragment>
+
 								<ui:fragment rendered="#{notifications.performed}">
 									<h:outputText value=" (" />
 									<h:outputText value="#{notifications.dateOfAction}">
@@ -109,62 +110,61 @@
 					</p:column>
 
 
-					<p:column headerText="#" style="width:30px !important">
+					<p:column headerText="" style="width:30px !important">
 						<!-- edit -->
-						<p:commandLink styleClass="noUnderlineAtLink"
-							title="#{msg['dialog.contacts.change']}"
-							actionListener="#{dialogHandlerAction.contactNotificationDialog.initAndPrepareBean(dialogHandlerAction.contactDialog.task, contactHolder.contact)}">
+						<p:commandLink title="#{msg['dialog.contacts.change']}"
+							actionListener="#{dialog.contactNotificationDialog.initAndPrepareBean(dialog.contactDialog.task, contactHolder.contact)}">
 							<i class="fa fa-wrench" />
 							<p:ajax event="dialogReturn" update="@form"
-								listener="#{dialogHandlerAction.contactDialog.updateContactHolders()}" />
+								listener="#{dialog.contactDialog.onDefaultDialogReturn}" />
 						</p:commandLink>
 
 						<!-- remove, only if no notification was performed -->
-						<p:commandLink styleClass="noUnderlineAtLink"
+						<p:commandLink
 							title="#{contactHolder.deleteAble ? msg['dialog.contacts.remove']: msg['dialog.contacts.remove.notPossible']}"
 							disabled="#{!contactHolder.deleteAble}" update="@form">
 							<f:actionListener
-								binding="#{dialogHandlerAction.contactDialog.removeContact(dialogHandlerAction.contactDialog.task, contactHolder.contact)}" />
+								binding="#{dialog.contactDialog.removeContact(dialog.contactDialog.task, contactHolder.contact)}" />
 							<f:actionListener
-								binding="#{dialogHandlerAction.contactDialog.updateContactHolders()}" />
+								binding="#{dialog.contactDialog.updateContactHolders()}" />
 							<i class="fa fa-times" />
 						</p:commandLink>
 					</p:column>
 
 					<p:ajax event="rowReorder"
-						listener="#{dialogHandlerAction.contactDialog.onReorderList}" />
+						listener="#{dialog.contactDialog.onReorderList}" />
 
 				</p:dataTable>
+
+
 			</h:panelGrid>
 		</div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="noBordersAll collapsedBordersAll noPaddingAll">
 
-				<h:panelGrid columns="1">
-					<h:panelGrid columns="1" style="margin-left: 20px;">
-					</h:panelGrid>
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" style="float:right;">
-
+				<h:panelGrid columns="2" styleClass="right">
 					<p:commandButton value="#{msg['dialog.contact.add']}"
 						styleClass="smallButton buttonRighMarginInList"
 						icon="fa fa-fw fa-user-plus"
-						actionListener="#{dialogHandlerAction.contactDialog.addContact()}">
+						actionListener="#{dialog.contactDialog.addContact()}">
 						<p:ajax event="dialogReturn" update="@form"
-							listener="#{dialogHandlerAction.contactDialog.updateContactHolders()}" />
+							listener="#{dialog.contactDialog.updateContactHolders()}" />
 					</p:commandButton>
 
 					<p:commandButton value="#{msg['general.close']}"
 						styleClass="smallButton buttonRighMarginInList"
 						icon="fa fa-fw fa-times-circle" id="closeBtn"
-						actionListener="#{dialogHandlerAction.contactDialog.hideDialog()}"></p:commandButton>
-				</h:panelGrid>
+						actionListener="#{dialog.contactDialog.hideDialog()}"></p:commandButton>
 
+				</h:panelGrid>
 			</h:panelGrid>
 		</div>
+
 	</h:form>
 </h:body>
 </html>

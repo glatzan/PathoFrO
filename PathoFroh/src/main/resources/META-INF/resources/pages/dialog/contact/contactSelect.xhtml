@@ -9,37 +9,35 @@
 <h:head>
 	<title><h:outputLabel
 			value="#{msg['dialog.selectContact.headline']}" /> <h:outputLabel
-			rendered="#{dialogHandlerAction.contactSelectDialog.addAsRole ne null}"
-			value=" (#{msg['enum.contactRole.'.concat(dialogHandlerAction.contactSelectDialog.addAsRole)]})"></h:outputLabel>
+			rendered="#{dialog.contactSelectDialog.addAsRole ne null}"
+			value=" (#{msg['enum.contactRole.'.concat(dialog.contactSelectDialog.addAsRole)]})"></h:outputLabel>
 	</title>
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 
 	<h:form id="dialogContent">
 
 		<h:outputScript library="scripts" name="selectCheckboxMenuTop.js" />
 
 		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
+			<h:panelGrid style="width:100%;" columns="2">
 				<h:panelGroup>
 					<h:outputLabel id="headerText"
 						value="#{msg['dialog.selectContact.headline']}" />
 					<h:outputLabel value=" (" />
 
-					<c:if
-						test="#{dialogHandlerAction.contactSelectDialog.addAsRole ne null}">
+					<c:if test="#{dialog.contactSelectDialog.addAsRole ne null}">
 						<h:outputLabel
-							value="#{msg['enum.contactRole.'.concat(dialogHandlerAction.contactSelectDialog.addAsRole)]}" />
+							value="#{msg['enum.contactRole.'.concat(dialog.contactSelectDialog.addAsRole)]}" />
 					</c:if>
 
-					<c:if
-						test="#{dialogHandlerAction.contactSelectDialog.addAsRole eq null}">
-						<c:forEach
-							items="#{dialogHandlerAction.contactSelectDialog.addableRoles}"
+					<c:if test="#{dialog.contactSelectDialog.addAsRole eq null}">
+						<c:forEach items="#{dialog.contactSelectDialog.addableRoles}"
 							var="roles" varStatus="index">
 							<h:outputLabel value="#{msg['enum.contactRole.'.concat(roles)]}" />
 							<c:if test="${!index.last}">
@@ -51,7 +49,6 @@
 				</h:panelGroup>
 
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -59,12 +56,12 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="1" styleClass="newStyleListingTable">
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
 				<p:dataTable var="contact" rowKey="#{contact.id}" id="contentTable"
-					rowIndexVar="rowIdx" styleClass="newStyleDataTable"
-					scrollable="true" scrollHeight="320" selectionMode="single"
-					selection="#{dialogHandlerAction.contactSelectDialog.selectedContact}"
-					value="#{dialogHandlerAction.contactSelectDialog.contactList}">
+					rowIndexVar="rowIdx" styleClass="defaultHistoDataTable"
+					scrollable="true" scrollHeight="370" selectionMode="single"
+					selection="#{dialog.contactSelectDialog.selectedContact}"
+					value="#{dialog.contactSelectDialog.contactList}">
 
 					<!-- Name -->
 					<p:column headerText="#{msg['dialog.selectContact.table.name']}"
@@ -72,7 +69,7 @@
 						filterBy="#{contact.physician.person.lastName}"
 						filterMatchMode="contains">
 						<h:outputText
-							value="#{contact.physician.person.title} #{contact.physician.person.lastName}, #{contact.physician.person.firstName}" />
+							value="#{contact.physician.person.getFullName()}" />
 					</p:column>
 
 					<!-- default function-->
@@ -94,13 +91,13 @@
 						</f:facet>
 
 						<ui:fragment
-							rendered="#{contact.hasRole(dialogHandlerAction.contactSelectDialog.showRoles)}">
+							rendered="#{contact.hasRole(dialog.contactSelectDialog.showRoles)}">
 							<i class="fa fa-check icon-green"
 								title="#{msg['dialog.selectContact.table.added']}" />
 						</ui:fragment>
 
 						<ui:fragment
-							rendered="#{contact.contactOfTask and !contact.hasRole(dialogHandlerAction.contactSelectDialog.showRoles)}">
+							rendered="#{contact.contactOfTask and !contact.hasRole(dialog.contactSelectDialog.showRoles)}">
 							<i class="fa fa-exclamation icon-red"
 								title="#{msg['dialog.selectContact.table.added.otherRole']}" />
 						</ui:fragment>
@@ -117,9 +114,9 @@
 							title="#{contact.contactSelector.deleteAble ? msg['dialog.selectContact.table.remove']: msg['dialog.selectContact.table.remove.notPossible']}"
 							disabled="#{!contact.contactSelector.deleteAble}" update="@form">
 							<f:actionListener
-								binding="#{dialogHandlerAction.contactDialog.removeContact(dialogHandlerAction.contactSelectDialog.task, contact.contactSelector.contact)}" />
+								binding="#{dialogHandlerAction.contactDialog.removeContact(dialog.contactSelectDialog.task, contact.contactSelector.contact)}" />
 							<f:actionListener
-								binding="#{dialogHandlerAction.contactSelectDialog.updateContactList()}" />
+								binding="#{dialog.contactSelectDialog.updateContactList()}" />
 							<i class="fa fa-times" />
 						</p:commandLink>
 					</p:column>
@@ -129,35 +126,34 @@
 				</p:dataTable>
 
 				<p:remoteCommand name="submitDoubleclick"
-					rendered="#{!dialogHandlerAction.contactSelectDialog.selectedContact.contactOfTask}">
+					rendered="#{!dialog.contactSelectDialog.selectedContact.contactOfTask}">
 					<f:actionListener
-						binding="#{dialogHandlerAction.contactSelectDialog.addPhysicianAsRole()}" />
+						binding="#{dialog.contactSelectDialog.addPhysicianWithRole()}" />
 					<f:actionListener
-						binding="#{dialogHandlerAction.contactSelectDialog.hideDialog()}" />
+						binding="#{dialog.contactSelectDialog.hideDialog()}" />
 				</p:remoteCommand>
 			</h:panelGrid>
 		</div>
 
 		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+			<h:panelGrid columns="2">
 
-				<h:panelGrid columns="3" styleClass="newTableContainer left">
+				<h:panelGrid columns="3" styleClass="left">
 					<p:selectCheckboxMenu
 						styleClass="customSelectCheckboxMenu smallButton"
 						id="roleSelectCheckbox"
 						panelStyleClass="customSelectCheckboxMenuContactDialogPannel"
 						label="#{msg['dialog.selectContact.roles']}"
 						panelStyle="width:250px"
-						value="#{dialogHandlerAction.contactSelectDialog.showRoles}">
+						value="#{dialog.contactSelectDialog.showRoles}">
 
 						<f:selectItems var="role"
-							value="#{dialogHandlerAction.contactSelectDialog.selectAbleContactRoles}"
+							value="#{dialog.contactSelectDialog.selectAbleContactRoles}"
 							itemValue="#{role}"
 							itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
 
 						<p:ajax event="change"
-							listener="#{dialogHandlerAction.contactSelectDialog.updateContactList()}"
+							listener="#{dialog.contactSelectDialog.updateContactList()}"
 							partialSubmit="true" process="@this"
 							update=":dialogContent:contentTable"></p:ajax>
 
@@ -165,13 +161,12 @@
 
 					<h:outputLabel value="#{msg['dialog.selectContact.addAs']}"
 						style="margin-left: 10px;" id="selectRoleText"
-						rendered="#{dialogHandlerAction.contactSelectDialog.manuallySelectRole}" />
+						rendered="#{dialog.contactSelectDialog.manuallySelectRole}" />
 
 					<p:selectOneMenu style="margin-left: 10px;" id="selectroleMenu"
-						rendered="#{dialogHandlerAction.contactSelectDialog.manuallySelectRole}"
-						value="#{dialogHandlerAction.contactSelectDialog.addAsRole}">
-						<f:selectItems
-							value="#{dialogHandlerAction.contactSelectDialog.addableRoles}"
+						rendered="#{dialog.contactSelectDialog.manuallySelectRole}"
+						value="#{dialog.contactSelectDialog.addAsRole}">
+						<f:selectItems value="#{dialog.contactSelectDialog.addableRoles}"
 							var="role" itemLabel="#{msg['enum.contactRole.'.concat(role)]}"
 							itemValue="#{role}" />
 
@@ -181,23 +176,24 @@
 					</p:selectOneMenu>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<h:panelGrid columns="2" styleClass="right">
 					<p:commandButton value="#{msg['general.select']}" id="selectBtn"
-						disabled="#{dialogHandlerAction.contactSelectDialog.selectedContact eq null or dialogHandlerAction.contactSelectDialog.selectedContact.contactOfTask}"
+						disabled="#{dialog.contactSelectDialog.selectedContact eq null or dialog.contactSelectDialog.selectedContact.contactOfTask}"
 						icon="fa fa-fw fa-check-circle-o">
 						<f:actionListener
-							binding="#{dialogHandlerAction.contactSelectDialog.addPhysicianAsRole()}" />
+							binding="#{dialog.contactSelectDialog.addPhysicianWithRole()}" />
 						<f:actionListener
-							binding="#{dialogHandlerAction.contactSelectDialog.hideDialog()}" />
+							binding="#{dialog.contactSelectDialog.hideDialog()}" />
 					</p:commandButton>
 
 					<p:commandButton value="#{msg['general.close']}"
 						partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
 						process="@this"
-						actionListener="#{dialogHandlerAction.contactSelectDialog.hideDialog()}"></p:commandButton>
+						actionListener="#{dialog.contactSelectDialog.hideDialog()}"></p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
+
 
 	</h:form>
 </h:body>

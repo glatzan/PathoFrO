@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.notification;
 
 import java.util.List;
 
+import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -12,23 +13,20 @@ import com.patho.main.common.Dialog;
 import com.patho.main.common.SortOrder;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Physician;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.ui.selectors.PhysicianSelector;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.Accessors;
 
 @Configurable
 @Getter
 @Setter
-@Slf4j
-public class ContactSelectDialog extends AbstractDialog {
+public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -39,7 +37,7 @@ public class ContactSelectDialog extends AbstractDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private AssociatedContactService associatedContactService;
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -77,6 +75,7 @@ public class ContactSelectDialog extends AbstractDialog {
 	/**
 	 * If true the user can change the role, for the the physician is added
 	 */
+	@Accessors(chain = true)
 	private boolean manuallySelectRole = false;
 
 	/**
@@ -86,21 +85,22 @@ public class ContactSelectDialog extends AbstractDialog {
 	 */
 	private boolean dynamicRoleSelection = false;
 
-	public void initAndPrepareBean(Task task, ContactRole... contactRole) {
-		if (initBean(task, contactRole, contactRole, contactRole, contactRole.length == 1 ? contactRole[0] : null))
-			prepareDialog();
+	public ContactSelectDialog initAndPrepareBean(Task task, ContactRole... contactRole) {
+		return initAndPrepareBean(task, contactRole, contactRole, contactRole,
+				contactRole.length == 1 ? contactRole[0] : null);
 	}
 
-	public void initAndPrepareBean(Task task, ContactRole[] selectAbleRoles, ContactRole[] showRoles,
+	public ContactSelectDialog initAndPrepareBean(Task task, ContactRole[] selectAbleRoles, ContactRole[] showRoles,
 			ContactRole addAsRole) {
-		if (initBean(task, selectAbleRoles, showRoles, new ContactRole[] { addAsRole }, addAsRole))
-			prepareDialog();
+		return initAndPrepareBean(task, selectAbleRoles, showRoles, new ContactRole[] { addAsRole }, addAsRole);
 	}
 
-	public void initAndPrepareBean(Task task, ContactRole[] selectAbleRoles, ContactRole[] showRoles,
+	public ContactSelectDialog initAndPrepareBean(Task task, ContactRole[] selectAbleRoles, ContactRole[] showRoles,
 			ContactRole[] addableRoles, ContactRole addAsRole) {
 		if (initBean(task, selectAbleRoles, showRoles, addableRoles, addAsRole))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(Task task, ContactRole[] selectAbleRoles, ContactRole[] showRoles,
@@ -134,8 +134,7 @@ public class ContactSelectDialog extends AbstractDialog {
 	 * or other roles should be displayed)
 	 */
 	public void updateContactList() {
-		List<Physician> databasePhysicians = physicianRepository.findByRole(getShowRoles(), true, SortOrder.PRIORITY);
-		setContactList(PhysicianSelector.factory(task, databasePhysicians));
+		setContactList(physicianRepository.findSelectorsByRole(getTask(), getShowRoles(), SortOrder.PRIORITY));
 	}
 
 	public void addPhysicianAsRole() {
@@ -143,7 +142,7 @@ public class ContactSelectDialog extends AbstractDialog {
 
 			AssociatedContact associatedContact = new AssociatedContact(getTask(),
 					getSelectedContact().getPhysician().getPerson());
-			addPhysicianAsRole(associatedContact, getRoleForAddingContact(getSelectedContact().getPhysician()));
+			addPhysicianWithRole(associatedContact, getRoleForAddingContact(getSelectedContact().getPhysician()));
 		}
 	}
 
@@ -175,7 +174,7 @@ public class ContactSelectDialog extends AbstractDialog {
 	 * @param associatedContact
 	 * @param role
 	 */
-	public void addPhysicianAsRole(AssociatedContact associatedContact, ContactRole role) {
+	public void addPhysicianWithRole(AssociatedContact associatedContact, ContactRole role) {
 		try {
 			associatedContact.setRole(role);
 
@@ -189,9 +188,8 @@ public class ContactSelectDialog extends AbstractDialog {
 			associatedContactService.incrementContactPriorityCounter(associatedContact.getPerson());
 		} catch (IllegalArgumentException e) {
 			// todo error message
-			log.debug("Not adding, double contact");
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
+			logger.debug("Not adding, double contact");
+			Messaa
 		}
 	}
 

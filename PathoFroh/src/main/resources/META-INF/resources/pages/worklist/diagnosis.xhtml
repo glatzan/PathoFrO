@@ -72,7 +72,7 @@
 									hideEffect="fade" style="width:500px" hideEvent="mousedown"
 									showEvent="none" onkeypress="return false;">
 									<p:dataTable
-										value="#{globalEditViewHandler.commonData.materialList}"
+										value="#{globalEditViewHandler.staticData.materialList}"
 										var="preset" styleClass="defaultHistoDataTable"
 										scrollable="true" scrollHeight="200" rowKey="#{preset.id}"
 										selection="#{sample.materialPreset}" selectionMode="single">
@@ -134,10 +134,10 @@
 							style="width:500px" hideEvent="mousedown" showEvent="none"
 							onkeypress="return false;">
 							<p:dataTable
-								value="#{globalEditViewHandler.commonData.caseHistoryList}"
+								value="#{globalEditViewHandler.staticData.caseHistoryList}"
 								var="item" styleClass="defaultHistoDataTable" scrollable="true"
 								scrollHeight="200" rowKey="#{item.id}"
-								selection="#{globalEditViewHandler.commonData.selectedCaseHistoryItem}"
+								selection="#{globalEditViewHandler.staticData.selectedCaseHistoryItem}"
 								selectionMode="single">
 								<p:column filterBy="#{item.value}" filterMatchMode="contains">
 									<h:outputText value="#{item.value}" />
@@ -145,7 +145,7 @@
 
 								<p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
 									process="@form"
-									listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.commonData.selectedCaseHistoryItem)}"
+									listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.staticData.selectedCaseHistoryItem)}"
 									oncomplete="PF('caseHistoryOverlayPanel').hide();" />
 							</p:dataTable>
 
@@ -226,7 +226,7 @@
 						style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}">
 
 						<f:selectItems
-							value="#{globalEditViewHandler.commonData.wardList}"
+							value="#{globalEditViewHandler.staticData.wardList}"
 							itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
 						<p:ajax event="change" execute="@this"
 							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', globalEditViewHandler.worklistData.worklist.selectedTask, globalEditViewHandler.worklistData.worklist.selectedTask.ward)}" />
@@ -245,7 +245,7 @@
 						<p:commandLink style="float: right; margin-right:5px;"
 							tabindex="8"
 							title="#{msg['body.receiptlog.notification.surgeon.hint']}"
-							actionListener="#{dialogHandlerAction.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask, 'SURGEON', 'EXTERNAL_SURGEON')}"
+							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask, 'SURGEON', 'EXTERNAL_SURGEON')}"
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
 							<i class="fa fa-fw fa-scissors" />
 							<p:ajax event="dialogReturn"
@@ -265,7 +265,7 @@
 						<p:commandLink style="float: right; margin-right:5px;"
 							tabindex="9"
 							title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
-							actionListener="#{dialogHandlerAction.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask,'PRIVATE_PHYSICIAN')}"
+							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask,'PRIVATE_PHYSICIAN')}"
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
 							<i class="fa fa-fw fa-eye" />
 							<p:ajax event="dialogReturn"
@@ -273,7 +273,37 @@
 						</p:commandLink>
 
 					</h:panelGroup>
+					<h:panelGroup>
+						<p:commandLink style="float: right; margin-right:5px;"
+							tabindex="9"
+							onclick="PF('privatePhysicianOverlayPanel#{loopCount.index}').show('#{component.clientId}');PF('privatePhysicianOverlayPanel#{loopCount.index}').update();"
+							onfocus="PF('privatePhysicianOverlayPanel#{loopCount.index}').show('#{component.clientId}');PF('privatePhysicianOverlayPanel#{loopCount.index}').update();"
+							title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
+							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
+							<i class="fa fa-fw fa-eye" />
+						</p:commandLink>
 
+						<!-- material overlay panel -->
+						<p:overlayPanel
+							id="privatePhysicianOverlayPanel#{loopCount.index}"
+							styleClass="histoOverlayPanel" onShow=""
+							widgetVar="privatePhysicianOverlayPanel#{loopCount.index}"
+							hideEffect="fade" style="width:500px" hideEvent="mousedown"
+							showEvent="none" onkeypress="return false;">
+							<p:dataTable
+								selection="#{globalEditViewHandler.genericView.selectedSurgeon}"
+								selectionMode="single"
+								value="#{globalEditViewHandler.genericView.surgeons}"
+								var="physicianSelector" styleClass="defaultHistoDataTable"
+								scrollable="true" scrollHeight="200" rowKey="#{physicianSelector.id}">
+								<p:column filterBy="#{physicianSelector.physician.person.getFullName()}" filterMatchMode="contains">
+									<h:outputText value="#{physicianSelector.physician.person.getFullName()}" />
+								</p:column>
+
+							</p:dataTable>
+
+						</p:overlayPanel>
+					</h:panelGroup>
 				</h:panelGrid>
 			</h:panelGrid>
 			<!-- Right Column -->
@@ -407,7 +437,7 @@
 								styleClass="histoOverlayPanel" hideEffect="fade"
 								style="width:500px" hideEvent="mousedown" showEvent="none">
 								<p:dataTable
-									value="#{globalEditViewHandler.commonData.diagnosisPresets}"
+									value="#{globalEditViewHandler.staticData.diagnosisPresets}"
 									var="item" styleClass="defaultHistoDataTable" scrollable="true"
 									scrollHeight="200" rowKey="#{item.id}"
 									selection="#{diagnosis.diagnosisPrototype}"
@@ -452,7 +482,7 @@
 							style="width:90% !important;"
 							panelStyleClass="iconFixForSelectOneMenu"
 							value="#{revision.signatureOne.physician}"
-							converter="#{globalEditViewHandler.commonData.physiciansToSignListTransformer}"
+							converter="#{globalEditViewHandler.staticData.physiciansToSignListTransformer}"
 							filter="true" filterMatchMode="contains">
 
 							<f:selectItem
@@ -460,7 +490,7 @@
 								itemValue="#{null}" />
 
 							<f:selectItems
-								value="#{globalEditViewHandler.commonData.physiciansToSignList}"
+								value="#{globalEditViewHandler.staticData.physiciansToSignList}"
 								var="physician" itemLabel="#{physician.person.getFullName()}"
 								itemValue="#{physician}" />
 
@@ -488,14 +518,14 @@
 							style="width:90% !important;"
 							panelStyleClass="iconFixForSelectOneMenu"
 							value="#{revision.signatureTwo.physician}"
-							converter="#{globalEditViewHandler.commonData.physiciansToSignListTransformer}"
+							converter="#{globalEditViewHandler.staticData.physiciansToSignListTransformer}"
 							filter="true" filterMatchMode="contains">
 							<f:selectItem
 								itemLabel="#{msg['body.diagnosis.signature.consultant.select']}"
 								itemValue="#{null}" />
 
 							<f:selectItems
-								value="#{globalEditViewHandler.commonData.physiciansToSignList}"
+								value="#{globalEditViewHandler.staticData.physiciansToSignList}"
 								var="physician" itemLabel="#{physician.person.getFullName()}"
 								itemValue="#{physician}" />
 

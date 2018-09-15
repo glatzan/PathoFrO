@@ -13,6 +13,9 @@ import com.patho.main.action.dialog.media.EditPDFDialog;
 import com.patho.main.action.dialog.media.PDFOrganizer;
 import com.patho.main.action.dialog.media.UploadDialog;
 import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
+import com.patho.main.action.dialog.notification.ContactDialog;
+import com.patho.main.action.dialog.notification.ContactNotificationDialog;
+import com.patho.main.action.dialog.notification.ContactSelectDialog;
 import com.patho.main.action.dialog.patient.PatientLogDialog;
 import com.patho.main.action.dialog.patient.SearchPatientDialog;
 import com.patho.main.action.dialog.print.PrintDialog;
@@ -30,7 +33,6 @@ import lombok.Setter;
 
 @Component("dialog")
 @Getter
-@Setter
 @Scope(value = "session")
 public class DialogHandler {
 
@@ -55,4 +57,8 @@ public class DialogHandler {
 	private PatientLogDialog patientLogDialog = new PatientLogDialog();
 	private ChangeTaskIDDialog changeTaskIDDialog = new ChangeTaskIDDialog();
 	private AccountingDataDialog accountingDataDialog = new AccountingDataDialog();
+	private ContactDialog contactDialog = new ContactDialog();
+	private ContactSelectDialog contactSelectDialog = new ContactSelectDialog();
+	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
+	
 }

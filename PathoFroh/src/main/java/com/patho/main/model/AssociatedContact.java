@@ -47,7 +47,6 @@ import lombok.extern.slf4j.Slf4j;
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
-@Slf4j
 public class AssociatedContact implements LogAble, ID {
 
 	@ManyToOne(fetch = FetchType.LAZY)

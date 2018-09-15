@@ -52,7 +52,11 @@ import com.patho.main.action.dialog.settings.favourites.FavouriteListItemRemoveD
 import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
+import com.patho.main.action.handler.data.StaticData;
+import com.patho.main.action.handler.views.GenericView;
+import com.patho.main.action.handler.views.ReceiptLogView;
 import com.patho.main.action.handler.views.ReportView;
+import com.patho.main.action.handler.views.TaskView;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.View;
@@ -98,6 +102,7 @@ import com.patho.main.service.WorkPhaseService;
 import com.patho.main.template.print.SlideLable;
 import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.ui.menu.MenuGenerator;
+import com.patho.main.ui.selectors.PhysicianSelector;
 import com.patho.main.ui.task.TaskStatus;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
@@ -185,14 +190,27 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	/**
 	 * Data for Taskview
 	 */
-	private TaskView taskView = new TaskView();
-
-	private ReportView reportView = new ReportView();
+	private TaskView taskView = new TaskView(this);
 
 	/**
-	 * Container for common data.
+	 * Data that are shred between different vies
 	 */
-	private CommonData commonData = new CommonData();
+	private GenericView genericView = new GenericView(this);
+
+	/**
+	 * Data for the report view
+	 */
+	private ReportView reportView = new ReportView(this);
+
+	/**
+	 * Data for receipt log view
+	 */
+	private ReceiptLogView receiptLogView = new ReceiptLogView(this);
+
+	/**
+	 * Container for static data, generic, not adapted to a task
+	 */
+	private StaticData staticData = new StaticData();
 
 	private WorklistData worklistData = new WorklistData();
 
@@ -200,11 +218,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	 * Methodes for saving task data
 	 */
 	private CurrentTaskFunctions ct = new CurrentTaskFunctions(this);
-
-	/**
-	 * Data for receipt log view
-	 */
-	private ReceiptLogView receiptLogView = new ReceiptLogView();
 
 	/**
 	 * Functions for starting and ending a work phase
@@ -264,7 +277,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		worklistViewHandlerAction.addWorklist(worklist, true);
 
 		logger.debug("2. Loading common data");
-		commonData.updateData();
+		staticData.updateData();
 
 		logger.debug("3. Loading view data");
 		navigationData.updateData();
@@ -299,7 +312,9 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			for (TaskInitilize taskInitilize : initilizes) {
 				if (taskInitilize == TaskInitilize.RELOAD) {
 					getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+
 					reload = true;
+					break;
 				}
 			}
 
@@ -316,10 +331,10 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 			if (view == View.WORKLIST_RECEIPTLOG) {
 				// generating guilist for display
-				getReceiptLogView().setActionOnMany(StainingListAction.NONE);
-				getReceiptLogView().setStainingTableRows(
-						StainingTableChooser.factory(getWorklistData().getWorklist().getSelectedTask(), false));
+				receiptLogView.loadView();
 			}
+
+			genericView.loadView();
 
 			break;
 		case WORKLIST_PATIENT:
@@ -332,7 +347,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			break;
 		case WORKLIST_TASKS:
 			logger.debug("Initilizing task view");
-			getTaskView().onChangeSelectionCriteria();
+			taskView.loadView();
 			break;
 		case WORKLIST_REPORT:
 			logger.debug("Initlize worklist report data");
@@ -343,7 +358,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 									getWorklistData().getWorklist().getSelectedTask(), taskMenuCommandButtons));
 			}
 
-			reportView.loadReportData(getWorklistData().getWorklist().getSelectedTask());
+			reportView.loadView();
 			break;
 		default:
 			break;
@@ -352,7 +367,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 	public void reloadAllData() {
 		logger.debug("Force Reload of all data");
-		commonData.updateData();
+		staticData.updateData();
 		navigationData.updateData();
 		logger.debug("Reloading worklist");
 		worklistViewHandlerAction.getCurrentWokrlistHandler().reloadCurrentWorklist();
@@ -367,7 +382,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	}
 
 	public void reloadGuiData() {
-		commonData.updateData();
+		staticData.updateData();
 
 		// only task needs reload
 		if (worklistData.getWorklist().getSelectedTask() != null) {
@@ -613,103 +628,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		}
 	}
 
-	/**
-	 * Common Data
-	 * 
-	 * @author andi
-	 *
-	 */
-	@Getter
-	@Setter
-	@Configurable
-	public static class CommonData {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private ListItemRepository listItemRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private DiagnosisPresetRepository diagnosisPresetRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private PhysicianRepository physicianRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private MaterialPresetRepository materialPresetRepository;
-
-		/**
-		 * Contains all available case histories
-		 */
-		private List<ListItem> slideCommentary;
-
-		/**
-		 * List of all diagnosis presets
-		 */
-		private List<DiagnosisPreset> diagnosisPresets;
-
-		/**
-		 * List of physicians which have the role signature
-		 */
-		private List<Physician> physiciansToSignList;
-
-		/**
-		 * Transfomer for physiciansToSign
-		 */
-		private DefaultTransformer<Physician> physiciansToSignListTransformer;
-
-		/**
-		 * List of available materials
-		 */
-		private List<MaterialPreset> materialList;
-
-		/**
-		 * Contains all available case histories
-		 */
-		private List<ListItem> caseHistoryList;
-
-		/**
-		 * selected List item form caseHistory list
-		 */
-		private ListItem selectedCaseHistoryItem;
-
-		/**
-		 * Contains all available wards
-		 */
-		private List<ListItem> wardList;
-
-		public void setPhysiciansToSignList(List<Physician> physicians) {
-			this.physiciansToSignList = physicians;
-			this.physiciansToSignListTransformer = new DefaultTransformer<Physician>(physicians);
-		}
-
-		/**
-		 * Loading all data from Backend
-		 */
-		public void updateData() {
-			// resetting selected values
-			setSelectedCaseHistoryItem(null);
-
-			setSlideCommentary(listItemRepository
-					.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.SLIDES, false));
-			setCaseHistoryList(listItemRepository
-					.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.CASE_HISTORY, false));
-			setWardList(listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.WARDS,
-					false));
-			setDiagnosisPresets(diagnosisPresetRepository.findAllByOrderByIndexInListAsc());
-
-			setPhysiciansToSignList(physicianRepository.findAllByRole(ContactRole.SIGNATURE, true));
-
-			setMaterialList(materialPresetRepository.findAll(true));
-		}
-	};
-
 	@Getter
 	@Setter
 	public static class WorklistData {
@@ -786,264 +704,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			setNavigationPages(
 					new ArrayList<View>(userHandlerAction.getCurrentUser().getSettings().getAvailableViews()));
 		}
-	}
-
-	/**
-	 * Task view Data
-	 */
-	@Getter
-	@Setter
-	@Configurable
-	@ConfigurationProperties(prefix = "patho.common.taskview", ignoreInvalidFields = true, ignoreUnknownFields = true)
-	public class TaskView {
-
-		protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private TaskOverviewRepository taskOverviewRepository;
-
-		/**
-		 * Lists of task to display
-		 */
-		private List<TaskOverview> taskList;
-
-		/**
-		 * Task to select from list
-		 */
-		private TaskOverview selectedTask;
-
-		/**
-		 * Task per Page, Initialized by spring
-		 */
-		private int tasksPerPage;
-
-		/**
-		 * Options to choose the taksperPage, Initialized by spring
-		 */
-		private int[] tasksPerPageOptions;
-
-		/**
-		 * List of available pages
-		 */
-		private List<Integer> pages;
-
-		/**
-		 * Page of list
-		 */
-		private int page = 0;
-
-		public TaskView() {
-		}
-
-		public void onChangeSelectionCriteria() {
-
-			System.out.println(tasksPerPageOptions[1]);
-			// updating page count
-			long maxPages = taskOverviewRepository.count();
-
-			int pagesCount = (int) Math.ceil((double) maxPages / tasksPerPage);
-
-			logger.debug("Count of pages " + pagesCount);
-
-			setPages(new ArrayList<Integer>(pagesCount));
-
-			for (int i = 0; i < pagesCount; i++) {
-				getPages().add(i + 1);
-			}
-
-			logger.debug("Reloading task lists");
-
-			List<TaskOverview> p = taskOverviewRepository.findAllWithAssociatedPerson(
-					userHandlerAction.getCurrentUser().getPhysician().getPerson().getId(),
-					PageRequest.of(getPage(), getTasksPerPage()));
-
-			setTaskList(p);
-		}
-
-		public void addUserToNotification(Task task, HistoUser histoUser) {
-			// AssociatedContact associatedContact = contactDAO.addAssociatedContact(task,
-			// histoUser.getPhysician().getPerson(), ContactRole.CLINIC_PHYSICIAN);
-			//
-			// contactDAO.addNotificationType(task, associatedContact,
-			// AssociatedContactNotification.NotificationTyp.EMAIL);
-		}
-
-		public void removeUserFromNotification(Task task, HistoUser histoUser) {
-			// if (task.getContacts() != null) {
-			// try {
-			// AssociatedContact associatedContact = task.getContacts().stream()
-			// .filter(p -> p.getPerson().equals(histoUser.getPhysician().getPerson()))
-			// .collect(StreamUtils.singletonCollector());
-			//
-			// contactDAO.removeAssociatedContact(task, associatedContact);
-			// } catch (IllegalStateException e) {
-			// log.debug("No matching contact found!");
-			// // do nothing
-			// }
-			// }
-		}
-	}
-
-	/**
-	 * Savin receipt log data
-	 * 
-	 * @author andi
-	 *
-	 */
-	@Getter
-	@Setter
-	@Configurable
-	public class ReceiptLogView {
-
-		protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-		/**
-		 * Currently selected task in table form, transient, used for gui
-		 */
-		private ArrayList<StainingTableChooser<?>> stainingTableRows;
-
-		/**
-		 * Is used for selecting a chooser from the generated list (generated by task).
-		 * It is used to edit the names of the entities by an overlaypannel
-		 */
-		private StainingTableChooser<?> selectedStainingTableChooser;
-
-		/**
-		 * This variable is used to save the selected action, which should be executed
-		 * upon all selected slides
-		 */
-		private StainingListAction actionOnMany;
-
-		public ReceiptLogView() {
-		}
-
-		/**
-		 * Toggles the status of a StainingTableChooser object and all chides.
-		 * 
-		 * @param chooser
-		 */
-		public void toggleChildrenChoosenFlag(StainingTableChooser<?> chooser) {
-			setChildrenAsChoosen(chooser, !chooser.isChoosen());
-		}
-
-		/**
-		 * Sets all children of a StainingTableChoosers to chosen/unchosen
-		 * 
-		 * @param chooser
-		 * @param choosen
-		 */
-		public void setChildrenAsChoosen(StainingTableChooser<?> chooser, boolean chosen) {
-			chooser.setChoosen(chosen);
-			if (chooser.isSampleType() || chooser.isBlockType()) {
-				for (StainingTableChooser<?> tmp : chooser.getChildren()) {
-					setChildrenAsChoosen(tmp, chosen);
-				}
-			}
-
-			setActionOnMany(StainingListAction.NONE);
-		}
-
-		/**
-		 * Sets a lists of StainingTableChoosers to chosen/unchosen Setzt den Status
-		 * einer Liste von StainingTableChoosers und ihrer Kinder
-		 * 
-		 * @param choosers
-		 * @param choosen
-		 */
-		public void setListAsChoosen(List<StainingTableChooser<?>> choosers, boolean chosen) {
-			for (StainingTableChooser<?> chooser : choosers) {
-				if (chooser.isSampleType()) {
-					setChildrenAsChoosen(chooser, chosen);
-				}
-			}
-		}
-
-		/**
-		 * Executes an action on all selected slides
-		 * 
-		 * @param task
-		 */
-		public void performActionOnMany(Task task) {
-			performActionOnMany(task, getActionOnMany());
-		}
-
-		/**
-		 * Executes an action on all selected slides
-		 * 
-		 * @param list
-		 * @param action
-		 */
-		public void performActionOnMany(Task task, StainingListAction action) {
-			List<StainingTableChooser<?>> list = getStainingTableRows();
-
-			List<Slide> slides = list.stream().filter(p -> p.isChoosen() && p.isStainingType())
-					.map(p -> (Slide) p.getEntity()).collect(Collectors.toList());
-
-			if (slides.isEmpty()) {
-				logger.debug("Nothing selected, do not performe any action");
-				return;
-			}
-
-			switch (getActionOnMany()) {
-			case PERFORMED:
-			case NOT_PERFORMED:
-				logger.debug("Setting staining status of selected slides");
-				slides.stream().forEachOrdered(p -> slideService.completedStaining(p,
-						getActionOnMany() == StainingListAction.PERFORMED ? true : false));
-				workPhase.updateStainingPhase(taskRepository.save(getWorklistData().getSelectedTask(),
-						resourceBundle.get("log.task.slide.completed", getWorklistData().getSelectedTask())));
-				break;
-			case ARCHIVE:
-				// TODO implement
-				System.out.println("To impliment");
-				break;
-			case PRINT:
-
-				// SlideLable slideLabel = DocumentTemplate
-				// .getTemplateByID(globalSettings.getDefaultDocuments().getSlideLabelDocument());
-				//
-				// if (slideLabel == null) {
-				// logger.debug("No template found for printing, returning!");
-				// return;
-				// }
-				//
-				// logger.debug("Printing labes for selected slides");
-				//
-				// List<SlideLable> toPrint = new ArrayList<SlideLable>();
-				//
-				// for (StainingTableChooser<?> stainingTableChooser : list) {
-				// if (stainingTableChooser.isChoosen() &&
-				// stainingTableChooser.isStainingType()) {
-				//
-				// Slide slide = (Slide) stainingTableChooser.getEntity();
-				//
-				// SlideLable tmp = (SlideLable) slideLabel.clone();
-				// tmp.initData(task, slide, new Date(System.currentTimeMillis()));
-				// tmp.fillTemplate();
-				// toPrint.add(tmp);
-				// }
-				// }
-				//
-				// if (toPrint.size() != 0) {
-				// try {
-				// userHandlerAction.getSelectedLabelPrinter().print(toPrint);
-				// } catch (CustomUserNotificationExcepetion e) {
-				// // handling offline error
-				// mainHandlerAction.sendGrowlMessages(e);
-				// }
-				// }
-
-				break;
-			default:
-				break;
-			}
-
-			setActionOnMany(StainingListAction.NONE);
-
-		}
-
 	}
 
 	public static enum StainingListAction {
@@ -1285,6 +945,25 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			getSelectedTask().getAudit().setUpdatedOn(System.currentTimeMillis());
 			Task task = diagnosisService.generateDefaultDiagnosisReport(getSelectedTask(), diagnosisRevision);
 			save(task, false, "log.patient.task.diagnosisRevision.lock", task, diagnosisRevision);
+		}
+
+		public void addPhysicianWithRole(AssociatedContact associatedContact, ContactRole role) {
+			try {
+				associatedContact.setRole(role);
+
+				// saving
+				associatedContactService.addAssociatedContact(getWorklistData().getWorklist().getSelectedTask(),
+						associatedContact);
+
+				// settings roles
+				associatedContactService.updateNotificationForPhysicalDiagnosisReport(task, associatedContact);
+
+				// increment counter
+				associatedContactService.incrementContactPriorityCounter(associatedContact.getPerson());
+			} catch (IllegalArgumentException e) {
+				// todo error message
+				logger.debug("Not adding, double contact");
+			}
 		}
 	}
 

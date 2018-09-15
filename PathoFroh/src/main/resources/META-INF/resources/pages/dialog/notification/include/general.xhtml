@@ -108,7 +108,7 @@
 				<p:commandButton process="@form"
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
 					icon="fa fa-fw fa-cog"
-					actionListener="#{dialogHandlerAction.contactDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
 					<p:ajax event="dialogReturn" update="@form"
 						listener="#{dialogHandlerAction.notificationDialog.phoneTab.updateData()}" />
 				</p:commandButton>

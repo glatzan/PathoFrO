@@ -87,7 +87,7 @@
 					style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor};"
 					styleClass="customBackground" editable="true"
 					disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
-					<f:selectItems value="#{globalEditViewHandler.commonData.wardList}"
+					<f:selectItems value="#{globalEditViewHandler.staticData.wardList}"
 						itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
 					<p:ajax event="change" execute="@this"
 						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', globalEditViewHandler.worklistData.worklist.selectedTask, globalEditViewHandler.worklistData.worklist.selectedTask.ward)}" />
@@ -129,17 +129,17 @@
 						hideEffect="fade" style="width:500px" hideEvent="mousedown"
 						showEvent="none">
 						<p:dataTable
-							value="#{globalEditViewHandler.commonData.caseHistoryList}"
+							value="#{globalEditViewHandler.staticData.caseHistoryList}"
 							var="item" styleClass="defaultHistoDataTable" scrollable="true"
 							scrollHeight="200" rowKey="#{item.id}"
-							selection="#{globalEditViewHandler.commonData.selectedCaseHistoryItem}"
+							selection="#{globalEditViewHandler.staticData.selectedCaseHistoryItem}"
 							selectionMode="single">
 							<p:column filterBy="#{item.value}" filterMatchMode="contains">
 								<h:outputText value="#{item.value}" />
 							</p:column>
 
 							<p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
-								listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.commonData.selectedCaseHistoryItem)}"
+								listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.staticData.selectedCaseHistoryItem)}"
 								oncomplete="PF('caseHistoryOverlayPanel').hide();" />
 						</p:dataTable>
 
@@ -197,7 +197,7 @@
 								hideEffect="fade" style="width:500px" hideEvent="mousedown"
 								showEvent="none" onkeypress="return false;">
 								<p:dataTable
-									value="#{globalEditViewHandler.commonData.materialList}"
+									value="#{globalEditViewHandler.staticData.materialList}"
 									var="preset" styleClass="defaultHistoDataTable"
 									scrollable="true" scrollHeight="200" rowKey="#{preset.id}"
 									selection="#{sample.materialPreset}" selectionMode="single">
@@ -231,7 +231,7 @@
 						<p:commandLink
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
 							title="#{msg['body.receiptlog.notification.surgeon.hint']}"
-							actionListener="#{dialogHandlerAction.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask, 'SURGEON', 'EXTERNAL_SURGEON')}">
+							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask, 'SURGEON', 'EXTERNAL_SURGEON')}">
 							<i class="fa fa-fw fa-scissors" />
 							<p:ajax event="dialogReturn"
 								update="navigationForm:patientList contentForm:contentPanel" />
@@ -241,7 +241,7 @@
 						<p:commandLink
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
 							title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
-							actionListener="#{dialogHandlerAction.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask,'PRIVATE_PHYSICIAN')}">
+							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask,'PRIVATE_PHYSICIAN')}">
 							<i class="fa fa-fw fa-eye" />
 							<p:ajax event="dialogReturn"
 								update="navigationForm:patientList contentForm:contentPanel" />
@@ -250,7 +250,7 @@
 						<!-- edit contacts -->
 						<p:commandLink title="#{msg['body.receiptlog.notification.hint']}"
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
-							actionListener="#{dialogHandlerAction.contactDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask)}">
+							actionListener="#{dialog.contactDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask)}">
 							<i class="fa fa-fw fa-cog" />
 							<p:ajax event="dialogReturn"
 								update="navigationForm:patientList contentForm:contentPanel" />
@@ -463,7 +463,7 @@
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable or stainingRow.entity.stainingCompleted}">
 
 							<f:selectItems
-								value="#{globalEditViewHandler.commonData.slideCommentary}"
+								value="#{globalEditViewHandler.staticData.slideCommentary}"
 								var="commentary" itemLabel="#{commentary.value}"
 								itemValue="#{commentary.value}" />
 

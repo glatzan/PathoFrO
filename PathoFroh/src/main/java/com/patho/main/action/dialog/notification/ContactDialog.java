@@ -3,53 +3,53 @@ package com.patho.main.action.dialog.notification;
 import java.util.List;
 
 import org.primefaces.event.ReorderEvent;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Lazy;
 
-import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
+import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.AssociatedContact;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.ui.selectors.AssociatedContactSelector;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.Accessors;
 
 @Configurable
 @Getter
 @Setter
-@Slf4j
-public class ContactDialog extends AbstractDialog {
+public class ContactDialog extends AbstractDialog<ContactDialog> {
 
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DialogHandlerAction dialogHandlerAction;
-	
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private AssociatedContactService associatedContactService;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private TaskRepository taskRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	@Lazy
+	private DialogHandler dialogHandler;
+
 	private AssociatedContactSelector[] contacts;
 
 	/**
-	 * List of all ContactRole available for selecting physicians, used by
-	 * contacts and settings
+	 * List of all ContactRole available for selecting physicians, used by contacts
+	 * and settings
 	 */
 	private ContactRole[] selectAbleContactRoles;
 
@@ -58,9 +58,11 @@ public class ContactDialog extends AbstractDialog {
 	 */
 	private ContactRole[] showRoles;
 
-	public void initAndPrepareBean(Task task) {
+	public ContactDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(Task task) {
@@ -70,17 +72,25 @@ public class ContactDialog extends AbstractDialog {
 
 		setShowRoles(ContactRole.values());
 
-		updateContactHolders();
+		update(false);
 
 		return true;
 	}
 
+	/**
+	 * Reloads data of the task
+	 */
+	public void update(boolean reload) {
+		if (reload)
+			taskRepository.findOptionalByIdAndInitialize(task.getId(), false, false, false, true, true);
+
+		updateContactHolders();
+	}
+
 	public void addContact() {
-		dialogHandlerAction.getContactSelectDialog().initBean(task, ContactRole.values(), ContactRole.values(),
-				ContactRole.values(), ContactRole.OTHER_PHYSICIAN);
-		// user can manually change the role for that the physician is added
-		dialogHandlerAction.getContactSelectDialog().setManuallySelectRole(true);
-		dialogHandlerAction.getContactSelectDialog().prepareDialog();
+		System.out.println(dialogHandler);
+		dialogHandler.getContactSelectDialog().initAndPrepareBean(task, ContactRole.values(), ContactRole.values(),
+				ContactRole.values(), ContactRole.OTHER_PHYSICIAN).setManuallySelectRole(true);
 	}
 
 	public void updateContactHolders() {
@@ -91,11 +101,7 @@ public class ContactDialog extends AbstractDialog {
 	}
 
 	public void removeContact(Task task, AssociatedContact associatedContact) {
-		try {
-			associatedContactService.removeAssociatedContact(task, associatedContact);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+		associatedContactService.removeAssociatedContact(task, associatedContact);
 	}
 
 	/**
@@ -104,15 +110,18 @@ public class ContactDialog extends AbstractDialog {
 	 * @param event
 	 */
 	public void onReorderList(ReorderEvent event) {
-		try {
+		logger.debug("List order changed, moved contact from ? to ?", event.getFromIndex(), event.getToIndex());
+		associatedContactService.reOrderContactList(task, event.getFromIndex(), event.getToIndex());
+	}
 
-			log.debug(
-					"List order changed, moved contact from " + event.getFromIndex() + " to " + event.getToIndex());
-
-			associatedContactService.reOrderContactList(task, event.getFromIndex(), event.getToIndex());
-
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
+	/**
+	 * On dialog return, reload data
+	 * 
+	 * @param event
+	 */
+	public void onDefaultDialogReturn(SelectEvent event) {
+		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
+			update(true);
 		}
 	}
 

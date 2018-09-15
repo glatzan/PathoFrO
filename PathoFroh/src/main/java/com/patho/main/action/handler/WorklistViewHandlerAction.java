@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.MainHandlerAction;
 import com.patho.main.action.UserHandlerAction;
-import com.patho.main.action.handler.GlobalEditViewHandler.CommonData;
 import com.patho.main.action.handler.GlobalEditViewHandler.DialogReturnEventHandler;
 import com.patho.main.action.handler.GlobalEditViewHandler.NavigationData;
 import com.patho.main.action.handler.GlobalEditViewHandler.TaskInitilize;

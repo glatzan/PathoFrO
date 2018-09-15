@@ -34,6 +34,10 @@ import com.patho.main.repository.PersonRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.TaskRepository;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 @Service
 @Transactional
 public class AssociatedContactService extends AbstractService {
@@ -157,18 +161,21 @@ public class AssociatedContactService extends AbstractService {
 	 * @param associatedContact
 	 * @param notification
 	 */
-	public void removeNotification(Task task, AssociatedContact associatedContact,
+	public Task removeNotification(Task task, AssociatedContact associatedContact,
 			AssociatedContactNotification notification) {
 
 		if (associatedContact.getNotifications() != null) {
 			associatedContact.getNotifications().remove(notification);
 
+			task = taskRepository.save(task, resourceBundle.get("log.contact.notification.removed", task,
+					associatedContact.toString(), notification.getNotificationTyp().toString()));
+
 			// only remove from array, and deleting the entity only (no saving
 			// of contact necessary because mapped within notification)
-			associatedContactNotificationRepository.delete(notification,
-					resourceBundle.get("log.contact.notification.removed", notification.getNotificationTyp().toString(),
-							associatedContact.toString()));
+			associatedContactNotificationRepository.delete(notification);
 		}
+
+		return task;
 	}
 
 	/**
@@ -178,7 +185,7 @@ public class AssociatedContactService extends AbstractService {
 	 * @param associatedContact
 	 * @return
 	 */
-	public AssociatedContact addAssociatedContact(Task task, Person person, ContactRole role) {
+	public ContactReturn addAssociatedContact(Task task, Person person, ContactRole role) {
 		return addAssociatedContact(task, new AssociatedContact(task, person, role));
 	}
 
@@ -189,17 +196,16 @@ public class AssociatedContactService extends AbstractService {
 	 * @param associatedContact
 	 * @return
 	 */
-	public AssociatedContact addAssociatedContact(Task task, AssociatedContact associatedContact) {
+	public ContactReturn addAssociatedContact(Task task, AssociatedContact associatedContact) {
 
 		if (task.getContacts().stream().anyMatch(p -> p.getPerson().getId() == associatedContact.getPerson().getId()))
 			throw new IllegalArgumentException("Already in list");
 
 		task.getContacts().add(associatedContact);
 		associatedContact.setTask(task);
-
-		associatedContactRepository.save(associatedContact, resourceBundle.get("log.contact.add", associatedContact));
-
-		return associatedContact;
+		task = taskRepository.save(task, resourceBundle.get("log.contact.add", task, associatedContact));
+	
+		return new ContactReturn(task, associatedContact);
 	}
 
 	/**
@@ -210,9 +216,9 @@ public class AssociatedContactService extends AbstractService {
 	 * @param notificationTyp
 	 * @return
 	 */
-	public AssociatedContactNotification addNotificationType(Task task, AssociatedContact associatedContact,
+	public NotificationReturn addNotificationByType(Task task, AssociatedContact associatedContact,
 			AssociatedContactNotification.NotificationTyp notificationTyp) {
-		return addNotificationType(task, associatedContact, notificationTyp, true, false, false, null, null, false);
+		return addNotificationByType(task, associatedContact, notificationTyp, true, false, false, null, null, false);
 
 	}
 
@@ -228,9 +234,10 @@ public class AssociatedContactService extends AbstractService {
 	 * @param dateOfAction
 	 * @return
 	 */
-	public AssociatedContactNotification addNotificationType(Task task, AssociatedContact associatedContact,
+	public NotificationReturn addNotificationByType(Task task, AssociatedContact associatedContact,
 			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
 			boolean failed, Date dateOfAction, String customAddress, boolean renewed) {
+
 		AssociatedContactNotification newNotification = new AssociatedContactNotification();
 		newNotification.setActive(active);
 		newNotification.setPerformed(performed);
@@ -246,10 +253,25 @@ public class AssociatedContactService extends AbstractService {
 
 		associatedContact.getNotifications().add(newNotification);
 
-		associatedContactRepository.save(associatedContact,
-				resourceBundle.get("log.contact.notification.added", notificationTyp.toString(), associatedContact));
+		task = taskRepository.save(task, resourceBundle.get("log.contact.notification.added", task, associatedContact,
+				notificationTyp.toString()));
 
-		return newNotification;
+		return new NotificationReturn(task, newNotification);
+	}
+
+	/**
+	 * Sets all notifications of the given type to inactive, and creats a new
+	 * notification of the given type
+	 * 
+	 * @param task
+	 * @param associatedContact
+	 * @param notificationTyp
+	 * @return
+	 */
+	public NotificationReturn addNotificationByTypeAndDisableOld(Task task, AssociatedContact associatedContact,
+			AssociatedContactNotification.NotificationTyp notificationTyp) {
+		task = markNotificationsAsActive(task, associatedContact, notificationTyp, false);
+		return addNotificationByType(task, associatedContact, notificationTyp);
 	}
 
 	/**
@@ -260,16 +282,16 @@ public class AssociatedContactService extends AbstractService {
 	 * @param associatedContact
 	 * @param notification
 	 */
-	public AssociatedContactNotification renewNotification(Task task, AssociatedContact associatedContact,
+	public NotificationReturn renewNotification(Task task, AssociatedContact associatedContact,
 			AssociatedContactNotification notification) {
 
 		notification.setActive(false);
 
-		associatedContactNotificationRepository.save(notification, resourceBundle.get(
-				"log.contact.notification.inactive", notification.getNotificationTyp().toString(), associatedContact));
+		task = taskRepository.save(task, resourceBundle.get("log.contact.notification.inactive", task,
+				associatedContact, notification.getNotificationTyp().toString(), "inactive"));
 
-		return addNotificationType(task, associatedContact, notification.getNotificationTyp(), true, false, false, null,
-				notification.getContactAddress(), true);
+		return addNotificationByType(task, associatedContact, notification.getNotificationTyp(), true, false, false,
+				null, notification.getContactAddress(), true);
 	}
 
 	/**
@@ -280,17 +302,47 @@ public class AssociatedContactService extends AbstractService {
 	 * @param notificationTyp
 	 * @param active
 	 */
-	public void setNotificationsAsActive(Task task, AssociatedContact associatedContact,
+	public Task markNotificationsAsActive(Task task, AssociatedContact associatedContact,
 			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active) {
+
 		for (AssociatedContactNotification notification : associatedContact.getNotifications()) {
 			if (notification.getNotificationTyp().equals(notificationTyp) && notification.isActive()) {
 				notification.setActive(active);
-
-				associatedContactNotificationRepository.save(notification,
-						resourceBundle.get("log.contact.notification.inactive",
-								notification.getNotificationTyp().toString(), associatedContact));
+				task = taskRepository.save(task,
+						resourceBundle.get("log.contact.notification.inactive", task, associatedContact,
+								notification.getNotificationTyp().toString(), active ? "active" : "inactive"));
 			}
 		}
+
+		return task;
+	}
+
+	/**
+	 * Updates a notification when the notification was performed
+	 * 
+	 * @param task
+	 * @param associatedContact
+	 * @param notification
+	 * @param message
+	 * @param success
+	 * @return
+	 */
+	public Task performNotification(Task task, AssociatedContact associatedContact,
+			AssociatedContactNotification notification, String message, boolean success) {
+		notification.setActive(false);
+
+		notification.setPerformed(true);
+		notification.setDateOfAction(new Date(System.currentTimeMillis()));
+		notification.setCommentary(message);
+		// if success = performed, nothing to do = inactive, if failed = active
+		notification.setActive(!success);
+		// if success = !failed = false
+		notification.setFailed(!success);
+
+		task = taskRepository.save(task, resourceBundle.get("log.contact.notification.performed", associatedContact,
+				notification.getNotificationTyp().toString(), success, message));
+
+		return task;
 	}
 
 	/**
@@ -347,6 +399,22 @@ public class AssociatedContactService extends AbstractService {
 			physicianRepository.save(physicians.get(0));
 		}
 
+	}
+
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class ContactReturn {
+		private Task task;
+		private AssociatedContact associatedContact;
+	}
+
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class NotificationReturn {
+		private Task task;
+		private AssociatedContactNotification associatedContactNotification;
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.SortOrder;
 import com.patho.main.model.Physician;
+import com.patho.main.model.patient.Task;
+import com.patho.main.ui.selectors.PhysicianSelector;
 
 public interface PhysicianRepositoryCustom {
 
@@ -58,4 +60,10 @@ public interface PhysicianRepositoryCustom {
 	 * @return
 	 */
 	List<Physician> findAllByRole(List<ContactRole> roles, boolean irgnoreArchived, SortOrder sortOrder);
+
+	List<PhysicianSelector> findSelectorsByRole(Task task, ContactRole roles, SortOrder sortOrder);
+	
+	List<PhysicianSelector> findSelectorsByRole(Task task, ContactRole[] roles, SortOrder sortOrder);
+	
+	List<PhysicianSelector> findSelectorsByRole(Task task, List<ContactRole> roles, SortOrder sortOrder);
 }

@@ -20,7 +20,9 @@ import com.patho.main.model.AssociatedContactNotification;
 import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactRepository;
+import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.AssociatedContactService;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
@@ -30,7 +32,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class ContactNotificationDialog extends AbstractDialog {
+public class ContactNotificationDialog extends AbstractDialog<ContactNotificationDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -40,17 +42,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private AssociatedContactRepository associatedContactRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private ResourceBundle resourceBundle;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
+	private TaskRepository taskRepository;
 
 	private AssociatedContact associatedContact;
 
@@ -58,11 +50,23 @@ public class ContactNotificationDialog extends AbstractDialog {
 
 	private ContactRole[] selectableRoles;
 
-	HashMap<String, String> icons=new HashMap<String,String>(){{put("EMAIL","fa-envelope");put("FAX","fa-fax");put("PHONE","fa-phone");put("LETTER","fa-pencil-square-o");}};
+	private HashMap<String, String> icons = new HashMap<String, String>() {
 
-	public void initAndPrepareBean(Task task, AssociatedContact associatedContact) {
+		private static final long serialVersionUID = 6498119466449178573L;
+
+		{
+			put("EMAIL", "fa-envelope");
+			put("FAX", "fa-fax");
+			put("PHONE", "fa-phone");
+			put("LETTER", "fa-pencil-square-o");
+		}
+	};
+
+	public ContactNotificationDialog initAndPrepareBean(Task task, AssociatedContact associatedContact) {
 		if (initBean(task, associatedContact))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(Task task, AssociatedContact associatedContact) {
@@ -99,8 +103,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 
 			DefaultMenuItem item = new DefaultMenuItem("");
 			item.setIcon("fa " + icons.get(typeArr[i].toString()));
-			item.setCommand("#{dialogHandlerAction.contactNotificationDialog.addNotificationAndUpdate('"
-					+ typeArr[i].toString() + "')}");
+			item.setCommand("#{dialog.contactNotificationDialog.addNotification('" + typeArr[i].toString() + "')}");
 			item.setValue(resourceBundle.get("enum.notificationType." + typeArr[i].toString()));
 			item.setDisabled(disabled);
 			item.setUpdate("@form");
@@ -108,49 +111,30 @@ public class ContactNotificationDialog extends AbstractDialog {
 		}
 	}
 
-	public void removeNotificationAndUpdate(AssociatedContactNotification associatedContactNotification) {
-		removeNotification(associatedContactNotification);
-		generatedMenuModel();
-	}
-
 	public void removeNotification(AssociatedContactNotification associatedContactNotification) {
-		try {
-			associatedContactService.removeNotification(task, associatedContact, associatedContactNotification);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
-	}
-
-	public void addNotificationAndUpdate(AssociatedContactNotification.NotificationTyp notification) {
-		addNotification(notification);
+		setTask(associatedContactService.removeNotification(task, associatedContact, associatedContactNotification));
 		generatedMenuModel();
 	}
 
 	public void addNotification(AssociatedContactNotification.NotificationTyp notification) {
-
-		try {
-
-			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-				public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-					// setting all other notifications with the same type as
-					// inactive
-					associatedContactService.setNotificationsAsActive(task, associatedContact, notification, false);
-					associatedContactService.addNotificationType(task, associatedContact, notification);
-				}
-			});
-
-		} catch (Exception e) {
-			onDatabaseVersionConflict();
-		}
+		setTask(associatedContactService.addNotificationByTypeAndDisableOld(task, associatedContact, notification)
+				.getTask());
+		generatedMenuModel();
 	}
 
-	public void saveRoleChange() {
-		try {
-			associatedContactRepository.save(getAssociatedContact(), resourceBundle.get("log.contact.roleChange",
-					getAssociatedContact().toString(), getAssociatedContact().getRole().toString()));
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+	public void notificationAsPerformed(AssociatedContactNotification associatedContactNotification) {
+		setTask(associatedContactService.performNotification(task, associatedContact, associatedContactNotification,
+				resourceBundle.get("log.contact.notification.performed.manual"), true));
 	}
+
+	public void onRoleChange() {
+		setTask(taskRepository.save(getTask(), resourceBundle.get("log.contact.roleChange", task,
+				getAssociatedContact().toString(), getAssociatedContact().getRole().toString())));
+	}
+
+	@Override
+	public void hideDialog() {
+		super.hideDialog(new ReloadEvent());
+	}
+
 }
