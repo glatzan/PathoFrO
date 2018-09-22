@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.Transient;
+
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
+import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Signature;
 import com.patho.main.model.patient.Diagnosis;
@@ -299,6 +302,7 @@ public class DiagnosisService extends AbstractService {
 
 	/**
 	 * Generated or updates the default diagnosis report for a diagnosis
+	 * 
 	 * @param task
 	 * @param diagnosisRevision
 	 * @return
@@ -306,5 +310,16 @@ public class DiagnosisService extends AbstractService {
 	public Task generateDefaultDiagnosisReport(Task task, DiagnosisRevision diagnosisRevision) {
 		logger.debug("Generating new report");
 		return new DiagnosisReportUpdater().updateDiagnosisReportNoneBlocking(task, diagnosisRevision);
+	}
+
+	/**
+	 * Copies the parameters of a diagnosisPreset to this entity.
+	 * 
+	 * @param diagnosisPreset
+	 */
+	public void updateDiagnosisWithPrest(Diagnosis diagnosis, DiagnosisPreset diagnosisPreset) {
+		diagnosis.setDiagnosis(diagnosisPreset.getDiagnosis());
+		diagnosis.setMalign(diagnosisPreset.isMalign());
+		diagnosis.setIcd10(diagnosisPreset.getIcd10());
 	}
 }

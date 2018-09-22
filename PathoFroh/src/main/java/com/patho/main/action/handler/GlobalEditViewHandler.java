@@ -52,7 +52,6 @@ import com.patho.main.action.dialog.settings.favourites.FavouriteListItemRemoveD
 import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
-import com.patho.main.action.handler.data.StaticData;
 import com.patho.main.action.handler.views.GenericView;
 import com.patho.main.action.handler.views.ReceiptLogView;
 import com.patho.main.action.handler.views.ReportView;
@@ -67,6 +66,7 @@ import com.patho.main.model.AssociatedContactNotification;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
+import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Signature;
 import com.patho.main.model.dto.TaskOverview;
@@ -207,10 +207,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	 */
 	private ReceiptLogView receiptLogView = new ReceiptLogView(this);
 
-	/**
-	 * Container for static data, generic, not adapted to a task
-	 */
-	private StaticData staticData = new StaticData();
 
 	private WorklistData worklistData = new WorklistData();
 
@@ -277,7 +273,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		worklistViewHandlerAction.addWorklist(worklist, true);
 
 		logger.debug("2. Loading common data");
-		staticData.updateData();
+		genericView.loadStaticData();
 
 		logger.debug("3. Loading view data");
 		navigationData.updateData();
@@ -367,7 +363,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 	public void reloadAllData() {
 		logger.debug("Force Reload of all data");
-		staticData.updateData();
+		genericView.loadStaticData();
 		navigationData.updateData();
 		logger.debug("Reloading worklist");
 		worklistViewHandlerAction.getCurrentWokrlistHandler().reloadCurrentWorklist();
@@ -382,13 +378,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	}
 
 	public void reloadGuiData() {
-		staticData.updateData();
-
-		// only task needs reload
-		if (worklistData.getWorklist().getSelectedTask() != null) {
-			worklistViewHandlerAction.onSelectTaskAndPatient(worklistData.getWorklist().getSelectedTask().getId());
-			logger.debug("Reloading task");
-		}
+		genericView.loadStaticData();
 	}
 
 	@Transactional
@@ -818,10 +808,13 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		}
 
 		public void copyCaseHistory(ListItem selectedcaseHistoryItem) {
-			logger.debug("Updating Case History " + selectedcaseHistoryItem.getValue() + " to "
-					+ worklist().getSelectedTask());
-			getSelectedTask().setCaseHistory(selectedcaseHistoryItem.getValue());
-			save("log.patient.task.change.caseHistory", getSelectedTask(), selectedcaseHistoryItem.getValue());
+			setNewCaseHistory(selectedcaseHistoryItem.getValue());
+		}
+
+		public void setNewCaseHistory(String caseHistory) {
+			logger.debug("Updating Case History to " + caseHistory);
+			getSelectedTask().setCaseHistory(caseHistory);
+			save("log.patient.task.change.caseHistory", getSelectedTask(), caseHistory);
 		}
 
 		/**
@@ -865,7 +858,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		public void diagnosisPrototypeChanged(Diagnosis diagnosis) {
 			logger.debug("Updating diagnosis prototype");
 
-			diagnosis.updateDiagnosisWithPrest(diagnosis.getDiagnosisPrototype());
+			diagnosisService.updateDiagnosisWithPrest(diagnosis, diagnosis.getDiagnosisPrototype());
 
 			// updating all contacts on diagnosis change, an determine if the
 			// contact should receive a physical case report
@@ -879,6 +872,11 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				logger.debug("Updating revision extended text");
 			}
 
+			saveData("log.patient.task.diagnosisRevision.diagnosis.update", diagnosis.getTask(), diagnosis,
+					diagnosis.getDiagnosis());
+		}
+		
+		public void setNewDiagnosis(Diagnosis diagnosis, String diagnosisAsText, boolean  ) {
 			saveData("log.patient.task.diagnosisRevision.diagnosis.update", diagnosis.getTask(), diagnosis,
 					diagnosis.getDiagnosis());
 		}
@@ -947,24 +945,23 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			save(task, false, "log.patient.task.diagnosisRevision.lock", task, diagnosisRevision);
 		}
 
-		public void addPhysicianWithRole(AssociatedContact associatedContact, ContactRole role) {
+		public void addPhysicianWithRole(Person person, ContactRole role) {
 			try {
-				associatedContact.setRole(role);
 
-				// saving
-				associatedContactService.addAssociatedContact(getWorklistData().getWorklist().getSelectedTask(),
-						associatedContact);
-
-				// settings roles
-				associatedContactService.updateNotificationForPhysicalDiagnosisReport(task, associatedContact);
-
+				associatedContactService.addAssociatedContactAndUpdateWithDiagnosisPresets(getSelectedTask(),
+						new AssociatedContact(getSelectedTask(), person, role));
 				// increment counter
-				associatedContactService.incrementContactPriorityCounter(associatedContact.getPerson());
+				associatedContactService.incrementContactPriorityCounter(person);
 			} catch (IllegalArgumentException e) {
 				// todo error message
 				logger.debug("Not adding, double contact");
+				MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");
 			}
+
+			reloadGuiData();
+			globalEditViewHandler.generateViewData(TaskInitilize.RELOAD, TaskInitilize.GENERATE_TASK_STATUS);
 		}
+
 	}
 
 	public static enum TaskInitilize {

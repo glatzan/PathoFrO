@@ -139,23 +139,4 @@ public class Diagnosis implements Parent<DiagnosisRevision>, GsonAble, LogAble, 
 	public String toSimpleString() {
 		return getName();
 	}
-
-	/********************************************************
-	 * Transient
-	 ********************************************************/
-	/**
-	 * Copies the parameters of a diagnosisPreset to this entity.
-	 * 
-	 * @param diagnosisPreset
-	 */
-	@Transient
-	public void updateDiagnosisWithPrest(DiagnosisPreset diagnosisPreset) {
-		setDiagnosis(diagnosisPreset.getDiagnosis());
-		setMalign(diagnosisPreset.isMalign());
-		setIcd10(diagnosisPreset.getIcd10());
-	}
-
-	/********************************************************
-	 * Transient
-	 ********************************************************/
 }

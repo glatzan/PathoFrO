@@ -107,11 +107,74 @@ function getAlteredID(str) {
 
 /**
  * REturns an url parameter
+ * 
  * @param name
  * @returns
  */
 function getURLParameter(name) {
-	var value = decodeURIComponent((RegExp(name + '=' + '(.+?)(&|$)')
-			.exec(location.search) || [ , "" ])[1]);
+	var value = decodeURIComponent((RegExp(name + '=' + '(.+?)(&|$)').exec(
+			location.search) || [ , "" ])[1]);
 	return (value !== 'null') ? value : false;
+}
+
+/**
+ * Show an overlaypanel with a datatable. Will call a reset function, clear the
+ * search filter and unselects all rows. A enter key press will be routet to an
+ * submit function
+ * 
+ * @param panelID
+ * @param parentID
+ * @param resetContentFunction
+ * @param clearFiltersID
+ * @param focusElementID
+ * @param submitFunction
+ * @returns
+ */
+function showAndUpdateOverlayPanel(panelID, parentID, resetContentFunction,
+		clearFiltersID, focusElementID, submitFunction) {
+
+	// only work if panel is not visible
+	if (!PF(panelID).jq.hasClass("ui-overlay-visible")) {
+
+		PF(panelID).show(parentID);
+
+		// reset values in backend bean
+		resetContentFunction();
+
+		// clear datatable
+		PF(clearFiltersID).clearFilters();
+		PF(clearFiltersID).unselectAllRows();
+
+		// on enter submit
+		var t = $(focusElementID);
+		t.on("keydown", function(e) {
+			if (e.which == 13) {
+				submitNewCustomCaseHistory();
+				e.preventDefault();
+				return false;
+			}
+		});
+
+		focusElement(focusElementID);
+	}
+}
+
+/**
+ * Sets the focus on an element with a delay. Is used to set the focus for
+ * overlaypanels
+ * 
+ * @param clintId
+ * @returns
+ */
+function focusElement(clintId) {
+	// settings focus, with an delay of 100ms
+	setTimeout(function() {
+		var t = $(clintId);
+		t.focus();
+		// focus at the end of the input
+		var test = t.val();
+		t.val("");
+		t.val(test);
+	}, 200);
+
 }

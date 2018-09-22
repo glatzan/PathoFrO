@@ -43,11 +43,6 @@ public class DiagnosisViewHandlerAction {
 	@Setter(AccessLevel.NONE)
 	private CopyHistologicalRecordDialog copyHistologicalRecordDialog;
 
-	/**
-	 * selected List item form caseHistory list
-	 */
-	private ListItem selectedCaseHistoryItem;
-
 	public void prepareForTask(Task task) {
 		log.debug("Initilize DiagnosisViewHandlerAction for task");
 

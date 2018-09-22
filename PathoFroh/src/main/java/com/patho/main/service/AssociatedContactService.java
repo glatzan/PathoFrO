@@ -82,7 +82,7 @@ public class AssociatedContactService extends AbstractService {
 			addNotificationType(task, associatedContact, notificationTyp);
 		}
 
-		updateNotificationForPhysicalDiagnosisReport(task, associatedContact);
+		updateNotificationWithDiagnosisPresets(task, associatedContact);
 	}
 
 	/**
@@ -92,16 +92,16 @@ public class AssociatedContactService extends AbstractService {
 	 * @param task
 	 * @param associatedContact
 	 */
-	public void updateNotificationForPhysicalDiagnosisReport(Task task, AssociatedContact associatedContact) {
+	public ContactReturn updateNotificationWithDiagnosisPresets(Task task, AssociatedContact associatedContact) {
 		Set<ContactRole> sendLetterTo = new HashSet<ContactRole>();
 
 		// checking if a already a report should be send physically, if so do
 		// nothing and return
 		if (associatedContact.getNotifications().stream()
 				.anyMatch(p -> p.getNotificationTyp().equals(AssociatedContactNotification.NotificationTyp.LETTER)))
-			return;
+			return new ContactReturn(task, associatedContact);
 
-		// collecting roles for which a report should be physically send
+		// collecting roles for which a report should be send by letter
 		for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
 			for (Diagnosis diagnosis : diagnosisRevision.getDiagnoses()) {
 				if (diagnosis.getDiagnosisPrototype() != null)
@@ -113,11 +113,12 @@ public class AssociatedContactService extends AbstractService {
 		for (ContactRole contactRole : sendLetterTo) {
 			if (associatedContact.getRole().equals(contactRole)) {
 				// adding notification and return;
-				addNotificationType(task, associatedContact, AssociatedContactNotification.NotificationTyp.LETTER);
-				return;
+				return new ContactReturn(addNotificationByType(task, associatedContact,
+						AssociatedContactNotification.NotificationTyp.LETTER).getTask(), associatedContact);
 			}
 		}
 
+		return new ContactReturn(task, associatedContact);
 	}
 
 	/**
@@ -129,7 +130,7 @@ public class AssociatedContactService extends AbstractService {
 	 */
 	public void updateNotificationsForPhysicalDiagnosisReport(Task task) {
 		for (AssociatedContact associatedContact : task.getContacts()) {
-			updateNotificationForPhysicalDiagnosisReport(task, associatedContact);
+			updateNotificationWithDiagnosisPresets(task, associatedContact);
 		}
 	}
 
@@ -179,6 +180,29 @@ public class AssociatedContactService extends AbstractService {
 	}
 
 	/**
+	 * Adds an associated contact, and checks if notification methods should be
+	 * added because of a specific diagnosis
+	 * 
+	 * @param task
+	 * @param associatedContact
+	 * @return
+	 */
+	public ContactReturn addAssociatedContactAndUpdateWithDiagnosisPresets(Task task,
+			AssociatedContact associatedContact) {
+
+		if (task.getContacts().stream().anyMatch(p -> p.getPerson().getId() == associatedContact.getPerson().getId()))
+			throw new IllegalArgumentException("Already in list");
+
+		task.getContacts().add(associatedContact);
+		associatedContact.setTask(task);
+
+		task = taskRepository.save(task, resourceBundle.get("log.contact.add", task, associatedContact));
+		task = updateNotificationWithDiagnosisPresets(task, associatedContact).getTask();
+
+		return new ContactReturn(task, associatedContact);
+	}
+
+	/**
 	 * Adds an associated contact
 	 * 
 	 * @param task
@@ -204,7 +228,7 @@ public class AssociatedContactService extends AbstractService {
 		task.getContacts().add(associatedContact);
 		associatedContact.setTask(task);
 		task = taskRepository.save(task, resourceBundle.get("log.contact.add", task, associatedContact));
-	
+
 		return new ContactReturn(task, associatedContact);
 	}
 
@@ -375,29 +399,21 @@ public class AssociatedContactService extends AbstractService {
 		}
 	}
 
-	public void incrementContactPriorityCounter(Person person) {
+	/**
+	 * Increments the count by times the physician was selected.
+	 * 
+	 * @param person
+	 * @return
+	 */
+	public Physician incrementContactPriorityCounter(Person person) {
+		Optional<Physician> p = physicianRepository.findOptionalByPerson(person);
 
-		// Create CriteriaBuilder
-		CriteriaBuilder qb = getCriteriaBuilder();
-
-		// Create CriteriaQuery
-		CriteriaQuery<Physician> criteria = qb.createQuery(Physician.class);
-		Root<Physician> root = criteria.from(Physician.class);
-		criteria.select(root);
-
-		Join<Physician, Person> personQuery = root.join(Physician_.person, JoinType.LEFT);
-
-		criteria.where(qb.equal(personQuery.get(Person_.id), person.getId()));
-		criteria.distinct(true);
-
-		List<Physician> physicians = getSession().createQuery(criteria).getResultList();
-
-		if (physicians.size() == 1) {
-
-			physicians.get(0).setPriorityCount(physicians.get(0).getPriorityCount() + 1);
-
-			physicianRepository.save(physicians.get(0));
+		if (p.isPresent()) {
+			p.get().setPriorityCount(p.get().getPriorityCount() + 1);
+			return physicianRepository.save(p.get());
 		}
+
+		return null;
 
 	}
 

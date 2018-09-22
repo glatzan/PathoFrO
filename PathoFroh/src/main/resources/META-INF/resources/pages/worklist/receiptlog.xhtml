@@ -87,7 +87,7 @@
 					style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor};"
 					styleClass="customBackground" editable="true"
 					disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
-					<f:selectItems value="#{globalEditViewHandler.staticData.wardList}"
+					<f:selectItems value="#{globalEditViewHandler.genericView.staticData.wardList}"
 						itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
 					<p:ajax event="change" execute="@this"
 						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', globalEditViewHandler.worklistData.worklist.selectedTask, globalEditViewHandler.worklistData.worklist.selectedTask.ward)}" />
@@ -129,17 +129,17 @@
 						hideEffect="fade" style="width:500px" hideEvent="mousedown"
 						showEvent="none">
 						<p:dataTable
-							value="#{globalEditViewHandler.staticData.caseHistoryList}"
+							value="#{globalEditViewHandler.genericView.staticData.caseHistoryList}"
 							var="item" styleClass="defaultHistoDataTable" scrollable="true"
 							scrollHeight="200" rowKey="#{item.id}"
-							selection="#{globalEditViewHandler.staticData.selectedCaseHistoryItem}"
+							selection="#{globalEditViewHandler.genericView.selectedCaseHistoryItem}"
 							selectionMode="single">
 							<p:column filterBy="#{item.value}" filterMatchMode="contains">
 								<h:outputText value="#{item.value}" />
 							</p:column>
 
 							<p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
-								listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.staticData.selectedCaseHistoryItem)}"
+								listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.genericView.selectedCaseHistoryItem)}"
 								oncomplete="PF('caseHistoryOverlayPanel').hide();" />
 						</p:dataTable>
 
@@ -197,7 +197,7 @@
 								hideEffect="fade" style="width:500px" hideEvent="mousedown"
 								showEvent="none" onkeypress="return false;">
 								<p:dataTable
-									value="#{globalEditViewHandler.staticData.materialList}"
+									value="#{globalEditViewHandler.genericView.staticData.materialList}"
 									var="preset" styleClass="defaultHistoDataTable"
 									scrollable="true" scrollHeight="200" rowKey="#{preset.id}"
 									selection="#{sample.materialPreset}" selectionMode="single">
@@ -463,7 +463,7 @@
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable or stainingRow.entity.stainingCompleted}">
 
 							<f:selectItems
-								value="#{globalEditViewHandler.staticData.slideCommentary}"
+								value="#{globalEditViewHandler.genericView.staticData.slideCommentary}"
 								var="commentary" itemLabel="#{commentary.value}"
 								itemValue="#{commentary.value}" />
 
@@ -681,15 +681,7 @@
 					// showing the overlay
 					PF('idInputPannel').show(clintId);
 
-					// settings focus, with an delay of 100ms
-					setTimeout(function() {
-						PF('idInputPannelInput').jq.focus();
-						// focus at the end of the input
-						var test = PF('idInputPannelInput').jq.val();
-						PF('idInputPannelInput').jq.val("");
-						PF('idInputPannelInput').jq.val(test);
-					}, 100);
-
+					focusElement('idInputPannelInput');
 				}
 			</script>
 

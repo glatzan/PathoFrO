@@ -17,8 +17,9 @@
 		(function() {
 			var proxied = PrimeFaces.widget.OverlayPanel.prototype.applyFocus;
 			PrimeFaces.widget.OverlayPanel.prototype.applyFocus = function() {
-				if (this.jq.hasClass("histoOverlayPanel"))
+				if (this.jq.hasClass("histoOverlayPanel")) {
 					return;
+				}
 				return proxied.apply(this, arguments);
 			};
 		})();
@@ -57,8 +58,8 @@
 									id="materialInput#{loopCount.index}"
 									disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
 									tabindex="1" styleClass="customBackground"
-									onclick="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');PF('materialOverlayPanel#{loopCount.index}').update();"
-									onfocus="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');PF('materialOverlayPanel#{loopCount.index}').update();"
+									onclick="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');"
+									onfocus="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');"
 									style="width:200px;float:right;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}">
 
 									<p:ajax event="change" execute="@this"
@@ -72,7 +73,7 @@
 									hideEffect="fade" style="width:500px" hideEvent="mousedown"
 									showEvent="none" onkeypress="return false;">
 									<p:dataTable
-										value="#{globalEditViewHandler.staticData.materialList}"
+										value="#{globalEditViewHandler.genericView.staticData.materialList}"
 										var="preset" styleClass="defaultHistoDataTable"
 										scrollable="true" scrollHeight="200" rowKey="#{preset.id}"
 										selection="#{sample.materialPreset}" selectionMode="single">
@@ -121,8 +122,7 @@
 							title="#{msg['body.diagnosis.story.watermark']}"
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
 							id="caseHistoryInput" style="width:90%"
-							onclick="PF('caseHistoryOverlayPanel').show('#{component.clientId}');PF('caseHistoryOverlayPanel').update();"
-							onfocus="PF('caseHistoryOverlayPanel').show('#{component.clientId}');PF('caseHistoryOverlayPanel').update();"
+							onclick="showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,clearSelectedCaseHistoryItem, 'caseHistoryOverlayPanelDataTable', '#contentForm\\:caseHistoryOverlayPanelDataTable\\:valueColumn\\:filter',submitNewCustomCaseHistory);"
 							onkeypress="PF('caseHistoryOverlayPanel').hide();">
 							<p:ajax event="change"
 								listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',globalEditViewHandler.worklistData.worklist.selectedTask,globalEditViewHandler.worklistData.worklist.selectedTask.caseHistory)}"></p:ajax>
@@ -133,23 +133,34 @@
 							widgetVar="caseHistoryOverlayPanel" hideEffect="fade"
 							style="width:500px" hideEvent="mousedown" showEvent="none"
 							onkeypress="return false;">
-							<p:dataTable
-								value="#{globalEditViewHandler.staticData.caseHistoryList}"
+							<p:dataTable id="caseHistoryOverlayPanelDataTable"
+								widgetVar="caseHistoryOverlayPanelDataTable" filterDelay="100"
+								value="#{globalEditViewHandler.genericView.staticData.caseHistoryList}"
 								var="item" styleClass="defaultHistoDataTable" scrollable="true"
 								scrollHeight="200" rowKey="#{item.id}"
-								selection="#{globalEditViewHandler.staticData.selectedCaseHistoryItem}"
+								selection="#{globalEditViewHandler.genericView.selectedCaseHistoryItem}"
 								selectionMode="single">
-								<p:column filterBy="#{item.value}" filterMatchMode="contains">
+
+								<p:column filterBy="#{item.value}" filterMatchMode="contains"
+									filterValue="#{globalEditViewHandler.genericView.caseHistoryFilter}"
+									id="valueColumn">
 									<h:outputText value="#{item.value}" />
 								</p:column>
 
 								<p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
 									process="@form"
-									listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.staticData.selectedCaseHistoryItem)}"
+									listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.genericView.selectedCaseHistoryItem)}"
 									oncomplete="PF('caseHistoryOverlayPanel').hide();" />
 							</p:dataTable>
-
 						</p:overlayPanel>
+
+						<p:remoteCommand name="submitNewCustomCaseHistory"
+							update="contentForm:caseHistoryInput"
+							actionListener="#{globalEditViewHandler.ct.setNewCaseHistory(globalEditViewHandler.genericView.caseHistoryFilter)}"
+							oncomplete="PF('caseHistoryOverlayPanel').hide();" />
+
+						<p:remoteCommand name="clearSelectedCaseHistoryItem"
+							actionListener="#{globalEditViewHandler.genericView.setSelectedCaseHistoryItem(null)}" />
 
 					</h:panelGroup>
 				</h:panelGrid>
@@ -226,7 +237,7 @@
 						style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}">
 
 						<f:selectItems
-							value="#{globalEditViewHandler.staticData.wardList}"
+							value="#{globalEditViewHandler.genericView.staticData.wardList}"
 							itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
 						<p:ajax event="change" execute="@this"
 							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', globalEditViewHandler.worklistData.worklist.selectedTask, globalEditViewHandler.worklistData.worklist.selectedTask.ward)}" />
@@ -276,32 +287,75 @@
 					<h:panelGroup>
 						<p:commandLink style="float: right; margin-right:5px;"
 							tabindex="9"
-							onclick="PF('privatePhysicianOverlayPanel#{loopCount.index}').show('#{component.clientId}');PF('privatePhysicianOverlayPanel#{loopCount.index}').update();"
-							onfocus="PF('privatePhysicianOverlayPanel#{loopCount.index}').show('#{component.clientId}');PF('privatePhysicianOverlayPanel#{loopCount.index}').update();"
+							oncomplete="PF('privatePhysicianOverlayPanel').show('#{component.clientId}');"
 							title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
+							actionListener="#{globalEditViewHandler.genericView.setSelectedSurgeon(null)}"
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
 							<i class="fa fa-fw fa-eye" />
 						</p:commandLink>
 
 						<!-- material overlay panel -->
-						<p:overlayPanel
-							id="privatePhysicianOverlayPanel#{loopCount.index}"
+						<p:overlayPanel id="privatePhysicianOverlayPanel"
 							styleClass="histoOverlayPanel" onShow=""
-							widgetVar="privatePhysicianOverlayPanel#{loopCount.index}"
-							hideEffect="fade" style="width:500px" hideEvent="mousedown"
-							showEvent="none" onkeypress="return false;">
-							<p:dataTable
+							widgetVar="privatePhysicianOverlayPanel" hideEffect="fade"
+							style="width:500px" hideEvent="mousedown" showEvent="none"
+							onkeypress="return false;">
+							<p:dataTable id="privatePhysicianOverlayPanelDataTable"
+								widgetVar="privatePhysicianOverlayPanelDataTable"
+								disabledSelection="#{physicianSelector.contactOfTask}"
 								selection="#{globalEditViewHandler.genericView.selectedSurgeon}"
 								selectionMode="single"
 								value="#{globalEditViewHandler.genericView.surgeons}"
 								var="physicianSelector" styleClass="defaultHistoDataTable"
-								scrollable="true" scrollHeight="200" rowKey="#{physicianSelector.id}">
-								<p:column filterBy="#{physicianSelector.physician.person.getFullName()}" filterMatchMode="contains">
-									<h:outputText value="#{physicianSelector.physician.person.getFullName()}" />
+								scrollable="true" scrollHeight="200"
+								rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
+
+								<!-- name -->
+								<p:column id="nameColumn"
+									filterValue="#{globalEditViewHandler.genericView.selectedSurgeonFilter}"
+									filterBy="#{physicianSelector.physician.person.getFullName()}"
+									filterMatchMode="contains">
+									<f:facet name="header">
+										<span id="privatePhysicianOverlayPanel#{rowIndexVar}"></span>
+									</f:facet>
+
+									<h:outputText
+										value="#{physicianSelector.physician.person.getFullName()}" />
 								</p:column>
+
+								<!-- already selected -->
+								<p:column style="width:5%; text-align:center;">
+									<f:facet name="header">
+										<i class="fa fa-check-square-o"
+											title="#{msg['dialog.selectContact.table.added']}" />
+									</f:facet>
+
+									<ui:fragment rendered="#{physicianSelector.contactOfTask}">
+										<i class="fa fa-check icon-green"
+											title="#{msg['dialog.selectContact.table.added']}" />
+									</ui:fragment>
+
+								</p:column>
+
+
+								<p:ajax event="rowSelect"
+									update="navigationForm:patientList contentForm:contentPanel headerForm"
+									process="@form"
+									listener="#{globalEditViewHandler.ct.addPhysicianWithRole(globalEditViewHandler.genericView.selectedSurgeon.physician.person, 'SURGEON')}"
+									oncomplete="PF('privatePhysicianOverlayPanel#{loopCount.index}').hide();" />
 
 							</p:dataTable>
 
+							<script>
+								var t = $("#contentForm\\:privatePhysicianOverlayPanelDataTable\\:nameColumn\\:filter");
+								t.on("keydown", function(e) {
+									if (e.which == 13) {
+										alert("t");
+										e.preventDefault();
+										return false;
+									}
+								});
+							</script>
 						</p:overlayPanel>
 					</h:panelGroup>
 				</h:panelGrid>
@@ -331,7 +385,7 @@
 					<!-- Extended Diagnosis Text -->
 					<h:panelGroup layout="block" id="pPannel"
 						style="width: 90%; min-height:16px; #{revision.name == '' ? 'background: #fcf1b8' : ''}"
-						onclick="PF('diagnosisNamePannel#{varCounterOuter.index}').show();PF('diagnosisNamePannel#{varCounterOuter.index}').update()">
+						onclick="PF('diagnosisNamePannel#{varCounterOuter.index}').show()">
 						<h:outputLabel value="#{revision.name}" />
 
 						<p:overlayPanel id="diagnosisNamePannel#{varCounterOuter.index}"
@@ -419,8 +473,8 @@
 							<!-- diagnosis text -->
 							<p:inputTextarea value="#{diagnosis.diagnosis}"
 								onkeypress="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"
-								onclick="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').show('#{component.clientId}');PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').update();"
-								onfocus="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').show('#{component.clientId}');PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').update();"
+								onclick="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').show('#{component.clientId}');"
+								onfocus="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').show('#{component.clientId}');"
 								id="diagnosisText#{varCounterOuter.index}#{varCounterInner.index}"
 								disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
 								style="width:99%">
@@ -437,12 +491,13 @@
 								styleClass="histoOverlayPanel" hideEffect="fade"
 								style="width:500px" hideEvent="mousedown" showEvent="none">
 								<p:dataTable
-									value="#{globalEditViewHandler.staticData.diagnosisPresets}"
+									value="#{globalEditViewHandler.genericView.staticData.diagnosisPresets}"
 									var="item" styleClass="defaultHistoDataTable" scrollable="true"
 									scrollHeight="200" rowKey="#{item.id}"
 									selection="#{diagnosis.diagnosisPrototype}"
 									selectionMode="single">
 									<p:column filterBy="#{item.diagnosis}"
+										filterValue="#{globalEditViewHandler.genericView.diagnosisFilter[varCounterOuter.index][varCounterInner.index]}"
 										filterMatchMode="contains">
 										<h:outputText value="#{item.diagnosis}" />
 									</p:column>
@@ -453,6 +508,12 @@
 										oncomplete="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();" />
 
 								</p:dataTable>
+
+								<p:remoteCommand name="submitNewCustomCaseHistory"
+									update="navigationForm:patientList contentForm:contentPanel headerForm"
+									actionListener="#{globalEditViewHandler.ct.setNewCaseHistory(globalEditViewHandler.genericView.caseHistorySearch)}"
+									oncomplete="PF('caseHistoryOverlayPanel').hide();" />
+
 							</p:overlayPanel>
 						</h:panelGroup>
 						<!-- Diagnosis for sample -->
@@ -482,7 +543,7 @@
 							style="width:90% !important;"
 							panelStyleClass="iconFixForSelectOneMenu"
 							value="#{revision.signatureOne.physician}"
-							converter="#{globalEditViewHandler.staticData.physiciansToSignListTransformer}"
+							converter="#{globalEditViewHandler.genericView.staticData.physiciansToSignListTransformer}"
 							filter="true" filterMatchMode="contains">
 
 							<f:selectItem
@@ -490,7 +551,7 @@
 								itemValue="#{null}" />
 
 							<f:selectItems
-								value="#{globalEditViewHandler.staticData.physiciansToSignList}"
+								value="#{globalEditViewHandler.genericView.staticData.physiciansToSignList}"
 								var="physician" itemLabel="#{physician.person.getFullName()}"
 								itemValue="#{physician}" />
 
@@ -518,14 +579,14 @@
 							style="width:90% !important;"
 							panelStyleClass="iconFixForSelectOneMenu"
 							value="#{revision.signatureTwo.physician}"
-							converter="#{globalEditViewHandler.staticData.physiciansToSignListTransformer}"
+							converter="#{globalEditViewHandler.genericView.staticData.physiciansToSignListTransformer}"
 							filter="true" filterMatchMode="contains">
 							<f:selectItem
 								itemLabel="#{msg['body.diagnosis.signature.consultant.select']}"
 								itemValue="#{null}" />
 
 							<f:selectItems
-								value="#{globalEditViewHandler.staticData.physiciansToSignList}"
+								value="#{globalEditViewHandler.genericView.staticData.physiciansToSignList}"
 								var="physician" itemLabel="#{physician.person.getFullName()}"
 								itemValue="#{physician}" />
 
@@ -744,6 +805,15 @@
 			</h:panelGrid>
 		</c:forEach>
 	</p:panel>
+
+	<script>
+		$(document)
+				.ready(
+						function() {
+							// updating scrollElement for displaying the scroll bar correctly
+							updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane');
+						});
+	</script>
 
 </ui:composition>
 

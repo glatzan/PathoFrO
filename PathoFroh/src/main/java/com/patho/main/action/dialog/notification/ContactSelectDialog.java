@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -16,7 +17,9 @@ import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.service.AssociatedContactService;
+import com.patho.main.service.AssociatedContactService.ContactReturn;
 import com.patho.main.ui.selectors.PhysicianSelector;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -137,15 +140,6 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 		setContactList(physicianRepository.findSelectorsByRole(getTask(), getShowRoles(), SortOrder.PRIORITY));
 	}
 
-	public void addPhysicianAsRole() {
-		if (getSelectedContact() != null) {
-
-			AssociatedContact associatedContact = new AssociatedContact(getTask(),
-					getSelectedContact().getPhysician().getPerson());
-			addPhysicianWithRole(associatedContact, getRoleForAddingContact(getSelectedContact().getPhysician()));
-		}
-	}
-
 	/**
 	 * IF dynamicRoleSelection is disabled the addAsRole will be used for adding a
 	 * physician. If true the addableRoles an the roles of the physician will be
@@ -168,6 +162,14 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 		return ContactRole.OTHER_PHYSICIAN;
 	}
 
+	public void addPhysicianWithRole() {
+		if (getSelectedContact() != null) {
+			AssociatedContact associatedContact = new AssociatedContact(getTask(),
+					getSelectedContact().getPhysician().getPerson());
+			addPhysicianWithRole(associatedContact, getRoleForAddingContact(getSelectedContact().getPhysician()));
+		}
+	}
+
 	/**
 	 * Sets the given associatedContact to the given role
 	 * 
@@ -178,19 +180,20 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 		try {
 			associatedContact.setRole(role);
 
-			// saving
-			associatedContactService.addAssociatedContact(task, associatedContact);
-
-			// settings roles
-			associatedContactService.updateNotificationForPhysicalDiagnosisReport(task, associatedContact);
+			associatedContactService.addAssociatedContactAndUpdateWithDiagnosisPresets(task, associatedContact);
 
 			// increment counter
 			associatedContactService.incrementContactPriorityCounter(associatedContact.getPerson());
 		} catch (IllegalArgumentException e) {
 			// todo error message
 			logger.debug("Not adding, double contact");
-			Messaa
+			MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");
 		}
+	}
+
+	@Override
+	public void hideDialog() {
+		super.hideDialog(new ReloadEvent());
 	}
 
 }

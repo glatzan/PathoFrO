@@ -8,7 +8,7 @@ import com.patho.main.repository.service.PhysicianRepositoryCustom;
 
 public interface PhysicianRepository extends BaseRepository<Physician, Long>, PhysicianRepositoryCustom {
 
-	Optional<Physician> findOptionalByPerson(Person pseron);
+	Optional<Physician> findOptionalByPerson(Person person);
 
 	Optional<Physician> findOptionalByUid(String uid);
 
