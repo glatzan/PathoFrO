@@ -123,39 +123,68 @@ function getURLParameter(name) {
  * submit function
  * 
  * @param panelID
+ *            ID of the overlaypanel, widgetwar
  * @param parentID
+ *            ID of the element the overlaypanel should be aligned with, id
  * @param resetContentFunction
+ *            If data should be resetted on show, remotecommand oder javascript
+ *            function
  * @param clearFiltersID
+ *            Datatable to clear, widgetwar
  * @param focusElementID
+ *            Element in overlaypanel which should be focused, id
+ *            ('#contentForm\\:privatePhysicianOverlayPanelDataTable\\:nameColumn\\:filter');
+ *            or number of the input element
  * @param submitFunction
+ *            Function which will be called on enter while focus is located in
+ *            the filter input
  * @returns
  */
 function showAndUpdateOverlayPanel(panelID, parentID, resetContentFunction,
-		clearFiltersID, focusElementID, submitFunction) {
+		dataTable, focusElementID, submitFunction) {
 
 	// only work if panel is not visible
 	if (!PF(panelID).jq.hasClass("ui-overlay-visible")) {
 
 		PF(panelID).show(parentID);
 
-		// reset values in backend bean
-		resetContentFunction();
-
-		// clear datatable
-		PF(clearFiltersID).clearFilters();
-		PF(clearFiltersID).unselectAllRows();
+		if (resetContentFunction != null) {
+			// reset values in backend bean
+			resetContentFunction();
+		}
 
 		// on enter submit
 		var t = $(focusElementID);
-		t.on("keydown", function(e) {
-			if (e.which == 13) {
-				submitNewCustomCaseHistory();
-				e.preventDefault();
-				return false;
-			}
-		});
 
-		focusElement(focusElementID);
+		if (submitFunction != null) {
+			// submit on return only used if submitFunction is not null
+			t.on("keydown", function(e) {
+				if (e.which == 13) {
+					submitFunction();
+					e.preventDefault();
+					return false;
+				}
+			});
+		}
+
+		if (dataTable != null) {
+			// clear datatable
+			PF(dataTable).clearFilters();
+			PF(dataTable).unselectAllRows();
+
+			var data = focusElementID;
+			if (data === parseInt(data, 10)) {
+				// searching for filters to focus
+				var filters = PF(dataTable).jq.find("[id$='filter']");
+
+				if (filters.length > 0 && filters.length > data) {
+					focusElement("#"+filters[data].id.replace(/\:/g, "\\:"));
+				}
+				
+			} else {
+				focusElement(focusElementID);
+			}
+		}
 	}
 }
 

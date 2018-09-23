@@ -49,7 +49,15 @@ public class GenericView extends AbstractTaskView {
 	 */
 	private ListItem selectedCaseHistoryItem;
 
+	/**
+	 * Array for diagnoses filter
+	 */
 	private String[][] diagnosisFilter;
+
+	/**
+	 * Array for selected diagnosis presets
+	 */
+	private DiagnosisPreset[][] selectedDiagnosisPresets;
 
 	/**
 	 * List of all surgeons
@@ -57,19 +65,32 @@ public class GenericView extends AbstractTaskView {
 	private List<PhysicianSelector> surgeons;
 
 	/**
+	 * Selected surgeon
+	 */
+	private PhysicianSelector selectedSurgeon;
+
+	/**
+	 * Surgeon filter
+	 */
+	private String selectedSurgeonFilter;
+
+	/**
 	 * List of all private physicians
 	 */
 	private List<PhysicianSelector> privatePhysicians;
 
-	private PhysicianSelector selectedSurgeon;
-
-	private String selectedSurgeonFilter;
-
+	/**
+	 * Private physician surgeon
+	 */
 	private PhysicianSelector selectedPrivatePhysician;
+
+	/**
+	 * Private physician filter
+	 */
+	private String selectedPrivatePhysicianFilter;
 
 	public GenericView(GlobalEditViewHandler globalEditViewHandler) {
 		super(globalEditViewHandler);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void loadView() {
@@ -78,11 +99,13 @@ public class GenericView extends AbstractTaskView {
 		setPrivatePhysicians(PhysicianSelector.factory(getTask(), getStaticData().getPrivatePhysicians()));
 
 		setDiagnosisFilter(new String[getTask().getDiagnosisRevisions().size()][]);
+		setSelectedDiagnosisPresets(new DiagnosisPreset[getTask().getDiagnosisRevisions().size()][]);
 
 		int i = 0;
-		
+
 		for (DiagnosisRevision revision : getTask().getDiagnosisRevisions()) {
 			getDiagnosisFilter()[i] = new String[revision.getDiagnoses().size()];
+			getSelectedDiagnosisPresets()[i] = new DiagnosisPreset[revision.getDiagnoses().size()];
 			i++;
 		}
 	}

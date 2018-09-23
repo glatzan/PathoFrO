@@ -207,7 +207,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	 */
 	private ReceiptLogView receiptLogView = new ReceiptLogView(this);
 
-
 	private WorklistData worklistData = new WorklistData();
 
 	/**
@@ -851,34 +850,36 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		}
 
 		/**
-		 * Method for changing a diagnosis prototype, updates contacts as well.
+		 * Updates a diagnosis with a preset
 		 * 
 		 * @param diagnosis
+		 * @param preset
 		 */
-		public void diagnosisPrototypeChanged(Diagnosis diagnosis) {
-			logger.debug("Updating diagnosis prototype");
-
-			diagnosisService.updateDiagnosisWithPrest(diagnosis, diagnosis.getDiagnosisPrototype());
-
-			// updating all contacts on diagnosis change, an determine if the
-			// contact should receive a physical case report
-			associatedContactService.updateNotificationsForPhysicalDiagnosisReport(diagnosis.getTask());
-
-			// only setting diagnosis text if one sample and no text has been
-			// added
-			// jet
-			if (diagnosis.getParent().getText() == null || diagnosis.getParent().getText().isEmpty()) {
-				diagnosis.getParent().setText(diagnosis.getDiagnosisPrototype().getExtendedDiagnosisText());
-				logger.debug("Updating revision extended text");
-			}
-
-			saveData("log.patient.task.diagnosisRevision.diagnosis.update", diagnosis.getTask(), diagnosis,
-					diagnosis.getDiagnosis());
+		public void updateDiagnosisPrototype(Diagnosis diagnosis, DiagnosisPreset preset) {
+			logger.debug("Updating diagnosis with prototype");
+			setSelectedTask(diagnosisService.updateDiagnosisWithPrototype(diagnosis.getTask(), diagnosis, preset));
+			globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 		}
-		
-		public void setNewDiagnosis(Diagnosis diagnosis, String diagnosisAsText, boolean  ) {
-			saveData("log.patient.task.diagnosisRevision.diagnosis.update", diagnosis.getTask(), diagnosis,
-					diagnosis.getDiagnosis());
+
+		/**
+		 * Updates a diagnosis without a preset. (Removes the previously set preset)
+		 */
+		public void updateDiagnosisPrototype(Diagnosis diagnosis, String diagnosisAsText) {
+			logger.debug("Updating diagnosis to " + diagnosisAsText);
+			setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.getTask(), diagnosis,
+					diagnosisAsText, "", diagnosis.isMalign(), ""));
+			globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+		}
+
+		/**
+		 * Updates a diagnosis without a preset. (Removes the previously set preset)
+		 */
+		public void updateDiagnosisPrototype(Diagnosis diagnosis, String diagnosisAsText, String extendedDiagnosisText,
+				boolean malign, String icd10) {
+			logger.debug("Updating diagnosis to " + diagnosisAsText);
+			setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.getTask(), diagnosis,
+					diagnosisAsText, extendedDiagnosisText, malign, icd10));
+			globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 		}
 
 		/**

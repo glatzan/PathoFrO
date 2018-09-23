@@ -89,6 +89,11 @@ public class DiagnosisService extends AbstractService {
 	@Setter(AccessLevel.NONE)
 	private MediaRepository mediaRepository;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private AssociatedContactService associatedContactService;
+
 	/**
 	 * Updates all diagnosisRevision of the given revisions
 	 * 
@@ -313,13 +318,74 @@ public class DiagnosisService extends AbstractService {
 	}
 
 	/**
-	 * Copies the parameters of a diagnosisPreset to this entity.
+	 * Updates a diagnosis with out a diagnosis prototype
 	 * 
-	 * @param diagnosisPreset
+	 * @param task
+	 * @param diagnosis
+	 * @param diagnosisAsText
+	 * @param extendedDiagnosisText
+	 * @param malign
+	 * @param icd10
+	 * @return
 	 */
-	public void updateDiagnosisWithPrest(Diagnosis diagnosis, DiagnosisPreset diagnosisPreset) {
-		diagnosis.setDiagnosis(diagnosisPreset.getDiagnosis());
-		diagnosis.setMalign(diagnosisPreset.isMalign());
-		diagnosis.setIcd10(diagnosisPreset.getIcd10());
+	public Task updateDiagnosisWithoutPrototype(Task task, Diagnosis diagnosis, String diagnosisAsText,
+			String extendedDiagnosisText, boolean malign, String icd10) {
+		diagnosis.setDiagnosisPrototype(null);
+
+		return updateDiagnosis(task, diagnosis, diagnosisAsText, extendedDiagnosisText, malign, icd10);
+	}
+
+	/**
+	 * Updates a diagnosis with a diagnosispreset.
+	 * 
+	 * @param task
+	 * @param diagnosis
+	 * @param preset
+	 * @return
+	 */
+	public Task updateDiagnosisWithPrototype(Task task, Diagnosis diagnosis, DiagnosisPreset preset) {
+		logger.debug("Updating diagnosis with prototype");
+
+		diagnosis.setDiagnosisPrototype(preset);
+
+		return updateDiagnosis(task, diagnosis, preset.getDiagnosis(), preset.getExtendedDiagnosisText(),
+				preset.isMalign(), preset.getIcd10());
+	}
+
+	/**
+	 * Updates a diagnosis with the given data. Also updates notification via letter
+	 * 
+	 * @param task
+	 * @param diagnosis
+	 * @param diagnosisAsText
+	 * @param extendedDiagnosisText
+	 * @param malign
+	 * @param icd10
+	 * @return
+	 */
+	public Task updateDiagnosis(Task task, Diagnosis diagnosis, String diagnosisAsText, String extendedDiagnosisText,
+			boolean malign, String icd10) {
+		logger.debug("Updating diagnosis to " + diagnosisAsText);
+
+		diagnosis.setDiagnosis(diagnosisAsText);
+		diagnosis.setMalign(malign);
+		diagnosis.setIcd10(icd10);
+
+		// only setting diagnosis text if one sample and no text has been
+		// added
+		// jet
+		if (diagnosis.getParent().getText() == null || diagnosis.getParent().getText().isEmpty()) {
+			diagnosis.getParent().setText(extendedDiagnosisText);
+			logger.debug("Updating revision extended text");
+		}
+
+		// updating all contacts on diagnosis change, an determine if the
+		// contact should receive a physical case report
+		task = associatedContactService.updateNotificationsForPhysicalDiagnosisReport(task);
+
+		task = taskRepository.save(task, resourceBundle.get("log.patient.task.diagnosisRevision.diagnosis.update", task,
+				diagnosis, diagnosis.getDiagnosis()));
+
+		return task;
 	}
 }

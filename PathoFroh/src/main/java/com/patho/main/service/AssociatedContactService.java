@@ -128,10 +128,11 @@ public class AssociatedContactService extends AbstractService {
 	 * @param task
 	 * @param diagnosisRevision
 	 */
-	public void updateNotificationsForPhysicalDiagnosisReport(Task task) {
+	public Task updateNotificationsForPhysicalDiagnosisReport(Task task) {
 		for (AssociatedContact associatedContact : task.getContacts()) {
-			updateNotificationWithDiagnosisPresets(task, associatedContact);
+			task = updateNotificationWithDiagnosisPresets(task, associatedContact).getTask();
 		}
+		return task;
 	}
 
 	public void reOrderContactList(Task task, int indexRemove, int indexMove) {
