@@ -49,22 +49,22 @@
 					<p:commandButton icon="fa fa-check-circle-o"
 						value="#{msg['dialog.histologicalRecordOverwrite.button.overwrite']}">
 						<f:actionListener
-							binding="#{copyHistologicalRecordDialog.copyHistologicalRecord(true)}" />
+							binding="#{dialog.copyHistologicalRecordDialog.copyHistologicalRecord(true)}" />
 						<f:actionListener
-							binding="#{copyHistologicalRecordDialog.hideDialog(true)}" />
+							binding="#{dialog.copyHistologicalRecordDialog.hideDialog()}" />
 					</p:commandButton>
 
 					<p:commandButton icon="fa fa-check-circle-o"
 						value="#{msg['dialog.histologicalRecordOverwrite.button.add']}">
 						<f:actionListener
-							binding="#{copyHistologicalRecordDialog.copyHistologicalRecord(false)}" />
+							binding="#{dialog.copyHistologicalRecordDialog.copyHistologicalRecord(false)}" />
 						<f:actionListener
-							binding="#{copyHistologicalRecordDialog.hideDialog(true)}" />
+							binding="#{dialog.copyHistologicalRecordDialog.hideDialog()}" />
 					</p:commandButton>
 
 					<p:commandButton id="closeBtn" value="#{msg['general.abort']}"
 						icon="fa fa-times-circle"
-						actionListener="#{copyHistologicalRecordDialog.hideDialog()}" />
+						actionListener="#{dialog.copyHistologicalRecordDialog.hideDialog()}" />
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>

@@ -19,5 +19,8 @@ public class VersionContainer {
 
 	public VersionContainer(List<Version> versions) {
 		this.versions = versions;
+
+		if (versions != null)
+			currentVersion = versions.get(0).getVersion();
 	}
 }

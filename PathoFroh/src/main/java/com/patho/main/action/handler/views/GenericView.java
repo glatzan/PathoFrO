@@ -89,6 +89,16 @@ public class GenericView extends AbstractTaskView {
 	 */
 	private String selectedPrivatePhysicianFilter;
 
+	/**
+	 * Selected material presets
+	 */
+	private MaterialPreset[] selectedMaterialPresets;
+
+	/**
+	 * Material preset filter
+	 */
+	private String[] selectedMaterialPresetFilter;
+
 	public GenericView(GlobalEditViewHandler globalEditViewHandler) {
 		super(globalEditViewHandler);
 	}
@@ -102,12 +112,14 @@ public class GenericView extends AbstractTaskView {
 		setSelectedDiagnosisPresets(new DiagnosisPreset[getTask().getDiagnosisRevisions().size()][]);
 
 		int i = 0;
-
 		for (DiagnosisRevision revision : getTask().getDiagnosisRevisions()) {
 			getDiagnosisFilter()[i] = new String[revision.getDiagnoses().size()];
 			getSelectedDiagnosisPresets()[i] = new DiagnosisPreset[revision.getDiagnoses().size()];
 			i++;
 		}
+
+		setSelectedMaterialPresetFilter(new String[getTask().getSamples().size()]);
+		setSelectedMaterialPresets(new MaterialPreset[getTask().getSamples().size()]);
 	}
 
 	public void loadStaticData() {

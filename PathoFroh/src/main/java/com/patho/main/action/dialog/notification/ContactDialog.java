@@ -7,12 +7,16 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.annotation.Transient;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.DialogHandler;
+import com.patho.main.action.dialog.notification.ContactSelectDialog.SelectPhysicianReturnEvent;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.AssociatedContact;
+import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.AssociatedContactService;
@@ -45,6 +49,9 @@ public class ContactDialog extends AbstractDialog<ContactDialog> {
 	@Lazy
 	private DialogHandler dialogHandler;
 
+	/**
+	 * List of contacts
+	 */
 	private AssociatedContactSelector[] contacts;
 
 	/**
@@ -81,18 +88,16 @@ public class ContactDialog extends AbstractDialog<ContactDialog> {
 	 * Reloads data of the task
 	 */
 	public void update(boolean reload) {
-		if (reload)
-			taskRepository.findOptionalByIdAndInitialize(task.getId(), false, false, false, true, true);
+		if (reload) {
+			setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), false, false, false, true, true).get());
+		}
 
 		updateContactHolders();
 	}
 
-	public void addContact() {
-		System.out.println(dialogHandler);
-		dialogHandler.getContactSelectDialog().initAndPrepareBean(task, ContactRole.values(), ContactRole.values(),
-				ContactRole.values(), ContactRole.OTHER_PHYSICIAN).setManuallySelectRole(true);
-	}
-
+	/**
+	 * Generates a list for displaying contact data
+	 */
 	public void updateContactHolders() {
 		if (task.getContacts() != null) {
 			List<AssociatedContactSelector> selectors = AssociatedContactSelector.factory(task);
@@ -100,18 +105,34 @@ public class ContactDialog extends AbstractDialog<ContactDialog> {
 		}
 	}
 
+	/**
+	 * Opens the add contact dialog
+	 */
+	public void openAddContactDialog() {
+		dialogHandler.getContactSelectDialog().initAndPrepareBean(task, ContactRole.values(), ContactRole.values(),
+				ContactRole.values(), ContactRole.OTHER_PHYSICIAN).setManuallySelectRole(true);
+	}
+
 	public void removeContact(Task task, AssociatedContact associatedContact) {
 		associatedContactService.removeAssociatedContact(task, associatedContact);
 	}
 
 	/**
-	 * Is fired if the list is reordered by the user via drag and drop
-	 *
-	 * @param event
+	 * Adds a physician as contact
+	 * @param physician
+	 * @param role
 	 */
-	public void onReorderList(ReorderEvent event) {
-		logger.debug("List order changed, moved contact from ? to ?", event.getFromIndex(), event.getToIndex());
-		associatedContactService.reOrderContactList(task, event.getFromIndex(), event.getToIndex());
+	@Transient
+	public void addPhysicianWithRole(Physician physician, ContactRole role) {
+		try {
+			AssociatedContact associatedContact = new AssociatedContact(getTask(), physician.getPerson(), role);
+			associatedContactService.addAssociatedContactAndAddDefaultNotifications(task, associatedContact);
+			// increment counter
+			associatedContactService.incrementContactPriorityCounter(associatedContact.getPerson());
+		} catch (IllegalArgumentException e) {
+			logger.debug("Not adding, double contact");
+			MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");
+		}
 	}
 
 	/**
@@ -120,9 +141,21 @@ public class ContactDialog extends AbstractDialog<ContactDialog> {
 	 * @param event
 	 */
 	public void onDefaultDialogReturn(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
-			update(true);
+		if (event.getObject() != null) {
+			if (event.getObject() instanceof ReloadEvent) {
+				update(true);
+			} else if (event.getObject() instanceof SelectPhysicianReturnEvent) {
+				addPhysicianWithRole(((SelectPhysicianReturnEvent) event.getObject()).getPhysician(),
+						((SelectPhysicianReturnEvent) event.getObject()).getRole());
+				update(true);
+			}
 		}
 	}
 
+	@Override
+	public void hideDialog() {
+		super.hideDialog(new ReloadEvent());
+	}
+	
+	
 }

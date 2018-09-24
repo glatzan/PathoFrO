@@ -13,7 +13,7 @@
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannel">
-		<h:panelGrid styleClass="newStyleListingTable">
+		<h:panelGrid styleClass="defaultHistoTable">
 			<h:outputLabel value="#{msg['dialog.info.about.text']}" />
 		</h:panelGrid>
 	</p:outputPanel>
@@ -26,10 +26,10 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="1" styleClass="newTableContainer right">
-				<!-- Close button -->
+				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle"
-					actionListener="#{dialogHandlerAction.programmVersionDialog.hideDialog()}" />
+					actionListener="#{dialog.programmVersionDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

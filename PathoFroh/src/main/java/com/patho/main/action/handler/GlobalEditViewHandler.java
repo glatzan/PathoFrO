@@ -719,11 +719,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		@Autowired
 		@Getter(AccessLevel.NONE)
 		@Setter(AccessLevel.NONE)
-		private CopyHistologicalRecordDialog copyHistologicalRecordDialog;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
 		private SampleService sampleService;
 
 		@Autowired
@@ -806,11 +801,11 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			return task;
 		}
 
-		public void copyCaseHistory(ListItem selectedcaseHistoryItem) {
-			setNewCaseHistory(selectedcaseHistoryItem.getValue());
+		public void updateCaseHistory(ListItem selectedcaseHistoryItem) {
+			updateCaseHistoryWithName(selectedcaseHistoryItem.getValue());
 		}
 
-		public void setNewCaseHistory(String caseHistory) {
+		public void updateCaseHistoryWithName(String caseHistory) {
 			logger.debug("Updating Case History to " + caseHistory);
 			getSelectedTask().setCaseHistory(caseHistory);
 			save("log.patient.task.change.caseHistory", getSelectedTask(), caseHistory);
@@ -833,7 +828,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				return;
 			} else if (diagnosis.getDiagnosisPrototype() != null) {
 				logger.debug("Extended diagnosistext found, showing confing dialog");
-				copyHistologicalRecordDialog.initAndPrepareBean(diagnosis);
+				MessageHandler.executeScript("clickButtonFromBean('dialogContent:stainingPhaseExitFromDialog')");
+				dialogHandler.getCopyHistologicalRecordDialog().initAndPrepareBean(diagnosis);
 			}
 		}
 
@@ -843,9 +839,21 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		 * @param sample
 		 * @param materialPreset
 		 */
-		public void changeMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
+		public void updateMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
+			logger.debug("Change maerial of sample with preset");
+			setSelectedTask(sampleService.updateMaterialOfSample(sample, materialPreset));
+			globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+		}
+
+		/**
+		 * Changes the material of the sample.
+		 * 
+		 * @param sample
+		 * @param materialPreset
+		 */
+		public void updateMaterialOfSampleWithName(Sample sample, String materialPreset) {
 			logger.debug("Change maerial of sample");
-			setSelectedTask(sampleService.changeMaterialOfSample(sample, materialPreset));
+			setSelectedTask(sampleService.updateMaterialOfSampleWithoutPrototype(sample, materialPreset));
 			globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 		}
 
@@ -865,10 +873,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		 * Updates a diagnosis without a preset. (Removes the previously set preset)
 		 */
 		public void updateDiagnosisPrototype(Diagnosis diagnosis, String diagnosisAsText) {
-			logger.debug("Updating diagnosis to " + diagnosisAsText);
-			setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.getTask(), diagnosis,
-					diagnosisAsText, "", diagnosis.isMalign(), ""));
-			globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+			updateDiagnosisPrototype(diagnosis, diagnosisAsText, "", diagnosis.isMalign(), "");
 		}
 
 		/**
@@ -949,7 +954,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		public void addPhysicianWithRole(Person person, ContactRole role) {
 			try {
 
-				associatedContactService.addAssociatedContactAndUpdateWithDiagnosisPresets(getSelectedTask(),
+				associatedContactService.addAssociatedContactAndAddDefaultNotifications(getSelectedTask(),
 						new AssociatedContact(getSelectedTask(), person, role));
 				// increment counter
 				associatedContactService.incrementContactPriorityCounter(person);

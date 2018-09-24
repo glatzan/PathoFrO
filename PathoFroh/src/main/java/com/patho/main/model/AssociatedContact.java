@@ -62,7 +62,7 @@ public class AssociatedContact implements LogAble, ID {
 	 * 
 	 * @return
 	 */
-	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH })
+	@OneToOne(cascade = { CascadeType.DETACH })
 	private Person person;
 
 	@Enumerated(EnumType.STRING)

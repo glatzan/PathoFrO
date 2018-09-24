@@ -153,10 +153,35 @@ function showAndUpdateOverlayPanel(panelID, parentID, resetContentFunction,
 			resetContentFunction();
 		}
 
-		// on enter submit
-		var t = $(focusElementID);
+		if (dataTable != null) {
+			// clear datatable
+			PF(dataTable).clearFilters();
+			PF(dataTable).unselectAllRows();
+		}
+		
+		var data = focusElementID;
+		
+		if (data === parseInt(data, 10)) {
+			// searching for filters to focus
+			var filters = PF(dataTable).jq.find("[id$='filter']");
 
+			if (filters.length > 0 && filters.length > data) {
+				data = "#"+filters[data].id.replace(/\:/g, "\\:");
+			}
+			
+		} else {
+			data =  focusElementID;
+		}
+		
+		if(data != null)
+			focusElement(data);
+		
 		if (submitFunction != null) {
+
+			// on enter submit
+			var t = $(data);
+
+			
 			// submit on return only used if submitFunction is not null
 			t.on("keydown", function(e) {
 				if (e.which == 13) {
@@ -165,25 +190,6 @@ function showAndUpdateOverlayPanel(panelID, parentID, resetContentFunction,
 					return false;
 				}
 			});
-		}
-
-		if (dataTable != null) {
-			// clear datatable
-			PF(dataTable).clearFilters();
-			PF(dataTable).unselectAllRows();
-
-			var data = focusElementID;
-			if (data === parseInt(data, 10)) {
-				// searching for filters to focus
-				var filters = PF(dataTable).jq.find("[id$='filter']");
-
-				if (filters.length > 0 && filters.length > data) {
-					focusElement("#"+filters[data].id.replace(/\:/g, "\\:"));
-				}
-				
-			} else {
-				focusElement(focusElementID);
-			}
 		}
 	}
 }

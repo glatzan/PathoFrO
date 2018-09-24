@@ -42,6 +42,11 @@ public class ContactNotificationDialog extends AbstractDialog<ContactNotificatio
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
+	private AssociatedContactRepository associatedContactRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	private TaskRepository taskRepository;
 
 	private AssociatedContact associatedContact;
@@ -75,11 +80,28 @@ public class ContactNotificationDialog extends AbstractDialog<ContactNotificatio
 
 		setAssociatedContact(associatedContact);
 
-		generatedMenuModel();
+		update(false);
 
 		setSelectableRoles(ContactRole.values());
 
 		return true;
+	}
+
+	/**
+	 * Reloads data of the task
+	 */
+	public void update(boolean reload) {
+		if (reload) {
+			setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), false, false, false, true, true).get());
+			for (AssociatedContact contact : task.getContacts()) {
+				if (contact.equals(getAssociatedContact())) {
+					setAssociatedContact(contact);
+					break;
+				}
+			}
+		}
+
+		generatedMenuModel();
 	}
 
 	public void generatedMenuModel() {
@@ -112,24 +134,28 @@ public class ContactNotificationDialog extends AbstractDialog<ContactNotificatio
 	}
 
 	public void removeNotification(AssociatedContactNotification associatedContactNotification) {
-		setTask(associatedContactService.removeNotification(task, associatedContact, associatedContactNotification));
-		generatedMenuModel();
+		associatedContactService.removeNotification(associatedContact, associatedContactNotification)
+				.getAssociatedContact();
+		update(true);
 	}
 
 	public void addNotification(AssociatedContactNotification.NotificationTyp notification) {
-		setTask(associatedContactService.addNotificationByTypeAndDisableOld(task, associatedContact, notification)
-				.getTask());
-		generatedMenuModel();
+		associatedContactService.addNotificationByTypeAndDisableOld(associatedContact, notification)
+				.getAssociatedContact();
+		update(true);
 	}
 
 	public void notificationAsPerformed(AssociatedContactNotification associatedContactNotification) {
-		setTask(associatedContactService.performNotification(task, associatedContact, associatedContactNotification,
-				resourceBundle.get("log.contact.notification.performed.manual"), true));
+		associatedContactService.performNotification(associatedContact, associatedContactNotification,
+				resourceBundle.get("log.contact.notification.performed.manual"), true).getAssociatedContact();
+		update(true);
 	}
 
 	public void onRoleChange() {
-		setTask(taskRepository.save(getTask(), resourceBundle.get("log.contact.roleChange", task,
-				getAssociatedContact().toString(), getAssociatedContact().getRole().toString())));
+		associatedContactRepository.save(getAssociatedContact(),
+				resourceBundle.get("log.contact.roleChange", getAssociatedContact().getTask(),
+						getAssociatedContact().toString(), getAssociatedContact().getRole().toString()));
+		update(true);
 	}
 
 	@Override

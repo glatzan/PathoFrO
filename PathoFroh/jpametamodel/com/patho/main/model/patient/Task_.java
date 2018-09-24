@@ -46,7 +46,7 @@ public abstract class Task_ {
 	public static volatile SetAttribute<Task, Council> councils;
 	public static volatile SingularAttribute<Task, Byte> typeOfOperation;
 	public static volatile SingularAttribute<Task, String> commentary;
-	public static volatile ListAttribute<Task, AssociatedContact> contacts;
+	public static volatile SetAttribute<Task, AssociatedContact> contacts;
 
 }
 

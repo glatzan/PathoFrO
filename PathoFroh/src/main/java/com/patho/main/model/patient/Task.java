@@ -206,11 +206,11 @@ public class Task
 	 * Liste aller Personen die �ber die Diangose informiert werden sollen.
 	 */
 	// TODO fetch lazy
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "task")
+	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER, mappedBy = "task")
 	@Fetch(value = FetchMode.SUBSELECT)
 	@OrderBy("id ASC")
 	@NotAudited
-	private List<AssociatedContact> contacts = new ArrayList<AssociatedContact>();
+	private Set<AssociatedContact> contacts = new HashSet<AssociatedContact>();
 
 	/**
 	 * List with all samples

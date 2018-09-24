@@ -14,7 +14,7 @@
 
 	<p:outputPanel styleClass="bodyPannelScroll">
 		<ui:repeat var="info"
-			value="#{dialogHandlerAction.programmVersionDialog.versionTab.versionInfo}"
+			value="#{dialog.programmVersionDialog.versionTab.versionInfo}"
 			varStatus="versionCount">
 			<h:outputLabel style="margin-left:5px;" styleClass="bigFont"
 				value="#{msg['dialog.info.version']} #{info.version}" />
@@ -36,9 +36,10 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="1" styleClass="newTableContainer right">
+				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle"
-					actionListener="#{dialogHandlerAction.programmVersionDialog.hideDialog()}" />
+					actionListener="#{dialog.programmVersionDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

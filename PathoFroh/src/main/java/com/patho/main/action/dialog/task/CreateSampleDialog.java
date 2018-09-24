@@ -13,7 +13,6 @@ import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.service.SampleService;
 import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 
 import lombok.AccessLevel;
@@ -23,7 +22,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class CreateSampleDialog extends AbstractDialog {
+public class CreateSampleDialog extends AbstractDialog<CreateSampleDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -46,9 +45,11 @@ public class CreateSampleDialog extends AbstractDialog {
 
 	private MaterialPreset selectedMaterial;
 
-	public void initAndPrepareBean(Task task) {
+	public CreateSampleDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
+		
+		return this;
 	}
 
 	public boolean initBean(Task task) {

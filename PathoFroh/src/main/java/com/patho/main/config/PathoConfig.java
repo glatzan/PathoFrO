@@ -121,7 +121,6 @@ public class PathoConfig {
 		
 		if((new File(fileSettings.getProgramInfo()).exists())){
 			String programVersionJson = mediaRepository.getString(fileSettings.getProgramInfo());
-			
 		}else {
 			logger.debug("First program start");
 		}

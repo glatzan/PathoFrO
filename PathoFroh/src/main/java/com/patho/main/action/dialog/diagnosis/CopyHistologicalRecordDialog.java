@@ -1,37 +1,22 @@
 package com.patho.main.action.dialog.diagnosis;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Diagnosis;
-import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.TaskService;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-@Component
-@Scope(value = "session")
+@Configurable
 @Getter
 @Setter
-public class CopyHistologicalRecordDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskRepository taskRepository;
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+public class CopyHistologicalRecordDialog extends AbstractDialog<CopyHistologicalRecordDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -40,9 +25,11 @@ public class CopyHistologicalRecordDialog extends AbstractDialog {
 
 	private Diagnosis diagnosis;
 
-	public void initAndPrepareBean(Diagnosis diagnosis) {
+	public CopyHistologicalRecordDialog initAndPrepareBean(Diagnosis diagnosis) {
 		if (initBean(diagnosis))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(Diagnosis diagnosis) {
@@ -52,12 +39,11 @@ public class CopyHistologicalRecordDialog extends AbstractDialog {
 	}
 
 	public void copyHistologicalRecord(boolean overwrite) {
-		getDiagnosis().getTask().setVersion(getDiagnosis().getTask().getVersion() + 2);
 		taskService.copyHistologicalRecord(getDiagnosis(), overwrite);
 	}
 
-	public void hideDialog(boolean reload) {
-		super.hideDialog(reload ? new ReloadTaskEvent() : null);
+	public void hideDialog() {
+		super.hideDialog(new ReloadTaskEvent());
 	}
 
 }

@@ -51,9 +51,9 @@
 		<h:panelGrid columns="4" styleClass="histoTable headerRight">
 			<!-- Current Version -->
 			<p:commandLink
-				value="#{msg['header.version']}: #{globalSettings.currentVersion}"
+				value="#{msg['header.version']}: #{pathoConfig.versionContainer.currentVersion}"
 				styleClass="icon-grey"
-				actionListener="#{dialogHandlerAction.programmVersionDialog.initAndPrepareBean()}"></p:commandLink>
+				actionListener="#{dialog.programmVersionDialog.initAndPrepareBean()}"></p:commandLink>
 
 			<h:panelGroup>
 				<!-- button edit -->
@@ -254,6 +254,7 @@
 			<p:commandButton id="editContactBtn"
 				actionListener="#{dialog.contactDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask)}">
 				<p:ajax event="dialogReturn"
+					listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm headerForm" />
 			</p:commandButton>
@@ -347,7 +348,7 @@
 
 			<!-- Info button -->
 			<p:commandButton id="infoDialogBtn"
-				actionListener="#{dialogHandlerAction.programmVersionDialog.initAndPrepareBean()}">
+				actionListener="#{dialog.programmVersionDialog.initAndPrepareBean()}">
 				<p:ajax event="dialogReturn"
 					update="navigationForm:patientList contentForm" />
 			</p:commandButton>

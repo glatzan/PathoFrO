@@ -66,11 +66,6 @@ public class GlobalSettings {
 	private DefaultDocuments defaultDocuments;
 
 
-	/**
-	 * List with default notification options for contact roles
-	 */
-	private DefaultNotificationSettings defaultNotificationSettings;
-
 
 	/**
 	 * Object for handling mails
@@ -108,22 +103,11 @@ public class GlobalSettings {
 
 		programSettings = gson.fromJson(o.get(SETTINGS_GENERAL), ProgramSettings.class);
 
-		defaultNotificationSettings = gson.fromJson(o.get(SETTINGS_DEFAULT_NOTIFICATION),
-				DefaultNotificationSettings.class);
-
 		mailHandler = gson.fromJson(o.get(SETTINGS_MAIL), MailHandler.class);
 
 		faxHandler = gson.fromJson(o.get(SETTINGS_FAX), FaxHandler.class);
 
 		defaultDocuments = gson.fromJson(o.get(SETTINGS_DEFAULT_DOCUMENTS), DefaultDocuments.class);
-
-		
-		
-//		List<Version> versions = Version.factroy(VERSIONS_INFO);
-//		// setting current version
-//		if (versions != null && versions.size() > 0) {
-//			setCurrentVersion(versions.get(0).getVersion());
-//		}
 
 	}
 

@@ -31,9 +31,10 @@
 		<div class="dialogContent">
 
 			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+
 				<p:dataTable var="contactHolder" styleClass="defaultHistoDataTable"
-					id="contactDatas" scrollable="true" scrollHeight="430"
-					draggableRows="true" value="#{dialog.contactDialog.contacts}">
+					id="contactDatas" scrollable="true" scrollHeight="480"
+					value="#{dialog.contactDialog.contacts}">
 
 					<!-- Name -->
 					<p:column headerText="#{msg['dialog.contacts.table.name']}"
@@ -109,7 +110,7 @@
 						</p:dataList>
 					</p:column>
 
-
+					<!-- options -->
 					<p:column headerText="" style="width:30px !important">
 						<!-- edit -->
 						<p:commandLink title="#{msg['dialog.contacts.change']}"
@@ -131,11 +132,7 @@
 						</p:commandLink>
 					</p:column>
 
-					<p:ajax event="rowReorder"
-						listener="#{dialog.contactDialog.onReorderList}" />
-
 				</p:dataTable>
-
 
 			</h:panelGrid>
 		</div>
@@ -148,19 +145,18 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" styleClass="right">
+					<!-- add new contact -->
 					<p:commandButton value="#{msg['dialog.contact.add']}"
-						styleClass="smallButton buttonRighMarginInList"
 						icon="fa fa-fw fa-user-plus"
-						actionListener="#{dialog.contactDialog.addContact()}">
+						actionListener="#{dialog.contactDialog.openAddContactDialog()}">
 						<p:ajax event="dialogReturn" update="@form"
-							listener="#{dialog.contactDialog.updateContactHolders()}" />
+							listener="#{dialog.contactDialog.onDefaultDialogReturn}" />
 					</p:commandButton>
 
+					<!-- close -->
 					<p:commandButton value="#{msg['general.close']}"
-						styleClass="smallButton buttonRighMarginInList"
 						icon="fa fa-fw fa-times-circle" id="closeBtn"
 						actionListener="#{dialog.contactDialog.hideDialog()}"></p:commandButton>
-
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>

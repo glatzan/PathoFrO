@@ -114,6 +114,7 @@ public class SampleService extends AbstractService {
 
 	/**
 	 * Deletes a sample and updates all names, saves the task
+	 * 
 	 * @param sampel
 	 */
 	public Task deleteSampleAndPersist(Sample sampel) {
@@ -122,6 +123,7 @@ public class SampleService extends AbstractService {
 
 	/**
 	 * Deletes a sampel
+	 * 
 	 * @param sampel
 	 * @param save
 	 * @return
@@ -140,22 +142,41 @@ public class SampleService extends AbstractService {
 			parent = taskRepository.save(parent, resourceBundle.get("log.task.sample.delete", sampel));
 			sampleRepository.delete(sampel, resourceBundle.get("log.task.sample.delete", sampel));
 		}
-		
+
 		return parent;
 	}
 
 	/**
 	 * Changes the material of an sample
 	 * 
-	 * Error-Handling via global Error-Handler
+	 * @param sample
+	 * @param materialPreset
+	 */
+	public Task updateMaterialOfSampleWithoutPrototype(Sample sample, String name) {
+		sample.setMaterialPreset(null);
+		return updateMaterialOfSample(sample, name);
+	}
+
+	/**
+	 * Changes the material of an sample
 	 * 
 	 * @param sample
 	 * @param materialPreset
 	 */
-	public Task changeMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
-		sample.setMaterial(materialPreset.getName());
+	public Task updateMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
 		sample.setMaterialPreset(materialPreset);
+		return updateMaterialOfSample(sample, materialPreset.getName());
+	}
+
+	/**
+	 * Changes the material of an sample
+	 * 
+	 * @param sample
+	 * @param materialPreset
+	 */
+	public Task updateMaterialOfSample(Sample sample, String name) {
+		sample.setMaterial(name);
 		return taskRepository.save(sample.getTask(),
-				resourceBundle.get("log.patient.task.sample.material.update",sample.getTask(), sample, materialPreset));
+				resourceBundle.get("log.patient.task.sample.material.update", sample.getTask(), sample, name));
 	}
 }

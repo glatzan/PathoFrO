@@ -126,37 +126,35 @@
 					</p:column>
 				</p:dataTable>
 			</h:panelGrid>
-
-			<h:panelGrid columns="2"
-				styleClass="defaultListingTableFirstColumEnummeration"
-				columnClasses="defaultListingTableColumn10,">
-				<h:outputLabel value="#{msg['dialog.cotactNotification.role']}"
-					style="margin-left:10px" />
-				<p:selectOneMenu
-					value="#{dialog.contactNotificationDialog.associatedContact.role}">
-					<f:selectItems
-						value="#{dialog.contactNotificationDialog.selectableRoles}"
-						var="role" itemLabel="#{msg['enum.contactRole.'.concat(role)]}"
-						itemValue="#{role}" />
-
-					<p:ajax event="change"
-						listener="#{dialog.contactNotificationDialog.onRoleChange()}" />
-				</p:selectOneMenu>
-			</h:panelGrid>
 		</div>
 
 		<div class="buttonContainer">
 			<h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
+				<h:panelGrid columns="2" styleClass="left">
+					<!-- role of physician -->
+					<h:outputLabel value="#{msg['dialog.cotactNotification.role']}"
+						style="margin-left:10px" />
+					<p:selectOneMenu
+						value="#{dialog.contactNotificationDialog.associatedContact.role}">
+						<f:selectItems
+							value="#{dialog.contactNotificationDialog.selectableRoles}"
+							var="role" itemLabel="#{msg['enum.contactRole.'.concat(role)]}"
+							itemValue="#{role}" />
+
+						<p:ajax event="change"
+							listener="#{dialog.contactNotificationDialog.onRoleChange()}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="right">
+
 					<!-- add notification -->
-					<p:menuButton
+					<p:menuButton icon="fa fa-fw fa-plus-circle"
 						value="#{msg['dialog.cotactNotification.button.add']}"
 						model="#{dialog.contactNotificationDialog.model}">
 					</p:menuButton>
-				</h:panelGrid>
 
-				<h:panelGrid columns="1" styleClass="right">
 					<!-- close -->
 					<p:commandButton value="#{msg['general.close']}"
 						partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"

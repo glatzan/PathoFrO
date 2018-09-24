@@ -4,28 +4,22 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.UserHandlerAction;
-import com.patho.main.action.handler.GlobalSettings;
-import com.patho.main.adaptors.MailHandler;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
-import com.patho.main.template.mail.ErrorMail;
+import com.patho.main.config.PathoConfig;
 import com.patho.main.util.helper.TimeUtil;
 import com.patho.main.util.version.Version;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Scope(value = "session")
+@Configurable
 @Getter
 @Setter
-@Slf4j
 public class ProgrammVersionDialog extends AbstractTabDialog {
 
 	@Autowired
@@ -36,7 +30,7 @@ public class ProgrammVersionDialog extends AbstractTabDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private GlobalSettings globalSettings;
+	private PathoConfig pathoConfig;
 
 	private VersionTab versionTab;
 	private ErrorTab errorTab;
@@ -73,7 +67,7 @@ public class ProgrammVersionDialog extends AbstractTabDialog {
 		}
 
 		public boolean initTab() {
-			setVersionInfo(Version.factroy(GlobalSettings.VERSIONS_INFO));
+			setVersionInfo(pathoConfig.getVersionContainer().getVersions());
 			return true;
 		}
 
@@ -102,22 +96,22 @@ public class ProgrammVersionDialog extends AbstractTabDialog {
 
 		public void sendErrorMessage() {
 			// TODO rewrite if email system is updated
-			log.debug("Sending Error DiagnosisRevision Date + "
-					+ TimeUtil.formatDate(errorDate, DateFormat.GERMAN_DATE_TIME.getDateFormat()) + " Message: "
-					+ errorMessage);
+			logger.debug("Sending Error DiagnosisRevision Date {} Message {}",
+					TimeUtil.formatDate(errorDate, DateFormat.GERMAN_DATE_TIME.getDateFormat()), errorMessage);
 
 			if (errorMessage != null && !errorMessage.isEmpty() && errorMessage != null) {
 
-				ErrorMail mail = MailHandler.getDefaultTemplate(ErrorMail.class);
-				mail.prepareTemplate(userHandlerAction.getCurrentUser(), errorMessage,
-						new Date(System.currentTimeMillis()));
-				mail.fillTemplate();
-
-				globalSettings.getMailHandler().sendAdminMail(mail);
-				
-				initTab();
-				
-				mainHandlerAction.sendGrowlMessagesAsResource("growl.mail.sendErrorMail", "growl.mail.sendErrorMail.text");
+				// ErrorMail mail = MailHandler.getDefaultTemplate(ErrorMail.class);
+				// mail.prepareTemplate(userHandlerAction.getCurrentUser(), errorMessage,
+				// new Date(System.currentTimeMillis()));
+				// mail.fillTemplate();
+				//
+				// globalSettings.getMailHandler().sendAdminMail(mail);
+				//
+				// initTab();
+				//
+				// mainHandlerAction.sendGrowlMessagesAsResource("growl.mail.sendErrorMail",
+				// "growl.mail.sendErrorMail.text");
 			}
 		}
 

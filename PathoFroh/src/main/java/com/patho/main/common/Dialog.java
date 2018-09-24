@@ -26,10 +26,10 @@ public enum Dialog {
 	SLIDE_OVERVIEW("/pages/dialog/task/staining/slideOverview", null, 1024, 600, false, false, true), 																		// OK 				// TEST OK
 	SLIDE_NAMING("/pages/dialog/task/staining/slideNaming", null,430, 270, false, false, true), 																			// OK				// TEST OK
 	SLIDE_CREATE("/pages/dialog/task/staining/addSlide", null, 858, 484, false, false, true),																				// OK				// TEST OK
-	DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/task/diagnosis/diagnosisRecordOverwrite", null, 480, 272, false, false, true), // 16:9
-	CONTACTS("/pages/dialog/contact/contacts", null, 1024, 600, false, false, true), // 16:9
-	CONTACTS_NOTIFICATION("/pages/dialog/contact/contactNotification", null, 858, 484, false, false, true), // 16:9
-	QUICK_CONTACTS("/pages/dialog/contact/contactSelect", null, 858, 484, false, false, true), // 16:9
+	DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/task/diagnosis/diagnosisRecordOverwrite", null, 480, 272, false, false, true), 												// OK				// TEST OK
+	CONTACTS("/pages/dialog/contact/contacts", null, 1024, 600, false, false, true),																						// OK				// TEST OK
+	CONTACTS_NOTIFICATION("/pages/dialog/contact/contactNotification", null, 858, 484, false, false, true), 																// OK				// TEST OK
+	CONTACTS_SELECT("/pages/dialog/contact/contactSelect", null, 858, 484, false, false, true), 																			// OK				// TEST OK
 	SETTINGS("/pages/dialog/settings/globalSettings/settings", null, 1024, 600, false, false, true), // 16:9
 	SETTINGS_PHYSICIAN_SEARCH("/pages/dialog/settings/physician/physicianSearch", null, 1024, 600, false, false, true), // 16:9
 	SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1024, 600, false, false, true), //  16:9
@@ -53,8 +53,7 @@ public enum Dialog {
 	NOTIFICATION_ALREADY_PERFORMED("/pages/dialog/notification/notification_already_performed", null,  480, 272, false, false, true), //  16:9
 	NOTIFICATION("/pages/dialog/notification/notification", null,  1024, 600, false, false, true),  // 16:9
 	NOTIFICATION_PREVIEW("/pages/dialog/notification/notification_preview", null,  1024, 600, false, false, true), //  16:9
-	INFO("/pages/dialog/info/info", null,  1024, 600, false, false, true), //  16:9
-	SELECT_MATERIAL("/pages/dialog/task/selectMaterial", null, 640, 360, false, false, true), // 16:9
+	INFO("/pages/dialog/info/info", null,  1024, 600, false, false, true),																									// OK
 	DELETE_TASK_ENTITY("/pages/dialog/task/delete/deleteTaskEntity", null,  480, 272, false, false, true), //  16:9
 	PDF_ORGANIZER("/pages/dialog/upload/pdfOrganizer", null,  1280, 720,  false, false, true), 																				// OK
 	PDF_UPLOAD("/pages/dialog/upload/upload", null,  640, 360, false, false, true),																							// OK
@@ -70,7 +69,7 @@ public enum Dialog {
 	DIAGNOSIS_REVISION_DELETE("/pages/dialog/task/diagnosisRevision/diagnosisRevisionDelete", null, 480, 272, false, false, true), 											// OK
 	DIAGNOSIS_REVISION_ADD("/pages/dialog/task/diagnosisRevision/diagnosisRevisionDialogQuickAdd", null, 480, 272, false, false, true), 									// OK		// TEST OK
 	PRINT_SELECT_PRINTER("/pages/dialog/selectPrinter", null, 640, 360, false, false, true),
-	ACCOUNTING_DATA("/pages/dialog/miscellaneous/accounting", null,  1024, 600, false, false, true);																						// OK
+	ACCOUNTING_DATA("/pages/dialog/miscellaneous/accounting", null,  1024, 600, false, false, true);																		// OK
 
 	
 	

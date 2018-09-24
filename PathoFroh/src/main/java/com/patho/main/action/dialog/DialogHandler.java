@@ -3,6 +3,7 @@ package com.patho.main.action.dialog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.patho.main.action.dialog.diagnosis.CopyHistologicalRecordDialog;
 import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog;
 import com.patho.main.action.dialog.diagnosis.DeleteDiagnosisRevisionDialog;
 import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog;
@@ -60,5 +61,6 @@ public class DialogHandler {
 	private ContactDialog contactDialog = new ContactDialog();
 	private ContactSelectDialog contactSelectDialog = new ContactSelectDialog();
 	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
-	
+	private CopyHistologicalRecordDialog copyHistologicalRecordDialog = new CopyHistologicalRecordDialog();
+	private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();
 }

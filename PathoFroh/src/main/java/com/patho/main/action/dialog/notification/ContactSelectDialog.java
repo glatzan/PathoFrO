@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.notification;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.util.Arrays;
@@ -14,14 +15,17 @@ import com.patho.main.common.Dialog;
 import com.patho.main.common.SortOrder;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Physician;
+import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.service.AssociatedContactService.ContactReturn;
 import com.patho.main.ui.selectors.PhysicianSelector;
+import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -36,16 +40,6 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 	@Setter(AccessLevel.NONE)
 	private PhysicianRepository physicianRepository;
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private AssociatedContactService associatedContactService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
-
 	/**
 	 * List of all ContactRole available for selecting physicians, used by contacts
 	 * and settings
@@ -57,6 +51,9 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 	 */
 	private ContactRole[] showRoles;
 
+	/**
+	 * Array of roles which can be added
+	 */
 	private ContactRole[] addableRoles;
 
 	/**
@@ -109,7 +106,7 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 	public boolean initBean(Task task, ContactRole[] selectAbleRoles, ContactRole[] showRoles,
 			ContactRole[] addableRoles, ContactRole addAsRole) {
 
-		super.initBean(task, Dialog.QUICK_CONTACTS);
+		super.initBean(task, Dialog.CONTACTS_SELECT);
 
 		setSelectAbleContactRoles(selectAbleRoles);
 
@@ -120,6 +117,8 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 		// if no role to add, the dynamic role selection
 		if (getAddAsRole() == null)
 			setDynamicRoleSelection(true);
+		else
+			setDynamicRoleSelection(false);
 
 		setAddableRoles(addableRoles);
 
@@ -137,7 +136,10 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 	 * or other roles should be displayed)
 	 */
 	public void updateContactList() {
-		setContactList(physicianRepository.findSelectorsByRole(getTask(), getShowRoles(), SortOrder.PRIORITY));
+		if (getShowRoles().length != 0)
+			setContactList(physicianRepository.findSelectorsByRole(getTask(), getShowRoles(), SortOrder.PRIORITY));
+		else
+			setContactList(new ArrayList<PhysicianSelector>());
 	}
 
 	/**
@@ -157,43 +159,25 @@ public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
 				}
 			}
 		} else
-			getAddAsRole();
+			return getAddAsRole();
 
 		return ContactRole.OTHER_PHYSICIAN;
 	}
 
-	public void addPhysicianWithRole() {
-		if (getSelectedContact() != null) {
-			AssociatedContact associatedContact = new AssociatedContact(getTask(),
-					getSelectedContact().getPhysician().getPerson());
-			addPhysicianWithRole(associatedContact, getRoleForAddingContact(getSelectedContact().getPhysician()));
-		}
-	}
-
 	/**
-	 * Sets the given associatedContact to the given role
-	 * 
-	 * @param associatedContact
-	 * @param role
+	 * Returns a physician and the selected role
 	 */
-	public void addPhysicianWithRole(AssociatedContact associatedContact, ContactRole role) {
-		try {
-			associatedContact.setRole(role);
-
-			associatedContactService.addAssociatedContactAndUpdateWithDiagnosisPresets(task, associatedContact);
-
-			// increment counter
-			associatedContactService.incrementContactPriorityCounter(associatedContact.getPerson());
-		} catch (IllegalArgumentException e) {
-			// todo error message
-			logger.debug("Not adding, double contact");
-			MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");
-		}
+	public void selectAndHide() {
+		super.hideDialog(new SelectPhysicianReturnEvent(getSelectedContact().getPhysician(),
+				getRoleForAddingContact(getSelectedContact().getPhysician())));
 	}
 
-	@Override
-	public void hideDialog() {
-		super.hideDialog(new ReloadEvent());
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public class SelectPhysicianReturnEvent implements DialogReturnEvent {
+		private Physician physician;
+		private ContactRole role;
 	}
 
 }

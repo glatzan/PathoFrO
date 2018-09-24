@@ -58,8 +58,7 @@
 									id="materialInput#{loopCount.index}"
 									disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
 									tabindex="1" styleClass="customBackground"
-									onclick="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');"
-									onfocus="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');"
+									onclick="showAndUpdateOverlayPanel('materialOverlayPanel#{loopCount.index}', '#{component.clientId}' ,null, 'materialOverlayPanelDataTable#{loopCount.index}', 0, submitUpdateMaterial#{loopCount.index});"
 									style="width:200px;float:right;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}">
 
 									<p:ajax event="change" execute="@this"
@@ -68,26 +67,40 @@
 
 								<!-- material overlay panel -->
 								<p:overlayPanel id="materialOverlayPanel#{loopCount.index}"
-									styleClass="histoOverlayPanel" onShow=""
 									widgetVar="materialOverlayPanel#{loopCount.index}"
-									hideEffect="fade" style="width:500px" hideEvent="mousedown"
-									showEvent="none" onkeypress="return false;">
-									<p:dataTable
+									styleClass="histoOverlayPanel" hideEffect="fade"
+									style="width:500px" hideEvent="mousedown" showEvent="none"
+									onkeypress="return false;">
+									<p:dataTable filterDelay="50"
+										id="materialOverlayPanelDataTable#{loopCount.index}"
+										widgetVar="materialOverlayPanelDataTable#{loopCount.index}"
 										value="#{globalEditViewHandler.genericView.staticData.materialList}"
 										var="preset" styleClass="defaultHistoDataTable"
 										scrollable="true" scrollHeight="200" rowKey="#{preset.id}"
-										selection="#{sample.materialPreset}" selectionMode="single">
-										<p:column filterBy="#{preset.name}" filterMatchMode="contains">
+										selection="#{globalEditViewHandler.genericView.selectedMaterialPresets[loopCount.index]}"
+										selectionMode="single">
+
+										<p:column filterBy="#{preset.name}" filterMatchMode="contains"
+											filterValue="#{globalEditViewHandler.genericView.selectedMaterialPresetFilter[loopCount.index]}"
+											id="presetName">
 											<h:outputText value="#{preset.name}" />
 										</p:column>
 
-										<p:ajax event="rowSelect" process="@form"
+										<p:ajax event="rowSelect"
+											process="contentForm:materialOverlayPanel#{loopCount.index}"
+											partialSubmit="true"
 											update="contentForm:materialInput#{loopCount.index}"
-											listener="#{globalEditViewHandler.ct.changeMaterialOfSample(sample, sample.materialPreset)}"
+											listener="#{globalEditViewHandler.ct.updateMaterialOfSample(sample, globalEditViewHandler.genericView.selectedMaterialPresets[loopCount.index])}"
 											oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();" />
 									</p:dataTable>
-
 								</p:overlayPanel>
+
+								<p:remoteCommand name="submitUpdateMaterial#{loopCount.index}"
+									partialSubmit="true"
+									update="navigationForm:patientList contentForm:contentPanel headerForm"
+									actionListener="#{globalEditViewHandler.ct.updateMaterialOfSampleWithName(sample, globalEditViewHandler.genericView.selectedMaterialPresetFilter[loopCount.index])}"
+									oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();" />
+
 							</h:panelGroup>
 						</h:panelGrid>
 					</c:forEach>
@@ -122,7 +135,7 @@
 							title="#{msg['body.diagnosis.story.watermark']}"
 							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
 							id="caseHistoryInput" style="width:90%"
-							onclick="showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,clearSelectedCaseHistoryItem, 'caseHistoryOverlayPanelDataTable', '#contentForm\\:caseHistoryOverlayPanelDataTable\\:valueColumn\\:filter',submitNewCustomCaseHistory);"
+							onclick="showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
 							onkeypress="PF('caseHistoryOverlayPanel').hide();">
 							<p:ajax event="change"
 								listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',globalEditViewHandler.worklistData.worklist.selectedTask,globalEditViewHandler.worklistData.worklist.selectedTask.caseHistory)}"></p:ajax>
@@ -134,7 +147,7 @@
 							style="width:500px" hideEvent="mousedown" showEvent="none"
 							onkeypress="return false;">
 							<p:dataTable id="caseHistoryOverlayPanelDataTable"
-								widgetVar="caseHistoryOverlayPanelDataTable" filterDelay="100"
+								widgetVar="caseHistoryOverlayPanelDataTable" filterDelay="50"
 								value="#{globalEditViewHandler.genericView.staticData.caseHistoryList}"
 								var="item" styleClass="defaultHistoDataTable" scrollable="true"
 								scrollHeight="200" rowKey="#{item.id}"
@@ -148,19 +161,17 @@
 								</p:column>
 
 								<p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
-									process="@form"
-									listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.genericView.selectedCaseHistoryItem)}"
+									process="contentForm:caseHistoryOverlayPanel"
+									partialSubmit="true"
+									listener="#{globalEditViewHandler.ct.updateCaseHistory(globalEditViewHandler.genericView.selectedCaseHistoryItem)}"
 									oncomplete="PF('caseHistoryOverlayPanel').hide();" />
 							</p:dataTable>
 						</p:overlayPanel>
 
 						<p:remoteCommand name="submitNewCustomCaseHistory"
-							update="contentForm:caseHistoryInput"
-							actionListener="#{globalEditViewHandler.ct.setNewCaseHistory(globalEditViewHandler.genericView.caseHistoryFilter)}"
+							update="navigationForm:patientList contentForm:contentPanel headerForm"
+							actionListener="#{globalEditViewHandler.ct.updateCaseHistoryWithName(globalEditViewHandler.genericView.caseHistoryFilter)}"
 							oncomplete="PF('caseHistoryOverlayPanel').hide();" />
-
-						<p:remoteCommand name="clearSelectedCaseHistoryItem"
-							actionListener="#{globalEditViewHandler.genericView.setSelectedCaseHistoryItem(null)}" />
 
 					</h:panelGroup>
 				</h:panelGrid>
@@ -312,7 +323,8 @@
 
 									<p:ajax event="rowSelect"
 										update="navigationForm:patientList contentForm:contentPanel headerForm"
-										process="@form"
+										process="contentForm:surgeonPhysicianOverlayPanelDataTable"
+										partialSubmit=""
 										listener="#{globalEditViewHandler.ct.addPhysicianWithRole(globalEditViewHandler.genericView.selectedSurgeon.physician.person, 'SURGEON')}"
 										oncomplete="PF('surgeonPhysicianOverlayPanel#{loopCount.index}').hide();" />
 
@@ -389,7 +401,8 @@
 
 									<p:ajax event="rowSelect"
 										update="navigationForm:patientList contentForm:contentPanel headerForm"
-										process="@form"
+										process="contentForm:privatePhysicianPhysicianOverlayPanel"
+										partialSubmit="true"
 										listener="#{globalEditViewHandler.ct.addPhysicianWithRole(globalEditViewHandler.genericView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
 										oncomplete="PF('privatePhysicianPhysicianOverlayPanel#{loopCount.index}').hide();" />
 
@@ -480,20 +493,20 @@
 									<h:outputLabel value="" />
 								</c:otherwise>
 							</c:choose>
-
-							<!-- copy diagnosis text -->
-							<p:commandLink style="margin-left:20px;"
-								disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTaskInfo.isDiagnosisRevisionEditable(revision) or diagnosis.diagnosisPrototype.extendedDiagnosisText eq ''}"
-								title="#{diagnosis.diagnosisPrototype.extendedDiagnosisText eq '' ? msg['body.diagnosis.histologicalRecordPreset.text.none'] : msg['body.diagnosis.histologicalRecordPreset.text']}"
-								rendered="#{diagnosis.diagnosisPrototype ne null}"
-								process="@this"
-								actionListener="#{globalEditViewHandler.ct.copyHistologicalRecord(diagnosis)}"
-								update="contentForm:contentPanel">
-								<i class="fa fa-copy"></i>
-								<p:ajax event="dialogReturn" update="contentForm:contentPanel"
-									listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}" />
-							</p:commandLink>
-
+							<h:panelGroup>
+								<!-- copy diagnosis text -->
+								<p:commandLink style="margin-left:20px;"
+									disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTaskInfo.isDiagnosisRevisionEditable(revision) or diagnosis.diagnosisPrototype.extendedDiagnosisText eq ''}"
+									title="#{diagnosis.diagnosisPrototype.extendedDiagnosisText eq '' ? msg['body.diagnosis.histologicalRecordPreset.text.none'] : msg['body.diagnosis.histologicalRecordPreset.text']}"
+									rendered="#{diagnosis.diagnosisPrototype ne null}"
+									process="@this"
+									actionListener="#{globalEditViewHandler.ct.copyHistologicalRecord(diagnosis)}"
+									update="contentForm:contentPanel">
+									<i class="fa fa-copy"></i>
+									<p:ajax event="dialogReturn" update="contentForm:contentPanel"
+										listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}" />
+								</p:commandLink>
+							</h:panelGroup>
 							<!-- malign -->
 							<h:panelGrid columns="2" style="float:right;margin-right:20px;">
 								<h:outputLabel value="#{msg['body.diagnosis.malign']}" />
@@ -544,14 +557,17 @@
 										<h:outputText value="#{item.diagnosis}" />
 									</p:column>
 
-									<p:ajax event="rowSelect" process="@form"
+									<p:ajax event="rowSelect"
+										process="contentForm:diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}"
+										partialSubmit="true"
 										update="navigationForm:patientList contentForm:contentPanel headerForm"
 										listener="#{globalEditViewHandler.ct.updateDiagnosisPrototype(diagnosis,globalEditViewHandler.genericView.selectedDiagnosisPresets[varCounterOuter.index][varCounterInner.index])}"
 										oncomplete="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();" />
 
 								</p:dataTable>
 
-								<p:remoteCommand
+								<p:remoteCommand partialSubmit="true"
+									process="contentForm:diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}"
 									name="submitNewCustomDiagnosis#{varCounterOuter.index}#{varCounterInner.index}"
 									update="navigationForm:patientList contentForm:contentPanel headerForm"
 									actionListener="#{globalEditViewHandler.ct.updateDiagnosisPrototype(diagnosis,globalEditViewHandler.genericView.diagnosisFilter[varCounterOuter.index][varCounterInner.index])}"
