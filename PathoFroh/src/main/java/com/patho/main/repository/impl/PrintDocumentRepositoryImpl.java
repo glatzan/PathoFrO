@@ -1,7 +1,5 @@
 package com.patho.main.repository.impl;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,10 +58,11 @@ public class PrintDocumentRepositoryImpl implements PrintDocumentRepository {
 		if (types == null || types.size() == 0)
 			return result;
 
+		// return a copy of the printDocument
 		for (PrintDocument printDocument : documents) {
 			for (DocumentType documentType : types) {
 				if (printDocument.getDocumentType() == documentType) {
-					result.add(loadDocument(printDocument));
+					result.add(PrintDocumentRepository.loadDocument(printDocument));
 				}
 			}
 		}
@@ -72,13 +71,13 @@ public class PrintDocumentRepositoryImpl implements PrintDocumentRepository {
 	}
 
 	public List<PrintDocument> findAll() {
-		return Arrays.asList(documents).stream().map(p -> loadDocument(p)).collect(Collectors.toList());
+		return Arrays.asList(documents).stream().map(p -> PrintDocumentRepository.loadDocument(p)).collect(Collectors.toList());
 	}
 
 	public Optional<PrintDocument> findByID(long id) {
 		for (PrintDocument printDocument : documents) {
 			if (printDocument.getId() == id)
-				return Optional.ofNullable(loadDocument(printDocument));
+				return Optional.ofNullable(PrintDocumentRepository.loadDocument(printDocument));
 		}
 
 		return Optional.empty();
@@ -88,29 +87,10 @@ public class PrintDocumentRepositoryImpl implements PrintDocumentRepository {
 		List<PrintDocument> documents = findAllByTypes(type);
 		for (PrintDocument printDocument : documents) {
 			if (printDocument.isDefaultOfType())
-				return Optional.ofNullable(loadDocument(printDocument));
+				return Optional.ofNullable(PrintDocumentRepository.loadDocument(printDocument));
 		}
 
 		return Optional.empty();
-	}
-
-	public PrintDocument loadDocument(PrintDocument document) {
-		PrintDocument copy;
-
-		if (document.getTemplateName() == null)
-			copy = (PrintDocument) document.clone();
-		else {
-			try {
-				Class<?> myClass = Class.forName(document.getTemplateName());
-				Constructor<?> constructor = myClass.getConstructor(new Class[] { PrintDocument.class });
-				copy = (PrintDocument) constructor.newInstance(new Object[] { document });
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				logger.error("Unknow or Argument class: " + document.getTemplateName());
-				copy = (PrintDocument) document.clone();
-			}
-		}
-		return copy;
 	}
 
 }

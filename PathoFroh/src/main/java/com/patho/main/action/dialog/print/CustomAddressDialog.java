@@ -6,14 +6,16 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.ui.selectors.ContactSelector;
+import com.patho.main.util.dialogReturn.DialogReturnEvent;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Configurable
 @Getter
 @Setter
-public class CustomAddressDialog extends AbstractDialog {
+public class CustomAddressDialog extends AbstractDialog<CustomAddressDialog> {
 
 	private ContactSelector contactContainer;
 
@@ -21,26 +23,35 @@ public class CustomAddressDialog extends AbstractDialog {
 
 	private boolean addressChanged;
 
-	public void initAndPrepareBean(Task task, ContactSelector contactContainer) {
-		initBean(task, contactContainer);
-		prepareDialog();
+	public CustomAddressDialog initAndPrepareBean(Task task, ContactSelector contactContainer) {
+		if (initBean(task, contactContainer))
+			prepareDialog();
+		return this;
 	}
 
-	public void initBean(Task task, ContactSelector contactContainer) {
+	public boolean initBean(Task task, ContactSelector contactContainer) {
 		this.contactContainer = contactContainer;
 
 		customAddress = contactContainer.getCustomAddress();
 
 		setAddressChanged(false);
 
-		super.initBean(task, Dialog.PRINT_ADDRESS, false);
+		return super.initBean(task, Dialog.PRINT_ADDRESS, false);
 	}
 
-	public void copyCustomAddress() {
-		if (!getCustomAddress().equals(getContactContainer().getCustomAddress()))
-			setAddressChanged(true);
-
-		getContactContainer().setCustomAddress(getCustomAddress());
+	public void onContentChange() {
+		setAddressChanged(!getCustomAddress().equals(getContactContainer().getCustomAddress()));
 	}
 
+	public void selectAndHide() {
+		hideDialog(new CustomAddressReturn(customAddress,contactContainer));
+	}
+
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class CustomAddressReturn implements DialogReturnEvent {
+		private String customAddress;
+		private ContactSelector contactSelector;
+	}
 }

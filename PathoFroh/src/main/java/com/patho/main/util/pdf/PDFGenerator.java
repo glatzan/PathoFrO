@@ -22,6 +22,7 @@ import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.common.DateFormat;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
+import com.patho.main.model.transitory.LoadedPDFContainer;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.impl.MediaRepositoryImpl;
 import com.patho.main.service.PDFService;
@@ -99,8 +100,6 @@ public class PDFGenerator {
 
 	private boolean generateThumbnail;
 
-	private PDFContainer container;
-
 	public PDFContainer getPDF(PrintDocument template, File outputDirectory) {
 		return getPDF(template, outputDirectory, false);
 	}
@@ -115,41 +114,44 @@ public class PDFGenerator {
 		this.generateThumbnail = generateThumbnail;
 		this.outputDirectory = outputDirectory;
 
-		if (preparePDFCreation(toUpdateContainer))
-			return generatePDF();
-		else
+		try {
+			PDFContainer result = preparePDFCreation(toUpdateContainer);
+			return generatePDF(result);
+		} catch (IllegalArgumentException e) {
 			return null;
+		}
 	}
 
 	public String getPDFNoneBlocking(PrintDocument template, File outputDirectory, LazyPDFReturnHandler returnHandler) {
 		return getPDFNoneBlocking(template, outputDirectory, null, false, returnHandler);
 	}
 
-	public String getPDFNoneBlocking(PrintDocument template, File outputDirectory,  PDFContainer toUpdateContainer,
+	public String getPDFNoneBlocking(PrintDocument template, File outputDirectory, PDFContainer toUpdateContainer,
 			boolean generateThumbnail, LazyPDFReturnHandler returnHandler) {
 		this.printTemplate = template;
 		this.generateThumbnail = generateThumbnail;
 		this.outputDirectory = outputDirectory;
 
-		if (preparePDFCreation(toUpdateContainer)) {
-
+		try {
+			PDFContainer result = preparePDFCreation(toUpdateContainer);
 			String uuid = UUID.randomUUID().toString();
 
 			taskExecutor.execute(new Thread() {
 				public void run() {
 					logger.debug("Stargin PDF Generation in new Thread");
-					PDFContainer returnPDF = generatePDF();
+					PDFContainer returnPDF = generatePDF(result);
 					returnHandler.returnPDFContent(returnPDF, uuid);
 					logger.debug("PDF Generation completed, thread ended");
 				}
 			});
 
 			return uuid;
+		} catch (Exception e) {
+			return null;
 		}
-		return null;
 	}
 
-	public boolean preparePDFCreation() {
+	public PDFContainer preparePDFCreation() {
 		return preparePDFCreation(null);
 	}
 
@@ -159,34 +161,38 @@ public class PDFGenerator {
 	 * @param fileName
 	 * @return
 	 */
-	public boolean preparePDFCreation(PDFContainer pdfContainer) {
+	public PDFContainer preparePDFCreation(PDFContainer pdfContainer) {
 		workingDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getWorkDirectory());
 
 		// checking directories
 		if (!workingDirectory.isDirectory() && !workingDirectory.mkdirs()) {
-			logger.error("Error directory not found: work directory " + workingDirectory.getAbsolutePath());
-			return false;
+			logger.error("Error directory not found: work directory {}", workingDirectory.getAbsolutePath());
+			throw new IllegalArgumentException(
+					"Error directory not found: work directory " + workingDirectory.getAbsolutePath());
 		}
 
 		auxDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getAuxDirectory());
 
 		if (!auxDirectory.isDirectory() && !auxDirectory.mkdirs()) {
-			logger.error("Error directory not found: aux directory " + auxDirectory.getAbsolutePath());
-			return false;
+			logger.error("Error directory not found: aux directory {}", auxDirectory.getAbsolutePath());
+			throw new IllegalArgumentException(
+					"Error directory not found: aux directory " + auxDirectory.getAbsolutePath());
 		}
 
 		if (!mediaRepository.getWriteFile(outputDirectory).isDirectory()
 				&& !mediaRepository.getWriteFile(outputDirectory).mkdirs()) {
-			logger.error("Error directory not found: output directory "
+			logger.error("Error directory not found: output directory {}",
+					mediaRepository.getWriteFile(outputDirectory).getAbsolutePath());
+			throw new IllegalArgumentException("Error directory not found: output directory "
 					+ mediaRepository.getWriteFile(outputDirectory).getAbsolutePath());
-			return false;
 		}
 
 		errorDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getErrorDirectory());
 
 		if (!errorDirectory.isDirectory() && !errorDirectory.mkdirs()) {
-			logger.error("Error directory not found: error directory " + errorDirectory.getAbsolutePath());
-			return false;
+			logger.error("Error directory not found: error directory {}", errorDirectory.getAbsolutePath());
+			throw new IllegalArgumentException(
+					"Error directory not found: error directory " + errorDirectory.getAbsolutePath());
 		}
 
 		if (pdfContainer == null) {
@@ -195,13 +201,13 @@ public class PDFGenerator {
 			outputFile = new File(outputDirectory, outPutName);
 			thubnailFile = new File(outputDirectory, outPutName.replace(".pdf", ".png"));
 
-			logger.debug("PDF with output file " + outputFile.getPath() + " dir " +outputDirectory.getPath());
+			logger.debug("PDF with output file " + outputFile.getPath() + " dir " + outputDirectory.getPath());
 			pdfContainer = new PDFContainer();
 			pdfContainer.setName(printTemplate.getGeneratedFileName());
 			// sets the absolute path of the file
 			pdfContainer.setPath(outputFile.getPath());
 			pdfContainer.setThumbnail(generateThumbnail ? thubnailFile.getPath() : null);
-			
+
 		} else {
 			outputFile = new File(pdfContainer.getPath());
 			thubnailFile = new File(pdfContainer.getThumbnail());
@@ -214,8 +220,9 @@ public class PDFGenerator {
 		logFile = new File(auxDirectory, createName.replace(".tex", ".log"));
 		generatedOutputFile = new File(outputDirectory, createName.replace(".tex", ".pdf"));
 
-		if (!mediaRepository.saveString(printTemplate.getFinalContent(), inputFile))
-			return false;
+		if (!mediaRepository.saveString(printTemplate.getFinalContent(), inputFile)) {
+			throw new IllegalArgumentException("Could not save pdf to process to " + inputFile.getAbsolutePath());
+		}
 
 		logger.debug("Working directory: " + workingDirectory.getAbsolutePath());
 		logger.debug("Aux directory: " + auxDirectory.getAbsolutePath());
@@ -225,17 +232,17 @@ public class PDFGenerator {
 
 		logger.debug("PDF file: " + outputFile.getPath());
 
-		return true;
+		return pdfContainer;
 	}
 
-	private PDFContainer generatePDF() {
+	private PDFContainer generatePDF(PDFContainer container) {
 		long time = System.currentTimeMillis();
 
 		try {
 			if (generate()) {
 				logger.debug("Creating pdf with path: " + outputFile.getPath() + " thub: "
 						+ (generateThumbnail ? thubnailFile.getPath() : ""));
-				PDFContainer result = getContainer();
+				PDFContainer result = container;
 
 				if (printTemplate.isAfterPDFCreationHook())
 					result = printTemplate.onAfterPDFCreation(result);
@@ -275,33 +282,36 @@ public class PDFGenerator {
 		localProcessBuilder.redirectErrorStream(true);
 		localProcessBuilder.directory(workingDirectory);
 
-		Process localProcess = localProcessBuilder.start();
+		for (int i = 1; i <= 3; i++) {
+			Process localProcess = localProcessBuilder.start();
 
-		InputStreamReader localInputStreamReader = new InputStreamReader(localProcess.getInputStream());
-		BufferedReader localBufferedReader = new BufferedReader(localInputStreamReader);
-		StringBuilder localStringBuilder = new StringBuilder();
+			InputStreamReader localInputStreamReader = new InputStreamReader(localProcess.getInputStream());
+			BufferedReader localBufferedReader = new BufferedReader(localInputStreamReader);
+			StringBuilder localStringBuilder = new StringBuilder();
 
-		String res = null;
-		try {
-			while ((res = localBufferedReader.readLine()) != null) {
-				localStringBuilder.append(res + newline);
-			}
-		} finally {
-			localBufferedReader.close();
-		}
-
-		generationResult = localStringBuilder.toString();
-
-		try {
-			int j = localProcess.waitFor();
-
-			if (j != 0 || !verifyGeneration()) {
-				errorMessage = ("Errors occurred while executing pdfLaTeX! Exit value of the process: " + j);
+			String res = null;
+			try {
+				while ((res = localBufferedReader.readLine()) != null) {
+					localStringBuilder.append(res + newline);
+				}
+			} finally {
+				localBufferedReader.close();
 			}
 
-		} catch (InterruptedException localInterruptedException) {
-			errorMessage = ("The process pdfLaTeX was interrupted and an exception occurred!" + newline
-					+ localInterruptedException.toString());
+			generationResult = localStringBuilder.toString();
+
+			try {
+				int j = localProcess.waitFor();
+
+				if (j != 0 || !verifyGeneration()) {
+					errorMessage = ("Errors occurred while executing pdfLaTeX! Exit value of the process: " + j);
+				}
+
+			} catch (InterruptedException localInterruptedException) {
+				errorMessage = ("The process pdfLaTeX was interrupted and an exception occurred!" + newline
+						+ localInterruptedException.toString());
+			}
+
 		}
 
 		if (generateThumbnail) {
@@ -316,6 +326,7 @@ public class PDFGenerator {
 			cleanUp(false, pathoConfig.getFileSettings().isKeepErrorFiles());
 			return true;
 		}
+
 	}
 
 	public boolean verifyGeneration() {
@@ -340,12 +351,12 @@ public class PDFGenerator {
 			result = false;
 			logger.error("out file not Found! " + outputFile.getAbsolutePath());
 		} else {
-			
-			if(mediaRepository.getWriteFile(outputFile).isFile()) {
-				logger.debug("Old file found removing " +outputFile.getPath());
+
+			if (mediaRepository.getWriteFile(outputFile).isFile()) {
+				logger.debug("Old file found removing " + outputFile.getPath());
 				mediaRepository.delete(outputFile);
 			}
-			
+
 			// moving file to correct position
 			try {
 				FileUtils.moveFile(mediaRepository.getWriteFile(generatedOutputFile),
@@ -403,10 +414,10 @@ public class PDFGenerator {
 	 * @param container
 	 * @return
 	 */
-	public static int countPDFPages(PDFContainer container) {
+	public static int countPDFPages(LoadedPDFContainer container) {
 		PdfReader pdfReader;
 		try {
-			pdfReader = new PdfReader(container.getData());
+			pdfReader = new PdfReader(container.getPdfData());
 			pdfReader.close();
 			return pdfReader.getNumberOfPages();
 
@@ -425,7 +436,7 @@ public class PDFGenerator {
 	 * @param type
 	 * @return
 	 */
-	public static PDFContainer mergePdfs(List<PDFContainer> containers, String name, DocumentType type) {
+	public static LoadedPDFContainer mergePdfs(List<LoadedPDFContainer> containers, String name, DocumentType type) {
 
 		try {
 			Document document = new Document();
@@ -435,8 +446,8 @@ public class PDFGenerator {
 			document.open();
 			PdfContentByte cb = writer.getDirectContent();
 
-			for (PDFContainer pdfContainer : containers) {
-				PdfReader pdfReader = new PdfReader(pdfContainer.getData());
+			for (LoadedPDFContainer pdfContainer : containers) {
+				PdfReader pdfReader = new PdfReader(pdfContainer.getPdfData());
 				for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
 					document.newPage();
 					// import the page from source pdf
@@ -447,12 +458,11 @@ public class PDFGenerator {
 			}
 			document.close();
 
-			return new PDFContainer(type, name, out.toByteArray());
+			return new LoadedPDFContainer(type, name, out.toByteArray(), null);
 		} catch (DocumentException | IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	
 }

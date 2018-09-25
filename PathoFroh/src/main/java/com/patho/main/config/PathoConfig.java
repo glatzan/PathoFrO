@@ -40,6 +40,8 @@ public class PathoConfig {
 	public static final String REPORT_NOT_APPROVED_PDF= "classpath:templates/print/reportnotapproved.pdf";
 	public static final String REPORT_NOT_APPROVED_IMG= "classpath:templates/print/reportnotapproved.png";
 	
+	public static final String RENDER_ERROR_PDF= "classpath:templates/print/pdfnotfound.pdf";
+	
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)

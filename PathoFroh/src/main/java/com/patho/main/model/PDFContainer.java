@@ -47,37 +47,37 @@ public class PDFContainer implements ID, AuditAble {
 	@Id
 	@GeneratedValue(generator = "pdfs_sequencegenerator")
 	@Column(unique = true, nullable = false)
-	private long id;
+	protected long id;
 
 	@Type(type = "org.hibernate.type.BinaryType")
-	private byte data[];
+	protected byte data[];
 
 	@Enumerated(EnumType.STRING)
-	private DocumentType type;
+	protected DocumentType type;
 
 	@Column(length = 255)
-	private String name;
+	protected String name;
 
 	@Embedded
-	private Audit audit;
+	protected Audit audit;
 
 	@Column
-	private boolean finalDocument;
+	protected boolean finalDocument;
 
 	@Column(columnDefinition = "text")
-	private String commentary;
+	protected String commentary;
 
 	@Column(length = 10)
-	private String intern;
+	protected String intern;
 
 	@Column(length = 255)
-	private String path;
+	protected String path;
 
 	@Column(length = 255)
-	private String thumbnail;
+	protected String thumbnail;
 
 	@Column
-	private boolean restricted;
+	protected boolean restricted;
 
 	public PDFContainer() {
 	}
@@ -94,6 +94,10 @@ public class PDFContainer implements ID, AuditAble {
 		this.type = type;
 		this.data = data;
 		this.name = name;
+	}
+
+	public PDFContainer(DocumentType type, String name, String path) {
+		this(type,name,path,null);
 	}
 
 	public PDFContainer(DocumentType type, String name, String path, String thumbnail) {

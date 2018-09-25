@@ -16,12 +16,12 @@
 
 	<h:panelGroup>
 		<p:selectOneMenu
-			converter="#{dialog.printDialog.selectedTemplate.councilListTransformer}"
+			converter="#{dialog.printDialog.selectedTemplate.sharedData.councilListTransformer}"
 			style="width:90%"
-			value="#{dialog.printDialog.selectedTemplate.selectedCouncil}">
+			value="#{dialog.printDialog.selectedTemplate.sharedData.selectedCouncil}">
 
 			<f:selectItems
-				value="#{dialog.printDialog.selectedTemplate.councilList}"
+				value="#{dialog.printDialog.selectedTemplate.sharedData.councilList}"
 				var="council" itemLabel="#{council.name}" itemValue="#{council}" />
 
 			<p:ajax event="change" process="@this"
@@ -30,7 +30,7 @@
 		</p:selectOneMenu>
 
 		<p:remoteCommand name="updateContactForCouncil"
-			update="printSettingsTable pollUpdateTable dialogContent:selectBtn dialogContent:faxBtn dialogContent:downloadBtn">
+			update="printSettingsTable pollUpdateTable buttonBtnContainer">
 			<f:actionListener
 				binding="#{dialog.printDialog.selectedTemplate.updateContactList()}" />
 			<f:actionListener
@@ -59,7 +59,7 @@
 		</f:facet>
 
 		<c:forEach varStatus="outer"
-			items="#{dialog.printDialog.selectedTemplate.contactList}"
+			items="#{dialog.printDialog.selectedTemplate.sharedData.contactList}"
 			var="chooser">
 			<p:row
 				styleClass="#{(outer.index + 1 ) mod 2 eq 0 ? 'alternate_row_background' : ''}">
@@ -82,7 +82,7 @@
 						</p:selectBooleanCheckbox>
 
 						<p:remoteCommand name="updateContactAndRerenderPDF#{outer.index}"
-							update="printSettingsTable pollUpdateTable dialogContent:selectBtn dialogContent:faxBtn dialogContent:downloadBtn">
+							update="printSettingsTable pollUpdateTable buttonBtnContainer">
 							<f:actionListener
 								binding="#{dialog.printDialog.selectedTemplate.onChooseContact(chooser)}" />
 							<f:actionListener
@@ -136,7 +136,7 @@
 						<p:commandLink
 							rendered="#{!dialog.printDialog.selectedTemplate.updatePdfOnEverySettingChange}"
 							title="#{msg['dialog.print.individualAddress']}"
-							actionListener="#{dialogHandlerAction.customAddressDialog.initAndPrepareBean(dialog.printDialog.selectedTemplate.task,chooser)}">
+							actionListener="#{dialog.customAddressDialog.initAndPrepareBean(dialog.printDialog.selectedTemplate.task,chooser)}">
 							<i class="fa fa-gear" style="margin-left: 2px" />
 							<p:ajax event="dialogReturn"
 								update="editAddressOver#{outer.index}" />
@@ -146,11 +146,11 @@
 						<p:commandLink
 							rendered="#{dialog.printDialog.selectedTemplate.updatePdfOnEverySettingChange}"
 							title="#{msg['dialog.print.individualAddress']}"
-							actionListener="#{dialogHandlerAction.customAddressDialog.initAndPrepareBean(dialog.printDialog.selectedTemplate.task,chooser)}">
+							actionListener="#{dialog.customAddressDialog.initAndPrepareBean(dialog.printDialog.selectedTemplate.task,chooser)}">
 							<i class="fa fa-gear" style="margin-left: 2px" />
 							<p:ajax event="dialogReturn"
 								listener="#{dialog.printDialog.onChangePrintTemplate()}"
-								update="editAddressOver#{outer.index} pollUpdateTable dialogContent:selectBtn dialogContent:faxBtn dialogContent:downloadBtn" />
+								update="editAddressOver#{outer.index} pollUpdateTable buttonBtnContainer" />
 						</p:commandLink>
 
 					</h:panelGroup>
@@ -185,7 +185,7 @@
 
 							<p:remoteCommand
 								name="updateOrganizationAndRerenderPDF#{outer.index}"
-								update="printSettingsTable pollUpdateTable dialogContent:selectBtn dialogContent:faxBtn dialogContent:downloadBtn">
+								update="printSettingsTable pollUpdateTable buttonBtnContainer">
 								<f:actionListener
 									binding="#{dialog.printDialog.selectedTemplate.onChooseOrganizationOfContact(organizazion)}" />
 								<f:actionListener

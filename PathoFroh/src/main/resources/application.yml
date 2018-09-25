@@ -169,9 +169,11 @@ patho:
         type: U_REPORT
         attributes:
         templateName: com.patho.main.template.print.CaseCertificate
+        uiClass: com.patho.main.template.print.ui.document.CaseCertificateUi
         defaultOfType: false
         transientContent: true
         hidden: false
+        sharedContextGroup: 2
       -
         id: 1
         name: Eingangsbogen bedrucken
@@ -180,9 +182,11 @@ patho:
         type: U_REPORT_EMTY
         attributes: 
         templateName: com.patho.main.template.print.CaseCertificate
+        uiClass: com.patho.main.template.print.ui.document.CaseCertificateUi
         defaultOfType: false
         transientContent: true
         hidden: false
+        sharedContextGroup: 2
       -
         id: 2
         name: Eingangsbogen bedrucken, umgekehrt
@@ -190,10 +194,12 @@ patho:
         content2: 
         type: U_REPORT_EMTY
         attributes: media:keyword:default,tray1
-        emplateName: com.patho.main.template.print.CaseCertificate
+        templateName: com.patho.main.template.print.CaseCertificate
+        uiClass: com.patho.main.template.print.ui.document.CaseCertificateUi
         defaultOfType: false
         transientContent: true
         hidden: false
+        sharedContextGroup: 2
       -
         id: 10
         name: Befundbericht
@@ -202,11 +208,13 @@ patho:
         type: DIAGNOSIS_REPORT
         attributes: sides:keyword:one-side
         templateName: com.patho.main.template.print.DiagnosisReport
+        uiClass: com.patho.main.template.print.ui.document.report.DiagnosisReportUi
         defaultOfType: true
         transientContent: false
         hidden: false
-        duplexPrinting : true
-        printEvenPageCount : true
+        duplexPrinting: true
+        printEvenPageCount: true
+        sharedContextGroup: 1
       -
         id: 11
         name: Befundbericht - ohne Logo
@@ -215,11 +223,13 @@ patho:
         type: DIAGNOSIS_REPORT
         attributes: "sides:keyword:one-side#media:keyword:default,tray2"
         templateName: com.patho.main.template.print.DiagnosisReport
+        uiClass: com.patho.main.template.print.ui.document.report.DiagnosisReportUi
         defaultOfType: false
         transientContent: false
         hidden: false
-        duplexPrinting : true
-        printEvenPageCount : true
+        duplexPrinting: true
+        printEvenPageCount: true
+        sharedContextGroup: 1
       -
         id: 20
         name: Befundbericht extern
@@ -228,11 +238,13 @@ patho:
         type: DIAGNOSIS_REPORT_EXTERN
         attributes: sides:keyword:one-side
         templateName: com.patho.main.template.print.DiagnosisReport
+        uiClass: com.patho.main.template.print.ui.document.report.DiagnosisReportUi
         defaultOfType: true
         transientContent: false
         hidden: false
-        duplexPrinting : true
-        printEvenPageCount : true
+        duplexPrinting: true
+        printEvenPageCount: true
+        sharedContextGroup: 1
       -
         id: 21
         name: Befundbericht extern - ohne Logo
@@ -241,11 +253,13 @@ patho:
         type: DIAGNOSIS_REPORT_EXTERN
         attributes: "sides:keyword:one-side#media:keyword:default,tray2"
         templateName: com.patho.main.template.print.DiagnosisReport
+        uiClass: com.patho.main.template.print.ui.document.report.DiagnosisReportUi
         defaultOfType: true
         transientContent: false
         hidden: false
-        duplexPrinting : true
-        printEvenPageCount : true
+        duplexPrinting: true
+        printEvenPageCount: true
+        sharedContextGroup: 1
       -
         id: 50
         name: Konsil

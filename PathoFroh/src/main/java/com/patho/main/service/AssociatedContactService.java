@@ -15,6 +15,7 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.AssociatedContactNotification;
+import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Diagnosis;
@@ -130,7 +131,8 @@ public class AssociatedContactService extends AbstractService {
 		task.getContacts().remove(associatedContact);
 		// only associatedContact has to be removed, is the mapping enity
 		associatedContactRepository.delete(associatedContact,
-				resourceBundle.get("log.contact.remove", task, associatedContact),associatedContact.getTask().getPatient());
+				resourceBundle.get("log.contact.remove", task, associatedContact),
+				associatedContact.getTask().getPatient());
 	}
 
 	/**
@@ -361,8 +363,8 @@ public class AssociatedContactService extends AbstractService {
 		notification.setFailed(!success);
 
 		notification = associatedContactNotificationRepository.save(notification,
-				resourceBundle.get("log.contact.notification.performed", notification.getContact().getTask(), notification.getContact(),
-						notification.getNotificationTyp().toString(), success, message),
+				resourceBundle.get("log.contact.notification.performed", notification.getContact().getTask(),
+						notification.getContact(), notification.getNotificationTyp().toString(), success, message),
 				associatedContact.getTask().getPatient());
 
 		return new NotificationReturn(null, notification.getContact(), notification);
@@ -439,6 +441,53 @@ public class AssociatedContactService extends AbstractService {
 			super(task, associatedContact);
 			this.associatedContactNotification = associatedContactNotification;
 		}
+	}
+
+	public static String generateAddress(AssociatedContact associatedContact) {
+		return generateAddress(associatedContact, null);
+	}
+
+	public static String generateAddress(AssociatedContact associatedContact, Organization organization) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(associatedContact.getPerson().getFullName() + "\r\n");
+
+		Optional<String> addition1;
+		Optional<String> addition2;
+		Optional<String> street;
+		Optional<String> postcode;
+		Optional<String> town;
+
+		if (organization != null) {
+			street = Optional.ofNullable(organization.getContact().getStreet()).filter(s -> !s.isEmpty());
+			postcode = Optional.ofNullable(organization.getContact().getPostcode()).filter(s -> !s.isEmpty());
+			town = Optional.ofNullable(organization.getContact().getTown()).filter(s -> !s.isEmpty());
+			addition1 = Optional.ofNullable(organization.getContact().getAddressadditon()).filter(s -> !s.isEmpty());
+			addition2 = Optional.ofNullable(organization.getContact().getAddressadditon2()).filter(s -> !s.isEmpty());
+			buffer.append(organization.getName() + "\r\n");
+
+		} else {
+			// no organization is selected or present, so add the data of the
+			// user
+			street = Optional.ofNullable(associatedContact.getPerson().getContact().getStreet())
+					.filter(s -> !s.isEmpty());
+			postcode = Optional.ofNullable(associatedContact.getPerson().getContact().getPostcode())
+					.filter(s -> !s.isEmpty());
+			town = Optional.ofNullable(associatedContact.getPerson().getContact().getTown()).filter(s -> !s.isEmpty());
+			addition1 = Optional.ofNullable(associatedContact.getPerson().getContact().getAddressadditon())
+					.filter(s -> !s.isEmpty());
+			addition2 = Optional.ofNullable(associatedContact.getPerson().getContact().getAddressadditon2())
+					.filter(s -> !s.isEmpty());
+		}
+
+		buffer.append(addition1.isPresent() ? addition1.get() + "\r\n" : "");
+		buffer.append(addition2.isPresent() ? addition2.get() + "\r\n" : "");
+		buffer.append(street.isPresent() ? street.get() + "\r\n" : "");
+		buffer.append(postcode.isPresent() ? postcode.get() + " " : "");
+		buffer.append(town.isPresent() ? town.get() + "\r\n" : "");
+
+		System.out.println(buffer.toString());
+		
+		return buffer.toString();
 	}
 
 }

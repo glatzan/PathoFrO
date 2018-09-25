@@ -28,7 +28,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MailTemplate extends Template {
+public class MailTemplate extends AbstractTemplate {
 
 	private PDFContainer attachment;
 

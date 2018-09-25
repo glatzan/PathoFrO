@@ -9,7 +9,6 @@ import com.patho.main.action.dialog.notification.NotificationDialog;
 import com.patho.main.action.dialog.notification.NotificationPhaseExitDialog;
 import com.patho.main.action.dialog.patient.DeleteTaskDialog;
 import com.patho.main.action.dialog.patient.EditPatientDialog;
-import com.patho.main.action.dialog.print.CustomAddressDialog;
 import com.patho.main.action.dialog.print.FaxPrintDocumentDialog;
 import com.patho.main.action.dialog.settings.groups.GroupEditDialog;
 import com.patho.main.action.dialog.settings.groups.GroupListDialog;
@@ -34,8 +33,6 @@ import lombok.Getter;
 public class DialogHandlerAction {
 
 	private OrganizationListDialog organizationListDialog = new OrganizationListDialog();
-
-	private CustomAddressDialog customAddressDialog = new CustomAddressDialog();
 
 	private ContactDialog contactDialog = new ContactDialog();
 

@@ -127,47 +127,4 @@ public class AssociatedContact implements LogAble, ID {
 
 		return super.equals(obj);
 	}
-
-	public static String generateAddress(AssociatedContact associatedContact) {
-		return generateAddress(associatedContact, null);
-	}
-
-	public static String generateAddress(AssociatedContact associatedContact, Organization organization) {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(associatedContact.getPerson().getFullName() + "\r\n");
-
-		Optional<String> addition1;
-		Optional<String> addition2;
-		Optional<String> street;
-		Optional<String> postcode;
-		Optional<String> town;
-
-		if (organization != null) {
-			street = Optional.ofNullable(organization.getContact().getStreet()).filter(s -> !s.isEmpty());
-			postcode = Optional.ofNullable(organization.getContact().getPostcode()).filter(s -> !s.isEmpty());
-			town = Optional.ofNullable(organization.getContact().getTown()).filter(s -> !s.isEmpty());
-			addition1 = Optional.ofNullable(organization.getContact().getAddressadditon()).filter(s -> !s.isEmpty());
-			addition2 = Optional.ofNullable(organization.getContact().getAddressadditon2()).filter(s -> !s.isEmpty());
-			buffer.append(organization.getName() + "\r\n");
-
-		} else {
-			// no organization is selected or present, so add the data of the
-			// user
-			street = Optional.ofNullable(associatedContact.getPerson().getContact().getStreet())
-					.filter(s -> !s.isEmpty());
-			postcode = Optional.ofNullable(associatedContact.getPerson().getContact().getPostcode())
-					.filter(s -> !s.isEmpty());
-			town = Optional.ofNullable(associatedContact.getPerson().getContact().getTown()).filter(s -> !s.isEmpty());
-			addition1 = Optional.ofNullable(associatedContact.getPerson().getContact().getAddressadditon()).filter(s -> !s.isEmpty());
-			addition2 = Optional.ofNullable(associatedContact.getPerson().getContact().getAddressadditon2()).filter(s -> !s.isEmpty());
-		}
-
-		buffer.append(addition1.isPresent() ? addition1.get() + "\r\n" : "");
-		buffer.append(addition2.isPresent() ? addition2.get() + "\r\n" : "");
-		buffer.append(street.isPresent() ? street.get() + "\r\n" : "");
-		buffer.append(postcode.isPresent() ? postcode.get() + " " : "");
-		buffer.append(town.isPresent() ? town.get() + "\r\n" : "");
-
-		return buffer.toString();
-	}
 }

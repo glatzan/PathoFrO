@@ -10,6 +10,7 @@ import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
+import com.patho.main.service.AssociatedContactService;
 import com.patho.main.template.print.DiagnosisReport;
 import com.patho.main.util.pdf.PDFGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,7 @@ public class NotificationExecutor<T extends NotificationContainer> {
 				result = genericPDF;
 			} else {
 				// individual address
-				String reportAddressField = AssociatedContact.generateAddress(container.getContact(), container.getContact().getPerson().getDefaultAddress());
+				String reportAddressField = AssociatedContactService.generateAddress(container.getContact(), container.getContact().getPerson().getDefaultAddress());
 				log.debug("Generating pdf for " + reportAddressField);
 				feedback.setFeedback("dialog.notification.sendProcess.pdf.generating",
 						container.getContact().getPerson().getFullName());

@@ -4,6 +4,7 @@ import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.AssociatedContactNotification;
 import com.patho.main.model.Organization;
 import com.patho.main.model.PDFContainer;
+import com.patho.main.service.AssociatedContactService;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -84,7 +85,7 @@ public class NotificationContainer {
 				break;
 			case LETTER:
 				setContactAddress(
-						AssociatedContact.generateAddress(getContact(), getContact().getPerson().getDefaultAddress()));
+						AssociatedContactService.generateAddress(getContact(), getContact().getPerson().getDefaultAddress()));
 			default:
 				break;
 			}

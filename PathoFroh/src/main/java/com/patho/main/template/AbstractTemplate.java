@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 //@SequenceGenerator(name = "template_sequencegenerator", sequenceName = "template_sequence")
 @Getter
 @Setter
-public abstract class Template implements ID, Cloneable {
+public abstract class AbstractTemplate implements ID, Cloneable {
 
 	protected long id;
 

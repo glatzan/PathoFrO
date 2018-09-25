@@ -29,8 +29,8 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.Task;
-import com.patho.main.template.print.ui.AbstractDocumentUi;
-import com.patho.main.template.print.ui.CouncilReportUi;
+import com.patho.main.template.print.ui.document.AbstractDocumentUi;
+import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 

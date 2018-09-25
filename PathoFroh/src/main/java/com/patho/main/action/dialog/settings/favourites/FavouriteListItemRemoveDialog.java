@@ -24,7 +24,7 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.service.FavouriteListService;
-import com.patho.main.template.Template;
+import com.patho.main.template.AbstractTemplate;
 import com.patho.main.util.helper.TimeUtil;
 
 import lombok.AccessLevel;
@@ -80,7 +80,7 @@ public class FavouriteListItemRemoveDialog extends AbstractDialog {
 		this.task = task;
 
 		if (favouriteList.getDumpCommentary() != null) {
-			Template.initVelocity();
+			AbstractTemplate.initVelocity();
 
 			/* create a context and add data */
 			VelocityContext context = new VelocityContext();

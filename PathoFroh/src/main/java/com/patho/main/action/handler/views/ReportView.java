@@ -23,6 +23,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.model.util.audit.Audit;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.ui.LazyPDFGuiManager;
 import com.patho.main.ui.task.DiagnosisReportUpdater;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.pdf.PDFUtil;
@@ -41,10 +42,19 @@ public class ReportView extends AbstractTaskView {
 	@Setter(AccessLevel.NONE)
 	private MediaRepository mediaRepository;
 
+	/**
+	 * List of all diagnosis revisions with correspondending reports
+	 */
 	public List<DiagnosisReportData> data;
 
+	/**
+	 * The data which are displayed
+	 */
 	private DiagnosisReportData selectedData;
 
+	/**
+	 * The selected PDF container
+	 */
 	private PDFContainer selectedContainer;
 
 	/**

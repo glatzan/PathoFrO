@@ -7,10 +7,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.MediaRepository;
 
 import com.patho.main.template.PrintDocument;
+import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.ui.interfaces.PdfStreamProvider;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
 import com.patho.main.util.pdf.PDFGenerator;
@@ -46,7 +48,7 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private MediaRepository mediaRepository;
-	
+
 	/**
 	 * If true the component wil be rendered.
 	 */
@@ -107,7 +109,7 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 	public void startRendering(PrintDocument template, String outputPath) {
 		startRendering(template, new File(outputPath));
 	}
-	
+
 	public void startRendering(PrintDocument template, File outputPath) {
 		currentTaskUuid = new PDFGenerator().getPDFNoneBlocking(template, outputPath, this);
 		getStopPoll().set(false);
@@ -121,11 +123,19 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 	@Synchronized
 	public void returnPDFContent(PDFContainer container, String uuid) {
 		if (getCurrentTaskUuid().equals(uuid)) {
-			logger.debug("Setting PDf for rendering");
-			setPDFContainerToRender(container);
+
+			if (container != null && mediaRepository.isFile(container.getPath())) {
+				logger.debug("Setting PDf for rendering. Path: {}", container);
+				setPDFContainerToRender(container);
+			} else {
+				setPDFContainerToRender(new PDFContainer(DocumentType.PRINT_DOCUMENT,
+						"RenderError.pdf", PathoConfig.RENDER_ERROR_PDF));
+			}
+
 			getRenderPDF().set(true);
 			getStopPoll().set(true);
 			getAutoStartPoll().set(false);
+
 		} else {
 			logger.debug("More then one Thread! Old Thread");
 		}
@@ -141,8 +151,15 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 			// that it will generate right URL.
 			return new DefaultStreamedContent();
 		} else {
-			byte[] img = mediaRepository.getBytes(getPDFContainerToRender().getPath());
-			return new DefaultStreamedContent(new ByteArrayInputStream(img), "application/pdf",
+
+			byte[] pdf;
+
+			if (mediaRepository.isFile(getPDFContainerToRender().getPath()))
+				pdf = mediaRepository.getBytes(getPDFContainerToRender().getPath());
+			else
+				pdf = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
+
+			return new DefaultStreamedContent(new ByteArrayInputStream(pdf), "application/pdf",
 					getPDFContainerToRender().getName());
 		}
 	}

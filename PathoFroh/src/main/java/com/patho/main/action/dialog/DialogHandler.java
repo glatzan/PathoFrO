@@ -19,6 +19,7 @@ import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.notification.ContactSelectDialog;
 import com.patho.main.action.dialog.patient.PatientLogDialog;
 import com.patho.main.action.dialog.patient.SearchPatientDialog;
+import com.patho.main.action.dialog.print.CustomAddressDialog;
 import com.patho.main.action.dialog.print.PrintDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog;
 import com.patho.main.action.dialog.slides.SlideNamingDialog;
@@ -30,7 +31,6 @@ import com.patho.main.action.dialog.task.CreateTaskDialog;
 import com.patho.main.action.dialog.task.DeleteTaskEntityDialog;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Component("dialog")
 @Getter
@@ -63,4 +63,5 @@ public class DialogHandler {
 	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
 	private CopyHistologicalRecordDialog copyHistologicalRecordDialog = new CopyHistologicalRecordDialog();
 	private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();
+	private CustomAddressDialog customAddressDialog = new CustomAddressDialog();
 }

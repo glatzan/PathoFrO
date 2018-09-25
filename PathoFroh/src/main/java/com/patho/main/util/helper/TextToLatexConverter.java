@@ -9,6 +9,28 @@ import org.apache.commons.lang3.StringUtils;
 
 public class TextToLatexConverter {
 
+	/**
+	 * \& \% \$ \# \_ \{ \}
+	 * 
+	 * @author andi
+	 *
+	 */
+	Map<String, String> charMap = new HashMap<String, String>();
+
+	public TextToLatexConverter() {
+		charMap.put("\r\n", "\\\\ \r\n");
+		charMap.put("&", "\\&");
+		charMap.put("%", "\\%");
+		charMap.put("$", "\\$");
+		charMap.put("#", "\\#");
+		charMap.put("{", "\\{");
+		charMap.put("}", "\\}");
+		charMap.put("\"", "\'\'");
+		charMap.put("_", "\\_");
+		charMap.put("^", "\\^");
+		charMap.put("~", "\\~");
+	}
+
 	public String convertToTex(String string) {
 		if (string == null)
 			return "";
@@ -18,23 +40,4 @@ public class TextToLatexConverter {
 		}
 		return string;
 	}
-
-	/**
-	 * \& \% \$ \# \_ \{ \}
-	 * 
-	 * @author andi
-	 *
-	 */
-	Map<String, String> charMap = null;
-//	Map.ofEntries(
-//			 entry( "\r\n", "\\\\ \r\n" ), 
-//			 entry( "&", "\\&" ), 
-//			 entry( "%", "\\%" ), 
-//			 entry( "$", "\\$" ), 
-//			 entry( "#", "\\#" ),
-//			 entry( "{", "\\{" ), 
-//			 entry( "}", "\\}" ),
-//			 entry( "\"", "\'\'" ), 
-//			 entry( "_", "\\_" ) 
-//		);
 }

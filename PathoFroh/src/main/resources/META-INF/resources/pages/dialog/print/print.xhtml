@@ -40,7 +40,7 @@
 				columnClasses="columnWidthPercent30 columnTop, columnWidth25,">
 
 				<!-- left column -->
-				<h:panelGrid columns="1"
+				<h:panelGrid columns="1" id="leftColumnTable"
 					styleClass="defaultHistoHiddenTableContainer" style="width: 100%">
 
 					<h:panelGrid columns="2" styleClass="defaultHistoTable"
@@ -51,12 +51,13 @@
 						<p:selectOneMenu value="#{dialog.printDialog.selectedTemplate}"
 							style="width:80% !important;"
 							converter="#{dialog.printDialog.templateTransformer}">
-							<f:selectItems value="#{dialog.printDialog.templateList}"
-								var="template" itemLabel="#{template.printDocument.name}"
-								itemValue="#{template}" />
 
-							<p:ajax
-								update="printSettingsTable pollUpdateTable printEvenPageCount duplexPrinting"
+							<f:selectItems value="#{dialog.printDialog.templateList}"
+								var="template" itemValue="#{template}"
+								itemLabel="#{template.printDocument.name}">
+							</f:selectItems>
+
+							<p:ajax update="leftColumnTable pollUpdateTable pdfcontent"
 								event="change"
 								listener="#{dialog.printDialog.onChangePrintTemplate()}"></p:ajax>
 						</p:selectOneMenu>
@@ -68,14 +69,14 @@
 
 						<!-- duplex druck -->
 						<h:outputLabel value="#{msg['dialog.print.duplex']}" />
-						<p:selectBooleanCheckbox id="duplexPrinting"
+						<p:selectBooleanCheckbox
 							value="#{dialog.printDialog.duplexPrinting}"
 							title="#{msg['dialog.print.duplex.text']}" />
 
 						<!-- even page numbers -->
 						<h:outputLabel
 							value="#{msg['dialog.print.duplex.printEvenPageCount']}" />
-						<p:selectBooleanCheckbox id="printEvenPageCount"
+						<p:selectBooleanCheckbox
 							disabled="#{!dialog.printDialog.duplexPrinting}"
 							title="#{msg['dialog.print.duplex.printEvenPageCount.text']}"
 							value="#{dialog.printDialog.printEvenPageCounts}">
@@ -97,23 +98,41 @@
 				<h:panelGroup />
 
 				<!-- right column -->
-				<h:panelGrid columns="1" id="pollUpdateTable"
-					styleClass="defaultHistoTable"
+				<h:panelGrid columns="1" styleClass="defaultHistoTable"
 					style="width: 100% !important;height: calc( 100vh - 200px )!important;">
 
-					<h:panelGrid columns="1"
-						rendered="#{!dialog.printDialog.guiManager.renderComponent}"
-						style="width: 100% !important;height: calc( 100vh - 200px )!important;"
-						columnClasses="columnMiddle columnTextCenter">
+					<h:panelGrid id="pdfcontent"
+						rendered="#{dialog.printDialog.guiManager.renderComponent}"
+						styleClass="defaultHistoHiddenTableContainer onClickUpdate}"
+						style="width:calc(100% - 20px)">
 
-						<h:outputLabel styleClass="hugeFont"
-							value="#{msg['body.worklist.report.noDiagnosis']}"></h:outputLabel>
+						<pe:documentViewer
+							style="margin-left:5px;height:calc(100vh - 75px)"
+							rendered="#{dialog.printDialog.guiManager.renderPDF.get()}"
+							value="#{dialog.printDialog.guiManager.getPdfContent()}"
+							download="#{dialog.printDialog.guiManager.getPDFContainerToRender().name}" />
+
+						<h:panelGrid columns="1"
+							rendered="#{!dialog.printDialog.guiManager.renderPDF.get()}"
+							styleClass="defaultHistoHiddenTableContainer"
+							style="width: 100% !important;height: calc(100vh - 75px) !important;"
+							columnClasses="columnMiddle">
+							<h:panelGrid columns="1" style="width: 100% !important;"
+								styleClass="defaultHistoHiddenTableContainer"
+								columnClasses="columnHorizontalCenter">
+								<p:graphicImage value="/gfx/ajax-loader1.gif"></p:graphicImage>
+								<h:outputLabel styleClass="hugeFont"
+									value="#{msg['body.worklist.report.generating']}"></h:outputLabel>
+							</h:panelGrid>
+						</h:panelGrid>
 					</h:panelGrid>
 
-					<histo:dynamicMedia height="calc( 100vh - 100px )" width="100%"
-						update="dialogContent:pollUpdateTable dialogContent:selectBtn dialogContent:faxBtn dialogContent:downloadBtn"
-						pdfContent="#{dialog.printDialog.guiManager.pdfContent}"
-						guiManager="#{dialog.printDialog.guiManager}" />
+					<h:panelGroup id="pollUpdateTable">
+						<p:poll
+							autoStart="#{dialog.printDialog.guiManager.autoStartPoll.get()}"
+							interval="1" update="pdfcontent  buttonBtnContainer"
+							stop="#{dialog.printDialog.guiManager.stopPoll.get()}"></p:poll>
+					</h:panelGroup>
 				</h:panelGrid>
 
 			</h:panelGrid>
@@ -122,9 +141,7 @@
 		<div class="buttonContainer">
 			<h:panelGrid columns="2">
 
-				<h:panelGrid columns="5" styleClass="left" id="printBtnContainer">
-
-
+				<h:panelGrid columns="1" styleClass="left" id="printBtnContainer">
 				</h:panelGrid>
 
 				<h:panelGrid columns="4" styleClass="right" id="buttonBtnContainer">
@@ -137,10 +154,9 @@
 
 					<h:panelGrid columns="2"
 						rendered="#{!dialog.printDialog.selectMode}">
-
-
+						<!-- print button -->
 						<p:commandButton value="#{msg['dialog.print.button.print']}"
-							disabled="#{dialog.pdfOrganizer.displayPDF eq null}"
+							disabled="#{!dialog.printDialog.guiManager.renderPDF.get()}"
 							icon="fa fa-print" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
 							title="#{msg['dialog.print.button.print.text']}"
@@ -156,20 +172,20 @@
 
 							<f:selectItems value="#{printService.cupsPrinter.printer}"
 								var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
-						</p:selectOneMenu>
 
+							<p:ajax event="change" process="@this"></p:ajax>
+						</p:selectOneMenu>
 					</h:panelGrid>
 
 					<!-- fax -->
 					<p:commandButton value="#{msg['dialog.print.button.fax']}"
-						id="faxBtn"
 						disabled="#{!dialog.printDialog.guiManager.renderPDF.get()}"
 						icon="fa fa-fax" title="#{msg['dialog.print.button.fax.text']}"
 						rendered="#{dialog.printDialog.faxMode}"
 						actionListener="#{dialogHandlerAction.faxPrintDocumentDialog.initAndPrepareBean(dialog.printDialog.task, dialog.printDialog.renderedContact.contact,dialog.printDialog.pdfContainer)}"></p:commandButton>
 
 					<!-- download -->
-					<p:commandButton id="downloadBtn"
+					<p:commandButton
 						disabled="#{!dialog.printDialog.guiManager.renderPDF.get()}"
 						value="#{msg['dialog.print.button.open']}" icon="fa fa-download"
 						ajax="false" title="#{msg['dialog.print.button.open.text']}">

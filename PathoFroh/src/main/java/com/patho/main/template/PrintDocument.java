@@ -17,7 +17,8 @@ import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
-import com.patho.main.template.print.ui.AbstractDocumentUi;
+import com.patho.main.template.print.ui.document.AbstractDocumentUi;
+import com.patho.main.template.print.ui.document.report.AbsctractContactUi;
 import com.patho.main.util.helper.FileUtil;
 import com.patho.main.util.helper.StreamUtils;
 import com.patho.main.util.helper.TextToLatexConverter;
@@ -34,28 +35,34 @@ import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
-public class PrintDocument extends Template {
+public class PrintDocument extends AbstractTemplate {
+
+	/**
+	 * Class of the ui Element
+	 */
+	protected String uiClass;
+
+	/**
+	 * Group of uis which share the same data context. If 0 there is no shared
+	 * group.
+	 */
+	protected int sharedContextGroup;
 
 	/**
 	 * Raw file content from hdd
 	 */
-	private String loadedContent;
+	protected String loadedContent;
 
 	/**
-	 * Processed final document 
+	 * Processed final document
 	 */
-	private String finalContent;
-	
+	protected String finalContent;
+
 	/**
 	 * If true the pdf generator will call onAfterPDFCreation to allow the template
 	 * to change or attach other things to the pdf
 	 */
 	protected boolean afterPDFCreationHook;
-
-	/**
-	 * Document copies
-	 */
-	protected int copies = 1;
 
 	/**
 	 * If true duplex printing is used per default
@@ -70,7 +77,7 @@ public class PrintDocument extends Template {
 
 	public PrintDocument() {
 	}
-	
+
 	public PrintDocument(PrintDocument document) {
 		copyIntoDocument(document);
 	}
@@ -86,33 +93,33 @@ public class PrintDocument extends Template {
 	}
 
 	public void initilize(InitializeToken... token) {
-		HashMap<String, Object> map = new HashMap<String,Object>();
-		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
 		for (int i = 0; i < token.length; i++) {
 			map.put(token[i].getKey(), token[i].getValue());
 		}
 		initilize(map);
 	}
-	
+
 	public void initilize(HashMap<String, Object> content) {
 		initVelocity();
 
 		/* create a context and add data */
 		VelocityContext context = new VelocityContext();
 
-		for(Map.Entry<String, Object> entry : content.entrySet()) { 
+		for (Map.Entry<String, Object> entry : content.entrySet()) {
 			context.put(entry.getKey(), entry.getValue());
 		}
-		
+
 		// default date tool
 		context.put("date", new DateTool());
 		context.put("latexTextConverter", new TextToLatexConverter());
-		
+
 		/* now render the template into a StringWriter */
 		StringWriter writer = new StringWriter();
 
 		Velocity.evaluate(context, writer, "test", loadedContent);
-		
+
 		finalContent = writer.toString();
 	}
 
@@ -129,20 +136,18 @@ public class PrintDocument extends Template {
 		setDuplexPrinting(document.isDuplexPrinting());
 		setPrintEvenPageCount(document.isPrintEvenPageCount());
 		setLoadedContent(document.getLoadedContent());
+		setUiClass(document.getUiClass());
+		setSharedContextGroup(document.getSharedContextGroup());
 	}
-	
+
 	public DocumentType getDocumentType() {
 		return DocumentType.fromString(this.type);
 	}
 
-	public AbstractDocumentUi<?> getDocumentUi() {
-		return new AbstractDocumentUi(this);
-	}
-	
 	public String getGeneratedFileName() {
 		return "GenericFile.pdf";
 	}
-	
+
 	/**
 	 * U_REPORT = Eingangsbogen print at blank page U_REPORT_EMTY = Eingangsbogen
 	 * print at template, only infill of missing date U_REPORT_COMPLETED = A
@@ -176,11 +181,10 @@ public class PrintDocument extends Template {
 		}
 	}
 
-	
 	@Getter
 	@Setter
 	@AllArgsConstructor
-	public static class InitializeToken{
+	public static class InitializeToken {
 		private String key;
 		private Object value;
 	}

@@ -1,24 +1,34 @@
 package com.patho.main.action.dialog.print;
 
+import static org.assertj.core.api.Assertions.contentOf;
+
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.config.PathoConfig.FileSettings;
+import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PrintDocumentRepository;
+import com.patho.main.service.AssociatedContactService;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.template.print.ui.AbstractDocumentUi;
+import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.ui.LazyPDFGuiManager;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PrintOrder;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,11 +48,21 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private MediaRepository mediaRepository;
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private PathoConfig pathoConfig;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private UserHandlerAction userHandlerAction;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private AssociatedContactService associatedContactService;
 
 	/**
 	 * Manager for rendering the pdf lazy style
@@ -52,17 +72,17 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 	/**
 	 * List of all templates for printing
 	 */
-	private List<AbstractDocumentUi<?>> templateList;
+	private List<AbstractDocumentUi<?, ?>> templateList;
 
 	/**
 	 * The TemplateListtransformer for selecting a template
 	 */
-	private DefaultTransformer<AbstractDocumentUi<?>> templateTransformer;
+	private DefaultTransformer<AbstractDocumentUi<?, ?>> templateTransformer;
 
 	/**
 	 * Ui object for template
 	 */
-	private AbstractDocumentUi<?> selectedTemplate;
+	private AbstractDocumentUi<?, ?> selectedTemplate;
 
 	/**
 	 * Can be set to true, if so the generated pdf will be saved
@@ -112,8 +132,7 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 				DocumentType.U_REPORT, DocumentType.U_REPORT_EMTY, DocumentType.DIAGNOSIS_REPORT_EXTERN);
 
 		// getting ui objects
-		List<AbstractDocumentUi<?>> printDocumentUIs = printDocuments.stream().map(p -> p.getDocumentUi())
-				.collect(Collectors.toList());
+		List<AbstractDocumentUi<?, ?>> printDocumentUIs = AbstractDocumentUi.factory(printDocuments);
 
 		// init templates
 		printDocumentUIs.forEach(p -> p.initialize(task));
@@ -121,14 +140,14 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 		return initBean(task, printDocumentUIs, printDocumentUIs.get(0));
 	}
 
-	public boolean initBean(Task task, List<AbstractDocumentUi<?>> templateUI,
-			AbstractDocumentUi<?> selectedTemplateUi) {
+	public boolean initBean(Task task, List<AbstractDocumentUi<?, ?>> templateUI,
+			AbstractDocumentUi<?, ?> selectedTemplateUi) {
 
 		if (templateUI != null) {
 
 			// setting template list to choose from
 			setTemplateList(templateUI);
-			setTemplateTransformer(new DefaultTransformer<AbstractDocumentUi<?>>(getTemplateList()));
+			setTemplateTransformer(new DefaultTransformer<AbstractDocumentUi<?, ?>>(getTemplateList()));
 
 			if (selectedTemplateUi != null)
 				setSelectedTemplate(selectedTemplateUi);
@@ -198,8 +217,10 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 	// }
 
 	public void onChangePrintTemplate() {
+		System.out.println("-------------" + getSelectedTemplate());
 		guiManager.reset();
-		guiManager.startRendering(getSelectedTemplate().getDefaultTemplateConfiguration().getDocumentTemplate(), pathoConfig.getFileSettings().getPrintDirectory());
+		guiManager.startRendering(getSelectedTemplate().getDefaultTemplateConfiguration().getDocumentTemplate(),
+				pathoConfig.getFileSettings().getPrintDirectory());
 
 		setDuplexPrinting(getSelectedTemplate().getPrintDocument().isDuplexPrinting());
 		setPrintEvenPageCounts(getSelectedTemplate().getPrintDocument().isPrintEvenPageCount());
@@ -207,39 +228,32 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 
 	public void onPrintNewPdf() {
 
-		// logger.debug("Printing PDF");
-		//
-		// PDFGenerator generator = new PDFGenerator();
-		//
-		// int i = 0;
-		//
-		// getSelectedTemplate().beginNextTemplateIteration();
-		//
-		// while (getSelectedTemplate().hasNextTemplateConfiguration()) {
-		// AbstractDocumentUi<?>.TemplateConfiguration<?> container =
-		// getSelectedTemplate()
-		// .getNextTemplateConfiguration();
-		//
-		// PDFContainer pdf = generator.getPDF(container.getDocumentTemplate());
-		// PrintOrder printOrder = new PrintOrder(pdf, container.getDocumentTemplate(),
-		// isDuplexPrinting());
-		//
-		// // only save if person is associated
-		// if (container.getContact().getRole() != ContactRole.NONE) {
-		// associatedContactService.addNotificationType(task, container.getContact(),
-		// AssociatedContactNotification.NotificationTyp.PRINT, false, true, false,
-		// new Date(System.currentTimeMillis()), container.getAddress(), false);
-		// }
-		//
-		// // if (!template.isTransientContent()) {
-		// // }
-		//
-		// userHandlerAction.getSelectedPrinter().print(printOrder);
-		//
-		// logger.debug("Printing.... " + i);
-		//
-		// i++;
-		// }
+		logger.debug("Printing PDF");
+
+		PDFGenerator generator = new PDFGenerator();
+
+		getSelectedTemplate().beginNextTemplateIteration();
+
+		while (getSelectedTemplate().hasNextTemplateConfiguration()) {
+			AbstractDocumentUi<?, ?>.TemplateConfiguration<?> container = getSelectedTemplate()
+					.getNextTemplateConfiguration();
+
+			PDFContainer pdf = generator.getPDF(container.getDocumentTemplate(),
+					new File(pathoConfig.getFileSettings().getPrintDirectory()));
+
+			PrintOrder printOrder = new PrintOrder(pdf, container.getCopies(), isDuplexPrinting(),
+					container.getDocumentTemplate().getAttributes());
+
+			userHandlerAction.getSelectedPrinter().print(printOrder);
+
+			// only save if person is associated
+			if (container.getContact().getRole() != ContactRole.NONE) {
+				associatedContactService.addNotificationByType(container.getContact(), NotificationTyp.PRINT, false,
+						true, false, new Date(System.currentTimeMillis()), container.getAddress(), false);
+			}
+
+			logger.debug("Printing next order ");
+		}
 	}
 
 	/**

@@ -5,23 +5,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Task;
+import com.patho.main.service.AssociatedContactService;
 import com.patho.main.util.helper.StreamUtils;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
-@Slf4j
 public class ContactSelector extends AbstractSelector implements ID {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	private AssociatedContact contact;
 
 	private int copies;
@@ -31,6 +35,8 @@ public class ContactSelector extends AbstractSelector implements ID {
 	private String customAddress;
 
 	private boolean emptyAddress;
+	
+	private boolean manuallyAltered;
 
 	public ContactSelector(Task task, Person person, ContactRole role) {
 		this(new AssociatedContact(task, person, role), false, false);
@@ -87,9 +93,9 @@ public class ContactSelector extends AbstractSelector implements ID {
 		Optional<Organization> selectedOrganization = Optional.ofNullable(getSelectedOrganization())
 				.map(OrganizationChooser::getOrganization);
 
-		setCustomAddress(AssociatedContact.generateAddress(getContact(), selectedOrganization.orElse(null)));
+		setCustomAddress(AssociatedContactService.generateAddress(getContact(), selectedOrganization.orElse(null)));
 
-		log.trace("Custom Address is: " + getCustomAddress());
+		logger.trace("Custom Address is: " + getCustomAddress());
 	}
 
 	@Getter

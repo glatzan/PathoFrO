@@ -23,20 +23,15 @@ public class PrintOrder {
 	private String args;
 
 	public PrintOrder(PDFContainer container) {
-		this(container, null);
+		this(container, 1, null);
 	}
 
-	public PrintOrder(PDFContainer container, PrintDocument documentTemplate) {
-		this(container, documentTemplate, false);
+	public PrintOrder(PDFContainer container, int copies, PrintDocument documentTemplate) {
+		this(container, copies, documentTemplate, false);
 	}
 
-	public PrintOrder(PDFContainer container, PrintDocument documentTemplate, boolean duplex) {
-		this.pdfContainer = container;
-		if (documentTemplate != null) {
-			this.duplex = documentTemplate.isDuplexPrinting() || duplex;
-			this.args = documentTemplate.getAttributes();
-			this.copies = documentTemplate.getCopies();
-		}
+	public PrintOrder(PDFContainer container, int copies, PrintDocument documentTemplate, boolean duplex) {
+		this(container, copies, documentTemplate.isDuplexPrinting() || duplex, documentTemplate.getAttributes());
 	}
 
 	public PrintOrder(PDFContainer container, int copies, boolean duplex, String args) {

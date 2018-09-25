@@ -1,11 +1,11 @@
-package com.patho.main.template.print.ui;
+package com.patho.main.template.print.ui.document.report;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.patho.main.action.dialog.print.PrintDialog;
-import com.patho.main.model.AssociatedContact;
+import com.patho.main.model.patient.Task;
 import com.patho.main.template.PrintDocument;
+import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.selectors.ContactSelector.OrganizationChooser;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -16,25 +16,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Configurable
-public class AbsctractContactUi<T extends PrintDocument> extends AbstractDocumentUi<T> {
-
-	/**
-	 * List with all associated contacts
-	 */
-	protected List<ContactSelector> contactList;
-
-	/**
-	 * List if true single select mode of contacts is enabled
-	 */
-	protected boolean singleSelect;
+public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractContactUi.SharedContactData>
+		extends AbstractDocumentUi<T, S> {
 
 	/**
 	 * Pointer for printing all selected contacts
 	 */
 	protected ContactSelector contactListPointer;
 
-	public AbsctractContactUi(T documentTemplate) {
-		super(documentTemplate);
+	public AbsctractContactUi(T documentTemplate, S sharedData) {
+		super(documentTemplate, sharedData);
 	}
 
 	/**
@@ -57,8 +48,8 @@ public class AbsctractContactUi<T extends PrintDocument> extends AbstractDocumen
 			}
 
 			// if single select mode remove other selections
-			if (isSingleSelect()) {
-				getContactList().stream().forEach(p -> {
+			if (sharedData.isSingleSelect()) {
+				sharedData.getContactList().stream().forEach(p -> {
 					if (p != container) {
 						p.setSelected(false);
 						p.getOrganizazionsChoosers().forEach(s -> s.setSelected(false));
@@ -67,7 +58,7 @@ public class AbsctractContactUi<T extends PrintDocument> extends AbstractDocumen
 			}
 		}
 
-		container.generateAddress(true);
+		container.generateAddress(false);
 
 	}
 
@@ -104,20 +95,26 @@ public class AbsctractContactUi<T extends PrintDocument> extends AbstractDocumen
 	 */
 	public String getAddressOfFirstSelectedContact() {
 		try {
-			return contactList.stream().filter(p -> p.isSelected()).findFirst().get().getCustomAddress();
+			return sharedData.contactList.stream().filter(p -> p.isSelected()).findFirst().get().getCustomAddress();
 		} catch (NoSuchElementException e) {
 			return "";
 		}
 	}
 
+	/**
+	 * Resets the template pointer
+	 */
 	public void beginNextTemplateIteration() {
 		contactListPointer = null;
 	}
 
+	/**
+	 * Checks if an other template configuration is present
+	 */
 	public boolean hasNextTemplateConfiguration() {
 		boolean searchForNextContact = false;
 
-		for (ContactSelector contactSelector : contactList) {
+		for (ContactSelector contactSelector : sharedData.contactList) {
 			if (contactSelector.isSelected()) {
 				// first contact pointer
 				if (contactListPointer == null) {
@@ -135,6 +132,38 @@ public class AbsctractContactUi<T extends PrintDocument> extends AbstractDocumen
 
 		return false;
 
+	}
+
+	/**
+	 * Data which can be share between Ui Objects.
+	 * 
+	 * @author andi
+	 *
+	 */
+	@Getter
+	@Setter
+	public static class SharedContactData extends AbstractDocumentUi.SharedData {
+		/**
+		 * List with all associated contacts
+		 */
+		protected List<ContactSelector> contactList;
+
+		/**
+		 * List if true single select mode of contacts is enabled
+		 */
+		protected boolean singleSelect;
+
+		/**
+		 * Initializes the shareddata context.
+		 * 
+		 * @param task
+		 * @param contactList
+		 */
+		public void initializ(Task task, List<ContactSelector> contactList) {
+
+			if (isInitialized())
+				return;
+		}
 	}
 
 }

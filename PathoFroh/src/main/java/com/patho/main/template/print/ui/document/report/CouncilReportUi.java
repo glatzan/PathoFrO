@@ -1,4 +1,4 @@
-package com.patho.main.template.print.ui;
+package com.patho.main.template.print.ui.document.report;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import com.patho.main.model.Person;
 import com.patho.main.model.patient.Task;
 import com.patho.main.template.PrintDocument.InitializeToken;
 import com.patho.main.template.print.CouncilReport;
+import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -21,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Configurable
-public class CouncilReportUi extends AbsctractContactUi<CouncilReport> {
+public class CouncilReportUi extends AbsctractContactUi<CouncilReport, AbsctractContactUi.SharedContactData> {
 
 	/**
 	 * List of all councils
@@ -39,7 +40,16 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport> {
 	private Council selectedCouncil;
 
 	public CouncilReportUi(CouncilReport templateCouncil) {
-		super(templateCouncil);
+		this(templateCouncil, new AbsctractContactUi.SharedContactData());
+	}
+
+	public CouncilReportUi(CouncilReport templateCouncil, AbsctractContactUi.SharedContactData sharedData) {
+		super(templateCouncil, sharedData);
+		inputInclude = "include/councilReport.xhtml";
+	}
+
+	public CouncilReportUi(CouncilReport templateCouncil, AbstractDocumentUi.SharedData sharedData) {
+		super(templateCouncil, (AbsctractContactUi.SharedContactData) sharedData);
 		inputInclude = "include/councilReport.xhtml";
 	}
 
@@ -63,7 +73,7 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport> {
 	 */
 	public void updateContactList() {
 		// contacts for printing
-		setContactList(new ArrayList<ContactSelector>());
+		getSharedData().setContactList(new ArrayList<ContactSelector>());
 
 		// only one adress so set as chosen
 		if (getSelectedCouncil() != null && getSelectedCouncil().getCouncilPhysician() != null) {
@@ -71,10 +81,10 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport> {
 					ContactRole.CASE_CONFERENCE);
 			chosser.setSelected(true);
 			// setting patient
-			getContactList().add(chosser);
+			getSharedData().getContactList().add(chosser);
 		}
 
-		getContactList()
+		getSharedData().getContactList()
 				.add(new ContactSelector(task, new Person("Individuelle Addresse", new Contact()), ContactRole.NONE));
 
 		// getContactList().add(new ContactSelector(task,
@@ -100,8 +110,8 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport> {
 		String address = contactListPointer != null ? contactListPointer.getCustomAddress() : "";
 		printDocument.initilize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
 				new InitializeToken("council", getSelectedCouncil()), new InitializeToken("address", address));
-		printDocument.setCopies(contactListPointer != null ? contactListPointer.getCopies() : 1);
 		return new TemplateConfiguration<CouncilReport>(printDocument,
-				contactListPointer != null ? contactListPointer.getContact() : null, address);
+				contactListPointer != null ? contactListPointer.getContact() : null, address,
+				contactListPointer != null ? contactListPointer.getCopies() : 1);
 	}
 }
