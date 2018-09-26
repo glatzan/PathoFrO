@@ -83,7 +83,7 @@ public class PDFContainer implements ID, AuditAble {
 	}
 
 	public PDFContainer(DocumentType type) {
-		this(type, null);
+		this(type, "");
 	}
 
 	public PDFContainer(DocumentType type, byte[] data) {
@@ -96,8 +96,12 @@ public class PDFContainer implements ID, AuditAble {
 		this.name = name;
 	}
 
+	public PDFContainer(DocumentType type, String path) {
+		this(type, "", path, null);
+	}
+
 	public PDFContainer(DocumentType type, String name, String path) {
-		this(type,name,path,null);
+		this(type, name, path, null);
 	}
 
 	public PDFContainer(DocumentType type, String name, String path, String thumbnail) {

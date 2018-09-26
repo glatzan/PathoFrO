@@ -126,6 +126,7 @@ public class PathoConfig {
 		}else {
 			logger.debug("First program start");
 		}
+		
 	}
 
 	@Getter
@@ -157,7 +158,7 @@ public class PathoConfig {
 
 	@Getter
 	@Setter
-	public class DefaultDocuments {
+	public static class DefaultDocuments {
 
 		/**
 		 * Document-Template which is used on diagnosis phase exit.

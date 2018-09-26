@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -47,7 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ClinicPrinter extends AbstractPrinter {
 
 	private static String IPADDRESS_PATTERN = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
-	
+
 	@Autowired
 	protected PathoConfig pathoConfig;
 
@@ -128,18 +129,20 @@ public class ClinicPrinter extends AbstractPrinter {
 
 		// adding additional page if duplex print an odd pages are provided
 		if (PDFGenerator.countPDFPages(printOrder.getPdfContainer()) % 2 != 0 && printOrder.isDuplex()) {
-			byte[] arr = FileUtil.getFileAsBinary(pathoConfig.getDefaultDocuments().getEmptyPage());
 
-			PDFContainer cont = PDFGenerator.mergePdfs(
-					Arrays.asList(printOrder.getPdfContainer(), new PDFContainer(DocumentType.EMPTY, arr)), "",
-					DocumentType.PRINT_DOCUMENT);
+			// Merging with empty page
+			LoadedPDFContainer cont = PDFGenerator.mergePdfs(
+					Arrays.asList(printOrder.getPdfContainer(),
+							new LoadedPDFContainer(new PDFContainer(DocumentType.EMPTY,
+									pathoConfig.getDefaultDocuments().getEmptyPage()))),
+					"", DocumentType.PRINT_DOCUMENT);
 
 			printOrder.setPdfContainer(cont);
 
 			logger.debug("Printing in duplex mode, adding empty page at the end");
 		}
 
-		PrintJob printJob = new PrintJob.Builder(new ByteArrayInputStream(printOrder.getPdfContainer().getData()))
+		PrintJob printJob = new PrintJob.Builder(new ByteArrayInputStream(printOrder.getPdfContainer().getPdfData()))
 				.duplex(printOrder.isDuplex()).copies(printOrder.getCopies()).build();
 
 		if (HistoUtil.isNotNullOrEmpty(printOrder.getArgs())) {

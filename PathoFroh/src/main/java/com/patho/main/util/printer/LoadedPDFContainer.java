@@ -1,4 +1,4 @@
-package com.patho.main.model.transitory;
+package com.patho.main.util.printer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -11,22 +11,27 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-@Configurable
 /**
  * Container which loads the pdf data in ram
  * 
  * @author andi
  *
  */
-public class LoadedPDFContainer extends PDFContainer {
+@Configurable(preConstruction=true)
+@Getter
+@Setter
+public class LoadedPDFContainer{
 
-	@Autowired
+	@Autowired()
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private MediaRepository mediaRepository;
 
+	private PDFContainer pdfContainer;
+	
+	private String name;
+	protected DocumentType type;
+	
 	private byte pdfData[];
 	private byte thumbnailData[];
 
@@ -38,20 +43,15 @@ public class LoadedPDFContainer extends PDFContainer {
 	}
 
 	public LoadedPDFContainer(PDFContainer pdfContainer) {
-		this.id = pdfContainer.getId();
+		this.pdfContainer = pdfContainer;
+		System.out.println(pdfContainer.getPath() + "  " + mediaRepository);
+		
+		this.pdfData = mediaRepository.getBytes(pdfContainer.getPath());
+
 		this.type = pdfContainer.getType();
 		this.name = pdfContainer.getName();
-		this.audit = pdfContainer.getAudit();
-		this.finalDocument = pdfContainer.isFinalDocument();
-		this.commentary = pdfContainer.getCommentary();
-		this.intern = pdfContainer.getIntern();
-		this.path = pdfContainer.getPath();
-		this.thumbnail = pdfContainer.getThumbnail();
-		this.restricted = pdfContainer.isRestricted();
-
-		this.pdfData = mediaRepository.getBytes(this.path);
-
-		if (this.thumbnail != null)
-			this.thumbnailData = mediaRepository.getBytes(this.thumbnail);
+		
+		if (pdfContainer.getThumbnail() != null)
+			this.thumbnailData = mediaRepository.getBytes(pdfContainer.getThumbnail());
 	}
 }

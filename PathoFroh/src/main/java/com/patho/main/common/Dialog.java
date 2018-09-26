@@ -45,7 +45,7 @@ public enum Dialog {
 	SETTINGS_FAVOURITE_LIST_EDIT("/pages/dialog/settings/favouriteList/favouriteListEdit", null, 1024, 600, false, false, true), //  16:9
 	FAVOURITE_LIST_ITEM_REMOVE("/pages/dialog/settings/favouriteList/favouriteListItemRemove", null,  480, 272, false, false, true), // 16:9
 	PRINT("/pages/dialog/print/print", null, 1280, 720, false, false, true), // 16:9
-	PRINT_ADDRESS("/pages/dialog/print/address", null,  480, 272, false, false, true), // 16:9
+	PRINT_ADDRESS("/pages/dialog/print/address", null,  480, 272, false, false, true), 																						// OK
 	PRINT_FAX("/pages/dialog/print/printFax", null,  480, 272, false, false, true), // 16:9
 	COUNCIL("/pages/dialog/council/council", null,  1280, 720, false, false, true), // 16:9
 	USER_SETTINGS("/pages/dialog/userSettings/userSettings", null,  1024, 600, false, false, true), // 16:9

@@ -22,7 +22,6 @@ import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.common.DateFormat;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
-import com.patho.main.model.transitory.LoadedPDFContainer;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.impl.MediaRepositoryImpl;
 import com.patho.main.service.PDFService;
@@ -30,6 +29,7 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.helper.FileUtil;
 import com.patho.main.util.helper.TimeUtil;
+import com.patho.main.util.printer.LoadedPDFContainer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -282,7 +282,9 @@ public class PDFGenerator {
 		localProcessBuilder.redirectErrorStream(true);
 		localProcessBuilder.directory(workingDirectory);
 
-		for (int i = 1; i <= 3; i++) {
+		int loops = 2;
+
+		for (int i = 1; i <= loops; i++) {
 			Process localProcess = localProcessBuilder.start();
 
 			InputStreamReader localInputStreamReader = new InputStreamReader(localProcess.getInputStream());
@@ -303,7 +305,7 @@ public class PDFGenerator {
 			try {
 				int j = localProcess.waitFor();
 
-				if (j != 0 || !verifyGeneration()) {
+				if (j != 0 || !verifyGeneration(i == loops)) {
 					errorMessage = ("Errors occurred while executing pdfLaTeX! Exit value of the process: " + j);
 				}
 
@@ -330,6 +332,10 @@ public class PDFGenerator {
 	}
 
 	public boolean verifyGeneration() {
+		return verifyGeneration(true);
+	}
+
+	public boolean verifyGeneration(boolean move) {
 		boolean result = true;
 
 		if (!inputFile.isFile()) {
@@ -352,20 +358,22 @@ public class PDFGenerator {
 			logger.error("out file not Found! " + outputFile.getAbsolutePath());
 		} else {
 
-			if (mediaRepository.getWriteFile(outputFile).isFile()) {
-				logger.debug("Old file found removing " + outputFile.getPath());
-				mediaRepository.delete(outputFile);
-			}
+			if (move) {
+				if (mediaRepository.getWriteFile(outputFile).isFile()) {
+					logger.debug("Old file found removing " + outputFile.getPath());
+					mediaRepository.delete(outputFile);
+				}
 
-			// moving file to correct position
-			try {
-				FileUtils.moveFile(mediaRepository.getWriteFile(generatedOutputFile),
-						mediaRepository.getWriteFile(outputFile));
-			} catch (IOException e) {
-				e.printStackTrace();
-				result = false;
+				// moving file to correct position
+				try {
+					FileUtils.moveFile(mediaRepository.getWriteFile(generatedOutputFile),
+							mediaRepository.getWriteFile(outputFile));
+				} catch (IOException e) {
+					e.printStackTrace();
+					result = false;
+				}
+				logger.debug("Moving file to correct destinaion");
 			}
-			logger.debug("Moving file to correct destinaion");
 		}
 
 		return result;

@@ -1,4 +1,4 @@
-package com.patho.main.action.dialog.task;
+package com.patho.main.action.dialog.council;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -23,12 +23,16 @@ import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.common.PredefinedFavouriteList;
+import com.patho.main.common.SortOrder;
 import com.patho.main.model.Council;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.ListItemRepository;
+import com.patho.main.repository.PhysicianRepository;
+import com.patho.main.repository.TaskRepository;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -39,24 +43,25 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Scope(value = "session")
+@Configurable
 @Getter
 @Setter
-@Slf4j
-public class CouncilDialogHandler extends AbstractDialog {
+public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private DialogHandlerAction dialogHandlerAction;
-
+	private ListItemRepository listItemRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private PhysicianRepository physicianRepository;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private TaskRepository taskRepository;
 
 	/**
 	 * Selected council from councilList
@@ -97,15 +102,17 @@ public class CouncilDialogHandler extends AbstractDialog {
 	 * True if editable
 	 */
 	private boolean editable;
-	
+
 	/**
 	 * Initializes the bean and shows the council dialog
 	 * 
 	 * @param task
 	 */
-	public void initAndPrepareBean(Task task) {
+	public CouncilDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
+
+		return this;
 	}
 
 	/**
@@ -114,33 +121,28 @@ public class CouncilDialogHandler extends AbstractDialog {
 	 * @param task
 	 */
 	public boolean initBean(Task task) {
-		try {
-			taskDAO.initializeTask(task, true);
-			taskDAO.initializeCouncils(task);
+		
+		task = taskRepository.findOptionalByIdAndInitialize(task.getId(), true, true, true, true, true).get();
+		task.generateTaskStatus();
+		
+		super.initBean(task, Dialog.COUNCIL);
 
-			super.initBean(task, Dialog.COUNCIL);
+		setCouncilList(new ArrayList<Council>(getTask().getCouncils()));
 
-			setCouncilList(new ArrayList<Council>(getTask().getCouncils()));
+		// setting council as default
+		if (getCouncilList().size() != 0) {
+			setSelectedCouncil(getCouncilList().get(0));
+		} else
+			setSelectedCouncil(null);
 
-			// setting council as default
-			if (getCouncilList().size() != 0) {
-				setSelectedCouncil(getCouncilList().get(0));
-			}else
-				setSelectedCouncil(null);
+		updatePhysicianLists();
 
-			updatePhysicianLists();
+		setAttachmentList(listItemRepository
+				.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.COUNCIL_ATTACHMENT, false));
 
-			setAttachmentList(utilDAO.getAllStaticListItems(ListItem.StaticList.COUNCIL_ATTACHMENT));
+		setEditable(task.getTaskStatus().isEditable());
 
-			setEditable(task.getTaskStatus().isEditable());
-
-			return true;
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			log.debug("Version conflict, updating entity");
-			task = taskDAO.getTaskAndPatientInitialized(task.getId());
-			worklistViewHandlerAction.replaceTaskInCurrentWorklist(task, false);
-			return false;
-		}
+		return true;
 	}
 
 	/**
@@ -148,11 +150,13 @@ public class CouncilDialogHandler extends AbstractDialog {
 	 */
 	public void updatePhysicianLists() {
 		// list of physicians which are the counselors
-		setPhysicianCouncilList(physicianDao.list(ContactRole.CASE_CONFERENCE, false));
+		setPhysicianCouncilList(physicianRepository.findAllByRole(new ContactRole[] { ContactRole.CASE_CONFERENCE },
+				true, SortOrder.PRIORITY));
 		setPhysicianCouncilTransformer(new DefaultTransformer<Physician>(getPhysicianCouncilList()));
 
 		// list of physicians to sign the request
-		setPhysicianSigantureList(physicianDao.list(ContactRole.SIGNATURE, false));
+		setPhysicianCouncilList(physicianRepository.findAllByRole(new ContactRole[] { ContactRole.SIGNATURE }, true,
+				SortOrder.PRIORITY));
 		setPhysicianSigantureListTransformer(new DefaultTransformer<Physician>(getPhysicianSigantureList()));
 	}
 
@@ -160,8 +164,8 @@ public class CouncilDialogHandler extends AbstractDialog {
 	 * Creates a new council and saves it
 	 */
 	public void addNewCouncil() {
-		log.info("Adding new council");
-		
+		logger.info("Adding new council");
+
 		setSelectedCouncil(new Council(getTask()));
 		getSelectedCouncil().setDateOfRequest(DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH));
 		getSelectedCouncil().setName(generateName());
@@ -179,7 +183,7 @@ public class CouncilDialogHandler extends AbstractDialog {
 			switch (getSelectedCouncil().getCouncilState()) {
 			case EditState:
 			case ValidetedState:
-				log.debug("EditState selected");
+				logger.debug("EditState selected");
 				// removing all fav lists
 				removeListFromTask(PredefinedFavouriteList.CouncilLendingMTA,
 						PredefinedFavouriteList.CouncilLendingSecretary, PredefinedFavouriteList.CouncilPending,
@@ -187,7 +191,7 @@ public class CouncilDialogHandler extends AbstractDialog {
 				break;
 			case LendingStateMTA:
 			case LendingStateSecretary:
-				log.debug("LendingState selected");
+				logger.debug("LendingState selected");
 				// removing pending and completed state
 				removeListFromTask(PredefinedFavouriteList.CouncilPending, PredefinedFavouriteList.CouncilCompleted);
 				favouriteListDAO.addReattachedTaskToList(getTask(),
@@ -196,14 +200,14 @@ public class CouncilDialogHandler extends AbstractDialog {
 								: PredefinedFavouriteList.CouncilLendingSecretary);
 				break;
 			case PendingState:
-				log.debug("PendingState selected");
+				logger.debug("PendingState selected");
 				// removing pending and completed state
 				removeListFromTask(PredefinedFavouriteList.CouncilLendingMTA,
 						PredefinedFavouriteList.CouncilLendingSecretary, PredefinedFavouriteList.CouncilCompleted);
 				favouriteListDAO.addReattachedTaskToList(getTask(), PredefinedFavouriteList.CouncilPending);
 				break;
 			case CompletedState:
-				log.debug("CompletedState selected");
+				logger.debug("CompletedState selected");
 				// removing pending and completed state
 				removeListFromTask(PredefinedFavouriteList.CouncilLendingMTA,
 						PredefinedFavouriteList.CouncilLendingSecretary, PredefinedFavouriteList.CouncilPending);
@@ -227,13 +231,13 @@ public class CouncilDialogHandler extends AbstractDialog {
 				if (!getTask().getCouncils().stream().anyMatch(p -> p.getCouncilState() == CouncilState.CompletedState))
 					favouriteListDAO.removeReattachedTaskFromList(getTask(), predefinedFavouriteList);
 				else
-					log.debug("Not removing from CouncilCompleted list, other councils are in this state");
+					logger.debug("Not removing from CouncilCompleted list, other councils are in this state");
 				break;
 			case CouncilPending:
 				if (!getTask().getCouncils().stream().anyMatch(p -> p.getCouncilState() == CouncilState.PendingState))
 					favouriteListDAO.removeReattachedTaskFromList(getTask(), predefinedFavouriteList);
 				else
-					log.debug("Not removing from CouncilPending list, other councils are in this state");
+					logger.debug("Not removing from CouncilPending list, other councils are in this state");
 				break;
 			case CouncilLendingMTA:
 			case CouncilLendingSecretary:
@@ -241,7 +245,7 @@ public class CouncilDialogHandler extends AbstractDialog {
 						|| p.getCouncilState() == CouncilState.LendingStateSecretary))
 					favouriteListDAO.removeReattachedTaskFromList(getTask(), predefinedFavouriteList);
 				else
-					log.debug("Not removing from CouncilLendingMTA list, other councils are in this state");
+					logger.debug("Not removing from CouncilLendingMTA list, other councils are in this state");
 				break;
 			default:
 				break;
@@ -265,9 +269,9 @@ public class CouncilDialogHandler extends AbstractDialog {
 
 		str.append(" ");
 
-		
-		LocalDateTime ldt = LocalDateTime.ofInstant(selectedCouncil.getDateOfRequest().toInstant(), ZoneId.systemDefault());
-		
+		LocalDateTime ldt = LocalDateTime.ofInstant(selectedCouncil.getDateOfRequest().toInstant(),
+				ZoneId.systemDefault());
+
 		// adding date
 		str.append(ldt.format(DateTimeFormatter.ofPattern(DateFormat.GERMAN_DATE.getDateFormat())));
 
@@ -275,12 +279,8 @@ public class CouncilDialogHandler extends AbstractDialog {
 	}
 
 	public void saveCouncilData() {
-		try {
-			if (getSelectedCouncil() != null)
-				save();
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+		if (getSelectedCouncil() != null)
+			save();
 	}
 
 	/**
@@ -292,10 +292,9 @@ public class CouncilDialogHandler extends AbstractDialog {
 	private boolean save() throws HistoDatabaseInconsistentVersionException {
 		// new
 		if (getSelectedCouncil().getId() == 0) {
-			log.debug("Council Dialog: Creating new council");
+			logger.debug("Council Dialog: Creating new council");
 			// TODO: Better loggin
-			genericDAO.savePatientData(getSelectedCouncil(), getTask(),
-					"log.patient.task.council.create");
+			genericDAO.savePatientData(getSelectedCouncil(), getTask(), "log.patient.task.council.create");
 
 			task.getCouncils().add(getSelectedCouncil());
 
@@ -303,9 +302,9 @@ public class CouncilDialogHandler extends AbstractDialog {
 					String.valueOf(getSelectedCouncil().getId()));
 
 		} else {
-			log.debug("Council Dialog: Saving council");
-			genericDAO.savePatientData(getSelectedCouncil(), getTask(),
-					"log.patient.task.council.update", String.valueOf(getSelectedCouncil().getId()));
+			logger.debug("Council Dialog: Saving council");
+			genericDAO.savePatientData(getSelectedCouncil(), getTask(), "log.patient.task.council.update",
+					String.valueOf(getSelectedCouncil().getId()));
 		}
 
 		// updating council list
@@ -314,16 +313,17 @@ public class CouncilDialogHandler extends AbstractDialog {
 	}
 
 	/**
-	 * hideDialog should be called first. This method opens a printer dialog, an
-	 * let the gui click the button for opening the dialog. This is a workaround
-	 * for opening other dialogs after closing the current dialog.
+	 * hideDialog should be called first. This method opens a printer dialog, an let
+	 * the gui click the button for opening the dialog. This is a workaround for
+	 * opening other dialogs after closing the current dialog.
 	 */
 	public void printCouncilReport() {
 		try {
 			save();
-			
+
 			List<DocumentTemplate> templates = DocumentTemplate.getTemplates(DocumentType.COUNCIL_REQUEST);
-			List<AbstractDocumentUi<?>> subSelectUIs = templates.stream().map(p -> p.getDocumentUi()).collect(Collectors.toList());
+			List<AbstractDocumentUi<?>> subSelectUIs = templates.stream().map(p -> p.getDocumentUi())
+					.collect(Collectors.toList());
 
 			for (AbstractDocumentUi<?> documentUi : subSelectUIs) {
 				((CouncilReportUi) documentUi).initialize(task, getSelectedCouncil());
@@ -347,14 +347,15 @@ public class CouncilDialogHandler extends AbstractDialog {
 
 	public void showMediaSelectDialog(PDFContainer pdf) {
 		try {
-			
+
 			// init dialog for patient and task
-			dialogHandlerAction.getMediaDialog().initBean(getTask().getPatient(), new DataList[] { getTask(), getTask().getPatient() }, pdf,
-					true);
+			dialogHandlerAction.getMediaDialog().initBean(getTask().getPatient(),
+					new DataList[] { getTask(), getTask().getPatient() }, pdf, true);
 
 			// setting advance copy mode with move as true and target to task
 			// and biobank
-			dialogHandlerAction.getMediaDialog().enableAutoCopyMode(new DataList[] { getTask(), getSelectedCouncil() }, true, true);
+			dialogHandlerAction.getMediaDialog().enableAutoCopyMode(new DataList[] { getTask(), getSelectedCouncil() },
+					true, true);
 
 			// enabeling upload to task
 			dialogHandlerAction.getMediaDialog().enableUpload(new DataList[] { getTask() },
@@ -374,11 +375,12 @@ public class CouncilDialogHandler extends AbstractDialog {
 
 	public void showMediaViewDialog(PDFContainer pdfContainer) {
 		// init dialog for patient and task
-		dialogHandlerAction.getMediaDialog().initBean(getTask().getPatient(), getSelectedCouncil(), pdfContainer, false);
+		dialogHandlerAction.getMediaDialog().initBean(getTask().getPatient(), getSelectedCouncil(), pdfContainer,
+				false);
 
 		// setting info text
-		dialogHandlerAction.getMediaDialog()
-				.setActionDescription(resourceBundle.get("dialog.pdfOrganizer.headline.info.council", getTask().getTaskID()));
+		dialogHandlerAction.getMediaDialog().setActionDescription(
+				resourceBundle.get("dialog.pdfOrganizer.headline.info.council", getTask().getTaskID()));
 
 		// show dialog
 		dialogHandlerAction.getMediaDialog().prepareDialog();

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
@@ -234,6 +235,8 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 
 		getSelectedTemplate().beginNextTemplateIteration();
 
+		int printedDocuments = 0;
+
 		while (getSelectedTemplate().hasNextTemplateConfiguration()) {
 			AbstractDocumentUi<?, ?>.TemplateConfiguration<?> container = getSelectedTemplate()
 					.getNextTemplateConfiguration();
@@ -247,13 +250,19 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 			userHandlerAction.getSelectedPrinter().print(printOrder);
 
 			// only save if person is associated
-			if (container.getContact().getRole() != ContactRole.NONE) {
+			if (container.getContact() != null && container.getContact().getRole() != ContactRole.NONE) {
 				associatedContactService.addNotificationByType(container.getContact(), NotificationTyp.PRINT, false,
 						true, false, new Date(System.currentTimeMillis()), container.getAddress(), false);
 			}
 
+			printedDocuments += container.getCopies();
 			logger.debug("Printing next order ");
 		}
+
+		MessageHandler.sendGrowlMessagesAsResource("growl.print", "growl.print.success",
+				new Object[] { printedDocuments });
+
+		logger.debug("Printing completed");
 	}
 
 	/**
