@@ -3,9 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
-
-
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
 	<title><h:outputFormat
@@ -31,313 +30,67 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="2" styleClass="newTableContainer"
-				columnClasses="columnTop column25, columnTop">
+			<h:panelGrid columns="2"
+				styleClass="defaultHistoHiddenTableContainer"
+				columnClasses="columnTop columnWidth250, columnTop"
+				style="width:100%">
+				<p:panelGrid styleClass="defaultHistoHiddenTableContainer"
+					style="background: black; height: 655px;width:100%">
+					<p:row>
+						<p:column styleClass="columnTop">
+							<!-- scrolling -->
+							<p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody"
+								style="height:400px;">
+								<!-- navigation tree -->
+								<p:tree value="#{dialog.councilDialog.root}" var="node"
+									styleClass="histoTree" style="width:99%" id="menuTree"
+									selectionMode="single" draggable="true" droppable="true"
+									dropRestrict="pdf"
+									selection="#{dialog.councilDialog.selectedNode}">
 
-				<!-- left column -->
-				<p:dataTable value="#{dialog.councilDialog.task.councils}"
-					selection="#{dialog.councilDialog.selectedCouncil}"
-					scrollable="true" scrollHeight="550" var="council"
-					selectionMode="single" rowKey="#{council.id}"
-					rowIndexVar="rowIndex" styleClass="newStyleDataTable">
-					<p:column headerText="#{msg['dialog.council.list.headline']}">
+									<p:ajax event="select" update="dialogContent:content"
+										listener="#{dialog.pdfOrganizer.displaySelectedContainer()}" />
 
-						<h:panelGrid columns="1" styleClass="newStyleListingTable">
+									<p:ajax event="dragdrop" onstart="setMouseEnterEvents(false)"
+										listener="#{dialog.pdfOrganizer.onDragDrop}"
+										update="dialogContent:menuTree"
+										oncomplete="setMouseEnterEvents(true)" />
 
-							<h:panelGroup>
-								<h:outputLabel value="#{msg['dialog.council.list.name']}:"></h:outputLabel>
-								<h:outputLabel value="#{council.name}"></h:outputLabel>
-							</h:panelGroup>
+									<!-- root -->
+									<p:treeNode expandedIcon="ui-icon-folder-open"
+										collapsedIcon="ui-icon-folder-collapsed">
+										<h:outputText value="#{node}" />
+									</p:treeNode>
 
-							<h:panelGroup>
-								<h:outputLabel value="#{msg['dialog.council.list.date']}:"></h:outputLabel>
-								<h:outputLabel value="#{council.dateOfRequest}">
-									<f:convertDateTime type="date" dateType="short" />
-								</h:outputLabel>
-							</h:panelGroup>
+									<!-- Task -->
+									<p:treeNode type="task" expandedIcon="ui-icon-folder-open"
+										collapsedIcon="ui-icon-folder-collapsed">
+										<h:outputText value="#{node.taskID}" />
+									</p:treeNode>
 
-							<h:panelGroup>
-								<h:outputLabel value="#{msg['dialog.council.list.status']}: "></h:outputLabel>
+									<!-- coucil -->
+									<p:treeNode type="council" expandedIcon="fa fa-comment-o"
+										collapsedIcon="fa fa-comment-o">
+										<h:outputText value="#{node.name}" />
+									</p:treeNode>
 
-								<h:outputLabel value="#{msg['enum.concilStates.EditState']}"
-									rendered="#{council.isCouncilState('EditState')}" />
+									<!-- council request -->
+									<p:treeNode type="council_request" expandedIcon="fa fa-file-text-o"
+										collapsedIcon="fa fa-file-text-o">
+										<h:outputText value="Anfrage" />
+									</p:treeNode>
+								</p:tree>
 
-								<h:outputLabel
-									value="#{msg['enum.concilStates.LendingStateMTA']}"
-									styleClass="icon-orange"
-									rendered="#{council.isCouncilState('LendingStateMTA')}" />
+							</p:scrollPanel>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
 
-								<h:outputLabel
-									value="#{msg['enum.concilStates.LendingStateSecretary']}"
-									styleClass="icon-orange"
-									rendered="#{council.isCouncilState('LendingStateSecretary')}" />
-
-								<h:outputLabel value="#{msg['enum.concilStates.PendingState']}"
-									styleClass="icon-red"
-									rendered="#{council.isCouncilState('PendingState')}" />
-
-								<h:outputLabel
-									value="#{msg['enum.concilStates.CompletedState']}"
-									styleClass="icon-purple"
-									rendered="#{council.isCouncilState('CompletedState')}" />
-
-								<h:outputLabel
-									value="#{msg['enum.concilStates.ValidetedState']}"
-									styleClass="icon-green"
-									rendered="#{council.isCouncilState('ValidetedState')}" />
-
-							</h:panelGroup>
-						</h:panelGrid>
-					</p:column>
-					<p:ajax event="rowSelect" update="@form" />
-				</p:dataTable>
-
-				<!-- right column -->
-				<h:panelGroup>
-					<ui:fragment
-						rendered="#{dialog.councilDialog.selectedCouncil ne null}">
-
-						<h:panelGrid columns="2" styleClass="newStyleListingTable"
-							columnClasses="defaultListingTableColumnTop,">
-
-							<!-- name -->
-							<h:outputLabel value="#{msg['dialog.council.name']}"
-								style="font-weight:bold !important;"></h:outputLabel>
-							<h:outputLabel
-								value="#{dialog.councilDialog.selectedCouncil.name}"></h:outputLabel>
-
-							<!-- requesting text -->
-							<h:outputLabel value="#{msg['dialog.council.requestText']}"></h:outputLabel>
-
-							<h:inputTextarea style="width: 500px;" rows="13"
-								disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.editable}"
-								value="#{dialog.councilDialog.selectedCouncil.councilText}">
-								<p:ajax event="keyup" delay="1000"
-									listener="#{dialog.councilDialog.saveCouncilData()}" />
-							</h:inputTextarea>
-
-							<!-- sample send -->
-							<h:outputLabel value="#{msg['dialog.council.sampleShipped']}"></h:outputLabel>
-							<h:panelGrid columns="2" styleClass="newTableContainer">
-								<p:selectBooleanCheckbox
-									disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.editable}"
-									title="#{msg['dialog.council.sampleShipped.text']}"
-									value="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
-									<p:ajax event="change" update="@form" process="@form"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-								</p:selectBooleanCheckbox>
-
-								<p:selectOneMenu id="attachments"
-									style="width:450px; margin-left: 10px;"
-									value="#{dialog.councilDialog.selectedCouncil.sampleShippedCommentary}"
-									disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.selectedCouncil.sampleShipped or !dialog.councilDialog.editable}"
-									editable="true">
-									<f:selectItems value="#{dialog.councilDialog.attachmentList}"
-										itemValue="#{attachment.value}"
-										itemLabel="#{attachment.value}" var="attachment" />
-									<p:ajax event="change"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-									<p:ajax event="keyup" delay="1000"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-								</p:selectOneMenu>
-							</h:panelGrid>
-
-							<!-- sample send date -->
-							<h:outputLabel value=""
-								rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}" />
-							<h:panelGrid columns="2" styleClass="newTableContainer"
-								rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
-								<h:outputLabel
-									value="#{msg['dialog.council.sampleShipped.date']}"></h:outputLabel>
-
-								<p:calendar pattern="dd.MM.yyyy" mask="true"
-									style="margin-left:10px;"
-									disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.editable}"
-									value="#{dialog.councilDialog.selectedCouncil.sampleShippedDate}">
-
-									<p:ajax event="dateSelect"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-									<p:ajax event="change"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-								</p:calendar>
-							</h:panelGrid>
-
-							<!-- Sample returned -->
-							<h:outputLabel value="#{msg['dialog.council.sampleReturned']}"
-								rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}" />
-							<h:panelGrid columns="2" styleClass="newTableContainer"
-								rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
-								<p:selectBooleanCheckbox
-									disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState')} or !dialog.councilDialog.editable"
-									title="#{msg['dialog.council.sampleReturned.text']}"
-									value="#{dialog.councilDialog.selectedCouncil.sampleReturned}">
-									<p:ajax event="change" update="@form" process="@form"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-								</p:selectBooleanCheckbox>
-								<p:inputText style="width:470px; margin-left: 10px;"
-									disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.selectedCouncil.sampleReturned} or !dialog.councilDialog.editable"
-									value="#{dialog.councilDialog.selectedCouncil.sampleReturnedCommentary}">
-									<p:ajax event="keyup" delay="1000"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-								</p:inputText>
-							</h:panelGrid>
-
-							<!-- sample returned date -->
-							<h:outputLabel value=""
-								rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}" />
-							<h:panelGrid columns="2" styleClass="newTableContainer"
-								rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
-								<h:outputLabel
-									value="#{msg['dialog.council.sampleReturned.date']}"></h:outputLabel>
-
-								<p:calendar pattern="dd.MM.yyyy" mask="true"
-									style="margin-left:10px;"
-									disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.selectedCouncil.sampleReturned} or !dialog.councilDialog.editable"
-									value="#{dialog.councilDialog.selectedCouncil.sampleReturnedDate}">
-
-									<p:ajax event="dateSelect"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-									<p:ajax event="change"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-								</p:calendar>
-							</h:panelGrid>
-
-							<!-- Consultant -->
-							<h:outputLabel value="#{msg['dialog.council.consultant']}"></h:outputLabel>
-							<h:panelGrid columns="2" style="width: auto"
-								styleClass="newTableContainer">
-
-								<!-- council physician -->
-								<p:selectOneMenu
-									value="#{dialog.councilDialog.selectedCouncil.councilPhysician}"
-									panelStyleClass="iconFixForSelectOneMenu"
-									disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.editable}"
-									converter="#{dialog.councilDialog.physicianCouncilTransformer}"
-									filter="true" filterMatchMode="contains">
-									<f:selectItem
-										itemLabel="#{msg['dialog.council.consultant.choose']}"
-										itemValue="#{null}" />
-									<f:selectItems
-										value="#{dialog.councilDialog.physicianCouncilList}"
-										var="physician" itemLabel="#{physician.person.fullName}"
-										itemValue="#{physician}" />
-									<p:ajax event="change" update="@form" process="@form"
-										listener="#{dialog.councilDialog.onNameChange()}" />
-								</p:selectOneMenu>
-
-								<!-- edit physicians -->
-								<p:commandLink title="#{msg['dialog.council.consultant.edit']}"
-									style="margin-left:10px;"
-									styleClass="noUnderlineAtLink icon-grey"
-									actionListener="#{settingsDialogHandler.initAndPrepareBean('PhysicianSettingsTab')}">
-									<i class="fa fa-fw fa-cog icon-grey" />
-									<p:ajax event="dialogReturn" update="@form"
-										listener="#{dialog.councilDialog.updatePhysicianLists()}" />
-								</p:commandLink>
-							</h:panelGrid>
-
-							<!-- council requesting physician -->
-							<h:outputLabel
-								value="#{msg['dialog.council.requestingPhysician']}"></h:outputLabel>
-							<h:panelGrid columns="2" style="width: auto"
-								styleClass="newTableContainer">
-								<!-- physician requesting council -->
-								<p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
-									disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.editable}"
-									value="#{dialog.councilDialog.selectedCouncil.physicianRequestingCouncil}"
-									converter="#{dialog.councilDialog.physicianSigantureListTransformer}"
-									filter="true" filterMatchMode="contains">
-
-									<f:selectItem
-										itemLabel="#{msg['dialog.council.physician.choose']}"
-										itemValue="#{null}" />
-
-									<f:selectItems
-										value="#{dialog.councilDialog.physicianSigantureList}"
-										var="physicianToSign"
-										itemLabel="#{physicianToSign.person.fullName}"
-										itemValue="#{physicianToSign}" />
-
-									<p:ajax event="change"
-										listener="#{dialog.councilDialog.saveCouncilData()}" />
-
-								</p:selectOneMenu>
-
-								<!-- edit physician list -->
-								<p:commandLink title="#{msg['dialog.council.physician.edit']}"
-									style="margin-left:10px;" styleClass="noUnderlineAtLink"
-									actionListener="#{settingsDialogHandler.initAndPrepareBean('PhysicianSettingsTab')}">
-									<i class="fa fa-fw fa-cog icon-grey" />
-									<p:ajax event="dialogReturn" update="@form"
-										listener="#{dialog.councilDialog.updatePhysicianLists()}" />
-								</p:commandLink>
-							</h:panelGrid>
-
-							<!-- Date -->
-							<h:outputLabel value="#{msg['dialog.council.date']}"></h:outputLabel>
-							<p:calendar
-								disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.editable}"
-								value="#{dialog.councilDialog.selectedCouncil.dateOfRequest}"
-								tabindex="4" locale="de" pattern="dd.MM.yyyy" mask="true">
-
-								<p:ajax event="dateSelect" update="@form" process="@form"
-									listener="#{dialog.councilDialog.onNameChange()}" />
-
-								<p:ajax event="change" update="@form" process="@form"
-									listener="#{dialog.councilDialog.onNameChange()}" />
-							</p:calendar>
-
-							<!-- Status -->
-							<h:outputLabel value="#{msg['dialog.council.state']}"></h:outputLabel>
-							<p:selectOneMenu disabled="#{!dialog.councilDialog.editable}"
-								value="#{dialog.councilDialog.selectedCouncil.councilState}">
-
-								<f:selectItems value="#{enumProvider.councilStates}"
-									var="councilState"
-									itemLabel="#{msg['enum.concilStates.'.concat(councilState)]}" />
-
-								<p:ajax event="change" process="@this" update="@form"
-									listener="#{dialog.councilDialog.onCouncilStateChange()}"></p:ajax>
-
-							</p:selectOneMenu>
-
-							<h:outputLabel value="#{msg['dialog.council.pdf']}"
-								rendered="#{dialog.councilDialog.selectedCouncil.isCouncilState('CompletedState', 'ValidetedState')}" />
-
-							<!-- Attached PDFs -->
-							<p:dataTable var="pdf"
-								rendered="#{dialog.councilDialog.selectedCouncil.isCouncilState('CompletedState', 'ValidetedState')}"
-								value="#{dialog.councilDialog.selectedCouncil.attachedPdfs}"
-								styleClass="newStyleDataTable" style="width:450px"
-								scrollable="true" scrollHeight="50">
-								<p:column headerText="#{msg['dialog.council.pdf.table.name']}">
-									<h:outputLabel value="#{pdf.name}">
-										<f:converter converterId="org.histo.ui.TruncateConverter" />
-										<f:attribute name="truncateAt" value="50" />
-										<f:attribute name="continuationMark" value="..." />
-									</h:outputLabel>
-								</p:column>
-								<p:column headerText="#" style="width:7%">
-									<p:commandLink styleClass="noUnderlineAtLink"
-										title="#{msg['dialog.council.pdf.table.preview']}"
-										disabled="!dialog.councilDialog.editable"
-										actionListener="#{dialog.councilDialog.showMediaViewDialog(pdf)}">
-										<p:ajax event="dialogReturn" update="@form" />
-										<i class="fa fa-search icon-grey"></i>
-									</p:commandLink>
-									<p:commandLink style="margin-right:5px" update="@form"
-										styleClass="noUnderlineAtLink"
-										disabled="!dialog.councilDialog.editable"
-										title="#{msg['dialog.council.pdf.table.remove']}"
-										actionListener="#{dialogHandlerAction.mediaDialog.removeFromDataList(dialog.councilDialog.selectedCouncil,pdf)}">
-										<i class="fa fa-close icon-grey"></i>
-									</p:commandLink>
-								</p:column>
-							</p:dataTable>
-
-						</h:panelGrid>
-					</ui:fragment>
-				</h:panelGroup>
+				<h:panelGrid id="content"
+					styleClass="listingHistoHiddenTableContainer"
+					style="width:calc(100% - 5px)">
+					<h:outputFormat value="test"></h:outputFormat>
+				</h:panelGrid>
 			</h:panelGrid>
 		</div>
 
@@ -351,7 +104,7 @@
 					<p:commandButton value="#{msg['dialog.council.button.create']}"
 						icon="fa fa-check-circle-o" update="@form"
 						disabled="#{!dialog.councilDialog.editable}"
-						actionListener="#{dialog.councilDialog.addNewCouncil()}"></p:commandButton>
+						actionListener="#{dialog.councilDialog.createCouncil()}"></p:commandButton>
 				</h:panelGrid>
 
 

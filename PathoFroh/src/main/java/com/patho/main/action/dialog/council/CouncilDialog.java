@@ -6,9 +6,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
@@ -24,15 +27,19 @@ import com.patho.main.common.Dialog;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.SortOrder;
+import com.patho.main.model.BioBank;
 import com.patho.main.model.Council;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;
 import com.patho.main.model.interfaces.DataList;
+import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.service.CouncilService;
+import com.patho.main.service.PDFService;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -61,7 +68,16 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
+	private CouncilService councilService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	private TaskRepository taskRepository;
+
+	private TreeNode root;
+
+	private TreeNode selectedNode;
 
 	/**
 	 * Selected council from councilList
@@ -121,11 +137,11 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	 * @param task
 	 */
 	public boolean initBean(Task task) {
-		
-		task = taskRepository.findOptionalByIdAndInitialize(task.getId(), true, true, true, true, true).get();
-		task.generateTaskStatus();
-		
+
 		super.initBean(task, Dialog.COUNCIL);
+
+		// reload task in order to load councils
+		update(true);
 
 		setCouncilList(new ArrayList<Council>(getTask().getCouncils()));
 
@@ -146,6 +162,51 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	}
 
 	/**
+	 * Updates the tree menu und reloads the patient's data
+	 * 
+	 * @param reloadPatient
+	 */
+	private void update(boolean reloadTask) {
+		if (reloadTask) {
+			setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), true, true, true, true, true).get());
+			getTask().generateTaskStatus();
+		}
+
+		setRoot(generateTree(task));
+	}
+
+	private TreeNode generateTree(Task task) {
+		TreeNode root = new DefaultTreeNode("Root", null);
+
+		TreeNode taskNode = new DefaultTreeNode("task", task, root);
+		taskNode.setExpanded(true);
+		taskNode.setSelectable(false);
+
+		for (Council concil : task.getCouncils()) {
+			TreeNode councilNode = new DefaultTreeNode("council", concil, taskNode);
+			councilNode.setExpanded(true);
+			councilNode.setSelectable(false);
+
+			TreeNode councilRequestNode = new DefaultTreeNode("council_request", "", councilNode);
+			councilRequestNode.setExpanded(true);
+			councilRequestNode.setSelectable(true);
+
+		}
+
+		return root;
+	}
+
+	public String getCenterInclude() {
+		if (getSelectedNode() != null) {
+			if (getSelectedNode().getType().equals("council_request")) {
+				return "inculde/request.xhtml";
+			}
+		}
+
+		return "inculde/empty.xhtml";
+	}
+
+	/**
 	 * Renews the physician lists
 	 */
 	public void updatePhysicianLists() {
@@ -163,16 +224,10 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	/**
 	 * Creates a new council and saves it
 	 */
-	public void addNewCouncil() {
+	public void createCouncil() {
 		logger.info("Adding new council");
-
-		setSelectedCouncil(new Council(getTask()));
-		getSelectedCouncil().setDateOfRequest(DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH));
-		getSelectedCouncil().setName(generateName());
-		getSelectedCouncil().setCouncilState(CouncilState.EditState);
-		getSelectedCouncil().setAttachedPdfs(new ArrayList<PDFContainer>());
-
-		saveCouncilData();
+		councilService.createCouncil(getTask());
+		update(true);
 	}
 
 	public void onCouncilStateChange() {
