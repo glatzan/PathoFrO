@@ -4,7 +4,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:b="http://bootsfaces.net/ui">
 
 <h:head>
 	<title><h:outputFormat
@@ -15,7 +16,7 @@
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="histoDialogStyle">
+<h:body styleClass="histoTabDialogStyle">
 	<h:form id="dialogContent">
 
 		<div class="dialogHeader">
@@ -29,11 +30,9 @@
 			</h:panelGrid>
 		</div>
 
-		<div class="dialogContent">
-			<h:panelGrid columns="2"
-				styleClass="defaultHistoHiddenTableContainer"
-				columnClasses="columnTop columnWidth250, columnTop"
-				style="width:100%">
+		<h:panelGrid columns="2" styleClass="dialogContainer"
+			columnClasses="navColumn300">
+			<p:outputPanel id="navigationTable" styleClass="navigationTable">
 				<p:panelGrid styleClass="defaultHistoHiddenTableContainer"
 					style="background: black; height: 655px;width:100%">
 					<p:row>
@@ -48,13 +47,9 @@
 									dropRestrict="pdf"
 									selection="#{dialog.councilDialog.selectedNode}">
 
-									<p:ajax event="select" update="dialogContent:content"
-										listener="#{dialog.pdfOrganizer.displaySelectedContainer()}" />
-
-									<p:ajax event="dragdrop" onstart="setMouseEnterEvents(false)"
-										listener="#{dialog.pdfOrganizer.onDragDrop}"
-										update="dialogContent:menuTree"
-										oncomplete="setMouseEnterEvents(true)" />
+									<p:ajax event="select"
+										update="dialogContent:dialogContent dialogContent:councilInfo"
+										listener="#{dialog.councilDialog.onNodeSelect()}" />
 
 									<!-- root -->
 									<p:treeNode expandedIcon="ui-icon-folder-open"
@@ -75,69 +70,107 @@
 									</p:treeNode>
 
 									<!-- council request -->
-									<p:treeNode type="council_request" expandedIcon="fa fa-file-text-o"
-										collapsedIcon="fa fa-file-text-o">
+									<p:treeNode type="council_request" icon="fa fa-edit">
 										<h:outputText value="Anfrage" />
+										<ui:fragment rendered="#{node.councilRequestCompleted}">
+											<i class="fa fa-check-circle icon-green" title="" />
+										</ui:fragment>
+									</p:treeNode>
+
+									<!-- council request -->
+									<p:treeNode type="council_ship" icon="fa fa-envelope">
+										<h:outputText value="Versenden" />
+										<ui:fragment
+											rendered="#{node.sampleShippedDate != 0 and node.sampleReturnedDate == 0}">
+											<i class="fa fa-check-circle icon-yellow" title="" />
+										</ui:fragment>
+
+										<ui:fragment rendered="#{node.sampleReturnedDate != 0}">
+											<i class="fa fa-check-circle icon-green" title="" />
+										</ui:fragment>
+									</p:treeNode>
+
+									<!-- council return -->
+									<p:treeNode type="council_reply" icon="fa fa-user-md">
+										<h:outputText value="Antwort" />
+									</p:treeNode>
+
+									<!-- data node-->
+									<p:treeNode type="data_node" expandedIcon="ui-icon-folder-open"
+										collapsedIcon="ui-icon-folder-collapsed">
+										<h:outputText value="Files" />
+									</p:treeNode>
+
+									<!-- pdf -->
+									<p:treeNode type="pdf_node" icon="fa fa-file-pdf-o">
+										<h:outputText value="#{node.name}" />
 									</p:treeNode>
 								</p:tree>
 
 							</p:scrollPanel>
 						</p:column>
 					</p:row>
+					<p:row>
+						<p:column>
+							<h:panelGrid columns="2" styleClass="defaultHistoTable"
+								style="margin-top:5px;" id="councilInfo"
+								rendered="#{dialog.councilDialog.selectedCouncil ne null}">
+								<!-- created date-->
+								<h:outputText
+									value="#{msg['dialog.pdfOrganizer.files.createdOn']}"></h:outputText>
+								<h:outputText
+									value="#{dialog.councilDialog.selectedCouncil.audit.createdOn}">
+									<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
+								</h:outputText>
+
+								<!-- created name-->
+								<h:outputText
+									value="#{msg['dialog.pdfOrganizer.files.createdBy']}"></h:outputText>
+								<h:outputText
+									value="#{dialog.councilDialog.selectedCouncil.audit.createdBy}">
+								</h:outputText>
+
+								<!-- updated date-->
+								<h:outputText
+									value="#{msg['dialog.pdfOrganizer.files.updatedOn']}"></h:outputText>
+								<h:outputText
+									style="#{dialog.councilDialog.selectedCouncil.audit.updatedOn eq 0 ? 'display:none' : ''}"
+									value="#{dialog.councilDialog.selectedCouncil.audit.updatedOn}">
+									<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
+								</h:outputText>
+
+								<!-- updated name-->
+								<h:outputText
+									value="#{msg['dialog.pdfOrganizer.files.updatedBy']}"></h:outputText>
+								<h:outputText
+									value="#{dialog.councilDialog.selectedCouncil.audit.updatedBy}">
+								</h:outputText>
+							</h:panelGrid>
+						</p:column>
+					</p:row>
 				</p:panelGrid>
 
-				<h:panelGrid id="content"
-					styleClass="listingHistoHiddenTableContainer"
-					style="width:calc(100% - 5px)">
-					<h:outputFormat value="test"></h:outputFormat>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="noBordersAll collapsedBordersAll noPaddingAll">
+				<div class="buttonContainer">
+					<h:panelGrid columns="2" style="width:100%"
+						styleClass="newTableContainer">
 
-				<!-- add new council -->
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
-					<!-- Save button -->
-					<p:commandButton value="#{msg['dialog.council.button.create']}"
-						icon="fa fa-check-circle-o" update="@form"
-						disabled="#{!dialog.councilDialog.editable}"
-						actionListener="#{dialog.councilDialog.createCouncil()}"></p:commandButton>
-				</h:panelGrid>
+						<h:panelGrid columns="1" styleClass="newTableContainer left">
+							<p:commandButton value="#{msg['dialog.council.button.create']}"
+								icon="fa fa-check-circle-o" update="@form"
+								disabled="#{!dialog.councilDialog.editable}"
+								actionListener="#{dialog.councilDialog.createCouncil()}"></p:commandButton>
+						</h:panelGrid>
 
-
-
-				<h:panelGrid columns="3" styleClass="newTableContainer right">
-
-					<!-- media select for coincil reply -->
-					<p:commandButton icon="fa-upload fa"
-						rendered="#{dialog.councilDialog.selectedCouncil.isCouncilState('CompletedState', 'ValidetedState')}"
-						title="#{msg['dialog.council.button.upload']}"
-						actionListener="#{dialog.councilDialog.showMediaSelectDialog()}">
-						<p:ajax event="dialogReturn" update="@form" />
-					</p:commandButton>
-
-					<!-- create and print -->
-					<p:commandButton value="#{msg['general.print']}"
-						icon="fa fa-check-circle-o" onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()"
-						disabled="#{dialog.councilDialog.selectedCouncil eq null}">
-						<f:actionListener
-							binding="#{dialog.councilDialog.printCouncilReport()}" />
-					</p:commandButton>
-
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
-						icon="fa fa-times-circle">
-						<f:actionListener
-							binding="#{dialog.councilDialog.saveCouncilData()}" />
-						<f:actionListener binding="#{dialog.councilDialog.hideDialog()}" />
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
+						<h:panelGrid columns="1" styleClass="newTableContainer right">
+						</h:panelGrid>
+					</h:panelGrid>
+				</div>
+			</p:outputPanel>
+			<p:outputPanel id="dialogContent" styleClass="dialogContent">
+				<ui:include src="#{dialog.councilDialog.getCenterInclude()}"></ui:include>
+			</p:outputPanel>
+		</h:panelGrid>
 
 		<ui:include src="../../../template/blockUi.xhtml"></ui:include>
 

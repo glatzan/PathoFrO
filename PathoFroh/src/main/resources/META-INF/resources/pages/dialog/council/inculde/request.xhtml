@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:b="http://bootsfaces.net/ui">
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel value="#{msg['dialog.council.request']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannel" style="padding:10px;">
+
+		<h:panelGrid styleClass="defaultHistoTable" columns="2"
+			id="councilRequestData">
+
+			<!-- name -->
+			<h:outputLabel value="#{msg['dialog.council.name']}"
+				style="font-weight:bold !important;"></h:outputLabel>
+			<h:outputLabel value="#{dialog.councilDialog.selectedCouncil.name}"></h:outputLabel>
+
+			<!-- requesting text -->
+			<h:outputLabel value="#{msg['dialog.council.requestText']}"></h:outputLabel>
+			<h:inputTextarea style="width: 500px;" rows="13"
+				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+				value="#{dialog.councilDialog.selectedCouncil.councilText}">
+				<p:ajax event="keyup" delay="1000"
+					listener="#{dialog.councilDialog.saveCouncilData()}" />
+			</h:inputTextarea>
+
+			<!-- Consultant -->
+			<h:outputLabel value="#{msg['dialog.council.consultant']}"></h:outputLabel>
+
+			<h:panelGrid columns="2" style="width: auto"
+				styleClass="listingHistoHiddenTableContainer">
+
+				<!-- council physician -->
+				<p:selectOneMenu
+					value="#{dialog.councilDialog.selectedCouncil.councilPhysician}"
+					panelStyleClass="iconFixForSelectOneMenu"
+					disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+					converter="#{dialog.councilDialog.physicianCouncilTransformer}"
+					filter="true" filterMatchMode="contains">
+					<f:selectItem
+						itemLabel="#{msg['dialog.council.consultant.choose']}"
+						itemValue="#{null}" />
+					<f:selectItems value="#{dialog.councilDialog.physicianCouncilList}"
+						var="physician" itemLabel="#{physician.person.getFullName()}"
+						itemValue="#{physician}" />
+					<p:ajax event="change" update="@form" process="@form"
+						listener="#{dialog.councilDialog.onNameChange()}" />
+				</p:selectOneMenu>
+
+				<!-- edit physicians -->
+				<p:commandLink title="#{msg['dialog.council.consultant.edit']}"
+					style="margin-left:10px;" styleClass="noUnderlineAtLink icon-grey"
+					actionListener="#{settingsDialogHandler.initAndPrepareBean('PhysicianSettingsTab')}">
+					<i class="fa fa-fw fa-cog icon-grey" />
+					<p:ajax event="dialogReturn" update="@form"
+						listener="#{dialog.councilDialog.updatePhysicianLists()}" />
+				</p:commandLink>
+			</h:panelGrid>
+
+			<!-- council requesting physician -->
+			<h:outputLabel value="#{msg['dialog.council.requestingPhysician']}"></h:outputLabel>
+			<h:panelGrid columns="2" style="width: auto"
+				styleClass="listingHistoHiddenTableContainer">
+				<!-- physician requesting council -->
+				<p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
+					disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+					value="#{dialog.councilDialog.selectedCouncil.physicianRequestingCouncil}"
+					converter="#{dialog.councilDialog.physicianSigantureListTransformer}"
+					filter="true" filterMatchMode="contains">
+
+					<f:selectItem itemLabel="#{msg['dialog.council.physician.choose']}"
+						itemValue="#{null}" />
+
+					<f:selectItems
+						value="#{dialog.councilDialog.physicianSigantureList}"
+						var="physicianToSign"
+						itemLabel="#{physicianToSign.person.getFullName()}"
+						itemValue="#{physicianToSign}" />
+
+					<p:ajax event="change"
+						listener="#{dialog.councilDialog.saveCouncilData()}" />
+
+				</p:selectOneMenu>
+
+				<!-- edit physician list -->
+				<p:commandLink title="#{msg['dialog.council.physician.edit']}"
+					style="margin-left:10px;" styleClass="noUnderlineAtLink"
+					actionListener="#{settingsDialogHandler.initAndPrepareBean('PhysicianSettingsTab')}">
+					<i class="fa fa-fw fa-cog icon-grey" />
+					<p:ajax event="dialogReturn" update="@form"
+						listener="#{dialog.councilDialog.updatePhysicianLists()}" />
+				</p:commandLink>
+			</h:panelGrid>
+
+			<!-- Date -->
+			<h:outputLabel value="#{msg['dialog.council.date']}"></h:outputLabel>
+			<p:calendar
+				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+				value="#{dialog.councilDialog.selectedCouncil.dateOfRequest}"
+				tabindex="4" locale="de" pattern="dd.MM.yyyy" mask="true">
+
+				<p:ajax event="dateSelect" update="@form" process="@form"
+					listener="#{dialog.councilDialog.onNameChange()}" />
+
+				<p:ajax event="change" update="@form" process="@form"
+					listener="#{dialog.councilDialog.onNameChange()}" />
+			</p:calendar>
+
+			<!-- send slides -->
+			<h:outputLabel value="Anhang versenden"></h:outputLabel>
+			<p:selectBooleanCheckbox
+				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+				title="#{msg['dialog.council.sampleShipped.text']}"
+				value="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
+			</p:selectBooleanCheckbox>
+		</h:panelGrid>
+
+		<!-- spot light -->
+		<p:spotlight target="councilRequestData"
+			widgetVar="councilRequestDataBlocker" />
+
+		<h:panelGrid columns="3" styleClass="newTableContainer"
+			style="margin-top:20px">
+			<p:commandButton value="Drucken" icon="fa fa-check-circle-o">
+				<f:actionListener
+					binding="#{dialog.councilDialog.printCouncilReport()}" />
+			</p:commandButton>
+
+			<!-- save changes -->
+			<p:commandButton value="Bearbeiten"
+				rendered="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted}"
+				oncomplete="PF('councilRequestDataBlocker').show()"
+				icon="fa fa-check-circle-o" update="councilRequestData">
+				<f:actionListener
+					binding="#{dialog.councilDialog.admendRequestState()}"></f:actionListener>
+			</p:commandButton>
+
+			<!-- create and print -->
+			<p:commandButton value="Anfrage Stellen" style="margin-right:30px"
+				icon="fa fa-check-circle-o" process="@form" update="@form"
+				rendered="#{!dialog.councilDialog.selectedCouncil.councilRequestCompleted}">
+				<f:actionListener
+					binding="#{dialog.councilDialog.endRequestState(dialog.councilDialog.selectedCouncil)}" />
+			</p:commandButton>
+		</h:panelGrid>
+
+	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="1" styleClass="newTableContainer left">
+			
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<!-- Add button -->
+				<p:commandButton
+					value="#{msg['dialog.searchPatient.add.button.add']}"
+					widgetVar="addExternalPatient" update="@form" process="@form"
+					icon="fa fa-fw fa-user-plus" partialSubmit="true">
+					<f:actionListener
+						binding="#{confirmExternalPatientDataDialog.initAndPrepareBean(dialog.searchPatientDialog.externalPatientTab.patient)}" />
+					<p:ajax event="dialogReturn" update="@form"
+						listener="#{dialog.searchPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}" />
+				</p:commandButton>
+
+				<!-- Close Button -->
+				<p:commandButton value="#{msg['general.close']}"
+					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
+					immediate="true"
+					actionListener="#{dialog.searchPatientDialog.hideDialog()}" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+</ui:composition>

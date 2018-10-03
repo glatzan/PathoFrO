@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -29,6 +31,9 @@ import com.patho.main.common.CouncilState;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.util.audit.Audit;
+import com.patho.main.model.util.audit.AuditAble;
+import com.patho.main.model.util.audit.AuditListener;
 import com.patho.main.util.helper.TextToLatexConverter;
 
 import lombok.Getter;
@@ -41,7 +46,8 @@ import lombok.Setter;
 @SequenceGenerator(name = "council_sequencegenerator", sequenceName = "council_sequence")
 @Getter
 @Setter
-public class Council implements ID, DataList {
+@EntityListeners(AuditListener.class)
+public class Council implements ID, DataList, AuditAble {
 
 	@Id
 	@GeneratedValue(generator = "council_sequencegenerator")
@@ -51,6 +57,9 @@ public class Council implements ID, DataList {
 	@Version
 	private long version;
 
+	@Embedded
+	protected Audit audit;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Task task;
 
@@ -73,11 +82,24 @@ public class Council implements ID, DataList {
 	private Physician physicianRequestingCouncil;
 
 	/**
+	 * Date of request
+	 */
+	@Temporal(TemporalType.DATE)
+	private Date dateOfRequest;
+	
+	/**
 	 * Text of council
 	 */
 	@Column(columnDefinition = "text")
 	private String councilText;
 
+	/**
+	 * True if samples were send to external clinics
+	 */
+	@Column
+	private boolean councilRequestCompleted;
+
+	
 	/**
 	 * True if samples were send to external clinics
 	 */
@@ -114,11 +136,23 @@ public class Council implements ID, DataList {
 	private Date sampleReturnedDate;
 	
 	/**
-	 * Date of request
+	 * Commentary 
+	 */
+	@Column(columnDefinition = "text")
+	private String commentary;
+	
+	/**
+	 * True if answer was received 
+	 */
+	@Column
+	private boolean replyReceived;
+	
+	/**
+	 * Date of return
 	 */
 	@Temporal(TemporalType.DATE)
-	private Date dateOfRequest;
-
+	private Date replyReceivedDate;
+	
 	/**
 	 * State of the council
 	 */
@@ -159,4 +193,12 @@ public class Council implements ID, DataList {
 	public String getPublicName() {
 		return "Konsil - " + task.getTaskID();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Council && ((Council) obj).getId() == getId())
+			return true;
+		return super.equals(obj);
+	}
+
 }

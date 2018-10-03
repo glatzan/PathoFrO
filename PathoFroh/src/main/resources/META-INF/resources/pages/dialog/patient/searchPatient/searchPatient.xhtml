@@ -36,7 +36,7 @@
 					varStatus="loop">
 					<p:commandButton value="#{msg[tab.name]}" immediate="true"
 						disabled="#{tab.disabled}"
-						styleClass="#{tab eq dialog.searchPatientDialog.selectedTab ? 'selectedButton' : ''}"
+						styleClass="#{tab eq dialog.searchPatientDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
 						actionListener="#{dialog.searchPatientDialog.onTabChange(tab)}"
 						update="navigationTable dialogContent" />
 				</c:forEach>

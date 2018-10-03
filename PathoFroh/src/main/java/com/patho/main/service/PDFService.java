@@ -23,8 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.BioBank;
+import com.patho.main.model.Council;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.BioBankRepository;
+import com.patho.main.repository.CouncilRepository;
 import com.patho.main.repository.DataListRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PDFRepository;
@@ -59,6 +61,9 @@ public class PDFService extends AbstractService {
 	private PDFRepository pdfRepository;
 
 	@Autowired
+	private CouncilRepository councilRepository;
+
+	@Autowired
 	private PathoConfig pathoConfig;
 
 	public DataList attachPDF(DataList dataList, PDFContainer pdfContainer) {
@@ -71,6 +76,9 @@ public class PDFService extends AbstractService {
 			return taskRepository.save((Task) dataList, resourceBundle.get("log.pdf.uploaded", pdfContainer.getName()));
 		} else if (dataList instanceof BioBank) {
 			return bioBankRepository.save((BioBank) dataList,
+					resourceBundle.get("log.pdf.uploaded", pdfContainer.getName()));
+		} else if (dataList instanceof Council) {
+			return councilRepository.save((Council) dataList,
 					resourceBundle.get("log.pdf.uploaded", pdfContainer.getName()));
 		} else {
 			throw new IllegalArgumentException("List type not supported (" + dataList + ")");

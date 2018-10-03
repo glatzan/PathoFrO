@@ -153,7 +153,38 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
-/* audth for task container */
+/* new field for council*/
+Alter table council add councilRequestCompleted boolean;
+Alter table council_aud add councilRequestCompleted boolean;
+update council set councilRequestCompleted = false;
+update council_aud set councilRequestCompleted = false;
+/* audit for task container */
+Alter table council add createdOn bigint;
+Alter table council add createdBy character varying(10);
+Alter table council add updatedOn bigint;
+Alter table council add updatedBy character varying(10);
+Alter table council_aud add createdOn bigint;
+Alter table council_aud add createdBy character varying(10);
+Alter table council_aud add updatedOn bigint;
+Alter table council_aud add updatedBy character varying(10);
+UPDATE council SET createdOn = 0;
+UPDATE council_aud SET createdOn = 0;
+update council set updatedOn = 0;
+update council_aud set updatedOn = 0;
+/* commentary */
+Alter table council add commentary character varying;
+Alter table council_aud add commentary character varying;
+/* council answer */
+Alter table council add replyReceived boolean;
+Alter table council_aud add replyReceived boolean;
+update council set replyReceived = false;
+update council_aud set replyReceived = false;
+Alter table council add replyReceivedDate date;
+Alter table council_aud add replyReceivedDate date;
+
+
+
+/* audit for task container */
 Alter table task add createdOn bigint;
 Alter table task add createdBy character varying(10);
 Alter table task add updatedOn bigint;

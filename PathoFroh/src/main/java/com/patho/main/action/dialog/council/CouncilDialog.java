@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.council;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -9,9 +10,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.faces.application.FacesMessage;
+
 import org.apache.commons.lang3.time.DateUtils;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.CouncilState;
@@ -27,6 +33,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.SortOrder;
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.BioBank;
 import com.patho.main.model.Council;
 import com.patho.main.model.ListItem;
@@ -35,11 +42,13 @@ import com.patho.main.model.Physician;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.CouncilRepository;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.CouncilService;
 import com.patho.main.service.PDFService;
+import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -70,19 +79,37 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	@Setter(AccessLevel.NONE)
 	private CouncilService councilService;
 
+	private CouncilRepository councilRepository;
+	
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private TaskRepository taskRepository;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PDFService pdfService;
+
+	/**
+	 * Root node for Tree
+	 */
 	private TreeNode root;
 
+	/**
+	 * Selected Node
+	 */
 	private TreeNode selectedNode;
 
 	/**
 	 * Selected council from councilList
 	 */
 	private Council selectedCouncil;
+
+	/**
+	 * Council nodes
+	 */
+	private List<TreeNode> councilNodes;
 
 	/**
 	 * List of all councils of this tasks
@@ -119,6 +146,8 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	 */
 	private boolean editable;
 
+	private boolean admendSelectedRequestState;
+
 	/**
 	 * Initializes the bean and shows the council dialog
 	 * 
@@ -146,10 +175,13 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		setCouncilList(new ArrayList<Council>(getTask().getCouncils()));
 
 		// setting council as default
-		if (getCouncilList().size() != 0) {
-			setSelectedCouncil(getCouncilList().get(0));
-		} else
+		if (getCouncilNodes().size() != 0) {
+			setSelectedNode(getCouncilNodes().get(0).getChildren().get(0));
+			setSelectedCouncil((Council) getCouncilNodes().get(0).getData());
+		} else {
+			setSelectedNode(null);
 			setSelectedCouncil(null);
+		}
 
 		updatePhysicianLists();
 
@@ -173,6 +205,19 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		}
 
 		setRoot(generateTree(task));
+
+		if (getSelectedNode() != null) {
+			for (TreeNode node : getCouncilNodes()) {
+				if (((Council) node.getData()).equals((getSelectedNode()).getData())) {
+					setSelectedNode(node);
+					setSelectedCouncil((Council) node.getData());
+					return;
+				}
+			}
+		}
+
+		setSelectedNode(null);
+		setSelectedCouncil(null);
 	}
 
 	private TreeNode generateTree(Task task) {
@@ -182,24 +227,61 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		taskNode.setExpanded(true);
 		taskNode.setSelectable(false);
 
-		for (Council concil : task.getCouncils()) {
-			TreeNode councilNode = new DefaultTreeNode("council", concil, taskNode);
+		councilNodes = new ArrayList<TreeNode>();
+
+		for (Council council : task.getCouncils()) {
+			TreeNode councilNode = new DefaultTreeNode("council", council, taskNode);
 			councilNode.setExpanded(true);
 			councilNode.setSelectable(false);
 
-			TreeNode councilRequestNode = new DefaultTreeNode("council_request", "", councilNode);
+			councilNodes.add(councilNode);
+
+			TreeNode councilRequestNode = new DefaultTreeNode("council_request", council, councilNode);
 			councilRequestNode.setExpanded(true);
 			councilRequestNode.setSelectable(true);
 
+			if (council.isSampleShipped()) {
+				TreeNode councilshipNode = new DefaultTreeNode("council_ship", council, councilNode);
+				councilshipNode.setExpanded(true);
+				councilshipNode.setSelectable(true);
+			}
+
+			TreeNode councilReturnNode = new DefaultTreeNode("council_reply", council, councilNode);
+			councilReturnNode.setExpanded(true);
+			councilReturnNode.setSelectable(true);
+
+			TreeNode councilDataNode = new DefaultTreeNode("data_node", council, councilNode);
+			councilDataNode.setExpanded(true);
+			councilDataNode.setSelectable(true);
+
+			for (PDFContainer container : council.getAttachedPdfs()) {
+				TreeNode councilFileNode = new DefaultTreeNode("file_node", container, councilNode);
+				councilFileNode.setExpanded(false);
+				councilDataNode.setSelectable(true);
+			}
 		}
 
 		return root;
 	}
 
+	public void onNodeSelect() {
+		if (getSelectedNode() != null) {
+			setSelectedCouncil((Council) getSelectedNode().getData());
+		}
+	}
+
 	public String getCenterInclude() {
 		if (getSelectedNode() != null) {
-			if (getSelectedNode().getType().equals("council_request")) {
+
+			switch (getSelectedNode().getType()) {
+			case "council_request":
 				return "inculde/request.xhtml";
+			case "council_ship":
+				return "inculde/ship.xhtml";
+			case "council_reply":
+				return "inculde/reply.xhtml";
+			default:
+				return "inculde/empty.xhtml";
 			}
 		}
 
@@ -227,6 +309,38 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	public void createCouncil() {
 		logger.info("Adding new council");
 		councilService.createCouncil(getTask());
+		update(true);
+	}
+
+	public void admendRequestState() {
+		setAdmendSelectedRequestState(true);
+	}
+
+	public void endRequestState(Council council) {
+		logger.debug("Ending request phase");
+		councilService.endCouncilRequest(council);
+		setAdmendSelectedRequestState(false);
+		update(true);
+	}
+
+	/**
+	 * Handels file upload
+	 * 
+	 * @param event
+	 */
+	public void handleFileUpload(FileUploadEvent event) {
+		UploadedFile file = event.getFile();
+		try {
+			logger.debug("Uploadgin to Council: " + getSelectedCouncil().getId());
+			PDFReturn res = pdfService.createAndAttachPDF(getSelectedCouncil(), file, DocumentType.COUNCIL_REPLY, "",
+					"", true, new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN
+							+ String.valueOf(getSelectedCouncil().getTask().getPatient().getId())));
+
+			MessageHandler.sendGrowlMessagesAsResource("growl.upload.success");
+		} catch (IllegalAccessError e) {
+			MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed", FacesMessage.SEVERITY_ERROR);
+		}
+
 		update(true);
 	}
 
@@ -345,26 +459,10 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	 * @throws HistoDatabaseInconsistentVersionException
 	 */
 	private boolean save() throws HistoDatabaseInconsistentVersionException {
-		// new
-		if (getSelectedCouncil().getId() == 0) {
-			logger.debug("Council Dialog: Creating new council");
-			// TODO: Better loggin
-			genericDAO.savePatientData(getSelectedCouncil(), getTask(), "log.patient.task.council.create");
-
-			task.getCouncils().add(getSelectedCouncil());
-
-			genericDAO.savePatientData(getTask(), "log.patient.task.council.attached",
-					String.valueOf(getSelectedCouncil().getId()));
-
-		} else {
 			logger.debug("Council Dialog: Saving council");
 			genericDAO.savePatientData(getSelectedCouncil(), getTask(), "log.patient.task.council.update",
 					String.valueOf(getSelectedCouncil().getId()));
-		}
-
-		// updating council list
-		setCouncilList(new ArrayList<Council>(getTask().getCouncils()));
-		return true;
+			
 	}
 
 	/**

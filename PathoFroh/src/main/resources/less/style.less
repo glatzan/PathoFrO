@@ -23,8 +23,6 @@
 /*
  * Default Body Style
  */
-
-
 body {
 	margin: 0px !important;
 	.histo_font();
@@ -198,10 +196,6 @@ body {
 		white-space: pre-line !important;
 	}
 }
-
-
-
-
 
 /*
  * Class for normal table with scrollable body
@@ -713,6 +707,28 @@ div.contentAccordionPannel{
 		padding-bottom: 0.5em;
 		height: calc(100vh - 73px);
 		width: clac(100% - 4px);
+		
+		
+		.headerPannel {
+			padding: 3px 5px;
+			font-weight: bold;
+			background: #cccccc url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness)	50% 50% repeat-x;
+			color: #555555;
+			margin-top: 1px;
+			.histo_font(14px);	
+			
+			a:-webkit-any-link{
+				color: #555555;
+				font-size: 15px;
+			}
+	
+			display: block;
+			width: ~"calc(100% - 10px)";
+			border: 1px solid #a8a8a8;
+			border-radius: 3px;
+			margin-bottom: 2px;
+			margin-left: 2px;
+		}
 	}
 	
 	.dialogCommonClasses;
@@ -758,17 +774,22 @@ div.contentAccordionPannel{
 				.histo_noPadding();
 				vertical-align: top;
 			}
+			
+			// nav column width
+			.navColumn300{
+				width:300px !important;
+			}
 		}
 		
 		// navigation table
 		.navigationTable {
 			width: 97%;
 			
-			button:first-of-type {
+			button.tabBtn:first-of-type {
 				margin-top: 1px !important;
 			}
 			
-			button {
+			button.tabBtn {
 				border: 1px solid #a8a8a8;
 				border-radius: 3px;
 				width: calc(100% - 1px);
@@ -792,6 +813,8 @@ div.contentAccordionPannel{
 					float: left;
 				}
 			}
+			
+			.dialogCommonClasses;
 		}
 		
 		// content

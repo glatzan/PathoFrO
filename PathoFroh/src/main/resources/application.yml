@@ -4,7 +4,9 @@ jsf:
   primefaces:
     theme: smoothness
     fontAwesome: true
-    
+  bootsfaces:
+    getBootstrapFromCdn: false
+       
 spring: 
   datasource:
     url: jdbc:postgresql://localhost/histo2

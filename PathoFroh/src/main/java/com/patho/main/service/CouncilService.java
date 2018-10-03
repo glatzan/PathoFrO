@@ -3,15 +3,11 @@ package com.patho.main.service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +31,12 @@ public class CouncilService extends AbstractService {
 	@Setter(AccessLevel.NONE)
 	private CouncilRepository councilRepository;
 
+	/**
+	 * Creates a new council
+	 * 
+	 * @param task
+	 * @return
+	 */
 	public Council createCouncil(Task task) {
 
 		Council council = new Council(task);
@@ -51,6 +53,12 @@ public class CouncilService extends AbstractService {
 		return council;
 	}
 
+	/**
+	 * Generates a council name
+	 * 
+	 * @param council
+	 * @return
+	 */
 	public String generateCouncilName(Council council) {
 		StringBuffer str = new StringBuffer();
 
@@ -68,5 +76,20 @@ public class CouncilService extends AbstractService {
 		str.append(ldt.format(DateTimeFormatter.ofPattern(DateFormat.GERMAN_DATE.getDateFormat())));
 
 		return str.toString();
+	}
+
+	/**
+	 * Ends council request phase
+	 * 
+	 * @param council
+	 * @return
+	 */
+	public Council endCouncilRequest(Council council) {
+		council.setCouncilRequestCompleted(true);
+		council = councilRepository.save(council,
+				resourceBundle.get("log.patient.task.council.phase.request.end", council.getTask(), council.getName()),
+				council.getTask().getPatient());
+
+		return council;
 	}
 }
