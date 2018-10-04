@@ -2,24 +2,24 @@ package com.patho.main.action.dialog.patient;
 
 import java.util.List;
 
+import org.primefaces.event.SelectEvent;
+import org.primefaces.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.excepion.ToManyEntriesException;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
-import com.patho.main.util.exception.CustomNullPatientExcepetion;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.PatientService;
-import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.event.PatientMergeEvent;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import com.patho.main.util.exception.CustomNullPatientExcepetion;
+import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
+import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;

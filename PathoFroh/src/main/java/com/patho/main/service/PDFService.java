@@ -3,43 +3,35 @@ package com.patho.main.service;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.hibernate.Hibernate;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.BioBank;
 import com.patho.main.model.Council;
 import com.patho.main.model.PDFContainer;
+import com.patho.main.model.interfaces.DataList;
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.patient.Task;
 import com.patho.main.repository.BioBankRepository;
 import com.patho.main.repository.CouncilRepository;
-import com.patho.main.repository.DataListRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PDFRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.template.PrintDocument.DocumentType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import com.patho.main.model.interfaces.DataList;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Task;
 
 @Service
 @Transactional
@@ -114,10 +106,10 @@ public class PDFService extends AbstractService {
 			throw new IllegalAccessError("Could not updaload data");
 		}
 
-		return createAndAttachPDF(dataLists, uploadedPDF, content, folder, createThumbnail);
+		return createAndAttachPDF(dataLists, uploadedPDF, content, createThumbnail);
 	}
 
-	public PDFReturn createAndAttachPDF(DataList dataList, PDFContainer pdfContainer, byte[] pdfContent, File folder,
+	public PDFReturn createAndAttachPDF(DataList dataList, PDFContainer pdfContainer, byte[] pdfContent,
 			boolean createThumbnail) {
 
 		pdfContainer = pdfRepository.save(pdfContainer);

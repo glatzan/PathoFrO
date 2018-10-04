@@ -10,7 +10,7 @@
 
 	<p:outputPanel styleClass="headerPannel">
 		<h:outputLabel
-			value="#{msg['dialog.settings.material']} / #{settingsDialogHandler.materialTab.newMaterial ? msg['dialog.settings.material.new.new'] : msg['dialog.settings.material.new.edit']}" />
+			value="#{msg['dialog.settings.material']} / #{dialog.settingsDialog.materialTab.newMaterial ? msg['dialog.settings.material.new.new'] : msg['dialog.settings.material.new.edit']}" />
 	</p:outputPanel>
 	<p:outputPanel styleClass="bodyPannelFull">
 
@@ -19,19 +19,19 @@
 			styleClass="noBordersAll collapsedBordersAll " style="width:100%">
 			<h:outputLabel value="#{msg['dialog.settings.material.new.name']}"></h:outputLabel>
 			<p:inputText style="width:390px"
-				value="#{settingsDialogHandler.materialTab.editMaterial.name}" />
+				value="#{dialog.settingsDialog.materialTab.editMaterial.name}" />
 
 			<h:outputLabel
 				value="#{msg['dialog.settings.material.new.commentary']}"></h:outputLabel>
 			<p:inputTextarea rows="3" style="width:390px"
-				value="#{settingsDialogHandler.materialTab.editMaterial.commentary}" />
+				value="#{dialog.settingsDialog.materialTab.editMaterial.commentary}" />
 
 			<h:outputLabel
 				value="#{msg['dialog.settings.material.new.stainings']}"></h:outputLabel>
 
 			<p:dataTable var="staining" style="width:400px" scrollable="true"
 				scrollHeight="150" styleClass="highlightedDataTable"
-				value="#{settingsDialogHandler.materialTab.editMaterial.stainingPrototypes}">
+				value="#{dialog.settingsDialog.materialTab.editMaterial.stainingPrototypes}">
 
 				<p:column
 					headerText="#{msg['dialog.settings.material.new.stainings.name']}"
@@ -48,7 +48,7 @@
 
 				<p:column style="width:10%; text-align:center;">
 					<p:commandLink title="#{msg['general.remove']}"
-						actionListener="#{settingsDialogHandler.materialTab.removeStainingFromStainingList(staining)}"
+						actionListener="#{dialog.settingsDialog.materialTab.removeStainingFromStainingList(staining)}"
 						update="@form">
 						<i class="fa fa-trash-o" />
 					</p:commandLink>
@@ -72,26 +72,26 @@
 					icon="fa fa-fw fa-floppy-o" update="@form" process="@form"
 					partialSubmit="true">
 					<f:actionListener
-						binding="#{settingsDialogHandler.materialTab.saveMaterial()}" />
+						binding="#{dialog.settingsDialog.materialTab.saveMaterial()}" />
 					<f:actionListener
-						binding="#{settingsDialogHandler.materialTab.discardMaterial()}" />
+						binding="#{dialog.settingsDialog.materialTab.discardMaterial()}" />
 				</p:commandButton>
 
 				<p:commandButton
 					value="#{msg['dialog.settings.material.new.stainings.add']}"
 					icon="fa fa-fw fa-plus-circle" partialSubmit="true" process="@form"
-					actionListener="#{settingsDialogHandler.materialTab.prepareAddStainingToMaterial()}"
+					actionListener="#{dialog.settingsDialog.materialTab.prepareAddStainingToMaterial()}"
 					update="@form" />
 
 				<p:commandButton value="#{msg['general.abort']}"
 					icon="fa fa-fw fa-times-circle" partialSubmit="true"
 					process="@this"
-					actionListener="#{settingsDialogHandler.materialTab.discardMaterial()}"
+					actionListener="#{dialog.settingsDialog.materialTab.discardMaterial()}"
 					update="@form" />
 
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{settingsDialogHandler.hideDialog()}" />
+					actionListener="#{dialog.settingsDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

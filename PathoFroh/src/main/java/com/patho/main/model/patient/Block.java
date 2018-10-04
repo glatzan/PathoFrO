@@ -22,7 +22,6 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 
-import com.patho.main.common.Dialog;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.IdManuallyAltered;
 import com.patho.main.model.interfaces.LogAble;

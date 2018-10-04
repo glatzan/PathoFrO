@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.AssociatedContactNotification;
 import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
@@ -13,10 +15,7 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.template.print.DiagnosisReport;
 import com.patho.main.util.helper.StreamUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 

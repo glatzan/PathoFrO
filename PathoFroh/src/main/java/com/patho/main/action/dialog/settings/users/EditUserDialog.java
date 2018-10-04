@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.common.ContactRole;
@@ -17,7 +16,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.dao.LogDAO;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;

@@ -4,24 +4,19 @@ import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Transient;
-
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import com.patho.main.action.handler.GlobalSettings;
-import com.patho.main.model.PDFContainer;
-import com.patho.main.util.helper.FileUtil;
-import com.patho.main.util.helper.StreamUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.patho.main.action.handler.GlobalSettings;
+import com.patho.main.model.PDFContainer;
+import com.patho.main.util.helper.FileUtil;
+import com.patho.main.util.helper.StreamUtils;
 
 import lombok.Getter;
 import lombok.Setter;

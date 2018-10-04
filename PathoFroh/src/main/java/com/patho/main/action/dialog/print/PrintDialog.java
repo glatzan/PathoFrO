@@ -1,11 +1,8 @@
 package com.patho.main.action.dialog.print;
 
-import static org.assertj.core.api.Assertions.contentOf;
-
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -16,7 +13,6 @@ import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.config.PathoConfig.FileSettings;
 import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
@@ -117,12 +113,25 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 	private boolean printEvenPageCounts;
 
 	/**
-	 * Initializes the bean and shows the council dialog
+	 * Initializes the bean and shows the print dialog
 	 * 
 	 * @param task
 	 */
 	public PrintDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
+			prepareDialog();
+
+		return this;
+	}
+
+	/**
+	 * Initializes the bean and shows the print dialog
+	 * 
+	 * @param task
+	 */
+	public PrintDialog initAndPrepareBean(Task task, List<AbstractDocumentUi<?, ?>> templateUI,
+			AbstractDocumentUi<?, ?> selectedTemplateUi) {
+		if (initBean(task, templateUI, selectedTemplateUi))
 			prepareDialog();
 
 		return this;

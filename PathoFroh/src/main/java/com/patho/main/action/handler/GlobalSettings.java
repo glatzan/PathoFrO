@@ -1,7 +1,5 @@
 package com.patho.main.action.handler;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
@@ -18,12 +16,8 @@ import com.google.gson.JsonParser;
 import com.patho.main.adaptors.FaxHandler;
 import com.patho.main.adaptors.MailHandler;
 import com.patho.main.model.transitory.DefaultDocuments;
-import com.patho.main.model.transitory.DefaultNotificationSettings;
 import com.patho.main.model.transitory.ProgramSettings;
 import com.patho.main.util.helper.FileUtil;
-import com.patho.main.util.printer.ClinicPrinter;
-import com.patho.main.util.printer.LabelPrinter;
-import com.patho.main.util.version.Version;
 import com.patho.main.util.version.VersionContainer;
 
 import lombok.Getter;

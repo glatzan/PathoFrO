@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
-import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
 
 import lombok.Getter;

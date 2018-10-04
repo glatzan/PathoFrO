@@ -9,14 +9,15 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.common.Month;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.service.PatientRepositoryCustom.FindCriterion;
 import com.patho.main.util.helper.TimeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -228,13 +229,13 @@ public class WorklistSimpleSearch extends AbstractWorklistSearch {
 	public enum SimpleSearchOption {
 
 		STAINING_LIST(true, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.StayInStainingList,
-				PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.CouncilLendingMTA,
+				PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.CouncilSendRequestMTA,
 				PredefinedFavouriteList.ScannList), DIAGNOSIS_LIST(false, PredefinedFavouriteList.DiagnosisList,
 						PredefinedFavouriteList.ReDiagnosisList, PredefinedFavouriteList.StayInDiagnosisList,
 						PredefinedFavouriteList.CouncilCompleted), NOTIFICATION_LIST(false,
 								PredefinedFavouriteList.NotificationList,
 								PredefinedFavouriteList.StayInNotificationList,
-								PredefinedFavouriteList.CouncilLendingSecretary), CUSTOM_LIST, EMPTY_LIST, TODAY, YESTERDAY, CURRENTWEEK, LASTWEEK, CURRENTMONTH, LASTMONTH, DAY, MONTH, TIME,;
+								PredefinedFavouriteList.CouncilSendRequestSecretary), CUSTOM_LIST, EMPTY_LIST, TODAY, YESTERDAY, CURRENTWEEK, LASTWEEK, CURRENTMONTH, LASTMONTH, DAY, MONTH, TIME,;
 
 		private final PredefinedFavouriteList[] lists;
 		private final boolean newPatient;

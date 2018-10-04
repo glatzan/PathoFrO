@@ -1,6 +1,5 @@
 package com.patho.main.repository.service;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +7,6 @@ import java.util.Optional;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.hibernate.Hibernate;
 
 import com.patho.main.model.patient.Patient;
 import com.patho.main.util.worklist.search.WorklistSearchExtended;

@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import javax.naming.Name;
 
 import org.springframework.ldap.odm.annotations.Attribute;
-import org.springframework.ldap.odm.annotations.DnAttribute;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
-import org.springframework.ldap.odm.annotations.Transient;
 
 import com.patho.main.model.Contact;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
-import com.patho.main.model.user.HistoUser;
 
 import lombok.Getter;
 import lombok.Setter;

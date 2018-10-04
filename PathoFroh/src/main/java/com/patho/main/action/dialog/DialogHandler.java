@@ -22,6 +22,8 @@ import com.patho.main.action.dialog.patient.PatientLogDialog;
 import com.patho.main.action.dialog.patient.SearchPatientDialog;
 import com.patho.main.action.dialog.print.CustomAddressDialog;
 import com.patho.main.action.dialog.print.PrintDialog;
+import com.patho.main.action.dialog.settings.SettingsDialog;
+import com.patho.main.action.dialog.settings.favourites.FavouriteListEditDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog;
 import com.patho.main.action.dialog.slides.SlideNamingDialog;
 import com.patho.main.action.dialog.slides.SlideOverviewDialog;
@@ -66,4 +68,6 @@ public class DialogHandler {
 	private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();
 	private CustomAddressDialog customAddressDialog = new CustomAddressDialog();
 	private CouncilDialog councilDialog = new CouncilDialog();
+	private SettingsDialog settingsDialog = new SettingsDialog();
+	private FavouriteListEditDialog favouriteListEditDialog = new FavouriteListEditDialog();
 }

@@ -15,7 +15,6 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
-import com.patho.main.common.Dialog;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.interfaces.GsonAble;
 import com.patho.main.model.interfaces.ID;
@@ -26,7 +25,6 @@ import com.patho.main.model.interfaces.TaskEntity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Diagnose NAchbefundung Revision

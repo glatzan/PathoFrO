@@ -7,6 +7,7 @@ import javax.persistence.Transient;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.template.MailTemplate;
 

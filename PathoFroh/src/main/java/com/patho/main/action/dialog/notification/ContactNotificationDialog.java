@@ -7,14 +7,10 @@ import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.AssociatedContactNotification;
 import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
@@ -23,7 +19,6 @@ import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,7 +1,6 @@
 package com.patho.main.util.printer;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
@@ -13,14 +12,13 @@ import java.util.List;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import com.patho.main.action.handler.GlobalSettings;
-import com.patho.main.template.print.SlideLable;
-import com.patho.main.util.exception.CustomUserNotificationExcepetion;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.google.gson.annotations.Expose;
+import com.patho.main.action.handler.GlobalSettings;
+import com.patho.main.template.print.SlideLable;
+import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 
 import lombok.AccessLevel;
 import lombok.Getter;

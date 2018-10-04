@@ -5,9 +5,10 @@ import java.io.ByteArrayInputStream;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import com.patho.main.model.PDFContainer;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+
+import com.patho.main.model.PDFContainer;
 
 /**
  * Interface for handling pdf streams for primefaces

@@ -1,9 +1,6 @@
 package com.patho.main.dao;
 
 import org.hibernate.Hibernate;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.StainingPrototype;
 

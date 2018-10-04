@@ -16,7 +16,7 @@
 
 		<p:dataTable var="organization" style="width:100%;" scrollable="true"
 			scrollHeight="440" styleClass="newStyleDataTable"
-			value="#{settingsDialogHandler.organizationTab.organizations}">
+			value="#{dialog.settingsDialog.organizationTab.organizations}">
 
 			<p:column
 				headerText="#{msg['dialog.settings.organization.list.name']}"
@@ -56,7 +56,7 @@
 						binding="#{dialogHandlerAction.organizationEditDialog.initAndPrepareBean(organization)}" />
 
 					<p:ajax event="dialogReturn"
-						listener="#{settingsDialogHandler.organizationTab.updateData()}"
+						listener="#{dialog.settingsDialog.organizationTab.updateData()}"
 						update="@form" />
 				</p:commandLink>
 			</p:column>
@@ -69,9 +69,9 @@
 
 			<h:panelGrid columns="2" styleClass="newTableContainer left">
 				<p:selectBooleanCheckbox styleClass="smallCheckbox"
-					value="#{settingsDialogHandler.organizationTab.showArchived}">
+					value="#{dialog.settingsDialog.organizationTab.showArchived}">
 					<p:ajax
-						listener="#{settingsDialogHandler.organizationTab.updateData()}"
+						listener="#{dialog.settingsDialog.organizationTab.updateData()}"
 						partialSubmit="true" process="@this" update="@form" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
@@ -86,14 +86,14 @@
 					<f:actionListener
 						binding="#{dialogHandlerAction.organizationEditDialog.initAndPrepareBean()}" />
 					<p:ajax event="dialogReturn"
-						listener="#{settingsDialogHandler.organizationTab.updateData()}"
+						listener="#{dialog.settingsDialog.organizationTab.updateData()}"
 						update="@form" />
 				</p:commandButton>
 
 
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{settingsDialogHandler.hideDialog()}" />
+					actionListener="#{dialog.settingsDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

@@ -1,30 +1,17 @@
 package com.patho.main.service;
 
-import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
-import com.patho.main.util.helper.HistoUtil;
-import com.patho.main.model.patient.Block;
-import com.patho.main.model.patient.Diagnosis;
-import com.patho.main.model.patient.Sample;
-import com.patho.main.model.patient.Slide;
-import com.patho.main.model.patient.Task;
-import com.patho.main.repository.DiagnosisRevisionRepository;
-import com.patho.main.repository.TaskRepository;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import com.patho.main.common.PredefinedFavouriteList;
+import com.patho.main.model.patient.Diagnosis;
+import com.patho.main.model.patient.Sample;
+import com.patho.main.model.patient.Task;
+import com.patho.main.repository.DiagnosisRevisionRepository;
+import com.patho.main.repository.TaskRepository;
+import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
+import com.patho.main.util.helper.HistoUtil;
 
 @Service
 @Transactional

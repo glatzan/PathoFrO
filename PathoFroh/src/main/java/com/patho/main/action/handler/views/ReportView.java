@@ -23,7 +23,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.model.util.audit.Audit;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.ui.LazyPDFGuiManager;
 import com.patho.main.ui.task.DiagnosisReportUpdater;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.pdf.PDFUtil;

@@ -1,7 +1,5 @@
 package com.patho.main.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -11,16 +9,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.util.audit.Audit;
 import com.patho.main.model.util.audit.AuditAble;
 import com.patho.main.model.util.audit.AuditListener;

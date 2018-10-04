@@ -1,7 +1,6 @@
 package com.patho.main.action.handler;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import com.patho.main.action.UserHandlerAction;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoPermissions;
-
 import com.patho.main.template.print.DiagnosisReport;
 import com.patho.main.ui.LazyPDFGuiManager;
 import com.patho.main.ui.transformer.DefaultTransformer;

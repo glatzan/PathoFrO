@@ -1,15 +1,10 @@
 package com.patho.main.util.printer;
 
-import com.patho.main.model.interfaces.ID;
-
-import java.io.File;
-
-import org.apache.commons.io.FileUtils;
-import org.cups4j.PrintJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.annotations.Expose;
+import com.patho.main.model.interfaces.ID;
 
 import lombok.Getter;
 import lombok.Setter;

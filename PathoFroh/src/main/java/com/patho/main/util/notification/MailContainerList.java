@@ -1,8 +1,9 @@
 package com.patho.main.util.notification;
 
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.template.mail.DiagnosisReportMail;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import lombok.Getter;
 import lombok.Setter;

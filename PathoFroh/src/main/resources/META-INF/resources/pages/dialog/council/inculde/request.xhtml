@@ -10,7 +10,10 @@
 	xmlns:b="http://bootsfaces.net/ui">
 
 	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.council.request']}" />
+		<h:outputFormat value="#{msg['dialog.council.request']}"
+			escape="false">
+			<f:param value="#{dialog.councilDialog.selectedCouncil.name}" />
+		</h:outputFormat>
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannel" style="padding:10px;">
@@ -19,18 +22,17 @@
 			id="councilRequestData">
 
 			<!-- name -->
-			<h:outputLabel value="#{msg['dialog.council.name']}"
-				style="font-weight:bold !important;"></h:outputLabel>
+			<h:outputLabel value="#{msg['dialog.council.name']}"></h:outputLabel>
 			<h:outputLabel value="#{dialog.councilDialog.selectedCouncil.name}"></h:outputLabel>
 
 			<!-- requesting text -->
 			<h:outputLabel value="#{msg['dialog.council.requestText']}"></h:outputLabel>
-			<h:inputTextarea style="width: 500px;" rows="13"
+			<p:inputTextarea style="width: 700px;" rows="25"
 				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
 				value="#{dialog.councilDialog.selectedCouncil.councilText}">
-				<p:ajax event="keyup" delay="1000"
-					listener="#{dialog.councilDialog.saveCouncilData()}" />
-			</h:inputTextarea>
+				<p:ajax event="keyup" delay="500" process="@form" update="@form"
+					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+			</p:inputTextarea>
 
 			<!-- Consultant -->
 			<h:outputLabel value="#{msg['dialog.council.consultant']}"></h:outputLabel>
@@ -45,28 +47,33 @@
 					disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
 					converter="#{dialog.councilDialog.physicianCouncilTransformer}"
 					filter="true" filterMatchMode="contains">
+
 					<f:selectItem
 						itemLabel="#{msg['dialog.council.consultant.choose']}"
 						itemValue="#{null}" />
+
 					<f:selectItems value="#{dialog.councilDialog.physicianCouncilList}"
 						var="physician" itemLabel="#{physician.person.getFullName()}"
 						itemValue="#{physician}" />
+
 					<p:ajax event="change" update="@form" process="@form"
 						listener="#{dialog.councilDialog.onNameChange()}" />
+
 				</p:selectOneMenu>
 
 				<!-- edit physicians -->
 				<p:commandLink title="#{msg['dialog.council.consultant.edit']}"
 					style="margin-left:10px;" styleClass="noUnderlineAtLink icon-grey"
-					actionListener="#{settingsDialogHandler.initAndPrepareBean('PhysicianSettingsTab')}">
+					actionListener="#{dialog.settingsDialog.initAndPrepareBean('PhysicianSettingsTab')}">
 					<i class="fa fa-fw fa-cog icon-grey" />
 					<p:ajax event="dialogReturn" update="@form"
 						listener="#{dialog.councilDialog.updatePhysicianLists()}" />
 				</p:commandLink>
+
 			</h:panelGrid>
 
 			<!-- council requesting physician -->
-			<h:outputLabel value="#{msg['dialog.council.requestingPhysician']}"></h:outputLabel>
+			<h:outputLabel value="#{msg['dialog.council.physician.requesting']}"></h:outputLabel>
 			<h:panelGrid columns="2" style="width: auto"
 				styleClass="listingHistoHiddenTableContainer">
 				<!-- physician requesting council -->
@@ -85,15 +92,15 @@
 						itemLabel="#{physicianToSign.person.getFullName()}"
 						itemValue="#{physicianToSign}" />
 
-					<p:ajax event="change"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+					<p:ajax event="change" update="@form" process="@form"
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 
 				</p:selectOneMenu>
 
 				<!-- edit physician list -->
 				<p:commandLink title="#{msg['dialog.council.physician.edit']}"
 					style="margin-left:10px;" styleClass="noUnderlineAtLink"
-					actionListener="#{settingsDialogHandler.initAndPrepareBean('PhysicianSettingsTab')}">
+					actionListener="#{dialog.settingsDialog.initAndPrepareBean('PhysicianSettingsTab')}">
 					<i class="fa fa-fw fa-cog icon-grey" />
 					<p:ajax event="dialogReturn" update="@form"
 						listener="#{dialog.councilDialog.updatePhysicianLists()}" />
@@ -115,43 +122,43 @@
 			</p:calendar>
 
 			<!-- send slides -->
-			<h:outputLabel value="Anhang versenden"></h:outputLabel>
+			<h:outputLabel value="#{msg['dialog.council.shipSlides']}"></h:outputLabel>
 			<p:selectBooleanCheckbox
 				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
-				title="#{msg['dialog.council.sampleShipped.text']}"
 				value="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
+				<p:ajax event="change" update="@form" process="@form"
+					listener="#{dialog.councilDialog.onSendSlides()}"></p:ajax>
 			</p:selectBooleanCheckbox>
+
+			<h:outputLabel value="Benachritung wird druchgefüht von: "></h:outputLabel>
+			<p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
+				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+				value="#{dialog.councilDialog.selectedCouncil.notificationType}"
+				filter="true" filterMatchMode="contains">
+
+				<f:selectItem itemLabel="MTA" itemValue="MTA" />
+				<f:selectItem itemLabel="SECRETARY" itemValue="SECRETARY" />
+
+				<p:ajax event="change" update="@form" process="@form" />
+
+			</p:selectOneMenu>
+
+
+			<h:outputLabel value="&nbsp;" />
+			<h:outputLabel value=" " />
+
+			<!-- internal commentary -->
+			<h:outputLabel value="#{msg['dialog.council.internalCommentary']}"></h:outputLabel>
+			<p:inputTextarea style="width: 700px;" rows="5"
+				value="#{dialog.councilDialog.selectedCouncil.commentary}">
+				<p:ajax event="keyup" delay="500" process="@form" update="@form"
+					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+			</p:inputTextarea>
 		</h:panelGrid>
 
 		<!-- spot light -->
 		<p:spotlight target="councilRequestData"
 			widgetVar="councilRequestDataBlocker" />
-
-		<h:panelGrid columns="3" styleClass="newTableContainer"
-			style="margin-top:20px">
-			<p:commandButton value="Drucken" icon="fa fa-check-circle-o">
-				<f:actionListener
-					binding="#{dialog.councilDialog.printCouncilReport()}" />
-			</p:commandButton>
-
-			<!-- save changes -->
-			<p:commandButton value="Bearbeiten"
-				rendered="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted}"
-				oncomplete="PF('councilRequestDataBlocker').show()"
-				icon="fa fa-check-circle-o" update="councilRequestData">
-				<f:actionListener
-					binding="#{dialog.councilDialog.admendRequestState()}"></f:actionListener>
-			</p:commandButton>
-
-			<!-- create and print -->
-			<p:commandButton value="Anfrage Stellen" style="margin-right:30px"
-				icon="fa fa-check-circle-o" process="@form" update="@form"
-				rendered="#{!dialog.councilDialog.selectedCouncil.councilRequestCompleted}">
-				<f:actionListener
-					binding="#{dialog.councilDialog.endRequestState(dialog.councilDialog.selectedCouncil)}" />
-			</p:commandButton>
-		</h:panelGrid>
-
 	</p:outputPanel>
 
 	<div class="buttonContainer">
@@ -159,26 +166,38 @@
 			styleClass="newTableContainer">
 
 			<h:panelGrid columns="1" styleClass="newTableContainer left">
-			
+
 			</h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newTableContainer right">
-				<!-- Add button -->
-				<p:commandButton
-					value="#{msg['dialog.searchPatient.add.button.add']}"
-					widgetVar="addExternalPatient" update="@form" process="@form"
-					icon="fa fa-fw fa-user-plus" partialSubmit="true">
+			<h:panelGrid columns="3" styleClass="newTableContainer right">
+				<p:commandButton value="Drucken" icon="fa fa-check-circle-o">
 					<f:actionListener
-						binding="#{confirmExternalPatientDataDialog.initAndPrepareBean(dialog.searchPatientDialog.externalPatientTab.patient)}" />
-					<p:ajax event="dialogReturn" update="@form"
-						listener="#{dialog.searchPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}" />
+						binding="#{dialog.councilDialog.printCouncilReport()}" />
+				</p:commandButton>
+
+				<!-- create and print -->
+				<p:commandButton value="#{msg['dialog.council.button.sendRequest']}"
+					style="margin-right:30px" icon="fa fa-check-circle-o"
+					process="@form" update="@form"
+					rendered="#{!dialog.councilDialog.selectedCouncil.councilRequestCompleted}">
+					<f:actionListener
+						binding="#{dialog.councilDialog.endRequestState(dialog.councilDialog.selectedCouncil)}" />
+				</p:commandButton>
+
+				<!-- save changes -->
+				<p:commandButton value="#{msg['dialog.council.button.editRequest']}"
+					rendered="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted}"
+					oncomplete="PF('councilRequestDataBlocker').show()"
+					icon="fa fa-check-circle-o" update="councilRequestData">
+					<f:actionListener
+						binding="#{dialog.councilDialog.admendRequestState()}"></f:actionListener>
 				</p:commandButton>
 
 				<!-- Close Button -->
 				<p:commandButton value="#{msg['general.close']}"
 					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
 					immediate="true"
-					actionListener="#{dialog.searchPatientDialog.hideDialog()}" />
+					actionListener="#{dialog.councilDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

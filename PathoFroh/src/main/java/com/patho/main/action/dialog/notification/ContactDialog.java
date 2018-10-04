@@ -2,7 +2,6 @@ package com.patho.main.action.dialog.notification;
 
 import java.util.List;
 
-import org.primefaces.event.ReorderEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -26,7 +25,6 @@ import com.patho.main.util.dialogReturn.ReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Configurable
 @Getter

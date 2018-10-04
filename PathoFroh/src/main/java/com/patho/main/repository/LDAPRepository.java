@@ -1,16 +1,9 @@
 package com.patho.main.repository;
 
-import static org.springframework.ldap.query.LdapQueryBuilder.query;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.ldap.query.ContainerCriteria;
 
 import com.patho.main.model.Physician;
-import com.patho.main.model.dto.ldap.LDAPUserMapper;
 
 public interface LDAPRepository {
 

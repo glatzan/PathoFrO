@@ -3,7 +3,6 @@ package com.patho.main.repository.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.patho.main.model.Organization;
 import com.patho.main.model.user.HistoGroup;
 
 public interface GroupRepositoryCustom {

@@ -2,9 +2,6 @@ package com.patho.main.service;
 
 import java.util.ArrayList;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.patho.main.common.View;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;

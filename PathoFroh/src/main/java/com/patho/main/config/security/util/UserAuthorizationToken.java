@@ -1,9 +1,7 @@
 package com.patho.main.config.security.util;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import io.jsonwebtoken.Jwts;
 import lombok.Getter;
 import lombok.Setter;
 

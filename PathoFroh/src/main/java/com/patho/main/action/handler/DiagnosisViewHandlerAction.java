@@ -5,15 +5,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.patho.main.action.dialog.diagnosis.CopyHistologicalRecordDialog;
-import com.patho.main.model.ListItem;
 import com.patho.main.model.Signature;
-import com.patho.main.model.interfaces.PatientRollbackAble;
-import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
-import com.patho.main.service.SampleService;
 import com.patho.main.service.TaskService;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.TimeUtil;
 
 import lombok.AccessLevel;

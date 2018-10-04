@@ -1,18 +1,15 @@
 package com.patho.main.ui.task;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.Block;
-import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoPermissions;
-
-import java.util.HashSet;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -82,9 +79,9 @@ public class TaskStatus {
 		this.notificationNeeded = task.isListedInFavouriteList(PredefinedFavouriteList.NotificationList);
 		this.stayInNotificationList = task.isListedInFavouriteList(PredefinedFavouriteList.StayInNotificationList);
 
-		this.councilLendingMTA = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilLendingMTA);
-		this.councilLendingSecretary = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilLendingSecretary);
-		this.councilPending = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilPending);
+		this.councilLendingMTA = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilSendRequestMTA);
+		this.councilLendingSecretary = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilSendRequestSecretary);
+		this.councilPending = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilRequest);
 		this.councilCompleted = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilCompleted);
 
 		this.scannList = task.isListedInFavouriteList(PredefinedFavouriteList.ScannList);

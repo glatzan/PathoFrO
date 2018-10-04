@@ -3,6 +3,7 @@ package com.patho.main.util;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.BioBank;
@@ -29,8 +29,11 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.BioBankRepository;
+import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PDFRepository;
 import com.patho.main.repository.PatientRepository;
+import com.patho.main.service.PDFService;
+import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -71,53 +74,70 @@ public class DataBaseConverter {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private PathoConfig pathoConfig;
-	
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private MediaRepository mediaRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PDFService pdfService;
+
 	public void start() {
+		List<PDFContainer> ignoredContainer = new ArrayList<PDFContainer>();
 		List<Patient> p = patientRepository.findAll();
 
 		for (Patient patient : p) {
 			System.out.println("Loading patient " + patient.getId() + " Name: " + patient.getPerson().getFullName());
 			Hibernate.initialize(patient.getAttachedPdfs());
-			for (PDFContainer container : patient.getAttachedPdfs()) {
-				File file = new File(pathoConfig.getFileSettings().getBasePath() + "/" + patient.getId() + "/" + container.getId() + ".pdf");
-				File thumbnail = new File(pathoConfig.getFileSettings().getBasePath() + "/" + patient.getId() + "/" + container.getId() + ".png");
-				File fil2e = new File(pathoConfig.getFileSettings().getBasePath() + "/" + patient.getId() + "/");
-				fil2e.mkdirs();
+
+			String folder = pathoConfig.getFileSettings().getFileRepository() + "/" + patient.getId();
+
+			for (int i = 0; i < patient.getAttachedPdfs().size(); i++) {
+				PDFContainer container = HistoUtil.getNElement(patient.getAttachedPdfs(), i);
+
+				if (container.getName() != null && !container.getName().matches("^((.*\\.pdf)|([A-Za-z0-9 ]*))$")) {
+					System.out.println("ignoring " + container.getName());
+					ignoredContainer.add(container);
+					continue;
+				}
+
+				File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
+				container.setPath(uniqueFile.getPath());
+				container.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
+				patient = (Patient) pdfService.createAndAttachPDF(patient, container, container.getData(), true)
+						.getDataList();
 
 				System.out.println("-> writing file: " + container.getName());
-
-				try {
-					FileUtils.writeByteArrayToFile(file, container.getData());
-					gerateThumbnail(container.getData(),thumbnail);
-					container.setPath(patient.getId() + "/" + container.getId() + ".pdf");
-					container.setThumbnail(patient.getId() + "/" + container.getId() + ".png");
-					pdfRepository.save(container);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 
-			for (Task task : patient.getTasks()) {
-				Hibernate.initialize(task.getAttachedPdfs());
+			for (int i = 0; i < patient.getTasks().size(); i++) {
+
+				Task task = HistoUtil.getNElement(patient.getTasks(), i);
+
+				Hibernate.initialize(task);
 
 				if (!task.getAttachedPdfs().isEmpty()) {
 					System.out.println("--> TASK " + task.getTaskID());
-					for (PDFContainer c : task.getAttachedPdfs()) {
-						System.out.println("--> writing file: " + c.getName());
-						File fileT = new File(pathoConfig.getFileSettings().getBasePath() + "/" + patient.getId() + "/" + c.getId() + ".pdf");
-						File thumbnail = new File(pathoConfig.getFileSettings().getBasePath() + "/" + patient.getId() + "/" + c.getId() + ".png");
-						try {
-							FileUtils.writeByteArrayToFile(fileT, c.getData());
-							gerateThumbnail(c.getData(),thumbnail);
-							c.setPath(patient.getId() + "/" + c.getId() + ".pdf");
-							c.setThumbnail(patient.getId() + "/" + c.getId() + ".png");
-							pdfRepository.save(c);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+
+					for (int y = 0; y < task.getAttachedPdfs().size(); y++) {
+
+						PDFContainer c = HistoUtil.getNElement(task.getAttachedPdfs(), y);
+
+						if (c.getName() != null && !c.getName().matches("^((.*\\.pdf)|([A-Za-z0-9 ]*))$")) {
+							System.out.println("ignoring " + c.getName());
+							ignoredContainer.add(c);
+							continue;
 						}
 
+						File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
+						c.setPath(uniqueFile.getPath());
+						c.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
+						task = (Task) pdfService.createAndAttachPDF(task, c, c.getData(), true).getDataList();
+
+						System.out.println("--> writing file: " + c.getName());
 					}
 				}
 
@@ -128,19 +148,23 @@ public class DataBaseConverter {
 
 					if (!council.getAttachedPdfs().isEmpty()) {
 						System.out.println("---> Council" + council.getName());
-						for (PDFContainer c2 : council.getAttachedPdfs()) {
-							System.out.println("---> writing file: " + c2.getName());
-							File fileT = new File(pathoConfig.getFileSettings().getBasePath() + "/" + patient.getId() + "/" + c2.getId() + ".pdf");
-							try {
-								FileUtils.writeByteArrayToFile(fileT, c2.getData());
-								c2.setPath(patient.getId() + "/" + c2.getId() + ".pdf");
-								c2.setThumbnail(patient.getId() + "/" + c2.getId() + ".png");
-								pdfRepository.save(c2);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+						for (int y = 0; y < council.getAttachedPdfs().size(); y++) {
+
+							PDFContainer c2 = HistoUtil.getNElement(council.getAttachedPdfs(), y);
+							
+							if (c2.getName() != null && !c2.getName().matches("^((.*\\.pdf)|([A-Za-z0-9 ]*))$")) {
+								System.out.println("ignoring " + c2.getName());
+								ignoredContainer.add(c2);
+								continue;
 							}
 
+							File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
+							c2.setPath(uniqueFile.getPath());
+							c2.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
+							council = (Council) pdfService.createAndAttachPDF(council, c2, c2.getData(), true)
+									.getDataList();
+
+							System.out.println("---> writing file: " + c2.getName());
 						}
 					}
 
@@ -153,51 +177,33 @@ public class DataBaseConverter {
 
 					if (!b.get().getAttachedPdfs().isEmpty()) {
 						System.out.println("---> Biobank");
-						for (PDFContainer c2 : b.get().getAttachedPdfs()) {
-							System.out.println("---> writing file: " + c2.getName());
-							File fileT = new File(pathoConfig.getFileSettings().getBasePath() + "/" + patient.getId() + "/" + c2.getId() + ".pdf");
-							try {
-								FileUtils.writeByteArrayToFile(fileT, c2.getData());
-								c2.setPath(patient.getId() + "/" + c2.getId() + ".pdf");
-								c2.setThumbnail(patient.getId() + "/" + c2.getId() + ".png");
-								pdfRepository.save(c2);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+						BioBank bio = b.get();
+						for (int y = 0; y < b.get().getAttachedPdfs().size(); y++) {
+
+							PDFContainer c2 = HistoUtil.getNElement(bio.getAttachedPdfs(), y);
+
+							if (c2.getName() != null && !c2.getName().matches("^((.*\\.pdf)|([A-Za-z0-9 ]*))$")) {
+								System.out.println("ignoring " + c2.getName());
+								ignoredContainer.add(c2);
+								continue;
 							}
 
+							File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
+							c2.setPath(uniqueFile.getPath());
+							c2.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
+							bio = (BioBank) pdfService.createAndAttachPDF(bio, c2, c2.getData(), true).getDataList();
+
+							System.out.println("---> writing file: " + c2.getName());
 						}
 					}
 				}
 			}
 
 		}
-	}
 
-	public void gerateThumbnail(byte[] pdf, File path) {
-		PDDocument document = null;
-		try {
-			document = PDDocument.load(pdf);
-
-			PDFRenderer pdfRenderer = new PDFRenderer(document);
-
-			for (PDPage page : document.getPages()) {
-				// note that the page number parameter is zero based
-				BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 50, ImageType.RGB);
-				// suffix in filename will be used as the file format
-				ImageIO.write(bim, "png", path);
-				break;
-			}
-
-		} catch (Exception e) {
-			System.err.println(e);
-		} finally {
-			try {
-				document.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		System.out.println("Container ignored " + ignoredContainer.size());
+		for (PDFContainer pdfContainer : ignoredContainer) {
+			System.out.println("-> " + pdfContainer.getName());
 		}
 	}
-
 }

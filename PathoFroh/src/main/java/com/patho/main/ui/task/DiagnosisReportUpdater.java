@@ -1,11 +1,8 @@
 package com.patho.main.ui.task;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
-import org.apache.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

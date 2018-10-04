@@ -7,17 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import com.patho.main.config.PathoConfig;
-import com.patho.main.model.PDFContainer;
-import com.patho.main.repository.MediaRepository;
-
-import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.ui.interfaces.PdfStreamProvider;
-import com.patho.main.util.pdf.LazyPDFReturnHandler;
-import com.patho.main.util.pdf.PDFGenerator;
-import com.sun.media.jfxmedia.Media;
-
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
@@ -25,11 +14,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.patho.main.config.PathoConfig;
+import com.patho.main.model.PDFContainer;
+import com.patho.main.repository.MediaRepository;
+import com.patho.main.template.PrintDocument;
+import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.ui.interfaces.PdfStreamProvider;
+import com.patho.main.util.pdf.LazyPDFReturnHandler;
+import com.patho.main.util.pdf.PDFGenerator;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Synchronized;
-import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter

@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.Contact;
 import com.patho.main.model.Person;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.PersonRepository;
 import com.patho.main.util.helper.HistoUtil;
 

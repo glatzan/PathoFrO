@@ -9,22 +9,22 @@ jsf:
        
 spring: 
   datasource:
-    url: jdbc:postgresql://localhost/histo2
+    url: jdbc:postgresql://localhost/histo3
     username: postgres
     password: postgres
   jpa:
+    hibernate: 
+        ddl-auto: none
     properties:
       hibernate: 
         jdbc:
           lob:
             non_contextual_creation: true
         use-new-id-generator-mappings: true
-        ddl-auto: none
-        show_sql: true
+      
         use_sql_comments: true
         format_sql: true
         type: trace
-    hibernate.ddl-auto: none
   output:
     ansi:
       enabled: always
@@ -270,6 +270,7 @@ patho:
         type: COUNCIL_REQUEST
         attributes: 
         templateName: com.patho.main.template.print.CouncilReport
+        uiClass: com.patho.main.template.print.ui.document.report.CouncilReportUi
         defaultOfType: true
         transientContent: false
         hidden: false

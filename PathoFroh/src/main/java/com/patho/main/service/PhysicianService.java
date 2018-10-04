@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.Physician;
-import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.util.helper.HistoUtil;

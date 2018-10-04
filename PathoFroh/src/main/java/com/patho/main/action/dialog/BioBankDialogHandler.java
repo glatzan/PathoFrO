@@ -7,22 +7,20 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.patho.main.action.DialogHandlerAction;
-import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.Dialog;
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.model.BioBank;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.BioBankRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Getter

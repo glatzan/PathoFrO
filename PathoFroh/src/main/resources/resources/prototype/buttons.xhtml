@@ -51,7 +51,7 @@
 	
 	<!-- edit -->
 	<p:commandLink title="#{msg['dialog.settings.material.edit']}"
-		actionListener="#{settingsDialogHandler.getTab('StaticListTab').prepareEditListItem(item)}"
+		actionListener="#{dialog.settingsDialog.getTab('StaticListTab').prepareEditListItem(item)}"
 		styleClass="noUnderlineAtLink" update=":adminForm:tabview:staticLists"
 		process="@this" partialSubmit="true">
 		<i class="fa fa-fw fa-cog" />
@@ -60,7 +60,7 @@
 	<!-- delete -->
 	<p:commandLink title="#{msg['dialog.settings.material.edit']}"
 		rendered="#{!item.archived}" styleClass="noUnderlineAtLink"
-		actionListener="#{settingsDialogHandler.getTab('StaticListTab').archiveListItem(item, true)}"
+		actionListener="#{dialog.settingsDialog.getTab('StaticListTab').archiveListItem(item, true)}"
 		update=":adminForm:tabview:staticLists" process="@this"
 		partialSubmit="true">
 		<i class="fa fa-fw fa-times-circle" />

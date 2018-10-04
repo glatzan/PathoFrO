@@ -9,14 +9,14 @@
 
 	<p:outputPanel styleClass="headerPannel">
 		<h:outputLabel
-			value="#{msg['dialog.settings.material']} / #{settingsDialogHandler.materialTab.newMaterial ? msg['dialog.settings.material.new.new'] : msg['dialog.settings.material.new.edit']} / #{msg['dialog.settings.material.new.stainings.add.headline']}" />
+			value="#{msg['dialog.settings.material']} / #{dialog.settingsDialog.materialTab.newMaterial ? msg['dialog.settings.material.new.new'] : msg['dialog.settings.material.new.edit']} / #{msg['dialog.settings.material.new.stainings.add.headline']}" />
 	</p:outputPanel>
 	<p:outputPanel styleClass="bodyPannelFull">
 
 		<p:dataTable var="staining"
 			styleClass="highlightedDataTable noBordersAll collapsedBordersAll"
 			style="width:100%" scrollable="true" scrollHeight="460"
-			value="#{settingsDialogHandler.materialTab.stainingListChooserForMaterial}">
+			value="#{dialog.settingsDialog.materialTab.stainingListChooserForMaterial}">
 			<p:column
 				headerText="#{msg['dialog.settings.material.new.stainings.add.staining']}">
 				<h:outputLabel value="#{staining.listItem.name}" />
@@ -41,21 +41,21 @@
 					icon="fa fa-fw fa-plus-circle" partialSubmit="true" process="@form"
 					update="@form">
 					<f:actionListener
-						binding="#{settingsDialogHandler.materialTab.addStainingToMaterial()}" />
+						binding="#{dialog.settingsDialog.materialTab.addStainingToMaterial()}" />
 					<f:actionListener
-						binding="#{settingsDialogHandler.materialTab.discardAddStainingToMaterial()}" />
+						binding="#{dialog.settingsDialog.materialTab.discardAddStainingToMaterial()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.abort']}"
 					icon="fa fa-fw fa-times-circle" partialSubmit="true"
 					process="@this"
-					actionListener="#{settingsDialogHandler.materialTab.discardAddStainingToMaterial()}"
+					actionListener="#{dialog.settingsDialog.materialTab.discardAddStainingToMaterial()}"
 					update="@form" />
 
 				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{settingsDialogHandler.hideDialog()}" />
+					actionListener="#{dialog.settingsDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

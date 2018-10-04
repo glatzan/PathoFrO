@@ -12,14 +12,12 @@ import com.patho.main.model.Contact;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.repository.PersonRepository;
-import com.patho.main.repository.UserRepository;
 import com.patho.main.service.OrganizationService;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

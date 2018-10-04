@@ -7,8 +7,10 @@
 
 <h:head>
 	<title><h:outputLabel
-			value="#{favouriteListEditDialog.newFavouriteList ? msg['dialog.favouriteListEdit.headline.new'] : msg['dialog.favouriteListEdit.headline.edit']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="style" />
+			value="#{dialog.favouriteListEditDialog.newFavouriteList ? msg['dialog.favouriteListEdit.headline.new'] : msg['dialog.favouriteListEdit.headline.edit']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
@@ -17,22 +19,22 @@
 	<h:form enctype="multipart/form-data" id="dialogContent">
 
 		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
 				<h:outputLabel
-					value="#{favouriteListEditDialog.newFavouriteList ? msg['dialog.favouriteListEdit.headline.new'] : msg['dialog.favouriteListEdit.headline.edit']}" />
+					value="#{dialog.favouriteListEditDialog.newFavouriteList ? msg['dialog.favouriteListEdit.headline.new'] : msg['dialog.favouriteListEdit.headline.edit']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 			</h:panelGrid>
 		</div>
 
-		<div class="dialogContent" style="height: 500px;">
+		<div class="dialogContent">
 
 			<h:panelGrid columns="2" style="width:100%"
 				columnClasses="columnWidthPercent70 columnTop, columnWidthPercent30 columnTop"
-				styleClass="defaultHistoHiddenTableContainer">
+				styleClass="listingHistoHiddenTableContainer">
 				<!-- left -->
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
 					columnClasses="columnWidth150 columnHeading columnTop,">
@@ -40,15 +42,15 @@
 					<!-- name -->
 					<h:outputLabel value="#{msg['dialog.favouriteListEdit.name']}" />
 					<p:inputText
-						disabled="#{favouriteListEditDialog.favouriteList.defaultList or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
-						value="#{favouriteListEditDialog.favouriteList.name}"></p:inputText>
+						disabled="#{dialog.favouriteListEditDialog.favouriteList.defaultList or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
+						value="#{dialog.favouriteListEditDialog.favouriteList.name}"></p:inputText>
 
 					<!-- commentary -->
 					<h:outputLabel
 						value="#{msg['dialog.favouriteListEdit.commentary']}" />
 					<p:inputTextarea scrollHeight="40" style="width:70%"
-						disabled="#{favouriteListEditDialog.favouriteList.defaultList or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
-						value="#{favouriteListEditDialog.favouriteList.commentary}">
+						disabled="#{dialog.favouriteListEditDialog.favouriteList.defaultList or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
+						value="#{dialog.favouriteListEditDialog.favouriteList.commentary}">
 					</p:inputTextarea>
 
 					<!-- owner -->
@@ -57,22 +59,22 @@
 					<h:panelGroup>
 						<!-- owners name -->
 						<h:outputLabel
-							rendered="#{favouriteListEditDialog.favouriteList.owner ne null and !favouriteListEditDialog.favouriteList.defaultList}"
-							value="#{favouriteListEditDialog.favouriteList.owner.physician.person.fullName}" />
+							rendered="#{dialog.favouriteListEditDialog.favouriteList.owner ne null and !dialog.favouriteListEditDialog.favouriteList.defaultList}"
+							value="#{dialog.favouriteListEditDialog.favouriteList.owner.physician.person.getFullName()}" />
 
 						<!-- system name -->
 						<h:outputLabel
-							rendered="#{favouriteListEditDialog.favouriteList.defaultList}"
+							rendered="#{dialog.favouriteListEditDialog.favouriteList.defaultList}"
 							value="System" />
 
 						<!-- change owner, if admin or user is owner -->
 						<p:commandLink
 							title="#{msg['dialog.favouriteListEdit.owner.change']}"
-							rendered="#{(favouriteListEditDialog.userPermission.owner or favouriteListEditDialog.adminMode) and !favouriteListEditDialog.favouriteList.defaultList}"
+							rendered="#{(dialog.favouriteListEditDialog.userPermission.owner or dialog.favouriteListEditDialog.adminMode) and !dialog.favouriteListEditDialog.favouriteList.defaultList}"
 							actionListener="#{dialogHandlerAction.userListDialog.initAndPrepareBean(true,false)}"
-							styleClass="noUnderlineAtLink" partialSubmit="true">
+							partialSubmit="true">
 							<p:ajax event="dialogReturn" update="@form"
-								listener="#{favouriteListEditDialog.onReturnSelectOwner}" />
+								listener="#{dialog.favouriteListEditDialog.onReturnSelectOwner}" />
 							<i class="fa fa-fw fa-cog icon-grey" />
 						</p:commandLink>
 
@@ -83,8 +85,8 @@
 						value="#{msg['dialog.favouriteListEdit.globalView']}"></h:outputLabel>
 					<p:selectBooleanCheckbox
 						title="#{msg['dialog.favouriteListEdit.globalView.text']}"
-						disabled="#{favouriteListEditDialog.favouriteList.defaultList or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
-						value="#{favouriteListEditDialog.favouriteList.globalView}">
+						disabled="#{dialog.favouriteListEditDialog.favouriteList.defaultList or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
+						value="#{dialog.favouriteListEditDialog.favouriteList.globalView}">
 					</p:selectBooleanCheckbox>
 
 				</h:panelGrid>
@@ -96,8 +98,8 @@
 					<h:outputLabel value="#{msg['dialog.favouriteListEdit.hidden']}"></h:outputLabel>
 					<p:selectBooleanCheckbox
 						title="#{msg['dialog.favouriteListEdit.hidden.text']}"
-						disabled="#{(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
-						value="#{favouriteListEditDialog.favouriteList.hideList}">
+						disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
+						value="#{dialog.favouriteListEditDialog.favouriteList.hideList}">
 					</p:selectBooleanCheckbox>
 				</h:panelGrid>
 			</h:panelGrid>
@@ -121,19 +123,20 @@
 					<h:outputLabel
 						value="#{msg['dialog.favouriteListEdit.icon.useIcon']}"></h:outputLabel>
 					<p:selectBooleanCheckbox
-						disabled="#{(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
-						value="#{favouriteListEditDialog.favouriteList.useIcon}">
+						disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
+						value="#{dialog.favouriteListEditDialog.favouriteList.useIcon}">
 						<p:ajax event="change" process="@form" update="@form" />
 					</p:selectBooleanCheckbox>
 
 					<!-- icon -->
 					<h:outputLabel value="#{msg['dialog.favouriteListEdit.icon.icon']}"></h:outputLabel>
 					<h:panelGroup>
-						<p:inputText value="#{favouriteListEditDialog.favouriteList.icon}"
-							disabled="#{!favouriteListEditDialog.favouriteList.useIcon or (!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"></p:inputText>
+						<p:inputText
+							value="#{dialog.favouriteListEditDialog.favouriteList.icon}"
+							disabled="#{!dialog.favouriteListEditDialog.favouriteList.useIcon or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"></p:inputText>
 
 						<h:outputLink style="margin-left:5px"
-							disabled="#{(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
+							disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
 							value="https://www.primefaces.org/showcase/ui/misc/fa.xhtml"
 							title="#{msg['dialog.favouriteListEdit.icon.icon.text']}"
 							target="_blank">
@@ -146,22 +149,22 @@
 						value="#{msg['dialog.favouriteListEdit.icon.command']}"
 						rendered="#{userHandlerAction.currentUserHasPermission('FAVOURITE_LIST_ICON_COMMAND')}"></h:outputLabel>
 					<p:inputText
-						value="#{favouriteListEditDialog.favouriteList.command}"
+						value="#{dialog.favouriteListEditDialog.favouriteList.command}"
 						rendered="#{userHandlerAction.currentUserHasPermission('FAVOURITE_LIST_ICON')}"
-						disabled="#{!favouriteListEditDialog.favouriteList.useIcon or (!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"></p:inputText>
+						disabled="#{!dialog.favouriteListEditDialog.favouriteList.useIcon or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"></p:inputText>
 
 					<!-- color -->
 					<h:outputLabel
 						value="#{msg['dialog.favouriteListEdit.icon.color']}"></h:outputLabel>
 					<p:colorPicker
-						value="#{favouriteListEditDialog.favouriteList.iconColor}"
-						disabled="#{!favouriteListEditDialog.favouriteList.useIcon or (!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}" />
+						value="#{dialog.favouriteListEditDialog.favouriteList.iconColor}"
+						disabled="#{!dialog.favouriteListEditDialog.favouriteList.useIcon or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}" />
 
 					<!-- info text -->
 					<h:outputLabel value="#{msg['dialog.favouriteListEdit.icon.text']}"></h:outputLabel>
 					<p:inputText
-						value="#{favouriteListEditDialog.favouriteList.infoText}"
-						disabled="#{!favouriteListEditDialog.favouriteList.useIcon or (!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"></p:inputText>
+						value="#{dialog.favouriteListEditDialog.favouriteList.infoText}"
+						disabled="#{!dialog.favouriteListEditDialog.favouriteList.useIcon or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"></p:inputText>
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
@@ -170,24 +173,24 @@
 					<!-- use dumplist -->
 					<h:outputLabel value="#{msg['dialog.favouriteListEdit.dumpList']}"></h:outputLabel>
 					<p:selectBooleanCheckbox
-						disabled="#{(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
-						value="#{favouriteListEditDialog.favouriteList.useDumplist}">
+						disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
+						value="#{dialog.favouriteListEditDialog.favouriteList.useDumplist}">
 						<p:ajax event="change" process="@form" update="@form"
-							listener="#{favouriteListEditDialog.onUseDumplist()}" />
+							listener="#{dialog.favouriteListEditDialog.onUseDumplist()}" />
 					</p:selectBooleanCheckbox>
 
 					<!-- dump list -->
 					<h:outputLabel
 						value="#{msg['dialog.favouriteListEdit.dumpList.list']}"></h:outputLabel>
 					<p:selectOneMenu
-						disabled="#{!favouriteListEditDialog.favouriteList.useDumplist or (!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
-						value="#{favouriteListEditDialog.favouriteList.dumpList}"
-						converter="#{favouriteListEditDialog.dumpListTransformer}">
+						disabled="#{!dialog.favouriteListEditDialog.favouriteList.useDumplist or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
+						value="#{dialog.favouriteListEditDialog.favouriteList.dumpList}"
+						converter="#{dialog.favouriteListEditDialog.dumpListTransformer}">
 
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{msg['dialog.favouriteListEdit.dumpList.none']}"></f:selectItem>
 
-						<f:selectItems value="#{favouriteListEditDialog.dumpLists}"
+						<f:selectItems value="#{dialog.favouriteListEditDialog.dumpLists}"
 							var="list" itemValue="#{list}" itemLabel="#{list.name}" />
 
 					</p:selectOneMenu>
@@ -207,8 +210,8 @@
 
 					</h:panelGroup>
 					<p:inputTextarea rows="4" cols="35"
-						value="#{favouriteListEditDialog.favouriteList.dumpCommentary}"
-						disabled="#{!favouriteListEditDialog.favouriteList.useDumplist or  (!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"></p:inputTextarea>
+						value="#{dialog.favouriteListEditDialog.favouriteList.dumpCommentary}"
+						disabled="#{!dialog.favouriteListEditDialog.favouriteList.useDumplist or  (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"></p:inputTextarea>
 
 
 				</h:panelGrid>
@@ -234,13 +237,13 @@
 				<p:dataTable var="userPermission" style="width:100%;"
 					scrollable="true" scrollHeight="80"
 					styleClass="defaultHistoDataTable"
-					value="#{favouriteListEditDialog.favouriteList.users}">
+					value="#{dialog.favouriteListEditDialog.favouriteList.users}">
 
 					<!-- Name -->
 					<p:column
 						headerText="#{msg['dialog.favouriteListEdit.userPermissions.user']}">
 						<h:outputLabel
-							value="#{userPermission.user.physician.person.fullName}" />
+							value="#{userPermission.user.physician.person.getFullName()}" />
 					</p:column>
 
 					<!-- read -->
@@ -264,7 +267,7 @@
 						</f:facet>
 
 						<p:selectBooleanCheckbox
-							disabled="#{userPermission.admin or (!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
+							disabled="#{userPermission.admin or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
 							value="#{userPermission.editable}"></p:selectBooleanCheckbox>
 					</p:column>
 
@@ -276,9 +279,9 @@
 								title="#{msg['dialog.favouriteListEdit.permissions.admin.text']}" />
 						</f:facet>
 						<p:selectBooleanCheckbox value="#{userPermission.admin}"
-							disabled="#{favouriteListEditDialog.favouriteList.defaultList or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}">
+							disabled="#{dialog.favouriteListEditDialog.favouriteList.defaultList or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}">
 							<p:ajax event="change" update="@form"
-								listener="#{favouriteListEditDialog.onSelectAdmin(userPermission)}"></p:ajax>
+								listener="#{dialog.favouriteListEditDialog.onSelectAdmin(userPermission)}"></p:ajax>
 						</p:selectBooleanCheckbox>
 					</p:column>
 
@@ -286,21 +289,21 @@
 						<f:facet name="header">
 							<p:commandLink
 								title="#{msg['dialog.favouriteListEdit.permissions.add.text']}"
-								disabled="#{(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
+								disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
 								actionListener="#{dialogHandlerAction.userListDialog.initAndPrepareBean(true,false)}">
 								<p:ajax event="dialogReturn" update="@form"
-									listener="#{favouriteListEditDialog.onReturnSelectUser}" />
+									listener="#{dialog.favouriteListEditDialog.onReturnSelectUser}" />
 								<i class="fa fa-plus" />
 							</p:commandLink>
 						</f:facet>
 
 						<p:commandLink
-							disabled="#{(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
+							disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
 							title="#{msg['dialog.favouriteListEdit.permissions.remove.text']}"
 							update="@form" partialSubmit="true" process="@this">
 							<i class="fa fa-fw fa-times" />
 							<f:actionListener
-								binding="#{favouriteListEditDialog.removeEntityFromList(favouriteListEditDialog.favouriteList.users, userPermission)}" />
+								binding="#{dialog.favouriteListEditDialog.removeEntityFromList(dialog.favouriteListEditDialog.favouriteList.users, userPermission)}" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
@@ -309,7 +312,7 @@
 				<p:dataTable var="groupPermission" style="width:100%;"
 					scrollable="true" scrollHeight="80"
 					styleClass="defaultHistoDataTable"
-					value="#{favouriteListEditDialog.favouriteList.groups}">
+					value="#{dialog.favouriteListEditDialog.favouriteList.groups}">
 
 					<!-- name -->
 					<p:column
@@ -337,7 +340,7 @@
 						</f:facet>
 
 						<p:selectBooleanCheckbox
-							disabled="#{groupPermission.admin or (!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
+							disabled="#{groupPermission.admin or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
 							value="#{groupPermission.editable}"></p:selectBooleanCheckbox>
 					</p:column>
 
@@ -350,11 +353,11 @@
 						</f:facet>
 
 						<p:selectBooleanCheckbox
-							disabled="#{favouriteListEditDialog.favouriteList.defaultList or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
+							disabled="#{dialog.favouriteListEditDialog.favouriteList.defaultList or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
 							value="#{groupPermission.admin}">
 							<p:ajax event="change" update="@form"
-								disabled="#{favouriteListEditDialog.favouriteList.defaultList}"
-								listener="#{favouriteListEditDialog.onSelectAdmin(groupPermission)}"></p:ajax>
+								disabled="#{dialog.favouriteListEditDialog.favouriteList.defaultList}"
+								listener="#{dialog.favouriteListEditDialog.onSelectAdmin(groupPermission)}"></p:ajax>
 						</p:selectBooleanCheckbox>
 					</p:column>
 
@@ -362,23 +365,23 @@
 						<f:facet name="header">
 							<p:commandLink
 								title="#{msg['dialog.favouriteListEdit.permissions.add.text']}"
-								disabled="#{(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
+								disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
 								actionListener="#{dialogHandlerAction.groupListDialog.initAndPrepareBean(true,false)}">
 								<p:ajax event="dialogReturn" update="@form"
-									listener="#{favouriteListEditDialog.onReturnSelectGroup}" />
+									listener="#{dialog.favouriteListEditDialog.onReturnSelectGroup}" />
 								<i class="fa fa-plus" />
 							</p:commandLink>
 						</f:facet>
 
 						<!-- remove -->
 						<p:commandLink update="@form" partialSubmit="true"
-							disabled="#{(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList) or !(favouriteListEditDialog.userPermission.ownerOrAdmin or favouriteListEditDialog.adminMode)}"
+							disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
 							process="@this"
 							title="#{msg['dialog.favouriteListEdit.permissions.remove.text']}">
 							<i class="fa fa-fw fa-times" />
 
 							<f:actionListener
-								binding="#{favouriteListEditDialog.removeEntityFromList(favouriteListEditDialog.favouriteList.groups, groupPermission)}" />
+								binding="#{dialog.favouriteListEditDialog.removeEntityFromList(dialog.favouriteListEditDialog.favouriteList.groups, groupPermission)}" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
@@ -389,7 +392,7 @@
 				<h:outputLabel />
 				<p:dataTable var="item" scrollable="true" scrollHeight="60"
 					styleClass="defaultHistoDataTable"
-					value="#{favouriteListEditDialog.favouriteList.items}">
+					value="#{dialog.favouriteListEditDialog.favouriteList.items}">
 					<p:column headerText="#{msg['dialog.favouriteListEdit.tasks.id']}"
 						style="width:30%">
 						<h:outputText value="#{item.task.taskID}" />
@@ -410,23 +413,22 @@
 
 		<div class="buttonContainer">
 			<h:panelGrid columns="2">
-
 				<h:panelGrid columns="2" styleClass="right">
 					<!-- Save button -->
 					<p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
 						process="@form"
-						rendered="#{!(!favouriteListEditDialog.favouriteList.manuelEdit and favouriteListEditDialog.favouriteList.defaultList)}">
+						rendered="#{!(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList)}">
 						<f:actionListener
-							binding="#{favouriteListEditDialog.saveFavouriteList()}"></f:actionListener>
+							binding="#{dialog.favouriteListEditDialog.saveFavouriteList()}"></f:actionListener>
 						<f:actionListener
-							binding="#{favouriteListEditDialog.hideDialog()}"></f:actionListener>
+							binding="#{dialog.favouriteListEditDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 
 					<!-- Close button -->
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
 						icon="fa fa-times-circle">
 						<f:actionListener
-							binding="#{favouriteListEditDialog.hideDialog()}"></f:actionListener>
+							binding="#{dialog.favouriteListEditDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>

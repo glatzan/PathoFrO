@@ -1,14 +1,11 @@
 package com.patho.main.action.handler;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
-import org.primefaces.model.menu.MenuModel;
 import org.primefaces.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,36 +14,20 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.patho.main.action.DialogHandlerAction;
-import com.patho.main.action.MainHandlerAction;
 import com.patho.main.action.UserHandlerAction;
-import com.patho.main.action.handler.GlobalEditViewHandler.DialogReturnEventHandler;
-import com.patho.main.action.handler.GlobalEditViewHandler.NavigationData;
 import com.patho.main.action.handler.GlobalEditViewHandler.TaskInitilize;
-import com.patho.main.action.handler.GlobalEditViewHandler.CurrentTaskFunctions;
-import com.patho.main.action.handler.GlobalEditViewHandler.WorklistData;
 import com.patho.main.common.View;
-import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
-import com.patho.main.model.user.HistoSettings;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.PatientService;
-import com.patho.main.service.TaskService.TaskIDValidity;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.StreamUtils;
 import com.patho.main.util.worklist.Worklist;
 import com.patho.main.util.worklist.search.AbstractWorklistSearch;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Scope("session")

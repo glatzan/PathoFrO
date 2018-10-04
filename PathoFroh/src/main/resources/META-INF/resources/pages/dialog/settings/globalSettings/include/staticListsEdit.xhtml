@@ -9,7 +9,7 @@
 
 	<p:outputPanel styleClass="headerPannel">
 		<h:outputLabel
-			value="#{settingsDialogHandler.staticListTab.newListItem ? msg['dialog.settings.list.new.headline'].concat( msg['enum.staticList.'.concat(settingsDialogHandler.staticListTab.selectedStaticList)]) : msg['dialog.settings.list.new.headline'].concat( msg['enum.staticList.'.concat(settingsDialogHandler.staticListTab.selectedStaticList)])}" />
+			value="#{dialog.settingsDialog.staticListTab.newListItem ? msg['dialog.settings.list.new.headline'].concat( msg['enum.staticList.'.concat(dialog.settingsDialog.staticListTab.selectedStaticList)]) : msg['dialog.settings.list.new.headline'].concat( msg['enum.staticList.'.concat(dialog.settingsDialog.staticListTab.selectedStaticList)])}" />
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannelFull">
@@ -19,7 +19,7 @@
 
 			<h:outputLabel value="#{msg['dialog.settings.list.new.name']}"></h:outputLabel>
 			<p:inputText
-				value="#{settingsDialogHandler.staticListTab.editListItem.value}"></p:inputText>
+				value="#{dialog.settingsDialog.staticListTab.editListItem.value}"></p:inputText>
 		</p:panelGrid>
 
 	</p:outputPanel>
@@ -36,20 +36,20 @@
 					icon="fa fa-fw fa-floppy-o" process="@form" partialSubmit="true"
 					update="@form">
 					<f:actionListener
-						binding="#{settingsDialogHandler.staticListTab.saveListItem()}" />
+						binding="#{dialog.settingsDialog.staticListTab.saveListItem()}" />
 					<f:actionListener
-						binding="#{settingsDialogHandler.staticListTab.discardListItem()}" />
+						binding="#{dialog.settingsDialog.staticListTab.discardListItem()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.abort']}"
 					icon="fa fa-fw fa-times-circle" process="@this"
 					partialSubmit="true"
-					actionListener="#{settingsDialogHandler.staticListTab.discardListItem()}"
+					actionListener="#{dialog.settingsDialog.staticListTab.discardListItem()}"
 					update="@form" />
 
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{settingsDialogHandler.hideDialog()}" />
+					actionListener="#{dialog.settingsDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

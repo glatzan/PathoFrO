@@ -1,7 +1,6 @@
 package com.patho.main.template.print;
 
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.print.ui.document.report.DiagnosisReportUi;
 
 /**
  * patient, task, diagnosisRevisions, address, subject, date, latexTextConverter

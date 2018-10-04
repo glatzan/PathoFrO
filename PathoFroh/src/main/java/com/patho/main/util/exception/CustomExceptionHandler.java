@@ -29,7 +29,6 @@ import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.View;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.interfaces.Parent;
-import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 

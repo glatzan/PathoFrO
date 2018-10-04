@@ -2,14 +2,14 @@ package com.patho.main.action.dialog.patient;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.log.Log;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.LogRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import lombok.AccessLevel;
 import lombok.Getter;

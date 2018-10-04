@@ -4,8 +4,8 @@ import java.util.Set;
 
 import javax.persistence.Transient;
 
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.model.PDFContainer;
+import com.patho.main.template.PrintDocument.DocumentType;
 
 /**
  * Classes have a data list

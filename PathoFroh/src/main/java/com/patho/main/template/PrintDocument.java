@@ -1,37 +1,19 @@
 package com.patho.main.template;
 
 import java.io.StringWriter;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.apache.pdfbox.contentstream.operator.state.SetGraphicsStateParameters;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.tools.generic.DateTool;
 
-import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.model.PDFContainer;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Task;
-import com.patho.main.template.print.ui.document.AbstractDocumentUi;
-import com.patho.main.template.print.ui.document.report.AbsctractContactUi;
-import com.patho.main.util.helper.FileUtil;
-import com.patho.main.util.helper.StreamUtils;
 import com.patho.main.util.helper.TextToLatexConverter;
-import com.patho.main.util.pdf.PDFGenerator;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter

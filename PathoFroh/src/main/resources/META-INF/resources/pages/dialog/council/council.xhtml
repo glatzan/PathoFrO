@@ -14,6 +14,7 @@
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
 		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
+	<h:outputScript library="scripts" name="updateAndScrollScrollPanel.js"></h:outputScript>
 </h:head>
 
 <h:body styleClass="histoTabDialogStyle">
@@ -24,7 +25,8 @@
 				styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.council.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					immediate="true"
+					actionListener="#{dialog.councilDialog.hideDialog()}">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 			</h:panelGrid>
@@ -39,7 +41,7 @@
 						<p:column styleClass="columnTop">
 							<!-- scrolling -->
 							<p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody"
-								style="height:400px;">
+								style="height:500px;width:285px !important">
 								<!-- navigation tree -->
 								<p:tree value="#{dialog.councilDialog.root}" var="node"
 									styleClass="histoTree" style="width:99%" id="menuTree"
@@ -80,19 +82,34 @@
 									<!-- council request -->
 									<p:treeNode type="council_ship" icon="fa fa-envelope">
 										<h:outputText value="Versenden" />
+
+										<!-- shipment completed, checking date of sampleShipment because sampleShipped is used to mark the need of a shipment -->
 										<ui:fragment
-											rendered="#{node.sampleShippedDate != 0 and node.sampleReturnedDate == 0}">
-											<i class="fa fa-check-circle icon-yellow" title="" />
+											rendered="#{node.sampleShippedDate != null and node.expectSampleReturn and !node.sampleReturned}">
+											<i class="fa fa-send icon-green" title="" />
 										</ui:fragment>
 
-										<ui:fragment rendered="#{node.sampleReturnedDate != 0}">
+										<!-- waiting for return -->
+										<ui:fragment
+											rendered="#{node.expectSampleReturn and !node.sampleReturned}">
+											<i class="fa fa-undo icon-red" title="" />
+										</ui:fragment>
+
+										<!-- shipment and return completed  -->
+										<ui:fragment
+											rendered="#{node.sampleShippedDate != null and node.expectSampleReturn and node.sampleReturned}">
 											<i class="fa fa-check-circle icon-green" title="" />
 										</ui:fragment>
+
 									</p:treeNode>
 
 									<!-- council return -->
 									<p:treeNode type="council_reply" icon="fa fa-user-md">
 										<h:outputText value="Antwort" />
+										<h:outputText value="Anfrage" />
+										<ui:fragment rendered="#{node.replyReceived}">
+											<i class="fa fa-check-circle icon-green" title="" />
+										</ui:fragment>
 									</p:treeNode>
 
 									<!-- data node-->
@@ -157,7 +174,7 @@
 
 						<h:panelGrid columns="1" styleClass="newTableContainer left">
 							<p:commandButton value="#{msg['dialog.council.button.create']}"
-								icon="fa fa-check-circle-o" update="@form"
+								icon="fa fa-check-circle-o" update="@form" process="@form"
 								disabled="#{!dialog.councilDialog.editable}"
 								actionListener="#{dialog.councilDialog.createCouncil()}"></p:commandButton>
 						</h:panelGrid>
@@ -174,6 +191,15 @@
 
 		<ui:include src="../../../template/blockUi.xhtml"></ui:include>
 
+		<script>
+			$(document)
+					.ready(
+							function() {
+								setScrollPanelScrollSpeed("dialogContent:scrollBody");
+								// updating scrollElement for displaying the scroll bar correctly
+								updateAndAutoScrollToSelectedElement('dialogContent:scrollBody');
+							});
+		</script>
 	</h:form>
 </h:body>
 </html>

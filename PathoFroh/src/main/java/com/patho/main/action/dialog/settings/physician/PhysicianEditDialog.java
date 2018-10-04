@@ -3,7 +3,6 @@ package com.patho.main.action.dialog.settings.physician;
 import java.util.Arrays;
 import java.util.List;
 
-import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -14,7 +13,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -23,7 +21,6 @@ import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

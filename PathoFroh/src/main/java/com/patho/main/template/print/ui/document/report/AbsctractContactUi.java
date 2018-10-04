@@ -3,12 +3,13 @@ package com.patho.main.template.print.ui.document.report;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.model.patient.Task;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.selectors.ContactSelector.OrganizationChooser;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import lombok.Getter;
 import lombok.Setter;

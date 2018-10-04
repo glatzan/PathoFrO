@@ -8,8 +8,6 @@ import java.util.Optional;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
-import com.patho.main.template.print.ui.document.report.AbsctractContactUi;
-import com.patho.main.util.helper.StreamUtils;
 
 public interface PrintDocumentRepository {
 

@@ -153,11 +153,22 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* renaming old council favourite lists*/
+update favouritelist set name = 'Konsil Anfrage' where id = 11
+
+/* new favourite list for pending councils*/
+INSERT INTO favouritelist (id, defaultlist, globalview, name, manueledit, useicon, icon, usedumplist, dumplist_id) VALUES (14, true, false, 'Konsile', false, true, 'fa-fa-stethoscope', true, 12);
+
 /* new field for council*/
-Alter table council add councilRequestCompleted boolean;
-Alter table council_aud add councilRequestCompleted boolean;
+Alter table council add councilrequestcompleted boolean;
+Alter table council_aud add councilrequestcompleted boolean;
 update council set councilRequestCompleted = false;
 update council_aud set councilRequestCompleted = false;
+/* sample return */
+Alter table council add expectsamplereturn boolean;
+Alter table council_aud add expectsamplereturn boolean;
+update council set expectsamplereturn = false;
+update council_aud set expectsamplereturn = false;
 /* audit for task container */
 Alter table council add createdOn bigint;
 Alter table council add createdBy character varying(10);
@@ -175,14 +186,12 @@ update council_aud set updatedOn = 0;
 Alter table council add commentary character varying;
 Alter table council_aud add commentary character varying;
 /* council answer */
-Alter table council add replyReceived boolean;
-Alter table council_aud add replyReceived boolean;
-update council set replyReceived = false;
-update council_aud set replyReceived = false;
-Alter table council add replyReceivedDate date;
-Alter table council_aud add replyReceivedDate date;
-
-
+Alter table council add replyreceived boolean;
+Alter table council_aud add replyreceived boolean;
+update council set replyreceived = false;
+update council_aud set replyreceived = false;
+Alter table council add replyreceiveddate date;
+Alter table council_aud add replyreceiveddate date;
 
 /* audit for task container */
 Alter table task add createdOn bigint;

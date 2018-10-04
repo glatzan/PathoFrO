@@ -17,7 +17,7 @@
 		<p:dataTable var="group" scrollable="true" scrollHeight="440"
 			rowKey="#{group.id}" rowIndexVar="rowIdx" id="batchList"
 			styleClass="newStyleDataTable"
-			value="#{settingsDialogHandler.histoGroupTab.groups}">
+			value="#{dialog.settingsDialog.histoGroupTab.groups}">
 
 			<p:column headerText="#{msg['dialog.settings.group.name']}">
 				<h:outputText value="#{group.name}" />
@@ -37,7 +37,7 @@
 					actionListener="#{dialogHandlerAction.groupEditDialog.initAndPrepareBean(group)}"
 					process="@this" partialSubmit="true">
 					<p:ajax event="dialogReturn"
-						listener="#{settingsDialogHandler.histoGroupTab.updateData()}"
+						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
 						update="@form" />
 					<i class="fa fa-fw fa-cog" />
 				</p:commandLink>
@@ -51,7 +51,7 @@
 					<f:actionListener
 						binding="#{dialogHandlerAction.groupListDialog.archive(group, !group.archived)}" />
 					<f:actionListener
-						binding="#{settingsDialogHandler.histoGroupTab.updateData()}" />
+						binding="#{dialog.settingsDialog.histoGroupTab.updateData()}" />
 				</p:commandLink>
 			</p:column>
 		</p:dataTable>
@@ -64,9 +64,9 @@
 			<h:panelGrid columns="2" styleClass="newTableContainer left">
 				<p:selectBooleanCheckbox styleClass="centerCheckbox"
 					title="#{msg['dialog.settings.group.archive.text']}"
-					value="#{settingsDialogHandler.histoGroupTab.showArchived}">
+					value="#{dialog.settingsDialog.histoGroupTab.showArchived}">
 					<p:ajax
-						listener="#{settingsDialogHandler.histoGroupTab.updateData()}"
+						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
 						partialSubmit="true" process="@this" update="@form" />
 				</p:selectBooleanCheckbox>
 
@@ -84,13 +84,13 @@
 					<f:actionListener
 						binding="#{dialogHandlerAction.groupEditDialog.initAndPrepareBean()}"></f:actionListener>
 					<p:ajax event="dialogReturn"
-						listener="#{settingsDialogHandler.histoGroupTab.updateData()}"
+						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
 						update="@form" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{settingsDialogHandler.hideDialog()}" />
+					actionListener="#{dialog.settingsDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

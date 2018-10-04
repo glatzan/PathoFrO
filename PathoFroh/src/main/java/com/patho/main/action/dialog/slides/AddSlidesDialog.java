@@ -21,7 +21,6 @@ import com.patho.main.service.SlideService;
 import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.task.TaskStatus;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 
 import lombok.AccessLevel;

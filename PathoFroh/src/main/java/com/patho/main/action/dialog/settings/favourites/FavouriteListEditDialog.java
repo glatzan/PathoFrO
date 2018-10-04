@@ -16,13 +16,24 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.settings.SettingsDialog.DiagnosisTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.FavouriteListTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.HistoGroupTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.HistoUserTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.LogTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.MaterialTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.OrganizationTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.PersonParentTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.PhysicianSettingsTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.ProgramParentTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.StainingTab;
+import com.patho.main.action.dialog.settings.SettingsDialog.StaticListTab;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteListItem;
 import com.patho.main.model.favourites.FavouritePermissions;
 import com.patho.main.model.favourites.FavouritePermissionsGroup;
 import com.patho.main.model.favourites.FavouritePermissionsUser;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.FavouriteListRepository;
@@ -38,12 +49,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Scope(value = "session")
-@Setter
+@Configurable
 @Getter
-@Slf4j
-public class FavouriteListEditDialog extends AbstractDialog {
+@Setter
+public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -84,11 +93,11 @@ public class FavouriteListEditDialog extends AbstractDialog {
 
 	private DefaultTransformer<FavouriteList> dumpListTransformer;
 
-	public void initAndPrepareBean() {
-		initAndPrepareBean(false);
+	public FavouriteListEditDialog initAndPrepareBean() {
+		return initAndPrepareBean(false);
 	}
 
-	public void initAndPrepareBean(boolean adminMode) {
+	public FavouriteListEditDialog initAndPrepareBean(boolean adminMode) {
 		FavouriteList favouriteList = new FavouriteList();
 		favouriteList.setDefaultList(false);
 		favouriteList.setUsers(new HashSet<FavouritePermissionsUser>());
@@ -96,31 +105,31 @@ public class FavouriteListEditDialog extends AbstractDialog {
 		favouriteList.setItems(new ArrayList<FavouriteListItem>());
 		favouriteList.setOwner(userHandlerAction.getCurrentUser());
 
-		if (initBean(favouriteList, false, false))
-			prepareDialog();
+		return initAndPrepareBean(favouriteList, adminMode, false);
 	}
 
-	public void initAndPrepareBean(FavouriteList favouriteList) {
-		initAndPrepareBean(favouriteList, false);
+	public FavouriteListEditDialog initAndPrepareBean(FavouriteList favouriteList) {
+		return initAndPrepareBean(favouriteList, false);
 	}
 
-	public void initAndPrepareBean(FavouriteList favouriteList, boolean adminMode) {
-		if (initBean(favouriteList, adminMode, true))
+	public FavouriteListEditDialog initAndPrepareBean(FavouriteList favouriteList, boolean adminMode) {
+		return initAndPrepareBean(favouriteList, adminMode, true);
+	}
+
+	public FavouriteListEditDialog initAndPrepareBean(FavouriteList favouriteList, boolean adminMode,
+			boolean initialize) {
+		if (initBean(favouriteList, adminMode, initialize))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(FavouriteList favouriteList, boolean adminMode, boolean initialize) {
+		if (initialize)
+			favouriteList = favouriteListRepository
+					.findOptionalByIdAndInitialize(favouriteList.getId(), true, true, true).get();
 
-		if (initialize) {
-			try {
-				setFavouriteList(favouriteListDAO.initFavouriteList(favouriteList, true));
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				log.debug("Version conflict, updating entity");
-				setFavouriteList(favouriteListDAO.getFavouriteList(favouriteList.getId(), true, true, true));
-			}
-		} else {
-			setFavouriteList(favouriteList);
-		}
+		setFavouriteList(favouriteList);
 
 		setNewFavouriteList(favouriteList.getId() == 0);
 
@@ -148,8 +157,7 @@ public class FavouriteListEditDialog extends AbstractDialog {
 
 		setUserPermission(new FavouriteListContainer(favouriteList, userHandlerAction.getCurrentUser()));
 
-		super.initBean(task, Dialog.SETTINGS_FAVOURITE_LIST_EDIT);
-		return true;
+		return super.initBean(task, Dialog.SETTINGS_FAVOURITE_LIST_EDIT);
 	}
 
 	/**
@@ -244,27 +252,20 @@ public class FavouriteListEditDialog extends AbstractDialog {
 	 * Saves the list.
 	 */
 	public void saveFavouriteList() {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 
-		try {
-
-			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-				public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-					if (!toDeleteList.isEmpty()) {
-						for (FavouritePermissions favouritePermissions : toDeleteList) {
-							favouritePermissionsRepository.delete(favouritePermissions);
-						}
+			public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+				if (!toDeleteList.isEmpty()) {
+					for (FavouritePermissions favouritePermissions : toDeleteList) {
+						favouritePermissionsRepository.delete(favouritePermissions);
 					}
-
-					favouriteListRepository.save(getFavouriteList(),
-							resourceBundle.get(getFavouriteList().getId() == 0 ? "log.settings.favouriteList.new"
-									: "log.settings.favouriteList.edit", getFavouriteList()));
 				}
-			});
 
-		} catch (Exception e) {
-			onDatabaseVersionConflict();
-		}
+				favouriteListRepository.save(getFavouriteList(),
+						resourceBundle.get(getFavouriteList().getId() == 0 ? "log.settings.favouriteList.new"
+								: "log.settings.favouriteList.edit", getFavouriteList()));
+			}
+		});
 	}
 
 	public enum Mode {

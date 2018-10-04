@@ -1,30 +1,18 @@
 package com.patho.main.action.handler;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.persistence.Transient;
-
-import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.MainHandlerAction;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.diagnosis.QuickAddDiangosisRevisionDialog;
-import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
 import com.patho.main.model.patient.Slide;
-import com.patho.main.model.patient.Task;
 import com.patho.main.service.SampleService;
 import com.patho.main.template.print.SlideLable;
-import com.patho.main.ui.StainingTableChooser;
-import com.patho.main.util.exception.CustomUserNotificationExcepetion;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;

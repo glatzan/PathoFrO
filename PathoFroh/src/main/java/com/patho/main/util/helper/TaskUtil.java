@@ -5,7 +5,6 @@ import java.util.Set;
 
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;

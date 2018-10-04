@@ -9,7 +9,6 @@ import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.NotificationService;
@@ -20,7 +19,6 @@ import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

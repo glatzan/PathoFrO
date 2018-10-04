@@ -10,14 +10,10 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.patient.ConfirmExternalPatientDataDialog.ConfirmExternalPatientReturnEvent;
-import com.patho.main.action.dialog.worklist.WorklistSearchDialog;
-import com.patho.main.action.dialog.worklist.WorklistSearchDialog.WorklistReturnEvent;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.excepion.ToManyEntriesException;
@@ -29,7 +25,6 @@ import com.patho.main.service.PatientService;
 import com.patho.main.ui.ListChooser;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

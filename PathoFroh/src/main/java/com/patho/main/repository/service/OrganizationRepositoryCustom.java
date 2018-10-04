@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.patho.main.model.Organization;
-import com.patho.main.model.user.HistoUser;
 
 public interface OrganizationRepositoryCustom {
 

@@ -15,7 +15,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.TaskService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;

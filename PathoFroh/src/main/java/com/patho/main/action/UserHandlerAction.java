@@ -11,24 +11,18 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.adaptors.MailHandler;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoPermissions;
-import com.patho.main.model.user.HistoSettings;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.service.PrintService;
 import com.patho.main.template.mail.RequestUnlockMail;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Scope(value = "session")

@@ -15,7 +15,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.dao.SettingsDAO;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;

@@ -1,5 +1,12 @@
 package com.patho.main.template.print.ui.document;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.interfaces.ID;
@@ -7,16 +14,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.InitializeToken;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import lombok.AccessLevel;
 import lombok.Getter;

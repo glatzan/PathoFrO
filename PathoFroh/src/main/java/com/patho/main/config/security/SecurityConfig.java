@@ -30,12 +30,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.patho.main.config.security.filters.JWTAuthorizationFilter;
 import com.patho.main.config.security.filters.JWTPasswortAuthorizationFilter;
 import com.patho.main.config.security.filters.UserAuthorizationFilter;
+import com.patho.main.config.security.handler.JWTAuthorizationFailureHandler;
+import com.patho.main.config.security.handler.UserAuthenticationFailureHandler;
 import com.patho.main.config.security.handler.UserAuthenticationSuccessHandler;
 import com.patho.main.config.security.provider.JWTAuthenticationProvider;
 import com.patho.main.config.security.provider.JWTUserAuthenticationProvider;
 import com.patho.main.config.security.provider.UserAuthenticationProvider;
-import com.patho.main.config.security.handler.JWTAuthorizationFailureHandler;
-import com.patho.main.config.security.handler.UserAuthenticationFailureHandler;
 
 /**
  * Spring Security Configuration.

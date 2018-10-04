@@ -3,34 +3,14 @@ package com.patho.main.util.pdf;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.patho.main.action.handler.GlobalSettings;
-import com.patho.main.common.DateFormat;
-import com.patho.main.config.PathoConfig;
-import com.patho.main.model.PDFContainer;
-import com.patho.main.repository.MediaRepository;
-import com.patho.main.repository.impl.MediaRepositoryImpl;
-import com.patho.main.service.PDFService;
-import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.util.helper.FileUtil;
-import com.patho.main.util.helper.TimeUtil;
-import com.patho.main.util.printer.LoadedPDFContainer;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -41,6 +21,13 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
+import com.patho.main.config.PathoConfig;
+import com.patho.main.model.PDFContainer;
+import com.patho.main.repository.MediaRepository;
+import com.patho.main.service.PDFService;
+import com.patho.main.template.PrintDocument;
+import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.util.printer.LoadedPDFContainer;
 
 import lombok.AccessLevel;
 import lombok.Getter;

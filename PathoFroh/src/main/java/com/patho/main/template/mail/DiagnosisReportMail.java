@@ -6,7 +6,7 @@ import javax.persistence.Transient;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.tools.generic.DateTool;
+
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;

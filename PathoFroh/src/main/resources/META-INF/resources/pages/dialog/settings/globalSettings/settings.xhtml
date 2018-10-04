@@ -11,41 +11,40 @@
 	<title><h:outputFormat
 			value="#{msg['dialog.settings.headline']}">
 		</h:outputFormat></title>
-	<h:outputStylesheet name="histo.css" value="histo.css" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="tabDialog">
+<h:body styleClass="histoTabDialogStyle">
 	<h:form id="adminForm">
 
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
+				styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.settings.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					immediate="true" styleClass="noUnderlineAtLink">
-					<f:actionListener
-						binding="#{settingsDialogHandler.hideDialog()}" />
+					immediate="true">
+					<f:actionListener binding="#{dialog.settingsDialog.hideDialog()}" />
 					<i class="fa fa-fw fa-times icon-grey" />
 				</p:commandLink>
 			</h:panelGrid>
 		</div>
 
-		<h:panelGrid columns="2" styleClass="newTableContainer contentTable"
-			columnClasses="column200px columnTop,columnTop">
+		<h:panelGrid columns="2" styleClass="dialogContainer">
 			<p:outputPanel id="navigationTable" styleClass="navigationTable">
-				<c:forEach items="#{settingsDialogHandler.tabs}"
-					var="tab" varStatus="loop">
-					<p:commandButton value="#{msg[tab.name]}" disabled="#{tab.disabled}"
-						styleClass="#{tab eq settingsDialogHandler.selectedTab ? 'selectedButton' : ''} #{tab.isParent() ? 'childButton' : ''}"
-						actionListener="#{settingsDialogHandler.onTabChange(tab)}"
+				<c:forEach items="#{dialog.settingsDialog.tabs}" var="tab"
+					varStatus="loop">
+					<p:commandButton value="#{msg[tab.name]}"
+						disabled="#{tab.disabled}"
+						styleClass="#{tab eq dialog.settingsDialog.selectedTab ? 'selectedButton' : ''} #{tab.isParent() ? 'childButton' : ''} tabBtn"
+						actionListener="#{dialog.settingsDialog.onTabChange(tab)}"
 						update="navigationTable dialogContent" />
 				</c:forEach>
 			</p:outputPanel>
 			<p:outputPanel id="dialogContent" styleClass="dialogContent">
-				<ui:include
-					src="#{settingsDialogHandler.selectedTab.centerInclude}" />
+				<ui:include src="#{dialog.settingsDialog.selectedTab.centerInclude}" />
 			</p:outputPanel>
 		</h:panelGrid>
 	</h:form>

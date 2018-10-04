@@ -1,63 +1,57 @@
 package com.patho.main.action.dialog.council;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Lazy;
 
-import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.handler.MessageHandler;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.CouncilState;
-import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.SortOrder;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.model.BioBank;
 import com.patho.main.model.Council;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;
 import com.patho.main.model.interfaces.DataList;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.CouncilRepository;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.repository.PhysicianRepository;
+import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.CouncilService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFReturn;
+import com.patho.main.template.PrintDocument;
+import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
+import javassist.Modifier;
+import javassist.util.proxy.MethodFilter;
+import javassist.util.proxy.ProxyFactory;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.Delegate;
 
 @Configurable
 @Getter
@@ -79,8 +73,11 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	@Setter(AccessLevel.NONE)
 	private CouncilService councilService;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	private CouncilRepository councilRepository;
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -90,6 +87,17 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private PDFService pdfService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PrintDocumentRepository printDocumentRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	@Lazy
+	private DialogHandler dialogHandler;
 
 	/**
 	 * Root node for Tree
@@ -221,6 +229,9 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	}
 
 	private TreeNode generateTree(Task task) {
+
+		logger.debug("Generating new tree");
+
 		TreeNode root = new DefaultTreeNode("Root", null);
 
 		TreeNode taskNode = new DefaultTreeNode("task", task, root);
@@ -230,34 +241,38 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		councilNodes = new ArrayList<TreeNode>();
 
 		for (Council council : task.getCouncils()) {
-			TreeNode councilNode = new DefaultTreeNode("council", council, taskNode);
+			logger.debug("Creating tree for {}", council);
+			TreeNode councilNode = new DefaultTreeNode("council", new CouncilContainer(council), taskNode);
 			councilNode.setExpanded(true);
 			councilNode.setSelectable(false);
 
 			councilNodes.add(councilNode);
 
-			TreeNode councilRequestNode = new DefaultTreeNode("council_request", council, councilNode);
+			TreeNode councilRequestNode = new DefaultTreeNode("council_request", new CouncilContainer(council),
+					councilNode);
 			councilRequestNode.setExpanded(true);
 			councilRequestNode.setSelectable(true);
 
 			if (council.isSampleShipped()) {
-				TreeNode councilshipNode = new DefaultTreeNode("council_ship", council, councilNode);
+				TreeNode councilshipNode = new DefaultTreeNode("council_ship", new CouncilContainer(council),
+						councilNode);
 				councilshipNode.setExpanded(true);
 				councilshipNode.setSelectable(true);
 			}
 
-			TreeNode councilReturnNode = new DefaultTreeNode("council_reply", council, councilNode);
+			TreeNode councilReturnNode = new DefaultTreeNode("council_reply", new CouncilContainer(council),
+					councilNode);
 			councilReturnNode.setExpanded(true);
 			councilReturnNode.setSelectable(true);
 
-			TreeNode councilDataNode = new DefaultTreeNode("data_node", council, councilNode);
+			TreeNode councilDataNode = new DefaultTreeNode("data_node", new CouncilContainer(council), councilNode);
 			councilDataNode.setExpanded(true);
 			councilDataNode.setSelectable(true);
 
 			for (PDFContainer container : council.getAttachedPdfs()) {
-				TreeNode councilFileNode = new DefaultTreeNode("file_node", container, councilNode);
+				TreeNode councilFileNode = new DefaultTreeNode("file_node", container, councilDataNode);
 				councilFileNode.setExpanded(false);
-				councilDataNode.setSelectable(true);
+				councilFileNode.setSelectable(true);
 			}
 		}
 
@@ -298,7 +313,7 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		setPhysicianCouncilTransformer(new DefaultTransformer<Physician>(getPhysicianCouncilList()));
 
 		// list of physicians to sign the request
-		setPhysicianCouncilList(physicianRepository.findAllByRole(new ContactRole[] { ContactRole.SIGNATURE }, true,
+		setPhysicianSigantureList(physicianRepository.findAllByRole(new ContactRole[] { ContactRole.SIGNATURE }, true,
 				SortOrder.PRIORITY));
 		setPhysicianSigantureListTransformer(new DefaultTransformer<Physician>(getPhysicianSigantureList()));
 	}
@@ -308,7 +323,7 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	 */
 	public void createCouncil() {
 		logger.info("Adding new council");
-		councilService.createCouncil(getTask());
+		councilService.createCouncil(getTask(), true).getTask();
 		update(true);
 	}
 
@@ -316,11 +331,24 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		setAdmendSelectedRequestState(true);
 	}
 
-	public void endRequestState(Council council) {
+	public void endRequestState(CouncilContainer council) {
 		logger.debug("Ending request phase");
-		councilService.endCouncilRequest(council);
+		councilService.endCouncilRequest(council.getCouncil(), null);
+		System.out.println(council.getNotificationType());
 		setAdmendSelectedRequestState(false);
 		update(true);
+		selectNextStep();
+	}
+
+	/**
+	 * Selects the next step
+	 */
+	private void selectNextStep() {
+		TreeNode parent = getSelectedNode().getParent();
+		int index;
+		if (parent.getChildCount() - 1 > (index = parent.getChildren().indexOf(getSelectedNode()))) {
+			setSelectedNode(parent.getChildren().get(index + 1));
+		}
 	}
 
 	/**
@@ -354,32 +382,32 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 			case ValidetedState:
 				logger.debug("EditState selected");
 				// removing all fav lists
-				removeListFromTask(PredefinedFavouriteList.CouncilLendingMTA,
-						PredefinedFavouriteList.CouncilLendingSecretary, PredefinedFavouriteList.CouncilPending,
+				removeListFromTask(PredefinedFavouriteList.CouncilSendRequestMTA,
+						PredefinedFavouriteList.CouncilSendRequestSecretary, PredefinedFavouriteList.CouncilRequest,
 						PredefinedFavouriteList.CouncilCompleted);
 				break;
 			case LendingStateMTA:
 			case LendingStateSecretary:
 				logger.debug("LendingState selected");
 				// removing pending and completed state
-				removeListFromTask(PredefinedFavouriteList.CouncilPending, PredefinedFavouriteList.CouncilCompleted);
+				removeListFromTask(PredefinedFavouriteList.CouncilRequest, PredefinedFavouriteList.CouncilCompleted);
 				favouriteListDAO.addReattachedTaskToList(getTask(),
 						getSelectedCouncil().getCouncilState() == CouncilState.LendingStateMTA
-								? PredefinedFavouriteList.CouncilLendingMTA
-								: PredefinedFavouriteList.CouncilLendingSecretary);
+								? PredefinedFavouriteList.CouncilSendRequestMTA
+								: PredefinedFavouriteList.CouncilSendRequestSecretary);
 				break;
 			case PendingState:
 				logger.debug("PendingState selected");
 				// removing pending and completed state
-				removeListFromTask(PredefinedFavouriteList.CouncilLendingMTA,
-						PredefinedFavouriteList.CouncilLendingSecretary, PredefinedFavouriteList.CouncilCompleted);
-				favouriteListDAO.addReattachedTaskToList(getTask(), PredefinedFavouriteList.CouncilPending);
+				removeListFromTask(PredefinedFavouriteList.CouncilSendRequestMTA,
+						PredefinedFavouriteList.CouncilSendRequestSecretary, PredefinedFavouriteList.CouncilCompleted);
+				favouriteListDAO.addReattachedTaskToList(getTask(), PredefinedFavouriteList.CouncilRequest);
 				break;
 			case CompletedState:
 				logger.debug("CompletedState selected");
 				// removing pending and completed state
-				removeListFromTask(PredefinedFavouriteList.CouncilLendingMTA,
-						PredefinedFavouriteList.CouncilLendingSecretary, PredefinedFavouriteList.CouncilPending);
+				removeListFromTask(PredefinedFavouriteList.CouncilSendRequestMTA,
+						PredefinedFavouriteList.CouncilSendRequestSecretary, PredefinedFavouriteList.CouncilRequest);
 				favouriteListDAO.addReattachedTaskToList(getTask(), PredefinedFavouriteList.CouncilCompleted);
 				break;
 			default:
@@ -402,14 +430,14 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 				else
 					logger.debug("Not removing from CouncilCompleted list, other councils are in this state");
 				break;
-			case CouncilPending:
+			case CouncilRequest:
 				if (!getTask().getCouncils().stream().anyMatch(p -> p.getCouncilState() == CouncilState.PendingState))
 					favouriteListDAO.removeReattachedTaskFromList(getTask(), predefinedFavouriteList);
 				else
 					logger.debug("Not removing from CouncilPending list, other councils are in this state");
 				break;
-			case CouncilLendingMTA:
-			case CouncilLendingSecretary:
+			case CouncilSendRequestMTA:
+			case CouncilSendRequestSecretary:
 				if (!getTask().getCouncils().stream().anyMatch(p -> p.getCouncilState() == CouncilState.LendingStateMTA
 						|| p.getCouncilState() == CouncilState.LendingStateSecretary))
 					favouriteListDAO.removeReattachedTaskFromList(getTask(), predefinedFavouriteList);
@@ -422,47 +450,39 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		}
 	}
 
+	/**
+	 * Updates the council name
+	 */
 	public void onNameChange() {
-		getSelectedCouncil().setName(generateName());
-		saveCouncilData();
+		getSelectedCouncil().setName(councilService.generateCouncilName(getSelectedCouncil()));
+		saveSelectedCouncil();
 	}
 
-	public String generateName() {
-		StringBuffer str = new StringBuffer();
-
-		// name
-		if (getSelectedCouncil().getCouncilPhysician() != null)
-			str.append(getSelectedCouncil().getCouncilPhysician().getPerson().getFullName());
-		else
-			str.append(resourceBundle.get("dialog.council.data.newCouncil"));
-
-		str.append(" ");
-
-		LocalDateTime ldt = LocalDateTime.ofInstant(selectedCouncil.getDateOfRequest().toInstant(),
-				ZoneId.systemDefault());
-
-		// adding date
-		str.append(ldt.format(DateTimeFormatter.ofPattern(DateFormat.GERMAN_DATE.getDateFormat())));
-
-		return str.toString();
-	}
-
-	public void saveCouncilData() {
-		if (getSelectedCouncil() != null)
-			save();
+	public void onSendSlides() {
+		saveSelectedCouncil();
+		update(true);
 	}
 
 	/**
-	 * Saves a council. If id=0, the council is new and is added to the task, if
-	 * id!=0 the council will only be saved.
-	 * 
-	 * @throws HistoDatabaseInconsistentVersionException
+	 * Saves the currently selected coucil and replaces all old objects
 	 */
-	private boolean save() throws HistoDatabaseInconsistentVersionException {
-			logger.debug("Council Dialog: Saving council");
-			genericDAO.savePatientData(getSelectedCouncil(), getTask(), "log.patient.task.council.update",
-					String.valueOf(getSelectedCouncil().getId()));
-			
+	public void saveSelectedCouncil() {
+		logger.debug("Saving council data");
+		if (getSelectedCouncil() != null) {
+			Council c = councilRepository.save(getSelectedCouncil(),
+					resourceBundle.get("log.patient.task.council.update", getTask(), getSelectedCouncil().getName()),
+					task.getPatient());
+
+			// replacing old coucils
+			DefaultTreeNode parent = (DefaultTreeNode) getSelectedNode().getParent();
+			parent.setData(c);
+
+			for (TreeNode node : parent.getChildren()) {
+				((DefaultTreeNode) node).setData(c);
+			}
+
+			setSelectedCouncil(c);
+		}
 	}
 
 	/**
@@ -471,27 +491,20 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	 * opening other dialogs after closing the current dialog.
 	 */
 	public void printCouncilReport() {
-		try {
-			save();
 
-			List<DocumentTemplate> templates = DocumentTemplate.getTemplates(DocumentType.COUNCIL_REQUEST);
-			List<AbstractDocumentUi<?>> subSelectUIs = templates.stream().map(p -> p.getDocumentUi())
-					.collect(Collectors.toList());
+		List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(DocumentType.COUNCIL_REQUEST);
 
-			for (AbstractDocumentUi<?> documentUi : subSelectUIs) {
-				((CouncilReportUi) documentUi).initialize(task, getSelectedCouncil());
-				((CouncilReportUi) documentUi).setRenderSelectedContact(true);
-				((CouncilReportUi) documentUi).setUpdatePdfOnEverySettingChange(true);
-				((CouncilReportUi) documentUi).setSingleSelect(true);
-			}
+		// getting ui objects
+		List<AbstractDocumentUi<?, ?>> printDocumentUIs = AbstractDocumentUi.factory(printDocuments);
 
-			dialogHandlerAction.getPrintDialog().initBeanForPrinting(task, subSelectUIs, DocumentType.COUNCIL_REQUEST);
-			dialogHandlerAction.getPrintDialog().prepareDialog();
-
-			// workaround for showing and hiding two dialogues
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
+		for (AbstractDocumentUi<?, ?> documentUi : printDocumentUIs) {
+			((CouncilReportUi) documentUi).initialize(task, getSelectedCouncil());
+			((CouncilReportUi) documentUi).setRenderSelectedContact(true);
+			((CouncilReportUi) documentUi).setUpdatePdfOnEverySettingChange(true);
+			((CouncilReportUi) documentUi).getSharedData().setSingleSelect(true);
 		}
+
+		dialogHandler.getPrintDialog().initAndPrepareBean(getTask(), printDocumentUIs, printDocumentUIs.get(0));
 	}
 
 	public void showMediaSelectDialog() {
@@ -539,4 +552,22 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		dialogHandlerAction.getMediaDialog().prepareDialog();
 	}
 
+	@Getter
+	@Setter
+	public static class CouncilContainer extends Council {
+
+		private CouncilNotificationType notificationType = CouncilNotificationType.MTA;
+
+		@Delegate
+		@Setter(AccessLevel.NONE)
+		private Council council;
+
+		public CouncilContainer(Council council) {
+			this.council = council;
+		}
+
+		public static enum CouncilNotificationType {
+			MTA, SECRETARY;
+		}
+	}
 }

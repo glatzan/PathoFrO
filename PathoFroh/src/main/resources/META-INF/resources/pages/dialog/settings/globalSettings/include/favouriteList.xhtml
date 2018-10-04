@@ -16,9 +16,8 @@
 	<p:outputPanel styleClass="bodyPannelFull">
 
 		<p:dataTable var="favouriteList" style="width:100%;" scrollable="true"
-			scrollHeight="460"
-			styleClass="highlightedDataTable noBordersAll collapsedBordersAll"
-			value="#{settingsDialogHandler.favouriteListTab.favouriteLists}">
+			scrollHeight="460" styleClass="defaultHistoDataTable"
+			value="#{dialog.settingsDialog.favouriteListTab.favouriteLists}">
 
 			<p:column
 				headerText="#{msg['dialog.settings.favouriteList.list.name']}"
@@ -82,13 +81,13 @@
 						title="#{msg['dialog.settings.person.list.options']}" />
 				</f:facet>
 				<!-- Edit -->
-				<p:commandLink styleClass="noUnderlineAtLink"
+				<p:commandLink
 					title="#{msg['dialog.settings.person.list.options.edit']}"
-					actionListener="#{favouriteListEditDialog.initAndPrepareBean(favouriteList, true)}"
+					actionListener="#{dialog.favouriteListEditDialog.initAndPrepareBean(favouriteList, true)}"
 					process="@this" partialSubmit="true"
 					disabled="#{!userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_FAVOURITE')}">
 					<p:ajax event="dialogReturn"
-						listener="#{settingsDialogHandler.favouriteListTab.updateData()}"
+						listener="#{dialog.settingsDialog.favouriteListTab.updateData()}"
 						update="@form" />
 					<i class="fa fa-fw fa-cog" />
 				</p:commandLink>
@@ -96,31 +95,30 @@
 		</p:dataTable>
 	</p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
 
-			<h:panelGrid columns="2" styleClass="newTableContainer left">
-				<p:selectBooleanCheckbox styleClass="smallCheckbox" />
+	<div class="buttonContainer">
+		<h:panelGrid columns="2">
+			<!-- to many entries -->
+			<h:panelGrid columns="2" styleClass="left" id="toManyMatches">
+				<p:selectBooleanCheckbox disabled="true" />
 				<h:outputLabel
 					value="#{msg['dialog.settings.favouriteList.list.archived']}"></h:outputLabel>
 			</h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newTableContainer right">
+			<h:panelGrid columns="2" styleClass="right" id="buttonContainer">
 				<p:commandButton
 					value="#{msg['dialog.settings.favouriteList.list.button.new']}"
 					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
-					actionListener="#{favouriteListEditDialog.initAndPrepareBean(true)}">
+					actionListener="#{dialog.favouriteListEditDialog.initAndPrepareBean(true)}">
 					<p:ajax event="dialogReturn"
-						listener="#{settingsDialogHandler.favouriteListTab.updateData()}"
+						listener="#{dialog.settingsDialog.favouriteListTab.updateData()}"
 						update="@form" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{settingsDialogHandler.hideDialog()}" />
+					actionListener="#{dialog.settingsDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
-
 </ui:composition>

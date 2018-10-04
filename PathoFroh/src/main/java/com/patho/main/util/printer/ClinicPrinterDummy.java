@@ -9,8 +9,6 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.pdf.PrintOrder;
 
-import lombok.extern.slf4j.Slf4j;
-
 public class ClinicPrinterDummy extends ClinicPrinter {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());

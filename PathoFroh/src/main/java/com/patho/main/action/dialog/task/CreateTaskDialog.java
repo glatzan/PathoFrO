@@ -6,28 +6,20 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
-import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.GlobalSettings;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.common.Dialog;
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.common.InformedConsentType;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.TaskPriority;
@@ -43,12 +35,10 @@ import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.DiagnosisService;
-import com.patho.main.service.SampleService;
 import com.patho.main.service.TaskService;
-
+import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.CaseCertificate;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
+import com.patho.main.util.exception.CustomNotUniqueReqest;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TimeUtil;
 import com.patho.main.util.pdf.PDFGenerator;

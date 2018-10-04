@@ -1,9 +1,10 @@
 package com.patho.main.util.notification;
 
-import com.patho.main.action.handler.GlobalSettings;
-import com.patho.main.util.helper.HistoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+
+import com.patho.main.action.handler.GlobalSettings;
+import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -5,14 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.patho.main.action.DialogHandlerAction;
-import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.PDFContainer;
-import com.patho.main.model.interfaces.DataList;
 import com.patho.main.util.event.PatientMergeEvent;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Scope("session")

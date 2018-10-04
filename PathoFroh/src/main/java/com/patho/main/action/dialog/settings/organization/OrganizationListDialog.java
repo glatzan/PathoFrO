@@ -9,13 +9,11 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.OrganizationRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

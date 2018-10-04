@@ -1,6 +1,7 @@
 package com.patho.main.util.notification;
 
 import org.apache.commons.validator.routines.EmailValidator;
+
 import com.patho.main.util.helper.HistoUtil;
 
 /**

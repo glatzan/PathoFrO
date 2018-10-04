@@ -1,5 +1,7 @@
 package com.patho.main.rest;
 
+import static org.springframework.ldap.query.LdapQueryBuilder.query;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,8 +23,6 @@ import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.support.LdapNameBuilder;
-import org.springframework.security.ldap.userdetails.Person;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,8 +38,6 @@ import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.AuthenticationService;
-
-import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 @RestController
 @RequestMapping(value = "/rest")

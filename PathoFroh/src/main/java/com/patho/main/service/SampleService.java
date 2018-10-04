@@ -1,31 +1,15 @@
 package com.patho.main.service;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
-import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Sample;
-import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.SampleRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.ui.task.TaskStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional

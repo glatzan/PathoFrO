@@ -30,7 +30,6 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.interfaces.ArchivAble;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.user.HistoUser;
 
 import lombok.Getter;
 import lombok.Setter;

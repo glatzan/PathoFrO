@@ -10,7 +10,9 @@
 	xmlns:b="http://bootsfaces.net/ui">
 
 	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.council.request']}" />
+		<h:outputFormat value="#{msg['dialog.council.ship']}" escape="false">
+			<f:param value="#{dialog.councilDialog.selectedCouncil.name}" />
+		</h:outputFormat>
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannel" style="padding:10px;">
@@ -18,87 +20,122 @@
 		<h:panelGrid styleClass="defaultHistoTable" columns="2">
 			<!-- sample send -->
 			<h:outputLabel value="#{msg['dialog.council.sampleShipped']}"></h:outputLabel>
-			<h:panelGrid columns="2" styleClass="newTableContainer">
+			<h:panelGrid columns="2"
+				styleClass="listingHistoHiddenTableContainer">
 				<p:selectBooleanCheckbox
-					disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.editable}"
 					title="#{msg['dialog.council.sampleShipped.text']}"
 					value="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
 					<p:ajax event="change" update="@form" process="@form"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 				</p:selectBooleanCheckbox>
 
-				<p:selectOneMenu id="attachments"
-					style="width:450px; margin-left: 10px;"
+				<p:selectOneMenu id="attachments" style="width:450px;"
 					value="#{dialog.councilDialog.selectedCouncil.sampleShippedCommentary}"
-					disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.selectedCouncil.sampleShipped or !dialog.councilDialog.editable}"
 					editable="true">
 					<f:selectItems value="#{dialog.councilDialog.attachmentList}"
 						itemValue="#{attachment.value}" itemLabel="#{attachment.value}"
 						var="attachment" />
 					<p:ajax event="change"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 					<p:ajax event="keyup" delay="1000"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 				</p:selectOneMenu>
 			</h:panelGrid>
 
 			<!-- sample send date -->
-			<h:outputLabel value=""
-				rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}" />
-			<h:panelGrid columns="2" styleClass="newTableContainer"
-				rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
+			<h:outputLabel value="" />
+			<h:panelGrid columns="2"
+				styleClass="listingHistoHiddenTableContainer">
 				<h:outputLabel value="#{msg['dialog.council.sampleShipped.date']}"></h:outputLabel>
 
 				<p:calendar pattern="dd.MM.yyyy" mask="true"
-					style="margin-left:10px;"
-					disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.editable}"
 					value="#{dialog.councilDialog.selectedCouncil.sampleShippedDate}">
 
 					<p:ajax event="dateSelect"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 					<p:ajax event="change"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 				</p:calendar>
 			</h:panelGrid>
 
-			<!-- Sample returned -->
-			<h:outputLabel value="#{msg['dialog.council.sampleReturned']}"
-				rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}" />
-			<h:panelGrid columns="2" styleClass="newTableContainer"
-				rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
+			<!-- sample return is expected -->
+			<h:outputLabel value="" />
+			<h:panelGrid columns="2"
+				styleClass="listingHistoHiddenTableContainer">
+				<h:outputLabel value="#{msg['dialog.council.expectSampleReturn']}"></h:outputLabel>
+
 				<p:selectBooleanCheckbox
-					disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState')} or !dialog.councilDialog.editable"
+					title="#{msg['dialog.council.expectSampleReturn.text']}"
+					value="#{dialog.councilDialog.selectedCouncil.expectSampleReturn}">
+					<p:ajax event="change" update="@form" process="@form"
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+				</p:selectBooleanCheckbox>
+			</h:panelGrid>
+
+			<!-- Sample returned -->
+			<h:outputLabel value="#{msg['dialog.council.sampleReturned']}" />
+			<h:panelGrid columns="2"
+				styleClass="listingHistoHiddenTableContainer">
+				<p:selectBooleanCheckbox
+					disabled="#{!dialog.councilDialog.selectedCouncil.expectSampleReturn}"
 					title="#{msg['dialog.council.sampleReturned.text']}"
 					value="#{dialog.councilDialog.selectedCouncil.sampleReturned}">
 					<p:ajax event="change" update="@form" process="@form"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 				</p:selectBooleanCheckbox>
-				<p:inputText style="width:470px; margin-left: 10px;"
-					disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.selectedCouncil.sampleReturned} or !dialog.councilDialog.editable"
+				<p:inputText style="width:470px;"
+					disabled="#{!dialog.councilDialog.selectedCouncil.expectSampleReturn}"
 					value="#{dialog.councilDialog.selectedCouncil.sampleReturnedCommentary}">
 					<p:ajax event="keyup" delay="1000"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 				</p:inputText>
 			</h:panelGrid>
 
 			<!-- sample returned date -->
-			<h:outputLabel value=""
-				rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}" />
-			<h:panelGrid columns="2" styleClass="newTableContainer"
-				rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
+			<h:outputLabel value="" />
+			<h:panelGrid columns="2"
+				styleClass="listingHistoHiddenTableContainer">
 				<h:outputLabel value="#{msg['dialog.council.sampleReturned.date']}"></h:outputLabel>
 
 				<p:calendar pattern="dd.MM.yyyy" mask="true"
-					style="margin-left:10px;"
-					disabled="#{!dialog.councilDialog.selectedCouncil.isCouncilState('EditState') or !dialog.councilDialog.selectedCouncil.sampleReturned} or !dialog.councilDialog.editable"
+					disabled="#{!dialog.councilDialog.selectedCouncil.expectSampleReturn}"
 					value="#{dialog.councilDialog.selectedCouncil.sampleReturnedDate}">
 
 					<p:ajax event="dateSelect"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 					<p:ajax event="change"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 				</p:calendar>
 			</h:panelGrid>
+
+			<h:outputLabel value="&nbsp;" />
+			<h:outputLabel value=" " />
+
+			<!-- internal commentary -->
+			<h:outputLabel value="#{msg['dialog.council.internalCommentary']}"></h:outputLabel>
+			<p:inputTextarea style="width: 700px;" rows="5"
+				value="#{dialog.councilDialog.selectedCouncil.commentary}">
+				<p:ajax event="keyup" delay="1000" process="@form" update="@form"
+					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+			</p:inputTextarea>
 		</h:panelGrid>
 	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="1" styleClass="newTableContainer left">
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="3" styleClass="newTableContainer right">
+				<!-- Close Button -->
+				<p:commandButton value="#{msg['general.close']}"
+					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
+					immediate="true"
+					actionListener="#{dialog.councilDialog.hideDialog()}" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
 </ui:composition>

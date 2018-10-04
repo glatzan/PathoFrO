@@ -5,6 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.action.dialog.print.CustomAddressDialog.CustomAddressReturn;
 import com.patho.main.common.ContactRole;
 import com.patho.main.config.util.ResourceBundle;
@@ -17,10 +21,6 @@ import com.patho.main.template.print.DiagnosisReport;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.transformer.DefaultTransformer;
-
-import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import lombok.AccessLevel;
 import lombok.Getter;

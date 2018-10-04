@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.CouncilState;
 import com.patho.main.common.DateFormat;
+import com.patho.main.common.PredefinedFavouriteList;
+import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Council;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
@@ -31,26 +33,37 @@ public class CouncilService extends AbstractService {
 	@Setter(AccessLevel.NONE)
 	private CouncilRepository councilRepository;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private FavouriteListService favouriteListService;
+
 	/**
 	 * Creates a new council
 	 * 
 	 * @param task
 	 * @return
 	 */
-	public Council createCouncil(Task task) {
+	public CouncilReturn createCouncil(Task task, boolean addToFavList) {
 
 		Council council = new Council(task);
 		council.setDateOfRequest(DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH));
 		council.setName(generateCouncilName(council));
 		council.setCouncilState(CouncilState.EditState);
 		council.setAttachedPdfs(new HashSet<PDFContainer>());
+		council.setTask(task);
+
+		task.getCouncils().add(council);
 
 		// task does not need to be saved, because council is mapped by the council.task
 		// id;
 		council = councilRepository.save(council,
 				resourceBundle.get("log.patient.task.council.create", task, council.getName()), task.getPatient());
 
-		return council;
+		task = favouriteListService.addTaskToList(council.getTask(), "", PredefinedFavouriteList.Council,
+				PredefinedFavouriteList.CouncilRequest);
+
+		return new CouncilReturn(task, council);
 	}
 
 	/**
@@ -84,12 +97,28 @@ public class CouncilService extends AbstractService {
 	 * @param council
 	 * @return
 	 */
-	public Council endCouncilRequest(Council council) {
+	public CouncilReturn endCouncilRequest(Council council, PredefinedFavouriteList nextStepList) {
 		council.setCouncilRequestCompleted(true);
+
 		council = councilRepository.save(council,
 				resourceBundle.get("log.patient.task.council.phase.request.end", council.getTask(), council.getName()),
 				council.getTask().getPatient());
 
-		return council;
+		Task task = favouriteListService.removeTaskFromList(council.getTask(), PredefinedFavouriteList.CouncilRequest);
+//		task = favouriteListService.addTaskToList(task, nextStepList);
+
+		return new CouncilReturn(task, council);
+	}
+
+	@Getter
+	@Setter
+	public static class CouncilReturn {
+		protected Task task;
+		protected Council council;
+
+		public CouncilReturn(Task task, Council council) {
+			this.task = task;
+			this.council = council;
+		}
 	}
 }

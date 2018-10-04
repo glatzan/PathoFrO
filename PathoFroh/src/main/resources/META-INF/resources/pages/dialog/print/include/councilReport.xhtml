@@ -111,7 +111,7 @@
 
 				<!-- name -->
 				<p:column>
-					<h:outputLabel value="#{chooser.contact.person.fullName}"
+					<h:outputLabel value="#{chooser.contact.person.getFullName()}"
 						id="editAddress#{outer.index}">
 						<f:converter converterId="org.histo.ui.TruncateConverter" />
 						<f:attribute name="truncateAt" value="20" />

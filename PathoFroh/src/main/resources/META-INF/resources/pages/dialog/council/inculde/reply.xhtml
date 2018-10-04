@@ -10,45 +10,110 @@
 	xmlns:b="http://bootsfaces.net/ui">
 
 	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="Antwort" />
+		<h:outputFormat value="#{msg['dialog.council.reply']}" escape="false">
+			<f:param value="#{dialog.councilDialog.selectedCouncil.name}" />
+		</h:outputFormat>
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannel" style="padding:10px;">
 
 		<h:panelGrid styleClass="defaultHistoTable" columns="2">
 			<!-- sample send -->
-			<h:outputLabel value="Antwort erhalten"></h:outputLabel>
-			<h:panelGrid columns="2" styleClass="newTableContainer">
-				<p:selectBooleanCheckbox
-					title="#{msg['dialog.council.sampleShipped.text']}"
-					value="#{dialog.councilDialog.selectedCouncil.replyReceived}">
-					<p:ajax event="change" update="@form" process="@form"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
-				</p:selectBooleanCheckbox>
-
-			</h:panelGrid>
+			<h:outputLabel value="#{msg['dialog.council.repy']}"></h:outputLabel>
+			<p:selectBooleanCheckbox
+				title="#{msg['dialog.council.sampleShipped.text']}"
+				value="#{dialog.councilDialog.selectedCouncil.replyReceived}">
+				<p:ajax event="change" update="@form" process="@form"
+					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+			</p:selectBooleanCheckbox>
 
 			<!-- sample send date -->
-			<h:outputLabel value=""  />
-			<h:panelGrid columns="2" styleClass="newTableContainer"
+			<h:outputLabel value="" />
+			<h:panelGrid columns="2"
+				styleClass="listingHistoHiddenTableContainer"
 				rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
-				<h:outputLabel value="#{msg['dialog.council.sampleShipped.date']}"></h:outputLabel>
+				<h:outputLabel value="#{msg['dialog.council.repy.date']}"></h:outputLabel>
 
 				<p:calendar pattern="dd.MM.yyyy" mask="true"
-					style="margin-left:10px;"
 					value="#{dialog.councilDialog.selectedCouncil.replyReceivedDate}">
 
 					<p:ajax event="dateSelect"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 					<p:ajax event="change"
-						listener="#{dialog.councilDialog.saveCouncilData()}" />
+						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 				</p:calendar>
 			</h:panelGrid>
 
-			<h:outputLabel value=""  />
+			<!-- PDFs -->
+			<h:outputLabel value="#{msg['dialog.council.repy.file']}" />
+			<p:dataTable var="attachedPdf" id="attachedPdfList"
+				style="width:700px"
+				value="#{dialog.councilDialog.selectedCouncil.attachedPdfs}"
+				styleClass="defaultHistoDataTable">
+
+				<p:column style="width:30%">
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['body.worklist.patient.pdfs.name']}"></h:outputLabel>
+					</f:facet>
+
+					<h:outputLabel value="#{attachedPdf.name}"></h:outputLabel>
+				</p:column>
+
+				<p:column style="width:18%">
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['body.worklist.patient.pdfs.date']}"></h:outputLabel>
+					</f:facet>
+					<h:outputText value="#{attachedPdf.audit.createdOn}">
+						<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:10%">
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['body.worklist.patient.pdfs.type']}"></h:outputLabel>
+					</f:facet>
+					<h:outputLabel
+						value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"></h:outputLabel>
+				</p:column>
+				<p:column style="auto">
+					<f:facet name="header">
+						<h:outputLabel
+							value="#{msg['body.worklist.patient.pdfs.commentary']}"></h:outputLabel>
+					</f:facet>
+					<h:outputLabel value="#{attachedPdf.commentary}"></h:outputLabel>
+				</p:column>
+				<p:column style="width:15px">
+					<f:facet name="header">
+						<p:commandLink id="upload"
+							rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+							actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
+							<p:ajax event="dialogReturn" update="@form" />
+							<i class="fa fa-plus"></i>
+						</p:commandLink>
+					</f:facet>
+					<p:commandLink
+						rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient).setDisplayPDF(attachedPdf)}">
+						<p:ajax event="dialogReturn" update="@form" />
+						<i class="fa fa-search"></i>
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+
+			<h:outputLabel value="#{msg['dialog.council.repy.upload']}" />
 			<p:fileUpload style="width:300px;" update="@form"
 				fileUploadListener="#{dialog.pdfOrganizer.handleFileUpload}"
 				mode="advanced" auto="true" sizeLimit="10000000" />
+
+			<h:outputLabel value="&nbsp;" />
+			<h:outputLabel value=" " />
+
+			<!-- internal commentary -->
+			<h:outputLabel value="#{msg['dialog.council.internalCommentary']}"></h:outputLabel>
+			<p:inputTextarea style="width: 700px;" rows="5"
+				value="#{dialog.councilDialog.selectedCouncil.commentary}">
+				<p:ajax event="keyup" delay="1000" process="@form" update="@form"
+					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+			</p:inputTextarea>
 		</h:panelGrid>
 	</p:outputPanel>
 </ui:composition>

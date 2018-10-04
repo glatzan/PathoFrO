@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.patho.main.model.patient.Patient;
 
-import lombok.extern.slf4j.Slf4j;
-
 public class AbstractWorklistSearch {
 	
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -3,7 +3,6 @@ package com.patho.main.repository.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.Organization;
 import com.patho.main.model.Organization_;
-import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.service.OrganizationRepositoryCustom;
 
 @Service

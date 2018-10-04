@@ -4,16 +4,6 @@ import java.util.List;
 
 import javax.faces.component.html.HtmlPanelGroup;
 
-import com.patho.main.action.UserHandlerAction;
-import com.patho.main.action.handler.GlobalEditViewHandler.TaskInitilize;
-import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.model.dto.FavouriteListMenuItem;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Task;
-import com.patho.main.model.user.HistoPermissions;
-import com.patho.main.repository.FavouriteListRepository;
-
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSeparator;
@@ -21,6 +11,16 @@ import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+
+import com.patho.main.action.UserHandlerAction;
+import com.patho.main.action.handler.GlobalEditViewHandler.TaskInitilize;
+import com.patho.main.common.PredefinedFavouriteList;
+import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.model.dto.FavouriteListMenuItem;
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.patient.Task;
+import com.patho.main.model.user.HistoPermissions;
+import com.patho.main.repository.FavouriteListRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;

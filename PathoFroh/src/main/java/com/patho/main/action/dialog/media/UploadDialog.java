@@ -17,7 +17,6 @@ import com.patho.main.config.PathoConfig;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Patient;
-import com.patho.main.repository.MediaRepository;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.PrintDocument.DocumentType;

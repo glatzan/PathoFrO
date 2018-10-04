@@ -1,14 +1,6 @@
 package com.patho.main.adaptors.patient;
 
-import java.io.File;
-import java.io.StringWriter;
-
-import com.patho.main.model.Person.Gender;
 import com.patho.main.model.patient.Patient;
-import com.patho.main.util.helper.TimeUtil;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /*
  * -<PatientData>

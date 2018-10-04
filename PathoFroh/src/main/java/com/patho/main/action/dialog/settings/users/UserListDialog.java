@@ -2,20 +2,20 @@ package com.patho.main.action.dialog.settings.users;
 
 import java.util.List;
 
-import com.patho.main.action.UserHandlerAction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.support.TransactionTemplate;
+
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.transaction.support.TransactionTemplate;
+import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;

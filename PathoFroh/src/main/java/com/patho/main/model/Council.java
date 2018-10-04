@@ -1,7 +1,6 @@
 package com.patho.main.model;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -116,6 +115,12 @@ public class Council implements ID, DataList, AuditAble {
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date sampleShippedDate;
+	
+	/**
+	 * True if the samples should be returned
+	 */
+	@Column
+	private boolean expectSampleReturn;
 	
 	/**
 	 * True if sample is returned

@@ -38,7 +38,7 @@
 			<p:column headerText="#" style="width:15px">
 				<p:commandLink styleClass="noUnderlineAtLink"
 					title="#{msg['dialog.settings.person.list.options.edit']}"
-					actionListener="#{favouriteListEditDialog.initAndPrepareBean(favouriteListContainer.favouriteList)}"
+					actionListener="#{dialog.favouriteListEditDialog.initAndPrepareBean(favouriteListContainer.favouriteList)}"
 					process="@this" partialSubmit="true">
 					<p:ajax event="dialogReturn" update="@form" />
 					<i class="fa fa-fw fa-search" />
@@ -59,7 +59,7 @@
 				<p:commandButton
 					value="#{msg['dialog.settings.favouriteList.list.button.new']}"
 					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
-					actionListener="#{favouriteListEditDialog.initAndPrepareBean()}">
+					actionListener="#{dialog.favouriteListEditDialog.initAndPrepareBean()}">
 					<p:ajax event="dialogReturn"
 						listener="#{userSettingsDialog.favouriteListTab.updateData()}"
 						update="@form" />

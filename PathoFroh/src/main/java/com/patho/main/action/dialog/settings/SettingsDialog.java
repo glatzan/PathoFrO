@@ -6,17 +6,13 @@ import java.util.stream.Collectors;
 
 import org.primefaces.event.ReorderEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.dao.LogDAO;
-import com.patho.main.dao.UtilDAO;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
@@ -26,7 +22,6 @@ import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.model.log.Log;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.DiagnosisPresetRepository;
@@ -42,19 +37,15 @@ import com.patho.main.service.PhysicianService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.ListChooser;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Scope(value = "session")
+@Configurable
 @Getter
 @Setter
-@Slf4j
-public class SettingsDialogHandler extends AbstractTabDialog {
+public class SettingsDialog extends AbstractTabDialog {
 
 	public static final int DIAGNOSIS_LIST = 0;
 	public static final int DIAGNOSIS_EDIT = 1;
@@ -79,16 +70,6 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private UserHandlerAction userHandlerAction;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DialogHandlerAction dialogHandlerAction;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private LogDAO logDAO;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -134,7 +115,7 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private FavouriteListRepository favouriteListRepository;
-	
+
 	private ProgramParentTab programParentTab;
 	private HistoUserTab histoUserTab;
 	private HistoGroupTab histoGroupTab;
@@ -148,7 +129,7 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 	private OrganizationTab organizationTab;
 	private LogTab logTab;
 
-	public SettingsDialogHandler() {
+	public SettingsDialog() {
 		setProgramParentTab(new ProgramParentTab());
 		setHistoUserTab(new HistoUserTab());
 		setHistoGroupTab(new HistoGroupTab());
@@ -239,21 +220,13 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		}
 
 		public void onChangeUserGroup(HistoUser histoUser) {
-			try {
-				userService.updateGroupOfUser(histoUser, histoUser.getGroup());
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
-			}
+			userService.updateGroupOfUser(histoUser, histoUser.getGroup());
 		}
 
 		public void addHistoUser(Physician physician) {
-			try {
-				if (physician != null) {
-					userService.addOrMergeUser(physician);
-					updateData();
-				}
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
+			if (physician != null) {
+				userService.addOrMergeUser(physician);
+				updateData();
 			}
 		}
 
@@ -347,36 +320,32 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		}
 
 		public void saveDiagnosisPreset() {
-			try {
-				if (getSelectedDiagnosisPreset().getId() == 0) {
+			if (getSelectedDiagnosisPreset().getId() == 0) {
 
-					// case new, save
-					log.debug("Creating new diagnosis " + getSelectedDiagnosisPreset().getCategory());
+				// case new, save
+				logger.debug("Creating new diagnosis " + getSelectedDiagnosisPreset().getCategory());
 
-					getDiagnosisPresets().add(getSelectedDiagnosisPreset());
+				getDiagnosisPresets().add(getSelectedDiagnosisPreset());
 
-					diagnosisPresetRepository.save(getSelectedDiagnosisPreset(), resourceBundle
-							.get("log.settings.diagnosis.new", getSelectedDiagnosisPreset().getCategory()));
+				diagnosisPresetRepository.save(getSelectedDiagnosisPreset(),
+						resourceBundle.get("log.settings.diagnosis.new", getSelectedDiagnosisPreset().getCategory()));
 
-					ListOrder.reOrderList(getDiagnosisPresets());
+				ListOrder.reOrderList(getDiagnosisPresets());
 
-					diagnosisPresetRepository.saveAll(getDiagnosisPresets(),
-							resourceBundle.get("log.settings.diagnosis.list.reoder"));
+				diagnosisPresetRepository.saveAll(getDiagnosisPresets(),
+						resourceBundle.get("log.settings.diagnosis.list.reoder"));
 
-				} else {
+			} else {
 
-					// case edit: update an save
-					log.debug("Updating diagnosis " + getSelectedDiagnosisPreset().getCategory());
+				// case edit: update an save
+				logger.debug("Updating diagnosis " + getSelectedDiagnosisPreset().getCategory());
 
-					diagnosisPresetRepository.save(getSelectedDiagnosisPreset(), resourceBundle
-							.get("log.settings.diagnosis.update", getSelectedDiagnosisPreset().getCategory()));
-				}
-
-				discardDiagnosisPreset();
-
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
+				diagnosisPresetRepository.save(getSelectedDiagnosisPreset(), resourceBundle
+						.get("log.settings.diagnosis.update", getSelectedDiagnosisPreset().getCategory()));
 			}
+
+			discardDiagnosisPreset();
+
 		}
 
 		/**
@@ -403,19 +372,14 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		 * @param event
 		 */
 		public void onReorderList(ReorderEvent event) {
+			logger.debug(
+					"List order changed, moved material from " + event.getFromIndex() + " to " + event.getToIndex());
 
-			try {
-				log.debug("List order changed, moved material from " + event.getFromIndex() + " to "
-						+ event.getToIndex());
+			ListOrder.reOrderList(getDiagnosisPresets());
 
-				ListOrder.reOrderList(getDiagnosisPresets());
+			diagnosisPresetRepository.saveAll(getDiagnosisPresets(),
+					resourceBundle.get("log.settings.diagnosis.list.reoder"));
 
-				diagnosisPresetRepository.saveAll(getDiagnosisPresets(),
-						resourceBundle.get("log.settings.diagnosis.list.reoder"));
-
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
-			}
 		}
 
 		@Override
@@ -506,28 +470,24 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		 * @param origStainingPrototypeList
 		 */
 		public void saveMaterial() {
-			try {
-				if (getEditMaterial().getId() == 0) {
-					log.debug("Creating new Material " + getEditMaterial().getName());
-					// case new, save+
-					getAllMaterialList().add(getEditMaterial());
+			if (getEditMaterial().getId() == 0) {
+				logger.debug("Creating new Material " + getEditMaterial().getName());
+				// case new, save+
+				getAllMaterialList().add(getEditMaterial());
 
-					materialPresetRepository.save(getEditMaterial(),
-							resourceBundle.get("log.settings.material.new", getEditMaterial().getName()));
+				materialPresetRepository.save(getEditMaterial(),
+						resourceBundle.get("log.settings.material.new", getEditMaterial().getName()));
 
-					ListOrder.reOrderList(getAllMaterialList());
+				ListOrder.reOrderList(getAllMaterialList());
 
-					materialPresetRepository.saveAll(getAllMaterialList(),
-							resourceBundle.get("log.settings.material.list.reoder"));
+				materialPresetRepository.saveAll(getAllMaterialList(),
+						resourceBundle.get("log.settings.material.list.reoder"));
 
-				} else {
-					log.debug("Updating Material " + getEditMaterial().getName());
-					// case edit: update an save
-					materialPresetRepository.save(getEditMaterial(),
-							resourceBundle.get("log.settings.material.update", getEditMaterial().getName()));
-				}
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
+			} else {
+				logger.debug("Updating Material " + getEditMaterial().getName());
+				// case edit: update an save
+				materialPresetRepository.save(getEditMaterial(),
+						resourceBundle.get("log.settings.material.update", getEditMaterial().getName()));
 			}
 		}
 
@@ -582,17 +542,13 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		 * @param event
 		 */
 		public void onReorderList(ReorderEvent event) {
-			try {
-				log.debug("List order changed, moved material from " + event.getFromIndex() + " to "
-						+ event.getToIndex());
-				ListOrder.reOrderList(getAllMaterialList());
+			logger.debug(
+					"List order changed, moved material from " + event.getFromIndex() + " to " + event.getToIndex());
+			ListOrder.reOrderList(getAllMaterialList());
 
-				materialPresetRepository.saveAll(getAllMaterialList(),
-						resourceBundle.get("log.settings.staining.list.reoder"));
+			materialPresetRepository.saveAll(getAllMaterialList(),
+					resourceBundle.get("log.settings.staining.list.reoder"));
 
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
-			}
 		}
 
 		@Override
@@ -642,15 +598,11 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		 * @param event
 		 */
 		public void onReorderList(ReorderEvent event) {
-			try {
-				log.debug("List order changed, moved staining from " + event.getFromIndex() + " to "
-						+ event.getToIndex());
-				ListOrder.reOrderList(getAllStainingsList());
-				stainingPrototypeRepository.saveAll(getAllStainingsList(), "log.settings.staining.list.reoder");
+			logger.debug(
+					"List order changed, moved staining from " + event.getFromIndex() + " to " + event.getToIndex());
+			ListOrder.reOrderList(getAllStainingsList());
+			stainingPrototypeRepository.saveAll(getAllStainingsList(), "log.settings.staining.list.reoder");
 
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
-			}
 		}
 
 	}
@@ -721,35 +673,29 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		}
 
 		public void saveListItem() {
-			try {
+			if (getEditListItem().getId() == 0) {
 
-				if (getEditListItem().getId() == 0) {
+				getEditListItem().setListType(getSelectedStaticList());
 
-					getEditListItem().setListType(getSelectedStaticList());
+				logger.debug("Creating new ListItem " + getEditListItem().getValue() + " for "
+						+ getSelectedStaticList().toString());
+				// case new, save
+				getStaticListContent().add(getEditListItem());
 
-					log.debug("Creating new ListItem " + getEditListItem().getValue() + " for "
-							+ getSelectedStaticList().toString());
-					// case new, save
-					getStaticListContent().add(getEditListItem());
+				listItemRepository.save(getEditListItem(), resourceBundle.get("log.settings.staticList.new",
+						getEditListItem().getValue(), getSelectedStaticList().toString()));
 
-					listItemRepository.save(getEditListItem(), resourceBundle.get("log.settings.staticList.new",
-							getEditListItem().getValue(), getSelectedStaticList().toString()));
+				ListOrder.reOrderList(getStaticListContent());
 
-					ListOrder.reOrderList(getStaticListContent());
+				listItemRepository.saveAll(getStaticListContent(),
+						resourceBundle.get("log.settings.staticList.list.reoder", getSelectedStaticList()));
 
-					listItemRepository.saveAll(getStaticListContent(),
-							resourceBundle.get("log.settings.staticList.list.reoder", getSelectedStaticList()));
+			} else {
+				logger.debug("Updating ListItem " + getEditListItem().getValue());
+				// case edit: update an save
 
-				} else {
-					log.debug("Updating ListItem " + getEditListItem().getValue());
-					// case edit: update an save
-
-					listItemRepository.save(getEditListItem(), resourceBundle.get("log.settings.staticList.update",
-							getEditListItem().getValue(), getSelectedStaticList().toString()));
-				}
-
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
+				listItemRepository.save(getEditListItem(), resourceBundle.get("log.settings.staticList.update",
+						getEditListItem().getValue(), getSelectedStaticList().toString()));
 			}
 		}
 
@@ -761,32 +707,24 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		}
 
 		public void archiveListItem(ListItem item, boolean archive) {
-			try {
-				item.setArchived(archive);
-				if (archive) {
-					listItemRepository.save(item, resourceBundle.get("log.settings.staticList.archive", item.getValue(),
-							getSelectedStaticList().toString()));
-				} else {
-					listItemRepository.save(item, resourceBundle.get("log.settings.staticList.dearchive",
-							item.getValue(), getSelectedStaticList().toString()));
-				}
-
-				// removing item from current list
-				getStaticListContent().remove(item);
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
+			item.setArchived(archive);
+			if (archive) {
+				listItemRepository.save(item, resourceBundle.get("log.settings.staticList.archive", item.getValue(),
+						getSelectedStaticList().toString()));
+			} else {
+				listItemRepository.save(item, resourceBundle.get("log.settings.staticList.dearchive", item.getValue(),
+						getSelectedStaticList().toString()));
 			}
+
+			// removing item from current list
+			getStaticListContent().remove(item);
 		}
 
 		public void onReorderList(ReorderEvent event) {
-			try {
-				ListOrder.reOrderList(getStaticListContent());
+			ListOrder.reOrderList(getStaticListContent());
 
-				listItemRepository.saveAll(getStaticListContent(),
-						resourceBundle.get("log.settings.staticList.list.reoder", getSelectedStaticList()));
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
-			}
+			listItemRepository.saveAll(getStaticListContent(),
+					resourceBundle.get("log.settings.staticList.list.reoder", getSelectedStaticList()));
 		}
 
 		@Override
@@ -858,16 +796,12 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setPhysicianList(physicianRepository.findByRole(getShowPhysicianRoles(), !showArchived));
+			setPhysicianList(physicianRepository.findAllByRole(getShowPhysicianRoles(), !showArchived));
 		}
 
 		public void addPhysician(Physician physician) {
-			try {
-				if (physician != null) {
-					physicianService.addOrMergePhysician(physician);
-				}
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
+			if (physician != null) {
+				physicianService.addOrMergePhysician(physician);
 			}
 		}
 
@@ -878,22 +812,14 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 		 * @param archive
 		 */
 		public void archivePhysician(Physician physician, boolean archive) {
-			try {
-				physicianService.archivePhysician(physician, archive);
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
-			}
+			physicianService.archivePhysician(physician, archive);
 		}
 
 		/**
 		 * Updates the data of the physician with data from the clinic backend
 		 */
 		public void updateDataFromLdap(Physician physician) {
-			try {
-				physicianService.updatePhysicianWithLdapData(physician);
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				onDatabaseVersionConflict();
-			}
+			physicianService.updatePhysicianWithLdapData(physician);
 		}
 	}
 
@@ -975,12 +901,12 @@ public class SettingsDialogHandler extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			int maxPages = logDAO.countTotalLogs();
-			int pagesCount = (int) Math.ceil((double) maxPages / logsPerPull);
-
-			setMaxLogPages(pagesCount);
-
-			setLogs(logDAO.getLogs(getLogsPerPull(), getSelectedLogPage() - 1));
+//			int maxPages = logDAO.countTotalLogs();
+//			int pagesCount = (int) Math.ceil((double) maxPages / logsPerPull);
+//
+//			setMaxLogPages(pagesCount);
+//
+//			setLogs(logDAO.getLogs(getLogsPerPull(), getSelectedLogPage() - 1));
 		}
 
 	}

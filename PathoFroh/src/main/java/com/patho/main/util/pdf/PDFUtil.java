@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
+import com.patho.main.template.PrintDocument.DocumentType;
 
 public class PDFUtil {
 

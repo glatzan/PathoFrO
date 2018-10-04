@@ -1,24 +1,16 @@
 package com.patho.main.model.patient;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
@@ -34,8 +26,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
-import org.primefaces.json.JSONException;
-import org.primefaces.json.JSONObject;
 
 import com.patho.main.common.Dialog;
 import com.patho.main.model.PDFContainer;
@@ -43,17 +33,13 @@ import com.patho.main.model.Person;
 import com.patho.main.model.interfaces.ArchivAble;
 import com.patho.main.model.interfaces.CreationDate;
 import com.patho.main.model.interfaces.DataList;
-import com.patho.main.model.interfaces.FullName;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.LogAble;
 import com.patho.main.model.interfaces.Parent;
 import com.patho.main.model.interfaces.PatientRollbackAble;
-import com.patho.main.util.exception.CustomNullPatientExcepetion;
-import com.patho.main.util.helper.HistoUtil;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Audited

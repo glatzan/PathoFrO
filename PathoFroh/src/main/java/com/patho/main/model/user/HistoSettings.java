@@ -25,7 +25,6 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import com.patho.main.common.View;
 import com.patho.main.common.WorklistSortOrder;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.patient.Block;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.Getter;

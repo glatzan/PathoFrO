@@ -1,20 +1,20 @@
 package com.patho.main.action.dialog.patient;
 
-import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
-import com.patho.main.common.Dialog;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.repository.PatientRepository;
-import com.patho.main.util.event.PatientMergeEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.handler.WorklistViewHandlerAction;
+import com.patho.main.common.Dialog;
+import com.patho.main.model.patient.Patient;
+import com.patho.main.repository.PatientRepository;
+import com.patho.main.util.event.PatientMergeEvent;
+import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

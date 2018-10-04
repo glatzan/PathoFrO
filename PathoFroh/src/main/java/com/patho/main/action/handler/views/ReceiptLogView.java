@@ -4,22 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.action.handler.GlobalEditViewHandler.StainingListAction;
-import com.patho.main.common.ContactRole;
-import com.patho.main.common.SortOrder;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
-import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.SlideService;
 import com.patho.main.ui.StainingTableChooser;
-import com.patho.main.ui.selectors.PhysicianSelector;
 
 import lombok.AccessLevel;
 import lombok.Getter;

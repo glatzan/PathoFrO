@@ -3,26 +3,18 @@ package com.patho.main.action.dialog.notification;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.MessageHandler;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.SortOrder;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Physician;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PhysicianRepository;
-import com.patho.main.service.AssociatedContactService;
-import com.patho.main.service.AssociatedContactService.ContactReturn;
 import com.patho.main.ui.selectors.PhysicianSelector;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

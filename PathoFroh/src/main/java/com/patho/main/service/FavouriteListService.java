@@ -19,7 +19,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.FavouriteListItemRepository;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.StreamUtils;
 
 import lombok.AccessLevel;

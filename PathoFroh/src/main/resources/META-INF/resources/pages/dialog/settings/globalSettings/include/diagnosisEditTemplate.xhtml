@@ -16,7 +16,7 @@
 		<p:panelGrid columns="1" styleClass="noBordersAll collapsedBordersAll"
 			style="width:100%">
 			<p:editor
-				value="#{settingsDialogHandler.diagnosisTab.selectedDiagnosisPreset.extendedDiagnosisText}">
+				value="#{dialog.settingsDialog.diagnosisTab.selectedDiagnosisPreset.extendedDiagnosisText}">
 			</p:editor>
 		</p:panelGrid>
 	</p:outputPanel>
@@ -32,11 +32,11 @@
 				<p:commandButton value="#{msg['general.ok']}"
 					icon="fa fa-fw fa-floppy-o" process="@form" partialSubmit="true"
 					update="@form"
-					actionListener="#{settingsDialogHandler.diagnosisTab.discardEditDiagnosisPresetTemplate()}" />
+					actionListener="#{dialog.settingsDialog.diagnosisTab.discardEditDiagnosisPresetTemplate()}" />
 				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{settingsDialogHandler.hideDialog()}" />
+					actionListener="#{dialog.settingsDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

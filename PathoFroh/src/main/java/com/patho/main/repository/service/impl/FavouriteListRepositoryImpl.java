@@ -174,6 +174,8 @@ public class FavouriteListRepositoryImpl extends AbstractRepositoryCustom
 		if (loadDumpList)
 			root.fetch(FavouriteList_.dumpList, JoinType.LEFT);
 
+		criteria.distinct(true);
+		
 		List<FavouriteList> lists = getSession().createQuery(criteria).getResultList();
 
 		return lists;

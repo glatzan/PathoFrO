@@ -2,15 +2,14 @@ package com.patho.main.util.worklist.search;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.patho.main.common.Eye;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 

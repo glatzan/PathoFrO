@@ -7,26 +7,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.patho.main.util.exception.CustomNullPatientExcepetion;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
-import com.patho.main.util.helper.HistoUtil;
-
-import lombok.Getter;
+import org.primefaces.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.config.excepion.ToManyEntriesException;
-import com.patho.main.model.PDFContainer;
-import com.patho.main.model.Person;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.JSONPatientRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
-
-import org.hibernate.Hibernate;
-import org.primefaces.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.patho.main.util.exception.CustomNullPatientExcepetion;
+import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
+import com.patho.main.util.helper.HistoUtil;
 
 @Service
 @Transactional

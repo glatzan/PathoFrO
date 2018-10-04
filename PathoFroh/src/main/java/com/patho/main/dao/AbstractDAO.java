@@ -12,9 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.orm.hibernate5.HibernateOptimisticLockingFailureException;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.interfaces.ID;
@@ -25,8 +23,6 @@ import com.patho.main.util.exception.HistoDatabaseConstraintViolationException;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.SecurityContextHolderUtil;
 import com.patho.main.util.hibernate.RootAware;
-
-import lombok.extern.slf4j.Slf4j;
 
 public abstract class AbstractDAO implements Serializable {
 

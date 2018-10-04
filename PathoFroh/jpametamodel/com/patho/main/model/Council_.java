@@ -13,6 +13,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Council.class)
 public abstract class Council_ {
 
+	public static volatile SingularAttribute<Council, Boolean> expectSampleReturn;
 	public static volatile SingularAttribute<Council, Boolean> councilRequestCompleted;
 	public static volatile SingularAttribute<Council, String> sampleShippedCommentary;
 	public static volatile SingularAttribute<Council, Date> sampleReturnedDate;

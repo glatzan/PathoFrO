@@ -1,5 +1,8 @@
 package com.patho.main.action.handler;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.patho.main.action.handler.GlobalEditViewHandler.StainingListAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.CouncilState;
@@ -13,8 +16,6 @@ import com.patho.main.common.TaskPriority;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.user.HistoGroup;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 
 /**

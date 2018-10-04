@@ -1,16 +1,12 @@
 package com.patho.main.template;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
 import org.apache.velocity.app.Velocity;
+
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.util.VelocityNoOutputLogger;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 //@Entity
 //@Audited

@@ -6,9 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,9 +29,6 @@ import com.patho.main.model.interfaces.ArchivAble;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.LogAble;
 import com.patho.main.model.user.HistoGroup.AuthRole;
-import com.patho.main.model.util.audit.Audit;
-import com.patho.main.model.util.audit.AuditAble;
-import com.patho.main.model.util.audit.AuditListener;
 
 import lombok.Getter;
 import lombok.Setter;

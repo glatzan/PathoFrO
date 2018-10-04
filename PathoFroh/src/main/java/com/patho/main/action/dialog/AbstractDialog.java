@@ -2,8 +2,6 @@ package com.patho.main.action.dialog;
 
 import java.util.HashMap;
 
-import javax.faces.event.AbortProcessingException;
-
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +11,12 @@ import com.patho.main.action.MainHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.Task;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
+import com.patho.main.util.exception.CustomNotUniqueReqest;
 import com.patho.main.util.helper.UniqueRequestID;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter

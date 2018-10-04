@@ -1,7 +1,5 @@
 package com.patho.main.util.helper;
 
-import static org.assertj.core.api.Assertions.entry;
-
 import java.util.HashMap;
 import java.util.Map;
 

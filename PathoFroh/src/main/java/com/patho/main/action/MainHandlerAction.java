@@ -1,23 +1,14 @@
 package com.patho.main.action;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletRequest;
 
-import org.cups4j.CupsClient;
-import org.cups4j.CupsPrinter;
-import org.cups4j.PrintJob;
-import org.cups4j.PrintRequestResult;
-import org.primefaces.PrimeFaces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Lazy;
@@ -29,14 +20,8 @@ import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.common.DateFormat;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Slide;
-import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PDFRepository;
-import com.patho.main.template.PrintDocument;
-import com.patho.main.template.print.SlideLable;
 import com.patho.main.util.DataBaseConverter;
-import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 import com.patho.main.util.helper.TimeUtil;
 
 import lombok.AccessLevel;

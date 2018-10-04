@@ -5,7 +5,6 @@ import static org.hibernate.annotations.LazyCollectionOption.FALSE;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -27,18 +26,15 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.LogAble;
-import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Task;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @SequenceGenerator(name = "associatedcontact_sequencegenerator", sequenceName = "associatedcontact_sequence")

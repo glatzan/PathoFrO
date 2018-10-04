@@ -2,17 +2,15 @@ package com.patho.main.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.Transient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.common.DiagnosisRevisionType;
-import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
-import com.patho.main.util.exception.CustomUserNotificationExcepetion;
+import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.DiagnosisPreset;
-import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Signature;
 import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.DiagnosisRevision;
@@ -22,28 +20,14 @@ import com.patho.main.repository.DiagnosisRepository;
 import com.patho.main.repository.DiagnosisRevisionRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PatientRepository;
-import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.template.PrintDocument.InitializeToken;
 import com.patho.main.ui.task.DiagnosisReportUpdater;
+import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 import com.patho.main.util.helper.TaskUtil;
-import com.patho.main.util.pdf.PDFGenerator;
-import com.patho.main.util.pdf.PDFUtil;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional

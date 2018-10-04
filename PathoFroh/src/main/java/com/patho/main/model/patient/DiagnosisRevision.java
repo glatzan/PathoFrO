@@ -27,7 +27,6 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 
 import com.patho.main.common.DiagnosisRevisionType;
-import com.patho.main.common.Dialog;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Signature;
 import com.patho.main.model.interfaces.ID;
@@ -38,7 +37,6 @@ import com.patho.main.model.interfaces.TaskEntity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Audited

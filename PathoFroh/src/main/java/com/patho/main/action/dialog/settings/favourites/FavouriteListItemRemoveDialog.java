@@ -1,14 +1,10 @@
 package com.patho.main.action.dialog.settings.favourites;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.primefaces.PrimeFaces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
@@ -20,7 +16,6 @@ import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.favourites.FavouriteList;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.service.FavouriteListService;
@@ -30,7 +25,6 @@ import com.patho.main.util.helper.TimeUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Scope(value = "session")

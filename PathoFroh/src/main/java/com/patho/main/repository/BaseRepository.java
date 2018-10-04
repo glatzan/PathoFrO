@@ -5,17 +5,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.interfaces.Parent;
-import com.patho.main.model.log.LogInfo;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.user.HistoUser;
-import com.patho.main.model.util.log.LogListener;
-import com.patho.main.util.helper.SecurityContextHolderUtil;
 
 @NoRepositoryBean
 public interface BaseRepository<T, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {

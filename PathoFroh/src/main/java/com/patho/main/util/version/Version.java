@@ -3,8 +3,6 @@ package com.patho.main.util.version;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.patho.main.util.helper.FileUtil;
-
 import lombok.Getter;
 import lombok.Setter;
 

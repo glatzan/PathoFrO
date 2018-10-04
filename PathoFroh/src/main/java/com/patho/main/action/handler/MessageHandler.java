@@ -7,8 +7,6 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
