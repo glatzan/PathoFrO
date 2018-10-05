@@ -123,7 +123,6 @@ public class MediaRepositoryImpl implements MediaRepository {
 	}
 
 	public byte[] getBytes(File file) {
-		System.out.println("---" + file.getPath());
 		byte[] bytes = null;
 		InputStream stream = null;
 		try {

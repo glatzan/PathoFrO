@@ -39,6 +39,7 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.ui.pdf.PDFStreamContainer;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
@@ -87,9 +88,7 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 
 	private TreeNode selectedNode;
 
-	private PDFContainer displayPDF;
-
-	private PDFContainer tooltip;
+	private PDFStreamContainer streamContainer;
 
 	private List<DataList> dataLists;
 
@@ -102,8 +101,9 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 	public boolean initBean(Patient patient) {
 		setPatient(patient);
 
+		setStreamContainer(new PDFStreamContainer());
+		
 		setSelectedNode(null);
-		setDisplayPDF(null);
 		setDataLists(new ArrayList<DataList>());
 		setRoot(null);
 
@@ -126,9 +126,9 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 		setRoot(generateTree(patient));
 
 		// unloading pdf is it was selected
-		if (displayPDF != null && PDFService.getParentOfPDF(getDataLists(), displayPDF) == null) {
+		if (getStreamContainer().getDisplayPDF() != null && PDFService.getParentOfPDF(getDataLists(), getStreamContainer().getDisplayPDF() ) == null) {
 			setSelectedNode(null);
-			setDisplayPDF(null);
+			getStreamContainer().setDisplayPDF(null);
 		}
 	}
 
@@ -188,55 +188,7 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 	 */
 	public void displaySelectedContainer() {
 		logger.debug("Display selected container");
-		this.displayPDF = getSelectedNode() != null ? (PDFContainer) getSelectedNode().getData() : null;
-	}
-
-	/**
-	 * Returns the thumbnail als stream
-	 * 
-	 * @return
-	 */
-	public StreamedContent getThumbnail() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE || tooltip == null) {
-			// So, we're rendering the HTML. Return a stub StreamedContent so
-			// that it will generate right URL.
-			return new DefaultStreamedContent();
-		} else {
-
-			byte[] img;
-
-			if (mediaRepository.isFile(tooltip.getThumbnail()))
-				img = mediaRepository.getBytes(tooltip.getThumbnail());
-			else
-				img = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_IMG);
-
-			return new DefaultStreamedContent(new ByteArrayInputStream(img), "image/png");
-		}
-	}
-
-	/**
-	 * Returns the pdf als stream
-	 * 
-	 * @return
-	 */
-	public StreamedContent getPDF() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE || getDisplayPDF() == null) {
-			// So, we're rendering the HTML. Return a stub StreamedContent so
-			// that it will generate right URL.
-			return new DefaultStreamedContent();
-		} else {
-			byte[] file;
-
-			if (mediaRepository.isFile(getDisplayPDF().getPath()))
-				file = mediaRepository.getBytes(getDisplayPDF().getPath());
-			else
-				file = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
-
-			return new DefaultStreamedContent(new ByteArrayInputStream(file), "application/pdf",
-					getDisplayPDF().getName());
-		}
+		getStreamContainer().setDisplayPDF(getSelectedNode() != null ? (PDFContainer) getSelectedNode().getData() : null);
 	}
 
 	/**
@@ -278,7 +230,7 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 	public void handleFileUpload(FileUploadEvent event) {
 		UploadedFile file = event.getFile();
 		try {
-			logger.debug("Uploadgin to Patient: " + patient.getId());
+			logger.debug("Uploadgin to Patient: " + getPatient().getId());
 			PDFReturn res = pdfService.createAndAttachPDF(patient, file, DocumentType.OTHER, "", "", true,
 					new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(patient.getId())));
 

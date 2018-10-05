@@ -16,6 +16,7 @@ import com.patho.main.common.DateFormat;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Council;
+import com.patho.main.model.Council.CouncilNotificationMethod;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.CouncilRepository;
@@ -49,8 +50,8 @@ public class CouncilService extends AbstractService {
 		Council council = new Council(task);
 		council.setDateOfRequest(DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH));
 		council.setName(generateCouncilName(council));
-		council.setCouncilState(CouncilState.EditState);
 		council.setAttachedPdfs(new HashSet<PDFContainer>());
+		council.setNotificationMethod(CouncilNotificationMethod.MTA);
 		council.setTask(task);
 
 		task.getCouncils().add(council);
@@ -97,15 +98,20 @@ public class CouncilService extends AbstractService {
 	 * @param council
 	 * @return
 	 */
-	public CouncilReturn endCouncilRequest(Council council, PredefinedFavouriteList nextStepList) {
+	public CouncilReturn endCouncilRequest(Task task, Council council) {
 		council.setCouncilRequestCompleted(true);
 
 		council = councilRepository.save(council,
-				resourceBundle.get("log.patient.task.council.phase.request.end", council.getTask(), council.getName()),
-				council.getTask().getPatient());
+				resourceBundle.get("log.patient.task.council.phase.request.end", task, council.getName()),
+				task.getPatient());
 
-		Task task = favouriteListService.removeTaskFromList(council.getTask(), PredefinedFavouriteList.CouncilRequest);
-//		task = favouriteListService.addTaskToList(task, nextStepList);
+		task = favouriteListService.removeTaskFromList(council.getTask(), PredefinedFavouriteList.CouncilRequest);
+		
+		if (council.getNotificationMethod() != CouncilNotificationMethod.NONE)
+			task = favouriteListService.addTaskToList(task,
+					council.getNotificationMethod() == CouncilNotificationMethod.MTA
+							? PredefinedFavouriteList.CouncilSendRequestMTA
+							: PredefinedFavouriteList.CouncilSendRequestSecretary);
 
 		return new CouncilReturn(task, council);
 	}

@@ -58,7 +58,7 @@ public class Council implements ID, DataList, AuditAble {
 
 	@Embedded
 	protected Audit audit;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Task task;
 
@@ -85,7 +85,7 @@ public class Council implements ID, DataList, AuditAble {
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date dateOfRequest;
-	
+
 	/**
 	 * Text of council
 	 */
@@ -98,36 +98,42 @@ public class Council implements ID, DataList, AuditAble {
 	@Column
 	private boolean councilRequestCompleted;
 
+	/**
+	 * State of the council
+	 */
+	@Enumerated(EnumType.STRING)
+	private CouncilNotificationMethod notificationMethod;
 	
 	/**
 	 * True if samples were send to external clinics
 	 */
 	@Column
 	private boolean sampleShipped;
+
 	/**
 	 * Attached slides of the council
 	 */
 	@Column(columnDefinition = "text")
 	private String sampleShippedCommentary;
-	
+
 	/**
 	 * Date of request
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date sampleShippedDate;
-	
+
 	/**
 	 * True if the samples should be returned
 	 */
 	@Column
 	private boolean expectSampleReturn;
-	
+
 	/**
 	 * True if sample is returned
 	 */
 	@Column
 	private boolean sampleReturned;
-	
+
 	/**
 	 * Commentary
 	 */
@@ -139,30 +145,24 @@ public class Council implements ID, DataList, AuditAble {
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date sampleReturnedDate;
-	
+
 	/**
-	 * Commentary 
+	 * Commentary
 	 */
 	@Column(columnDefinition = "text")
 	private String commentary;
-	
+
 	/**
-	 * True if answer was received 
+	 * True if answer was received
 	 */
 	@Column
 	private boolean replyReceived;
-	
+
 	/**
 	 * Date of return
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date replyReceivedDate;
-	
-	/**
-	 * State of the council
-	 */
-	@Enumerated(EnumType.ORDINAL)
-	private CouncilState councilState;
 
 	/**
 	 * Pdf attached to this council
@@ -183,22 +183,12 @@ public class Council implements ID, DataList, AuditAble {
 		return (new TextToLatexConverter()).convertToTex(getCouncilText());
 	}
 
-	@Transient
-	public boolean isCouncilState(CouncilState... councilStates) {
-		for (CouncilState councilState : councilStates) {
-			if (getCouncilState() == councilState)
-				return true;
-		}
-
-		return false;
-	}
-
 	@Override
 	@Transient
 	public String getPublicName() {
 		return "Konsil - " + task.getTaskID();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Council && ((Council) obj).getId() == getId())
@@ -206,4 +196,13 @@ public class Council implements ID, DataList, AuditAble {
 		return super.equals(obj);
 	}
 
+	/**
+	 * Method of notification
+	 * 
+	 * @author andi
+	 *
+	 */
+	public static enum CouncilNotificationMethod {
+		MTA, SECRETARY, NONE;
+	}
 }

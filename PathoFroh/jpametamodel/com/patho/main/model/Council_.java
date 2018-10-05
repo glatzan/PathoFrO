@@ -1,6 +1,6 @@
 package com.patho.main.model;
 
-import com.patho.main.common.CouncilState;
+import com.patho.main.model.Council.CouncilNotificationMethod;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.util.audit.Audit;
 import java.util.Date;
@@ -26,8 +26,8 @@ public abstract class Council_ {
 	public static volatile SingularAttribute<Council, Date> replyReceivedDate;
 	public static volatile SingularAttribute<Council, Audit> audit;
 	public static volatile SingularAttribute<Council, String> name;
-	public static volatile SingularAttribute<Council, CouncilState> councilState;
 	public static volatile SingularAttribute<Council, Long> id;
+	public static volatile SingularAttribute<Council, CouncilNotificationMethod> notificationMethod;
 	public static volatile SingularAttribute<Council, Boolean> sampleReturned;
 	public static volatile SingularAttribute<Council, Date> dateOfRequest;
 	public static volatile SingularAttribute<Council, Date> sampleShippedDate;

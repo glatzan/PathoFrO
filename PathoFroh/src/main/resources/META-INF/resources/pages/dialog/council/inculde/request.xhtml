@@ -9,7 +9,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:b="http://bootsfaces.net/ui">
 
-	<p:outputPanel styleClass="headerPannel">
+	<p:outputPanel styleClass="headerPannel" id="header">
 		<h:outputFormat value="#{msg['dialog.council.request']}"
 			escape="false">
 			<f:param value="#{dialog.councilDialog.selectedCouncil.name}" />
@@ -23,14 +23,15 @@
 
 			<!-- name -->
 			<h:outputLabel value="#{msg['dialog.council.name']}"></h:outputLabel>
-			<h:outputLabel value="#{dialog.councilDialog.selectedCouncil.name}"></h:outputLabel>
+			<h:outputLabel id="councilName"
+				value="#{dialog.councilDialog.selectedCouncil.name}"></h:outputLabel>
 
 			<!-- requesting text -->
 			<h:outputLabel value="#{msg['dialog.council.requestText']}"></h:outputLabel>
-			<p:inputTextarea style="width: 700px;" rows="25"
+			<p:inputTextarea style="width: 700px;" rows="20"
 				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
 				value="#{dialog.councilDialog.selectedCouncil.councilText}">
-				<p:ajax event="keyup" delay="500" process="@form" update="@form"
+				<p:ajax event="keyup" delay="500" process="@form"
 					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 			</p:inputTextarea>
 
@@ -56,7 +57,7 @@
 						var="physician" itemLabel="#{physician.person.getFullName()}"
 						itemValue="#{physician}" />
 
-					<p:ajax event="change" update="@form" process="@form"
+					<p:ajax event="change" update="header councilName" process="@form"
 						listener="#{dialog.councilDialog.onNameChange()}" />
 
 				</p:selectOneMenu>
@@ -66,7 +67,7 @@
 					style="margin-left:10px;" styleClass="noUnderlineAtLink icon-grey"
 					actionListener="#{dialog.settingsDialog.initAndPrepareBean('PhysicianSettingsTab')}">
 					<i class="fa fa-fw fa-cog icon-grey" />
-					<p:ajax event="dialogReturn" update="@form"
+					<p:ajax event="dialogReturn"
 						listener="#{dialog.councilDialog.updatePhysicianLists()}" />
 				</p:commandLink>
 
@@ -92,7 +93,7 @@
 						itemLabel="#{physicianToSign.person.getFullName()}"
 						itemValue="#{physicianToSign}" />
 
-					<p:ajax event="change" update="@form" process="@form"
+					<p:ajax event="change" process="@form"
 						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 
 				</p:selectOneMenu>
@@ -114,32 +115,26 @@
 				value="#{dialog.councilDialog.selectedCouncil.dateOfRequest}"
 				tabindex="4" locale="de" pattern="dd.MM.yyyy" mask="true">
 
-				<p:ajax event="dateSelect" update="@form" process="@form"
-					listener="#{dialog.councilDialog.onNameChange()}" />
+				<p:ajax event="dateSelect" update="header councilName"
+					process="@form" listener="#{dialog.councilDialog.onNameChange()}" />
 
-				<p:ajax event="change" update="@form" process="@form"
+				<p:ajax event="change" update="header councilName" process="@form"
 					listener="#{dialog.councilDialog.onNameChange()}" />
 			</p:calendar>
 
-			<!-- send slides -->
-			<h:outputLabel value="#{msg['dialog.council.shipSlides']}"></h:outputLabel>
-			<p:selectBooleanCheckbox
-				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
-				value="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
-				<p:ajax event="change" update="@form" process="@form"
-					listener="#{dialog.councilDialog.onSendSlides()}"></p:ajax>
-			</p:selectBooleanCheckbox>
-
-			<h:outputLabel value="Benachritung wird druchgefüht von: "></h:outputLabel>
+			<!-- council request -->
+			<h:outputLabel value="Anfrage versendet durch:"></h:outputLabel>
 			<p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
 				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
-				value="#{dialog.councilDialog.selectedCouncil.notificationType}"
+				value="#{dialog.councilDialog.selectedCouncil.notificationMethod}"
 				filter="true" filterMatchMode="contains">
 
 				<f:selectItem itemLabel="MTA" itemValue="MTA" />
-				<f:selectItem itemLabel="SECRETARY" itemValue="SECRETARY" />
+				<f:selectItem itemLabel="Sekreteriat" itemValue="SECRETARY" />
+				<f:selectItem itemLabel="Mir" itemValue="#{null}" />
 
-				<p:ajax event="change" update="@form" process="@form" />
+				<p:ajax event="change" process="@form"
+					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 
 			</p:selectOneMenu>
 
@@ -151,7 +146,7 @@
 			<h:outputLabel value="#{msg['dialog.council.internalCommentary']}"></h:outputLabel>
 			<p:inputTextarea style="width: 700px;" rows="5"
 				value="#{dialog.councilDialog.selectedCouncil.commentary}">
-				<p:ajax event="keyup" delay="500" process="@form" update="@form"
+				<p:ajax event="keyup" delay="500" process="@form"
 					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 			</p:inputTextarea>
 		</h:panelGrid>
@@ -170,7 +165,9 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="3" styleClass="newTableContainer right">
-				<p:commandButton value="Drucken" icon="fa fa-check-circle-o">
+				<!-- print -->
+				<p:commandButton value="#{msg['general.print']}"
+					icon="fa fa-check-circle-o">
 					<f:actionListener
 						binding="#{dialog.councilDialog.printCouncilReport()}" />
 				</p:commandButton>

@@ -169,7 +169,7 @@
 												<!-- preview image -->
 												<h:panelGrid columns="1" styleClass="defaultHistoTable">
 													<p:graphicImage
-														value="#{dialog.pdfOrganizer.getThumbnail()}"
+														value="#{dialog.pdfOrganizer.streamContainer.getThumbnail()}"
 														style="border: 1px solid black; float: right;"
 														width="200px" cache="false" alt="unable to load image" />
 												</h:panelGrid>
@@ -177,7 +177,7 @@
 										</pe:tooltip>
 
 										<p:remoteCommand name="updateToolTip#{node.id}"
-											actionListener="#{dialog.pdfOrganizer.setTooltip(node)}" />
+											actionListener="#{dialog.pdfOrganizer.streamContainer.setTooltip(node)}" />
 
 									</p:treeNode>
 								</p:tree>
@@ -185,12 +185,12 @@
 								<!-- content menu for navigation tree -->
 								<p:contextMenu for="menuTree" nodeType="pdf">
 									<p:menuitem
-										disabled="#{dialog.pdfOrganizer.displayPDF.restricted}"
+										disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF.restricted}"
 										value="#{msg['dialog.pdfOrganizer.tree.menu.edit']}"
 										onclick="$('#dialogContent\\:editBTN').click();"
 										icon="fa fa-pencil" />
 									<p:menuitem
-										disabled="#{dialog.pdfOrganizer.displayPDF.restricted}"
+										disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF.restricted}"
 										value="#{msg['dialog.pdfOrganizer.tree.menu.delete']}"
 										update="@form"
 										actionListener="#{dialog.pdfOrganizer.deletePDFContainer()}"
@@ -225,11 +225,11 @@
 							<h:panelGroup id="pdfInfo">
 								<h:panelGrid columns="2" styleClass="defaultHistoTable"
 									style="margin-top:5px;"
-									rendered="#{dialog.pdfOrganizer.displayPDF ne null}">
+									rendered="#{dialog.pdfOrganizer.streamContainer.displayPDF ne null}">
 									<!-- name -->
 									<h:outputText value="#{msg['dialog.pdfOrganizer.files.name']}" />
-									<h:outputText value="#{dialog.pdfOrganizer.displayPDF.name}"
-										title="#{dialog.pdfOrganizer.displayPDF.name}">
+									<h:outputText value="#{dialog.pdfOrganizer.streamContainer.displayPDF.name}"
+										title="#{dialog.pdfOrganizer.streamContainer.displayPDF.name}">
 										<f:converter converterId="org.histo.ui.TruncateConverter" />
 										<f:attribute name="truncateAt" value="35" />
 										<f:attribute name="continuationMark" value="..." />
@@ -239,7 +239,7 @@
 									<h:outputText
 										value="#{msg['dialog.pdfOrganizer.files.createdOn']}"></h:outputText>
 									<h:outputText
-										value="#{dialog.pdfOrganizer.displayPDF.audit.createdOn}">
+										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.createdOn}">
 										<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
 									</h:outputText>
 
@@ -247,15 +247,15 @@
 									<h:outputText
 										value="#{msg['dialog.pdfOrganizer.files.createdBy']}"></h:outputText>
 									<h:outputText
-										value="#{dialog.pdfOrganizer.displayPDF.audit.createdBy}">
+										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.createdBy}">
 									</h:outputText>
 
 									<!-- updated date-->
 									<h:outputText
 										value="#{msg['dialog.pdfOrganizer.files.updatedOn']}"></h:outputText>
 									<h:outputText
-										style="#{dialog.pdfOrganizer.displayPDF.audit.updatedOn eq 0 ? 'display:none' : ''}"
-										value="#{dialog.pdfOrganizer.displayPDF.audit.updatedOn}">
+										style="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.updatedOn eq 0 ? 'display:none' : ''}"
+										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.updatedOn}">
 										<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
 									</h:outputText>
 
@@ -263,21 +263,21 @@
 									<h:outputText
 										value="#{msg['dialog.pdfOrganizer.files.updatedBy']}"></h:outputText>
 									<h:outputText
-										value="#{dialog.pdfOrganizer.displayPDF.audit.updatedBy}">
+										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.updatedBy}">
 									</h:outputText>
 
 									<!-- type -->
 									<h:outputText value="#{msg['dialog.pdfOrganizer.files.type']}"></h:outputText>
 									<h:outputLabel
-										value="#{msg['enum.documentType.'.concat(dialog.pdfOrganizer.displayPDF.type)]}" />
+										value="#{msg['enum.documentType.'.concat(dialog.pdfOrganizer.streamContainer.displayPDF.type)]}" />
 
 									<!-- commentary -->
 									<h:outputText
 										value="#{msg['dialog.pdfOrganizer.files.commentary']}"></h:outputText>
 
 									<h:outputText
-										value="#{dialog.pdfOrganizer.displayPDF.commentary}"
-										title="#{dialog.pdfOrganizer.displayPDF.commentary}">
+										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.commentary}"
+										title="#{dialog.pdfOrganizer.streamContainer.displayPDF.commentary}">
 										<f:converter converterId="org.histo.ui.TruncateConverter" />
 										<f:attribute name="truncateAt" value="35" />
 										<f:attribute name="continuationMark" value="..." />
@@ -304,8 +304,8 @@
 					style="width:calc(100% - 5px)">
 					<pe:documentViewer height="650" style="margin-left:5px;"
 						class="noupdate"
-						rendered="#{dialog.pdfOrganizer.getDisplayPDF() ne null}"
-						value="#{dialog.pdfOrganizer.getPDF()}"
+						rendered="#{dialog.pdfOrganizer.streamContainer.renderPDF()}"
+						value="#{dialog.pdfOrganizer.streamContainer.getPDF()}"
 						download="extensions-rocks.pdf" />
 				</h:panelGrid>
 
@@ -346,9 +346,9 @@
 
 					<!-- print -->
 					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.print']}"
-						disabled="#{dialog.pdfOrganizer.displayPDF eq null}"
+						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null}"
 						icon="fa fa-print"
-						actionListener="#{dialog.pdfOrganizer.displayPrintNotification(userHandlerAction.selectedPrinter.print(dialog.pdfOrganizer.displayPDF))}"></p:commandButton>
+						actionListener="#{dialog.pdfOrganizer.displayPrintNotification(userHandlerAction.selectedPrinter.print(dialog.pdfOrganizer.streamContainer.displayPDF))}"></p:commandButton>
 
 					<!-- select printer -->
 					<p:selectOneMenu styleClass="customSerachSelectMenu"
@@ -364,15 +364,15 @@
 					<!-- download button -->
 					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.open']}"
 						icon="fa fa-download" ajax="false"
-						disabled="#{dialog.pdfOrganizer.displayPDF eq null}">
-						<p:fileDownload value="#{dialog.pdfOrganizer.getPDF()}" />
+						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null}">
+						<p:fileDownload value="#{dialog.pdfOrganizer.streamContainer.getPDF()}" />
 					</p:commandButton>
 
 					<!-- edit button -->
 					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.edit']}"
 						icon="fa fa-pencil"
-						disabled="#{dialog.pdfOrganizer.displayPDF eq null or dialog.pdfOrganizer.displayPDF.restricted}"
-						actionListener="#{dialog.pdfOrganizer.editPDFContainer(dialog.pdfOrganizer.displayPDF)}">
+						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null or dialog.pdfOrganizer.streamContainer.displayPDF.restricted}"
+						actionListener="#{dialog.pdfOrganizer.editPDFContainer(dialog.pdfOrganizer.streamContainer.displayPDF)}">
 
 						<p:ajax event="dialogReturn"
 							listener="#{dialog.pdfOrganizer.onDefaultDialogReturn}"
@@ -382,9 +382,9 @@
 					<!-- delete button -->
 					<p:commandButton
 						value="#{msg['dialog.pdfOrganizer.button.delete']}"
-						disabled="#{dialog.pdfOrganizer.displayPDF eq null or dialog.pdfOrganizer.displayPDF.restricted}"
+						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null or dialog.pdfOrganizer.streamContainer.displayPDF.restricted}"
 						icon="fa fa-trash"
-						actionListener="#{dialog.pdfOrganizer.deletePDFContainer(dialog.pdfOrganizer.displayPDF)}">
+						actionListener="#{dialog.pdfOrganizer.deletePDFContainer(dialog.pdfOrganizer.streamContainer.displayPDF)}">
 
 						<p:ajax event="dialogReturn"
 							listener="#{dialog.pdfOrganizer.onDefaultDialogReturn}"

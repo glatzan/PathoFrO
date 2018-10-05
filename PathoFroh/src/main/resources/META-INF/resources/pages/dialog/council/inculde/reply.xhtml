@@ -18,16 +18,17 @@
 	<p:outputPanel styleClass="bodyPannel" style="padding:10px;">
 
 		<h:panelGrid styleClass="defaultHistoTable" columns="2">
-			<!-- sample send -->
+
+			<!-- reply received -->
 			<h:outputLabel value="#{msg['dialog.council.repy']}"></h:outputLabel>
 			<p:selectBooleanCheckbox
 				title="#{msg['dialog.council.sampleShipped.text']}"
 				value="#{dialog.councilDialog.selectedCouncil.replyReceived}">
 				<p:ajax event="change" update="@form" process="@form"
-					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+					listener="#{dialog.councilDialog.noReplyReceived()}" />
 			</p:selectBooleanCheckbox>
 
-			<!-- sample send date -->
+			<!-- reply received date -->
 			<h:outputLabel value="" />
 			<h:panelGrid columns="2"
 				styleClass="listingHistoHiddenTableContainer"
@@ -45,7 +46,7 @@
 			</h:panelGrid>
 
 			<!-- PDFs -->
-			<h:outputLabel value="#{msg['dialog.council.repy.file']}" />
+			<h:outputLabel value="#{msg['dialog.council.repy.files']}" />
 			<p:dataTable var="attachedPdf" id="attachedPdfList"
 				style="width:700px"
 				value="#{dialog.councilDialog.selectedCouncil.attachedPdfs}"
@@ -92,7 +93,7 @@
 					</f:facet>
 					<p:commandLink
 						rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient).setDisplayPDF(attachedPdf)}">
+						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient).streamContainer.setDisplayPDF(attachedPdf)}">
 						<p:ajax event="dialogReturn" update="@form" />
 						<i class="fa fa-search"></i>
 					</p:commandLink>
@@ -101,9 +102,8 @@
 
 			<h:outputLabel value="#{msg['dialog.council.repy.upload']}" />
 			<p:fileUpload style="width:300px;" update="@form"
-				fileUploadListener="#{dialog.pdfOrganizer.handleFileUpload}"
+				fileUploadListener="#{dialog.councilDialog.handleFileUpload}"
 				mode="advanced" auto="true" sizeLimit="10000000" />
-
 			<h:outputLabel value="&nbsp;" />
 			<h:outputLabel value=" " />
 
@@ -116,4 +116,22 @@
 			</p:inputTextarea>
 		</h:panelGrid>
 	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2" style="width:100%"
+			styleClass="newTableContainer">
+
+			<h:panelGrid columns="1" styleClass="newTableContainer left">
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="1" styleClass="newTableContainer right">
+				<!-- Close Button -->
+				<p:commandButton value="#{msg['general.close']}"
+					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
+					immediate="true"
+					actionListener="#{dialog.councilDialog.hideDialog()}" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
 </ui:composition>

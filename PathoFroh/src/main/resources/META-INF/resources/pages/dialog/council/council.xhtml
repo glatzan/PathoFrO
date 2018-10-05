@@ -17,7 +17,7 @@
 	<h:outputScript library="scripts" name="updateAndScrollScrollPanel.js"></h:outputScript>
 </h:head>
 
-<h:body styleClass="histoTabDialogStyle">
+<h:body styleClass="histoTabDialogStyle councilDialog">
 	<h:form id="dialogContent">
 
 		<div class="dialogHeader">
@@ -44,14 +44,12 @@
 								style="height:500px;width:285px !important">
 								<!-- navigation tree -->
 								<p:tree value="#{dialog.councilDialog.root}" var="node"
-									styleClass="histoTree" style="width:99%" id="menuTree"
-									selectionMode="single" draggable="true" droppable="true"
-									dropRestrict="pdf"
+									dynamic="true" styleClass="histoTree" style="width:99%"
+									id="menuTree" selectionMode="single"
 									selection="#{dialog.councilDialog.selectedNode}">
 
-									<p:ajax event="select"
-										update="dialogContent:dialogContent dialogContent:councilInfo"
-										listener="#{dialog.councilDialog.onNodeSelect()}" />
+									<p:ajax event="select" partialSubmit="true" process="@this"
+										update="dialogContent:dialogContent dialogContent:councilInfo" />
 
 									<!-- root -->
 									<p:treeNode expandedIcon="ui-icon-folder-open"
@@ -97,7 +95,7 @@
 
 										<!-- shipment and return completed  -->
 										<ui:fragment
-											rendered="#{node.sampleShippedDate != null and node.expectSampleReturn and node.sampleReturned}">
+											rendered="#{(node.sampleShippedDate != null and node.expectSampleReturn and node.sampleReturned) or (node.sampleShippedDate != null and !node.expectSampleReturn)}">
 											<i class="fa fa-check-circle icon-green" title="" />
 										</ui:fragment>
 
@@ -106,7 +104,6 @@
 									<!-- council return -->
 									<p:treeNode type="council_reply" icon="fa fa-user-md">
 										<h:outputText value="Antwort" />
-										<h:outputText value="Anfrage" />
 										<ui:fragment rendered="#{node.replyReceived}">
 											<i class="fa fa-check-circle icon-green" title="" />
 										</ui:fragment>
@@ -120,7 +117,100 @@
 
 									<!-- pdf -->
 									<p:treeNode type="pdf_node" icon="fa fa-file-pdf-o">
-										<h:outputText value="#{node.name}" />
+										<h:panelGrid columns="1" styleClass="mouseEntryEventElemnt"
+											id="bine">
+											<f:passThroughAttribute name="tvalue"
+												value="#{node.container.id}" />
+
+											<!-- name -->
+											<h:outputText value="#{node.container.name}" id="treeNode">
+												<f:converter converterId="org.histo.ui.TruncateConverter" />
+												<f:attribute name="truncateAt" value="25" />
+												<f:attribute name="continuationMark" value="..." />
+											</h:outputText>
+										</h:panelGrid>
+
+										<!-- tooltip -->
+										<pe:tooltip for="bine" onShow="updatef1#{node.container.id}()"
+											mouseTracking="true" myPosition="top left" adjustX="10"
+											adjustY="10">
+
+											<p:remoteCommand name="updatef1#{node.container.id}"
+												update="bild2" />
+
+											<h:panelGrid columns="2"
+												columnClasses="columnTop, columnLeft" id="bild2"
+												style="width:100%"
+												styleClass="defaultHistoHiddenTableContainer">
+												<h:panelGrid columns="2" styleClass="defaultHistoTable">
+													<!-- name -->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.name']}" />
+													<h:outputText value="#{node.container.name}">
+														<f:converter converterId="org.histo.ui.TruncateConverter" />
+														<f:attribute name="truncateAt" value="35" />
+														<f:attribute name="continuationMark" value="..." />
+													</h:outputText>
+
+													<!-- created date-->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.createdOn']}"></h:outputText>
+													<h:outputText value="#{node.container.audit.createdOn}">
+														<f:convertDateTime type="date"
+															pattern="dd.MM.yyyy HH:mm:ss" />
+													</h:outputText>
+
+													<!-- created name-->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.createdBy']}"></h:outputText>
+													<h:outputText value="#{node.container.audit.createdBy}">
+													</h:outputText>
+
+													<!-- updated date-->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.updatedOn']}"></h:outputText>
+													<h:outputText
+														style="#{node.container.audit.updatedOn eq 0 ? 'display:none' : ''}"
+														value="#{node.container.audit.updatedOn}">
+														<f:convertDateTime type="date"
+															pattern="dd.MM.yyyy HH:mm:ss" />
+													</h:outputText>
+
+													<!-- updated name-->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.updatedBy']}"></h:outputText>
+													<h:outputText value="#{node.container.audit.updatedBy}">
+													</h:outputText>
+
+													<!-- type -->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.type']}"></h:outputText>
+													<h:outputLabel
+														value="#{msg['enum.documentType.'.concat(node.container.type)]}" />
+
+													<!-- commentary -->
+													<h:outputText
+														value="#{msg['dialog.pdfOrganizer.files.commentary']}"></h:outputText>
+													<h:outputText value="#{node.container.commentary}"
+														title="#{node.container.commentary}">
+														<f:converter converterId="org.histo.ui.TruncateConverter" />
+														<f:attribute name="truncateAt" value="35" />
+														<f:attribute name="continuationMark" value="..." />
+													</h:outputText>
+												</h:panelGrid>
+
+												<!-- preview image -->
+												<h:panelGrid columns="1" styleClass="defaultHistoTable">
+													<p:graphicImage
+														value="#{dialog.councilDialog.streamContainer.getThumbnail()}"
+														style="border: 1px solid black; float: right;"
+														width="200px" cache="false" alt="unable to load image" />
+												</h:panelGrid>
+											</h:panelGrid>
+										</pe:tooltip>
+
+										<p:remoteCommand name="updateToolTip#{node.container.id}"
+											actionListener="#{dialog.councilDialog.streamContainer.setTooltip(node.container)}" />
 									</p:treeNode>
 								</p:tree>
 
@@ -174,7 +264,7 @@
 
 						<h:panelGrid columns="1" styleClass="newTableContainer left">
 							<p:commandButton value="#{msg['dialog.council.button.create']}"
-								icon="fa fa-check-circle-o" update="@form" process="@form"
+								icon="fa fa-check-circle-o" update="@form"
 								disabled="#{!dialog.councilDialog.editable}"
 								actionListener="#{dialog.councilDialog.createCouncil()}"></p:commandButton>
 						</h:panelGrid>
@@ -192,13 +282,26 @@
 		<ui:include src="../../../template/blockUi.xhtml"></ui:include>
 
 		<script>
-			$(document)
-					.ready(
-							function() {
-								setScrollPanelScrollSpeed("dialogContent:scrollBody");
-								// updating scrollElement for displaying the scroll bar correctly
-								updateAndAutoScrollToSelectedElement('dialogContent:scrollBody');
-							});
+			$(document).ready(function() {
+				setMouseEnterEvents(true);
+				setScrollPanelScrollSpeed("dialogContent:scrollBody");
+			});
+
+			// mouse entry event for tree nodes
+			function setMouseEnterEvents() {
+				$(".mouseEntryEventElemnt").each(function(index) {
+
+					$(this).mouseenter(function() {
+						eval("updateToolTip" + $(this).attr("tvalue") + "()");
+						//PF('tooltipOverlay').show($(this).attr("id"));
+					});
+
+					$(this).mouseleave(function() {
+						//PF('tooltipOverlay').hide();
+					});
+
+				});
+			}
 		</script>
 	</h:form>
 </h:body>

@@ -26,7 +26,7 @@
 					title="#{msg['dialog.council.sampleShipped.text']}"
 					value="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
 					<p:ajax event="change" update="@form" process="@form"
-						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+						listener="#{dialog.councilDialog.onShipSample()}" />
 				</p:selectBooleanCheckbox>
 
 				<p:selectOneMenu id="attachments" style="width:450px;"
@@ -81,7 +81,7 @@
 					title="#{msg['dialog.council.sampleReturned.text']}"
 					value="#{dialog.councilDialog.selectedCouncil.sampleReturned}">
 					<p:ajax event="change" update="@form" process="@form"
-						listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
+						listener="#{dialog.councilDialog.onReturnSample()}" />
 				</p:selectBooleanCheckbox>
 				<p:inputText style="width:470px;"
 					disabled="#{!dialog.councilDialog.selectedCouncil.expectSampleReturn}"
@@ -130,6 +130,14 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="3" styleClass="newTableContainer right">
+
+				<!-- print -->
+				<p:commandButton value="#{msg['general.print']}"
+					icon="fa fa-check-circle-o">
+					<f:actionListener
+						binding="#{dialog.councilDialog.printCouncilReport()}" />
+				</p:commandButton>
+
 				<!-- Close Button -->
 				<p:commandButton value="#{msg['general.close']}"
 					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"

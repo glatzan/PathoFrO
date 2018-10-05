@@ -153,6 +153,12 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* new field for council, ship sample*/
+Alter table council add notificationMethod character varying(10);
+Alter table council_aud add notificationMethod character varying(10);
+update council set notificationMethod = 'NONE';
+update council_aud set notificationMethod = 'NONE';
+
 /* renaming old council favourite lists*/
 update favouritelist set name = 'Konsil Anfrage' where id = 11
 
