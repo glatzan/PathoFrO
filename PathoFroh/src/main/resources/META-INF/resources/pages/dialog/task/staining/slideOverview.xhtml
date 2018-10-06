@@ -197,7 +197,7 @@
 			<!-- hidden command button for displaying end staining phase dialog -->
 			<p:commandButton id="addDiagnosisRevisionFromDialog"
 				style="display:none"
-				actionListener="#{dialog.quickAddDiangosisRevisionDialog.initAndPrepareBean(dialog.slideOverviewDialog.task)}">
+				actionListener="#{dialog.quickAddDiangosisRevisionDialog.initAndPrepareBean(dialog.slideOverviewDialog.task,'DIAGNOSIS_REVISION')}">
 				<p:ajax event="dialogReturn"
 					listener="#{dialog.slideOverviewDialog.onDefaultDialogReturn}"
 					update="@form" />

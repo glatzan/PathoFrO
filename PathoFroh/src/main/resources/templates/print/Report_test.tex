@@ -1,0 +1,81 @@
+\documentclass{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage[left=1.5cm,right=1.5cm,top=3cm,bottom=2cm]{geometry}
+\usepackage[absolute]{textpos}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{everypage}
+\usepackage{helvet}
+\usepackage{setspace}
+\usepackage{wallpaper}
+
+\usepackage{array}
+
+% font
+\renewcommand{\familydefault}{\sfdefault}
+
+%deactive pagenumbering%
+\pagenumbering{gobble}
+
+% header
+\pagestyle{fancy}
+
+% header size first page, other
+\AddEverypageHook{%
+   \ifthenelse{\value{page}=1}%
+     {\renewcommand{\headrulewidth}{0.0pt}}%
+     {\renewcommand{\headrulewidth}{0.4pt}}%
+}
+
+
+
+\begin{document}
+\ThisCenterWallPaper{1}{_background.pdf}
+ \input{_code128.tex}
+ 
+\baselineskip10pt
+
+% textblog
+\textblockorigin{0in}{0in}
+\setlength{\TPHorizModule}{1mm}
+\setlength{\TPVertModule}{1mm}
+
+
+% pat block
+{
+\scriptsize
+\begin{textblock}{100}(19, 8) 
+\noindent $patient.person.getFullName()\\
+$patient.person.street\\
+$patient.person.postcode $patient.person.town\\
+\X=.35mm        
+\barheight=1cm 
+\code{#if($patient.piz == "") 0 #else $patient.piz #end}\\
+$patient.piz\\
+\end{textblock}
+}
+
+
+% add block
+{
+\begin{textblock}{100}(22, 50) 
+\setstretch{1.0}
+\noindent 
+\textbf{$subject} \\\\
+$addressee.fullName\\
+$addressee.street\\
+$addressee.postcode $addressee.town\\
+\end{textblock}
+}
+
+~\\
+\vspace{5.0cm}\\
+\noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}\\\\
+{\huge Histologisches Gutachten} \\
+
+\end{document}
+
+

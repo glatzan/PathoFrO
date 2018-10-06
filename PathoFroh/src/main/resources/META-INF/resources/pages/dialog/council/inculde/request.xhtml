@@ -164,7 +164,7 @@
 
 			</h:panelGrid>
 
-			<h:panelGrid columns="3" styleClass="newTableContainer right">
+			<h:panelGrid columns="4" styleClass="newTableContainer right">
 				<!-- print -->
 				<p:commandButton value="#{msg['general.print']}"
 					icon="fa fa-check-circle-o">
@@ -172,14 +172,16 @@
 						binding="#{dialog.councilDialog.printCouncilReport()}" />
 				</p:commandButton>
 
-				<!-- create and print -->
-				<p:commandButton value="#{msg['dialog.council.button.sendRequest']}"
-					style="margin-right:30px" icon="fa fa-check-circle-o"
-					process="@form" update="@form"
-					rendered="#{!dialog.councilDialog.selectedCouncil.councilRequestCompleted}">
-					<f:actionListener
-						binding="#{dialog.councilDialog.endRequestState(dialog.councilDialog.selectedCouncil)}" />
-				</p:commandButton>
+				<h:panelGroup>
+					<p:commandButton
+						value="#{msg['dialog.council.button.sendRequest']}"
+						style="margin-right:30px" icon="fa fa-check-circle-o"
+						actionListener="#{dialog.quickAddDiangosisRevisionDialog.initAndPrepareBean(dialog.councilDialog.task,'DIAGNOSIS_COUNCIL')}"
+						rendered="#{!dialog.councilDialog.selectedCouncil.councilRequestCompleted}">
+						<p:ajax event="dialogReturn" update="@form"
+							listener="#{dialog.councilDialog.onEndRequestState}"></p:ajax>
+					</p:commandButton>
+				</h:panelGroup>
 
 				<!-- save changes -->
 				<p:commandButton value="#{msg['dialog.council.button.editRequest']}"
@@ -187,7 +189,7 @@
 					oncomplete="PF('councilRequestDataBlocker').show()"
 					icon="fa fa-check-circle-o" update="councilRequestData">
 					<f:actionListener
-						binding="#{dialog.councilDialog.admendRequestState()}"></f:actionListener>
+						binding="#{dialog.quickAddDiangosisRevisionDialog.initAndPrepareBean(dialog.councilDialog.task,'DIAGNOSIS_COUNCIL')}"></f:actionListener>
 				</p:commandButton>
 
 				<!-- Close Button -->

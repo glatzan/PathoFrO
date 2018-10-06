@@ -3,6 +3,9 @@ package com.patho.main.util.helper;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.DiagnosisRevision;
@@ -11,8 +14,9 @@ import com.patho.main.model.patient.Task;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class TaskUtil {
+
+	protected final static Logger logger = LoggerFactory.getLogger(TaskUtil.class);
 
 	/**
 	 * Returns the number of the same stainings used within this block
@@ -133,22 +137,24 @@ public class TaskUtil {
 	public static final String getDiagnosisRevisionName(Set<DiagnosisRevision> revisions, DiagnosisRevision revision) {
 
 		ResourceBundle resourceBundle = ResourceBundle.getResourceBundle();
-		
+
 		// if default diagnosis
 		if (revision.getType() == DiagnosisRevisionType.DIAGNOSIS) {
 			// if there are other diagnoses then the default one
 			if (revisions.size() > 1) {
-				log.debug("DiagnosisRevision name " + resourceBundle.get("enum.diagnosisType.DIAGNOSIS.temp"));
+				logger.debug("DiagnosisRevision name {}", resourceBundle.get("enum.diagnosisType.DIAGNOSIS.temp"));
 				return resourceBundle.get("enum.diagnosisType.DIAGNOSIS.temp");
 			} else {
 				// default diagnosis only
-				log.debug("DiagnosisRevision name " + resourceBundle.get("enum.diagnosisType.DIAGNOSIS"));
+				logger.debug("DiagnosisRevision name {}", resourceBundle.get("enum.diagnosisType.DIAGNOSIS"));
 				return resourceBundle.get("enum.diagnosisType.DIAGNOSIS");
 			}
 
 		} else {
 			int number = 0;
 			for (DiagnosisRevision diagnosisRevision : revisions) {
+				logger.debug("Found diagnosis {},{} == {},{}", diagnosisRevision.getName(), diagnosisRevision.getId(),
+						revision.getName(), revision.getId());
 				if (diagnosisRevision == revision)
 					break;
 
@@ -157,7 +163,7 @@ public class TaskUtil {
 			}
 			String result = resourceBundle.get("enum.diagnosisType." + revision.getType())
 					+ (number == 0 ? "" : " " + number);
-			log.debug("DiagnosisRevision name " + result);
+			logger.debug("DiagnosisRevision name {}", result);
 			return result;
 		}
 	}

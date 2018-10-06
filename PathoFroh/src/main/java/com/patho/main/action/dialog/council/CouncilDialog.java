@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 
+import org.hibernate.Hibernate;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.primefaces.model.UploadedFile;
@@ -18,6 +20,7 @@ import org.springframework.context.annotation.Lazy;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.DialogHandler;
+import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -42,6 +45,7 @@ import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.pdf.PDFStreamContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -378,12 +382,17 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		setAdmendSelectedRequestState(true);
 	}
 
-	public void endRequestState(CouncilContainer council) {
-		logger.debug("Ending request phase");
-		councilService.endCouncilRequest(getTask(), council.getCouncil());
-		setAdmendSelectedRequestState(false);
-		update(true);
-		selectNode(council, 1);
+	public void onEndRequestState(SelectEvent event) {
+		if (event.getObject() instanceof ReloadTaskEvent) {
+			// reloading
+			logger.debug("Ending request phase");
+			councilService.endCouncilRequest(getTask(), getSelectedCouncil().getCouncil());
+			setAdmendSelectedRequestState(false);
+			update(true);
+			selectNode(getSelectedCouncil(), 1);
+		} else {
+			hideDialog(new ReloadTaskEvent());
+		}
 	}
 
 	private void selectNode(CouncilContainer container, int child) {
@@ -456,6 +465,8 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 					getTask().getPatient());
 
 			getSelectedCouncil().setCouncil(c);
+			councilRepository.initializeTask(c);
+			setTask(c.getTask());
 		}
 	}
 
@@ -473,8 +484,8 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 		for (AbstractDocumentUi<?, ?> documentUi : printDocumentUIs) {
 			((CouncilReportUi) documentUi).initialize(task, getSelectedCouncil());
-			((CouncilReportUi) documentUi).setRenderSelectedContact(true);
-			((CouncilReportUi) documentUi).setUpdatePdfOnEverySettingChange(true);
+			((CouncilReportUi) documentUi).getSharedData().setRenderSelectedContact(true);
+			((CouncilReportUi) documentUi).getSharedData().setUpdatePdfOnEverySettingChange(true);
 			((CouncilReportUi) documentUi).getSharedData().setSingleSelect(true);
 		}
 

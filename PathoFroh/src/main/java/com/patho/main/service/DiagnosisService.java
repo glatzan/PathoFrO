@@ -1,6 +1,7 @@
 package com.patho.main.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog.DiagnosisRevisionContainer;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.DiagnosisPreset;
@@ -369,6 +371,26 @@ public class DiagnosisService extends AbstractService {
 
 		task = taskRepository.save(task, resourceBundle.get("log.patient.task.diagnosisRevision.diagnosis.update", task,
 				diagnosis, diagnosis.getDiagnosis()));
+
+		return task;
+	}
+
+	public Task renameDiagnosisRevisions(Task task, List<DiagnosisRevisionContainer> containers) {
+
+		boolean changed = false;
+		for (DiagnosisRevisionContainer diagnosisRevisionContainer : containers) {
+			if (!diagnosisRevisionContainer.getNewName().equals(diagnosisRevisionContainer.getName())) {
+				logger.debug("Updating revision name from " + diagnosisRevisionContainer.getName() + " to "
+						+ diagnosisRevisionContainer.getName());
+				// updating name
+				diagnosisRevisionContainer.setName(diagnosisRevisionContainer.getNewName());
+				changed = true;
+			}
+		}
+
+		if (changed)
+			task = taskRepository.save(task,
+					resourceBundle.get("log.patient.task.diagnosisRevision.diagnosis.name.update", task));
 
 		return task;
 	}

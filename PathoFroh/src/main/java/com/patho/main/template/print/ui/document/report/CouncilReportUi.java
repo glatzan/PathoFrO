@@ -3,15 +3,18 @@ package com.patho.main.template.print.ui.document.report;
 import java.util.ArrayList;
 import java.util.Set;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.patho.main.action.dialog.print.CustomAddressDialog.CustomAddressReturn;
 import com.patho.main.common.ContactRole;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.Contact;
 import com.patho.main.model.Council;
 import com.patho.main.model.Person;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.CouncilRepository;
 import com.patho.main.template.PrintDocument.InitializeToken;
 import com.patho.main.template.print.CouncilReport;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
@@ -30,9 +33,9 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport, CouncilRe
 	public CouncilReportUi(CouncilReport templateCouncil) {
 		this(templateCouncil, new CouncilSharedData());
 	}
-	
+
 	public CouncilReportUi(CouncilReport templateCouncil, CouncilReportUi.CouncilSharedData sharedData) {
-		this(templateCouncil,(AbstractDocumentUi.SharedData) sharedData);
+		this(templateCouncil, (AbstractDocumentUi.SharedData) sharedData);
 	}
 
 	public CouncilReportUi(CouncilReport templateCouncil, AbstractDocumentUi.SharedData sharedData) {
@@ -50,12 +53,30 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport, CouncilRe
 	}
 
 	/**
+	 * 
+	 * Change Address Dialog return
+	 * 
+	 * @param event
+	 */
+	public void onCustomAddressReturn(SelectEvent event) {
+		logger.debug("Returning from custom address dialog");
+		if (event.getObject() != null && event.getObject() instanceof CustomAddressReturn) {
+			// setting manually altered
+			((CustomAddressReturn) event.getObject()).getContactSelector().setManuallyAltered(true);
+			((CustomAddressReturn) event.getObject()).getContactSelector()
+					.setCustomAddress(((CustomAddressReturn) event.getObject()).getCustomAddress());
+
+			logger.debug("Custom address set to {}", ((CustomAddressReturn) event.getObject()).getCustomAddress());
+		}
+	}
+
+	/**
 	 * Return default template configuration for printing
 	 */
 	public TemplateConfiguration<CouncilReport> getDefaultTemplateConfiguration() {
 		printDocument.initilize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
-				new InitializeToken("council", getSharedData().getSelectedCouncil()),
-				new InitializeToken("address", renderSelectedContact ? getAddressOfFirstSelectedContact() : ""));
+				new InitializeToken("council", getSharedData().getSelectedCouncil()), new InitializeToken("address",
+						getSharedData().renderSelectedContact ? getAddressOfFirstSelectedContact() : ""));
 
 		return new TemplateConfiguration<CouncilReport>(printDocument);
 	}
@@ -84,7 +105,7 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport, CouncilRe
 		protected ResourceBundle resourceBundle;
 
 		private Task task;
-		
+
 		/**
 		 * List of all councils
 		 */
@@ -111,7 +132,7 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport, CouncilRe
 			setSelectedCouncil(selectedCouncil);
 
 			setTask(task);
-			
+
 			updateContactList();
 
 			super.initializ();
@@ -135,10 +156,6 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport, CouncilRe
 
 			getContactList().add(
 					new ContactSelector(task, new Person("Individuelle Addresse", new Contact()), ContactRole.NONE));
-
-			// getContactList().add(new ContactSelector(task,
-			// new Person(resourceBundle.get("dialog.print.individualAddress"), new
-			// Contact()), ContactRole.NONE));
 		}
 	}
 }

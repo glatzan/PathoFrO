@@ -1,12 +1,15 @@
 package com.patho.main.action.dialog.diagnosis;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.postgresql.jdbc2.ArrayAssistantRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -22,8 +25,10 @@ import com.patho.main.util.helper.StreamUtils;
 import com.patho.main.util.helper.TaskUtil;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Delegate;
 
 @Configurable
 @Setter
@@ -64,7 +69,7 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog<CreateDiagnosi
 	 * List containing all old revisions and a new revision. The string contains the
 	 * proposed new name
 	 */
-	private List<RevisionHolder> revisionList = new ArrayList<RevisionHolder>();
+	private List<DiagnosisRevisionContainer> revisionList = new ArrayList<DiagnosisRevisionContainer>();
 
 	/**
 	 * If true the dialog will only allow renaming
@@ -99,7 +104,10 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog<CreateDiagnosi
 
 		setGenerateNames(true);
 
-		setRevisionList(new ArrayList<RevisionHolder>());
+		setRevisionList(DiagnosisRevisionContainer.factory(task,
+				new ArrayList<DiagnosisRevision>(
+						Arrays.asList(new DiagnosisRevision(getNewRevisionName(), getNewRevisionType()))),
+				isGenerateNames()));
 
 		updateDiagnosisRevisionList();
 		updateNewRevision();
@@ -112,18 +120,10 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog<CreateDiagnosi
 	 * not remove new tasks
 	 */
 	public void updateDiagnosisRevisionList() {
-		revisionList.clear();
-		Set<DiagnosisRevision> allRevsisions = new HashSet<DiagnosisRevision>();
-		allRevsisions.addAll(task.getDiagnosisRevisions());
-		allRevsisions.add(new DiagnosisRevision(newRevisionName, newRevisionType));
-
-		for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
-			String name = generateNames ? TaskUtil.getDiagnosisRevisionName(allRevsisions, diagnosisRevision)
-					: diagnosisRevision.getName();
-
-			revisionList.add(new RevisionHolder(diagnosisRevision, name));
-		}
-
+		setRevisionList(DiagnosisRevisionContainer.factory(task,
+				new ArrayList<DiagnosisRevision>(
+						Arrays.asList(new DiagnosisRevision(getNewRevisionName(), getNewRevisionType()))),
+				isGenerateNames()));
 	}
 
 	public void updateNewRevision() {
@@ -142,16 +142,14 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog<CreateDiagnosi
 		updateNewRevision();
 		updateDiagnosisRevisionList();
 	}
-	
+
 	/**
 	 * Copies the original name as the new name
 	 * 
 	 * @param diagnosisRevision
 	 */
-	public void copyOldNameFromDiagnosisRevision(DiagnosisRevision diagnosisRevision) {
-		RevisionHolder result = getRevisionList().stream().filter(p -> p.getRevision() == diagnosisRevision)
-				.collect(StreamUtils.singletonCollector());
-		result.setName(diagnosisRevision.getName());
+	public void copyOldNameFromDiagnosisRevision(DiagnosisRevisionContainer diagnosisRevisionContainer) {
+		diagnosisRevisionContainer.setNewName(diagnosisRevisionContainer.getName());
 	}
 
 	/**
@@ -161,15 +159,7 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog<CreateDiagnosi
 	public void addDiagnosisAndHide() {
 		logger.debug("Creating new diagnosis revision " + newRevisionName);
 
-		for (RevisionHolder revisionHolder : getRevisionList()) {
-			if (!revisionHolder.getName().equals(revisionHolder.getRevision().getName())) {
-				logger.debug("Updating revision name from " + revisionHolder.getRevision().getName() + " to "
-						+ revisionHolder.getName());
-				// updating name
-				revisionHolder.getRevision().setName(revisionHolder.getName());
-			}
-		}
-
+		task = diagnosisService.renameDiagnosisRevisions(task, getRevisionList());
 		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName);
 
 		super.hideDialog(new DiagnosisPhaseUpdateEvent(task));
@@ -181,33 +171,34 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog<CreateDiagnosi
 	 * @author andi
 	 *
 	 */
-	public static class RevisionHolder {
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class DiagnosisRevisionContainer extends DiagnosisRevision {
 
+		@Delegate
 		private DiagnosisRevision revision;
 
-		private String name;
+		private String newName;
 
-		public RevisionHolder(DiagnosisRevision revision, String name) {
-			this.revision = revision;
-			this.name = name;
+		public static List<DiagnosisRevisionContainer> factory(Task task, List<DiagnosisRevision> newRevisions,
+				boolean generateNames) {
+			List<DiagnosisRevisionContainer> result = new ArrayList<DiagnosisRevisionContainer>();
+
+			Set<DiagnosisRevision> allRevsisions = new LinkedHashSet<DiagnosisRevision>(task.getDiagnosisRevisions());
+
+			if (newRevisions != null)
+				allRevsisions.addAll(newRevisions);
+
+			for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
+				String name = generateNames ? TaskUtil.getDiagnosisRevisionName(allRevsisions, diagnosisRevision)
+						: diagnosisRevision.getName();
+
+				result.add(new DiagnosisRevisionContainer(diagnosisRevision, name));
+			}
+
+			return result;
 		}
-
-		public DiagnosisRevision getRevision() {
-			return revision;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setRevision(DiagnosisRevision revision) {
-			this.revision = revision;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
 	}
 
 }

@@ -7,7 +7,7 @@
 
 <h:head>
 	<title><h:outputFormat
-			value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.headline']}" /></title>
+			value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.headline.'.concat(dialog.quickAddDiangosisRevisionDialog.type)]}" /></title>
 	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
 		library="css" />
@@ -21,7 +21,7 @@
 			<h:panelGrid style="width:100%;" columns="2"
 				styleClass="defaultHistoTable">
 				<h:outputLabel
-					value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.headline']}" />
+					value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.headline.'.concat(dialog.quickAddDiangosisRevisionDialog.type)]}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
@@ -33,7 +33,14 @@
 		<div class="dialogContent">
 			<h:panelGrid columns="1" styleClass="defaultHistoTable">
 				<h:outputLabel
-					value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.text']}" />
+					value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.text.'.concat(dialog.quickAddDiangosisRevisionDialog.type)]}" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable">
+				<h:outputLabel
+					value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.renameOldDiagnoses']}" />
+				<p:selectBooleanCheckbox
+					value="#{dialog.quickAddDiangosisRevisionDialog.renameOldDiagnoses}"></p:selectBooleanCheckbox>
 			</h:panelGrid>
 		</div>
 

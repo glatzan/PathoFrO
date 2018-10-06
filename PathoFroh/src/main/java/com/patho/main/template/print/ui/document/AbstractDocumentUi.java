@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -24,6 +26,8 @@ import lombok.Setter;
 @Configurable
 public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocumentUi.SharedData> implements ID {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -43,21 +47,6 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 	 * Task
 	 */
 	protected Task task;
-
-	/**
-	 * True if task is set
-	 */
-	protected boolean initialized;
-
-	/**
-	 * If true the pdf will be updated on every settings change
-	 */
-	protected boolean updatePdfOnEverySettingChange = false;
-
-	/**
-	 * If true the first selected contact will be rendered
-	 */
-	protected boolean renderSelectedContact = false;
 
 	/**
 	 * String for input include

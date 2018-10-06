@@ -59,7 +59,7 @@ public class DiagnosisReportUi extends AbsctractContactUi<DiagnosisReport, Diagn
 	 * 
 	 * @param event
 	 */
-	public void onSearchForPatientReturn(SelectEvent event) {
+	public void onCustomAddressReturn(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof CustomAddressReturn) {
 			// setting manually altered
 			((CustomAddressReturn) event.getObject()).getContactSelector().setManuallyAltered(true);
@@ -74,7 +74,7 @@ public class DiagnosisReportUi extends AbsctractContactUi<DiagnosisReport, Diagn
 	public TemplateConfiguration<DiagnosisReport> getDefaultTemplateConfiguration() {
 		printDocument.initilize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(getSharedData().getSelectedDiagnosis())),
-				new InitializeToken("address", renderSelectedContact ? getAddressOfFirstSelectedContact() : ""));
+				new InitializeToken("address", getSharedData().renderSelectedContact ? getAddressOfFirstSelectedContact() : ""));
 
 		return new TemplateConfiguration<DiagnosisReport>(printDocument);
 	}

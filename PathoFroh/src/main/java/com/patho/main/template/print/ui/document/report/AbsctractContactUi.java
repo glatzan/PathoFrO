@@ -84,6 +84,16 @@ public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractCont
 				// setting parent as selected
 				chooser.getParent().setSelected(true);
 			}
+
+			// if single select mode remove other selections
+			if (sharedData.isSingleSelect()) {
+				sharedData.getContactList().stream().forEach(p -> {
+					if (p != chooser.getParent()) {
+						p.setSelected(false);
+						p.getOrganizazionsChoosers().forEach(s -> s.setSelected(false));
+					}
+				});
+			}
 		}
 
 		chooser.getParent().generateAddress(true);
@@ -153,6 +163,16 @@ public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractCont
 		 * List if true single select mode of contacts is enabled
 		 */
 		protected boolean singleSelect;
+
+		/**
+		 * If true the pdf will be updated on every settings change
+		 */
+		protected boolean updatePdfOnEverySettingChange = false;
+
+		/**
+		 * If true the first selected contact will be rendered
+		 */
+		protected boolean renderSelectedContact = false;
 
 		/**
 		 * Initializes the shareddata context.

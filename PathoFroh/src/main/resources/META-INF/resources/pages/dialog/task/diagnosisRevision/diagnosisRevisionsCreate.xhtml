@@ -77,7 +77,7 @@
 							<!-- old name -->
 							<p:column
 								headerText="#{msg['dialog.createDiagnosisRevision.name.old']}">
-								<h:outputText value="#{revision.revision.name}" />
+								<h:outputText value="#{revision.name}" />
 							</p:column>
 
 							<!-- copy -->
@@ -89,7 +89,7 @@
 								<p:commandLink
 									title="#{msg['dialog.createDiagnosisRevision.name.copy']}"
 									update="@form"
-									actionListener="#{dialog.createDiagnosisRevisionDialog.copyOldNameFromDiagnosisRevision(revision.revision)}">
+									actionListener="#{dialog.createDiagnosisRevisionDialog.copyOldNameFromDiagnosisRevision(revision)}">
 									<i class="fa fa-fw fa-arrow-circle-o-right" />
 								</p:commandLink>
 							</p:column>
@@ -97,7 +97,7 @@
 							<!-- new name -->
 							<p:column
 								headerText="#{msg['dialog.createDiagnosisRevision.name.new']}">
-								<p:inputText value="#{revision.name}" style="width:97%"></p:inputText>
+								<p:inputText value="#{revision.newName}" style="width:97%"></p:inputText>
 							</p:column>
 						</p:dataTable>
 					</p:tab>

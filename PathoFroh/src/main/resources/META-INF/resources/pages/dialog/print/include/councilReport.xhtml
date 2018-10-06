@@ -14,7 +14,10 @@
 	<h:outputLabel value="#{msg['dialog.print.council']}"
 		styleClass="bigFont" />
 
+	<!-- council for task -->
 	<h:panelGroup>
+
+		<!-- council select -->
 		<p:selectOneMenu
 			converter="#{dialog.printDialog.selectedTemplate.sharedData.councilListTransformer}"
 			style="width:90%"
@@ -29,14 +32,14 @@
 
 		</p:selectOneMenu>
 
+		<!-- select and update -->
 		<p:remoteCommand name="updateContactForCouncil"
 			update="printSettingsTable pollUpdateTable buttonBtnContainer">
 			<f:actionListener
-				binding="#{dialog.printDialog.selectedTemplate.updateContactList()}" />
+				binding="#{dialog.printDialog.selectedTemplate.sharedData.updateContactList()}" />
 			<f:actionListener
 				binding="#{dialog.printDialog.onChangePrintTemplate()}" />
 		</p:remoteCommand>
-
 	</h:panelGroup>
 
 	<h:outputLabel value="#{msg['dialog.print.addresses']}"
@@ -67,7 +70,7 @@
 				<p:column>
 					<!-- select boolean checkbox for not changing the pdf -->
 					<p:selectBooleanCheckbox value="#{chooser.selected}"
-						rendered="#{!dialog.printDialog.selectedTemplate.updatePdfOnEverySettingChange}">
+						rendered="#{!dialog.printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
 						<p:ajax event="change" process="printSettingsTable"
 							listener="#{dialog.printDialog.selectedTemplate.onChooseContact(chooser)}"
 							update="printSettingsTable" />
@@ -75,7 +78,7 @@
 
 					<!-- select boolean checkbox for changing the pdf -->
 					<h:panelGroup
-						rendered="#{dialog.printDialog.selectedTemplate.updatePdfOnEverySettingChange}">
+						rendered="#{dialog.printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
 						<p:selectBooleanCheckbox value="#{chooser.selected}">
 							<p:ajax event="change" process="printSettingsTable"
 								onstart="updateContactAndRerenderPDF#{outer.index}()" />
@@ -122,10 +125,10 @@
 						widgetVar="editAddressOver#{outer.index}"
 						rendered="#{!chooser.emptyAddress}"
 						id="editAddressOver#{outer.index}" showEvent="mouseover"
-						hideEvent="mouseout" onShow="updateOverlay#{outer.index}();">
+						hideEvent="mouseout">
 
-						<h:outputText value="#{chooser.customAddress}"
-							styleClass="lableLineBreak" />
+						<h:outputText value="#{chooser.customAddress}" escape="false"
+							styleClass="forcedLineBreak" />
 					</p:overlayPanel>
 				</p:column>
 
@@ -134,24 +137,34 @@
 
 						<!-- select boolean checkbox for not changing the pdf -->
 						<p:commandLink
-							rendered="#{!dialog.printDialog.selectedTemplate.updatePdfOnEverySettingChange}"
+							rendered="#{!dialog.printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}"
 							title="#{msg['dialog.print.individualAddress']}"
 							actionListener="#{dialog.customAddressDialog.initAndPrepareBean(dialog.printDialog.selectedTemplate.task,chooser)}">
 							<i class="fa fa-gear" style="margin-left: 2px" />
 							<p:ajax event="dialogReturn"
+								listener="#{dialog.printDialog.selectedTemplate.onCustomAddressReturn}"
 								update="editAddressOver#{outer.index}" />
 						</p:commandLink>
 
 						<!-- select boolean checkbox for changing the pdf -->
-						<p:commandLink
-							rendered="#{dialog.printDialog.selectedTemplate.updatePdfOnEverySettingChange}"
-							title="#{msg['dialog.print.individualAddress']}"
-							actionListener="#{dialog.customAddressDialog.initAndPrepareBean(dialog.printDialog.selectedTemplate.task,chooser)}">
-							<i class="fa fa-gear" style="margin-left: 2px" />
-							<p:ajax event="dialogReturn"
-								listener="#{dialog.printDialog.onChangePrintTemplate()}"
-								update="editAddressOver#{outer.index} pollUpdateTable buttonBtnContainer" />
-						</p:commandLink>
+						<h:panelGroup
+							rendered="#{dialog.printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
+							<p:commandLink title="#{msg['dialog.print.individualAddress']}"
+								actionListener="#{dialog.customAddressDialog.initAndPrepareBean(dialog.printDialog.selectedTemplate.task,chooser)}">
+								<i class="fa fa-gear" style="margin-left: 2px" />
+
+								<p:ajax event="dialogReturn"
+									update="editAddressOver#{outer.index}"
+									listener="#{dialog.printDialog.selectedTemplate.onCustomAddressReturn}"
+									oncomplete="updateAfterCustomAddress#{outer.index}()" />
+							</p:commandLink>
+
+							<p:remoteCommand name="updateAfterCustomAddress#{outer.index}"
+								update="editAddressOver#{outer.index} pollUpdateTable buttonBtnContainer">
+								<f:actionListener
+									binding="#{dialog.printDialog.onChangePrintTemplate()}" />
+							</p:remoteCommand>
+						</h:panelGroup>
 
 					</h:panelGroup>
 				</p:column>
@@ -168,7 +181,7 @@
 
 						<!-- select boolean checkbox for not changing the pdf -->
 						<p:selectBooleanCheckbox value="#{organizazion.selected}"
-							rendered="#{!dialog.printDialog.selectedTemplate.updatePdfOnEverySettingChange}">
+							rendered="#{!dialog.printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
 							<p:ajax event="change" process="@form"
 								update="printSettingsTable"
 								listener="#{dialog.printDialog.selectedTemplate.onChooseOrganizationOfContact(organizazion)}"></p:ajax>
@@ -177,7 +190,7 @@
 
 						<!-- select boolean checkbox for changing the pdf -->
 						<h:panelGroup
-							rendered="#{dialog.printDialog.selectedTemplate.updatePdfOnEverySettingChange}">
+							rendered="#{dialog.printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
 							<p:selectBooleanCheckbox value="#{organizazion.selected}">
 								<p:ajax event="change" process="printSettingsTable"
 									onstart="updateOrganizationAndRerenderPDF#{outer.index}()" />
