@@ -93,7 +93,7 @@
 					</f:facet>
 					<p:commandLink
 						rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient).streamContainer.setDisplayPDF(attachedPdf)}">
+						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient).setPDFToDisplay(attachedPdf)}">
 						<p:ajax event="dialogReturn" update="@form" />
 						<i class="fa fa-search"></i>
 					</p:commandLink>

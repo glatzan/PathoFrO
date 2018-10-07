@@ -126,7 +126,7 @@ patho:
       programVersionInfo: classpath:settings/version.txt
       copyFromClasspathToWorkDirectory:
         - "classpath:templates/print/_*"
-      cleanup: true
+      cleanup: false
       keepErrorFiles: true
     defaultDocuments:
       diagnosisApprovedDocument: 10

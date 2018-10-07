@@ -40,9 +40,11 @@ import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.ui.pdf.PDFStreamContainer;
+import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -92,6 +94,8 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 
 	private List<DataList> dataLists;
 
+	private boolean enablePDFSelection;
+
 	public PDFOrganizer initAndPrepareBean(Patient patient) {
 		if (initBean(patient))
 			prepareDialog();
@@ -102,16 +106,28 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 		setPatient(patient);
 
 		setStreamContainer(new PDFStreamContainer());
-		
+
 		setSelectedNode(null);
 		setDataLists(new ArrayList<DataList>());
 		setRoot(null);
 
 		update(true);
 
+		this.enablePDFSelection = false;
+
 		super.initBean(null, Dialog.PDF_ORGANIZER);
 
 		return true;
+	}
+
+	public PDFOrganizer setPDFToDisplay(PDFContainer c) {
+		getStreamContainer().setDisplayPDF(c);
+		return this;
+	}
+
+	public PDFOrganizer selectMode() {
+		this.enablePDFSelection = true;
+		return this;
 	}
 
 	/**
@@ -126,7 +142,8 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 		setRoot(generateTree(patient));
 
 		// unloading pdf is it was selected
-		if (getStreamContainer().getDisplayPDF() != null && PDFService.getParentOfPDF(getDataLists(), getStreamContainer().getDisplayPDF() ) == null) {
+		if (getStreamContainer().getDisplayPDF() != null
+				&& PDFService.getParentOfPDF(getDataLists(), getStreamContainer().getDisplayPDF()) == null) {
 			setSelectedNode(null);
 			getStreamContainer().setDisplayPDF(null);
 		}
@@ -188,7 +205,8 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 	 */
 	public void displaySelectedContainer() {
 		logger.debug("Display selected container");
-		getStreamContainer().setDisplayPDF(getSelectedNode() != null ? (PDFContainer) getSelectedNode().getData() : null);
+		getStreamContainer()
+				.setDisplayPDF(getSelectedNode() != null ? (PDFContainer) getSelectedNode().getData() : null);
 	}
 
 	/**
@@ -314,4 +332,23 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 		super.hideDialog(new ReloadEvent());
 	}
 
+	/**
+	 * Hies the dialog an returns the selected pdf as an event
+	 */
+	public void selectAndHide() {
+		super.hideDialog(new PDFSelectEvent(getStreamContainer().getDisplayPDF()));
+	}
+
+	/**
+	 * Return object for selection mode
+	 * 
+	 * @author andi
+	 *
+	 */
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class PDFSelectEvent implements DialogReturnEvent {
+		private PDFContainer container;
+	}
 }

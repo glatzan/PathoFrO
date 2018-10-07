@@ -227,7 +227,6 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 	// }
 
 	public void onChangePrintTemplate() {
-		System.out.println("-------------" + getSelectedTemplate());
 		guiManager.reset();
 		guiManager.startRendering(getSelectedTemplate().getDefaultTemplateConfiguration().getDocumentTemplate(),
 				pathoConfig.getFileSettings().getPrintDirectory());

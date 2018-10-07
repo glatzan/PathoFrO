@@ -37,16 +37,15 @@
 
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
 					columnClasses="columnWidth150 columnHeading,">
+
 					<!-- Task number -->
 					<h:outputLabel value="#{msg['dialog.createTask.taskNumber']}"></h:outputLabel>
 					<h:panelGroup>
 						<p:inputText required="true" maxlength="6" id="taskIDInput"
 							validator="#{dialog.createTaskDialog.validateTaskID}"
-							value="#{dialog.createTaskDialog.task.taskID}"
-							requiredMessage="You must enter an Sale Price"
-							converterMessage="Sale Price must be a number">
+							value="#{dialog.createTaskDialog.taskData.taskID}">
 							<p:ajax delay="1000" event="keyup"
-								listener="#{dialog.createTaskDialog.setTaskIdManuallyAltered(true)}"></p:ajax>
+								listener="#{dialog.createTaskDialog.taskData.setTaskIdManuallyAltered(true)}"></p:ajax>
 						</p:inputText>
 						<p:message for="taskIDInput" display="icon"
 							style="margin-left:10px" />
@@ -55,14 +54,14 @@
 					<!-- Task Date -->
 					<h:outputLabel value="#{msg['dialog.createTask.taskEDate']}"></h:outputLabel>
 					<p:calendar pattern="dd.MM.yyyy" mask="true" id="dueDate"
-						value="#{dialog.createTaskDialog.task.dateOfReceiptAsDate}">
+						value="#{dialog.createTaskDialog.taskData.dateOfReceipt}">
 					</p:calendar>
 
 					<!-- Auto nomenclature -->
 					<h:outputLabel value="#{msg['dialog.createTask.autoNomenclature']}" />
 					<p:selectBooleanCheckbox id="autoNomenclature"
 						title="#{msg['dialog.createTask.autoNomenclature.text']}"
-						value="#{dialog.createTaskDialog.task.useAutoNomenclature}">
+						value="#{dialog.createTaskDialog.taskData.useAutoNomenclature}">
 						<p:ajax
 							listener="#{dialog.createTaskDialog.manuallyChangeAutoNomenclature()}"></p:ajax>
 					</p:selectBooleanCheckbox>
@@ -71,7 +70,7 @@
 					<!-- priority -->
 					<h:outputLabel value="#{msg['dialog.createTask.priority']}" />
 					<p:selectOneRadio
-						value="#{dialog.createTaskDialog.task.taskPriority}">
+						value="#{dialog.createTaskDialog.taskData.taskPriority}">
 						<f:selectItem itemLabel="#{msg['enum.taskPriority.LOW']}"
 							itemValue="NONE" />
 						<f:selectItem itemLabel="#{msg['enum.taskPriority.HIGHT']}"
@@ -90,12 +89,14 @@
 							value="#{msg['dialog.createTask.priority.dueDate']}" />
 						<p:calendar pattern="dd.MM.yyyy" mask="true"
 							style="margin-left:10px"
-							disabled="#{!dialog.createTaskDialog.task.dueDateSelected}"
-							value="#{dialog.createTaskDialog.task.dueDateAsDate}">
+							disabled="#{!dialog.createTaskDialog.taskData.dueDateSelected}"
+							value="#{dialog.createTaskDialog.taskData.dueDate}">
 						</p:calendar>
 					</h:panelGrid>
 				</h:panelGrid>
 
+
+				<!-- bio bank -->
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
 					columnClasses="columnWidth150 columnHeading,">
 					<!-- bio bank -->
@@ -106,31 +107,17 @@
 						<h:outputLabel
 							value="#{msg['dialog.createTask.bioBank.informedConsent.signed']}" />
 						<p:commandLink
-							actionListener="#{dialog.createTaskDialog.showMediaSelectDialog(dialogHandlerAction.mediaDialog.selectedPdfContainer)}">
+							actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(dialog.createTaskDialog.patient).selectMode()}">
 							<p:ajax event="dialogReturn" update="@form" process="@form" />
 							<i class="fa fa-search icon-grey"></i>
 						</p:commandLink>
-						<p:commandLink style="margin-right:5px" update="@form"
-							process="@form"
-							rendered="#{dialogHandlerAction.mediaDialog.selectedPdfContainer != null}"
-							actionListener="#{dialogHandlerAction.mediaDialog.setSelectedPdfContainer(null)}">
-							<i class="fa fa-close icon-grey"></i>
-						</p:commandLink>
 					</h:panelGrid>
-
-					<!-- move file -->
-					<h:outputLabel
-						value="#{msg['dialog.createTask.moveInformedConsent']}" />
-					<p:selectBooleanCheckbox
-						title="#{msg['dialog.createTask.moveInformedConsent.hint']}"
-						value="#{dialog.createTaskDialog.moveInformedConsent}">
-					</p:selectBooleanCheckbox>
 
 					<!-- selected file /remove file -->
 					<h:outputLabel
 						value="#{msg['dialog.createTask.bioBank.informedConsent.file']}:" />
 					<h:outputLabel
-						value="#{dialogHandlerAction.mediaDialog.selectedPdfContainer.name}">
+						value="#{dialog.createTaskDialog.taskData.bioBank.container.name}">
 						<f:converter converterId="org.histo.ui.TruncateConverter" />
 						<f:attribute name="truncateAt" value="35" />
 						<f:attribute name="continuationMark" value="..." />
@@ -140,13 +127,14 @@
 					<h:outputLabel
 						value="#{msg['dialog.createTask.bioBank.informedConsent.type']}" />
 					<p:selectOneMenu id="consentType" styleClass="smallInput"
-						value="#{dialog.createTaskDialog.bioBank.informedConsentType}"
-						disabled="#{dialogHandlerAction.mediaDialog.selectedPdfContainer == null}">
+						value="#{dialog.createTaskDialog.taskData.bioBank.informedConsentType}"
+						disabled="#{!dialog.createTaskDialog.taskData.bioBank.isPDFSelected()}">
 						<f:selectItems value="#{enumProvider.informedConsentTypes}"
 							var="type"
 							itemLabel="#{msg['enum.informedConsentType.'.concat(type)]}"
 							itemValue="#{type}" />
 					</p:selectOneMenu>
+
 				</h:panelGrid>
 			</h:panelGrid>
 
@@ -159,58 +147,7 @@
 				columnClasses="columnWidthPercent50 columnTop, columnWidthPercent50 columnTop"
 				styleClass="defaultHistoHiddenTableContainer">
 
-				<!-- Left column -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					columnClasses="columnWidth150 columnHeading,">
 
-					<!-- samplecount -->
-					<h:outputLabel value="#{msg['dialog.createTask.sampleCount']}"></h:outputLabel>
-					<p:spinner styleClass="numberFixForSpinner"
-						value="#{dialog.createTaskDialog.sampleCount}" min="1" max="5">
-						<p:ajax update="@form" process="@this" event="change"
-							listener="#{dialog.createTaskDialog.updateDialog()}"></p:ajax>
-					</p:spinner>
-
-					<!-- samples -->
-					<c:forEach var="sample" varStatus="sampleIndex"
-						items="#{dialog.createTaskDialog.task.samples}">
-
-						<h:outputLabel style="margin-left:10px"
-							value="#{msg['dialog.createTask.task']} #{sample.sampleID}"></h:outputLabel>
-
-						<h:panelGroup>
-							<!-- material text -->
-							<p:inputText value="#{sample.material}"
-								onkeypress="PF('materialOverlayPanel#{sampleIndex.index}').hide();"
-								onclick="PF('materialOverlayPanel#{sampleIndex.index}').show();"
-								onfocus="PF('materialOverlayPanel#{sampleIndex.index}').show();"
-								id="materialName#{sampleIndex.index}" style="width:40%">
-							</p:inputText>
-
-							<p:overlayPanel
-								widgetVar="materialOverlayPanel#{sampleIndex.index}"
-								id="materialOverlayPanel#{sampleIndex.index}"
-								styleClass="defaultOverlayPanel selectOverlayPanel"
-								for="materialName#{sampleIndex.index}" hideEffect="fade"
-								hideEvent="none" showEvent="none">
-								<p:dataTable value="#{dialog.createTaskDialog.materialList}"
-									var="item" styleClass="newStyleDataTable" scrollable="true"
-									scrollHeight="200" rowKey="#{item.id}"
-									selection="#{sample.materialPreset}" selectionMode="single">
-									<p:column>
-										<h:outputText value="#{item.name}" />
-									</p:column>
-
-									<p:ajax event="rowSelect" update="@form"
-										listener="#{dialog.createTaskDialog.onMaterialPresetChange(sample)}"
-										oncomplete="PF('materialOverlayPanel#{sampleIndex.index}').hide();" />
-
-								</p:dataTable>
-							</p:overlayPanel>
-						</h:panelGroup>
-					</c:forEach>
-
-				</h:panelGrid>
 
 				<!-- Right column -->
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
@@ -219,15 +156,15 @@
 					<!-- external material -->
 					<h:outputLabel value="#{msg['dialog.createTask.external']}"></h:outputLabel>
 					<p:selectBooleanCheckbox
-						value="#{dialog.createTaskDialog.externalTask}">
+						value="#{dialog.createTaskDialog.taskData.externalSamples}">
 						<p:ajax event="change" process="@form" update="@form" />
 					</p:selectBooleanCheckbox>
 
 					<!-- external commentary  -->
 					<h:outputLabel value="#{msg['dialog.createTask.external.return']}"></h:outputLabel>
 					<p:inputTextarea rows="4" cols="35"
-						value="#{dialog.createTaskDialog.exneralCommentary}"
-						disabled="#{!dialog.createTaskDialog.externalTask}"></p:inputTextarea>
+						value="#{dialog.createTaskDialog.taskData.exnternalSampleCommentary}"
+						disabled="#{!dialog.createTaskDialog.taskData.externalSamples}"></p:inputTextarea>
 
 
 				</h:panelGrid>
@@ -262,7 +199,7 @@
 							binding="#{dialog.createTaskDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 
-					<!-- select printer -->
+					<!-- select printer
 					<p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
 						converter="#{globalSettings.printerListTransformer}"
 						value="#{userHandlerAction.selectedPrinter}" filter="true"
@@ -270,7 +207,7 @@
 
 						<f:selectItems value="#{globalSettings.printerList}" var="printer"
 							itemLabel="#{printer.name}" itemValue="#{printer}" />
-					</p:selectOneMenu>
+					</p:selectOneMenu> -->
 				</h:panelGrid>
 
 				<h:panelGrid columns="1" styleClass="right">

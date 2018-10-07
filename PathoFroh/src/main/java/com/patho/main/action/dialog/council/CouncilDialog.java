@@ -372,9 +372,8 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	public void createCouncil() {
 		logger.info("Adding new council");
 		Council c = councilService.createCouncil(getTask(), true).getCouncil();
+		
 		update(true);
-		logger.debug("Council with id {} created", c.getId());
-
 		selectNode(new CouncilContainer(c), 0);
 	}
 

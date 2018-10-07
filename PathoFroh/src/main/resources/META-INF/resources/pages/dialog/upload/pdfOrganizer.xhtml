@@ -228,7 +228,8 @@
 									rendered="#{dialog.pdfOrganizer.streamContainer.displayPDF ne null}">
 									<!-- name -->
 									<h:outputText value="#{msg['dialog.pdfOrganizer.files.name']}" />
-									<h:outputText value="#{dialog.pdfOrganizer.streamContainer.displayPDF.name}"
+									<h:outputText
+										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.name}"
 										title="#{dialog.pdfOrganizer.streamContainer.displayPDF.name}">
 										<f:converter converterId="org.histo.ui.TruncateConverter" />
 										<f:attribute name="truncateAt" value="35" />
@@ -365,7 +366,8 @@
 					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.open']}"
 						icon="fa fa-download" ajax="false"
 						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null}">
-						<p:fileDownload value="#{dialog.pdfOrganizer.streamContainer.getPDF()}" />
+						<p:fileDownload
+							value="#{dialog.pdfOrganizer.streamContainer.getPDF()}" />
 					</p:commandButton>
 
 					<!-- edit button -->
@@ -393,7 +395,7 @@
 
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right" id="buttonBtnContainer">
+				<h:panelGrid columns="3" styleClass="right" id="buttonBtnContainer">
 
 					<!-- upload button -->
 					<p:commandButton
@@ -404,6 +406,15 @@
 						<p:ajax event="dialogReturn"
 							listener="#{dialog.pdfOrganizer.onDefaultDialogReturn}"
 							update="@form"></p:ajax>
+					</p:commandButton>
+
+					<!-- edit button -->
+					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.select']}"
+						icon="fa fa-pencil"
+						rendered="#{dialog.pdfOrganizer.enablePDFSelection}"
+						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null}"
+						actionListener="#{dialog.pdfOrganizer.selectAndHide()}">
+
 					</p:commandButton>
 
 					<!-- Close button -->

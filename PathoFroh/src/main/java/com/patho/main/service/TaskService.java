@@ -1,5 +1,8 @@
 package com.patho.main.service;
 
+import java.util.Calendar;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +15,7 @@ import com.patho.main.repository.DiagnosisRevisionRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
+import com.patho.main.util.helper.TimeUtil;
 
 @Service
 @Transactional
@@ -114,7 +118,7 @@ public class TaskService extends AbstractService {
 	 */
 	@Transactional
 	public Task updateNamesOfTaskEnities(Task task, boolean ignoreManuallyChangedEntities, boolean save) {
-		logger.debug("Updatining names, ignore manually altered: " + ignoreManuallyChangedEntities); 
+		logger.debug("Updatining names, ignore manually altered: " + ignoreManuallyChangedEntities);
 		for (Sample sample : task.getSamples()) {
 			sample.updateAllNames(true, ignoreManuallyChangedEntities);
 		}
@@ -123,6 +127,28 @@ public class TaskService extends AbstractService {
 			return taskRepository.save(task, resourceBundle.get("log.task.nameUpdate", task));
 		else
 			return task;
+	}
+
+	/**
+	 * Returns the next id for a task, if the year changes a new task id will be generated
+	 * @return
+	 */
+	public String getNextTaskID() {
+		// generating new task id
+		Optional<Task> task = taskRepository.findOptinalByLastID(Calendar.getInstance(), false, false, false, false,
+				false);
+
+		// task is within the current year
+		if (task.isPresent()) {
+			// getting counter
+			String count = task.get().getTaskID().substring(2, 6);
+			// increment counter
+			int counterAsInt = Integer.valueOf(count) + 1;
+			return Integer.toString(TimeUtil.getCurrentYear() - 2000) + HistoUtil.fitString(counterAsInt, 4, '0');
+		} else {
+			// first task ever, or first task of year , year + 0001
+			return Integer.toString(TimeUtil.getCurrentYear() - 2000) + HistoUtil.fitString(1, 4, '0');
+		}
 	}
 
 	public enum TaskIDValidity {
