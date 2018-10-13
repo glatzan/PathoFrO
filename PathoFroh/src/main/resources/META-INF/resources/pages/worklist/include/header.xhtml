@@ -177,7 +177,7 @@
 			</p:commandButton>
 
 			<p:hotkey bind="shift+n"
-				oncomplete="$('#headerForm\\:newTaskBtn').click();$('#headerForm\\:newTaskBtn').hide();return false;" />
+				oncomplete="$('#headerForm\\:newTaskBtn').click();return false;" />
 
 			<!-- New Sample -->
 			<p:commandButton id="newSampleBtn"
@@ -254,6 +254,9 @@
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm headerForm" />
 			</p:commandButton>
+
+			<p:hotkey bind="shift+c"
+				oncomplete="$('#headerForm\\:councilBtn').click();return false;" />
 
 			<!-- Contacts button -->
 			<p:commandButton id="editContactBtn"
