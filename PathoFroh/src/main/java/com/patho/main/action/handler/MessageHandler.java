@@ -44,13 +44,21 @@ public class MessageHandler extends AbstractHandler {
 	public static void sendGrowlMessagesAsResource(CustomUserNotificationExcepetion e) {
 		sendGrowlMessagesAsResource(e.getHeadline(), e.getMessage(), FacesMessage.SEVERITY_ERROR);
 	}
-	
+
 	public static void sendGrowlMessagesAsResource(String headline) {
 		sendGrowlMessagesAsResource(headline, "growl.empty");
 	}
 
 	public static void sendGrowlMessagesAsResource(String headline, FacesMessage.Severity servertiy) {
 		sendGrowlMessagesAsResource(headline, "growl.empty", servertiy);
+	}
+
+	public static void sendGrowlWarnAsResource(String headline, String message) {
+		sendGrowlMessagesAsResource(headline, message, FacesMessage.SEVERITY_WARN);
+	}
+
+	public static void sendGrowlErrorAsResource(String headline, String message) {
+		sendGrowlMessagesAsResource(headline, message, FacesMessage.SEVERITY_ERROR);
 	}
 
 	public static void sendGrowlMessagesAsResource(String headline, String message) {

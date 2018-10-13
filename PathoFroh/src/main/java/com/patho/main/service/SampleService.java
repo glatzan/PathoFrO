@@ -47,11 +47,11 @@ public class SampleService extends AbstractService {
 	}
 
 	public void createSampleAndPersist(Task task, MaterialPreset material) {
-		createSample(task, material, true, true, true);
+		createSample(task, material, material == null ? "" : material.getName(), true, true, true);
 	}
 
 	public void createSampleAndPersist(Task task, MaterialPreset material, boolean createBlock, boolean naming) {
-		createSample(task, material, createBlock, naming, true);
+		createSample(task, material, material == null ? "" : material.getName(), createBlock, naming, true);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class SampleService extends AbstractService {
 	 * @param material
 	 */
 	public Task createSample(Task task, MaterialPreset material) {
-		return createSample(task, material, true, true, true);
+		return createSample(task, material, material == null ? "" : material.getName(), true, true, true);
 	}
 
 	/**
@@ -70,12 +70,13 @@ public class SampleService extends AbstractService {
 	 * 
 	 * @param task
 	 */
-	public Task createSample(Task task, MaterialPreset material, boolean createBlock, boolean naming, boolean save) {
+	public Task createSample(Task task, MaterialPreset material, String materialName, boolean createBlock,
+			boolean naming, boolean save) {
 		Sample sample = new Sample();
 		sample.setCreationDate(System.currentTimeMillis());
 		sample.setParent(task);
 		sample.setMaterialPreset(material);
-		sample.setMaterial(material == null ? "" : material.getName());
+		sample.setMaterial(materialName);
 		task.getSamples().add(sample);
 
 		logger.debug("Creating new sample " + sample.getSampleID());

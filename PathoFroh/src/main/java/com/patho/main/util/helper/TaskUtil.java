@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 
@@ -187,5 +188,19 @@ public class TaskUtil {
 		}
 
 		return highest;
+	}
+	
+	
+	/**
+	 * Returns the name of a sample
+	 * @param task
+	 * @param sample
+	 * @param useAutoNomenclature
+	 * @return
+	 */
+	public static String getSampleName(int sampleCount, int sampleIndex, boolean useAutoNomenclature) {
+		if (useAutoNomenclature && sampleCount > 1)
+			return TaskUtil.getRomanNumber(sampleIndex);
+		return "";
 	}
 }

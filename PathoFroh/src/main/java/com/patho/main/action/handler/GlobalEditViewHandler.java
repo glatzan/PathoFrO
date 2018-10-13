@@ -22,7 +22,6 @@ import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog.DiagnosisPhaseExitData;
-import com.patho.main.action.dialog.patient.SearchPatientDialog.PatientReturnEvent;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.handler.views.GenericView;
 import com.patho.main.action.handler.views.ReceiptLogView;
@@ -61,6 +60,7 @@ import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.ui.menu.MenuGenerator;
 import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
+import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
@@ -519,6 +519,9 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				// Patient reload event
 				if (event.getObject() instanceof PatientReturnEvent) {
 					logger.debug("Patient add event reload event.");
+					if (((PatientReturnEvent) event.getObject()).getTask() != null)
+						globalEditViewHandler.getWorklistData().getWorklist()
+								.setSelectedTask(((PatientReturnEvent) event.getObject()).getTask()); 
 					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
 					// staining phase reload event
 				} else if (event.getObject() instanceof StainingPhaseUpdateEvent) {

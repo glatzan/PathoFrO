@@ -117,12 +117,8 @@ public class Sample implements Parent<Task>, LogAble, TaskEntity, PatientRollbac
 	public boolean updateNameOfSample(boolean useAutoNomenclature, boolean ignoreManuallyNamedItems) {
 		if (!isIdManuallyAltered() || (ignoreManuallyNamedItems && isIdManuallyAltered())) {
 
-			String name = null;
-
-			if (useAutoNomenclature && getParent().getSamples().size() > 1)
-				name = TaskUtil.getRomanNumber(getParent().getSamples().indexOf(this) + 1);
-			else
-				name = "";
+			String name = TaskUtil.getSampleName(this.getParent().getSamples().size(),
+					this.getParent().getSamples().indexOf(this) + 1, useAutoNomenclature);
 
 			if (getSampleID() == null || !getSampleID().equals(name)) {
 				setSampleID(name);
@@ -156,34 +152,12 @@ public class Sample implements Parent<Task>, LogAble, TaskEntity, PatientRollbac
 		return "Sample: " + getSampleID() + (getId() != 0 ? ", ID: " + getId() : "");
 	}
 
-	/********************************************************
-	 * Interface Parent
-	 ********************************************************/
-	/**
-	 * �berschreibt Methode aus dem Interface StainingTreeParent
-	 */
-	@Transient
-	@Override
-	public Patient getPatient() {
-		return getParent().getPatient();
-	}
-
-	/**
-	 * Returns the parent task
-	 */
 	@Override
 	@Transient
 	public Task getTask() {
 		return getParent();
 	}
 
-	/********************************************************
-	 * Interface Parent
-	 ********************************************************/
-
-	/**
-	 * Overwriting of TaskEntity, returns id
-	 */
 	@Transient
 	@Override
 	public String toSimpleString() {

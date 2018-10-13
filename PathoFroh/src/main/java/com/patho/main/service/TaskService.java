@@ -1,14 +1,24 @@
 package com.patho.main.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.PredefinedFavouriteList;
+import com.patho.main.model.AssociatedContact;
+import com.patho.main.model.Council;
+import com.patho.main.model.MaterialPreset;
+import com.patho.main.model.PDFContainer;
+import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.patient.Diagnosis;
+import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.DiagnosisRevisionRepository;
@@ -26,6 +36,43 @@ public class TaskService extends AbstractService {
 
 	@Autowired
 	private TaskRepository taskRepository;
+
+	/**
+	 * Creatse a task
+	 * @param patient
+	 * @param taskID
+	 * @param save
+	 * @return
+	 */
+	public Task createTask(Patient patient, String taskID, boolean save) {
+		Task task = new Task();
+		task.setParent(patient);
+		task.setCaseHistory("");
+		task.setWard("");
+		task.setInsurance(patient.getInsurance());
+
+		if (HistoUtil.isNotNullOrEmpty(taskID)) {
+			if (isTaskIDAvailable(taskID))
+				task.setTaskID(taskID);
+			else
+				throw new IllegalArgumentException("Task ID taken");
+		} else
+			task.setTaskID(getNextTaskID());
+
+		task.setCouncils(new LinkedHashSet<Council>());
+		task.setFavouriteLists(new ArrayList<FavouriteList>());
+		task.setDiagnosisRevisions(new LinkedHashSet<DiagnosisRevision>());
+		task.setContacts(new LinkedHashSet<AssociatedContact>());
+		task.setAttachedPdfs(new LinkedHashSet<PDFContainer>());
+
+		if(patient.getTasks() == null)
+			patient.setTasks(new LinkedHashSet<Task>());
+		
+		if (save)
+			return task = taskRepository.save(task, resourceBundle.get("log.patient.task.new", task), patient);
+		return task;
+
+	}
 
 	public Task copyHistologicalRecord(Diagnosis diagnosis, boolean overwrite)
 			throws HistoDatabaseInconsistentVersionException {
@@ -130,7 +177,19 @@ public class TaskService extends AbstractService {
 	}
 
 	/**
-	 * Returns the next id for a task, if the year changes a new task id will be generated
+	 * Returns true if the task id is not used.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public boolean isTaskIDAvailable(String id) {
+		return !taskRepository.findOptionalByTaskId(id).isPresent();
+	}
+
+	/**
+	 * Returns the next id for a task, if the year changes a new task id will be
+	 * generated
+	 * 
 	 * @return
 	 */
 	public String getNextTaskID() {

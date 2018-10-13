@@ -1,9 +1,11 @@
 package com.patho.main.action.dialog.task;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -15,18 +17,24 @@ import javax.persistence.Enumerated;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.media.PDFOrganizer.PDFSelectEvent;
+import com.patho.main.action.dialog.task.CreateTaskDialog.TaskTempData.SampleTempData;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.InformedConsentType;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.TaskPriority;
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.BioBank;
 import com.patho.main.model.Council;
 import com.patho.main.model.MaterialPreset;
@@ -38,14 +46,28 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MaterialPresetRepository;
+import com.patho.main.repository.PatientRepository;
+import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.service.AssociatedContactService;
+import com.patho.main.service.BioBankService;
+import com.patho.main.service.DiagnosisService;
+import com.patho.main.service.FavouriteListService;
+import com.patho.main.service.PDFService;
+import com.patho.main.service.PatientService;
+import com.patho.main.service.SampleService;
 import com.patho.main.service.TaskService;
+import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.CaseCertificate;
+import com.patho.main.util.dialogReturn.PatientReturnEvent;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
 import com.patho.main.util.helper.HistoUtil;
+import com.patho.main.util.helper.TaskUtil;
 import com.patho.main.util.helper.TimeUtil;
 import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PrintOrder;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -55,6 +77,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private ThreadPoolTaskExecutor taskExecutor;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -79,33 +106,58 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
+	private SampleService sampleService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private DiagnosisService diagnosisService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private AssociatedContactService associatedContactService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private BioBankService bioBankService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private FavouriteListService favouriteListService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	private MaterialPresetRepository materialPresetRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PatientRepository patientRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PDFService pdfService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PathoConfig pathoConfig;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PrintDocumentRepository printDocumentRepository;
 
 	private Patient patient;
 
 	private List<MaterialPreset> materialList;
 
 	private TaskTempData taskData;
-
-	private int sampleCount;
-
-	private boolean autoNomenclatureChangedManually;
-
-	private BioBank bioBank;
-
-	private boolean moveInformedConsent;
-
-	private boolean taskIDisPresentInDatabase;
-
-	/**
-	 * True if external Task and there are sample for returning to client
-	 */
-	private boolean externalTask;
-
-	/**
-	 * Commentary for returning the samples
-	 */
-	private String exneralCommentary;
 
 	/**
 	 * Initializes the bean and shows the createTaskDialog
@@ -125,79 +177,16 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 	 * @param patient
 	 */
 	public boolean initBean(Patient patient) {
-		super.initBean(null, Dialog.TASK_CREATE, true);
+		super.initBean(null, Dialog.TASK_CREATE, false);
 
 		setPatient(patient);
-		
+
 		// setting material list
 		setMaterialList(materialPresetRepository.findAll(true));
 
 		setTaskData(new TaskTempData());
 
-		setAutoNomenclatureChangedManually(false);
-		setTaskIDisPresentInDatabase(false);
-
-		// setting biobank
-		setBioBank(new BioBank());
-		getBioBank().setInformedConsentType(InformedConsentType.NONE);
-		getBioBank().setTask(getTask());
-
-		// resetting selected container
-		// dialogHandlerAction.getMediaDialog().setSelectedPdfContainer(null);
-
-		setExneralCommentary("");
-		setExternalTask(false);
-
-		setMoveInformedConsent(false);
-
 		return true;
-	}
-
-	/**
-	 * Updates the name and the amount of samples which should be created with the
-	 * new task.
-	 */
-	public void updateDialog() {
-
-		logger.debug("New Task: Updating sample tree");
-
-		// changing autoNomeclature of samples, if no change was made manually
-		if (getSampleCount() > 1 && !isAutoNomenclatureChangedManually()) {
-			logger.debug("New Task: More then one sample, setting autonomeclature to true");
-			getTask().setUseAutoNomenclature(true);
-		} else if (getSampleCount() == 1 && !isAutoNomenclatureChangedManually()) {
-			logger.debug("New Task: Only one sample, setting autonomeclature to false");
-			getTask().setUseAutoNomenclature(false);
-		}
-
-		if (getSampleCount() >= 1) {
-			if (getSampleCount() > task.getSamples().size()) {
-				logger.debug("New Task: Samplecount > samples, adding new samples");
-				// adding samples if count is bigger then the current sample
-				// count
-				while (getSampleCount() > task.getSamples().size()) {
-					Sample newSample = new Sample();
-					newSample.setCreationDate(System.currentTimeMillis());
-					newSample.setParent(getTask());
-					newSample.setMaterialPreset(getMaterialList().get(0));
-					newSample.setMaterial(getMaterialList().get(0).getName());
-					getTask().getSamples().add(newSample);
-					getTask().updateAllNames();
-				}
-			} else if (getSampleCount() < task.getSamples().size()) {
-				logger.debug("New Task: Samplecount > samples, removing sample");
-				// removing samples if count is less then current sample count
-				while (getSampleCount() < task.getSamples().size())
-					task.getSamples().remove(task.getSamples().size() - 1);
-			}
-		}
-
-		logger.debug("New Task: Updating sample names");
-
-		// updates the name of all other samples
-		for (Sample sample : task.getSamples()) {
-			sample.updateNameOfSample(getTask().isUseAutoNomenclature(), true);
-		}
 	}
 
 	/**
@@ -205,154 +194,91 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 	 * 
 	 * @throws CustomNotUniqueReqest
 	 */
-	public void createTask() {
-		uniqueRequestID.checkUniqueRequestID(true);
+	public Task createNewTask() {
+		return transactionTemplate.execute(new TransactionCallback<Task>() {
 
-		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-			public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-
-				genericDAO.reattach(getPatient());
-
-				if (getPatient().getTasks() == null) {
-					getPatient().setTasks(new ArrayList<>());
-				}
+			public Task doInTransaction(TransactionStatus transactionStatus) {
 
 				logger.debug("Creating new Task");
 
-				getPatient().getTasks().add(0, getTask());
-				// sets the new task as the selected task
+				Task task = taskService.createTask(getPatient(), getTaskData().getTaskID(), true);
+				task.setDateOfReceipt(getTaskData().getDateOfReceipt().getTime());
+				task.setDueDate(getTaskData().getDueDate().getTime());
+				task.setTaskPriority(getTaskData().getTaskPriority());
+				task.setUseAutoNomenclature(getTaskData().isUseAutoNomenclature());
 
-				getTask().setParent(getPatient());
-				getTask().setCaseHistory("");
-				getTask().setWard("");
-				getTask().setInsurance(patient.getInsurance());
+				task = taskRepository.save(task, resourceBundle.get("log.patient.task.update", task), patient);
 
-				if (isTaskIdManuallyAltered()) {
-					// TODO check if task id exists
-				} else {
-					// renewing taskID, if somebody has created an other
-					// task in the meanwhile
-					getTask().setTaskID(getNewTaskID());
+				for (SampleTempData sampleTempData : getTaskData().getSamples()) {
+					logger.debug("Creating sample {}", sampleTempData.getMaterial());
+					sampleService.createSample(task, sampleTempData.getMaterialPreset(), sampleTempData.getMaterial(),
+							true, true, true);
 				}
 
-				getTask().setCouncils(new ArrayList<Council>());
-
-				getTask().setFavouriteLists(new ArrayList<FavouriteList>());
-
-				// saving task
-				genericDAO.savePatientData(getTask(), "log.patient.task.new", getTask().getTaskID());
-
-				getTask().setDiagnosisRevisions(new ArrayList<DiagnosisRevision>());
-
-				for (Sample sample : getTask().getSamples()) {
-					// saving samples
-					genericDAO.savePatientData(sample, "log.task.sample.new", sample.getSampleID());
-					// creating needed blocks
-					sampleService.createBlock(sample);
-
-				}
-
-				logger.debug("Creating diagnosis");
 				// creating standard diagnoses
-				diagnosisService.createDiagnosisRevision(getTask(), DiagnosisRevisionType.DIAGNOSIS);
+				task = diagnosisService.createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
 
-				// creating bioBank for Task
-				bioBank.setAttachedPdfs(new ArrayList<PDFContainer>());
+				task = associatedContactService
+						.addAssociatedContact(task, getPatient().getPerson(), ContactRole.PATIENT).getTask();
 
-				PDFContainer selectedPDF = dialogHandlerAction.getMediaDialog().getSelectedPdfContainer();
+				BioBank bioBank = bioBankService.createBioBank(task);
 
-				if (selectedPDF != null) {
-					// attaching pdf to biobank
-					bioBank.getAttachedPdfs().add(selectedPDF);
+				task = favouriteListService.addTaskToList(task, PredefinedFavouriteList.StainingList.getId());
 
-					genericDAO.savePatientData(bioBank, getTask(), "log.patient.bioBank.pdf.attached",
-							selectedPDF.getName());
-
-					// and task
-					getTask().setAttachedPdfs(new ArrayList<PDFContainer>());
-					getTask().getAttachedPdfs().add(selectedPDF);
-
-					genericDAO.savePatientData(getTask(), "log.pdf.attached");
-
-					if (isMoveInformedConsent()) {
-						patient.getAttachedPdfs().remove(selectedPDF);
-						genericDAO.savePatientData(getPatient(), "log.patient.pdf.removed", selectedPDF.getName());
-					}
-				} else {
-					genericDAO.savePatientData(bioBank, getTask(), "log.patient.bioBank.save");
+				if (getTaskData().isExternalSamples()) {
+					task = favouriteListService.addTaskToList(task, getTaskData().getExnternalSampleCommentary(),
+							PredefinedFavouriteList.ReturnSampleList.getId());
 				}
 
-				// adding patient to the contact list
-				contactDAO.addAssociatedContact(task, getPatient().getPerson(), ContactRole.PATIENT);
+				if (getTaskData().getBioBank().isPDFSelected()) {
+					Patient p = patientRepository.findOptionalById(getPatient().getId()).get();
 
-				genericDAO.savePatientData(getTask(), "log.patient.task.update", task.getTaskID());
+					p = pdfService.initializeDataListTree(p);
 
-				favouriteListDAO.addTaskToList(getTask(), PredefinedFavouriteList.StainingList.getId());
+					bioBank.setInformedConsentType(getTaskData().getBioBank().getInformedConsentType());
 
-				if (externalTask) {
-					favouriteListDAO.addTaskToList(task, PredefinedFavouriteList.ReturnSampleList.getId(),
-							exneralCommentary);
+					pdfService.movePdf(pdfService.getDataListsOfPatient(p), bioBank,
+							getTaskData().getBioBank().getContainer());
+
 				}
 
-				genericDAO.save(task.getPatient());
+				return task;
+			}
+		});
+	}
 
+	public void createAndHide() {
+		Task task = createNewTask();
+		hideDialog(new PatientReturnEvent(getPatient(), task));
+	}
+
+	public void createPrintAndHide() {
+		createNewTask();
+
+		taskExecutor.execute(new Thread() {
+			public void run() {
+				logger.debug("Stargin PDF Generation in new Thread");
+				PDFGenerator generator = new PDFGenerator();
+
+				Optional<PrintDocument> printDocument = printDocumentRepository
+						.findByTypeAndDefault(DocumentType.DIAGNOSIS_REPORT);
+
+				if (!printDocument.isPresent()) {
+					logger.error("New Task: No TemplateUtil for printing UReport found");
+					MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.noTemplate");
+					return;
+				}
+
+				PDFContainer container = generator.getPDF(printDocument.get(),
+						new File(pathoConfig.getFileSettings().getPrintDirectory()), false);
+
+				userHandlerAction.getSelectedPrinter().print(new PrintOrder(container, 1, printDocument.get()));
+
+				logger.debug("PDF Generation completed, thread ended");
 			}
 		});
 
-		genericDAO.lockParent(task);
-
-	}
-
-	/**
-	 * Calls createTask and prints the Ureport form
-	 * 
-	 * @throws CustomNotUniqueReqest
-	 */
-	public void createTaskAndPrintUReport() {
-		createTask();
-
-		CaseCertificate uReport = DocumentTemplate
-				.getTemplateByID(globalSettings.getDefaultDocuments().getTaskCreationDocument());
-
-		if (uReport == null) {
-			logger.error("New Task: No TemplateUtil for printing UReport found");
-			return;
-		}
-
-		// printing u report
-		uReport.initData(task);
-		PDFContainer newPdf = new PDFGenerator().getPDF(uReport);
-
-		logger.debug("printing task page");
-		userHandlerAction.getSelectedPrinter().print(newPdf, uReport);
-	}
-
-	/**
-	 * Is called if the user has manually change the checkbox, after that the
-	 * autonomeclature settings aren't changed automatically
-	 */
-	public void manuallyChangeAutoNomenclature() {
-		logger.debug("New Task: Autonomeclature change manually");
-		setAutoNomenclatureChangedManually(true);
-		updateDialog();
-	}
-
-	public void showMediaSelectDialog(PDFContainer pdfContainer) {
-		// init dialog for patient and task
-		dialogHandlerAction.getMediaDialog().initBean(getPatient(), new DataList[] { getPatient() }, pdfContainer,
-				true);
-
-		// enabeling upload to task
-		dialogHandlerAction.getMediaDialog().enableUpload(new DataList[] { getPatient() },
-				new DocumentType[] { DocumentType.BIOBANK_INFORMED_CONSENT });
-
-		// setting info text
-		dialogHandlerAction.getMediaDialog().setActionDescription(
-				resourceBundle.get("dialog.pdfOrganizer.headline.info.biobank", getTask().getTaskID()));
-
-		// show dialog
-		dialogHandlerAction.getMediaDialog().prepareDialog();
+		hideDialog(new ReloadEvent());
 	}
 
 	public void validateTaskID(FacesContext context, UIComponent componentToValidate, Object value)
@@ -370,24 +296,17 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 		}
 	}
 
-	public void onMaterialPresetChange(Sample sample) {
-		sample.setMaterial(sample.getMaterialPreset() != null ? sample.getMaterialPreset().getName() : "");
-	}
-
 	@Getter
 	@Setter
 	public class TaskTempData {
 		private String taskID;
 		private Date dateOfReceipt;
-		private boolean dueDateSelected;
 		private Date dueDate;
 		private boolean useAutoNomenclature;
 		private TaskPriority taskPriority;
 
 		private boolean externalSamples;
-		private boolean exnternalSampleCommentary;
-
-		private boolean taskIdManuallyAltered;
+		private String exnternalSampleCommentary;
 
 		private List<SampleTempData> samples;
 
@@ -399,8 +318,6 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 			this.dueDate = new Date(TimeUtil.setDayBeginning(System.currentTimeMillis()));
 			this.useAutoNomenclature = true;
 			this.taskPriority = TaskPriority.NONE;
-			this.taskIdManuallyAltered = false;
-			this.dueDateSelected = false;
 
 			this.samples = new ArrayList<SampleTempData>();
 			this.samples.add(new SampleTempData(materialList.get(0)));
@@ -408,17 +325,43 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 			this.bioBank = new BioBankTempData();
 		}
 
+		public void addSample() {
+			samples.add(new SampleTempData(materialList.get(0)));
+			updateSampleNames();
+		}
+
+		public void removeSample() {
+			if (samples.size() > 1)
+				samples.remove(samples.size() - 1);
+
+			updateSampleNames();
+		}
+
+		public void updateSampleNames() {
+			int i = 1;
+			for (SampleTempData sampleTempData : samples) {
+				sampleTempData.setSampleID(TaskUtil.getSampleName(samples.size(), i, useAutoNomenclature));
+				i++;
+			}
+		}
+
 		@Getter
 		@Setter
 		public class SampleTempData {
+
 			private MaterialPreset materialPreset;
 			private String material;
-
 			private String sampleID;
 
 			public SampleTempData(MaterialPreset materialPreset) {
 				this.materialPreset = materialPreset;
 				this.material = materialPreset.getName();
+				
+				this.sampleID = "";
+			}
+
+			public void onMaterialPresetChange() {
+				setMaterial(getMaterialPreset() != null ? getMaterialPreset().getName() : "");
 			}
 		}
 
@@ -438,7 +381,12 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 			}
 
 			public void onMediaSelectReturn(SelectEvent event) {
-
+				if (event.getObject() != null && event.getObject() instanceof PDFSelectEvent) {
+					setContainer(((PDFSelectEvent) event.getObject()).getContainer());
+					setInformedConsentType(InformedConsentType.FULL);
+				} else {
+					setInformedConsentType(InformedConsentType.NONE);
+				}
 			}
 		}
 	}

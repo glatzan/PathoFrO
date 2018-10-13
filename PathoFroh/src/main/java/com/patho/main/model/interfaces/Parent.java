@@ -11,9 +11,11 @@ import com.patho.main.model.patient.Task;
  *
  * @param <T>
  */
-public interface Parent<T> {
+public interface Parent<T extends Parent<?>> {
 
-	public Patient getPatient();
+	public default Patient getPatient() {
+		return getParent().getPatient();
+	}
 
 	public default Task getTask() {
 		return null;

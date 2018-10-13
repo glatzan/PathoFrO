@@ -24,6 +24,7 @@ import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.service.PatientService;
 import com.patho.main.ui.ListChooser;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
+import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
 
 import lombok.AccessLevel;
@@ -284,12 +285,5 @@ public class SearchPatientDialog extends AbstractTabDialog {
 						new PatientReturnEvent(((ConfirmExternalPatientReturnEvent) event.getObject()).getPatient()));
 			}
 		}
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public class PatientReturnEvent implements DialogReturnEvent {
-		private Patient patien;
 	}
 }

@@ -3,7 +3,9 @@ package com.patho.main.service;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
@@ -138,7 +140,7 @@ public class PDFService extends AbstractService {
 	}
 
 	public DataList removePdf(DataList dataList, PDFContainer pdfContainer) {
-		dataList.getAttachedPdfs().remove(pdfContainer);
+		dataList.removeReport(pdfContainer);
 		return saveDataList(dataList, resourceBundle.get("log.pdf.removed", pdfContainer.getName()));
 	}
 
@@ -158,6 +160,19 @@ public class PDFService extends AbstractService {
 
 	public void movePdf(DataList from, DataList to, PDFContainer pdfContainer) {
 		removePdf(from, pdfContainer);
+		attachPDF(to, pdfContainer);
+	}
+
+	public void movePdf(List<DataList> from, DataList to, PDFContainer pdfContainer) {
+		for (DataList dataList : from) {
+			if (dataList.containsReport(pdfContainer)) {
+				if (dataList.equals(to))
+					return;
+				dataList = removePdf(dataList, pdfContainer);
+				break;
+			}
+		}
+
 		attachPDF(to, pdfContainer);
 	}
 
@@ -183,6 +198,11 @@ public class PDFService extends AbstractService {
 		Hibernate.initialize(patient.getAttachedPdfs());
 		for (Task task : patient.getTasks()) {
 			Hibernate.initialize(task.getAttachedPdfs());
+			Hibernate.initialize(task.getCouncils());
+
+			for (Council council : task.getCouncils()) {
+				Hibernate.initialize(council.getAttachedPdfs());
+			}
 		}
 
 		return patient;
@@ -230,6 +250,27 @@ public class PDFService extends AbstractService {
 				}
 		}
 		return null;
+	}
+
+	public List<DataList> getDataListsOfPatient(Patient p) {
+		List<DataList> result = new ArrayList<DataList>();
+		
+		result.add(p);
+
+		for (Task task : p.getTasks()) {
+			result.add(task);
+
+			Optional<BioBank> bio = bioBankRepository.findOptionalByTask(task);
+
+			if (bio.isPresent())
+				result.add(bio.get());
+
+			for (Council c : task.getCouncils()) {
+				result.add(c);
+			}
+		}
+
+		return result;
 	}
 
 	public static DataList getParentOfPDF(List<DataList> dataLists, PDFContainer container) {

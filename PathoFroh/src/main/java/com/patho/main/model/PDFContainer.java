@@ -108,11 +108,14 @@ public class PDFContainer implements ID, AuditAble {
 
 	@Override
 	public boolean equals(Object obj) {
-
 		if (obj instanceof PDFContainer && ((PDFContainer) obj).getId() == getId())
 			return true;
 
 		return super.equals(obj);
 	}
 
+	@Override
+	public int hashCode() {
+		return getName() == null ? 0 : getName().hashCode() + (int) getId();
+	}
 }

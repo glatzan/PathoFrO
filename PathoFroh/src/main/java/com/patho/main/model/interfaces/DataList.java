@@ -14,14 +14,14 @@ import com.patho.main.template.PrintDocument.DocumentType;
  *
  */
 public interface DataList extends ID {
-	
+
 	public Set<PDFContainer> getAttachedPdfs();
 
 	public void setAttachedPdfs(Set<PDFContainer> attachedPdfs);
 
 	public String getPublicName();
 
-	public default boolean contaisPDFofType(DocumentType type) {
+	public default boolean contaisReportType(DocumentType type) {
 		if (getAttachedPdfs() != null) {
 			return getAttachedPdfs().stream().anyMatch(p -> p.getType().equals(type));
 		}
@@ -29,24 +29,31 @@ public interface DataList extends ID {
 		return false;
 	}
 
+	/**
+	 * Adds a pdf to a datalist
+	 * 
+	 * @param pdfTemplate
+	 */
 	public default void addReport(PDFContainer pdfTemplate) {
 		getAttachedPdfs().add(pdfTemplate);
 	}
 
 	/**
-	 * Removes a report with a specific type from the database
+	 * Removes a report
 	 * 
-	 * @param type
+	 * @param pdfTemplate
+	 */
+	public default void removeReport(PDFContainer pdfTemplate) {
+		getAttachedPdfs().remove(pdfTemplate);
+	}
+
+	/**
+	 * Returns true if the pdf is in the datalist
+	 * 
+	 * @param pdfTemplate
 	 * @return
 	 */
-	@Transient
-	public default PDFContainer removeReport(DocumentType type) {
-		for (PDFContainer pdfContainer : getAttachedPdfs()) {
-			if (pdfContainer.getType().equals(type)) {
-				getAttachedPdfs().remove(pdfContainer);
-				return pdfContainer;
-			}
-		}
-		return null;
+	public default boolean containsReport(PDFContainer pdfTemplate) {
+		return getAttachedPdfs() != null && getAttachedPdfs().contains(pdfTemplate);
 	}
 }
