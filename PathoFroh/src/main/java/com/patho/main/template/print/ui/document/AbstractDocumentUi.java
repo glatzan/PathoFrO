@@ -1,6 +1,7 @@
 package com.patho.main.template.print.ui.document;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import lombok.Setter;
 public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocumentUi.SharedData> implements ID {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -99,6 +100,15 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 	@Override
 	public long getId() {
 		return printDocument.getId();
+	}
+
+	/**
+	 * Loads a gui object for a print template
+	 * @param document
+	 * @return
+	 */
+	public static AbstractDocumentUi<?, ?> factory(PrintDocument document) {
+		return factory(Arrays.asList(document)).get(0);
 	}
 
 	/**

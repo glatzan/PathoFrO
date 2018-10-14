@@ -26,6 +26,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.patho.main.config.security.filters.JWTAuthorizationFilter;
 import com.patho.main.config.security.filters.JWTPasswortAuthorizationFilter;
@@ -92,18 +93,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			http.authenticationProvider(userAuthenticationProvider);
 
 			http.headers().frameOptions().sameOrigin();
-			
+
 			// disable csrf
 			http.csrf().disable();
 
 			// setup security
 			http.authorizeRequests().antMatchers("/javax.faces.resource/**").permitAll().antMatchers("/style/**")
-					.permitAll().antMatchers("/gfx/**").permitAll().antMatchers("/scripts/**").permitAll().antMatchers("/javax.faces.resource/jquery/jquery-plugins.js.xhtml").permitAll()
+					.permitAll().antMatchers("/gfx/**").permitAll().antMatchers("/scripts/**").permitAll()
+					.antMatchers("/javax.faces.resource/jquery/jquery-plugins.js.xhtml").permitAll()
 					.antMatchers("/RES_NOT_FOUND").permitAll().antMatchers("/error").permitAll()
-					.antMatchers("/login.xhtml*").permitAll().antMatchers("/**/favicon.ico").permitAll().anyRequest().authenticated().and().formLogin()
-					.loginPage("/login.xhtml").permitAll().loginProcessingUrl("/perform_login").permitAll()
-					.failureUrl("/login.jsf?error=true").and().logout().logoutSuccessUrl("/login.xhtml").permitAll();
-
+					.antMatchers("/login.xhtml*").permitAll().antMatchers("/**/favicon.ico").permitAll().anyRequest()
+					.authenticated().and().formLogin().loginPage("/login.xhtml").permitAll()
+					.loginProcessingUrl("/perform_login").permitAll().failureUrl("/login.jsf?error=true").and().logout()
+					.logoutSuccessUrl("/login.xhtml").permitAll();
+			
+			http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+			
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

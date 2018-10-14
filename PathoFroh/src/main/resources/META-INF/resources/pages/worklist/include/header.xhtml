@@ -105,7 +105,7 @@
 
 					<!-- notification -->
 					<p:menuitem value="#{msg['body.worklist.header.button.logout']}"
-						url="/spring_logout?faces-redirect=true" />
+						url="/logout?faces-redirect=true" />
 				</p:tieredMenu>
 			</h:panelGroup>
 
@@ -173,7 +173,7 @@
 				<p:ajax event="dialogReturn"
 					listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-					update="navigationForm:patientList contentForm headerForm" />
+					update="navigationForm:patientList contentForm:contentPanel headerForm" />
 			</p:commandButton>
 
 			<p:hotkey bind="shift+n"

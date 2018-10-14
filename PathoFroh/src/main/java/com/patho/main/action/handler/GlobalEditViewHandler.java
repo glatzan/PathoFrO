@@ -523,6 +523,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
 						globalEditViewHandler.getWorklistData().getWorklist()
 								.setSelectedTask(((PatientReturnEvent) event.getObject()).getTask()); 
 					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+					
+					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 					// staining phase reload event
 				} else if (event.getObject() instanceof StainingPhaseUpdateEvent) {
 					logger.debug("Update Stating phase");

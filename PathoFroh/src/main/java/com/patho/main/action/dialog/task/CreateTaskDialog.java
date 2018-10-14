@@ -60,6 +60,7 @@ import com.patho.main.service.TaskService;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.CaseCertificate;
+import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
@@ -253,7 +254,7 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 	}
 
 	public void createPrintAndHide() {
-		createNewTask();
+		task = createNewTask();
 
 		taskExecutor.execute(new Thread() {
 			public void run() {
@@ -261,7 +262,7 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 				PDFGenerator generator = new PDFGenerator();
 
 				Optional<PrintDocument> printDocument = printDocumentRepository
-						.findByTypeAndDefault(DocumentType.DIAGNOSIS_REPORT);
+						.findByID(pathoConfig.getDefaultDocuments().getTaskCreationDocument());
 
 				if (!printDocument.isPresent()) {
 					logger.error("New Task: No TemplateUtil for printing UReport found");
@@ -269,7 +270,13 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 					return;
 				}
 
-				PDFContainer container = generator.getPDF(printDocument.get(),
+				// getting ui objects
+				AbstractDocumentUi<?, ?> printDocumentUIs = AbstractDocumentUi.factory(printDocument.get());
+
+				printDocumentUIs.initialize(task);
+
+				PDFContainer container = generator.getPDF(
+						printDocumentUIs.getDefaultTemplateConfiguration().getDocumentTemplate(),
 						new File(pathoConfig.getFileSettings().getPrintDirectory()), false);
 
 				userHandlerAction.getSelectedPrinter().print(new PrintOrder(container, 1, printDocument.get()));
@@ -278,7 +285,7 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 			}
 		});
 
-		hideDialog(new ReloadEvent());
+		hideDialog(new PatientReturnEvent(getPatient(), task));
 	}
 
 	public void validateTaskID(FacesContext context, UIComponent componentToValidate, Object value)
@@ -356,7 +363,7 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 			public SampleTempData(MaterialPreset materialPreset) {
 				this.materialPreset = materialPreset;
 				this.material = materialPreset.getName();
-				
+
 				this.sampleID = "";
 			}
 
