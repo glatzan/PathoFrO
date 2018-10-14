@@ -45,6 +45,7 @@ import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.pdf.PDFStreamContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 
 import lombok.AccessLevel;
@@ -372,7 +373,7 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	public void createCouncil() {
 		logger.info("Adding new council");
 		Council c = councilService.createCouncil(getTask(), true).getCouncil();
-		
+
 		update(true);
 		selectNode(new CouncilContainer(c), 0);
 	}
@@ -389,8 +390,9 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 			setAdmendSelectedRequestState(false);
 			update(true);
 			selectNode(getSelectedCouncil(), 1);
-		} else {
-			hideDialog(new ReloadTaskEvent());
+			// error handling e.g. version confilict
+		} else if (event.getObject() instanceof ReloadEvent) {
+			hideDialog(new ReloadEvent());
 		}
 	}
 
