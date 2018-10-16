@@ -160,10 +160,10 @@ update council set notificationMethod = 'NONE';
 update council_aud set notificationMethod = 'NONE';
 
 /* renaming old council favourite lists*/
-update favouritelist set name = 'Konsil Anfrage' where id = 11
+update favouritelist set name = 'Konsil Anfrage', infotext = 'Konsil Anfrage muss bearbeitet werden' where id = 11;
 
 /* new favourite list for pending councils*/
-INSERT INTO favouritelist (id, defaultlist, globalview, name, manueledit, useicon, icon, usedumplist, dumplist_id) VALUES (14, true, false, 'Konsile', false, true, 'fa-fa-stethoscope', true, 12);
+INSERT INTO favouritelist (id, defaultlist, globalview, name, manueledit, useicon, icon, usedumplist, dumplist_id, infotext, command) VALUES (14, true, false, 'Konsile', false, true, 'fa-stethoscope icon-grey', true, 12, 'Konsil steht aus', 'dialog:dialog.councilDialog');
 
 /* new field for council*/
 Alter table council add councilrequestcompleted boolean;

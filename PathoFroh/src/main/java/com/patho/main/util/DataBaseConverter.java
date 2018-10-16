@@ -28,11 +28,13 @@ import com.patho.main.model.Council;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.util.audit.Audit;
 import com.patho.main.repository.BioBankRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PDFRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PDFService;
+import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
@@ -107,7 +109,9 @@ public class DataBaseConverter {
 				File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
 				container.setPath(uniqueFile.getPath());
 				container.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
-				patient = (Patient) pdfService.createAndAttachPDF(patient, container, container.getData(), true)
+				byte[] data = container.getData();
+				container.setData(null);
+				patient = (Patient) pdfService.createAndAttachPDF(patient, container, data, true)
 						.getDataList();
 
 				System.out.println("-> writing file: " + container.getName());
@@ -135,7 +139,9 @@ public class DataBaseConverter {
 						File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
 						c.setPath(uniqueFile.getPath());
 						c.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
-						task = (Task) pdfService.createAndAttachPDF(task, c, c.getData(), true).getDataList();
+						byte[] data = c.getData();
+						c.setData(null);
+						task = (Task) pdfService.createAndAttachPDF(task, c,data, true).getDataList();
 
 						System.out.println("--> writing file: " + c.getName());
 					}
@@ -161,7 +167,9 @@ public class DataBaseConverter {
 							File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
 							c2.setPath(uniqueFile.getPath());
 							c2.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
-							council = (Council) pdfService.createAndAttachPDF(council, c2, c2.getData(), true)
+							byte[] data = c2.getData();
+							c2.setData(null);
+							council = (Council) pdfService.createAndAttachPDF(council, c2, data, true)
 									.getDataList();
 
 							System.out.println("---> writing file: " + c2.getName());
@@ -191,7 +199,9 @@ public class DataBaseConverter {
 							File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
 							c2.setPath(uniqueFile.getPath());
 							c2.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
-							bio = (BioBank) pdfService.createAndAttachPDF(bio, c2, c2.getData(), true).getDataList();
+							byte[] data = c2.getData();
+							c2.setData(null);
+							bio = (BioBank) pdfService.createAndAttachPDF(bio, c2, data, true).getDataList();
 
 							System.out.println("---> writing file: " + c2.getName());
 						}

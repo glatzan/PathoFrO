@@ -22,6 +22,7 @@ import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.PDFRepository;
 import com.patho.main.util.DataBaseConverter;
+import com.patho.main.util.FileMakerImporter;
 import com.patho.main.util.helper.TimeUtil;
 
 import lombok.AccessLevel;
@@ -182,5 +183,15 @@ public class MainHandlerAction {
 				pdfRepository.save(returnPDF);
 			}
 		});
+	}
+	
+	public void importCSV() {
+		FileMakerImporter f = new FileMakerImporter();
+		try {
+			f.importFilemaker();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

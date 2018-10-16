@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.patho.main.model.Contact;
 import com.patho.main.model.Person;
 import com.patho.main.model.patient.Patient;
@@ -15,6 +16,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JSONPatientMapper {
 
 	private String titel;

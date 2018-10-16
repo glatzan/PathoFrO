@@ -58,7 +58,7 @@ public class BlockService extends AbstractService {
 
 		logger.debug("Creating new block " + block.getBlockID());
 
-		if (createSlides) {
+		if (createSlides && sample.getMaterialPreset() != null) {
 			for (StainingPrototype proto : sample.getMaterialPreset().getStainingPrototypes()) {
 				slideService.createSlide(proto, block, "", false, false, false, false);
 			}
