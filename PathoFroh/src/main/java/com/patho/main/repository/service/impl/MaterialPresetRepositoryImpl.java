@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.MaterialPreset_;
+import com.patho.main.model.Physician_;
 import com.patho.main.repository.service.MaterialPresetRepositoryCustom;
 
 @Service
@@ -33,4 +34,21 @@ public class MaterialPresetRepositoryImpl extends AbstractRepositoryCustom imple
 		return getSession().createQuery(criteria).getResultList();
 	}
 
+	public List<MaterialPreset> findAllByName(String name, boolean loadStainings) {
+		CriteriaBuilder qb = getCriteriaBuilder();
+		CriteriaQuery<MaterialPreset> criteria = qb.createQuery(MaterialPreset.class);
+		Root<MaterialPreset> root = criteria.from(MaterialPreset.class);
+
+		criteria.select(root);
+
+		criteria.where(getCriteriaBuilder().like(getCriteriaBuilder().lower(root.get(MaterialPreset_.name)),
+				name.toLowerCase()));
+
+		if (loadStainings)
+			root.fetch(MaterialPreset_.stainingPrototypes, JoinType.LEFT);
+
+		criteria.distinct(true);
+
+		return getSession().createQuery(criteria).getResultList();
+	}
 }
