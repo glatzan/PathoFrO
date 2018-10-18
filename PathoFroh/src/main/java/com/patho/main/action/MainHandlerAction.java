@@ -45,6 +45,9 @@ public class MainHandlerAction {
 	@Setter(AccessLevel.NONE)
 	private PDFRepository pdfRepository;
 	
+	@Getter
+	@Setter
+	private String number;
 	
 	public static FacesContext test;
 
@@ -188,7 +191,7 @@ public class MainHandlerAction {
 	public void importCSV() {
 		FileMakerImporter f = new FileMakerImporter();
 		try {
-			f.importFilemaker();
+			f.importFilemaker(number);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

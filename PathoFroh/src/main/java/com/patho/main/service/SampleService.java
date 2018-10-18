@@ -72,6 +72,17 @@ public class SampleService extends AbstractService {
 	 */
 	public Task createSample(Task task, MaterialPreset material, String materialName, boolean createBlock,
 			boolean naming, boolean save) {
+		return createSample(task, material, materialName, createBlock, true, naming, save);
+	}
+
+	/**
+	 * Creates a new sample and adds this sample to the given task. Creates a new
+	 * diagnosis and a new block with slides as well.
+	 * 
+	 * @param task
+	 */
+	public Task createSample(Task task, MaterialPreset material, String materialName, boolean createBlock,
+			boolean createSlides, boolean naming, boolean save) {
 		Sample sample = new Sample();
 		sample.setCreationDate(System.currentTimeMillis());
 		sample.setParent(task);
@@ -83,7 +94,7 @@ public class SampleService extends AbstractService {
 
 		// creating needed blocks
 		if (createBlock)
-			blockService.createBlock(sample, true, false, false);
+			blockService.createBlock(sample, createSlides, false, false);
 
 		if (naming)
 			sample.updateAllNames();

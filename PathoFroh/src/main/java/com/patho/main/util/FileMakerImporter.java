@@ -8,14 +8,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 
@@ -79,20 +84,20 @@ public class FileMakerImporter {
 //  - GDatum 7
 // ok 	Piz 8
 //	Material 9 
-//	Operateur/Einsender 10
+// ok Operateur/Einsender 10
 // ok	Rechts linkes Auge 11
 // ok Anamnese 12
 // ok Maligner Tumor 13
 // ok Diagnose 14
 // ok Datum 15
-//	festNachbefund 16
+// ok festNachbefund 16
 //	Konsil 17
 // ok Histologischer Befund 18
-//	Assistenz 19
-//	OA-Liste 20
-//	informiert 21
+// ok Assistenz 19
+// ok OA-Liste 20
+// ok informiert 21
 //	Fax an HA (externenr einsen( 22
-//
+// ok nachbefund angeschaut
 //	-> gs trennt diangosen
 //	
 
@@ -118,6 +123,7 @@ public class FileMakerImporter {
 	private final int index_oa = 20;
 	private final int index_notified = 21;
 	private final int index_external = 22;
+	private final int index_diagnosisRevision = 23;
 
 	@Autowired
 	private TaskService taskService;
@@ -149,145 +155,71 @@ public class FileMakerImporter {
 	@Autowired
 	private PhysicianRepository physicianRepository;
 
-	private HashMap<String, Long> phys = new HashMap();
-
+	private HashMap<String, String> redirect = new HashMap<String, String>();
 	{
-		phys.put("Prof. Dr. C. Auw-Hädrich", (long) 6);
-		phys.put("Auw-Hädrich", (long) 6);
-		phys.put("Prof. Auw-Hädrich", (long) 6);
+		redirect.put("Neß", "Ness");
+		redirect.put("MVH", "Mittelviefhaus");
+		redirect.put("A.H.", "Auw-Hädrich");
+		redirect.put("A.H.", "Auw-Hädrich");
+		redirect.put("Bü.", "Bühler");
+		redirect.put("Bie.", "Biermann");
 
-		phys.put("Frau PD Dr. L. Gasser", (long) 10);
-		phys.put("PD Dr. Laura Gasser", (long) 10);
-		phys.put("PD Dr. Gasser", (long) 10);
-		phys.put("Dr. Laura Gasser", (long) 10);
-		phys.put("Frau Dr. L. Gasser", (long) 10);
-		phys.put("Dr. Gasser", (long) 10);
-		phys.put("Gasser", (long) 10);
-
-		phys.put("Herr Dr. S. Lang", (long) 12);
-		phys.put("Dr. Lang", (long) 12);
-		phys.put("Dr. S.Lang", (long) 12);
-		phys.put("Lang", (long) 12);
-
-		phys.put("Dr. Kristina Schölles", (long) 32);
-		phys.put("Schölles", (long) 32);
-		
-		phys.put("Dr. Lisa Atzrodt", (long) 138);
-		phys.put("Dr. Atzrodt", (long) 138);
-		phys.put("Atzrodt", (long) 138);
-		phys.put("Dr. Zimmermann", (long) 138);
-		phys.put("Dr. Lisa Zimmermann", (long) 138);
-		phys.put("Zimmermann", (long) 138);
-
-		phys.put("Dr. Evers", (long) 25);
-		phys.put("Evers", (long) 25);
-		
-		phys.put("Susanne Ißleib", (long) 28);
-		phys.put("Ißleib", (long) 28);
-		
-		phys.put("Dr. Jan Lübke", (long) 13);
-		phys.put("Dr. Lübke", (long) 13);
-		phys.put("Lübke", (long) 13);
-
-		phys.put("Dr. Clemens Lange", (long) 31);
-		phys.put("Lange", (long) 31);
-		
-		phys.put("Dr. Benjamin Thabo Lapp", (long) 14);
-		phys.put("Dr. Lapp", (long) 14);
-		phys.put("Lapp", (long) 14);
-		
-		phys.put("Dr. Philip Maier", (long) 9);
-		phys.put("PD Dr. Maier", (long) 9);
-		phys.put("Maier", (long) 9);
-
-		phys.put("Prof. Reinhard", (long) 4);
-		phys.put("Reinhard", (long) 4);
-		
-		phys.put("Prof.  Mittelviefhaus", (long) 339);
-		phys.put("Mittelviefhaus", (long) 339);
-		phys.put("MVH", (long) 339);
-		
-		phys.put("Prof. Lagreze", (long) 8);
-		phys.put("Lagreze", (long) 8);
-		
-		phys.put("Prof. Agostini", (long) 7);
-		phys.put("Agostini", (long) 7);
-		
-		phys.put("PD Dr. Eberwein", (long) 11);
-		phys.put("Eberwein", (long) 11);
-		
-		phys.put("Dr. Bleul", (long) 17);
-		phys.put("Bleul", (long) 17);
-		
-		phys.put("Dr. Ludwig", (long) 18);
-		phys.put("Ludwig", (long) 18);
-		
-		phys.put("Dr. Stech", (long) 19);
-		phys.put("Stech", (long) 19);
-		
-		phys.put("Dr. Bründer", (long) 20);
-		phys.put("Bründer", (long) 20);
-		
-		phys.put("Dr. Anton", (long) 21);
-		phys.put("Anton", (long) 21);
-		
-		phys.put("Dr. Gross", (long) 22);
-		phys.put("Gross", (long) 22);
-		
-		phys.put("Dr. Grundel", (long) 23);
-		phys.put("Grundel", (long) 23);
-
-		phys.put("M. Avar", (long) 489);
-		phys.put("Dr. Avar", (long) 489);
-		phys.put("Avar", (long) 489);
-
-		phys.put("Prof. Stahl", (long) 24);
-		phys.put("Stahl", (long) 24);
-
-		phys.put("Dr. Joachimsen", (long) 27);
-		phys.put("Joachimsen", (long) 27);
-		
-		phys.put("Dr. Reichel", (long) 29);
-		phys.put("Reichel", (long) 29);
-		
-		phys.put("Osteried", (long) 287);
-
-		phys.put("M.Reich", (long) 438);
-		phys.put("Reich", (long) 438);
-		
-		phys.put("Dr. Lange", (long) 31);
-		phys.put("Lange", (long) 31);
-		
-		phys.put("PD Dr.Ness", (long) 28);
-		phys.put("Ness", (long) 28);
-		
-		phys.put("Dr. Schölles", (long) 32);
-		phys.put("Schölles", (long) 32);
-		
-		phys.put("Dr. Schmid", (long) 441);
-		phys.put("Schmid", (long) 441);
-		
-		phys.put("Dr. Jehle", (long) 16);
-		phys.put("Jehle", (long) 16);
-		
-		phys.put("Dr. Daniel", (long) 387);
-		phys.put("Daniel", (long) 387);
-		
-		phys.put("Dr. Grewing", (long) 237);
-		phys.put("Grewing", (long) 237);
-		
-		phys.put("Cazana", (long) 139);
-
-		// phys.put("Dr. Paduraru", (long) 4);
-		// phys.put("Dr. S. Reichl", (long) 4);
-
-//		Augenklinik Göttingen
-//		Ammerland-Klinik Westerstede
-//		Prof. Grüb, Breisach 
-//		PG Kloevekorn Halle
 	}
 
-	public void importFilemaker() throws IOException {
+	public Physician findPhysician(String name) {
+
+		name = redirect.get(name) == null ? name : redirect.get(name);
+
+		String[] spl = name.split("[. ]");
+
+		if (spl.length > 0) {
+			String name1 = redirect.get(spl[spl.length - 1]) == null ? spl[spl.length - 1]
+					: redirect.get(spl[spl.length - 1]);
+
+			List<Physician> physician = physicianRepository.findAllByPersonLastName(name1);
+
+			return physician.size() > 0 ? physician.get(0) : null;
+
+		}
+
+		return null;
+	}
+
+	public Date getDate(String str) {
+		if (str == null)
+			return null;
+
+		str = str.replaceAll("[\\.]{1,}", ".");
+		
+		Pattern pattern = Pattern.compile("([0-9]{2}.[0-9]{2}.[0-9]{2})");
+		Matcher matcher = pattern.matcher(str);
+		if (matcher.find()) {
+
+			SimpleDateFormat datep = new SimpleDateFormat("dd.MM.yy");
+			try {
+				return datep.parse(matcher.group(1));
+			} catch (ParseException e) {
+				return null;
+			}
+		}
+
+		pattern = Pattern.compile("([0-9]{2}.[0-9]{2}.[0-9]{4})");
+		matcher = pattern.matcher(str);
+		if (matcher.find()) {
+
+			SimpleDateFormat datep = new SimpleDateFormat("dd.MM.yyyy");
+			try {
+				return datep.parse(matcher.group(1));
+			} catch (ParseException e) {
+				return null;
+			}
+		}
+
+		return null;
+
+	}
+
+	public void importFilemaker(String number) throws IOException {
 
 		CsvParserSettings settings = new CsvParserSettings(); // many options here, check the documentation
 		CsvParser parser = new CsvParser(settings);
@@ -295,7 +227,6 @@ public class FileMakerImporter {
 
 		FileWriter fw = new FileWriter("d:/importLog.log", true);
 		BufferedWriter bw = new BufferedWriter(fw);
-		SimpleDateFormat datep = new SimpleDateFormat("dd.MM.yy");
 
 		ArrayList<Object[]> notProcessed = new ArrayList<>();
 
@@ -303,17 +234,20 @@ public class FileMakerImporter {
 
 		int rowCount = 0;
 
+		HashSet<String> wuu = new HashSet<>();
+
 		String[] row;
 		while ((row = parser.parseNext()) != null) {
 			rowCount++;
 
-			if (rowCount % 100 != 0)
+			if (number == null && rowCount % 100 != 0)
 				continue;
 
-			inserLog.append("-------------------------------\r\n");
-			inserLog.append(Arrays.toString(row) + "\r\n\\r\\n");
+			if (number == null) {
+				inserLog.append("-------------------------------\r\n");
+				inserLog.append(Arrays.toString(row) + "\r\n\\r\\n");
+			}
 
-			logger.debug("-> " + Arrays.toString(row));
 			if (HistoUtil.isNotNullOrEmpty(row[index_piz])) {
 				Optional<Patient> p;
 				try {
@@ -328,15 +262,17 @@ public class FileMakerImporter {
 						continue;
 					}
 
+					if (!taskid.matches(number)) {
+						continue;
+					}
+
+					inserLog.append("-------------------------------\r\n");
+					inserLog.append(Arrays.toString(row) + "\r\n\\r\\n");
+
 					inserLog.append("TaskID: " + taskid + "\r\n");
 
-//					if (!taskid.equals("170737")) {
-//						continue;
-//					}
-
 					logger.debug("Creating");
-
-					String material = row[index_material];
+					logger.debug("-> " + Arrays.toString(row));
 
 					boolean malign = row[index_malign] != null ? row[index_malign].equals("X") : false;
 
@@ -347,9 +283,9 @@ public class FileMakerImporter {
 					boolean taskPrio = false;
 					Date taskPrioDate = new Date();
 
-					Date sigantureDate = row[index_notified] != null ? datep.parse(row[index_notified]) : null;
+					Date sigantureDate = getDate(row[index_notified]);
 
-					Date edate = row[index_edate] != null ? datep.parse(row[index_edate]) : null;
+					Date edate = getDate(row[index_edate]);
 
 					if (edate == null) {
 						inserLog.append("Leeres EDatum");
@@ -358,75 +294,66 @@ public class FileMakerImporter {
 					}
 
 					if (taskPrioArr.length == 2) {
-						taskPrioDate = datep.parse(taskPrioArr[0]);
+						taskPrioDate = getDate(taskPrioArr[0]);
 						taskPrio = taskPrioArr[1].equals("X");
 					}
 
 					String oa = row[index_oa];
 					String assi = row[index_assi];
 					String surgeon = row[index_surgeon];
+					String diagnosisRevision1 = row[index_diagnosisRevision];
 
 					Physician oaPhys = null;
 					Physician assiPhys = null;
 					Physician surgeonPhys = null;
+					Physician diagnosisRevisionPhys = null;
 
 					if (HistoUtil.isNotNullOrEmpty(oa)) {
-						Long oaId = phys.get(oa);
+						Physician py = findPhysician(oa.trim());
 
-						if (oaId == null) {
-
-							String[] spl = oa.split("[. ]");
-
-							if (spl.length > 0)
-								oaId = phys.get(spl[spl.length - 1]);
-						}
-						
-						if (oaId == null) {
+						if (py == null) {
 
 							inserLog.append("OA not found: " + oa);
 							throw new IllegalIdentifierException("Empty");
 						}
 
-						oaPhys = physicianRepository.findById(oaId).get();
+						oaPhys = py;
 					}
 
 					if (HistoUtil.isNotNullOrEmpty(assi)) {
-						Long assiId = phys.get(assi);
-						
-						if (assiId == null) {
+						Physician py = findPhysician(assi.trim());
 
-							String[] spl = assi.split("[. ]");
+						if (py == null) {
 
-							if (spl.length > 0)
-								assiId = phys.get(spl[spl.length - 1]);
-						}
-						
-						
-						if (assiId == null) {
-							inserLog.append("Assi not found " + assi);
+							inserLog.append("Assi not found" + assi);
 							throw new IllegalIdentifierException("Empty");
 						}
 
-						assiPhys = physicianRepository.findById(assiId).get();
+						assiPhys = py;
 					}
 
 					if (HistoUtil.isNotNullOrEmpty(surgeon)) {
-						Long surgeonId = phys.get(surgeon);
-						
-						if (surgeonId == null) {
+						Physician py = findPhysician(surgeon.trim());
 
-							String[] spl = surgeon.split("[. ]");
+						if (py == null) {
 
-							if (spl.length > 0)
-								surgeonId = phys.get(spl[spl.length - 1]);
-						}
-						
-						if (surgeonId == null) {
-							inserLog.append("Assi not found " + surgeon);
+							inserLog.append("Assi not found" + surgeon);
 							throw new IllegalIdentifierException("Empty");
 						}
 
-						surgeonPhys = physicianRepository.findById(surgeonId).get();
+						surgeonPhys = py;
+					}
+
+					if (HistoUtil.isNotNullOrEmpty(diagnosisRevision1)) {
+						Physician py = findPhysician(diagnosisRevision1.trim());
+
+						if (py == null) {
+
+							inserLog.append("Revision phys not found" + diagnosisRevision1);
+							throw new IllegalIdentifierException("Empty");
+						}
+
+						diagnosisRevisionPhys = py;
 					}
 
 					logger.debug("Creating patient {}", strPit);
@@ -439,7 +366,7 @@ public class FileMakerImporter {
 
 					if (sigantureDate == null) {
 						inserLog.append("Signature Date empty");
-						throw new IllegalIdentifierException("Empty");
+						throw new IllegalIdentifierException("Signature Date empty");
 					}
 
 					Patient pait = patientService.addPatient(p.get(), false);
@@ -474,7 +401,7 @@ public class FileMakerImporter {
 						task.getAudit().setCreatedOn(edate.getTime());
 						task.setTaskPriority(taskPrio ? TaskPriority.TIME : TaskPriority.NONE);
 						if (taskPrio)
-							task.setDueDate(taskPrioDate.getTime());
+							task.setDueDate(taskPrioDate != null ? taskPrioDate.getTime() : edate.getTime());
 
 						task = taskRepository.save(task);
 
@@ -487,7 +414,10 @@ public class FileMakerImporter {
 								: new String[] { "" };
 
 						for (int i = 0; i < materialArr.length; i++) {
-							task = sampleService.createSample(task, null, materialArr[i], true, true, true);
+							List<MaterialPreset> preset = materialPresetRepository.findAllByName(materialArr[i], true);
+
+							task = sampleService.createSample(task, preset.size() > 0 ? preset.get(0) : null,
+									materialArr[i], true, true, true, true);
 						}
 
 						// creating standard diagnoses
@@ -511,11 +441,33 @@ public class FileMakerImporter {
 
 						rev.setSignatureOne(new Signature(assiPhys));
 						rev.setSignatureTwo(new Signature(oaPhys));
+						rev.setCompletionDate(sigantureDate.getTime());
 
 						task.setFinalized(true);
 						task.setFinalizationDate(sigantureDate.getTime());
 
 						task = taskRepository.save(task);
+
+						if (diagnosisRevisionPhys != null) {
+							task = diagnosisService.createDiagnosisRevision(task,
+									DiagnosisRevisionType.DIAGNOSIS_REVISION);
+							Iterator<DiagnosisRevision> iter = task.getDiagnosisRevisions().iterator();
+							iter.next();
+							DiagnosisRevision re = iter.next();
+
+							Date revdate = getDate(row[index_date]);
+
+							re.setSignatureTwo(new Signature(diagnosisRevisionPhys));
+
+							if (revdate != null) {
+								re.setCreationDate(revdate.getTime());
+								re.setText(row[index_rediagnosis]);
+								re.setSignatureDate(revdate.getTime());
+							}
+
+							re.setCompletionDate(sigantureDate.getTime());
+							re.setNotificationDate(sigantureDate.getTime());
+						}
 
 						task = associatedContactService
 								.addAssociatedContact(task, surgeonPhys.getPerson(), ContactRole.SURGEON).getTask();
@@ -545,6 +497,10 @@ public class FileMakerImporter {
 				inserLog.setLength(0);
 			}
 
+		}
+
+		for (String string : wuu) {
+			System.out.println(string);
 		}
 
 		bw.close();
