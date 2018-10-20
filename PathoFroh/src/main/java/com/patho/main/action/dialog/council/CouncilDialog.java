@@ -157,8 +157,6 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	 */
 	private boolean editable;
 
-	private boolean admendSelectedRequestState;
-
 	/**
 	 * Initializes the bean and shows the council dialog
 	 * 
@@ -340,6 +338,7 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 		if (node != null) {
 			setSelectedCouncil((CouncilContainer) node.getData());
+			getSelectedCouncil().setForceEditRequest(false);
 			node.setSelected(true);
 
 			if (node.getData() instanceof CouncilPDFContainer) {
@@ -378,22 +377,22 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		selectNode(new CouncilContainer(c), 0);
 	}
 
-	public void admendRequestState() {
-		setAdmendSelectedRequestState(true);
-	}
-
 	public void onEndRequestState(SelectEvent event) {
 		if (event.getObject() instanceof ReloadTaskEvent) {
 			// reloading
 			logger.debug("Ending request phase");
 			councilService.endCouncilRequest(getTask(), getSelectedCouncil().getCouncil());
-			setAdmendSelectedRequestState(false);
 			update(true);
 			selectNode(getSelectedCouncil(), 1);
 			// error handling e.g. version confilict
 		} else if (event.getObject() instanceof ReloadEvent) {
 			hideDialog(new ReloadEvent());
 		}
+	}
+
+	public void onReplyReceived() {
+		councilService.replyReceived(getTask(), getSelectedCouncil().getCouncil());
+		update(true);
 	}
 
 	private void selectNode(CouncilContainer container, int child) {
@@ -427,13 +426,16 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	}
 
 	/**
-	 * Updates the council name
+	 * Updates the council name, is called if the council physician is changed
 	 */
 	public void onNameChange() {
 		getSelectedCouncil().setName(councilService.generateCouncilName(getSelectedCouncil()));
 		saveSelectedCouncil();
 	}
 
+	/**
+	 * Sets the current date if the sample ship check box was selected
+	 */
 	public void onShipSample() {
 		if (getSelectedCouncil().isSampleShipped() && getSelectedCouncil().getSampleShippedDate() == null) {
 			getSelectedCouncil().setSampleShippedDate(new Date());
@@ -441,9 +443,12 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		saveSelectedCouncil();
 	}
 
+	/**
+	 * Sets the current date if the sample returned check box was selected
+	 */
 	public void onReturnSample() {
-		if (getSelectedCouncil().isSampleShipped() && getSelectedCouncil().getSampleShippedDate() == null) {
-			getSelectedCouncil().setSampleShippedDate(new Date());
+		if (getSelectedCouncil().isSampleReturned() && getSelectedCouncil().getSampleReturnedDate() == null) {
+			getSelectedCouncil().setSampleReturnedDate(new Date());
 		}
 		saveSelectedCouncil();
 	}
@@ -495,10 +500,19 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 	@Getter
 	@Setter
-	@AllArgsConstructor
 	public static class CouncilContainer extends Council {
+		
 		@Delegate
 		private Council council;
+
+		/**
+		 * If true the request can be edited
+		 */
+		private boolean forceEditRequest;
+		
+		public CouncilContainer(Council council) {
+			this.council = council;
+		}
 	}
 
 	@Getter

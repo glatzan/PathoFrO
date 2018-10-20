@@ -153,6 +153,11 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* new favourite list for council where a reply is pending*/
+INSERT INTO favouritelist (id, defaultlist, globalview, name, manueledit, useicon, icon, usedumplist, infotext, command, hidelist) VALUES (16, true, false, 'Konsile mit Anwort', false, true, 'fa-stethoscope icon-green', false, 'Konsilantwort erhalten', 'dialog:dialog.councilDialog', false);
+/* new favourite list for council where a reply is pending*/
+INSERT INTO favouritelist (id, defaultlist, globalview, name, manueledit, useicon, icon, usedumplist, dumplist_id, infotext, command,hidelist) VALUES (15, true, false, 'Konsile mit austehender Antwort', false, true, 'fa-stethoscope icon-orange', true, 16, 'Konsilantwort steht aus', 'dialog:dialog.councilDialog', false);
+
 /* new field for council, ship sample*/
 Alter table council add notificationMethod character varying(10);
 Alter table council_aud add notificationMethod character varying(10);
@@ -163,7 +168,7 @@ update council_aud set notificationMethod = 'NONE';
 update favouritelist set name = 'Konsil Anfrage', infotext = 'Konsil Anfrage muss bearbeitet werden' where id = 11;
 
 /* new favourite list for pending councils*/
-INSERT INTO favouritelist (id, defaultlist, globalview, name, manueledit, useicon, icon, usedumplist, dumplist_id, infotext, command) VALUES (14, true, false, 'Konsile', false, true, 'fa-stethoscope icon-grey', true, 12, 'Konsil steht aus', 'dialog:dialog.councilDialog');
+INSERT INTO favouritelist (id, defaultlist, globalview, name, manueledit, useicon, icon, usedumplist, dumplist_id, infotext, command, hidelist) VALUES (14, true, false, 'Konsile', false, true, 'fa-stethoscope icon-grey', true, 12, 'Konsil steht aus', 'dialog:dialog.councilDialog', false);
 
 /* new field for council*/
 Alter table council add councilrequestcompleted boolean;

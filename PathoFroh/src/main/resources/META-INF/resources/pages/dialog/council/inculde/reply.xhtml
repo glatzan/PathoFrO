@@ -48,7 +48,7 @@
 			<!-- PDFs -->
 			<h:outputLabel value="#{msg['dialog.council.repy.files']}" />
 			<p:dataTable var="attachedPdf" id="attachedPdfList"
-				style="width:700px"
+				style="width:700px" scrollable="true" scrollHeight="300"
 				value="#{dialog.councilDialog.selectedCouncil.attachedPdfs}"
 				styleClass="defaultHistoDataTable">
 
@@ -99,14 +99,6 @@
 					</p:commandLink>
 				</p:column>
 			</p:dataTable>
-
-			<h:outputLabel value="#{msg['dialog.council.repy.upload']}" />
-			<p:fileUpload style="width:300px;" update="@form"
-				fileUploadListener="#{dialog.councilDialog.handleFileUpload}"
-				mode="advanced" auto="true" sizeLimit="10000000" />
-			<h:outputLabel value="&nbsp;" />
-			<h:outputLabel value=" " />
-
 			<!-- internal commentary -->
 			<h:outputLabel value="#{msg['dialog.council.internalCommentary']}"></h:outputLabel>
 			<p:inputTextarea style="width: 700px;" rows="5"
@@ -114,6 +106,13 @@
 				<p:ajax event="keyup" delay="1000" process="@form" update="@form"
 					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 			</p:inputTextarea>
+
+			<h:outputLabel value="#{msg['dialog.council.repy.upload']}" />
+			<p:fileUpload style="width:300px;" update="@form"
+				fileUploadListener="#{dialog.councilDialog.handleFileUpload}"
+				mode="advanced" auto="true" sizeLimit="10000000" />
+			<h:outputLabel value="&nbsp;" />
+			<h:outputLabel value=" " />
 		</h:panelGrid>
 	</p:outputPanel>
 
@@ -125,7 +124,15 @@
 
 			</h:panelGrid>
 
-			<h:panelGrid columns="1" styleClass="newTableContainer right">
+			<h:panelGrid columns="2" styleClass="newTableContainer right">
+
+				<p:commandButton value="Befunder Informieren"
+					rendered="#{dialog.councilDialog.selectedCouncil.replyReceived}"
+					icon="fa fa-check-circle-o">
+					<f:actionListener
+						binding="#{dialog.councilDialog.onReplyReceived()}"></f:actionListener>
+				</p:commandButton>
+
 				<!-- Close Button -->
 				<p:commandButton value="#{msg['general.close']}"
 					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"

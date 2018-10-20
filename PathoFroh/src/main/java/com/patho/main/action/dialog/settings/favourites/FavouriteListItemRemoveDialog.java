@@ -106,6 +106,7 @@ public class FavouriteListItemRemoveDialog extends AbstractDialog {
 
 	@Transactional
 	public void moveTaskToList() {
+		// is combien in removeList (removes to dumplist per default)
 		favouriteListService.moveTaskToList(favouriteList.getId(), favouriteList.getDumpList().getId(), task.getId(), getCommentary());
 		mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.move", "growl.favouriteList.move.text",
 				new Object[] { task.getTaskID(), favouriteList.getDumpList().getName() });

@@ -29,7 +29,7 @@
 			<!-- requesting text -->
 			<h:outputLabel value="#{msg['dialog.council.requestText']}"></h:outputLabel>
 			<p:inputTextarea style="width: 700px;" rows="20"
-				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.selectedCouncil.forceEditRequest}"
 				value="#{dialog.councilDialog.selectedCouncil.councilText}">
 				<p:ajax event="keyup" delay="500" process="@form"
 					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
@@ -45,7 +45,7 @@
 				<p:selectOneMenu
 					value="#{dialog.councilDialog.selectedCouncil.councilPhysician}"
 					panelStyleClass="iconFixForSelectOneMenu"
-					disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+					disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.selectedCouncil.forceEditRequest}"
 					converter="#{dialog.councilDialog.physicianCouncilTransformer}"
 					filter="true" filterMatchMode="contains">
 
@@ -79,7 +79,7 @@
 				styleClass="listingHistoHiddenTableContainer">
 				<!-- physician requesting council -->
 				<p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
-					disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+					disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.selectedCouncil.forceEditRequest}"
 					value="#{dialog.councilDialog.selectedCouncil.physicianRequestingCouncil}"
 					converter="#{dialog.councilDialog.physicianSigantureListTransformer}"
 					filter="true" filterMatchMode="contains">
@@ -111,7 +111,7 @@
 			<!-- Date -->
 			<h:outputLabel value="#{msg['dialog.council.date']}"></h:outputLabel>
 			<p:calendar
-				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.selectedCouncil.forceEditRequest}"
 				value="#{dialog.councilDialog.selectedCouncil.dateOfRequest}"
 				tabindex="4" locale="de" pattern="dd.MM.yyyy" mask="true">
 
@@ -125,7 +125,7 @@
 			<!-- council request -->
 			<h:outputLabel value="Anfrage versendet durch:"></h:outputLabel>
 			<p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
-				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.admendSelectedRequestState}"
+				disabled="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.selectedCouncil.forceEditRequest}"
 				value="#{dialog.councilDialog.selectedCouncil.notificationMethod}"
 				filter="true" filterMatchMode="contains">
 
@@ -150,10 +150,6 @@
 					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 			</p:inputTextarea>
 		</h:panelGrid>
-
-		<!-- spot light -->
-		<p:spotlight target="councilRequestData"
-			widgetVar="councilRequestDataBlocker" />
 	</p:outputPanel>
 
 	<div class="buttonContainer">
@@ -165,6 +161,7 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="4" styleClass="newTableContainer right">
+
 				<!-- print -->
 				<p:commandButton value="#{msg['general.print']}"
 					icon="fa fa-check-circle-o">
@@ -183,13 +180,11 @@
 					</p:commandButton>
 				</h:panelGroup>
 
-				<!-- save changes -->
+				<!-- edit changes changes -->
 				<p:commandButton value="#{msg['dialog.council.button.editRequest']}"
 					rendered="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted}"
-					oncomplete="PF('councilRequestDataBlocker').show()"
-					icon="fa fa-check-circle-o" update="councilRequestData">
-					<f:actionListener
-						binding="#{dialog.quickAddDiangosisRevisionDialog.initAndPrepareBean(dialog.councilDialog.task,'DIAGNOSIS_COUNCIL')}"></f:actionListener>
+					icon="fa fa-check-circle-o" update="councilRequestData"
+					actionListener="#{dialog.councilDialog.selectedCouncil.setForceEditRequest(true)}">
 				</p:commandButton>
 
 				<!-- Close Button -->

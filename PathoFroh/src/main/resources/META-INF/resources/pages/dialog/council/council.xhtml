@@ -105,12 +105,18 @@
 
 									</p:treeNode>
 
-									<!-- council return -->
+									<!-- reply-->
 									<p:treeNode type="council_reply" icon="fa fa-user-md">
 										<h:outputText value="Antwort" />
+										<ui:fragment
+											rendered="#{node.councilRequestCompleted and !node.replyReceived}">
+											<i class="fa fa-exclamation-circle icon-red" title="" />
+										</ui:fragment>
+
 										<ui:fragment rendered="#{node.replyReceived}">
 											<i class="fa fa-check-circle icon-green" title="" />
 										</ui:fragment>
+
 									</p:treeNode>
 
 									<!-- data node-->
@@ -121,17 +127,25 @@
 
 									<!-- pdf -->
 									<p:treeNode type="pdf_node" icon="fa fa-file-pdf-o">
-										<h:panelGrid columns="1" styleClass="mouseEntryEventElemnt"
+										<h:panelGrid columns="2" styleClass="mouseEntryEventElemnt"
 											id="bine">
 											<f:passThroughAttribute name="tvalue"
 												value="#{node.container.id}" />
-
 											<!-- name -->
 											<h:outputText value="#{node.container.name}" id="treeNode">
 												<f:converter converterId="org.histo.ui.TruncateConverter" />
-												<f:attribute name="truncateAt" value="25" />
+												<f:attribute name="truncateAt" value="20" />
 												<f:attribute name="continuationMark" value="..." />
 											</h:outputText>
+
+											<!-- download -->
+											<p:commandLink
+												action="#{dialog.councilDialog.streamContainer.openPDFinNewWindow()}"
+												ajax="false" title="#{msg['dialog.print.button.open.text']}"
+												oncomplete="return false;" target="_blank">
+												<i class="fa fa-file-pdf-o" title="" />
+											</p:commandLink>
+
 										</h:panelGrid>
 
 										<!-- tooltip -->

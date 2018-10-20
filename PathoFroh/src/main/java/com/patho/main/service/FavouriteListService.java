@@ -58,13 +58,13 @@ public class FavouriteListService extends AbstractService {
 	public Task addTaskToList(Task task, PredefinedFavouriteList predefinedFavouriteList) {
 		return addTaskToList(task, predefinedFavouriteList.getId());
 	}
-	
+
 	public Task addTaskToList(long taskID, long id) {
-		return addTaskToList(taskID, null, new long[] {id});
+		return addTaskToList(taskID, null, new long[] { id });
 	}
-	
+
 	public Task addTaskToList(Task task, long id) {
-		return addTaskToList(task, null, new long[] {id});
+		return addTaskToList(task, null, new long[] { id });
 	}
 
 	public Task addTaskToList(long taskID, String commentary, Long... ids) {
@@ -133,49 +133,76 @@ public class FavouriteListService extends AbstractService {
 		return task;
 	}
 
+	public void removeTaskFromList(long taskID, boolean addToDumpList, Long... ids) {
+		removeTaskFromList(taskID, addToDumpList, ArrayUtils.toPrimitive(ids));
+	}
+
 	public void removeTaskFromList(long taskID, Long... ids) {
-		removeTaskFromList(taskID, ArrayUtils.toPrimitive(ids));
+		removeTaskFromList(taskID, true, ids);
+	}
+
+	public Task removeTaskFromList(long taskID, boolean addToDumpList,
+			PredefinedFavouriteList... predefinedFavouriteLists) {
+		Task task = taskRepository.findOptionalById(taskID).get();
+		return removeTaskFromList(task, addToDumpList, predefinedFavouriteLists);
 	}
 
 	public Task removeTaskFromList(long taskID, PredefinedFavouriteList... predefinedFavouriteLists) {
-		Task task = taskRepository.findOptionalById(taskID).get();
-		return removeTaskFromList(task, predefinedFavouriteLists);
+		return removeTaskFromList(taskID, true, predefinedFavouriteLists);
 	}
 
-	public Task removeTaskFromList(Task task, PredefinedFavouriteList... predefinedFavouriteLists) {
+	public Task removeTaskFromList(Task task, boolean addToDumpList,
+			PredefinedFavouriteList... predefinedFavouriteLists) {
 
 		long[] listID = new long[predefinedFavouriteLists.length];
 		for (int i = 0; i < predefinedFavouriteLists.length; i++) {
 			listID[i] = predefinedFavouriteLists[i].getId();
 		}
 
-		return removeTaskFromList(task, listID);
+		return removeTaskFromList(task, addToDumpList, listID);
+	}
+
+	public Task removeTaskFromList(Task task, PredefinedFavouriteList... predefinedFavouriteLists) {
+		return removeTaskFromList(task, true, predefinedFavouriteLists);
+	}
+
+	public Task removeTaskFromList(long taskID, boolean addToDumpList, long... ids) {
+		Task task = taskRepository.findOptionalById(taskID).get();
+		return removeTaskFromList(task, addToDumpList, ids);
 	}
 
 	public Task removeTaskFromList(long taskID, long... ids) {
-		Task task = taskRepository.findOptionalById(taskID).get();
-		return removeTaskFromList(task, ids);
+		return removeTaskFromList(taskID, true, ids);
 	}
 
-	public Task removeTaskFromList(Task task, long... ids) {
+	public Task removeTaskFromList(Task task, boolean addToDumpList, long... ids) {
 		for (int i = 0; i < ids.length; i++) {
 			Optional<FavouriteList> oFavList = favouriteListRepository.findOptionalByIdAndInitialize(ids[i], true,
 					false, false);
-			task = removeTaskFromList(task, oFavList.get());
+			task = removeTaskFromList(task, addToDumpList, oFavList.get());
 		}
 
 		return task;
 	}
 
-	public Task removeTaskFromList(Task task, FavouriteList favouriteList) {
+	public Task removeTaskFromList(Task task, long... ids) {
+		return removeTaskFromList(task, true, ids);
+	}
+
+	public Task removeTaskFromList(Task task, boolean addToDumpList, FavouriteList favouriteList) {
 
 		try {
 			logger.debug(
 					"Removing task (" + task.getTaskID() + ") from favourite lists (" + favouriteList.getName() + ")");
 
 			// searching for item to remove
-			FavouriteListItem itemToRemove = favouriteList.getItems().stream()
-					.filter(p -> p.getTask().getId() == task.getId()).collect(StreamUtils.singletonCollector());
+			FavouriteListItem itemToRemove = null;
+			for (FavouriteListItem iter : favouriteList.getItems()) {
+				if (iter.getTask() != null && iter.getTask().equals(task)) {
+					itemToRemove = iter;
+					break;
+				}
+			}
 
 			favouriteList.getItems().remove(itemToRemove);
 			// saving new fav item
@@ -199,13 +226,16 @@ public class FavouriteListService extends AbstractService {
 			task.getFavouriteLists().remove(listToRemove);
 
 			// saving new fav item
-			return taskRepository.save(task);
+			task = taskRepository.save(task);
 
 		} catch (IllegalStateException e) {
 			// no item found
 			logger.debug("Can not remove favourite list(" + favouriteList.getName() + ") from task (" + task.getTaskID()
 					+ "), not listed ");
 		}
+
+		if (addToDumpList && favouriteList.getDumpList() != null)
+			task = addTaskToList(task, favouriteList.getDumpList().getId());
 
 		return task;
 		// TODO Delete FavouriteListItem?
@@ -243,7 +273,7 @@ public class FavouriteListService extends AbstractService {
 				false);
 
 		if (oTask.isPresent() && oSource.isPresent() && oTarget.isPresent()) {
-			removeTaskFromList(oTask.get(), oSource.get());
+			removeTaskFromList(oTask.get(), false, oSource.get());
 			addTaskToList(oTask.get(), oTarget.get(), commentary);
 		}
 	}

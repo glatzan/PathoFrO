@@ -1,9 +1,17 @@
 package com.patho.main.ui.pdf;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -82,5 +90,47 @@ public class PDFStreamContainer {
 
 	public boolean renderPDF() {
 		return getDisplayPDF() != null;
+	}
+
+	/**
+	 * Opens a pdf in an new window
+	 */
+	public void openPDFinNewWindow() throws IOException {
+
+		// Prepare.
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		ExternalContext externalContext = facesContext.getExternalContext();
+		HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+
+		BufferedOutputStream output = null;
+
+		try {
+			byte[] file;
+
+			if (getDisplayPDF() != null && mediaRepository.isFile(getDisplayPDF().getPath()))
+				file = mediaRepository.getBytes(getDisplayPDF().getPath());
+			else
+				file = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
+
+			// Init servlet response.
+			response.reset();
+			response.setHeader("Content-Type", "application/pdf");
+			response.setHeader("Content-Length", String.valueOf(file.length));
+			response.setHeader("Content-Disposition", "inline; filename=\"asd\"");
+			output = new BufferedOutputStream(response.getOutputStream());
+			// Write file contents to response.
+			output.write(file, 0, file.length);
+			// Finalize task.
+			output.flush();
+		} finally {
+			output.close();
+		}
+
+		// Inform JSF that it doesn't need to handle response.
+		// This is very important, otherwise you will get the following exception in the
+		// logs:
+		// java.lang.IllegalStateException: Cannot forward after response has been
+		// committed.
+		facesContext.responseComplete();
 	}
 }

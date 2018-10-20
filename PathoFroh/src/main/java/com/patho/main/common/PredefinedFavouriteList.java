@@ -39,12 +39,12 @@ public enum PredefinedFavouriteList {
 	 * For secretary, not used
 	 */
 	StayInNotificationList(8),
-	
+
 	/**
 	 * Lists of tasks for that samples should be shipped to the consultant
 	 */
-	CouncilSendRequestMTA(9), 
-	
+	CouncilSendRequestMTA(9),
+
 	/**
 	 * Lists of tasks for that the council request should be send via letter
 	 */
@@ -60,7 +60,17 @@ public enum PredefinedFavouriteList {
 	/**
 	 * List of tasks with active council requests
 	 */
-	Council(14), ScannList(50), ScannCompletedList(51), ReturnSampleList(52);
+	Council(14),
+	/**
+	 * List of tasks for that a reply from the council physician is pending
+	 */
+	CouncilWaitingForReply(15),
+	/**
+	 * List of tasks for that a reply is present
+	 */
+	CouncilReplyPresent(16),
+
+	ScannList(50), ScannCompletedList(51), ReturnSampleList(52);
 
 	private final long id;
 
