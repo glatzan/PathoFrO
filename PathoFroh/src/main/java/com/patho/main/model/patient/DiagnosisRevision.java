@@ -47,6 +47,11 @@ import lombok.Setter;
 @Setter
 public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, PatientRollbackAble<Task>, ID {
 
+	/**
+	 * Internal marker for a diagnosis
+	 */
+	public final static String MARKER_COUNCIL = "c:$id";
+
 	@Id
 	@GeneratedValue(generator = "diagnosisRevision_sequencegenerator")
 	@Column(unique = true, nullable = false)
@@ -93,13 +98,19 @@ public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, Pat
 	 */
 	@Column
 	private boolean notificationPending;
-	
+
 	/**
-	 * Date of notification 
+	 * Date of notification
 	 */
 	@Column
 	private long notificationDate;
-	
+
+	/**
+	 * Internal references, e.g. to a council
+	 */
+	@Column(length = 10)
+	protected String intern;
+
 	/**
 	 * All diagnoses
 	 */
@@ -142,7 +153,7 @@ public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, Pat
 		this.name = name;
 		this.type = type;
 	}
-	
+
 	public DiagnosisRevision(Task parent, DiagnosisRevisionType type) {
 		this.parent = parent;
 		this.type = type;
@@ -203,7 +214,7 @@ public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, Pat
 
 		return super.equals(obj);
 	}
-	
+
 	/********************************************************
 	 * Interface Parent
 	 ********************************************************/

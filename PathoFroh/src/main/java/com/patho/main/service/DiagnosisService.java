@@ -83,8 +83,7 @@ public class DiagnosisService extends AbstractService {
 	/**
 	 * Updates all diagnosisRevision of the given revisions
 	 * 
-	 * @param Task
-	 *            task
+	 * @param Task task
 	 */
 	public Task synchronizeDiagnosesAndSamples(Task task, boolean save) {
 		logger.info("Synchronize all diagnoses of task " + task.getTaskID() + " with samples");
@@ -197,8 +196,7 @@ public class DiagnosisService extends AbstractService {
 	 * @return
 	 */
 	public Task createDiagnosisRevision(Task task, DiagnosisRevisionType type) {
-		return createDiagnosisRevision(task, type,
-				TaskUtil.getDiagnosisRevisionName(task.getDiagnosisRevisions(), new DiagnosisRevision("", type)));
+		return createDiagnosisRevision(task, type, null);
 	}
 
 	/**
@@ -209,7 +207,21 @@ public class DiagnosisService extends AbstractService {
 	 * @param type
 	 * @return
 	 */
-	public Task createDiagnosisRevision(Task task, DiagnosisRevisionType type, String name) {
+	public Task createDiagnosisRevision(Task task, DiagnosisRevisionType type, String interalReference) {
+		return createDiagnosisRevision(task, type,
+				TaskUtil.getDiagnosisRevisionName(task.getDiagnosisRevisions(), new DiagnosisRevision("", type)),
+				interalReference);
+	}
+
+	/**
+	 * Creates a diagnosisRevision, adds it to the given task and creates also all
+	 * needed diagnoses
+	 * 
+	 * @param parent
+	 * @param type
+	 * @return
+	 */
+	public Task createDiagnosisRevision(Task task, DiagnosisRevisionType type, String name, String interalReference) {
 		logger.info("Creating new diagnosisRevision");
 
 		DiagnosisRevision diagnosisRevision = new DiagnosisRevision();

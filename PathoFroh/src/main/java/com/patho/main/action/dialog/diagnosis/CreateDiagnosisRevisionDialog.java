@@ -160,7 +160,7 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog<CreateDiagnosi
 		logger.debug("Creating new diagnosis revision " + newRevisionName);
 
 		task = diagnosisService.renameDiagnosisRevisions(task, getRevisionList());
-		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName);
+		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName, null);
 
 		super.hideDialog(new DiagnosisPhaseUpdateEvent(task));
 	}

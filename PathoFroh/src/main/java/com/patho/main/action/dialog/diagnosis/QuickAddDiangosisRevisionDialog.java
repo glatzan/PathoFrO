@@ -24,6 +24,7 @@ import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Dialog for adding a diagnosis revision on creating a restaining
@@ -57,6 +58,9 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog<QuickAddDian
 
 	private List<DiagnosisRevisionContainer> revisionList;
 
+	@Accessors(chain = true)
+	private String internalReference;
+
 	public QuickAddDiangosisRevisionDialog initAndPrepareBean(Task task, DiagnosisRevisionType type) {
 		if (initBean(task, type))
 			prepareDialog();
@@ -75,6 +79,7 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog<QuickAddDian
 		setRevisionList(DiagnosisRevisionContainer.factory(task,
 				new ArrayList<DiagnosisRevision>(Arrays.asList(new DiagnosisRevision("", getType()))), true));
 
+		internalReference = null;
 		return true;
 	}
 
@@ -86,7 +91,7 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog<QuickAddDian
 				if (renameOldDiagnoses)
 					task = diagnosisService.renameDiagnosisRevisions(task, getRevisionList());
 
-				task = diagnosisService.createDiagnosisRevision(getTask(), type);
+				task = diagnosisService.createDiagnosisRevision(getTask(), type, internalReference);
 			}
 		});
 

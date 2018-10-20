@@ -134,6 +134,27 @@ public class CouncilService extends AbstractService {
 		return new CouncilReturn(task, council);
 	}
 
+	public CouncilReturn endCouncil(Task task, Council council) {
+		council.setCouncilCompleted(true);
+		council.setCouncilCompletedDate(new Date());
+
+		council = councilRepository.save(council,
+				resourceBundle.get("log.patient.task.council.phase.end", task, council.getName()), task.getPatient());
+
+		task = favouriteListService.removeTaskFromList(council.getTask(), false,
+				PredefinedFavouriteList.CouncilWaitingForReply, PredefinedFavouriteList.CouncilReplyPresent,
+				PredefinedFavouriteList.CouncilRequest, PredefinedFavouriteList.CouncilSendRequestMTA,
+				PredefinedFavouriteList.CouncilSendRequestSecretary, PredefinedFavouriteList.CouncilWaitingForReply);
+
+		task = favouriteListService.removeTaskFromList(council.getTask(), PredefinedFavouriteList.Council);
+
+		// this is normally done via dumplist of councilWaitingForReply, this catches
+		// errors
+		task = favouriteListService.addTaskToList(task, PredefinedFavouriteList.CouncilCompleted);
+
+		return new CouncilReturn(task, council);
+	}
+
 	@Getter
 	@Setter
 	public static class CouncilReturn {

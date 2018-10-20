@@ -284,16 +284,17 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 			councilRequestNode.setExpanded(true);
 			councilRequestNode.setSelectable(true);
 
-			if (council.getNotificationMethod() == CouncilNotificationMethod.MTA
-					&& council.isCouncilRequestCompleted()) {
-				TreeNode councilshipNode = new DefaultTreeNode("council_ship", council, councilNode);
-				councilshipNode.setExpanded(true);
-				councilshipNode.setSelectable(true);
-			}
+			TreeNode councilshipNode = new DefaultTreeNode("council_ship", council, councilNode);
+			councilshipNode.setExpanded(true);
+			councilshipNode.setSelectable(true);
 
 			TreeNode councilReturnNode = new DefaultTreeNode("council_reply", council, councilNode);
 			councilReturnNode.setExpanded(true);
 			councilReturnNode.setSelectable(true);
+
+			TreeNode councilDiagnosisNode = new DefaultTreeNode("council_diagnosis", council, councilNode);
+			councilDiagnosisNode.setExpanded(true);
+			councilDiagnosisNode.setSelectable(true);
 
 			TreeNode councilDataNode = new DefaultTreeNode("data_node", council, councilNode);
 			councilDataNode.setExpanded(true);
@@ -319,6 +320,8 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 				return "inculde/ship.xhtml";
 			case "council_reply":
 				return "inculde/reply.xhtml";
+			case "council_diagnosis":
+				return "inculde/diagnosis.xhtml";
 			case "pdf_node":
 				return "inculde/report.xhtml";
 			default:
@@ -392,6 +395,11 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 	public void onReplyReceived() {
 		councilService.replyReceived(getTask(), getSelectedCouncil().getCouncil());
+		update(true);
+	}
+
+	public void noCouncilCompleted() {
+		councilService.endCouncil(getTask(), getSelectedCouncil().getCouncil());
 		update(true);
 	}
 
@@ -498,10 +506,15 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		dialogHandler.getPrintDialog().initAndPrepareBean(getTask(), printDocumentUIs, printDocumentUIs.get(0));
 	}
 
+	@Override
+	public void hideDialog() {
+		super.hideDialog(new ReloadTaskEvent());
+	}
+
 	@Getter
 	@Setter
 	public static class CouncilContainer extends Council {
-		
+
 		@Delegate
 		private Council council;
 
@@ -509,7 +522,7 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		 * If true the request can be edited
 		 */
 		private boolean forceEditRequest;
-		
+
 		public CouncilContainer(Council council) {
 			this.council = council;
 		}

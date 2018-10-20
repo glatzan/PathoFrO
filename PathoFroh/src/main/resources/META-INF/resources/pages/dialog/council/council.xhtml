@@ -120,6 +120,20 @@
 									</p:treeNode>
 
 									<!-- data node-->
+									<p:treeNode type="council_diagnosis" icon="fa fa-edit">
+										<h:outputText value="Diagnose" />
+
+										<ui:fragment
+											rendered="#{node.councilRequestCompleted and node.replyReceived and !node.councilCompleted}">
+											<i class="fa fa-exclamation-circle icon-red" title="" />
+										</ui:fragment>
+
+										<ui:fragment rendered="#{node.councilCompleted}">
+											<i class="fa fa-check-circle icon-green" title="" />
+										</ui:fragment>
+									</p:treeNode>
+
+									<!-- data node-->
 									<p:treeNode type="data_node" expandedIcon="ui-icon-folder-open"
 										collapsedIcon="ui-icon-folder-collapsed">
 										<h:outputText value="Files" />
@@ -143,7 +157,7 @@
 												action="#{dialog.councilDialog.streamContainer.openPDFinNewWindow()}"
 												ajax="false" title="#{msg['dialog.print.button.open.text']}"
 												oncomplete="return false;" target="_blank">
-												<i class="fa fa-file-pdf-o" title="" />
+												<i class="fa fa-eye" title="" />
 											</p:commandLink>
 
 										</h:panelGrid>

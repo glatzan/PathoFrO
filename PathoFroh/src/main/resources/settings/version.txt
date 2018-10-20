@@ -153,6 +153,18 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* council completed */
+Alter table council add councilCompleted boolean;
+Alter table council_aud add councilCompleted boolean;
+update council set councilCompleted = false;
+update council_aud set councilCompleted = false;
+Alter table council add councilCompletedDate date;
+Alter table council_aud add councilCompletedDate date;
+
+/* interal reference for associating to councils*/
+Alter table diagnosisrevision add internal character varying(10);
+Alter table diagnosisrevision_aud add internal character varying(10);
+
 /* new favourite list for council where a reply is pending*/
 INSERT INTO favouritelist (id, defaultlist, globalview, name, manueledit, useicon, icon, usedumplist, infotext, command, hidelist) VALUES (16, true, false, 'Konsile mit Anwort', false, true, 'fa-stethoscope icon-green', false, 'Konsilantwort erhalten', 'dialog:dialog.councilDialog', false);
 /* new favourite list for council where a reply is pending*/

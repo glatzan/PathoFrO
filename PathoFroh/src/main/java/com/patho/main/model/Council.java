@@ -103,7 +103,7 @@ public class Council implements ID, DataList, AuditAble {
 	 */
 	@Enumerated(EnumType.STRING)
 	private CouncilNotificationMethod notificationMethod;
-	
+
 	/**
 	 * True if samples were send to external clinics
 	 */
@@ -133,6 +133,18 @@ public class Council implements ID, DataList, AuditAble {
 	 */
 	@Column
 	private boolean sampleReturned;
+
+	/**
+	 * True if sample is returned
+	 */
+	@Column
+	private boolean councilCompleted;
+
+	/**
+	 * Date of request
+	 */
+	@Temporal(TemporalType.DATE)
+	private Date councilCompletedDate;
 
 	/**
 	 * Commentary

@@ -31,8 +31,7 @@
 			<!-- reply received date -->
 			<h:outputLabel value="" />
 			<h:panelGrid columns="2"
-				styleClass="listingHistoHiddenTableContainer"
-				rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}">
+				styleClass="listingHistoHiddenTableContainer">
 				<h:outputLabel value="#{msg['dialog.council.repy.date']}"></h:outputLabel>
 
 				<p:calendar pattern="dd.MM.yyyy" mask="true"
@@ -99,6 +98,7 @@
 					</p:commandLink>
 				</p:column>
 			</p:dataTable>
+
 			<!-- internal commentary -->
 			<h:outputLabel value="#{msg['dialog.council.internalCommentary']}"></h:outputLabel>
 			<p:inputTextarea style="width: 700px;" rows="5"
@@ -107,12 +107,14 @@
 					listener="#{dialog.councilDialog.saveSelectedCouncil()}" />
 			</p:inputTextarea>
 
+			<h:outputLabel value="&nbsp;" />
+			<h:outputLabel value=" " />
+
 			<h:outputLabel value="#{msg['dialog.council.repy.upload']}" />
 			<p:fileUpload style="width:300px;" update="@form"
 				fileUploadListener="#{dialog.councilDialog.handleFileUpload}"
 				mode="advanced" auto="true" sizeLimit="10000000" />
-			<h:outputLabel value="&nbsp;" />
-			<h:outputLabel value=" " />
+
 		</h:panelGrid>
 	</p:outputPanel>
 
