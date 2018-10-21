@@ -129,15 +129,14 @@
 
 			</h:panelGrid>
 
-			<h:panelGrid columns="3" styleClass="newTableContainer right">
-
+			<h:panelGrid columns="2" styleClass="newTableContainer right">
 				<!-- print -->
 				<p:commandButton value="#{msg['general.print']}"
 					icon="fa fa-check-circle-o">
 					<f:actionListener
 						binding="#{dialog.councilDialog.printCouncilReport()}" />
 				</p:commandButton>
-
+				
 				<!-- Close Button -->
 				<p:commandButton value="#{msg['general.close']}"
 					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"

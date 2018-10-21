@@ -192,6 +192,8 @@ public class FavouriteListService extends AbstractService {
 	public Task removeTaskFromList(Task task, boolean addToDumpList, FavouriteList favouriteList) {
 
 		try {
+
+			// task should be in fav list
 			logger.debug(
 					"Removing task (" + task.getTaskID() + ") from favourite lists (" + favouriteList.getName() + ")");
 
@@ -204,12 +206,16 @@ public class FavouriteListService extends AbstractService {
 				}
 			}
 
+			if(itemToRemove == null)
+				throw new IllegalStateException();
+			
 			favouriteList.getItems().remove(itemToRemove);
 			// saving new fav item
 			favouriteListRepository.save(favouriteList);
 
 			favouriteListItemRepository.delete(itemToRemove,
 					resourceBundle.get("log.favouriteList.removed", task.getTaskID(), favouriteList.toString()));
+			
 		} catch (IllegalStateException e) {
 			// no item found
 			logger.debug("Can not remove task (" + task.getTaskID() + ") from favourite list ("

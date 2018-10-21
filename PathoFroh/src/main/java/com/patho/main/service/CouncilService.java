@@ -100,6 +100,10 @@ public class CouncilService extends AbstractService {
 	 */
 	public CouncilReturn endCouncilRequest(Task task, Council council) {
 		council.setCouncilRequestCompleted(true);
+		council.setCouncilRequestCompletedDate(new Date());
+
+		if (council.getNotificationMethod() == CouncilNotificationMethod.SECRETARY)
+			council.setSampleShippedCommentary(resourceBundle.get("dialog.council.sampleShipped.option.noSample"));
 
 		council = councilRepository.save(council,
 				resourceBundle.get("log.patient.task.council.phase.request.end", task, council.getName()),
@@ -108,16 +112,24 @@ public class CouncilService extends AbstractService {
 		task = favouriteListService.removeTaskFromList(council.getTask(), PredefinedFavouriteList.CouncilRequest);
 		task = favouriteListService.addTaskToList(council.getTask(), PredefinedFavouriteList.CouncilWaitingForReply);
 
-		if (council.getNotificationMethod() != CouncilNotificationMethod.NONE)
+		if (council.getNotificationMethod() != CouncilNotificationMethod.NONE) {
 			task = favouriteListService.addTaskToList(task,
 					council.getNotificationMethod() == CouncilNotificationMethod.MTA
 							? PredefinedFavouriteList.CouncilSendRequestMTA
 							: PredefinedFavouriteList.CouncilSendRequestSecretary);
 
+		}
+
 		return new CouncilReturn(task, council);
 	}
 
-	public CouncilReturn replyReceived(Task task, Council council) {
+	public CouncilReturn beginReplyReceived(Task task, Council council) {
+		task = favouriteListService.addTaskToList(council.getTask(), PredefinedFavouriteList.CouncilWaitingForReply);
+		task = favouriteListService.removeTaskFromList(task, PredefinedFavouriteList.CouncilReplyPresent);
+		return new CouncilReturn(task, council);
+	}
+
+	public CouncilReturn endReplyReceived(Task task, Council council) {
 		council.setReplyReceived(true);
 		council.setReplyReceivedDate(new Date());
 
@@ -131,6 +143,21 @@ public class CouncilService extends AbstractService {
 		// errors
 		task = favouriteListService.addTaskToList(task, PredefinedFavouriteList.CouncilReplyPresent);
 
+		return new CouncilReturn(task, council);
+	}
+
+	public CouncilReturn beginSampleShiped(Task task, Council council) {
+		if (council.getNotificationMethod() != CouncilNotificationMethod.NONE)
+			task = favouriteListService.addTaskToList(council.getTask(),
+					council.getNotificationMethod() == CouncilNotificationMethod.MTA
+							? PredefinedFavouriteList.CouncilSendRequestMTA
+							: PredefinedFavouriteList.CouncilSendRequestSecretary);
+		return new CouncilReturn(task, council);
+	}
+
+	public CouncilReturn endSampleShiped(Task task, Council council) {
+		task = favouriteListService.removeTaskFromList(council.getTask(), PredefinedFavouriteList.CouncilSendRequestMTA,
+				PredefinedFavouriteList.CouncilSendRequestSecretary);
 		return new CouncilReturn(task, council);
 	}
 

@@ -99,6 +99,12 @@ public class Council implements ID, DataList, AuditAble {
 	private boolean councilRequestCompleted;
 
 	/**
+	 * Date of request completed
+	 */
+	@Temporal(TemporalType.DATE)
+	private Date councilRequestCompletedDate;
+
+	/**
 	 * State of the council
 	 */
 	@Enumerated(EnumType.STRING)
@@ -111,16 +117,16 @@ public class Council implements ID, DataList, AuditAble {
 	private boolean sampleShipped;
 
 	/**
-	 * Attached slides of the council
-	 */
-	@Column(columnDefinition = "text")
-	private String sampleShippedCommentary;
-
-	/**
 	 * Date of request
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date sampleShippedDate;
+
+	/**
+	 * Attached slides of the council
+	 */
+	@Column(columnDefinition = "text")
+	private String sampleShippedCommentary;
 
 	/**
 	 * True if the samples should be returned
@@ -133,6 +139,30 @@ public class Council implements ID, DataList, AuditAble {
 	 */
 	@Column
 	private boolean sampleReturned;
+
+	/**
+	 * Date of request
+	 */
+	@Temporal(TemporalType.DATE)
+	private Date sampleReturnedDate;
+
+	/**
+	 * Commentary
+	 */
+	@Column(columnDefinition = "text")
+	private String sampleReturnedCommentary;
+
+	/**
+	 * True if answer was received
+	 */
+	@Column
+	private boolean replyReceived;
+
+	/**
+	 * Date of return
+	 */
+	@Temporal(TemporalType.DATE)
+	private Date replyReceivedDate;
 
 	/**
 	 * True if sample is returned
@@ -150,31 +180,7 @@ public class Council implements ID, DataList, AuditAble {
 	 * Commentary
 	 */
 	@Column(columnDefinition = "text")
-	private String sampleReturnedCommentary;
-
-	/**
-	 * Date of request
-	 */
-	@Temporal(TemporalType.DATE)
-	private Date sampleReturnedDate;
-
-	/**
-	 * Commentary
-	 */
-	@Column(columnDefinition = "text")
 	private String commentary;
-
-	/**
-	 * True if answer was received
-	 */
-	@Column
-	private boolean replyReceived;
-
-	/**
-	 * Date of return
-	 */
-	@Temporal(TemporalType.DATE)
-	private Date replyReceivedDate;
 
 	/**
 	 * Pdf attached to this council
@@ -199,6 +205,11 @@ public class Council implements ID, DataList, AuditAble {
 	@Transient
 	public String getPublicName() {
 		return "Konsil - " + task.getTaskID();
+	}
+
+	@Transient
+	public boolean isShippentExpected() {
+		return notificationMethod != CouncilNotificationMethod.NONE;
 	}
 
 	@Override

@@ -57,8 +57,8 @@
 						var="physician" itemLabel="#{physician.person.getFullName()}"
 						itemValue="#{physician}" />
 
-					<p:ajax event="change" update="header councilName" process="@form"
-						listener="#{dialog.councilDialog.onNameChange()}" />
+					<p:ajax event="change" update="header councilName navigationTable"
+						process="@form" listener="#{dialog.councilDialog.onNameChange()}" />
 
 				</p:selectOneMenu>
 
@@ -115,11 +115,12 @@
 				value="#{dialog.councilDialog.selectedCouncil.dateOfRequest}"
 				tabindex="4" locale="de" pattern="dd.MM.yyyy" mask="true">
 
-				<p:ajax event="dateSelect" update="header councilName"
-					process="@form" listener="#{dialog.councilDialog.onNameChange()}" />
-
-				<p:ajax event="change" update="header councilName" process="@form"
+				<p:ajax event="dateSelect"
+					update="header councilName navigationTable" process="@form"
 					listener="#{dialog.councilDialog.onNameChange()}" />
+
+				<p:ajax event="change" update="header councilName navigationTable"
+					process="@form" listener="#{dialog.councilDialog.onNameChange()}" />
 			</p:calendar>
 
 			<!-- council request -->
@@ -160,16 +161,9 @@
 
 			</h:panelGrid>
 
-			<h:panelGrid columns="4" styleClass="newTableContainer right">
+			<h:panelGrid columns="3" styleClass="newTableContainer right">
 
-				<!-- print -->
-				<p:commandButton value="#{msg['general.print']}"
-					icon="fa fa-check-circle-o">
-					<f:actionListener
-						binding="#{dialog.councilDialog.printCouncilReport()}" />
-				</p:commandButton>
-
-				<h:panelGroup>
+				<h:panelGroup style="margin-right:30px;"  id="customButtonContainer">
 					<p:commandButton
 						value="#{msg['dialog.council.button.sendRequest']}"
 						style="margin-right:30px" icon="fa fa-check-circle-o"
@@ -178,13 +172,30 @@
 						<p:ajax event="dialogReturn" update="@form"
 							listener="#{dialog.councilDialog.onEndRequestState}"></p:ajax>
 					</p:commandButton>
+
+					<!-- edit changes changes -->
+					<p:commandButton
+						value="#{msg['dialog.council.button.editRequest']}"
+						rendered="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and !dialog.councilDialog.selectedCouncil.forceEditRequest}"
+						icon="fa fa-check-circle-o" update="councilRequestData dialogContent:customButtonContainer"
+						actionListener="#{dialog.councilDialog.selectedCouncil.setForceEditRequest(true)}">
+					</p:commandButton>
+
+					<!-- save changes changes -->
+					<p:commandButton
+						value="#{msg['dialog.council.button.saveRequest']}"
+						rendered="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted and dialog.councilDialog.selectedCouncil.forceEditRequest}"
+						icon="fa fa-check-circle-o" update="councilRequestData dialogContent:customButtonContainer"
+						actionListener="#{dialog.councilDialog.selectedCouncil.setForceEditRequest(false)}">
+					</p:commandButton>
+
 				</h:panelGroup>
 
-				<!-- edit changes changes -->
-				<p:commandButton value="#{msg['dialog.council.button.editRequest']}"
-					rendered="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted}"
-					icon="fa fa-check-circle-o" update="councilRequestData"
-					actionListener="#{dialog.councilDialog.selectedCouncil.setForceEditRequest(true)}">
+				<!-- print -->
+				<p:commandButton value="#{msg['general.print']}"
+					icon="fa fa-check-circle-o">
+					<f:actionListener
+						binding="#{dialog.councilDialog.printCouncilReport()}" />
 				</p:commandButton>
 
 				<!-- Close Button -->

@@ -466,17 +466,18 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		}
 	}
 
+	/**
+	 * Executes a dynamic command e.g. for opening a dialog
+	 * 
+	 * @param command
+	 * @param task
+	 */
 	public void executeCommand(String command, Task task) {
-
 		if (HistoUtil.isNotNullOrEmpty(command)) {
-			if (command.matches("dialog:.*")) {
-				String[] arr = command.split(":");
-				AbstractDialog myClass = (AbstractDialog) appContext.getBean(arr[1]);
-				myClass.initAndPrepareBean(task);
-				// myClass.initAndPrepareBean(dialog);
+			if (command.matches("dialog:dialog.councilDialog")) {
+				MessageHandler.executeScript("clickButtonFromBean('headerForm:councilBtn')");
 			}
 		}
-		System.out.println(command);
 	}
 
 	@Configurable
@@ -521,9 +522,9 @@ public class GlobalEditViewHandler extends AbstractHandler {
 					logger.debug("Patient add event reload event.");
 					if (((PatientReturnEvent) event.getObject()).getTask() != null)
 						globalEditViewHandler.getWorklistData().getWorklist()
-								.setSelectedTask(((PatientReturnEvent) event.getObject()).getTask()); 
+								.setSelectedTask(((PatientReturnEvent) event.getObject()).getTask());
 					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
-					
+
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 					// staining phase reload event
 				} else if (event.getObject() instanceof StainingPhaseUpdateEvent) {

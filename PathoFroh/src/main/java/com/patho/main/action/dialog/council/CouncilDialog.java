@@ -38,6 +38,7 @@ import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.CouncilService;
+import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.PDFService;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
@@ -47,6 +48,7 @@ import com.patho.main.ui.pdf.PDFStreamContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
+import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -93,6 +95,11 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private PrintDocumentRepository printDocumentRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private FavouriteListService favouriteListService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -250,8 +257,10 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 		if (getSelectedNode() != null) {
 			logger.debug("Replacing selected node");
+
 			for (TreeNode node : getCouncilNodes()) {
-				if (node.getData().equals(getSelectedNode().getData())) {
+				if (node.getData().equals(getSelectedNode().getData())
+						&& node.getType().equals(getSelectedNode().getType())) {
 					setSelectedNode(node);
 					logger.debug("Replacing selected node");
 					return;
@@ -274,37 +283,43 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 		for (CouncilContainer council : getCouncilList()) {
 			logger.debug("Creating tree for {}", council);
+
 			TreeNode councilNode = new DefaultTreeNode("council", council, taskNode);
 			councilNode.setExpanded(true);
 			councilNode.setSelectable(false);
-
 			getCouncilNodes().add(councilNode);
 
 			TreeNode councilRequestNode = new DefaultTreeNode("council_request", council, councilNode);
 			councilRequestNode.setExpanded(true);
 			councilRequestNode.setSelectable(true);
+			getCouncilNodes().add(councilRequestNode);
 
 			TreeNode councilshipNode = new DefaultTreeNode("council_ship", council, councilNode);
 			councilshipNode.setExpanded(true);
 			councilshipNode.setSelectable(true);
+			getCouncilNodes().add(councilshipNode);
 
 			TreeNode councilReturnNode = new DefaultTreeNode("council_reply", council, councilNode);
 			councilReturnNode.setExpanded(true);
 			councilReturnNode.setSelectable(true);
+			getCouncilNodes().add(councilReturnNode);
 
 			TreeNode councilDiagnosisNode = new DefaultTreeNode("council_diagnosis", council, councilNode);
 			councilDiagnosisNode.setExpanded(true);
 			councilDiagnosisNode.setSelectable(true);
+			getCouncilNodes().add(councilDiagnosisNode);
 
 			TreeNode councilDataNode = new DefaultTreeNode("data_node", council, councilNode);
 			councilDataNode.setExpanded(true);
 			councilDataNode.setSelectable(false);
+			getCouncilNodes().add(councilDataNode);
 
 			for (PDFContainer container : council.getAttachedPdfs()) {
 				TreeNode councilFileNode = new DefaultTreeNode("pdf_node", new CouncilPDFContainer(council, container),
 						councilDataNode);
 				councilFileNode.setExpanded(false);
 				councilFileNode.setSelectable(true);
+				getCouncilNodes().add(councilFileNode);
 			}
 		}
 
@@ -393,12 +408,7 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		}
 	}
 
-	public void onReplyReceived() {
-		councilService.replyReceived(getTask(), getSelectedCouncil().getCouncil());
-		update(true);
-	}
-
-	public void noCouncilCompleted() {
+	public void onCouncilCompleted() {
 		councilService.endCouncil(getTask(), getSelectedCouncil().getCouncil());
 		update(true);
 	}
@@ -445,10 +455,28 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	 * Sets the current date if the sample ship check box was selected
 	 */
 	public void onShipSample() {
-		if (getSelectedCouncil().isSampleShipped() && getSelectedCouncil().getSampleShippedDate() == null) {
-			getSelectedCouncil().setSampleShippedDate(new Date());
+		if (getSelectedCouncil().isSampleShipped()) {
+			// setting date
+			if (getSelectedCouncil().getSampleShippedDate() == null)
+				getSelectedCouncil().setSampleShippedDate(new Date());
+
+			// setting no sample shipped if secreatary is selected
+			if (HistoUtil.isNullOrEmpty(getSelectedCouncil().getSampleShippedCommentary())
+					&& getSelectedCouncil().getNotificationMethod() == CouncilNotificationMethod.SECRETARY) {
+				getSelectedCouncil()
+						.setSampleShippedCommentary(resourceBundle.get("dialog.council.sampleShipped.option.noSample"));
+			}
 		}
+
 		saveSelectedCouncil();
+
+		if (getSelectedCouncil().isSampleShipped()) {
+			councilService.endSampleShiped(getTask(), getSelectedCouncil().getCouncil());
+		} else {
+			councilService.beginSampleShiped(getTask(), getSelectedCouncil().getCouncil());
+		}
+
+		update(true);
 	}
 
 	/**
@@ -461,11 +489,20 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		saveSelectedCouncil();
 	}
 
-	public void noReplyReceived() {
+	public void onReplyReceived() {
 		if (getSelectedCouncil().isReplyReceived() && getSelectedCouncil().getReplyReceivedDate() == null) {
 			getSelectedCouncil().setReplyReceivedDate(new Date());
 		}
+
 		saveSelectedCouncil();
+
+		if (getSelectedCouncil().isReplyReceived()) {
+			councilService.endReplyReceived(getTask(), getSelectedCouncil().getCouncil());
+		} else {
+			councilService.beginReplyReceived(getTask(), getSelectedCouncil().getCouncil());
+		}
+
+		update(true);
 	}
 
 	/**

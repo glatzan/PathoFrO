@@ -38,7 +38,7 @@
 				<p:panelGrid styleClass="defaultHistoHiddenTableContainer"
 					style="background: black; height: 655px;width:100%">
 					<p:row>
-						<p:column styleClass="columnTop">
+						<p:column styleClass="columnTop" style="height:505px"> 
 							<!-- scrolling -->
 							<p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody"
 								style="height:500px;width:285px !important">
@@ -85,10 +85,15 @@
 									<p:treeNode type="council_ship" icon="fa fa-envelope">
 										<h:outputText value="Versenden" />
 
-										<!-- shipment completed, checking date of sampleShipment because sampleShipped is used to mark the need of a shipment -->
+										<!-- waiting for shipment -->
 										<ui:fragment
-											rendered="#{node.sampleShippedDate != null and node.expectSampleReturn and !node.sampleReturned}">
-											<i class="fa fa-send icon-green" title="" />
+											rendered="#{node.councilRequestCompleted and node.isShippentExpected() and !node.sampleShipped}">
+											<i class="fa fa-exclamation-circle icon-red" title="" />
+										</ui:fragment>
+
+										<!-- shipment completed -->
+										<ui:fragment rendered="#{node.sampleShipped}">
+											<i class="fa fa-check-circle icon-green" title="" />
 										</ui:fragment>
 
 										<!-- waiting for return -->
@@ -99,7 +104,7 @@
 
 										<!-- shipment and return completed  -->
 										<ui:fragment
-											rendered="#{(node.sampleShippedDate != null and node.expectSampleReturn and node.sampleReturned) or (node.sampleShippedDate != null and !node.expectSampleReturn)}">
+											rendered="#{node.expectSampleReturn and node.sampleReturned}">
 											<i class="fa fa-check-circle icon-green" title="" />
 										</ui:fragment>
 
@@ -245,14 +250,13 @@
 											actionListener="#{dialog.councilDialog.streamContainer.setTooltip(node.container)}" />
 									</p:treeNode>
 								</p:tree>
-
 							</p:scrollPanel>
 						</p:column>
 					</p:row>
 					<p:row>
-						<p:column>
+						<p:column styleClass="columnTop">
 							<h:panelGrid columns="2" styleClass="defaultHistoTable"
-								style="margin-top:5px;" id="councilInfo"
+								style="margin-top:5px;margin-left:5px;" id="councilInfo"
 								rendered="#{dialog.councilDialog.selectedCouncil ne null}">
 								<!-- created date-->
 								<h:outputText

@@ -153,6 +153,13 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* replacing old command*/
+update favouritelist set command = 'dialog:dialog.councilDialog' where command like 'dialog:councilDialogHandler'
+
+/* request completed date */
+Alter table council add councilRequestCompletedDate date;
+Alter table council_aud add councilRequestCompletedDate date;
+
 /* council completed */
 Alter table council add councilCompleted boolean;
 Alter table council_aud add councilCompleted boolean;
@@ -348,6 +355,9 @@ $$ language plv8;
 +++!: Ansicht der Favouriten-Listen im Admin-Menu erweitert.
 
 SQL:
+/* only letter send no sample */
+INSERT INTO listitem VALUES (104, false, 0, 'COUNCIL_ATTACHMENT', 'Nur Konsilanfrage, keine Probe versendet');
+
 /* boolean for manualEdit*/
 alter table favouritelist add hidelist boolean;
 update favouritelist set hidelist = false;
