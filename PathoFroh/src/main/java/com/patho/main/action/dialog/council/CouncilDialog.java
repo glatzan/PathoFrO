@@ -217,7 +217,6 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 		if (reloadTask) {
 			setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), true, true, true, true, true).get());
-			getTask().generateTaskStatus();
 
 			if (getCouncilList() != null && getCouncilList().size() > 0) {
 				List<Council> coucils = new ArrayList<Council>(getTask().getCouncils());
@@ -252,6 +251,8 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 				setCouncilList(getTask().getCouncils().stream().map(p -> new CouncilContainer(p))
 						.collect(Collectors.toList()));
 		}
+
+		getTask().generateTaskStatus();
 
 		setRoot(generateTree());
 
@@ -518,6 +519,7 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 			getSelectedCouncil().setCouncil(c);
 			councilRepository.initializeTask(c);
 			setTask(c.getTask());
+			getTask().generateTaskStatus();
 		}
 	}
 

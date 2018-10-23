@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+
+<composite:interface>
+	<composite:attribute name="rendered" required="true" />
+	<composite:attribute name="auditElement" required="true" />
+</composite:interface>
+
+<composite:implementation>
+
+	<h:panelGrid columns="2" styleClass="defaultHistoTable"
+		style="margin-top:5px;margin-left:5px;" rendered="#{rendered}">
+
+		<!-- created date-->
+		<h:outputText value="#{msg['component.auditTable.createdOn']}"></h:outputText>
+		<h:outputText value="#{cc.attrs.auditElement.createdOn}">
+			<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
+		</h:outputText>
+
+		<!-- created name-->
+		<h:outputText value="#{msg['component.auditTable.createdBy']}"></h:outputText>
+		<h:outputText value="#{cc.attrs.auditElement.createdBy}">
+		</h:outputText>
+
+		<!-- updated date-->
+		<h:outputText value="#{msg['component.auditTable.updatedOn']}"></h:outputText>
+		<h:outputText
+			style="#{cc.attrs.auditElement.updatedOn eq 0 ? 'display:none' : ''}"
+			value="#{cc.attrs.auditElement.updatedOn}">
+			<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
+		</h:outputText>
+
+		<!-- updated name-->
+		<h:outputText value="#{msg['component.auditTable.updatedBy']}"></h:outputText>
+		<h:outputText value="#{cc.attrs.auditElement.updatedBy}">
+		</h:outputText>
+	</h:panelGrid>
+
+</composite:implementation>
+</html>

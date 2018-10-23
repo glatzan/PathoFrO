@@ -5,7 +5,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:b="http://bootsfaces.net/ui">
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 <h:head>
 	<title><h:outputFormat
@@ -38,7 +39,7 @@
 				<p:panelGrid styleClass="defaultHistoHiddenTableContainer"
 					style="background: black; height: 655px;width:100%">
 					<p:row>
-						<p:column styleClass="columnTop" style="height:505px"> 
+						<p:column styleClass="columnTop" style="height:505px">
 							<!-- scrolling -->
 							<p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody"
 								style="height:500px;width:285px !important">
@@ -75,73 +76,87 @@
 
 									<!-- council request -->
 									<p:treeNode type="council_request" icon="fa fa-edit">
-										<h:outputText value="Anfrage" />
+										<h:outputText value="#{msg['dialog.council.tree.request']}" />
+
+										<!-- completed -->
 										<ui:fragment rendered="#{node.councilRequestCompleted}">
-											<i class="fa fa-check-circle icon-green" title="" />
+											<i class="fa fa-check-circle icon-green"
+												title="#{msg['dialog.council.tree.request.completed.info']}" />
 										</ui:fragment>
 									</p:treeNode>
 
 									<!-- council request -->
 									<p:treeNode type="council_ship" icon="fa fa-envelope">
-										<h:outputText value="Versenden" />
+										<h:outputText value="#{msg['dialog.council.tree.ship']}" />
 
 										<!-- waiting for shipment -->
 										<ui:fragment
 											rendered="#{node.councilRequestCompleted and node.isShippentExpected() and !node.sampleShipped}">
-											<i class="fa fa-exclamation-circle icon-red" title="" />
+											<i class="fa fa-exclamation-circle icon-red"
+												title="#{msg['dialog.council.tree.ship.expected.info']}" />
 										</ui:fragment>
 
 										<!-- shipment completed -->
 										<ui:fragment rendered="#{node.sampleShipped}">
-											<i class="fa fa-check-circle icon-green" title="" />
+											<i class="fa fa-check-circle icon-green"
+												title="#{msg['dialog.council.tree.ship.completed.info']}" />
 										</ui:fragment>
 
 										<!-- waiting for return -->
 										<ui:fragment
 											rendered="#{node.expectSampleReturn and !node.sampleReturned}">
-											<i class="fa fa-undo icon-red" title="" />
+											<i class="fa fa-undo icon-red"
+												title="#{msg['dialog.council.tree.return.expected.info']}" />
 										</ui:fragment>
 
 										<!-- shipment and return completed  -->
 										<ui:fragment
 											rendered="#{node.expectSampleReturn and node.sampleReturned}">
-											<i class="fa fa-check-circle icon-green" title="" />
+											<i class="fa fa-check-circle icon-green"
+												title="#{msg['dialog.council.tree.return.completed.info']}" />
 										</ui:fragment>
-
 									</p:treeNode>
 
 									<!-- reply-->
 									<p:treeNode type="council_reply" icon="fa fa-user-md">
-										<h:outputText value="Antwort" />
+										<h:outputText value="#{msg['dialog.council.tree.reply']}" />
+
+										<!-- reply pending -->
 										<ui:fragment
 											rendered="#{node.councilRequestCompleted and !node.replyReceived}">
-											<i class="fa fa-exclamation-circle icon-red" title="" />
+											<i class="fa fa-exclamation-circle icon-red"
+												title="#{msg['dialog.council.tree.reply.pending.info']}" />
 										</ui:fragment>
 
+										<!-- reply received -->
 										<ui:fragment rendered="#{node.replyReceived}">
-											<i class="fa fa-check-circle icon-green" title="" />
+											<i class="fa fa-check-circle icon-green"
+												title="#{msg['dialog.council.tree.reply.completed.info']}" />
 										</ui:fragment>
-
 									</p:treeNode>
 
-									<!-- data node-->
+									<!-- finalize node-->
 									<p:treeNode type="council_diagnosis" icon="fa fa-edit">
-										<h:outputText value="Diagnose" />
+										<h:outputText value="#{msg['dialog.council.tree.finalize']}" />
 
+										<!-- not finalized -->
 										<ui:fragment
 											rendered="#{node.councilRequestCompleted and node.replyReceived and !node.councilCompleted}">
-											<i class="fa fa-exclamation-circle icon-red" title="" />
+											<i class="fa fa-exclamation-circle icon-red"
+												title="#{msg['dialog.council.tree.finalize.pending.info']}" />
 										</ui:fragment>
 
+										<!-- finalized -->
 										<ui:fragment rendered="#{node.councilCompleted}">
-											<i class="fa fa-check-circle icon-green" title="" />
+											<i class="fa fa-check-circle icon-green"
+												title="#{msg['dialog.council.tree.finalize.completed.info']}" />
 										</ui:fragment>
 									</p:treeNode>
 
 									<!-- data node-->
 									<p:treeNode type="data_node" expandedIcon="ui-icon-folder-open"
 										collapsedIcon="ui-icon-folder-collapsed">
-										<h:outputText value="Files" />
+										<h:outputText value="#{msg['dialog.council.tree.files']}" />
 									</p:treeNode>
 
 									<!-- pdf -->
@@ -255,40 +270,10 @@
 					</p:row>
 					<p:row>
 						<p:column styleClass="columnTop">
-							<h:panelGrid columns="2" styleClass="defaultHistoTable"
-								style="margin-top:5px;margin-left:5px;" id="councilInfo"
-								rendered="#{dialog.councilDialog.selectedCouncil ne null}">
-								<!-- created date-->
-								<h:outputText
-									value="#{msg['dialog.pdfOrganizer.files.createdOn']}"></h:outputText>
-								<h:outputText
-									value="#{dialog.councilDialog.selectedCouncil.audit.createdOn}">
-									<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
-								</h:outputText>
-
-								<!-- created name-->
-								<h:outputText
-									value="#{msg['dialog.pdfOrganizer.files.createdBy']}"></h:outputText>
-								<h:outputText
-									value="#{dialog.councilDialog.selectedCouncil.audit.createdBy}">
-								</h:outputText>
-
-								<!-- updated date-->
-								<h:outputText
-									value="#{msg['dialog.pdfOrganizer.files.updatedOn']}"></h:outputText>
-								<h:outputText
-									style="#{dialog.councilDialog.selectedCouncil.audit.updatedOn eq 0 ? 'display:none' : ''}"
-									value="#{dialog.councilDialog.selectedCouncil.audit.updatedOn}">
-									<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
-								</h:outputText>
-
-								<!-- updated name-->
-								<h:outputText
-									value="#{msg['dialog.pdfOrganizer.files.updatedBy']}"></h:outputText>
-								<h:outputText
-									value="#{dialog.councilDialog.selectedCouncil.audit.updatedBy}">
-								</h:outputText>
-							</h:panelGrid>
+							<!-- audit table -->
+							<histo:auditTable id="councilInfo"
+								rendered="#{dialog.councilDialog.selectedCouncil ne null}"
+								auditElement="#{dialog.councilDialog.selectedCouncil.audit}" />
 						</p:column>
 					</p:row>
 				</p:panelGrid>
