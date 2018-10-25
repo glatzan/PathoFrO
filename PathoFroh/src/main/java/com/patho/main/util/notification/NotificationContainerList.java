@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Configurable;
@@ -112,7 +113,7 @@ public class NotificationContainerList {
 	 * @param contacts
 	 * @param notificationTyp
 	 */
-	public void updateList(List<AssociatedContact> contacts, NotificationTyp notificationTyp) {
+	public void updateList(Set<AssociatedContact> contacts, NotificationTyp notificationTyp) {
 
 		// copie the list of current containers with notifications
 		List<NotificationContainer> tmpContainers = new ArrayList<NotificationContainer>(container);
