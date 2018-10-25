@@ -27,10 +27,12 @@ import com.patho.main.model.Person;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.service.NotificationService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.TaskService;
 import com.patho.main.template.MailTemplate;
+import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.mail.DiagnosisReportMail;
 import com.patho.main.template.print.DiagnosisReport;
@@ -56,8 +58,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-@Slf4j
-public class NotificationDialog extends AbstractTabDialog {
+public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -104,6 +105,11 @@ public class NotificationDialog extends AbstractTabDialog {
 	@Setter(AccessLevel.NONE)
 	private TaskService taskService;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PrintDocumentRepository printDocumentRepository;
+
 	private GeneralTab generalTab;
 	private MailTab mailTab;
 	private FaxTab faxTab;
@@ -112,9 +118,11 @@ public class NotificationDialog extends AbstractTabDialog {
 	private SendTab sendTab;
 	private SendReportTab sendReportTab;
 
-	public void initAndPrepareBean(Task task) {
+	public NotificationDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(Task task) {
@@ -122,7 +130,7 @@ public class NotificationDialog extends AbstractTabDialog {
 	}
 
 	public boolean initBean(Task task, boolean resend) {
-	
+
 		setGeneralTab(new GeneralTab());
 		setMailTab(new MailTab());
 		setFaxTab(new FaxTab());
@@ -131,7 +139,8 @@ public class NotificationDialog extends AbstractTabDialog {
 		setSendTab(new SendTab());
 		setSendReportTab(new SendReportTab());
 
-		tabs = new AbstractTab[] { generalTab, mailTab, faxTab, letterTab, phoneTab, sendTab, sendReportTab };
+		tabs = new AbstractTabDialog.AbstractTab[] { generalTab, mailTab, faxTab, letterTab, phoneTab, sendTab,
+				sendReportTab };
 
 		super.initBean(task, Dialog.NOTIFICATION);
 
@@ -168,10 +177,11 @@ public class NotificationDialog extends AbstractTabDialog {
 
 	public void openSelectPDFDialog(Task task, AssociatedContact contact) {
 
-		List<DocumentTemplate> templates = DocumentTemplate.getTemplates(DocumentType.DIAGNOSIS_REPORT,
+		List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
 				DocumentType.DIAGNOSIS_REPORT_EXTERN);
-		List<AbstractDocumentUi<?>> subSelectUIs = templates.stream().map(p -> p.getDocumentUi())
-				.collect(Collectors.toList());
+
+		// getting ui objects
+		List<AbstractDocumentUi<?, ?>> printDocumentUIs = AbstractDocumentUi.factory(printDocuments);
 
 		ArrayList<ContactSelector> selectors = new ArrayList<ContactSelector>();
 
@@ -179,9 +189,9 @@ public class NotificationDialog extends AbstractTabDialog {
 		selectors.add(new ContactSelector(task,
 				new Person(resourceBundle.get("dialog.print.individualAddress"), new Contact()), ContactRole.NONE));
 
-		for (AbstractDocumentUi<?> documentUi : subSelectUIs) {
+		for (AbstractDocumentUi<?, ?> documentUi : printDocumentUIs) {
 			((DiagnosisReportUi) documentUi).initialize(task, selectors);
-			((DiagnosisReportUi) documentUi).setSingleSelect(true);
+			((DiagnosisReportUi) documentUi).getSharedData().setSingleSelect(true);
 			((DiagnosisReportUi) documentUi)
 					.setSelectedDiagnosis(task.getDiagnosisRevisions().get(task.getDiagnosisRevisions().size() - 1));
 		}
@@ -201,11 +211,11 @@ public class NotificationDialog extends AbstractTabDialog {
 	public void onSelectPDFDialogReturn(SelectEvent event) {
 		Object container = event.getComponent().getAttributes().get("container");
 
-		log.debug("On custom dialog return " + event.getObject() + " " + container);
+		logger.debug("On custom dialog return " + event.getObject() + " " + container);
 
 		if (event.getObject() != null && event.getObject() instanceof PDFContainer && container != null
 				&& container instanceof NotificationContainer) {
-			log.debug("Settign custom pdf for container "
+			logger.debug("Settign custom pdf for container "
 					+ ((NotificationContainer) container).getContact().getPerson().getFirstName());
 			((NotificationContainer) container).setPdf((PDFContainer) event.getObject());
 		}
@@ -221,8 +231,8 @@ public class NotificationDialog extends AbstractTabDialog {
 				container, false, false);
 
 		// setting info text
-		dialogHandlerAction.getMediaDialog()
-				.setActionDescription(resourceBundle.get("dialog.pdfOrganizer.headline.info.council", getTask().getTaskID()));
+		dialogHandlerAction.getMediaDialog().setActionDescription(
+				resourceBundle.get("dialog.pdfOrganizer.headline.info.council", getTask().getTaskID()));
 
 		// show dialog
 		dialogHandlerAction.getMediaDialog().prepareDialog();
@@ -236,9 +246,9 @@ public class NotificationDialog extends AbstractTabDialog {
 
 		protected boolean initialized;
 
-		protected List<DocumentTemplate> templateList;
+		protected List<PrintDocument> templateList;
 
-		protected DefaultTransformer<DocumentTemplate> templateTransformer;
+		protected DefaultTransformer<PrintDocument> templateTransformer;
 
 		/**
 		 * Updates the notification container list and if at least one notification for
@@ -246,7 +256,7 @@ public class NotificationDialog extends AbstractTabDialog {
 		 */
 		@Override
 		public void updateData() {
-			log.debug("Updating tab " + containerList.getNotificationTyp());
+			logger.debug("Updating tab " + containerList.getNotificationTyp());
 			containerList.updateList(task.getContacts(), containerList.getNotificationTyp());
 			containerList.setUse(containerList.getContainer().size() > 0);
 			setInitialized(true);
@@ -276,10 +286,11 @@ public class NotificationDialog extends AbstractTabDialog {
 		public boolean initTab() {
 			setContainerList(new NotificationContainerList(NotificationTyp.PRINT));
 
-			setTemplateList(
-					DocumentTemplate.getTemplates(DocumentType.DIAGNOSIS_REPORT, DocumentType.DIAGNOSIS_REPORT_EXTERN));
+			List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
+					DocumentType.DIAGNOSIS_REPORT_EXTERN);
 
-			setTemplateTransformer(new DefaultTransformer<DocumentTemplate>(getTemplateList()));
+			// getting ui objects
+			List<AbstractDocumentUi<?, ?>> printDocumentUIs = AbstractDocumentUi.factory(printDocuments);
 
 			getContainerList().setDefaultReport((DiagnosisReport) DocumentTemplate.getTemplateByID(getTemplateList(),
 					globalSettings.getDefaultDocuments().getNotificationDefaultPrintDocument()));
@@ -308,7 +319,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
 			getContainerList().setUse(true);
 
-			log.debug("General Data initialized");
+			logger.debug("General Data initialized");
 			return true;
 		}
 
@@ -357,7 +368,7 @@ public class NotificationDialog extends AbstractTabDialog {
 			setMailSubject(mail.getSubject());
 			setMailBody(mail.getBody());
 
-			log.debug("Mail data initialized");
+			logger.debug("Mail data initialized");
 			return true;
 		}
 	}
@@ -378,7 +389,7 @@ public class NotificationDialog extends AbstractTabDialog {
 			setContainerList(new NotificationContainerList(NotificationTyp.FAX));
 
 			getContainerList().setIndividualAddresses(true);
-			
+
 			setTemplateList(
 					DocumentTemplate.getTemplates(DocumentType.DIAGNOSIS_REPORT, DocumentType.DIAGNOSIS_REPORT_EXTERN));
 
@@ -391,7 +402,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
 			getContainerList().setPrint(false);
 
-			log.debug("Fax data initialized");
+			logger.debug("Fax data initialized");
 			return true;
 		}
 	}
@@ -412,7 +423,7 @@ public class NotificationDialog extends AbstractTabDialog {
 			setContainerList(new NotificationContainerList(NotificationTyp.LETTER));
 
 			getContainerList().setIndividualAddresses(true);
-			
+
 			setTemplateList(
 					DocumentTemplate.getTemplates(DocumentType.DIAGNOSIS_REPORT, DocumentType.DIAGNOSIS_REPORT_EXTERN));
 
@@ -423,7 +434,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
 			getContainerList().setPrint(true);
 
-			log.debug("Letter data initialized");
+			logger.debug("Letter data initialized");
 			return true;
 		}
 	}
@@ -443,7 +454,7 @@ public class NotificationDialog extends AbstractTabDialog {
 		public boolean initTab() {
 			setContainerList(new NotificationContainerList(NotificationTyp.PHONE));
 
-			log.debug("Phone data initialized");
+			logger.debug("Phone data initialized");
 			return true;
 		}
 	}
@@ -484,7 +495,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			log.debug("Update Data send");
+			logger.debug("Update Data send");
 
 			// mail
 			if (!mailTab.isInitialized())
@@ -528,11 +539,11 @@ public class NotificationDialog extends AbstractTabDialog {
 		// @Async("taskExecutor")
 		public void performeNotification() {
 
-			log.debug("Startin notification thread");
+			logger.debug("Startin notification thread");
 
 			try {
 				if (isNotificationRunning()) {
-					log.debug("Thread allready running, abort new request!");
+					logger.debug("Thread allready running, abort new request!");
 					return;
 				}
 
@@ -562,7 +573,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
 				// progressStepText("dialog.notification.sendProcess.success");
 
-				log.debug("Messaging ended");
+				logger.debug("Messaging ended");
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -670,7 +681,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			log.debug("Update Data sendReport");
+			logger.debug("Update Data sendReport");
 			// getting all sendreports
 			List<PDFContainer> lists = PDFGenerator.getPDFsofType(task.getAttachedPdfs(),
 					DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
@@ -694,7 +705,7 @@ public class NotificationDialog extends AbstractTabDialog {
 		}
 
 		public void onReturnDialog(SelectEvent event) {
-			log.debug("Dialog return");
+			logger.debug("Dialog return");
 			if (event.getObject() != null && event.getObject() instanceof Boolean
 					&& ((Boolean) event.getObject()).booleanValue())
 				hideDialog();

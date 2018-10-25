@@ -10,7 +10,7 @@
 	<p:outputPanel styleClass="headerPannel">
 		<h:outputLabel value="#{msg['dialog.notification.tab.send.headline']}" />
 		<h:outputLabel
-			rendered="#{dialogHandlerAction.notificationDialog.generalTab.temporaryNotification}"
+			rendered="#{dialog.notificationDialog.generalTab.temporaryNotification}"
 			value=" (#{msg['dialog.notification.tab.send.headline.temporaray']})"></h:outputLabel>
 	</p:outputPanel>
 
@@ -27,18 +27,18 @@
 				<!-- enable -->
 				<h:outputText value="#{msg['dialog.notification.tab.send.active']}"
 					styleClass="icon-green bigFont"
-					rendered="#{dialogHandlerAction.notificationDialog.mailTab.containerList.use}" />
+					rendered="#{dialog.notificationDialog.mailTab.containerList.use}" />
 
 				<!-- disable -->
 				<h:outputText
 					value="#{msg['dialog.notification.tab.send.inacitve']}"
-					rendered="#{!dialogHandlerAction.notificationDialog.mailTab.containerList.use}" />
+					rendered="#{!dialog.notificationDialog.mailTab.containerList.use}" />
 
 			</h:panelGroup>
 
 			<p:dataTable var="emailHolder"
 				styleClass="newStyleDataTable newStyleDataTable-HideColumnHeader"
-				value="#{dialogHandlerAction.notificationDialog.mailTab.containerList.containerToNotify}">
+				value="#{dialog.notificationDialog.mailTab.containerList.containerToNotify}">
 
 				<!-- name and email -->
 				<p:column>
@@ -75,17 +75,17 @@
 				<!-- enable -->
 				<h:outputText value="#{msg['dialog.notification.tab.send.active']}"
 					styleClass="icon-green bigFont"
-					rendered="#{dialogHandlerAction.notificationDialog.faxTab.containerList.use }" />
+					rendered="#{dialog.notificationDialog.faxTab.containerList.use }" />
 				<!-- disable -->
 				<h:outputText
 					value="#{msg['dialog.notification.tab.send.inacitve']}"
-					rendered="#{!dialogHandlerAction.notificationDialog.faxTab.containerList.use }" />
+					rendered="#{!dialog.notificationDialog.faxTab.containerList.use }" />
 
 			</h:panelGroup>
 
 			<p:dataTable var="faxHolder"
 				styleClass="newStyleDataTable newStyleDataTable-HideColumnHeader"
-				value="#{dialogHandlerAction.notificationDialog.faxTab.containerList.containerToNotify}">
+				value="#{dialog.notificationDialog.faxTab.containerList.containerToNotify}">
 
 				<!-- name and fax -->
 				<p:column>
@@ -125,18 +125,18 @@
 				<!-- enable -->
 				<h:outputText value="#{msg['dialog.notification.tab.send.active']}"
 					styleClass="icon-green bigFont"
-					rendered="#{dialogHandlerAction.notificationDialog.letterTab.containerList.use }" />
+					rendered="#{dialog.notificationDialog.letterTab.containerList.use }" />
 
 				<!-- disable -->
 				<h:outputText
 					value="#{msg['dialog.notification.tab.send.inacitve']}"
-					rendered="#{!dialogHandlerAction.notificationDialog.letterTab.containerList.use }" />
+					rendered="#{!dialog.notificationDialog.letterTab.containerList.use }" />
 
 			</h:panelGroup>
 
 			<p:dataTable var="letterHolder"
 				styleClass="newStyleDataTable newStyleDataTable-HideColumnHeader"
-				value="#{dialogHandlerAction.notificationDialog.letterTab.containerList.containerToNotify}">
+				value="#{dialog.notificationDialog.letterTab.containerList.containerToNotify}">
 
 				<!-- name -->
 				<p:column>
@@ -173,18 +173,18 @@
 				<!-- enable -->
 				<h:outputText value="#{msg['dialog.notification.tab.send.active']}"
 					styleClass="icon-green bigFont"
-					rendered="#{dialogHandlerAction.notificationDialog.phoneTab.containerList.use }" />
+					rendered="#{dialog.notificationDialog.phoneTab.containerList.use }" />
 
 				<!-- disable -->
 				<h:outputText
 					value="#{msg['dialog.notification.tab.send.inacitve']}"
-					rendered="#{!dialogHandlerAction.notificationDialog.phoneTab.containerList.use }" />
+					rendered="#{!dialog.notificationDialog.phoneTab.containerList.use }" />
 
 			</h:panelGroup>
 
 			<p:dataTable var="phoneHolder"
 				styleClass="newStyleDataTable newStyleDataTable-HideColumnHeader"
-				value="#{dialogHandlerAction.notificationDialog.phoneTab.containerList.containerToNotify}">
+				value="#{dialog.notificationDialog.phoneTab.containerList.containerToNotify}">
 				<p:column>
 					<!-- name -->
 					<h:outputLabel
@@ -205,13 +205,13 @@
 		<h:panelGrid columns="1" styleClass="newStyleListingTable"
 			style="width:100%; margin-top:20px;">
 			<h:outputText
-				value="#{dialogHandlerAction.notificationDialog.sendTab.feedback} (#{dialogHandlerAction.notificationDialog.sendTab.progressPercent}%)"
+				value="#{dialog.notificationDialog.sendTab.feedback} (#{dialog.notificationDialog.sendTab.progressPercent}%)"
 				id="progressLable"
-				style="border: 1px solid; width:90%;display:block; text-align:center; background: linear-gradient(90deg, #fcf1b8 #{dialogHandlerAction.notificationDialog.sendTab.progressPercent}%, transparent 0%);margin: 0px auto;" />
+				style="border: 1px solid; width:90%;display:block; text-align:center; background: linear-gradient(90deg, #fcf1b8 #{dialog.notificationDialog.sendTab.progressPercent}%, transparent 0%);margin: 0px auto;" />
 
 			<p:poll autoStart="false" widgetVar="ajaxProgressPoll"
 				partialSubmit="true" process="@this"
-				stop="#{dialogHandlerAction.notificationDialog.sendTab.notificationCompleted}"
+				stop="#{dialog.notificationDialog.sendTab.notificationCompleted}"
 				update="progressLable summaryTable" interval="1" />
 		</h:panelGrid>
 
@@ -246,23 +246,23 @@
 						value="#{msg['dialog.notification.tab.send.perform']}"
 						icon="fa fa-fw fa-mail-forward"
 						title="#{msg['dialog.notification.tab.send.perform.text']}"
-						rendered="#{!dialogHandlerAction.notificationDialog.sendTab.notificationCompleted}"
+						rendered="#{!dialog.notificationDialog.sendTab.notificationCompleted}"
 						onstart="PF('blockUIWidget').block()"
 						onclick="performeNotificationCommand();PF('startNotificationButton').disable();PF('ajaxProgressPoll').start();"
 						widgetVar="startNotificationButton" />
 
 					<p:remoteCommand async="true" name="performeNotificationCommand"
-						actionListener="#{dialogHandlerAction.notificationDialog.sendTab.performeNotification()}"></p:remoteCommand>
+						actionListener="#{dialog.notificationDialog.sendTab.performeNotification()}"></p:remoteCommand>
 
 					<p:remoteCommand name="onNotificationCompleted" update="@form"
 						onstart="PF('blockUIWidget').unblock()"
-						actionListener="#{dialogHandlerAction.notificationDialog.nextTab()}"></p:remoteCommand>
+						actionListener="#{dialog.notificationDialog.nextTab()}"></p:remoteCommand>
 				</h:panelGroup>
 
 				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle"
-					actionListener="#{dialogHandlerAction.notificationDialog.hideDialog()}" />
+					actionListener="#{dialog.notificationDialog.hideDialog()}" />
 
 			</h:panelGrid>
 		</h:panelGrid>

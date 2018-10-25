@@ -21,7 +21,7 @@
 			<h:outputLabel value="#{msg['dialog.notification.tab.letter.use']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				value="#{dialogHandlerAction.notificationDialog.letterTab.containerList.use}"
+				value="#{dialog.notificationDialog.letterTab.containerList.use}"
 				title="#{msg['dialog.notification.tab.letter.use.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -30,8 +30,8 @@
 			<h:outputLabel value="#{msg['dialog.notification.tab.letter.print']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				disabled="#{!dialogHandlerAction.notificationDialog.letterTab.containerList.use}"
-				value="#{dialogHandlerAction.notificationDialog.letterTab.containerList.print}"
+				disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
+				value="#{dialog.notificationDialog.letterTab.containerList.print}"
 				title="#{msg['dialog.notification.tab.letter.print.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -41,8 +41,8 @@
 				value="#{msg['dialog.notification.tab.letter.individualAddress']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				disabled="#{!dialogHandlerAction.notificationDialog.letterTab.containerList.use}"
-				value="#{dialogHandlerAction.notificationDialog.letterTab.containerList.individualAddresses}"
+				disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
+				value="#{dialog.notificationDialog.letterTab.containerList.individualAddresses}"
 				title="#{msg['dialog.notification.tab.letter.individualAddress.text']}">
 				<p:ajax event="change" process="@this" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -52,13 +52,13 @@
 				value="#{msg['dialog.notification.tab.letter.pdfTemplate']}"
 				styleClass="bigFont" />
 			<p:selectOneMenu
-				value="#{dialogHandlerAction.notificationDialog.letterTab.containerList.defaultReport}"
-				converter="#{dialogHandlerAction.notificationDialog.letterTab.templateTransformer}"
-				disabled="#{!dialogHandlerAction.notificationDialog.letterTab.containerList.use}"
+				value="#{dialog.notificationDialog.letterTab.containerList.defaultReport}"
+				converter="#{dialog.notificationDialog.letterTab.templateTransformer}"
+				disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
 				styleClass="customSerachSelectMenu">
 
 				<f:selectItems
-					value="#{dialogHandlerAction.notificationDialog.letterTab.templateList}"
+					value="#{dialog.notificationDialog.letterTab.templateList}"
 					var="template" itemLabel="#{template.name}" itemValue="#{template}" />
 
 				<p:ajax update="@this" event="change" process="@form" />
@@ -70,7 +70,7 @@
 				styleClass="bigFont" />
 			<p:dataTable var="container" scrollable="true" scrollHeight="200"
 				style="width:96%" styleClass="newStyleDataTable"
-				value="#{dialogHandlerAction.notificationDialog.letterTab.containerList.container}">
+				value="#{dialog.notificationDialog.letterTab.containerList.container}">
 
 				<!-- name of receiver -->
 				<p:column
@@ -99,7 +99,7 @@
 					</f:facet>
 
 					<p:selectBooleanCheckbox
-						disabled="#{!dialogHandlerAction.notificationDialog.letterTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
 						value="#{container.perform}">
 						<p:ajax event="change" update="@form" />
 					</p:selectBooleanCheckbox>
@@ -114,14 +114,14 @@
 					<!-- add pdf, if pdf == null -->
 					<p:commandLink styleClass="noUnderlineAtLink"
 						rendered="#{container.pdf eq null and container.perform}"
-						disabled="#{!dialogHandlerAction.notificationDialog.letterTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.info']}"
 						execute="@this" onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
-						actionListener="#{dialogHandlerAction.notificationDialog.openSelectPDFDialog(dialogHandlerAction.notificationDialog.task, container.contact)}">
+						actionListener="#{dialog.notificationDialog.openSelectPDFDialog(dialog.notificationDialog.task, container.contact)}">
 
 						<p:ajax event="dialogReturn" update="@form" process="@form"
-							listener="#{dialogHandlerAction.notificationDialog.onSelectPDFDialogReturn}" />
+							listener="#{dialog.notificationDialog.onSelectPDFDialogReturn}" />
 
 						<i class="fa fa-fw fa-file-pdf-o" />
 					</p:commandLink>
@@ -131,8 +131,8 @@
 						rendered="#{container.pdf ne null and container.perform}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.show']}"
 						execute="@this"
-						disabled="#{!dialogHandlerAction.notificationDialog.letterTab.containerList.use}"
-						actionListener="#{dialogHandlerAction.notificationDialog.openMediaViewDialog(container.pdf)}">
+						disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
+						actionListener="#{dialog.notificationDialog.openMediaViewDialog(container.pdf)}">
 
 						<i class="fa fa-search icon-grey" />
 					</p:commandLink>
@@ -143,7 +143,7 @@
 						rendered="#{container.pdf ne null and container.perform}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.remove']}"
 						execute="@this"
-						disabled="#{!dialogHandlerAction.notificationDialog.letterTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
 						update="@form" actionListener="#{container.setPdf(null)}">
 
 						<i class="fa fa-close icon-grey" />
@@ -163,9 +163,9 @@
 				<p:commandButton
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
 					icon="fa fa-fw fa-cog" process="@form"
-					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
 					<p:ajax event="dialogReturn" update="@form"
-						listener="#{dialogHandlerAction.notificationDialog.letterTab.updateData()}" />
+						listener="#{dialog.notificationDialog.letterTab.updateData()}" />
 				</p:commandButton>
 			</h:panelGrid>
 
@@ -173,19 +173,19 @@
 				<!-- previouse -->
 				<p:commandButton value="#{msg['general.back']}"
 					icon="fa fa-fw fa-arrow-left"
-					actionListener="#{dialogHandlerAction.notificationDialog.previousTab()}"
+					actionListener="#{dialog.notificationDialog.previousTab()}"
 					process="@form" update="@form" />
 
 				<!-- next -->
 				<p:commandButton value="#{msg['general.next']}"
 					icon="fa fa-fw fa-arrow-right"
-					actionListener="#{dialogHandlerAction.notificationDialog.nextTab()}"
+					actionListener="#{dialog.notificationDialog.nextTab()}"
 					process="@form" update="@form" />
 
 				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle"
-					actionListener="#{dialogHandlerAction.notificationDialog.hideDialog()}" />
+					actionListener="#{dialog.notificationDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

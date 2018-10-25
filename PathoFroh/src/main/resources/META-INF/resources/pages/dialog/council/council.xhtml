@@ -206,7 +206,7 @@
 
 													<!-- created date-->
 													<h:outputText
-														value="#{msg['dialog.pdfOrganizer.files.createdOn']}"></h:outputText>
+														value="#{msg['component.auditTable.createdOn']}"></h:outputText>
 													<h:outputText value="#{node.container.audit.createdOn}">
 														<f:convertDateTime type="date"
 															pattern="dd.MM.yyyy HH:mm:ss" />
@@ -214,13 +214,13 @@
 
 													<!-- created name-->
 													<h:outputText
-														value="#{msg['dialog.pdfOrganizer.files.createdBy']}"></h:outputText>
+														value="#{msg['component.auditTable.createdBy']}"></h:outputText>
 													<h:outputText value="#{node.container.audit.createdBy}">
 													</h:outputText>
 
 													<!-- updated date-->
 													<h:outputText
-														value="#{msg['dialog.pdfOrganizer.files.updatedOn']}"></h:outputText>
+														value="#{msg['component.auditTable.updatedOn']}"></h:outputText>
 													<h:outputText
 														style="#{node.container.audit.updatedOn eq 0 ? 'display:none' : ''}"
 														value="#{node.container.audit.updatedOn}">
@@ -230,7 +230,7 @@
 
 													<!-- updated name-->
 													<h:outputText
-														value="#{msg['dialog.pdfOrganizer.files.updatedBy']}"></h:outputText>
+														value="#{msg['component.auditTable.updatedBy']}"></h:outputText>
 													<h:outputText value="#{node.container.audit.updatedBy}">
 													</h:outputText>
 

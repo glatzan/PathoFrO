@@ -40,6 +40,11 @@ public class PDFStreamContainer {
 
 	protected PDFContainer tooltip;
 
+	public void reset() {
+		this.displayPDF = null;
+		this.tooltip = null;
+	}
+
 	/**
 	 * Returns the thumbnail als stream
 	 * 

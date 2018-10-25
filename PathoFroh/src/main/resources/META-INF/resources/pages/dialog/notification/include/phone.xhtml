@@ -21,7 +21,7 @@
 			<h:outputLabel value="#{msg['dialog.notification.tab.phone.use']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				value="#{dialogHandlerAction.notificationDialog.phoneTab.containerList.use}"
+				value="#{dialog.notificationDialog.phoneTab.containerList.use}"
 				title="#{msg['dialog.notification.tab.phone.use.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -32,7 +32,7 @@
 				styleClass="bigFont" />
 
 			<p:dataTable var="container" styleClass="newStyleDataTable"
-				value="#{dialogHandlerAction.notificationDialog.phoneTab.containerList.defaultReport}">
+				value="#{dialog.notificationDialog.phoneTab.containerList.defaultReport}">
 
 				<!-- name of receiver -->
 				<p:column
@@ -45,7 +45,7 @@
 					headerText="#{msg['dialog.notification.tab.phone.receiver.number']}"
 					style="width:auto">
 					<p:inputText value="#{container.contactAddress}"
-						disabled="#{!dialogHandlerAction.notificationDialog.phoneTab.containerList.use or !container.perform}"
+						disabled="#{!dialog.notificationDialog.phoneTab.containerList.use or !container.perform}"
 						styleClass="smallInput" style="width:98%" />
 				</p:column>
 
@@ -57,7 +57,7 @@
 					</f:facet>
 
 					<p:selectBooleanCheckbox
-						disabled="#{!dialogHandlerAction.notificationDialog.phoneTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.phoneTab.containerList.use}"
 						value="#{container.perform}">
 						<p:ajax event="change" update="@form" />
 					</p:selectBooleanCheckbox>
@@ -75,9 +75,9 @@
 				<p:commandButton process="@form"
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
 					icon="fa fa-fw fa-cog"
-					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
 					<p:ajax event="dialogReturn" update="@form"
-						listener="#{dialogHandlerAction.notificationDialog.phoneTab.updateData()}" />
+						listener="#{dialog.notificationDialog.phoneTab.updateData()}" />
 				</p:commandButton>
 			</h:panelGrid>
 
@@ -85,19 +85,19 @@
 				<!-- previouse -->
 				<p:commandButton value="#{msg['general.back']}"
 					icon="fa fa-fw fa-arrow-left"
-					actionListener="#{dialogHandlerAction.notificationDialog.previousTab()}"
+					actionListener="#{dialog.notificationDialog.previousTab()}"
 					process="@form" update="@form" />
 
 				<!-- next -->
 				<p:commandButton value="#{msg['general.next']}"
 					icon="fa fa-fw fa-arrow-right"
-					actionListener="#{dialogHandlerAction.notificationDialog.nextTab()}"
+					actionListener="#{dialog.notificationDialog.nextTab()}"
 					process="@form" update="@form" />
 
 				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle"
-					actionListener="#{dialogHandlerAction.notificationDialog.hideDialog()}" />
+					actionListener="#{dialog.notificationDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

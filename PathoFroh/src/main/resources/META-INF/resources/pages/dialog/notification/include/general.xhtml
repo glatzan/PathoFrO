@@ -23,7 +23,7 @@
 			<h:outputLabel value="#{msg['dialog.notification.tab.general.use']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				value="#{dialogHandlerAction.notificationDialog.generalTab.containerList.use}"
+				value="#{dialog.notificationDialog.generalTab.containerList.use}"
 				title="#{msg['dialog.notification.tab.general.use.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -32,16 +32,16 @@
 			<h:outputLabel styleClass="bigFont"
 				value="#{msg['dialog.notification.tab.general.additionalPrints.tempalte']}" />
 			<p:selectOneMenu
-				disabled="#{!dialogHandlerAction.notificationDialog.generalTab.containerList.use}"
-				value="#{dialogHandlerAction.notificationDialog.generalTab.containerList.defaultReport}"
-				converter="#{dialogHandlerAction.notificationDialog.generalTab.templateTransformer}"
+				disabled="#{!dialog.notificationDialog.generalTab.containerList.use}"
+				value="#{dialog.notificationDialog.generalTab.containerList.defaultReport}"
+				converter="#{dialog.notificationDialog.generalTab.templateTransformer}"
 				styleClass="customSerachSelectMenu">
 
 				<f:selectItem itemValue="#{null}"
 					itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}"></f:selectItem>
 
 				<f:selectItems
-					value="#{dialogHandlerAction.notificationDialog.generalTab.templateList}"
+					value="#{dialog.notificationDialog.generalTab.templateList}"
 					var="template" itemLabel="#{template.name}" itemValue="#{template}" />
 
 				<p:ajax update="@this" event="change" process="@this"
@@ -53,8 +53,8 @@
 				value="#{msg['dialog.notification.tab.general.additionalPrints.count']} "
 				title="#{msg['dialog.notification.tab.send.count']}" />
 			<p:spinner
-				disabled="#{!dialogHandlerAction.notificationDialog.generalTab.containerList.use}"
-				value="#{dialogHandlerAction.notificationDialog.generalTab.containerList.printCount}"
+				disabled="#{!dialog.notificationDialog.generalTab.containerList.use}"
+				value="#{dialog.notificationDialog.generalTab.containerList.printCount}"
 				styleClass="oneNumberSpinner" min="0" max="9" />
 		</h:panelGrid>
 
@@ -75,11 +75,11 @@
 
 
 			<p:selectOneMenu
-				converter="#{dialogHandlerAction.notificationDialog.generalTab.diagnosesTransformer}"
-				value="#{dialogHandlerAction.notificationDialog.generalTab.selectedDiagnosis}">
+				converter="#{dialog.notificationDialog.generalTab.diagnosesTransformer}"
+				value="#{dialog.notificationDialog.generalTab.selectedDiagnosis}">
 
 				<f:selectItems
-					value="#{dialogHandlerAction.notificationDialog.generalTab.diagnoses}"
+					value="#{dialog.notificationDialog.generalTab.diagnoses}"
 					var="diagnosis"
 					itemLabel="#{diagnosis.name} #{diagnosis.notificationPending ? msg['dialog.notification.tab.general.notification.pending'] : ''}"
 					itemValue="#{diagnosis}" />
@@ -91,7 +91,7 @@
 				value="#{msg['dialog.notification.tab.general.temporaryNotification']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				value="#{dialogHandlerAction.notificationDialog.generalTab.temporaryNotification}"
+				value="#{dialog.notificationDialog.generalTab.temporaryNotification}"
 				title="#{msg['dialog.notification.tab.general.temporaryNotification.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -108,9 +108,9 @@
 				<p:commandButton process="@form"
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
 					icon="fa fa-fw fa-cog"
-					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
 					<p:ajax event="dialogReturn" update="@form"
-						listener="#{dialogHandlerAction.notificationDialog.phoneTab.updateData()}" />
+						listener="#{dialog.notificationDialog.phoneTab.updateData()}" />
 				</p:commandButton>
 			</h:panelGrid>
 
@@ -119,13 +119,13 @@
 				<!-- next -->
 				<p:commandButton value="#{msg['general.next']}"
 					icon="fa fa-fw fa-arrow-right"
-					actionListener="#{dialogHandlerAction.notificationDialog.nextTab()}"
+					actionListener="#{dialog.notificationDialog.nextTab()}"
 					process="@form" update="@form" />
 
 				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle"
-					actionListener="#{dialogHandlerAction.notificationDialog.hideDialog()}" />
+					actionListener="#{dialog.notificationDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>

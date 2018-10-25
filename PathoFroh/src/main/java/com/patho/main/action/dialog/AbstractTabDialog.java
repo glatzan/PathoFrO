@@ -5,12 +5,10 @@ import com.patho.main.model.patient.Task;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Getter
 @Setter
-public abstract class AbstractTabDialog extends AbstractDialog {
+public abstract class AbstractTabDialog<T extends AbstractTabDialog<?>> extends AbstractDialog<T> {
 
 	protected AbstractTab[] tabs;
 
@@ -33,13 +31,13 @@ public abstract class AbstractTabDialog extends AbstractDialog {
 	}
 
 	public void onTabChange(AbstractTab tab) {
-		log.debug("Changing tab to " + tab.getName());
+		logger.debug("Changing tab to " + tab.getName());
 		setSelectedTab(tab);
 		tab.updateData();
 	}
 
 	public void nextTab() {
-		log.trace("Next tab");
+		logger.trace("Next tab");
 		for (int i = 0; i < tabs.length; i++) {
 			if (tabs[i] == selectedTab) {
 				while (i++ <= tabs.length - 1) {
@@ -53,7 +51,7 @@ public abstract class AbstractTabDialog extends AbstractDialog {
 	}
 
 	public void previousTab() {
-		log.trace("Previous step");
+		logger.trace("Previous step");
 		for (int i = 0; i < tabs.length; i++) {
 			if (tabs[i] == selectedTab) {
 				while (--i >= 0) {

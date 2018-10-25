@@ -157,6 +157,9 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 	 */
 	private List<ListItem> attachmentList;
 
+	/**
+	 * Container for PDF display
+	 */
 	private PDFStreamContainer streamContainer;
 
 	/**
@@ -190,6 +193,8 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 		setSelectedNode(null);
 		setSelectedCouncil(null);
 
+		getStreamContainer().reset();
+
 		// reload task in order to load councils
 		update(true);
 
@@ -219,6 +224,7 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 			setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), true, true, true, true, true).get());
 
 			if (getCouncilList() != null && getCouncilList().size() > 0) {
+
 				List<Council> coucils = new ArrayList<Council>(getTask().getCouncils());
 				List<Council> foundCouncils = new ArrayList<Council>();
 				List<CouncilContainer> oldContainers = new ArrayList<CouncilContainer>();
@@ -416,7 +422,8 @@ public class CouncilDialog extends AbstractDialog<CouncilDialog> {
 
 	private void selectNode(CouncilContainer container, int child) {
 		for (TreeNode node : getCouncilNodes()) {
-			if (((CouncilContainer) node.getData()).getCouncil().equals(container)) {
+			if (((CouncilContainer) node.getData()).getCouncil().equals(container)
+					&& node.getType().equals("council")) {
 				if (child < node.getChildCount())
 					setSelectedNode(node.getChildren().get(child));
 			}

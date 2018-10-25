@@ -18,6 +18,7 @@ import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
 import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.notification.ContactSelectDialog;
+import com.patho.main.action.dialog.notification.NotificationDialog;
 import com.patho.main.action.dialog.patient.PatientLogDialog;
 import com.patho.main.action.dialog.patient.SearchPatientDialog;
 import com.patho.main.action.dialog.print.CustomAddressDialog;
@@ -70,4 +71,5 @@ public class DialogHandler {
 	private CouncilDialog councilDialog = new CouncilDialog();
 	private SettingsDialog settingsDialog = new SettingsDialog();
 	private FavouriteListEditDialog favouriteListEditDialog = new FavouriteListEditDialog();
+	private NotificationDialog notificationDialog = new NotificationDialog();
 }

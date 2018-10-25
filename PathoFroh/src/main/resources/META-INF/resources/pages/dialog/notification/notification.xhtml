@@ -28,14 +28,14 @@
 					<!-- notification -->
 					<h:outputLabel value="#{msg['dialog.notification.headline']}" />
 					<h:outputLabel
-						rendered="#{dialogHandlerAction.notificationDialog.generalTab.temporaryNotification}"
+						rendered="#{dialog.notificationDialog.generalTab.temporaryNotification}"
 						value=" #{msg['dialog.notification.headline.temporary']}" />
 
 				</h:panelGroup>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					immediate="true" styleClass="noUnderlineAtLink">
 					<f:actionListener
-						binding="#{dialogHandlerAction.notificationDialog.hideDialog()}" />
+						binding="#{dialog.notificationDialog.hideDialog()}" />
 					<i class="fa fa-fw fa-times icon-grey" />
 				</p:commandLink>
 			</h:panelGrid>
@@ -44,18 +44,18 @@
 		<h:panelGrid columns="2" styleClass="newTableContainer contentTable"
 			columnClasses="column200px columnTop,columnTop">
 			<p:outputPanel id="navigationTable" styleClass="navigationTable">
-				<c:forEach items="#{dialogHandlerAction.notificationDialog.tabs}"
+				<c:forEach items="#{dialog.notificationDialog.tabs}"
 					var="tab" varStatus="loop">
 					<p:commandButton value="#{msg[tab.name]}"
 						disabled="#{tab.disabled}"
-						styleClass="#{tab eq dialogHandlerAction.notificationDialog.selectedTab ? 'selectedButton' : ''} #{tab.isParent() ? 'childButton' : ''}"
-						actionListener="#{dialogHandlerAction.notificationDialog.onTabChange(tab)}"
+						styleClass="#{tab eq dialog.notificationDialog.selectedTab ? 'selectedButton' : ''} #{tab.isParent() ? 'childButton' : ''}"
+						actionListener="#{dialog.notificationDialog.onTabChange(tab)}"
 						update="navigationTable dialogContent" />
 				</c:forEach>
 			</p:outputPanel>
 			<p:outputPanel id="dialogContent" styleClass="dialogContent">
 				<ui:include
-					src="#{dialogHandlerAction.notificationDialog.selectedTab.centerInclude}" />
+					src="#{dialog.notificationDialog.selectedTab.centerInclude}" />
 			</p:outputPanel>
 		</h:panelGrid>
 

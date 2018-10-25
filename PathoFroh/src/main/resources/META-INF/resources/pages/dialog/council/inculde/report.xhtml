@@ -21,7 +21,7 @@
 		<h:panelGrid id="content"
 			styleClass="defaultHistoHiddenTableContainer noupdate"
 			style="width:calc(100% - 5px)">
-			<pe:documentViewer height="650" style="margin-left:5px;"
+			<pe:documentViewer height="610" style="margin-left:5px;"
 				class="noupdate"
 				rendered="#{dialog.councilDialog.streamContainer.renderPDF()}"
 				value="#{dialog.councilDialog.streamContainer.getPDF()}"
@@ -44,7 +44,7 @@
 					<f:actionListener
 						binding="#{dialog.councilDialog.printCouncilReport()}" />
 				</p:commandButton>
-				
+
 				<!-- Close Button -->
 				<p:commandButton value="#{msg['general.close']}"
 					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"

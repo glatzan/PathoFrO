@@ -17,26 +17,56 @@
 
 	<p:outputPanel styleClass="bodyPannel" style="padding:10px;">
 
-		<h:panelGrid styleClass="defaultHistoTable" columns="2" columnClasses="columnWidth150"> 
+		<h:panelGrid styleClass="defaultHistoTable" columns="2"
+			columnClasses="columnWidth150">
 
-			<h:outputLabel value="Anfrage gestellt am"></h:outputLabel>
-			<h:outputText
-				value="#{dialog.councilDialog.selectedCouncil.councilRequestCompletedDate}">
-				<f:convertDateTime pattern="dd.MM.yyyy" />
-			</h:outputText>
+			<!-- request -->
+			<h:outputLabel value="#{msg['dialog.council.diagnosis.requst']}"></h:outputLabel>
+			<h:panelGroup>
+				<h:outputText
+					rendered="#{dialog.councilDialog.selectedCouncil.councilRequestCompleted}"
+					value="#{dialog.councilDialog.selectedCouncil.councilRequestCompletedDate}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:outputText>
 
-			<h:outputLabel value="Versendet am"></h:outputLabel>
-			<h:outputText
-				value="#{dialog.councilDialog.selectedCouncil.sampleShippedDate}">
-				<f:convertDateTime pattern="dd.MM.yyyy" />
-			</h:outputText>
+				<h:outputText
+					rendered="#{!dialog.councilDialog.selectedCouncil.councilRequestCompleted}"
+					value="#{msg['dialog.council.diagnosis.noCompleted']}"
+					styleClass="icon-red">
+				</h:outputText>
 
+			</h:panelGroup>
 
-			<h:outputLabel value="Antwort erhalten am"></h:outputLabel>
-			<h:outputText
-				value="#{dialog.councilDialog.selectedCouncil.replyReceivedDate}">
-				<f:convertDateTime pattern="dd.MM.yyyy" />
-			</h:outputText>
+			<!-- ship -->
+			<h:outputLabel value="#{msg['dialog.council.diagnosis.ship']}"></h:outputLabel>
+			<h:panelGroup>
+				<h:outputText
+					rendered="#{dialog.councilDialog.selectedCouncil.sampleShipped}"
+					value="#{dialog.councilDialog.selectedCouncil.sampleShippedDate}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:outputText>
+				<h:outputText
+					rendered="#{!dialog.councilDialog.selectedCouncil.sampleShipped}"
+					value="#{msg['dialog.council.diagnosis.noCompleted']}"
+					styleClass="icon-red">
+				</h:outputText>
+			</h:panelGroup>
+
+			<!-- reply -->
+			<h:outputLabel value="#{msg['dialog.council.diagnosis.reply']}"></h:outputLabel>
+			<h:panelGroup>
+				<h:outputText
+					rendered="#{dialog.councilDialog.selectedCouncil.replyReceived}"
+					value="#{dialog.councilDialog.selectedCouncil.replyReceivedDate}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:outputText>
+
+				<h:outputText
+					rendered="#{!dialog.councilDialog.selectedCouncil.replyReceived}"
+					value="#{msg['dialog.council.diagnosis.noCompleted']}"
+					styleClass="icon-red">
+				</h:outputText>
+			</h:panelGroup>
 		</h:panelGrid>
 
 	</p:outputPanel>
@@ -53,12 +83,14 @@
 
 			<h:panelGrid columns="3" styleClass="newTableContainer right">
 
-				<p:commandButton value="Konsil abschließen"
-					style="margin-right:30px !important;"
-					disabled="#{!dialog.councilDialog.selectedCouncil.replyReceived}"
+				<!-- end council -->
+				<p:commandButton value="#{msg['dialog.council.button.endCouncil']}"
+					style="margin-right:30px !important;" update="@form"
+					rendered="#{!dialog.councilDialog.selectedCouncil.councilCompleted}"
+					disabled="#{!(dialog.councilDialog.selectedCouncil.replyReceived and dialog.councilDialog.selectedCouncil.sampleShipped and dialog.councilDialog.selectedCouncil.councilRequestCompleted)}"
 					icon="fa fa-check-circle-o">
 					<f:actionListener
-						binding="#{dialog.councilDialog.onReplyReceived()}"></f:actionListener>
+						binding="#{dialog.councilDialog.onCouncilCompleted()}"></f:actionListener>
 				</p:commandButton>
 
 				<!-- print -->

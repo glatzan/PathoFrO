@@ -19,7 +19,7 @@
 
 
 	<p:outputPanel styleClass="bodyPannel"
-		rendered="#{dialogHandlerAction.notificationDialog.sendReportTab.sendReportAvailable}"
+		rendered="#{dialog.notificationDialog.sendReportTab.sendReportAvailable}"
 		style="height: calc(100vh - 130px)">
 		<p:media player="pdf" cache="true"
 			value="#{dialogHandlerAction.mediaDialog.pdfContent}" width="100%"
@@ -27,7 +27,7 @@
 	</p:outputPanel>
 
 	<h:panelGrid columns="1" styleClass="newTableContainer"
-		rendered="#{!dialogHandlerAction.notificationDialog.sendReportTab.sendReportAvailable}"
+		rendered="#{!dialog.notificationDialog.sendReportTab.sendReportAvailable}"
 		style="width: 100% !important;height: calc( 100vh - 110px )!important;"
 		columnClasses="columnMiddle columnTextCenter">
 
@@ -41,8 +41,8 @@
 
 			<h:panelGrid columns="2" styleClass="newTableContainer left">
 				<p:selectOneMenu
-					rendered="#{dialogHandlerAction.notificationDialog.sendReportTab.sendReportAvailable}"
-					converter="#{dialogHandlerAction.notificationDialog.sendReportTab.sendReportConverter}"
+					rendered="#{dialog.notificationDialog.sendReportTab.sendReportAvailable}"
+					converter="#{dialog.notificationDialog.sendReportTab.sendReportConverter}"
 					title="#{msg['body.worklist.header.view']}"
 					value="#{dialogHandlerAction.mediaDialog.PDFContainerToRender}">
 
@@ -59,7 +59,7 @@
 
 				<!-- Download -->
 				<p:commandButton
-					rendered="#{dialogHandlerAction.notificationDialog.sendReportTab.sendReportAvailable}"
+					rendered="#{dialog.notificationDialog.sendReportTab.sendReportAvailable}"
 					value="#{msg['dialog.notification.tab.sendReport.button.download']}"
 					icon="fa fa-download" ajax="false"
 					disabled="#{dialogHandlerAction.mediaDialog.PDFContainerToRender eq null}"
@@ -76,13 +76,13 @@
 					value="#{msg['dialog.notification.tab.sendReport.button.resend']}"
 					icon="fa fa-mail-forward" update="@form"
 					title="#{msg['dialog.notification.tab.sendReport.button.resend.text']}"
-					actionListener="#{dialogHandlerAction.notificationDialog.sendReportTab.repeatNotification()}" />
+					actionListener="#{dialog.notificationDialog.sendReportTab.repeatNotification()}" />
 
 				<h:panelGroup>
 					<!--  archive task and end notification phase -->
 					<p:splitButton
 						value="#{msg['dialog.notification.tab.sendReport.button.archive']}"
-						rendered="#{!dialogHandlerAction.notificationDialog.generalTab.temporaryNotification and userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
+						rendered="#{!dialog.notificationDialog.generalTab.temporaryNotification and userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
 						onclick="$('#adminForm\\:archiveTaskDialog').click();"
 						icon="fa fa-archive">
 
@@ -96,8 +96,8 @@
 					<!-- end diagnosis phase if other things diagnosis are not approved jet -->
 					<p:splitButton
 						value="#{msg['dialog.notification.tab.sendReport.button.end']}"
-						rendered="#{dialogHandlerAction.notificationDialog.generalTab.temporaryNotification or !userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
-						disabled="#{!dialogHandlerAction.notificationDialog.task.taskStatus.editable}"
+						rendered="#{dialog.notificationDialog.generalTab.temporaryNotification or !userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
+						disabled="#{!dialog.notificationDialog.task.taskStatus.editable}"
 						onclick="$('#adminForm\\:endNotificationPhase').click();"
 						icon="fa fa-volume-off">
 
@@ -110,16 +110,16 @@
 					</p:splitButton>
 
 					<p:commandButton id="archiveTaskDialog" style="display:none"
-						actionListener="#{dialogHandlerAction.archiveTaskDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+						actionListener="#{dialogHandlerAction.archiveTaskDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
 						<p:ajax event="dialogReturn"
-							listener="#{dialogHandlerAction.notificationDialog.sendReportTab.onReturnDialog}" />
+							listener="#{dialog.notificationDialog.sendReportTab.onReturnDialog}" />
 					</p:commandButton>
 
 					<!-- end diagnosis phase -->
 					<p:commandButton id="endNotificationPhase" style="display:none"
-						actionListener="#{dialogHandlerAction.notificationPhaseExitDialog.initAndPrepareBean(dialogHandlerAction.notificationDialog.task)}">
+						actionListener="#{dialogHandlerAction.notificationPhaseExitDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
 						<p:ajax event="dialogReturn"
-							listener="#{dialogHandlerAction.notificationDialog.sendReportTab.onReturnDialog}" />
+							listener="#{dialog.notificationDialog.sendReportTab.onReturnDialog}" />
 					</p:commandButton>
 				</h:panelGroup>
 
