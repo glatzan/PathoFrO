@@ -64,6 +64,12 @@ public class NotificationContainer {
 		this.notification = notification;
 		this.faildPreviously = notification.isFailed();
 		this.perform = true;
+
+		initAddressForNotificationType();
+	}
+
+	public long getId() {
+		return getNotification().getId();
 	}
 
 	/**
@@ -83,8 +89,8 @@ public class NotificationContainer {
 				setContactAddress(contact.getPerson().getContact().getPhone());
 				break;
 			case LETTER:
-				setContactAddress(
-						AssociatedContactService.generateAddress(getContact(), getContact().getPerson().getDefaultAddress()));
+				setContactAddress(AssociatedContactService.generateAddress(getContact(),
+						getContact().getPerson().getDefaultAddress()));
 			default:
 				break;
 			}
@@ -110,4 +116,14 @@ public class NotificationContainer {
 		setWarning(warning);
 		setWarningInfo(info);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof NotificationContainer) {
+			NotificationContainer no = (NotificationContainer) obj;
+			return getContact().equals(no.getContact()) && getNotification().equals(no.getNotification());
+		}
+		return super.equals(obj);
+	}
+
 }

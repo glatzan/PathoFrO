@@ -9,7 +9,6 @@ import com.patho.main.action.dialog.notification.NotificationDialog;
 import com.patho.main.action.dialog.notification.NotificationPhaseExitDialog;
 import com.patho.main.action.dialog.patient.DeleteTaskDialog;
 import com.patho.main.action.dialog.patient.EditPatientDialog;
-import com.patho.main.action.dialog.print.FaxPrintDocumentDialog;
 import com.patho.main.action.dialog.settings.groups.GroupEditDialog;
 import com.patho.main.action.dialog.settings.groups.GroupListDialog;
 import com.patho.main.action.dialog.settings.material.MaterialEditDialog;
@@ -39,8 +38,6 @@ public class DialogHandlerAction {
 	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
 
 	private NotificationDialog notificationDialog = new NotificationDialog();
-
-	private FaxPrintDocumentDialog faxPrintDocumentDialog = new FaxPrintDocumentDialog();
 
 	private DeleteTaskDialog deleteTaskDialog = new DeleteTaskDialog();
 

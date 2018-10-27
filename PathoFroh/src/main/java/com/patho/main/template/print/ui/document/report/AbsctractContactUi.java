@@ -2,9 +2,11 @@ package com.patho.main.template.print.ui.document.report;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.patient.Task;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
@@ -113,6 +115,18 @@ public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractCont
 	}
 
 	/**
+	 * Returns the first selected contact
+	 */
+	public AssociatedContact getFirstSelectedContact() {
+		Optional<ContactSelector> res = getSharedData().getContactList().stream().filter(p -> p.isSelected())
+				.findFirst();
+		if (res.isPresent()) {
+			return res.get().getContact();
+		}
+		return null;
+	}
+
+	/**
 	 * Resets the template pointer
 	 */
 	public void beginNextTemplateIteration() {
@@ -181,7 +195,6 @@ public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractCont
 		 * @param contactList
 		 */
 		public void initializ(Task task, List<ContactSelector> contactList) {
-
 			if (isInitialized())
 				return;
 		}

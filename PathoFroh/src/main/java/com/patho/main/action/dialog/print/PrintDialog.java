@@ -193,39 +193,6 @@ public class PrintDialog extends AbstractDialog<PrintDialog> {
 		return this;
 	}
 
-	// public void initBeanForSelecting(Task task, DocumentType[] types,
-	// DocumentType defaultType,
-	// AssociatedContact[] addresses, boolean allowIndividualAddress) {
-	// initBeanForSelecting(task, DocumentTemplate.getTemplates(types), defaultType,
-	// Arrays.asList(addresses),
-	// allowIndividualAddress);
-	// }
-	//
-	// public void initBeanForSelecting(Task task, List<DocumentTemplate> types,
-	// DocumentType defaultType,
-	// List<AssociatedContact> addresses, boolean allowIndividualAddress) {
-	//
-	// List<AbstractDocumentUi<?>> subSelectUIs = types.stream().map(p ->
-	// p.getDocumentUi())
-	// .collect(Collectors.toList());
-	//
-	// // init templates
-	// subSelectUIs.forEach(p -> p.initialize(task));
-	//
-	// initBeanForSelecting(task, subSelectUIs, defaultType);
-	// }
-	//
-	// public void initBeanForSelecting(Task task, List<AbstractDocumentUi<?>>
-	// subSelectUIs, DocumentType defaultType) {
-	//
-	// subSelectUIs.forEach(p -> {
-	// p.setUpdatePdfOnEverySettingChange(true);
-	// p.setRenderSelectedContact(true);
-	// });
-	//
-	// setSelectMode(true);
-	// }
-
 	public void onChangePrintTemplate() {
 		guiManager.reset();
 		guiManager.startRendering(getSelectedTemplate().getDefaultTemplateConfiguration().getDocumentTemplate(),

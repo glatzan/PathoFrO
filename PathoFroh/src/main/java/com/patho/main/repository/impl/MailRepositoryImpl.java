@@ -1,22 +1,27 @@
 package com.patho.main.repository.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import javax.activation.DataSource;
-import javax.mail.util.ByteArrayDataSource;
+import javax.annotation.PostConstruct;
 
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.MultiPartEmail;
-import org.apache.commons.mail.SimpleEmail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.patho.main.model.dto.json.JSONMailMapper;
+import com.patho.main.repository.MailRepository;
+import com.patho.main.repository.MediaRepository;
 import com.patho.main.template.MailTemplate;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,104 +29,78 @@ import lombok.Setter;
 @ConfigurationProperties(prefix = "patho.mail")
 @Getter
 @Setter
-public class MailRepositoryImpl {
-	
-	private String server;
+public class MailRepositoryImpl implements MailRepository {
 
-	private int port;
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private boolean ssl;
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private MediaRepository mediaRepository;
 
-	private boolean debug;
+	private MailTemplate[] mails;
 
-	private String systemMail;
+	@PostConstruct
+	private void initilizeDocuments() {
+		for (MailTemplate mail : mails) {
+			logger.debug(
+					"Initilizing " + mail.getName() + " - " + mail.getType() + " - Default " + mail.isDefaultOfType());
 
-	private String systemName;
-	
-	private String[] adminAddresses;
-
-	private String[] errorAddresses;
-	
-	
-	public boolean sendErrorMail(MailTemplate mail) {
-		return sendMail(getErrorRecipients(), settings.getSystemMail(), settings.getSystemName(), mail);
-	}
-
-	public boolean sendAdminMail(MailTemplate mail) {
-		return sendMail(getAdminRecipients(), settings.getSystemMail(), settings.getSystemName(), mail);
-	}
-	
-	public boolean sendMail(String mailTo, MailTemplate template) {
-		return sendMail(new String[] {mailTo} , settings.getSystemMail(), settings.getSystemName(), template);
-	}
-
-	public boolean sendMail(List<String> mailTo, MailTemplate template) {
-		return sendMail(mailTo, settings.getSystemMail(), settings.getSystemName(), template);
-	}
-
-	public boolean sendMail(String[] mailTo, String mailFrom, String nameFrom, MailTemplate mail) {
-		return sendMail(Arrays.asList(mailTo), mailFrom, nameFrom, mail);
-	}
-
-	public boolean sendMail(List<String> mailTo, String mailFrom, String nameFrom, MailTemplate mail) {
-
-		if (mail.getAttachment() == null) {
-			SimpleEmail email = new SimpleEmail();
-
-			email.setHostName(settings.getServer());
-			email.setDebug(settings.isDebug());
-			email.setSmtpPort(settings.getPort());
-			email.setSSLOnConnect(settings.isSsl());
+			String jsonContent = mediaRepository.getString(mail.getContent());
+			
+			ObjectMapper mapper = new ObjectMapper();
 
 			try {
-				for (String to : mailTo) {
-					email.addTo(to);
-				}
-
-				email.setFrom(mailFrom, nameFrom);
-
-				email.setSubject(mail.getSubject());
-				email.setMsg(mail.getBody());
-				email.send();
-			} catch (EmailException e) {
+				JSONMailMapper userMapper = mapper.readValue(jsonContent, JSONMailMapper.class);
+				userMapper.updateMailTemplate(mail);
+			} catch (IOException e) {
 				e.printStackTrace();
-				return false;
 			}
-		} else {
-			// Create the email message
-			MultiPartEmail email = new MultiPartEmail();
+		}
+	}
 
-			email.setHostName(settings.getServer());
-			email.setDebug(settings.isDebug());
-			email.setSmtpPort(settings.getPort());
-			email.setSSLOnConnect(settings.isSsl());
+	public List<MailTemplate> findAllByTypes(MailTemplate.MailType... types) {
+		return findAllByTypes(Arrays.asList(types));
+	}
 
-			try {
-				for (String to : mailTo) {
-					email.addTo(to);
+	public List<MailTemplate> findAllByTypes(List<MailTemplate.MailType> types) {
+		List<MailTemplate> result = new ArrayList<MailTemplate>();
+
+		if (types == null || types.size() == 0)
+			return result;
+
+		// return a copy of the printDocument
+		for (MailTemplate mail : mails) {
+			for (MailTemplate.MailType type : types) {
+				if (mail.getDocumentType() == type) {
+					result.add(MailRepository.loadDocument(mail));
 				}
-				email.setFrom(mailFrom, nameFrom);
-
-				email.setSubject(mail.getSubject());
-				email.setMsg(mail.getBody());
-
-				InputStream is = new ByteArrayInputStream(mail.getAttachment().getData());
-
-				DataSource source = new ByteArrayDataSource(is, "application/pdf");
-
-				// add the attachment
-				email.attach(source, mail.getAttachment().getName(), "");
-
-				// send the email
-				email.send();
-				
-				is.close();
-			} catch (EmailException | IOException e) {
-				e.printStackTrace();
-				return false;
 			}
 		}
 
-		return true;
+		return result;
+	}
+
+	public List<MailTemplate> findAll() {
+		return Arrays.asList(mails).stream().map(p -> MailRepository.loadDocument(p)).collect(Collectors.toList());
+	}
+
+	public Optional<MailTemplate> findByID(long id) {
+		for (MailTemplate mail : mails) {
+			if (mail.getId() == id)
+				return Optional.ofNullable(MailRepository.loadDocument(mail));
+		}
+
+		return Optional.empty();
+	}
+
+	public Optional<MailTemplate> findByTypeAndDefault(MailTemplate.MailType type) {
+		List<MailTemplate> mails = findAllByTypes(type);
+		for (MailTemplate mail : mails) {
+			if (mail.isDefaultOfType())
+				return Optional.ofNullable(MailRepository.loadDocument(mail));
+		}
+
+		return Optional.empty();
 	}
 }

@@ -50,6 +50,18 @@ where (owner_id = 1 or fgroup.group_id = 1 or fuser.user_id = 1) and (hideList.h
 create view patientmenumodel as select patient.id, person.lastname, person.firstname, person.title, patient.piz, person.birthday from patient, person, contact where patient.person_id = person.id and person.contact_id = contact.id
 create view taskmenumodel as select task.id, task.taskid, task.taskpriority, task.duedate, task.parent_id from task
 
+Short Keys:
+CTRL + C: New Council
+CTRL + N: New Task
+Alt  + B: Notification
+
+Tasks:
+-> FIX Generation for Diagnosis-Reports in DiagnosisReport View
+-> FIX Task selection in TaskView (if number change)
+-> JsonHandler
+Change to Apache HTTP client 
+-> Council Dialog, select correct page on start up
+
 Next Changes:
 -> patienten 1502 und 1503 löschen
 -> Patient menu aufräumen 

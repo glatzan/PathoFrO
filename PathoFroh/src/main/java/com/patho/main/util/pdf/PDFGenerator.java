@@ -181,6 +181,7 @@ public class PDFGenerator {
 			logger.debug("PDF with output file " + result.outputFile.getPath() + " dir " + outputDirectory.getPath());
 			pdfContainer = new PDFContainer();
 			pdfContainer.setName(printTemplate.getGeneratedFileName());
+			pdfContainer.setType(printTemplate.getDocumentType());
 			// sets the absolute path of the file
 			pdfContainer.setPath(result.outputFile.getPath());
 			pdfContainer.setThumbnail(generateThumbnail ? result.thubnailFile.getPath() : null);

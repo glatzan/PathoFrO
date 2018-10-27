@@ -1,2 +1,4 @@
-Subject: Fehlermeldung PathoFro ($histoUser.username)
-Body: $bodyText
+{
+	"subject": "Fehlermeldung PathoFro ($histoUser.username)",
+	"body": "$bodyText"
+}

@@ -182,7 +182,7 @@
 						disabled="#{!dialog.printDialog.guiManager.renderPDF.get()}"
 						icon="fa fa-fax" title="#{msg['dialog.print.button.fax.text']}"
 						rendered="#{dialog.printDialog.faxMode}"
-						actionListener="#{dialogHandlerAction.faxPrintDocumentDialog.initAndPrepareBean(dialog.printDialog.task, dialog.printDialog.renderedContact.contact,dialog.printDialog.pdfContainer)}"></p:commandButton>
+						actionListener="#{dialog.faxDocumentDialog.initAndPrepareBean(dialog.printDialog.task, dialog.printDialog.selectedTemplate.getFirstSelectedContact(),dialog.printDialog.guiManager.getPDFContainerToRender())}"></p:commandButton>
 
 					<!-- download -->
 					<p:commandButton

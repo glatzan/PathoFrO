@@ -96,6 +96,8 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 
 	private boolean enablePDFSelection;
 
+	private boolean viewOnly;
+
 	public PDFOrganizer initAndPrepareBean(Patient patient) {
 		if (initBean(patient))
 			prepareDialog();
@@ -114,6 +116,7 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 		update(true);
 
 		this.enablePDFSelection = false;
+		this.viewOnly = false;
 
 		super.initBean(null, Dialog.PDF_ORGANIZER);
 
@@ -127,6 +130,11 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 
 	public PDFOrganizer selectMode() {
 		this.enablePDFSelection = true;
+		return this;
+	}
+
+	public PDFOrganizer viewMode() {
+		this.viewOnly = true;
 		return this;
 	}
 

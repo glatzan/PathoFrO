@@ -1,2 +1,4 @@
-Subject: %name%, %username%, %clinicRole% erbittet eine Freischaltung
-Body: %name%, %username%, %clinicRole% erbittet eine Freischaltung
+{
+	"subject": "%name%, %username%, %clinicRole% erbittet eine Freischaltung",
+	"body": "%name%, %username%, %clinicRole% erbittet eine Freischaltung"
+}

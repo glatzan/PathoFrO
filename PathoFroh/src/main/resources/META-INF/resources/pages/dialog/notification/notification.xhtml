@@ -11,19 +11,18 @@
 	<title><h:outputFormat
 			value="#{msg['dialog.notification.headline']}">
 		</h:outputFormat></title>
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
-	<h:outputStylesheet name="style.css" value="style.css" library="style" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="style" />
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="tabDialog">
+<h:body styleClass="histoTabDialogStyle">
 	<h:form id="adminForm">
 
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
+				styleClass="defaultHistoTable">
 				<h:panelGroup>
 					<!-- notification -->
 					<h:outputLabel value="#{msg['dialog.notification.headline']}" />
@@ -33,7 +32,7 @@
 
 				</h:panelGroup>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					immediate="true" styleClass="noUnderlineAtLink">
+					immediate="true">
 					<f:actionListener
 						binding="#{dialog.notificationDialog.hideDialog()}" />
 					<i class="fa fa-fw fa-times icon-grey" />
@@ -41,14 +40,13 @@
 			</h:panelGrid>
 		</div>
 
-		<h:panelGrid columns="2" styleClass="newTableContainer contentTable"
-			columnClasses="column200px columnTop,columnTop">
+		<h:panelGrid columns="2" styleClass="dialogContainer">
 			<p:outputPanel id="navigationTable" styleClass="navigationTable">
-				<c:forEach items="#{dialog.notificationDialog.tabs}"
-					var="tab" varStatus="loop">
+				<c:forEach items="#{dialog.notificationDialog.tabs}" var="tab"
+					varStatus="loop">
 					<p:commandButton value="#{msg[tab.name]}"
 						disabled="#{tab.disabled}"
-						styleClass="#{tab eq dialog.notificationDialog.selectedTab ? 'selectedButton' : ''} #{tab.isParent() ? 'childButton' : ''}"
+						styleClass="#{tab eq dialog.notificationDialog.selectedTab ? 'selectedButton' : ''} #{tab.isParent() ? 'childButton' : ''} tabBtn"
 						actionListener="#{dialog.notificationDialog.onTabChange(tab)}"
 						update="navigationTable dialogContent" />
 				</c:forEach>
@@ -61,7 +59,7 @@
 
 		<p:remoteCommand name="changeTab" process="@form" />
 		<p:remoteCommand name="updateContent" update="@form"></p:remoteCommand>
-		<ui:include src="../../template/blockUi.xhtml"></ui:include>
+		<ui:include src="../../../template/blockUi.xhtml"></ui:include>
 	</h:form>
 </h:body>
 </html>

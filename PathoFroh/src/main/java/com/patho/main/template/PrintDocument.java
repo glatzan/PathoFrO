@@ -1,23 +1,36 @@
 package com.patho.main.template;
 
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.tools.generic.DateTool;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
+import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
+import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TextToLatexConverter;
+import com.patho.main.util.helper.TimeUtil;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Configurable
 public class PrintDocument extends AbstractTemplate {
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	protected ResourceBundle resourceBundle;
 
 	/**
 	 * Class of the ui Element
@@ -127,7 +140,8 @@ public class PrintDocument extends AbstractTemplate {
 	}
 
 	public String getGeneratedFileName() {
-		return "GenericFile.pdf";
+		return resourceBundle.get("enum.documentType." + getDocumentType()) + "-"
+				+ TimeUtil.formatDate(new Date(), "dd.MM.yyyy") + "pdf.";
 	}
 
 	/**
@@ -146,7 +160,9 @@ public class PrintDocument extends AbstractTemplate {
 		/**
 		 * DIAGNOSIS_REPORT
 		 */
-		U_REPORT, U_REPORT_EMTY, U_REPORT_COMPLETED, DIAGNOSIS_REPORT, DIAGNOSIS_REPORT_COMPLETED, DIAGNOSIS_REPORT_NOT_APPROVED, DIAGNOSIS_REPORT_EXTERN, LABLE, BIOBANK_INFORMED_CONSENT, TEST_LABLE, COUNCIL_REQUEST, COUNCIL_REPLY, OTHER, EMPTY, NOTIFICATION_SEND_REPORT, MEDICAL_FINDINGS_SEND_REPORT_COMPLETED,
+		U_REPORT, U_REPORT_EMTY, U_REPORT_COMPLETED, DIAGNOSIS_REPORT, DIAGNOSIS_REPORT_COMPLETED,
+		DIAGNOSIS_REPORT_NOT_APPROVED, DIAGNOSIS_REPORT_EXTERN, LABLE, BIOBANK_INFORMED_CONSENT, TEST_LABLE,
+		COUNCIL_REQUEST, COUNCIL_REPLY, OTHER, EMPTY, NOTIFICATION_SEND_REPORT, MEDICAL_FINDINGS_SEND_REPORT_COMPLETED,
 
 		/**
 		 * Document for printing
@@ -161,13 +177,5 @@ public class PrintDocument extends AbstractTemplate {
 			}
 			throw new IllegalArgumentException("No constant with text " + text + " found");
 		}
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class InitializeToken {
-		private String key;
-		private Object value;
 	}
 }

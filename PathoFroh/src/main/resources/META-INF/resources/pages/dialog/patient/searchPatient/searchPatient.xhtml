@@ -23,8 +23,9 @@
 				styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.searchPatient.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					immediate="true" styleClass="noUnderlineAtLink">
-					<f:actionListener binding="#{dialog.searchPatientDialog.hideDialog()}" />
+					immediate="true">
+					<f:actionListener
+						binding="#{dialog.searchPatientDialog.hideDialog()}" />
 					<i class="fa fa-fw fa-times icon-grey" />
 				</p:commandLink>
 			</h:panelGrid>

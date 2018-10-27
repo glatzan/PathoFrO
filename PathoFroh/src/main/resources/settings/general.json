@@ -70,12 +70,6 @@
 		"cupsPost": 631,
 		"testPage": "classpath:templates/print/testPage.pdf"
 	},
-	"ldapSettings": {
-		"host": "ldap.ukl.uni-freiburg.de",
-		"port": 389,
-		"suffix": "dc=ukl,dc=uni-freiburg,dc=de",
-		"base": "ou=people"
-	},
 	"clinicBackend": {
 		"patientByPiz_URI": "http://auginfo/piz/$piz",
 		"patientHistoryHospitalized_URI" : "http://auginfo/piz/$piz?history=1S",
@@ -87,22 +81,6 @@
 	"findPrinterForRoomBackend": {
 		"baseUrl": "http://10.210.21.11:3009/DB/PLS/ip2room/ip/$ip",
 		"userAgent": "Mozilla/5.0"
-	},
-	"mail": {
-		"settings": {
-			"server": "smtp.ukl.uni-freiburg.de",
-			"port": 465,
-			"ssl": true,
-			"debug": false,
-			"systemMail": "augenklinik.histologie@uniklinik-freiburg.de",
-			"systemName": "Histologisches Labor der Augenklinik Freiburg"
-		},
-		"adminRecipients": [
-			"andreas.glatz@uniklinik-freiburg.de"
-		],
-		"errorRecipients": [
-			"andreas.glatz@uniklinik-freiburg.de"
-		]
 	},
 	"fax": {
 		"settings": {

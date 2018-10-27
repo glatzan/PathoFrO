@@ -8,49 +8,54 @@
 <h:head>
 	<title><h:outputLabel
 			value="#{msg['dialog.printFax.headline']}" /></title>
-	<h:outputStylesheet name="histo.css" value="histo.css" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="defaultDialogLayout infoDialog">
+<h:body styleClass="histoDialogStyle">
 
 	<h:form id="dialogContent">
 
-		<div class="defaulDilaogHeaderDivWithBackground">
+		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="noBordersAll noPaddingAll collapsedBordersAll">
+				styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.printFax.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 			</h:panelGrid>
 		</div>
 
-		<div class="contentDiv">
-			<h:panelGrid columns="1" styleClass="defaultListingTableFirstColumEnummeration">
+		<div class="dialogContent">
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+
 				<h:outputLabel value="#{msg['dialog.printFax.text.1']}" />
 
 				<h:outputLabel
 					rendered="#{dialog.faxDocumentDialog.contact ne null}"
-					value="#{dialog.faxDocumentDialog.contact.person.fullName}" />
+					value="#{dialog.faxDocumentDialog.contact.person.getFullName()}" />
 
 				<h:outputLabel
 					rendered="#{dialog.faxDocumentDialog.contact eq null}"
 					value="#{msg['dialog.printFax.text.noContact']}" />
 
-				<h:panelGrid columns="2" styleClass="defaultListingTableFirstColumEnummeration">
+				<h:outputLabel value=" " />
+				
+				<h:panelGrid columns="2"
+					styleClass="listingHistoHiddenTableContainer">
 					<h:outputLabel value="#{msg['dialog.printFax.faxNumber']}" />
-					<h:inputText
-						value="#{dialog.faxDocumentDialog.number}">
+					<h:inputText value="#{dialog.faxDocumentDialog.number}">
 						<p:ajax event="keyup" process="@this" partialSubmit="true"
-							update="@form" delay="100"
+							update="@form" delay="500"
 							listener="#{dialog.faxDocumentDialog.updateFaxButton()}" />
 
 						<p:ajax event="blur" process="@this" partialSubmit="true"
-							update="@form" delay="100"
+							update="@form" delay="500"
 							listener="#{dialog.faxDocumentDialog.updateFaxButton()}" />
+							
 					</h:inputText>
 				</h:panelGrid>
 
@@ -58,34 +63,37 @@
 			</h:panelGrid>
 		</div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="noBordersAll collapsedBordersAll noPaddingAll">
 
-				<h:panelGrid columns="1">
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" style="float:right;">
+				<h:panelGrid columns="2" styleClass="right">
+					<!-- send fax -->
 					<p:commandButton value="#{msg['dialog.printFax.button.sendFax']}"
 						disabled="#{dialog.faxDocumentDialog.faxButtonDisabled}"
 						styleClass="smallButton buttonRighMarginInList"
 						title="#{dialog.faxDocumentDialog.faxButtonDisabled ? msg['dialog.printFax.button.sendFax.title.disabled'] : msg['dialog.printFax.button.sendFax.text']}"
 						icon="fa fa-fw fa-fax">
-						<f:actionListener
-							binding="#{dialog.faxDocumentDialog.sendFax()}" />
+						<f:actionListener binding="#{dialog.faxDocumentDialog.sendFax()}" />
 						<f:actionListener
 							binding="#{dialog.faxDocumentDialog.hideDialog()}" />
 					</p:commandButton>
 
+					<!-- close -->
 					<p:commandButton value="#{msg['general.close']}"
 						styleClass="smallButton buttonRighMarginInList"
 						partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
 						process="@this"
 						actionListener="#{dialog.faxDocumentDialog.hideDialog()}"></p:commandButton>
-				</h:panelGrid>
 
+				</h:panelGrid>
 			</h:panelGrid>
 		</div>
+
+
 	</h:form>
 </h:body>
 </html>

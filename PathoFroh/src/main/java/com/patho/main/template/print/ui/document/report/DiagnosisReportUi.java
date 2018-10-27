@@ -16,7 +16,7 @@ import com.patho.main.model.Contact;
 import com.patho.main.model.Person;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
-import com.patho.main.template.PrintDocument.InitializeToken;
+import com.patho.main.template.InitializeToken;
 import com.patho.main.template.print.DiagnosisReport;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.ui.selectors.ContactSelector;

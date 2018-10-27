@@ -1,1 +1,5 @@
-Eine Freischaltung f�r PathoFRP ist erfolgt. !
+{
+	"subject": "%name%, %username%, %clinicRole% erbittet eine Freischaltung",
+	"body": "%name%, %username%, %clinicRole% erbittet eine Freischaltung"
+}
+

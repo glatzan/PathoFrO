@@ -3,6 +3,7 @@ package com.patho.main.template;
 import org.apache.velocity.app.Velocity;
 
 import com.patho.main.model.interfaces.ID;
+import com.patho.main.model.patient.Patient;
 import com.patho.main.util.VelocityNoOutputLogger;
 
 import lombok.Getter;
@@ -66,5 +67,15 @@ public abstract class AbstractTemplate implements ID, Cloneable {
 	public static final void initVelocity() {
 		Velocity.setProperty(Velocity.RUNTIME_LOG_LOGSYSTEM, new VelocityNoOutputLogger());
 		Velocity.init();
+	}
+	
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj instanceof AbstractTemplate && ((AbstractTemplate) obj).getId() == getId())
+			return true;
+
+		return super.equals(obj);
 	}
 }

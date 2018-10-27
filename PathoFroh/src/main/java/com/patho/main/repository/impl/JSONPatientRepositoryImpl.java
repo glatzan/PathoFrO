@@ -109,7 +109,6 @@ public class JSONPatientRepositoryImpl implements JSONPatientRepository {
 	public List<Patient> findAll(String url) throws ToManyEntriesException {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			System.out.println(url);
 			TypeReference<List<JSONPatientMapper>> typeRef = new TypeReference<List<JSONPatientMapper>>() {
 			};
 			List<JSONPatientMapper> userMapper = mapper.readValue(new URL(url), typeRef);

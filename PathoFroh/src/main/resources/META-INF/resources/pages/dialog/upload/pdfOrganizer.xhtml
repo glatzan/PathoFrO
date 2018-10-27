@@ -8,7 +8,7 @@
 
 <h:head>
 	<title><h:outputFormat
-			value="#{msg['dialog.pdfOrganizer.headline']}" /></title>
+			value="#{msg[dialog.pdfOrganizer.viewOnly ? 'dialog.pdfOrganizer.headline.viewMode' : 'dialog.pdfOrganizer.headline']}" /></title>
 	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
 		library="css" />
@@ -22,7 +22,8 @@
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
 				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.pdfOrganizer.headline']}" />
+				<h:outputLabel
+					value="#{msg[dialog.pdfOrganizer.viewOnly ? 'dialog.pdfOrganizer.headline.viewMode' : 'dialog.pdfOrganizer.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
@@ -37,7 +38,7 @@
 				columnClasses="columnTop columnWidth300, columnTop"
 				style="width:100%">
 				<p:panelGrid styleClass="defaultHistoHiddenTableContainer"
-					style="background: black; height: 655px">
+					id="navigationTable" style="background: black; height: 655px">
 					<p:row>
 						<p:column styleClass="columnTop">
 							<!-- scrolling -->
@@ -237,23 +238,20 @@
 									</h:outputText>
 
 									<!-- created date-->
-									<h:outputText
-										value="#{msg['component.auditTable.createdOn']}"></h:outputText>
+									<h:outputText value="#{msg['component.auditTable.createdOn']}"></h:outputText>
 									<h:outputText
 										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.createdOn}">
 										<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
 									</h:outputText>
 
 									<!-- created name-->
-									<h:outputText
-										value="#{msg['component.auditTable.createdBy']}"></h:outputText>
+									<h:outputText value="#{msg['component.auditTable.createdBy']}"></h:outputText>
 									<h:outputText
 										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.createdBy}">
 									</h:outputText>
 
 									<!-- updated date-->
-									<h:outputText
-										value="#{msg['component.auditTable.updatedOn']}"></h:outputText>
+									<h:outputText value="#{msg['component.auditTable.updatedOn']}"></h:outputText>
 									<h:outputText
 										style="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.updatedOn eq 0 ? 'display:none' : ''}"
 										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.updatedOn}">
@@ -261,8 +259,7 @@
 									</h:outputText>
 
 									<!-- updated name-->
-									<h:outputText
-										value="#{msg['component.auditTable.updatedBy']}"></h:outputText>
+									<h:outputText value="#{msg['component.auditTable.updatedBy']}"></h:outputText>
 									<h:outputText
 										value="#{dialog.pdfOrganizer.streamContainer.displayPDF.audit.updatedBy}">
 									</h:outputText>
@@ -311,10 +308,20 @@
 				</h:panelGrid>
 
 			</h:panelGrid>
+
+			<!-- blocker for view mode -->
+			<p:blockUI block="dialogContent:navigationTable"
+				widgetVar="viewModeBlock" />
+
 			<script>
 				$(document).ready(function() {
 					setMouseEnterEvents(true);
 					setScrollPanelScrollSpeed("dialogContent:scrollBody");
+					
+					// disabling pdf selection in view mode
+					if(#{dialog.pdfOrganizer.viewOnly}){
+						PF('viewModeBlock').show();
+					}
 				});
 
 				// mouse entry event for tree nodes
@@ -372,7 +379,7 @@
 
 					<!-- edit button -->
 					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.edit']}"
-						icon="fa fa-pencil"
+						icon="fa fa-pencil" rendered="#{!dialog.pdfOrganizer.viewOnly}"
 						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null or dialog.pdfOrganizer.streamContainer.displayPDF.restricted}"
 						actionListener="#{dialog.pdfOrganizer.editPDFContainer(dialog.pdfOrganizer.streamContainer.displayPDF)}">
 
@@ -382,7 +389,7 @@
 					</p:commandButton>
 
 					<!-- delete button -->
-					<p:commandButton
+					<p:commandButton rendered="#{!dialog.pdfOrganizer.viewOnly}"
 						value="#{msg['dialog.pdfOrganizer.button.delete']}"
 						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null or dialog.pdfOrganizer.streamContainer.displayPDF.restricted}"
 						icon="fa fa-trash"
@@ -398,7 +405,7 @@
 				<h:panelGrid columns="3" styleClass="right" id="buttonBtnContainer">
 
 					<!-- upload button -->
-					<p:commandButton
+					<p:commandButton rendered="#{!dialog.pdfOrganizer.viewOnly}"
 						value="#{msg['dialog.pdfOrganizer.button.upload']}"
 						icon="fa fa-cloud-upload"
 						actionListener="#{dialog.uploadDialog.initAndPrepareBean(dialog.pdfOrganizer.dataLists,dialog.pdfOrganizer.patient).initilizeUploadFileTypes()}">
@@ -409,9 +416,10 @@
 					</p:commandButton>
 
 					<!-- edit button -->
-					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.select']}"
+					<p:commandButton
+						value="#{msg['dialog.pdfOrganizer.button.select']}"
 						icon="fa fa-pencil"
-						rendered="#{dialog.pdfOrganizer.enablePDFSelection}"
+						rendered="#{dialog.pdfOrganizer.enablePDFSelection and !dialog.pdfOrganizer.viewOnly}"
 						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null}"
 						actionListener="#{dialog.pdfOrganizer.selectAndHide()}">
 
@@ -425,6 +433,8 @@
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
+
+
 	</h:form>
 </h:body>
 </html>

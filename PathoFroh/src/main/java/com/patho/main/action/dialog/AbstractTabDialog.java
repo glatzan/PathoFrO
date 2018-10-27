@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractTabDialog<T extends AbstractTabDialog<?>> extends AbstractDialog<T> {
+public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDialog<I>> {
 
 	protected AbstractTab[] tabs;
 
@@ -66,7 +66,7 @@ public abstract class AbstractTabDialog<T extends AbstractTabDialog<?>> extends 
 
 	@Getter
 	@Setter
-	public abstract class AbstractTab {
+	public abstract static class AbstractTab {
 
 		public void updateData() {
 			return;

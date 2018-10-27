@@ -1,7 +1,7 @@
 package com.patho.main.template.print.ui.document;
 
 import com.patho.main.model.patient.Task;
-import com.patho.main.template.PrintDocument.InitializeToken;
+import com.patho.main.template.InitializeToken;
 import com.patho.main.template.print.CaseCertificate;
 
 public class CaseCertificateUi extends AbstractDocumentUi<CaseCertificate, AbstractDocumentUi.SharedData> {

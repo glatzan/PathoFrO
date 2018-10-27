@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.AssociatedContactNotification;
+import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
@@ -24,6 +26,9 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactNotificationRepository;
 import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.PhysicianRepository;
+import com.patho.main.util.helper.StreamUtils;
+import com.patho.main.util.notification.MailContainer;
+import com.patho.main.util.notification.NotificationContainer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -485,9 +490,50 @@ public class AssociatedContactService extends AbstractService {
 		buffer.append(postcode.isPresent() ? postcode.get() + " " : "");
 		buffer.append(town.isPresent() ? town.get() + "\r\n" : "");
 
-		System.out.println(buffer.toString());
-		
 		return buffer.toString();
+	}
+
+	/**
+	 * Returns all active notification that are pending. If ignoreActiveState is
+	 * true the last performed notification of that type will be returned even if it
+	 * is not active any more.
+	 * 
+	 * @param task
+	 * @param type
+	 * @param ignoreActiveState
+	 * @return
+	 */
+	public static List<NotificationContainer> getNotificationListForType(Task task, NotificationTyp type,
+			boolean ignoreActiveState) {
+
+		List<NotificationContainer> containers = new ArrayList<NotificationContainer>();
+
+		for (AssociatedContact associatedContact : task.getContacts()) {
+			// getting all notifications of this type
+			List<AssociatedContactNotification> notification = associatedContact.getNotifications().stream()
+					.filter(p -> p.getNotificationTyp() == type).collect(Collectors.toList());
+
+			if (notification.size() > 0) {
+
+				Optional<AssociatedContactNotification> res = notification.stream().filter(p -> p.isActive())
+						.findFirst();
+
+				if (res.isPresent()) {
+					containers.add(new NotificationContainer(associatedContact, res.get()));
+				} else if (ignoreActiveState) {
+
+					// sorting after date, getting the last notification of that type
+					notification = notification.stream()
+							.sorted((p1, p2) -> p1.getDateOfAction().compareTo(p2.getDateOfAction()))
+							.collect(Collectors.toList());
+					
+					containers.add(
+							new NotificationContainer(associatedContact, notification.get(notification.size() - 1)));
+				}
+			}
+		}
+
+		return containers;
 	}
 
 }

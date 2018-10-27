@@ -15,8 +15,8 @@ import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PrintDocumentRepository;
+import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.InitializeToken;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -97,6 +97,16 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 		return new TemplateConfiguration<T>(printDocument);
 	}
 
+	/**
+	 * Returns the first contact which is selected, for templates without contacts
+	 * null is returned
+	 * 
+	 * @return
+	 */
+	public AssociatedContact getFirstSelectedContact() {
+		return null;
+	}
+
 	@Override
 	public long getId() {
 		return printDocument.getId();
@@ -104,6 +114,7 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 
 	/**
 	 * Loads a gui object for a print template
+	 * 
 	 * @param document
 	 * @return
 	 */
@@ -178,10 +189,15 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 	@Getter
 	@Setter
 	public static class SharedData {
+
 		private boolean initialized;
 
 		public void initializ() {
 			this.initialized = true;
+		}
+
+		public AssociatedContact getSelectedContact() {
+			return null;
 		}
 	}
 }
