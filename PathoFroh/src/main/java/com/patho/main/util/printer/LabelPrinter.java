@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.google.gson.annotations.Expose;
-import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.template.print.SlideLable;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 
@@ -37,11 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Slf4j
 public class LabelPrinter extends AbstractPrinter {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GlobalSettings globalSettings;
 
 	/**
 	 * Default name of the ftp uploaded file. Should contain %counter% in order to

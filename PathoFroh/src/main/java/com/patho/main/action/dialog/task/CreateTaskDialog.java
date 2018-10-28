@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.task;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +58,7 @@ import com.patho.main.service.PDFService;
 import com.patho.main.service.PatientService;
 import com.patho.main.service.SampleService;
 import com.patho.main.service.TaskService;
+import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.CaseCertificate;
@@ -270,13 +272,9 @@ public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
 					return;
 				}
 
-				// getting ui objects
-				AbstractDocumentUi<?, ?> printDocumentUIs = AbstractDocumentUi.factory(printDocument.get());
+				printDocument.get().initilize(new InitializeToken("task", task));
 
-				printDocumentUIs.initialize(task);
-
-				PDFContainer container = generator.getPDF(
-						printDocumentUIs.getDefaultTemplateConfiguration().getDocumentTemplate(),
+				PDFContainer container = generator.getPDF(printDocument.get(),
 						new File(pathoConfig.getFileSettings().getPrintDirectory()), false);
 
 				userHandlerAction.getSelectedPrinter().print(new PrintOrder(container, 1, printDocument.get()));

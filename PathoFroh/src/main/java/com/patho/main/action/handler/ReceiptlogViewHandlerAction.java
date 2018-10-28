@@ -50,11 +50,6 @@ public class ReceiptlogViewHandlerAction {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private GlobalSettings globalSettings;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private QuickAddDiangosisRevisionDialog addDiangosisReviosionDialog;
 
 	@Autowired

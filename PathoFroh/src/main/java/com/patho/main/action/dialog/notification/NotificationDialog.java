@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
@@ -22,7 +23,6 @@ import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -54,16 +54,15 @@ import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.template.print.ui.document.report.DiagnosisReportUi;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.StreamUtils;
+import com.patho.main.util.helper.ValidatorUtil;
 import com.patho.main.util.impl.DefaultDataList;
-import com.patho.main.util.notification.FaxExecutor;
-import com.patho.main.util.notification.MailContainer;
-import com.patho.main.util.notification.MailContainerList;
-import com.patho.main.util.notification.MailExecutor;
 import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationContainerList;
 import com.patho.main.util.notification.NotificationFeedback;
 import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PrintOrder;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -279,8 +278,6 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 		public void updateData() {
 			List<NotificationContainer> newContainers = AssociatedContactService.getNotificationListForType(task,
 					notificationType, false);
-			
-			System.out.println(newContainers.size());
 
 			List<NotificationContainer> foundContainer = new ArrayList<NotificationContainer>();
 
@@ -288,9 +285,7 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 			for (NotificationContainer notificationContainer : newContainers) {
 				if (getContainer().stream().anyMatch(p -> p.equals(notificationContainer))) {
 					// TODO update old conatienr
-					System.out.println("found");
 				} else {
-					System.out.println("adding");
 					getContainer().add(notificationContainer);
 				}
 				foundContainer.add(notificationContainer);
@@ -574,36 +569,21 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 		public void updateData() {
 			logger.debug("Update Data send");
 
-//			MailExecutor mailExecutor = new MailExecutor(null);
-//			mailTab.getContainerList().renewNotifications(getTask());
-//			mailTab.getContainerList().getContainerToNotify().forEach(p -> {
-//				if (!mailExecutor.isAddressApproved(p.getContactAddress()))
-//					p.setWarning(true, "dialog.notification.sendProcess.mail.error.mailNotValid");
-//				else
-//					p.clearWarning();
-//			});
+			ValidatorUtil val = new ValidatorUtil();
+			// checking mails
+			mailTab.getContainerToNotify().forEach(p -> {
+				if (val.approveMailAddress(p.getContactAddress()))
+					p.setWarning(true, "dialog.notification.sendProcess.mail.error.mailNotValid");
+				else
+					p.clearWarning();
+			});
 
-
-//			FaxExecutor faxExecutor = new FaxExecutor(null);
-//			faxTab.getContainerList().renewNotifications(getTask());
-//			faxTab.getContainerList().getContainerToNotify().forEach(p -> {
-//				if (!faxExecutor.isAddressApproved(p.getContactAddress()))
-//					p.setWarning(true, "dialog.notification.sendProcess.fax.error.numberNotValid");
-//				else
-//					p.clearWarning();
-//			});
-//
-//			// letters
-//			if (!letterTab.isInitialized())
-//				letterTab.updateData();
-//
-//			letterTab.getContainerList().renewNotifications(getTask());
-//
-//			// phone
-//			if (!phoneTab.isInitialized())
-//				phoneTab.updateData();
-//
-//			phoneTab.getContainerList().renewNotifications(getTask());
+			faxTab.getContainerToNotify().forEach(p -> {
+				if (val.approveFaxAddress(p.getContactAddress()))
+					p.setWarning(true, "dialog.notification.sendProcess.fax.error.numberNotValid");
+				else
+					p.clearWarning();
+			});
 		}
 
 		// @Async("taskExecutor")
@@ -621,23 +601,41 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 
 				setSteps(calculateSteps());
 
-				// progressStepText("dialog.notification.sendProcess.starting");
+				PDFContainer genericReport = null;
 
-				// copy mail text
-				((MailContainerList) mailTab.getContainerList()).getSelectedMail().setSubject(mailTab.getMailSubject());
-				((MailContainerList) mailTab.getContainerList()).getSelectedMail().setBody(mailTab.getMailBody());
+				if (generalTab.isUseNotification()) {
+					genericReport = notificationService.generatePDF(task, generalTab.getSelectDiagnosisRevision(), "",
+							generalTab.getSelectedTemplate());
 
-				// copy selected diagnoses
-				List<DiagnosisRevision> revisionsToRender = Arrays.asList(generalTab.getSelectedDiagnosis());
+					// printing generic report
+					userHandlerAction.getSelectedPrinter().print(new PrintOrder(genericReport,
+							generalTab.getPrintCount(), generalTab.getSelectedTemplate()));
+				}
 
-				generalTab.getContainerList().setSelectedRevisions(revisionsToRender);
-				mailTab.getContainerList().setSelectedRevisions(revisionsToRender);
-				faxTab.getContainerList().setSelectedRevisions(revisionsToRender);
-				letterTab.getContainerList().setSelectedRevisions(revisionsToRender);
+				if (mailTab.isUseNotification()) {
+					PDFContainer mailGenericReport = null;
 
-				notificationService.executeNotification(this, getTask(), (MailContainerList) mailTab.getContainerList(),
-						faxTab.getContainerList(), letterTab.getContainerList(), phoneTab.getContainerList(),
-						generalTab.getContainerList(), generalTab.isTemporaryNotification());
+					// generating generic report
+					if (!mailTab.isIndividualAddresses()) {
+						// copie generic report if used and is the same as the mail generic report
+						if (generalTab.isUseNotification()
+								&& mailTab.getSelectedTemplate() == generalTab.getSelectedTemplate()) {
+							mailGenericReport = genericReport;
+						} else {
+							mailGenericReport = notificationService.generatePDF(task,
+									generalTab.getSelectDiagnosisRevision(), "", mailTab.getSelectedTemplate());
+						}
+					}
+
+					for (NotificationContainer container : mailTab.getContainerToNotify()) {
+						notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
+								mailTab.getSelectedTemplate(), mailTab.isIndividualAddresses(), mailGenericReport,
+								this);
+					}
+
+					notificationService.emailNotification(mailTab.getContainerToNotify(), task,
+							mailTab.getMailTemplate(), this, false);
+				}
 
 				setProgressPercent(100);
 
@@ -670,16 +668,10 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 			// one step for creating the send report
 			int steps = 1;
 
-//			steps += mailTab.getContainerList().isUse()
-//					? mailTab.getContainerList().getContainer().stream().filter(p -> p.isPerform()).count()
-//					: 0;
-//			steps += faxTab.getContainerList().isUse()
-//					? faxTab.getContainerList().getContainer().stream().filter(p -> p.isPerform()).count()
-//					: 0;
-//			steps += letterTab.getContainerList().isUse()
-//					? letterTab.getContainerList().getContainer().stream().filter(p -> p.isPerform()).count()
-//					: 0;
-//			steps += phoneTab.getContainerList().isUse() ? 1 : 0;
+			steps += mailTab.isUseNotification() ? mailTab.getContainerToNotify().size() : 0;
+			steps += faxTab.isUseNotification() ? faxTab.getContainerToNotify().size() : 0;
+			steps += letterTab.isUseNotification() ? letterTab.getContainerToNotify().size() : 0;
+			steps += phoneTab.isUseNotification() ? 1 : 0;
 
 			return steps;
 		}

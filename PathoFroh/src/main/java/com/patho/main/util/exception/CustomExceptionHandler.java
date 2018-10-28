@@ -24,7 +24,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import com.patho.main.action.MainHandlerAction;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.handler.GlobalEditViewHandler;
-import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.View;
 import com.patho.main.config.util.ResourceBundle;
@@ -67,10 +66,6 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 	@Autowired
 	@Lazy
 	private WorklistViewHandlerAction worklistViewHandlerAction;
-
-	@Autowired
-	@Lazy
-	private GlobalSettings globalSettings;
 
 	@Autowired
 	@Lazy

@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.patho.main.adaptors.MailHandler;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;

@@ -1,6 +1,7 @@
 package com.patho.main.ui.task;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -18,9 +19,9 @@ import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFReturn;
+import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.template.PrintDocument.InitializeToken;
 import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.pdf.PDFUtil;
 
@@ -54,7 +55,7 @@ public class DiagnosisReportUpdater {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private PrintDocumentRepository printDocumentRepository;
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -76,6 +77,7 @@ public class DiagnosisReportUpdater {
 			PrintDocument printDocument) {
 
 		printDocument.initilize(new InitializeToken("task", diagnosisRevision.getTask()),
+				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
 				new InitializeToken("patient", diagnosisRevision.getPatient()), new InitializeToken("address", ""),
 				new InitializeToken("subject", ""));
 
@@ -99,7 +101,7 @@ public class DiagnosisReportUpdater {
 			container.setName(diagnosisRevision.getName());
 			task = taskRepository.save(task);
 		}
-		
+
 		taskExecutor.execute(new Thread() {
 			public void run() {
 				logger.debug("Stargin PDF Generation in new Thread");

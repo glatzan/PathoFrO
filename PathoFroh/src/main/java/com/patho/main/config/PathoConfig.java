@@ -54,6 +54,7 @@ public class PathoConfig {
 
 	private FileSettings fileSettings;
 	
+	private Miscellaneous miscellaneous;
 	/**
 	 * Container for providing version information
 	 */
@@ -270,5 +271,11 @@ public class PathoConfig {
 	@Setter
 	public static class ProgramInfo{
 		private String version;
+	}
+
+	@Getter
+	@Setter
+	public static class Miscellaneous{
+		String phoneRegex;
 	}
 }

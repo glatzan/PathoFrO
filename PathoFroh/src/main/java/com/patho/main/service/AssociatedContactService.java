@@ -26,8 +26,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactNotificationRepository;
 import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.PhysicianRepository;
-import com.patho.main.util.helper.StreamUtils;
-import com.patho.main.util.notification.MailContainer;
 import com.patho.main.util.notification.NotificationContainer;
 
 import lombok.Getter;
@@ -241,6 +239,13 @@ public class AssociatedContactService extends AbstractService {
 
 	}
 
+	public NotificationReturn addNotificationByType(AssociatedContact associatedContact,
+			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
+			boolean failed, Date dateOfAction, String customAddress, boolean renewed) {
+		return addNotificationByType(associatedContact, notificationTyp, active, performed, failed, dateOfAction,
+				customAddress, renewed, true);
+	}
+
 	/**
 	 * Adds a new notification with the given type
 	 * 
@@ -255,7 +260,7 @@ public class AssociatedContactService extends AbstractService {
 	 */
 	public NotificationReturn addNotificationByType(AssociatedContact associatedContact,
 			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
-			boolean failed, Date dateOfAction, String customAddress, boolean renewed) {
+			boolean failed, Date dateOfAction, String customAddress, boolean renewed, boolean save) {
 
 		logger.debug("Adding notification of type " + notificationTyp);
 
@@ -274,11 +279,12 @@ public class AssociatedContactService extends AbstractService {
 
 		associatedContact.getNotifications().add(newNotification);
 
-		associatedContact = associatedContactRepository
-				.save(associatedContact,
-						resourceBundle.get("log.contact.notification.added", associatedContact.getTask(),
-								associatedContact, notificationTyp.toString()),
-						associatedContact.getTask().getPatient());
+		if (save)
+			associatedContact = associatedContactRepository
+					.save(associatedContact,
+							resourceBundle.get("log.contact.notification.added", associatedContact.getTask(),
+									associatedContact, notificationTyp.toString()),
+							associatedContact.getTask().getPatient());
 
 		return new NotificationReturn(associatedContact.getTask(), associatedContact, newNotification);
 	}
@@ -298,6 +304,11 @@ public class AssociatedContactService extends AbstractService {
 		return addNotificationByType(associatedContact, notificationTyp);
 	}
 
+	public NotificationReturn renewNotification(AssociatedContact associatedContact,
+			AssociatedContactNotification notification) {
+		return renewNotification(associatedContact, notification, true);
+	}
+
 	/**
 	 * Sets the given notification as inactive an adds a new notification of the
 	 * same type (active)
@@ -307,17 +318,17 @@ public class AssociatedContactService extends AbstractService {
 	 * @param notification
 	 */
 	public NotificationReturn renewNotification(AssociatedContact associatedContact,
-			AssociatedContactNotification notification) {
+			AssociatedContactNotification notification, boolean saven) {
 
 		notification.setActive(false);
-
-		associatedContact = associatedContactRepository.save(associatedContact,
-				resourceBundle.get("log.contact.notification.inactive", associatedContact.getTask(), associatedContact,
-						notification.getNotificationTyp().toString(), "inactive"),
-				associatedContact.getTask().getPatient());
+		if (saven)
+			associatedContact = associatedContactRepository.save(associatedContact,
+					resourceBundle.get("log.contact.notification.inactive", associatedContact.getTask(),
+							associatedContact, notification.getNotificationTyp().toString(), "inactive"),
+					associatedContact.getTask().getPatient());
 
 		return addNotificationByType(associatedContact, notification.getNotificationTyp(), true, false, false, null,
-				notification.getContactAddress(), true);
+				notification.getContactAddress(), true, saven);
 	}
 
 	/**
@@ -526,7 +537,7 @@ public class AssociatedContactService extends AbstractService {
 					notification = notification.stream()
 							.sorted((p1, p2) -> p1.getDateOfAction().compareTo(p2.getDateOfAction()))
 							.collect(Collectors.toList());
-					
+
 					containers.add(
 							new NotificationContainer(associatedContact, notification.get(notification.size() - 1)));
 				}

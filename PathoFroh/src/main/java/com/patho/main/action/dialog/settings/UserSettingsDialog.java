@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
-import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.View;
 import com.patho.main.model.favourites.FavouriteList;
@@ -38,11 +37,6 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private UserHandlerAction userHandlerAction;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GlobalSettings globalSettings;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -81,12 +75,8 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	public void saveUserSettings() {
 		log.debug("Saving user Settings");
 
-		try {
-			userRepository.save(getUser());
-			userHandlerAction.updateSelectedPrinters();
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+		userRepository.save(getUser());
+		userHandlerAction.updateSelectedPrinters();
 	}
 
 	public void resetUserSettings() {

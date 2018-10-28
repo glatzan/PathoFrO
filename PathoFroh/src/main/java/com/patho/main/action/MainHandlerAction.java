@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
-import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.common.DateFormat;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;

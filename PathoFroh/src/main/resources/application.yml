@@ -144,7 +144,7 @@ patho:
           password: 1234
           timeout: 1000     
   ####### SETTINGS ####### 
-  settings:     
+  settings:    
     fileSettings:
       thumbnailDPI: 50
       fileRepository: D:/patho
@@ -190,7 +190,9 @@ patho:
           role: EXTERNAL_SURGEON
           notificationTyps:
             -
-              LETTER 
+              LETTER
+    miscellaneous:
+      phoneRegex: "^\\s*(?:[\\+#]?(\\d{1,3}))?([-. ()/\\\\]*(\\d*))*?\\s*$"
   ####### Print Documents #######
     documents:
       - 

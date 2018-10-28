@@ -31,11 +31,6 @@ import lombok.Setter;
 @Setter
 public class PhysicianSearchDialog extends AbstractDialog implements OrganizationFunctions {
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GlobalSettings globalSettings;
-
 	/**
 	 * If true it is possible to create an external physician or patient
 	 */

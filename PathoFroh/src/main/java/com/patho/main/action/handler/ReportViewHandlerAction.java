@@ -36,11 +36,6 @@ public class ReportViewHandlerAction {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private GlobalSettings globalSettings;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private UserHandlerAction userHandlerAction;
 	
 	private Task task;
