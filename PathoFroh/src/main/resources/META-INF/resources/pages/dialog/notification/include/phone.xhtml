@@ -14,14 +14,14 @@
 
 
 	<p:outputPanel styleClass="bodyPannel">
-		<h:panelGrid columns="2" styleClass="newStyleListingTable"
-			style="width:100%" columnClasses="columnLabelContainer150, ">
+		<h:panelGrid columns="2" styleClass="defaultHistoTable"
+			columnClasses="columnWidth150, ">
 
 			<!-- Use phone-->
 			<h:outputLabel value="#{msg['dialog.notification.tab.phone.use']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				value="#{dialog.notificationDialog.phoneTab.containerList.use}"
+				value="#{dialog.notificationDialog.phoneTab.useNotification}"
 				title="#{msg['dialog.notification.tab.phone.use.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -32,20 +32,20 @@
 				styleClass="bigFont" />
 
 			<p:dataTable var="container" styleClass="newStyleDataTable"
-				value="#{dialog.notificationDialog.phoneTab.containerList.defaultReport}">
+				value="#{dialog.notificationDialog.phoneTab.container}">
 
 				<!-- name of receiver -->
 				<p:column
 					headerText="#{msg['dialog.notification.tab.phone.receiver.name']}"
 					style="width:auto">
-					<h:outputText value="#{container.contact.person.fullName}" />
+					<h:outputText value="#{container.contact.person.getFullName()}" />
 				</p:column>
 
 				<p:column
 					headerText="#{msg['dialog.notification.tab.phone.receiver.number']}"
 					style="width:auto">
 					<p:inputText value="#{container.contactAddress}"
-						disabled="#{!dialog.notificationDialog.phoneTab.containerList.use or !container.perform}"
+						disabled="#{!dialog.notificationDialog.phoneTab.useNotification or !container.perform}"
 						styleClass="smallInput" style="width:98%" />
 				</p:column>
 
@@ -57,7 +57,7 @@
 					</f:facet>
 
 					<p:selectBooleanCheckbox
-						disabled="#{!dialog.notificationDialog.phoneTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.phoneTab.useNotification}"
 						value="#{container.perform}">
 						<p:ajax event="change" update="@form" />
 					</p:selectBooleanCheckbox>

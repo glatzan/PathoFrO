@@ -393,6 +393,16 @@ body {
 	.histoDataTable (false, true);
 }
 
+/* hides column headers of a data table*/
+.histoDataTable-HideColumnHeader{
+	.ui-datatable-tablewrapper{
+		>table{
+			>thead{
+				display: none;
+			}	
+		}	 	
+	}
+}
 
 /* 
  * scroll data table layout

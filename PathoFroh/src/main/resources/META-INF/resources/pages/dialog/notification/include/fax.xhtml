@@ -13,14 +13,14 @@
 
 
 	<p:outputPanel styleClass="bodyPannel">
-		<h:panelGrid columns="2" styleClass="newStyleListingTable"
-			style="width:100%" columnClasses="columnLabelContainer150, ">
+		<h:panelGrid columns="2" styleClass="defaultHistoTable"
+			columnClasses="columnWidth150, ">
 
 			<!-- Use fax -->
 			<h:outputLabel value="#{msg['dialog.notification.tab.fax.use']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				value="#{dialog.notificationDialog.faxTab.containerList.use}"
+				value="#{dialog.notificationDialog.faxTab.useNotification}"
 				title="#{msg['dialog.notification.tab.fax.use.text']}">
 				<p:ajax event="change" process="@form" update="@form"></p:ajax>
 			</p:selectBooleanCheckbox>
@@ -29,9 +29,9 @@
 			<h:outputLabel value="#{msg['dialog.notification.tab.fax.send']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				value="#{dialog.notificationDialog.faxTab.containerList.send}"
+				value="#{dialog.notificationDialog.faxTab.sendFax}"
 				title="#{msg['dialog.notification.tab.fax.send.text']}"
-				disabled="#{!dialog.notificationDialog.faxTab.containerList.use}">
+				disabled="#{!dialog.notificationDialog.faxTab.useNotification}">
 				<p:ajax event="change" process="@form" update="@form"></p:ajax>
 			</p:selectBooleanCheckbox>
 
@@ -39,8 +39,8 @@
 			<h:outputLabel value="#{msg['dialog.notification.tab.fax.print']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				disabled="#{!dialog.notificationDialog.faxTab.containerList.use}"
-				value="#{dialog.notificationDialog.faxTab.containerList.print}"
+				disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
+				value="#{dialog.notificationDialog.faxTab.printFax}"
 				title="#{msg['dialog.notification.tab.fax.print.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -50,8 +50,8 @@
 				value="#{msg['dialog.notification.tab.fax.individualAddress']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				disabled="#{!dialog.notificationDialog.faxTab.containerList.use}"
-				value="#{dialog.notificationDialog.faxTab.containerList.individualAddresses}"
+				disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
+				value="#{dialog.notificationDialog.faxTab.individualAddresses}"
 				title="#{msg['dialog.notification.tab.fax.individualAddress.text']}">
 				<p:ajax event="change" process="@this" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -61,9 +61,9 @@
 				value="#{msg['dialog.notification.tab.fax.pdfTemplate']}"
 				styleClass="bigFont" />
 			<p:selectOneMenu
-				value="#{dialog.notificationDialog.faxTab.containerList.defaultReport}"
-				converter="#{dialog.notificationDialog.faxTab.templateTransformer}"
-				disabled="#{!dialog.notificationDialog.faxTab.containerList.use}">
+				value="#{dialog.notificationDialog.faxTab.selectedTemplate}"
+				converter="#{dialog.notificationDialog.faxTab.templateListTransformer}"
+				disabled="#{!dialog.notificationDialog.faxTab.useNotification}">
 
 				<f:selectItems
 					value="#{dialog.notificationDialog.faxTab.templateList}"
@@ -77,13 +77,13 @@
 				styleClass="bigFont" />
 			<p:dataTable var="container" styleClass="newStyleDataTable"
 				scrollHeight="200" scrollable="true"
-				value="#{dialog.notificationDialog.faxTab.containerList.container}">
+				value="#{dialog.notificationDialog.faxTab.container}">
 
 				<!-- name of receiver -->
 				<p:column
 					headerText="#{msg['dialog.notification.tab.fax.receiver.name']}"
 					style="width:auto">
-					<h:outputText value="#{container.contact.person.fullName}" />
+					<h:outputText value="#{container.contact.person.getFullName()}" />
 					<ui:fragment rendered="#{container.notification.failed}">
 						<i class="fa fa-fw fa-times-circle icon-red"
 							title="#{msg['dialog.notification.tab.fax.receiver.failedAndRetry']}: #{container.notification.commentary}" />
@@ -95,7 +95,7 @@
 					headerText="#{msg['dialog.notification.tab.fax.receiver.number']}"
 					style="width:auto">
 					<p:inputText value="#{container.contactAddress}"
-						disabled="#{!dialog.notificationDialog.faxTab.containerList.use or !container.perform}"
+						disabled="#{!dialog.notificationDialog.faxTab.useNotification or !container.perform}"
 						style="width:98%" />
 				</p:column>
 
@@ -107,7 +107,7 @@
 					</f:facet>
 
 					<p:selectBooleanCheckbox
-						disabled="#{!dialog.notificationDialog.faxTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
 						value="#{container.perform}">
 						<p:ajax event="change" update="@form" />
 					</p:selectBooleanCheckbox>
@@ -123,7 +123,7 @@
 					<!-- add pdf, if pdf == null -->
 					<p:commandLink styleClass="noUnderlineAtLink"
 						rendered="#{container.pdf eq null and container.perform}"
-						disabled="#{!dialog.notificationDialog.faxTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
 						title="#{msg['dialog.notification.tab.fax.receiver.pdf.info']}"
 						execute="@this" onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
@@ -138,7 +138,7 @@
 					<!-- show pdf, if pdf != null -->
 					<p:commandLink styleClass="noUnderlineAtLink"
 						rendered="#{container.pdf ne null and container.perform}"
-						disabled="#{!dialog.notificationDialog.faxTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
 						title="#{msg['dialog.notification.tab.fax.receiver.pdf.show']}"
 						execute="@this"
 						actionListener="#{dialog.notificationDialog.openMediaViewDialog(container.pdf)}">
@@ -152,7 +152,7 @@
 						rendered="#{container.pdf ne null and container.perform}"
 						title="#{msg['dialog.notification.tab.fax.receiver.pdf.remove']}"
 						execute="@this" update="@form"
-						disabled="#{!dialog.notificationDialog.faxTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
 						actionListener="#{container.setPdf(null)}">
 
 						<i class="fa fa-close icon-grey" />

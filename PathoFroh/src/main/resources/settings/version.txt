@@ -61,6 +61,7 @@ Tasks:
 -> JsonHandler
 Change to Apache HTTP client 
 -> Council Dialog, select correct page on start up
+-> FAX fix
 
 Next Changes:
 -> patienten 1502 und 1503 löschen
@@ -115,10 +116,8 @@ Long-term Changes
 TODO: Beim schließen des Settings-dialoges auch gruppenrichtilinien neu laden
 TODO: Settings-Dialog überarbeiten tabellen und datatables auf neuen style ändern
 TODO: Nach 3 monaten soll dearchiviertung nicht mehr möglich sein
-TODO: Versionfehler beim �ffnen von dialogen handeln
 TODO: object f�r Arbeitsliste muss kopiert werden, wird momentan sofort �bernommen
 TODO: Konsil listenabfragen statisch, zur geschwindikeitsverbesserung
-TODO: loggin �berarbeiten, methoden in generica dat shiften
 TODO: log in settings rework
 TODO: Individelle Adressen beim drucken sollten aus personen gespeichert werden?
 TODO: Wenn Aufträge gelöscht werden müssen pdf mit gelöscht werden..

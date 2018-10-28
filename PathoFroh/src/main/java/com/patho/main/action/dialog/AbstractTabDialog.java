@@ -68,13 +68,10 @@ public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDia
 	@Setter
 	public abstract static class AbstractTab {
 
-		public void updateData() {
-			return;
-		}
-
-		public boolean initTab() {
-			return false;
-		}
+		/**
+		 * True if initilized
+		 */
+		protected boolean initialized;
 
 		protected String name;
 
@@ -91,6 +88,16 @@ public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDia
 		public boolean isParent() {
 			return parentTab != null;
 		}
+
+		public void updateData() {
+			return;
+		}
+
+		public boolean initTab() {
+			setInitialized(true);
+			return true;
+		}
+
 	}
 
 }

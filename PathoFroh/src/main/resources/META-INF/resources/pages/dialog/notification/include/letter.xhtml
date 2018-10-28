@@ -14,14 +14,14 @@
 
 
 	<p:outputPanel styleClass="bodyPannel">
-		<h:panelGrid columns="2" styleClass="newStyleListingTable"
-			style="width:100%" columnClasses="columnLabelContainer150, ">
+		<h:panelGrid columns="2" styleClass="defaultHistoTable"
+			columnClasses="columnWidth150, ">
 
 			<!-- Use letter -->
 			<h:outputLabel value="#{msg['dialog.notification.tab.letter.use']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				value="#{dialog.notificationDialog.letterTab.containerList.use}"
+				value="#{dialog.notificationDialog.letterTab.useNotification}"
 				title="#{msg['dialog.notification.tab.letter.use.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -30,8 +30,8 @@
 			<h:outputLabel value="#{msg['dialog.notification.tab.letter.print']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
-				value="#{dialog.notificationDialog.letterTab.containerList.print}"
+				disabled="#{!dialog.notificationDialog.letterTab.useNotification}"
+				value="#{dialog.notificationDialog.letterTab.printLetter}"
 				title="#{msg['dialog.notification.tab.letter.print.text']}">
 				<p:ajax event="change" process="@form" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -41,8 +41,8 @@
 				value="#{msg['dialog.notification.tab.letter.individualAddress']}"
 				styleClass="bigFont" />
 			<p:selectBooleanCheckbox
-				disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
-				value="#{dialog.notificationDialog.letterTab.containerList.individualAddresses}"
+				disabled="#{!dialog.notificationDialog.letterTab.useNotification}"
+				value="#{dialog.notificationDialog.letterTab.individualAddresses}"
 				title="#{msg['dialog.notification.tab.letter.individualAddress.text']}">
 				<p:ajax event="change" process="@this" update="@form" />
 			</p:selectBooleanCheckbox>
@@ -52,9 +52,9 @@
 				value="#{msg['dialog.notification.tab.letter.pdfTemplate']}"
 				styleClass="bigFont" />
 			<p:selectOneMenu
-				value="#{dialog.notificationDialog.letterTab.containerList.defaultReport}"
-				converter="#{dialog.notificationDialog.letterTab.templateTransformer}"
-				disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
+				value="#{dialog.notificationDialog.letterTab.selectedTemplate}"
+				converter="#{dialog.notificationDialog.letterTab.templateListTransformer}"
+				disabled="#{!dialog.notificationDialog.letterTab.useNotification}"
 				styleClass="customSerachSelectMenu">
 
 				<f:selectItems
@@ -70,13 +70,13 @@
 				styleClass="bigFont" />
 			<p:dataTable var="container" scrollable="true" scrollHeight="200"
 				style="width:96%" styleClass="newStyleDataTable"
-				value="#{dialog.notificationDialog.letterTab.containerList.container}">
+				value="#{dialog.notificationDialog.letterTab.container}">
 
 				<!-- name of receiver -->
 				<p:column
 					headerText="#{msg['dialog.notification.tab.letter.receiver.name']}"
 					style="width:auto">
-					<h:outputText value="#{container.contact.person.fullName}"
+					<h:outputText value="#{container.contact.person.getFullName()}"
 						id="namePanel" title="#{container.contactAddress}" />
 					<ui:fragment rendered="#{container.notification.failed}">
 						<i class="fa fa-fw fa-times-circle icon-red"
@@ -99,7 +99,7 @@
 					</f:facet>
 
 					<p:selectBooleanCheckbox
-						disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.letterTab.useNotification}"
 						value="#{container.perform}">
 						<p:ajax event="change" update="@form" />
 					</p:selectBooleanCheckbox>
@@ -114,7 +114,7 @@
 					<!-- add pdf, if pdf == null -->
 					<p:commandLink styleClass="noUnderlineAtLink"
 						rendered="#{container.pdf eq null and container.perform}"
-						disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.letterTab.useNotification}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.info']}"
 						execute="@this" onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
@@ -131,7 +131,7 @@
 						rendered="#{container.pdf ne null and container.perform}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.show']}"
 						execute="@this"
-						disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.letterTab.useNotification}"
 						actionListener="#{dialog.notificationDialog.openMediaViewDialog(container.pdf)}">
 
 						<i class="fa fa-search icon-grey" />
@@ -143,7 +143,7 @@
 						rendered="#{container.pdf ne null and container.perform}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.remove']}"
 						execute="@this"
-						disabled="#{!dialog.notificationDialog.letterTab.containerList.use}"
+						disabled="#{!dialog.notificationDialog.letterTab.s}"
 						update="@form" actionListener="#{container.setPdf(null)}">
 
 						<i class="fa fa-close icon-grey" />
