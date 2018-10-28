@@ -201,7 +201,7 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 				new DefaultTreeNode("pdf", container, taskNode);
 			}
 
-			Optional<BioBank> b = bankRepository.findOptionalByIdAndInitialize(task.getId(), true, true);
+			Optional<BioBank> b = bankRepository.findOptionalByTaskAndInitialize(task, true, true);
 
 			if (b.isPresent()) {
 				getDataLists().add(b.get());

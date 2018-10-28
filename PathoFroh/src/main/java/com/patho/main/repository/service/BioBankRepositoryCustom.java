@@ -13,5 +13,5 @@ public interface BioBankRepositoryCustom {
 
 	public Optional<BioBank> findOptionalByTaskAndInitialize(Task task);
 
-	public Optional<BioBank> findOptionalTaskIdAndInitialize(Task task, boolean loadTask, boolean loadPDFs);
+	public Optional<BioBank> findOptionalByTaskAndInitialize(Task task, boolean loadTask, boolean loadPDFs);
 }

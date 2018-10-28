@@ -45,10 +45,10 @@ public class BioBankRepositoryImpl extends AbstractRepositoryCustom implements B
 	}
 
 	public Optional<BioBank> findOptionalByTaskAndInitialize(Task task) {
-		return findOptionalTaskIdAndInitialize(task, false, true);
+		return findOptionalByTaskAndInitialize(task, false, true);
 	}
 
-	public Optional<BioBank> findOptionalTaskIdAndInitialize(Task task, boolean loadTask, boolean loadPDFs) {
+	public Optional<BioBank> findOptionalByTaskAndInitialize(Task task, boolean loadTask, boolean loadPDFs) {
 		CriteriaBuilder qb = getCriteriaBuilder();
 		CriteriaQuery<BioBank> criteria = qb.createQuery(BioBank.class);
 		Root<BioBank> root = criteria.from(BioBank.class);

@@ -25,6 +25,7 @@ public class BioBankService extends AbstractService {
 
 		bioBank = bankRepository.save(bioBank, resourceBundle.get("log.patient.bioBank.created", task),
 				task.getPatient());
+		
 		return bioBank;
 	}
 }
