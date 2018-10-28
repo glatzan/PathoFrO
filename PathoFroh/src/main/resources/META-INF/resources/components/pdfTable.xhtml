@@ -21,10 +21,13 @@
 	<composite:attribute name="nameLength" default="20" required="false" />
 	<composite:attribute name="commentaryLength" default="30"
 		required="false" />
+	<composite:attribute name="typLenth" default="300" required="false" />
 
 	<composite:attribute name="tableWidth" default="width:100%"
 		required="false" />
 	<composite:attribute name="tableHeight" default="300" required="false" />
+	
+	<composite:attribute name="showUpload" default="true" required="false" />
 </composite:interface>
 
 <composite:implementation>
@@ -61,10 +64,15 @@
 		<!-- type -->
 		<p:column style="width:10%">
 			<f:facet name="header">
-				<h:outputLabel value="#{msg['component.pdfTable.dateOfUPload']}"></h:outputLabel>
+				<h:outputLabel value="#{msg['component.pdfTable.type']}"></h:outputLabel>
 			</f:facet>
 			<h:outputLabel
-				value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"></h:outputLabel>
+				value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"
+				title="#{msg['enum.documentType.'.concat(attachedPdf.type)]}">
+				<f:converter converterId="org.histo.ui.TruncateConverter" />
+				<f:attribute name="truncateAt" value="#{cc.attrs.typLenth}" />
+				<f:attribute name="continuationMark" value="..." />
+			</h:outputLabel>
 		</p:column>
 
 		<!-- comentary -->
@@ -82,8 +90,8 @@
 
 		<p:column style="width:15px">
 			<f:facet name="header">
-				<p:commandLink id="upload"
-					rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+				<p:commandLink id="upload" 
+					rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA') and cc.attrs.showUpload}"
 					actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient)}">
 					<p:ajax event="dialogReturn" update="@form" />
 					<i class="fa fa-plus"></i>

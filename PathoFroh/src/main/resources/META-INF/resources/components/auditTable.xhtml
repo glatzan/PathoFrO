@@ -10,18 +10,20 @@
 
 
 <composite:interface>
-	<composite:attribute name="rendered" required="true" />
+	<composite:attribute name="rendered" required="false" default="true" />
 	<composite:attribute name="auditElement" required="true" />
 </composite:interface>
 
 <composite:implementation>
 
 	<h:panelGrid columns="2" styleClass="defaultHistoTable"
-		style="margin-top:5px;margin-left:5px;" rendered="#{rendered}">
+		style="margin-top:5px;margin-left:5px;"
+		rendered="#{cc.attrs.rendered}">
 
 		<!-- created date-->
 		<h:outputText value="#{msg['component.auditTable.createdOn']}"></h:outputText>
-		<h:outputText value="#{cc.attrs.auditElement.createdOn}">
+		<h:outputText value="#{cc.attrs.auditElement.createdOn}"
+			style="#{cc.attrs.auditElement.createdOn eq 0 ? 'display:none' : ''}">
 			<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
 		</h:outputText>
 
@@ -40,8 +42,8 @@
 
 		<!-- updated name-->
 		<h:outputText value="#{msg['component.auditTable.updatedBy']}"></h:outputText>
-		<h:outputText value="#{cc.attrs.auditElement.updatedBy}">
-		</h:outputText>
+		<h:outputText value="#{cc.attrs.auditElement.updatedBy}" />
+
 	</h:panelGrid>
 
 </composite:implementation>

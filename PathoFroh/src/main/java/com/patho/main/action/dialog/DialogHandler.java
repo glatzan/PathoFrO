@@ -3,6 +3,7 @@ package com.patho.main.action.dialog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.patho.main.action.dialog.biobank.BioBankDialog;
 import com.patho.main.action.dialog.council.CouncilDialog;
 import com.patho.main.action.dialog.diagnosis.CopyHistologicalRecordDialog;
 import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog;
@@ -68,10 +69,11 @@ public class DialogHandler {
 	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
 	private CopyHistologicalRecordDialog copyHistologicalRecordDialog = new CopyHistologicalRecordDialog();
 	private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();
-	private CustomAddressDialog customAddressDialog = new CustomAddressDialog(); 
+	private CustomAddressDialog customAddressDialog = new CustomAddressDialog();
 	private CouncilDialog councilDialog = new CouncilDialog();
 	private SettingsDialog settingsDialog = new SettingsDialog();
 	private FavouriteListEditDialog favouriteListEditDialog = new FavouriteListEditDialog();
 	private NotificationDialog notificationDialog = new NotificationDialog();
 	private FaxDocumentDialog faxDocumentDialog = new FaxDocumentDialog();
+	private BioBankDialog bioBankDialog = new BioBankDialog();
 }

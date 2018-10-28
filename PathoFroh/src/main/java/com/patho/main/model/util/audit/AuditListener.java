@@ -32,7 +32,7 @@ public class AuditListener {
  
     @PreUpdate
     public void setUpdatedOn(AuditAble auditable) {
-        System.out.println("persists");
+        System.out.println("persists " +userHandlerAction.getCurrentUser().getUsername());
     	Audit audit = auditable.getAudit();
         audit.setUpdatedOn(System.currentTimeMillis());
         audit.setUpdatedBy(userHandlerAction.getCurrentUser().getUsername());

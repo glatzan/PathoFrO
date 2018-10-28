@@ -164,6 +164,27 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* Adding field for biobank*/
+/* audit for task container */
+Alter table biobank add createdOn bigint;
+Alter table biobank add createdBy character varying(10);
+Alter table biobank add updatedOn bigint;
+Alter table biobank add updatedBy character varying(10);
+Alter table biobank_aud add createdOn bigint;
+Alter table biobank_aud add createdBy character varying(10);
+Alter table biobank_aud add updatedOn bigint;
+Alter table biobank_aud add updatedBy character varying(10);
+UPDATE biobank SET createdOn = 0;
+UPDATE biobank_aud SET createdOn = 0;
+update biobank set updatedOn = 0;
+update biobank_aud set updatedOn = 0;
+/* date of informed consent retraction*/
+Alter table biobank add retractionDate date;
+Alter table biobank_aud add retractionDate date;
+/* commentary */
+Alter table biobank add commentary character varying;
+Alter table biobank_aud add commentary character varying;
+
 /* replacing old command*/
 update favouritelist set command = 'dialog:dialog.councilDialog' where command like 'dialog:councilDialogHandler'
 

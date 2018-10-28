@@ -254,7 +254,7 @@ public class PDFService extends AbstractService {
 
 	public List<DataList> getDataListsOfPatient(Patient p) {
 		List<DataList> result = new ArrayList<DataList>();
-		
+
 		result.add(p);
 
 		for (Task task : p.getTasks()) {
@@ -280,6 +280,23 @@ public class PDFService extends AbstractService {
 				if (pContainer.equals(container))
 					return dataList;
 			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Searches for a datalist within all datalists e.g. of a patient. This is to
+	 * find the datalist with the current version.
+	 * 
+	 * @param dataLists
+	 * @param findeThisList
+	 * @return
+	 */
+	public static DataList getDatalistFromDatalists(List<DataList> dataLists, DataList findeThisList) {
+		for (DataList dataList : dataLists) {
+			if (dataList.getId() == findeThisList.getId() && dataList.getClass().equals(findeThisList.getClass()))
+				return dataList;
 		}
 
 		return null;

@@ -309,7 +309,7 @@
 
 			<!-- Biobank button -->
 			<p:commandButton id="bioBankBtn"
-				actionListener="#{bioBankDialogHandler.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask)}">
+				actionListener="#{dialog.bioBankDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask)}">
 				<p:ajax event="dialogReturn"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm headerForm" />

@@ -47,6 +47,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.experimental.Delegate;
 
 @Configurable
 @Getter
@@ -98,6 +100,12 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 
 	private boolean viewOnly;
 
+	@Accessors(chain = true)
+	private DocumentType uploadDocumentType;
+
+	@Accessors(chain = true)
+	private DataList uploadTarget;
+
 	public PDFOrganizer initAndPrepareBean(Patient patient) {
 		if (initBean(patient))
 			prepareDialog();
@@ -117,6 +125,9 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 
 		this.enablePDFSelection = false;
 		this.viewOnly = false;
+
+		uploadDocumentType = DocumentType.OTHER;
+		uploadTarget = patient;
 
 		super.initBean(null, Dialog.PDF_ORGANIZER);
 
@@ -257,10 +268,17 @@ public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
 		UploadedFile file = event.getFile();
 		try {
 			logger.debug("Uploadgin to Patient: " + getPatient().getId());
-			PDFReturn res = pdfService.createAndAttachPDF(patient, file, DocumentType.OTHER, "", "", true,
-					new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(patient.getId())));
 
-			setPatient((Patient) res.getDataList());
+			DataList uploadList = PDFService.getDatalistFromDatalists(getDataLists(), getUploadTarget());
+
+			if (uploadList == null) {
+				MessageHandler.sendGrowlMessagesAsResource("growl.upload.noTarget");
+				return;
+			}
+
+			PDFReturn res = pdfService.createAndAttachPDF(uploadList, file, uploadDocumentType, "", "", true,
+					new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(patient.getId())));
+			
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.success");
 		} catch (IllegalAccessError e) {
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed", FacesMessage.SEVERITY_ERROR);
