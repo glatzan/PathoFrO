@@ -631,10 +631,58 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 						notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
 								mailTab.getSelectedTemplate(), mailTab.isIndividualAddresses(), mailGenericReport,
 								this);
+
+						notificationService.emailNotification(container, task, mailTab.getMailTemplate(), this, false);
 					}
 
-					notificationService.emailNotification(mailTab.getContainerToNotify(), task,
-							mailTab.getMailTemplate(), this, false);
+				}
+
+				if (faxTab.isUseNotification()) {
+					PDFContainer faxGenericReport = null;
+
+					// generating generic report
+					if (!faxTab.isIndividualAddresses()) {
+						// copie generic report if used and is the same as the mail generic report
+						if (generalTab.isUseNotification()
+								&& faxTab.getSelectedTemplate() == generalTab.getSelectedTemplate()) {
+							faxGenericReport = genericReport;
+						} else {
+							faxGenericReport = notificationService.generatePDF(task,
+									generalTab.getSelectDiagnosisRevision(), "", faxTab.getSelectedTemplate());
+						}
+					}
+
+					for (NotificationContainer container : faxTab.getContainerToNotify()) {
+						notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
+								faxTab.getSelectedTemplate(), faxTab.isIndividualAddresses(), faxGenericReport, this);
+
+						notificationService.faxNotification(container, task, this, faxTab.isPrintFax(),
+								faxTab.isSendFax(), false);
+					}
+				}
+
+				if (letterTab.isUseNotification()) {
+					PDFContainer letterGenericReport = null;
+
+					// generating generic report
+					if (!letterTab.isIndividualAddresses()) {
+						// copie generic report if used and is the same as the mail generic report
+						if (generalTab.isUseNotification()
+								&& letterTab.getSelectedTemplate() == generalTab.getSelectedTemplate()) {
+							letterGenericReport = genericReport;
+						} else {
+							letterGenericReport = notificationService.generatePDF(task,
+									generalTab.getSelectDiagnosisRevision(), "", letterTab.getSelectedTemplate());
+						}
+					}
+
+					for (NotificationContainer container : letterTab.getContainerToNotify()) {
+						notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
+								letterTab.getSelectedTemplate(), letterTab.isIndividualAddresses(), letterGenericReport,
+								this);
+
+						notificationService.letterNotification(container, task, this, letterTab.isPrintLetter(), false);
+					}
 				}
 
 				setProgressPercent(100);

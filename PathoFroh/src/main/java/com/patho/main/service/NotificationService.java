@@ -218,7 +218,7 @@ public class NotificationService extends AbstractService {
 		return success;
 	}
 
-	public boolean faxNotification(NotificationContainer notificationContainer, Task task, MailTemplate template,
+	public boolean faxNotification(NotificationContainer notificationContainer, Task task,
 			NotificationFeedback feedback, boolean print, boolean send, boolean recreateAfterNotification) {
 
 		boolean success = true;
@@ -276,7 +276,7 @@ public class NotificationService extends AbstractService {
 	}
 
 	public boolean letterNotification(NotificationContainer notificationContainer, Task task,
-			NotificationFeedback feedback, boolean print, boolean send, boolean recreateAfterNotification) {
+			NotificationFeedback feedback, boolean print, boolean recreateAfterNotification) {
 
 		boolean success = true;
 		ValidatorUtil val = new ValidatorUtil();
@@ -285,81 +285,63 @@ public class NotificationService extends AbstractService {
 			// copy contact address before sending -> save before error
 			notificationContainer.getNotification().setContactAddress(notificationContainer.getContactAddress());
 
-			if (!notificationExecutor.isAddressApproved(container.getContactAddress()))
+			if (!val.approvePostalAddress(notificationContainer.getContactAddress()))
 				throw new IllegalArgumentException("");
 
-			container.setPdf(notificationExecutor.getPDF(container, task, letterContainerList.getDefaultReport(),
-					letterContainerList.getSelectedRevisions(), letterContainerList.isIndividualAddresses()));
+			feedback.setFeedback("dialog.notification.sendProcess.pdf.print");
+			userHandlerAction.getSelectedPrinter().print(notificationContainer.getPdf());
 
-			if (!notificationExecutor.performNotification(container, false, letterContainerList.isPrint()))
-				throw new IllegalArgumentException("dialog.notification.sendProcess.pdf.error.failed");
-
-			notificationExecutor.finishSendProecess(container, true,
-					resourceBundle.get("dialog.notification.sendProcess.pdf.print"));
+			notificationContainer.getNotification().setPerformed(true);
+			notificationContainer.getNotification().setDateOfAction(new Date());
+			notificationContainer.getNotification()
+					.setCommentary(resourceBundle.get("dialog.notification.sendProcess.pdf.print"));
+			// if success = performed, nothing to do = inactive, if failed = active
+			notificationContainer.getNotification().setActive(false);
+			// if success = !failed = false
+			notificationContainer.getNotification().setFailed(true);
 
 		} catch (IllegalArgumentException e) {
+			notificationContainer.getNotification().setPerformed(true);
+			notificationContainer.getNotification().setDateOfAction(new Date());
+			notificationContainer.getNotification()
+					.setCommentary(resourceBundle.get(e.getMessage(), notificationContainer.getContactAddress()));
+			// if success = performed, nothing to do = inactive, if failed = active
+			notificationContainer.getNotification().setActive(false);
+			// if success = !failed = false
+			notificationContainer.getNotification().setFailed(true);
+
 			success = false;
-			notificationExecutor.finishSendProecess(container, false,
-					resourceBundle.get(e.getMessage(), container.getContactAddress()));
-			log.debug("Sending failed" + container.getNotification().getCommentary());
+
+			logger.debug("Sending failed" + notificationContainer.getNotification().getCommentary());
 		}
 
-	}
-
-	public boolean executeLetterNotification(NotificationFeedback feedback, Task task,
-			NotificationContainerList letterContainerList, boolean temporaryNotification) {
-
-		boolean success = true;
-
-		for (NotificationContainer container : letterContainerList.getContainerToNotify()) {
-			try {
-
-				// copy contact address before sending -> save before error
-				container.getNotification().setContactAddress(container.getContactAddress());
-
-				if (!notificationExecutor.isAddressApproved(container.getContactAddress()))
-					throw new IllegalArgumentException("");
-
-				container.setPdf(notificationExecutor.getPDF(container, task, letterContainerList.getDefaultReport(),
-						letterContainerList.getSelectedRevisions(), letterContainerList.isIndividualAddresses()));
-
-				if (!notificationExecutor.performNotification(container, false, letterContainerList.isPrint()))
-					throw new IllegalArgumentException("dialog.notification.sendProcess.pdf.error.failed");
-
-				notificationExecutor.finishSendProecess(container, true,
-						resourceBundle.get("dialog.notification.sendProcess.pdf.print"));
-
-			} catch (IllegalArgumentException e) {
-				success = false;
-				notificationExecutor.finishSendProecess(container, false,
-						resourceBundle.get(e.getMessage(), container.getContactAddress()));
-				log.debug("Sending failed" + container.getNotification().getCommentary());
-			}
-
-			// renew if temporary notification
-			if (temporaryNotification)
-				contactDAO.renewNotification(task, container.getContact(), container.getNotification());
-
-			feedback.progressStep();
-		}
+		// renew if temporary notification
+		if (recreateAfterNotification)
+			associatedContactService.renewNotification(notificationContainer.getContact(),
+					notificationContainer.getNotification(), false);
 
 		return success;
+
 	}
 
-	public void executePhoneNotification(NotificationFeedback feedback, Task task,
-			NotificationContainerList phoneContainerList, boolean temporaryNotification) {
-		NotificationExecutor<NotificationContainer> notificationExecutor = new NotificationExecutor<NotificationContainer>(
-				feedback);
-		for (NotificationContainer container : phoneContainerList.getContainerToNotify()) {
-			notificationExecutor.finishSendProecess(container, true,
-					resourceBundle.get("dialog.notification.sendProcess.pdf.print"));
+	public boolean phoneNotification(NotificationContainer notificationContainer, Task task,
+			NotificationFeedback feedback, boolean recreateAfterNotification) {
 
-			// renew if temporary notification
-			if (temporaryNotification)
-				contactDAO.renewNotification(task, container.getContact(), container.getNotification());
-		}
+		notificationContainer.getNotification().setPerformed(true);
+		notificationContainer.getNotification().setDateOfAction(new Date());
+		notificationContainer.getNotification()
+				.setCommentary(resourceBundle.get("dialog.notification.sendProcess.pdf.print"));
+		// if success = performed, nothing to do = inactive, if failed = active
+		notificationContainer.getNotification().setActive(false);
+		// if success = !failed = false
+		notificationContainer.getNotification().setFailed(true);
 
-		feedback.progressStep();
+		// renew if temporary notification
+		if (recreateAfterNotification)
+			associatedContactService.renewNotification(notificationContainer.getContact(),
+					notificationContainer.getNotification(), false);
+
+		return true;
 	}
 
 	public PDFContainer generateSendReport(NotificationFeedback feedback, Task task,

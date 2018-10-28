@@ -62,6 +62,7 @@ Tasks:
 Change to Apache HTTP client 
 -> Council Dialog, select correct page on start up
 -> FAX fix
+-> Notification Dialog/Services, add printing of FAS and Letter with template infos 
 
 Next Changes:
 -> patienten 1502 und 1503 löschen
