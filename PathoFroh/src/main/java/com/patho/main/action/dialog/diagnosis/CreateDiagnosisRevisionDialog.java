@@ -2,14 +2,12 @@ package com.patho.main.action.dialog.diagnosis;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.postgresql.jdbc2.ArrayAssistantRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -21,7 +19,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.DiagnosisService;
 import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
-import com.patho.main.util.helper.StreamUtils;
 import com.patho.main.util.helper.TaskUtil;
 
 import lombok.AccessLevel;

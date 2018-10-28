@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 
-import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Council;
-import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.patient.Diagnosis;

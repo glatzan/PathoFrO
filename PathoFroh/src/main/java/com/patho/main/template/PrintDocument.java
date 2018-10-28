@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
-import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TextToLatexConverter;
 import com.patho.main.util.helper.TimeUtil;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

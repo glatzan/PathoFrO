@@ -26,7 +26,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 
-import com.patho.main.common.CouncilState;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Task;

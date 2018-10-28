@@ -9,11 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
-
-import lombok.extern.slf4j.Slf4j;
 
 public class TaskUtil {
 

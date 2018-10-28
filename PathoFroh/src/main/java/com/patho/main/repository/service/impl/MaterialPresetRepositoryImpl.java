@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.MaterialPreset_;
-import com.patho.main.model.Physician_;
 import com.patho.main.repository.service.MaterialPresetRepositoryCustom;
 
 @Service

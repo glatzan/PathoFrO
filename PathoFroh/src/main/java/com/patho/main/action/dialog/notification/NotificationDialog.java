@@ -1,40 +1,28 @@
 package com.patho.main.action.dialog.notification;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.validator.routines.EmailValidator;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.AssociatedContact;
-import com.patho.main.model.AssociatedContactNotification;
 import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.Contact;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Person;
-import com.patho.main.model.interfaces.DataList;
-import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MailRepository;
@@ -47,29 +35,19 @@ import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.template.mail.DiagnosisReportMail;
-import com.patho.main.template.print.DiagnosisReport;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
-import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.template.print.ui.document.report.DiagnosisReportUi;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.helper.HistoUtil;
-import com.patho.main.util.helper.StreamUtils;
 import com.patho.main.util.helper.ValidatorUtil;
-import com.patho.main.util.impl.DefaultDataList;
 import com.patho.main.util.notification.NotificationContainer;
-import com.patho.main.util.notification.NotificationContainerList;
 import com.patho.main.util.notification.NotificationFeedback;
-import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.pdf.PrintOrder;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Synchronized;
-import lombok.experimental.Delegate;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

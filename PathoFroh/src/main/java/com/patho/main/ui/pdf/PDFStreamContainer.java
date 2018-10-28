@@ -1,11 +1,7 @@
 package com.patho.main.ui.pdf;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.faces.context.ExternalContext;

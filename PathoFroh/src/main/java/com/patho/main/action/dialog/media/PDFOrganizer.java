@@ -1,21 +1,16 @@
 package com.patho.main.action.dialog.media;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +43,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.experimental.Delegate;
 
 @Configurable
 @Getter

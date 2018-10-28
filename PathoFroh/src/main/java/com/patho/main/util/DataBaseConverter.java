@@ -1,22 +1,14 @@
 package com.patho.main.util;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.rendering.ImageType;
-import org.apache.pdfbox.rendering.PDFRenderer;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +20,11 @@ import com.patho.main.model.Council;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
-import com.patho.main.model.util.audit.Audit;
 import com.patho.main.repository.BioBankRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PDFRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PDFService;
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;

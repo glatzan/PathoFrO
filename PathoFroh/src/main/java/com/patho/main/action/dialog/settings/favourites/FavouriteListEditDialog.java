@@ -8,26 +8,12 @@ import java.util.Set;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.settings.SettingsDialog.DiagnosisTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.FavouriteListTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.HistoGroupTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.HistoUserTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.LogTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.MaterialTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.OrganizationTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.PersonParentTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.PhysicianSettingsTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.ProgramParentTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.StainingTab;
-import com.patho.main.action.dialog.settings.SettingsDialog.StaticListTab;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteListItem;
@@ -41,13 +27,11 @@ import com.patho.main.repository.FavouritePermissionsRepository;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

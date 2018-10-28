@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.action.UserHandlerAction;
-import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog.DiagnosisPhaseExitData;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
@@ -744,7 +743,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		 */
 		public Task save(Task task, boolean reload, String resourcesKey, Object... arr) {
 			logger.debug("Saving task " + task.getTaskID());
-			task = taskRepository.save(task, resourceBundle.get(resourcesKey, arr));
+			task = taskRepository.save(task, resourceBundle.get(resourcesKey, arr), task.getPatient());
 			if (globalEditViewHandler.getWorklistData().isSelected(task)) {
 				if (!reload) {
 					setSelectedTask(task);

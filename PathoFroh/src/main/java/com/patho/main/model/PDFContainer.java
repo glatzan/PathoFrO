@@ -1,8 +1,5 @@
 package com.patho.main.model;
 
-import java.util.List;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -17,20 +14,12 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
-import org.slf4j.Logger;
 
-import com.patho.main.common.Eye;
-import com.patho.main.common.TaskPriority;
-import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Sample;
 import com.patho.main.model.util.audit.Audit;
 import com.patho.main.model.util.audit.AuditAble;
 import com.patho.main.model.util.audit.AuditListener;
 import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.ui.task.TaskStatus;
 
 import lombok.Getter;
 import lombok.Setter;

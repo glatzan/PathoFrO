@@ -1,12 +1,9 @@
 package com.patho.main.util;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,27 +14,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.persistence.EntityManager;
-
-import org.apache.commons.collections.map.HashedMap;
 import org.hibernate.boot.model.naming.IllegalIdentifierException;
-import org.primefaces.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.dialog.task.CreateTaskDialog.TaskTempData.SampleTempData;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.common.Eye;
 import com.patho.main.common.TaskPriority;
-import com.patho.main.config.excepion.ToManyEntriesException;
 import com.patho.main.model.BioBank;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Physician;
@@ -56,8 +46,6 @@ import com.patho.main.service.FileService;
 import com.patho.main.service.PatientService;
 import com.patho.main.service.SampleService;
 import com.patho.main.service.TaskService;
-import com.patho.main.util.exception.CustomNullPatientExcepetion;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;

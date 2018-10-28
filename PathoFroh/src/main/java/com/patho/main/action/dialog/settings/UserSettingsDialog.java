@@ -18,7 +18,6 @@ import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.ui.FavouriteListContainer;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;

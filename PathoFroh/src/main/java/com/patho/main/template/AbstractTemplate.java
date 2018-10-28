@@ -3,7 +3,6 @@ package com.patho.main.template;
 import org.apache.velocity.app.Velocity;
 
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.patient.Patient;
 import com.patho.main.util.VelocityNoOutputLogger;
 
 import lombok.Getter;

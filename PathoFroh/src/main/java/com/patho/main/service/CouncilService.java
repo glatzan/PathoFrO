@@ -11,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.common.CouncilState;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Council;
 import com.patho.main.model.Council.CouncilNotificationMethod;
 import com.patho.main.model.PDFContainer;

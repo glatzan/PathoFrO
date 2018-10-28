@@ -14,7 +14,6 @@ import com.patho.main.model.Contact;
 import com.patho.main.model.Council;
 import com.patho.main.model.Person;
 import com.patho.main.model.patient.Task;
-import com.patho.main.repository.CouncilRepository;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.print.CouncilReport;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;

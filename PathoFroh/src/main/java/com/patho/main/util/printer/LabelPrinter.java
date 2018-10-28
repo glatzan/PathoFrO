@@ -12,14 +12,12 @@ import java.util.List;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.google.gson.annotations.Expose;
 import com.patho.main.template.print.SlideLable;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

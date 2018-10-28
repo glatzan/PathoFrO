@@ -23,12 +23,10 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.service.PatientService;
 import com.patho.main.ui.ListChooser;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

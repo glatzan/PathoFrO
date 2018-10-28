@@ -19,6 +19,7 @@ import com.patho.main.service.PrintService;
 import com.patho.main.template.mail.RequestUnlockMail;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
+import com.sun.mail.util.logging.MailHandler;
 
 import lombok.AccessLevel;
 import lombok.Getter;

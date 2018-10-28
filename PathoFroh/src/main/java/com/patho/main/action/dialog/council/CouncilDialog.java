@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 
-import org.hibernate.Hibernate;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Lazy;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -51,7 +49,6 @@ import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Delegate;

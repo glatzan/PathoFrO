@@ -3,7 +3,6 @@ package com.patho.main.service;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,25 +12,17 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.UserHandlerAction;
-import com.patho.main.action.handler.GlobalSettings;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.mail.DiagnosisReportMail;
-import com.patho.main.template.print.DiagnosisReport;
-import com.patho.main.template.print.SendReport;
-import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.ValidatorUtil;
 import com.patho.main.util.notification.NotificationContainer;
-import com.patho.main.util.notification.NotificationContainerList;
-import com.patho.main.util.notification.NotificationExecutor;
 import com.patho.main.util.notification.NotificationFeedback;
 import com.patho.main.util.pdf.PDFGenerator;
 

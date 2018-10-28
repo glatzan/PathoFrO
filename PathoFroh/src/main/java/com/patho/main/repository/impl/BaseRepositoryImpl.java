@@ -10,7 +10,6 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,16 +65,14 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRep
 		return save(arg0, log, user, p);
 	}
 
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional
 	@Override
-	@Modifying(clearAutomatically = true)
 	public <S extends T> S save(S arg0, String log, HistoUser user) {
 		return save(arg0, log, user, arg0 instanceof Parent ? ((Parent) arg0).getPatient() : null);
 	}
 
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional
 	@Override
-	@Modifying(clearAutomatically = true)
 	public <S extends T> S save(S arg0, String log, HistoUser user, Patient p) {
 		SecurityContextHolderUtil.setObjectToSecurityContext(LogListener.LOG_KEY_INFO, new LogInfo(log, user, p));
 		return save(arg0);

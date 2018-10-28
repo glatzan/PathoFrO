@@ -173,6 +173,7 @@ public class SampleService extends AbstractService {
 	public Task updateMaterialOfSample(Sample sample, String name) {
 		sample.setMaterial(name);
 		return taskRepository.save(sample.getTask(),
-				resourceBundle.get("log.patient.task.sample.material.update", sample.getTask(), sample, name));
+				resourceBundle.get("log.patient.task.sample.material.update", sample.getTask(), sample, name),
+				sample.getTask().getPatient());
 	}
 }
