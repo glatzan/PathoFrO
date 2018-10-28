@@ -118,44 +118,44 @@ public class NotificationService extends AbstractService {
 		}
 	}
 
-	public boolean executeNotification(NotificationFeedback feedback, Task task, MailContainerList mailContainerList,
-			NotificationContainerList faxContainerList, NotificationContainerList letterContainerList,
-			NotificationContainerList phoneContainerList, NotificationContainerList printContainerList,
-			boolean temporaryNotification) {
-
-		boolean emailSendSuccessful = executeMailNotification(feedback, task, mailContainerList, temporaryNotification);
-		boolean faxSendSuccessful = executeFaxNotification(feedback, task, faxContainerList, temporaryNotification);
-		boolean letterSendSuccessful = executeLetterNotification(feedback, task, letterContainerList,
-				temporaryNotification);
-
-		if (printContainerList.isUse() && printContainerList.getDefaultReport() != null) {
-			// addition templates
-			((DiagnosisReport) printContainerList.getDefaultReport()).initData(task, "");
-			PDFContainer report = (new PDFGenerator())
-					.getPDF(((DiagnosisReport) printContainerList.getDefaultReport()));
-
-			userHandlerAction.getSelectedPrinter().print(report, printContainerList.getPrintCount(),
-					printContainerList.getDefaultReport().getAttributes());
-
-		}
-
-		feedback.progressStep();
-
-		PDFContainer sendReport = generateSendReport(feedback, task, mailContainerList, faxContainerList,
-				letterContainerList, phoneContainerList, new Date(), temporaryNotification);
-
-		// setting notification als completed
-		for (DiagnosisRevision revision : printContainerList.getSelectedRevisions()) {
-			revision.setNotificationPending(false);
-			revision.setNotificationDate(System.currentTimeMillis());
-		}
-
-		genericDAO.savePatientData(task, "log.patient.task.notification.send");
-
-		pdfService.attachPDF(task.getPatient(), task, sendReport);
-
-		return emailSendSuccessful && faxSendSuccessful && letterSendSuccessful;
-	}
+//	public boolean executeNotification(NotificationFeedback feedback, Task task, MailContainerList mailContainerList,
+//			NotificationContainerList faxContainerList, NotificationContainerList letterContainerList,
+//			NotificationContainerList phoneContainerList, NotificationContainerList printContainerList,
+//			boolean temporaryNotification) {
+//
+//		boolean emailSendSuccessful = executeMailNotification(feedback, task, mailContainerList, temporaryNotification);
+//		boolean faxSendSuccessful = executeFaxNotification(feedback, task, faxContainerList, temporaryNotification);
+//		boolean letterSendSuccessful = executeLetterNotification(feedback, task, letterContainerList,
+//				temporaryNotification);
+//
+//		if (printContainerList.isUse() && printContainerList.getDefaultReport() != null) {
+//			// addition templates
+//			((DiagnosisReport) printContainerList.getDefaultReport()).initData(task, "");
+//			PDFContainer report = (new PDFGenerator())
+//					.getPDF(((DiagnosisReport) printContainerList.getDefaultReport()));
+//
+//			userHandlerAction.getSelectedPrinter().print(report, printContainerList.getPrintCount(),
+//					printContainerList.getDefaultReport().getAttributes());
+//
+//		}
+//
+//		feedback.progressStep();
+//
+//		PDFContainer sendReport = generateSendReport(feedback, task, mailContainerList, faxContainerList,
+//				letterContainerList, phoneContainerList, new Date(), temporaryNotification);
+//
+//		// setting notification als completed
+//		for (DiagnosisRevision revision : printContainerList.getSelectedRevisions()) {
+//			revision.setNotificationPending(false);
+//			revision.setNotificationDate(System.currentTimeMillis());
+//		}
+//
+//		genericDAO.savePatientData(task, "log.patient.task.notification.send");
+//
+//		pdfService.attachPDF(task.getPatient(), task, sendReport);
+//
+//		return emailSendSuccessful && faxSendSuccessful && letterSendSuccessful;
+//	}
 
 	public boolean emailNotification(NotificationContainer notificationContainer, Task task, MailTemplate template,
 			NotificationFeedback feedback, boolean recreateAfterNotification) {
@@ -344,23 +344,23 @@ public class NotificationService extends AbstractService {
 		return true;
 	}
 
-	public PDFContainer generateSendReport(NotificationFeedback feedback, Task task,
-			MailContainerList mailContainerList, NotificationContainerList faxContainerList,
-			NotificationContainerList letterContainerList, NotificationContainerList phoneContaienrList,
-			Date notificationDate, boolean temporarayNotification) {
-
-		feedback.setFeedback("log.notification.pdf.sendReport.generation");
-
-		SendReport sendReport = DocumentTemplate
-				.getTemplateByID(globalSettings.getDefaultDocuments().getNotificationSendReport());
-
-		sendReport.initializeTempalte(task, mailContainerList, faxContainerList, letterContainerList,
-				phoneContaienrList, notificationDate, temporarayNotification);
-
-		PDFContainer container = (new PDFGenerator()).getPDF(sendReport);
-
-		return container;
-	}
+//	public PDFContainer generateSendReport(NotificationFeedback feedback, Task task,
+//			MailContainerList mailContainerList, NotificationContainerList faxContainerList,
+//			NotificationContainerList letterContainerList, NotificationContainerList phoneContaienrList,
+//			Date notificationDate, boolean temporarayNotification) {
+//
+//		feedback.setFeedback("log.notification.pdf.sendReport.generation");
+//
+//		SendReport sendReport = DocumentTemplate
+//				.getTemplateByID(globalSettings.getDefaultDocuments().getNotificationSendReport());
+//
+//		sendReport.initializeTempalte(task, mailContainerList, faxContainerList, letterContainerList,
+//				phoneContaienrList, notificationDate, temporarayNotification);
+//
+//		PDFContainer container = (new PDFGenerator()).getPDF(sendReport);
+//
+//		return container;
+//	}
 
 	/**
 	 * Returns a pdf container for an contact. IF the contact has its own container,

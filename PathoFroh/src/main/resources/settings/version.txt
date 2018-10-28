@@ -56,8 +56,7 @@ CTRL + N: New Task
 Alt  + B: Notification
 
 Tasks:
--> FIX Generation for Diagnosis-Reports in DiagnosisReport View
--> FIX Task selection in TaskView (if number change)
+-> FIX  Update for 2 > pdf thubnails Diagnosis-Reports in DiagnosisReport View
 -> JsonHandler
 Change to Apache HTTP client 
 -> Council Dialog, select correct page on start up

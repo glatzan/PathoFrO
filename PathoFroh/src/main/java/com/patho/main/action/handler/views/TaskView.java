@@ -83,8 +83,12 @@ public class TaskView extends AbstractTaskView {
 
 		setPages(new ArrayList<Integer>(pagesCount));
 
-		for (int i = 0; i < pagesCount; i++) {
+		for (int i = 0; i < pagesCount - 1; i++) {
 			getPages().add(i + 1);
+		}
+
+		if (page > getPages().size() - 1) {
+			page = getPages().get(getPages().size() - 1);
 		}
 
 		logger.debug("Reloading task lists");

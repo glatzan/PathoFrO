@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +25,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Component
-@Scope(value = "session")
 @Getter
 @Setter
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserHandlerAction implements Serializable {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());

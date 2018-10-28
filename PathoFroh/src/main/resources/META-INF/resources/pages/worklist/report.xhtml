@@ -96,7 +96,7 @@
 							<p:commandLink rendered="#{!data.loading}"
 								update="@(.onClickUpdate)"
 								actionListener="#{globalEditViewHandler.reportView.setSelectedPDF(data)}">
-								<p:graphicImage height="325" cache="false"
+								<p:graphicImage height="325" cache="false" 
 									value="#{globalEditViewHandler.reportView.getThumbnail()}"
 									style="border: 1px solid black;" width="230">
 									<f:param name="id" value="#{data.pdf.thumbnail}" />
@@ -118,6 +118,7 @@
 					interval="1" update="@(.reloadPDF)"
 					stop="#{globalEditViewHandler.reportView.generationCompleted}"
 					listener="#{globalEditViewHandler.reportView.updateData()}"></p:poll>
+					
 			</p:scrollPanel>
 		</h:panelGrid>
 		<script>

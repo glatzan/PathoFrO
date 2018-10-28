@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.patho.main.model.PDFContainer;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.util.notification.MailContainerList;
 import com.patho.main.util.notification.NotificationContainerList;
 import com.patho.main.util.pdf.PDFGenerator;
 
@@ -21,7 +20,6 @@ import com.patho.main.util.pdf.PDFGenerator;
  */
 public class SendReport extends PrintDocument {
 
-	private MailContainerList mailContainerList;
 	private NotificationContainerList faxContainerList;
 	private NotificationContainerList letterContainerList;
 	private NotificationContainerList phoneContainerList;
@@ -33,7 +31,6 @@ public class SendReport extends PrintDocument {
 
 	public void initilize(HashMap<String, Object> content) {
 		super.initilize(content);
-		mailContainerList = (MailContainerList) content.get("mailContainer");
 		faxContainerList = (NotificationContainerList) content.get("faxContainer");
 		letterContainerList = (NotificationContainerList) content.get("letterContainer");
 		phoneContainerList = (NotificationContainerList) content.get("phoneContainer");
@@ -44,8 +41,6 @@ public class SendReport extends PrintDocument {
 
 		attachPdf.add(container);
 
-		attachPdf.addAll(mailContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
-				.map(p -> p.getPdf()).collect(Collectors.toList()));
 		attachPdf.addAll(faxContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
 				.map(p -> p.getPdf()).collect(Collectors.toList()));
 		attachPdf.addAll(letterContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)

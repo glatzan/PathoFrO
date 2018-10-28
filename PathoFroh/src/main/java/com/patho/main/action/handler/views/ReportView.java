@@ -23,8 +23,10 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.model.util.audit.Audit;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.ui.interfaces.PdfStreamProvider;
 import com.patho.main.ui.task.DiagnosisReportUpdater;
 import com.patho.main.util.helper.HistoUtil;
+import com.patho.main.util.pdf.LazyPDFReturnHandler;
 import com.patho.main.util.pdf.PDFUtil;
 
 import lombok.AccessLevel;
@@ -92,8 +94,12 @@ public class ReportView extends AbstractTaskView {
 
 			if (!c.isPresent() && revision.getCompletionDate() != 0) {
 				logger.debug("No report present, generating new report");
-				task = new DiagnosisReportUpdater().updateDiagnosisReportNoneBlocking(task, revision);
-				data.add(new DiagnosisReportData(revision, PDFUtil.getDiagnosisReport(task, revision).get(), true));
+				
+				DiagnosisReportData reportData = new DiagnosisReportData(revision, true);
+				task = new DiagnosisReportUpdater().updateDiagnosisReportNoneBlocking(task, revision, reportData);
+				// serach for created pdfcontainer
+				reportData.setPdf(PDFUtil.getDiagnosisReport(task, revision).get());
+				data.add(reportData);
 				setGeneratingPDFs(true);
 			} else if (revision.getCompletionDate() != 0) {
 				data.add(new DiagnosisReportData(revision, c.get(), false));
@@ -117,13 +123,13 @@ public class ReportView extends AbstractTaskView {
 	}
 
 	public void updateData() {
-		getData().stream().forEach(p -> p.update());
 
 		if (isGeneratingSelectedPDF()) {
 			setSelectedPDF(getSelectedData());
 		}
 
 		boolean loading = getData().stream().anyMatch(p -> p.isLoading());
+		
 		setGenerationCompleted(!loading);
 		setGeneratingPDFs(loading);
 	}
@@ -142,7 +148,7 @@ public class ReportView extends AbstractTaskView {
 			// So, browser is requesting the image. Return a real StreamedContent with the
 			// image bytes.
 			String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
-
+			System.out.println("returning thumbnail");
 			if (id != null && mediaRepository.isFile(id)) {
 				byte[] img = mediaRepository.getBytes(id);
 				return new DefaultStreamedContent(new ByteArrayInputStream(img), "image/png");
@@ -189,7 +195,7 @@ public class ReportView extends AbstractTaskView {
 	@Getter
 	@Setter
 	@Configurable
-	public static class DiagnosisReportData {
+	public static class DiagnosisReportData implements LazyPDFReturnHandler {
 
 		protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -211,6 +217,10 @@ public class ReportView extends AbstractTaskView {
 			this(diagnosis, pdf, false);
 		}
 
+		public DiagnosisReportData(DiagnosisRevision diagnosis, boolean loading) {
+			this(diagnosis, null, loading);
+		}
+
 		public DiagnosisReportData(DiagnosisRevision diagnosis, PDFContainer pdf, boolean loading) {
 			super();
 			this.diagnosis = diagnosis;
@@ -218,9 +228,10 @@ public class ReportView extends AbstractTaskView {
 			this.loading = loading;
 		}
 
-		public void update() {
+		@Override
+		public void returnPDFContent(PDFContainer container, String uuid) {
 			if (loading) {
-				loading = !mediaRepository.isFile(pdf.getPath());
+				loading = false;
 			}
 		}
 	}

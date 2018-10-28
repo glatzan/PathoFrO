@@ -55,11 +55,12 @@ patho:
   common:
      ####### Task View #######
     taskView:
-      tasksPerPage: 25
+      tasksPerPage: 50
       tasksPerPageOptions:
-        - 25
         - 50
         - 100
+        - 200
+        - 300
   ####### LDAP #######
   ldap:
     ldapUrl: ldap://ldap.ukl.uni-freiburg.de/

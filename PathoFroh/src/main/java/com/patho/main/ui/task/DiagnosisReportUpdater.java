@@ -22,6 +22,7 @@ import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.util.pdf.LazyPDFReturnHandler;
 import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.pdf.PDFUtil;
 
@@ -62,6 +63,15 @@ public class DiagnosisReportUpdater {
 	private TaskRepository taskRepository;
 
 	public Task updateDiagnosisReportNoneBlocking(Task task, DiagnosisRevision diagnosisRevision) {
+		return updateDiagnosisReportNoneBlocking(task, diagnosisRevision, new LazyPDFReturnHandler() {
+			@Override
+			public void returnPDFContent(PDFContainer container, String uuid) {
+			}
+		});
+	}
+
+	public Task updateDiagnosisReportNoneBlocking(Task task, DiagnosisRevision diagnosisRevision,
+			LazyPDFReturnHandler returnHandler) {
 		Optional<PrintDocument> printDocument = printDocumentRepository
 				.findByTypeAndDefault(DocumentType.DIAGNOSIS_REPORT);
 
@@ -70,11 +80,11 @@ public class DiagnosisReportUpdater {
 			return task;
 		}
 
-		return updateDiagnosisReportNoneBlocking(task, diagnosisRevision, printDocument.get());
+		return updateDiagnosisReportNoneBlocking(task, diagnosisRevision, printDocument.get(), returnHandler);
 	}
 
 	public Task updateDiagnosisReportNoneBlocking(Task task, DiagnosisRevision diagnosisRevision,
-			PrintDocument printDocument) {
+			PrintDocument printDocument, LazyPDFReturnHandler returnHandler) {
 
 		printDocument.initilize(new InitializeToken("task", diagnosisRevision.getTask()),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
@@ -102,14 +112,14 @@ public class DiagnosisReportUpdater {
 			task = taskRepository.save(task);
 		}
 
-		taskExecutor.execute(new Thread() {
-			public void run() {
-				logger.debug("Stargin PDF Generation in new Thread");
-				PDFGenerator generator = new PDFGenerator();
-				generator.getPDF(printDocument, outputDirectory, container, true);
-				logger.debug("PDF Generation completed, thread ended");
-			}
-		});
+//		taskExecutor.execute(new Thread() {
+//			public void run() {
+		logger.debug("Stargin PDF Generation in new Thread");
+		PDFGenerator generator = new PDFGenerator();
+		generator.getPDFNoneBlocking(printDocument, outputDirectory, container, true, returnHandler);
+//				logger.debug("PDF Generation completed, thread ended");
+//			}
+//		});
 
 		return task;
 	}
