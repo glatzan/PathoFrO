@@ -56,12 +56,15 @@ CTRL + N: New Task
 Alt  + B: Notification
 
 Tasks:
--> FIX  Update for 2 > pdf thubnails Diagnosis-Reports in DiagnosisReport View
--> JsonHandler
-Change to Apache HTTP client 
--> Council Dialog, select correct page on start up
+-> ReportView: FIX  Update for 2 > pdf thubnails Diagnosis-Reports in DiagnosisReport View
+-> JsonHandler: Change to Apache HTTP client 
+-> Council Dialog: select correct page on start up
 -> FAX fix
--> Notification Dialog/Services, add printing of FAS and Letter with template infos 
+-> Notification Dialog/Services, add printing of FAx and Letter with template infos (pass the template to the print method)
+-> PAtientList: Fix council open via dynmaic link, if no task is selected, null pointer is thrown 
+
+-> Accounting: Add rights for accounting dialog
+-> Programm Version Dialog: Enable emails in this dialog
 
 Next Changes:
 -> patienten 1502 und 1503 löschen
