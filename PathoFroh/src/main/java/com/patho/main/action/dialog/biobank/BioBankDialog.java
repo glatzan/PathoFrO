@@ -46,7 +46,6 @@ public class BioBankDialog extends AbstractDialog<BioBankDialog> {
 	public BioBankDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
-
 		return this;
 	}
 
@@ -62,13 +61,9 @@ public class BioBankDialog extends AbstractDialog<BioBankDialog> {
 		return super.initBean(task, Dialog.BIO_BANK);
 	}
 
-	/**
-	 * Saves the biobank to the database
-	 */
 	public void saveAndHide() {
-		bioBankRepository.save(getBioBank(),
-				resourceBundle.get("log.patient.bioBank.save", getTask(), getTask().getParent()));
-		hideDialog(new ReloadTaskEvent());
+		saveData();
+		super.hideDialog(new ReloadTaskEvent());
 	}
 
 	/**
@@ -77,6 +72,10 @@ public class BioBankDialog extends AbstractDialog<BioBankDialog> {
 	public void onTypeChange() {
 		if (bioBank.getInformedConsentType() == InformedConsentType.REVOKED)
 			bioBank.setRetractionDate(new Date());
+		else if (bioBank.getInformedConsentType() == InformedConsentType.FULL)
+			bioBank.setConsentDate(new Date());
+
+		saveData();
 	}
 
 	/**
@@ -86,9 +85,13 @@ public class BioBankDialog extends AbstractDialog<BioBankDialog> {
 	 */
 	public void onDefaultDialogReturn(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
-			System.out.println("Reloading");
 			update(true);
 		}
+	}
+
+	public void saveData() {
+		bioBank = bioBankRepository.save(bioBank, resourceBundle.get("log.patient.bioBank.save", getTask()),
+				getTask().getPatient());
 	}
 
 	private void update(boolean reloadTask) {
@@ -104,4 +107,5 @@ public class BioBankDialog extends AbstractDialog<BioBankDialog> {
 		if (oBioBank.isPresent())
 			setBioBank(oBioBank.get());
 	}
+
 }

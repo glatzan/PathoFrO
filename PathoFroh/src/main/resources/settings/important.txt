@@ -1,0 +1,3 @@
+Handel Version Erros in Dialoges 
+-> new ReloadEvent() is fired
+-> if nested dialog, parent should catch ReloadEvent() 

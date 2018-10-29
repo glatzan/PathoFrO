@@ -12,12 +12,15 @@
 <composite:interface>
 	<composite:attribute name="rendered" required="false" default="true" />
 	<composite:attribute name="auditElement" required="true" />
+
+	<composite:attribute name="tableWidth" default="width:100%"
+		required="false" />
 </composite:interface>
 
 <composite:implementation>
 
 	<h:panelGrid columns="2" styleClass="defaultHistoTable"
-		style="margin-top:5px;margin-left:5px;"
+		style="margin-top:5px;margin-left:5px;width:#{cc.attrs.tableWidth} !important;"
 		rendered="#{cc.attrs.rendered}">
 
 		<!-- created date-->

@@ -15,7 +15,7 @@
 
 	<p:outputPanel styleClass="bodyPannel">
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150, ">
+			columnClasses="columnWidth150 columnTop, ">
 
 			<!-- Use letter -->
 			<h:outputLabel value="#{msg['dialog.notification.tab.letter.use']}"
@@ -68,8 +68,8 @@
 			<h:outputLabel
 				value="#{msg['dialog.notification.tab.letter.receiver']}"
 				styleClass="bigFont" />
-			<p:dataTable var="container" scrollable="true" scrollHeight="200"
-				style="width:96%" styleClass="newStyleDataTable"
+			<p:dataTable var="container" scrollable="true" scrollHeight="160"
+				style="width:96%" styleClass="defaultHistoDataTable"
 				value="#{dialog.notificationDialog.letterTab.container}">
 
 				<!-- name of receiver -->
@@ -92,7 +92,7 @@
 				</p:column>
 
 				<!-- perform notification on user -->
-				<p:column style="width:6%">
+				<p:column style="width:6%; text-align:center;">
 					<f:facet name="header">
 						<i class="fa fa-check-circle-o "
 							title="#{msg['dialog.notification.tab.letter.receiver.use']}" />
@@ -112,7 +112,7 @@
 					</f:facet>
 
 					<!-- add pdf, if pdf == null -->
-					<p:commandLink styleClass="noUnderlineAtLink"
+					<p:commandLink
 						rendered="#{container.pdf eq null and container.perform}"
 						disabled="#{!dialog.notificationDialog.letterTab.useNotification}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.info']}"
@@ -120,26 +120,28 @@
 						oncomplete="PF('blockUIWidget').unblock()"
 						actionListener="#{dialog.notificationDialog.openSelectPDFDialog(dialog.notificationDialog.task, container.contact)}">
 
+						<f:attribute name="container" value="#{container}" />
+
 						<p:ajax event="dialogReturn" update="@form" process="@form"
-							listener="#{dialog.notificationDialog.onSelectPDFDialogReturn}" />
+							listener="#{dialog.notificationDialog.onSelectPDFDialogReturn}">
+						</p:ajax>
 
 						<i class="fa fa-fw fa-file-pdf-o" />
 					</p:commandLink>
 
 					<!-- show pdf, if pdf != null -->
-					<p:commandLink styleClass="noUnderlineAtLink"
+					<p:commandLink
 						rendered="#{container.pdf ne null and container.perform}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.show']}"
 						execute="@this"
 						disabled="#{!dialog.notificationDialog.letterTab.useNotification}"
-						actionListener="#{dialog.notificationDialog.openMediaViewDialog(container.pdf)}">
+						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(dialog.notificationDialog.task.patient).viewMode().setPDFToDisplay(container.pdf)}">
 
 						<i class="fa fa-search icon-grey" />
 					</p:commandLink>
 
 					<!-- remove pdf, if pdf != null -->
-					<p:commandLink styleClass="noUnderlineAtLink"
-						style="margin-left: 10px;"
+					<p:commandLink style="margin-left: 10px;"
 						rendered="#{container.pdf ne null and container.perform}"
 						title="#{msg['dialog.notification.tab.letter.receiver.pdf.remove']}"
 						execute="@this"
@@ -155,10 +157,8 @@
 	</p:outputPanel>
 
 	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
-
-			<h:panelGrid columns="1" styleClass="newTableContainer left">
+		<h:panelGrid columns="2">
+			<h:panelGrid columns="1" styleClass="left" >
 				<!-- Contact -->
 				<p:commandButton
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
@@ -169,7 +169,7 @@
 				</p:commandButton>
 			</h:panelGrid>
 
-			<h:panelGrid columns="3" styleClass="newTableContainer right">
+			<h:panelGrid columns="3" styleClass="right" id="buttonContainer">
 				<!-- previouse -->
 				<p:commandButton value="#{msg['general.back']}"
 					icon="fa fa-fw fa-arrow-left"
@@ -189,5 +189,6 @@
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
+
 
 </ui:composition>

@@ -14,7 +14,7 @@
 
 	<p:outputPanel styleClass="bodyPannel">
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150, ">
+			columnClasses="columnWidth150 columnTop, ">
 
 			<!-- Use fax -->
 			<h:outputLabel value="#{msg['dialog.notification.tab.fax.use']}"
@@ -75,8 +75,9 @@
 			<!-- receiver -->
 			<h:outputLabel value="#{msg['dialog.notification.tab.fax.receiver']}"
 				styleClass="bigFont" />
-			<p:dataTable var="container" styleClass="newStyleDataTable"
-				scrollHeight="200" scrollable="true"
+
+			<p:dataTable var="container" styleClass="defaultHistoDataTable"
+				scrollHeight="160" scrollable="true" style="width:96%"
 				value="#{dialog.notificationDialog.faxTab.container}">
 
 				<!-- name of receiver -->
@@ -100,7 +101,7 @@
 				</p:column>
 
 				<!-- perform notification on user -->
-				<p:column style="width:6%">
+				<p:column style="width:6%;text-align:center;">
 					<f:facet name="header">
 						<i class="fa fa-check-circle-o "
 							title="#{msg['dialog.notification.tab.fax.receiver.use']}" />
@@ -121,7 +122,7 @@
 					</f:facet>
 
 					<!-- add pdf, if pdf == null -->
-					<p:commandLink styleClass="noUnderlineAtLink"
+					<p:commandLink
 						rendered="#{container.pdf eq null and container.perform}"
 						disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
 						title="#{msg['dialog.notification.tab.fax.receiver.pdf.info']}"
@@ -129,31 +130,33 @@
 						oncomplete="PF('blockUIWidget').unblock()"
 						actionListener="#{dialog.notificationDialog.openSelectPDFDialog(dialog.notificationDialog.task, container.contact)}">
 
+						<f:attribute name="container" value="#{container}" />
+
 						<p:ajax event="dialogReturn" update="@form" process="@form"
-							listener="#{dialog.notificationDialog.onSelectPDFDialogReturn}" />
+							listener="#{dialog.notificationDialog.onSelectPDFDialogReturn}">
+						</p:ajax>
 
 						<i class="fa fa-fw fa-file-pdf-o" />
 					</p:commandLink>
 
 					<!-- show pdf, if pdf != null -->
-					<p:commandLink styleClass="noUnderlineAtLink"
+					<p:commandLink
 						rendered="#{container.pdf ne null and container.perform}"
-						disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
 						title="#{msg['dialog.notification.tab.fax.receiver.pdf.show']}"
 						execute="@this"
-						actionListener="#{dialog.notificationDialog.openMediaViewDialog(container.pdf)}">
+						disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
+						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(dialog.notificationDialog.task.patient).viewMode().setPDFToDisplay(container.pdf)}">
 
 						<i class="fa fa-search icon-grey" />
 					</p:commandLink>
 
 					<!-- remove pdf, if pdf != null -->
-					<p:commandLink styleClass="noUnderlineAtLink"
-						style="margin-left: 10px;"
+					<p:commandLink style="margin-left: 10px;"
 						rendered="#{container.pdf ne null and container.perform}"
 						title="#{msg['dialog.notification.tab.fax.receiver.pdf.remove']}"
-						execute="@this" update="@form"
+						execute="@this"
 						disabled="#{!dialog.notificationDialog.faxTab.useNotification}"
-						actionListener="#{container.setPdf(null)}">
+						update="@form" actionListener="#{container.setPdf(null)}">
 
 						<i class="fa fa-close icon-grey" />
 					</p:commandLink>
@@ -164,10 +167,8 @@
 	</p:outputPanel>
 
 	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
-
-			<h:panelGrid columns="1" styleClass="newTableContainer left">
+		<h:panelGrid columns="2">
+			<h:panelGrid columns="1" styleClass="left">
 				<!-- Contact -->
 				<p:commandButton process="@form"
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
@@ -178,7 +179,7 @@
 				</p:commandButton>
 			</h:panelGrid>
 
-			<h:panelGrid columns="3" styleClass="newTableContainer right">
+			<h:panelGrid columns="3" styleClass="right" id="buttonContainer">
 				<!-- previouse -->
 				<p:commandButton value="#{msg['general.back']}"
 					icon="fa fa-fw fa-arrow-left"
@@ -198,5 +199,6 @@
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
+
 
 </ui:composition>

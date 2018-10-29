@@ -137,36 +137,40 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 		tabs = new AbstractTabDialog.AbstractTab[] { generalTab, mailTab, faxTab, letterTab, phoneTab, sendTab,
 				sendReportTab };
 
+		disableTabs(false, false, false, false, false, false, true);
+		
 		super.initBean(task, Dialog.NOTIFICATION);
 
-		// disabling tabs if notification was performed
-		if (task.getNotificationCompletionDate() != 0 && !resend) {
-			generalTab.setDisabled(true);
-			mailTab.setDisabled(true);
-			faxTab.setDisabled(true);
-			letterTab.setDisabled(true);
-			phoneTab.setDisabled(true);
-			sendTab.setDisabled(true);
-			sendReportTab.setDisabled(false);
-
-			onTabChange(sendReportTab);
-		} else if (resend) {
-			generalTab.setDisabled(false);
-			mailTab.setDisabled(false);
-			faxTab.setDisabled(generalTab.isTemporaryNotification());
-			letterTab.setDisabled(generalTab.isTemporaryNotification());
-			phoneTab.setDisabled(generalTab.isTemporaryNotification());
-			sendTab.setDisabled(false);
-			sendReportTab.setDisabled(false);
-		} else {
-			generalTab.setDisabled(false);
-			mailTab.setDisabled(false);
-			faxTab.setDisabled(generalTab.isTemporaryNotification());
-			letterTab.setDisabled(generalTab.isTemporaryNotification());
-			phoneTab.setDisabled(generalTab.isTemporaryNotification());
-			sendTab.setDisabled(false);
-			sendReportTab.setDisabled(true);
-		}
+		
+		
+//		// disabling tabs if notification was performed
+//		if (task.getNotificationCompletionDate() != 0 && !resend) {
+//			generalTab.setDisabled(true);
+//			mailTab.setDisabled(true);
+//			faxTab.setDisabled(true);
+//			letterTab.setDisabled(true);
+//			phoneTab.setDisabled(true);
+//			sendTab.setDisabled(true);
+//			sendReportTab.setDisabled(false);
+//
+//			onTabChange(sendReportTab);
+//		} else if (resend) {
+//			generalTab.setDisabled(false);
+//			mailTab.setDisabled(false);
+//			faxTab.setDisabled(generalTab.isTemporaryNotification());
+//			letterTab.setDisabled(generalTab.isTemporaryNotification());
+//			phoneTab.setDisabled(generalTab.isTemporaryNotification());
+//			sendTab.setDisabled(false);
+//			sendReportTab.setDisabled(false);
+//		} else {
+//			generalTab.setDisabled(false);
+//			mailTab.setDisabled(false);
+//			faxTab.setDisabled(generalTab.isTemporaryNotification());
+//			letterTab.setDisabled(generalTab.isTemporaryNotification());
+//			phoneTab.setDisabled(generalTab.isTemporaryNotification());
+//			sendTab.setDisabled(false);
+//			sendReportTab.setDisabled(true);
+//		}
 		return true;
 	}
 
@@ -213,6 +217,17 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 			((NotificationContainer) container).setPdf((PDFContainer) event.getObject());
 		}
 
+	}
+
+	public void disableTabs(boolean generalTab, boolean mailTab, boolean faxTab, boolean letterTab, boolean phoneTab,
+			boolean sendTab, boolean sendReportTab) {
+		getGeneralTab().setDisabled(generalTab);
+		getMailTab().setDisabled(mailTab);
+		getFaxTab().setDisabled(faxTab);
+		getLetterTab().setDisabled(letterTab);
+		getPhoneTab().setDisabled(phoneTab);
+		getSendTab().setDisabled(sendTab);
+		getSendReportTab().setDisabled(sendReportTab);
 	}
 
 	@Getter
@@ -306,6 +321,21 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 
 		private int printCount;
 
+		/**
+		 * No diagnosis is selected, selection by user is required
+		 */
+		private boolean selectDiagnosisManually;
+
+		/**
+		 * Selected diagnosis is not approved
+		 */
+		private boolean selectedDiagnosisNotApprovedy;
+
+		/**
+		 * If true all contacts will be notified, even contacts that are not refreshed
+		 */
+		private boolean completeNotification;
+
 		public GeneralTab() {
 			setTabName("GeneralTab");
 			setName("dialog.notification.tab.general");
@@ -333,30 +363,37 @@ public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
 
 			printCount = 2;
 
-//			List<AbstractDocumentUi<?, ?>> printDocumentUIs = AbstractDocumentUi.factory(printDocuments);
+			completeNotification = false;
 
-//			for (DiagnosisRevision revision : task.getDiagnosisRevisions()) {
-//				if (revision.isNotificationPending()) {
-//					setSelectedDiagnosis(revision);
-//					// last element
-//					if (task.getDiagnosisRevisions().indexOf(revision) == task.getDiagnosisRevisions().size() - 1)
-//						setTemporaryNotification(false);
-//					else
-//						setTemporaryNotification(true);
-//				}
-//			}
-
-//			// if no diagnosis is pending setting last diagnosis
-//			if (getSelectedDiagnosis() == null) {
-//				setSelectedDiagnosis(task.getDiagnosisRevisions().get(task.getDiagnosisRevisions().size() - 1));
-//				setTemporaryNotification(false);
-//			}
+			// if no diagnosis is pending setting last diagnosis
+			onDiangosisSelect();
 
 			logger.debug("General Data initialized");
 			return true;
 		}
 
 		public void updateData() {
+		}
+
+		public void onDiangosisSelect() {
+			if (getSelectDiagnosisRevision() == null) {
+				setSelectDiagnosisManually(true);
+				disableTabs(false, true, true, true, true, true, true);
+				return;
+			}
+
+			if (selectDiagnosisManually) {
+				selectDiagnosisManually = false;
+				disableTabs(false, false, false, false, false, false, true);
+			}
+
+			if (!getSelectDiagnosisRevision().isNotificationPending()
+					|| (getSelectDiagnosisRevision().isNotificationPending()
+							&& getSelectDiagnosisRevision().getNotificationDate() == 0)) {
+				selectedDiagnosisNotApprovedy = true;
+			} else
+				selectedDiagnosisNotApprovedy = false;
+
 		}
 
 	}

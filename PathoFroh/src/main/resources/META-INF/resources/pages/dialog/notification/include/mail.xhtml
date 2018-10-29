@@ -13,7 +13,7 @@
 
 	<p:outputPanel styleClass="bodyPannel">
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150, ">
+			columnClasses="columnWidth150 columnTop, ">
 
 			<!-- Use Mail -->
 			<h:outputLabel value="#{msg['dialog.notification.tab.mail.use']}"
@@ -101,7 +101,7 @@
 				</p:column>
 
 				<!-- perform notification on user -->
-				<p:column style="width:7%">
+				<p:column style="width:7%;text-align:center;">
 					<f:facet name="header">
 						<i class="fa fa-check-circle-o "
 							title="#{msg['dialog.notification.tab.mail.receiver.use']}" />
@@ -167,7 +167,7 @@
 
 	<div class="buttonContainer">
 		<h:panelGrid columns="2">
-			<h:panelGrid columns="1" styleClass="left" id="toManyMatches">
+			<h:panelGrid columns="1" styleClass="left" >
 				<!-- Contact -->
 				<p:commandButton process="@form"
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"

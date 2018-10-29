@@ -42,7 +42,6 @@ import lombok.Setter;
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-@DynamicUpdate(true)
 @SequenceGenerator(name = "bioBank_sequencegenerator", sequenceName = "bioBank_sequence")
 @Getter
 @Setter
@@ -71,6 +70,12 @@ public class BioBank implements DataList, AuditAble {
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date retractionDate;
+
+	/**
+	 * Date of informed constent retraction
+	 */
+	@Temporal(TemporalType.DATE)
+	private Date consentDate;
 
 	/**
 	 * Text of council

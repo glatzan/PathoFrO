@@ -27,7 +27,6 @@ import lombok.Setter;
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-@DynamicUpdate(true)
 @SequenceGenerator(name = "pdfs_sequencegenerator", sequenceName = "pdfs_sequence")
 @Getter
 @Setter

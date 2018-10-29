@@ -49,31 +49,52 @@
 						listener="#{dialog.bioBankDialog.onTypeChange()}"></p:ajax>
 				</p:selectOneMenu>
 
-				<!-- revoced date -->
-				<h:outputLabel value="#{msg['dialog.biobank.informentConsent']}"
+				<!-- consent date -->
+				<h:outputLabel
+					value="#{msg['dialog.biobank.informentConsent.date']}" />
+				<p:calendar pattern="dd.MM.yyyy" mask="true"
+					value="#{dialog.bioBankDialog.bioBank.consentDate}">
+					<p:ajax event="dateSelect"
+						listener="#{dialog.bioBankDialog.saveData()}" />
+					<p:ajax event="change"
+						listener="#{dialog.bioBankDialog.saveData()}" />
+				</p:calendar>
+
+				<!-- revoked date -->
+				<h:outputLabel
+					value="#{msg['dialog.biobank.revoke.informentConsent.date']}"
 					rendered="#{dialog.bioBankDialog.bioBank.informedConsentType eq 'REVOKED'}" />
 				<p:calendar pattern="dd.MM.yyyy" mask="true"
 					rendered="#{dialog.bioBankDialog.bioBank.informedConsentType eq 'REVOKED'}"
 					value="#{dialog.bioBankDialog.bioBank.retractionDate}">
+					<p:ajax event="dateSelect"
+						listener="#{dialog.bioBankDialog.saveData()}" />
+					<p:ajax event="change"
+						listener="#{dialog.bioBankDialog.saveData()}" />
 				</p:calendar>
 
 				<!-- external commentary  -->
-				<h:outputLabel value="#{msg['xx']}"></h:outputLabel>
-				<p:inputTextarea rows="4" cols="60"
-					value="#{dialog.bioBankDialog.bioBank.commentary}"></p:inputTextarea>
+				<h:outputLabel value="#{msg['dialog.biobank.commentary']}"></h:outputLabel>
+				<p:inputTextarea rows="4" style="width:89%"
+					value="#{dialog.bioBankDialog.bioBank.commentary}">
+					<p:ajax event="keyup" execute="@this" delay="1000"
+						listener="#{dialog.bioBankDialog.saveData()}" />
+					<p:ajax event="change" execute="@this"
+						listener="#{dialog.bioBankDialog.saveData()}" />
+				</p:inputTextarea>
 
 				<!-- attached pdfs -->
 				<h:outputLabel value="#{msg['dialog.biobank.pdf']}"></h:outputLabel>
-				<histo:pdfTable tableWidth="710px" tableHeight="100" typLenth="8"
-					showUpload="false"
+				<histo:pdfTable tableHeight="100" typLenth="8" showUpload="false"
+					tableWidth="90%"
 					pdfSource="#{dialog.bioBankDialog.bioBank.attachedPdfs}"
 					pdfOrganizier="#{dialog.pdfOrganizer}"
 					patient="#{dialog.bioBankDialog.task.patient}" nameLength="20"
 					commentaryLength="30" />
 
-				<h:outputLabel value="Änderungen"></h:outputLabel>
+				<h:outputLabel value="#{msg['dialog.biobank.history']}"></h:outputLabel>
 				<!-- audit table -->
-				<histo:auditTable id="biobankInfo"
+				<histo:auditTable id="biobankInfo" tableWidth="300px"
 					auditElement="#{dialog.bioBankDialog.bioBank.audit}" />
 
 			</h:panelGrid>
@@ -83,7 +104,10 @@
 			<h:panelGrid columns="2">
 
 				<h:panelGrid columns="1" styleClass="left">
-					<p:commandButton value="Aufklärung hochladen" icon="fa fa-upload"
+					<!-- upload -->
+					<p:commandButton
+						value="#{msg['dialog.biobank.button.addInformetConsent']}"
+						icon="fa fa-upload"
 						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(dialog.bioBankDialog.task.patient).setUploadDocumentType('BIOBANK_INFORMED_CONSENT').setUploadTarget(dialog.bioBankDialog.bioBank)}">
 						<p:ajax event="dialogReturn"
 							listener="#{dialog.bioBankDialog.onDefaultDialogReturn}"
@@ -97,7 +121,6 @@
 						icon="fa fa-check-circle-o">
 						<f:actionListener binding="#{dialog.bioBankDialog.saveAndHide()}"></f:actionListener>
 					</p:commandButton>
-
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>

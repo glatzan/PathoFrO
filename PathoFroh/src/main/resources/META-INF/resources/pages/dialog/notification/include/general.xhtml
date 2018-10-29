@@ -64,7 +64,30 @@
 							pattern="dd.MM.yyyy HH:mm:ss" />
 					</h:outputText>
 				</p:column>
+
+				<p:ajax event="rowSelect" process="@form" update="@form"
+					listener="#{dialog.notificationDialog.generalTab.onDiangosisSelect()}" />
 			</p:dataTable>
+
+			<h:outputLabel value=" " />
+			<h:panelGroup>
+				<!-- diagnosis not approved warning -->
+				<h:outputLabel styleClass="icon-red bigFont"
+					value="#{msg['dialog.notification.tab.general.diagnosis.notApproved']}"
+					rendered="#{dialog.notificationDialog.generalTab.selectedDiagnosisNotApprovedy}" />
+				<!-- diagnosis select manually -->
+				<h:outputLabel styleClass="icon-red bigFont"
+					value="#{msg['dialog.notification.tab.general.diagnosis.selectManually']}"
+					rendered="#{dialog.notificationDialog.generalTab.selectDiagnosisManually}" />
+			</h:panelGroup>
+
+			<h:outputLabel
+				value="#{msg['dialog.notification.tab.general.completeNotification']}" />
+			<p:selectBooleanCheckbox
+				value="#{dialog.notificationDialog.generalTab.completeNotification}"
+				title="#{msg['dialog.notification.tab.general.completeNotification.tex']}">
+				<p:ajax event="change" process="@this" />
+			</p:selectBooleanCheckbox>
 		</h:panelGrid>
 
 		<!-- Separator -->
@@ -119,20 +142,13 @@
 	<div class="buttonContainer">
 		<h:panelGrid columns="2">
 			<h:panelGrid columns="1" styleClass="left" id="toManyMatches">
-				<!-- Contact -->
-				<p:commandButton process="@form"
-					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
-					icon="fa fa-fw fa-cog"
-					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
-					<p:ajax event="dialogReturn" update="@form"
-						listener="#{dialog.notificationDialog.mailTab.updateData()}" />
-				</p:commandButton>
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right" id="buttonContainer">
 				<!-- next -->
 				<p:commandButton value="#{msg['general.next']}"
 					icon="fa fa-fw fa-arrow-right"
+					disabled="#{dialog.notificationDialog.generalTab.selectDiagnosisManually}"
 					actionListener="#{dialog.notificationDialog.nextTab()}"
 					process="@form" update="@form" />
 

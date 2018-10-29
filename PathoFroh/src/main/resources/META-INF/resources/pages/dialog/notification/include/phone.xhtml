@@ -15,7 +15,7 @@
 
 	<p:outputPanel styleClass="bodyPannel">
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150, ">
+			columnClasses="columnWidth150 columnTop, ">
 
 			<!-- Use phone-->
 			<h:outputLabel value="#{msg['dialog.notification.tab.phone.use']}"
@@ -31,7 +31,8 @@
 				value="#{msg['dialog.notification.tab.phone.receiver']}"
 				styleClass="bigFont" />
 
-			<p:dataTable var="container" styleClass="newStyleDataTable"
+			<p:dataTable var="container" styleClass="defaultHistoDataTable"
+				scrollHeight="160" scrollable="true" style="width:96%"
 				value="#{dialog.notificationDialog.phoneTab.container}">
 
 				<!-- name of receiver -->
@@ -50,7 +51,7 @@
 				</p:column>
 
 				<!-- perform notification on user -->
-				<p:column style="width:6%">
+				<p:column style="width:6%;text-align:center;">
 					<f:facet name="header">
 						<i class="fa fa-check-circle-o "
 							title="#{msg['dialog.notification.tab.phone.receiver.use']}" />
@@ -67,10 +68,8 @@
 	</p:outputPanel>
 
 	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
-
-			<h:panelGrid columns="1" styleClass="newTableContainer left">
+		<h:panelGrid columns="2">
+			<h:panelGrid columns="1" styleClass="left">
 				<!-- Contact -->
 				<p:commandButton process="@form"
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
@@ -81,7 +80,7 @@
 				</p:commandButton>
 			</h:panelGrid>
 
-			<h:panelGrid columns="3" styleClass="newTableContainer right">
+			<h:panelGrid columns="3" styleClass="right" id="buttonContainer">
 				<!-- previouse -->
 				<p:commandButton value="#{msg['general.back']}"
 					icon="fa fa-fw fa-arrow-left"
@@ -101,4 +100,5 @@
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
+
 </ui:composition>

@@ -181,6 +181,9 @@ update biobank_aud set updatedOn = 0;
 /* date of informed consent retraction*/
 Alter table biobank add retractionDate date;
 Alter table biobank_aud add retractionDate date;
+/* date of informed consent */
+Alter table biobank add consentDate date;
+Alter table biobank_aud add consentDate date;
 /* commentary */
 Alter table biobank add commentary character varying;
 Alter table biobank_aud add commentary character varying;

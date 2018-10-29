@@ -22,7 +22,7 @@ public enum Dialog {
 	TASK_DELETE("/pages/dialog/task/delete/deleteTask", null, 480, 272, false, false, true), // 16:9	
 	TASK_CHANGE_ID("/pages/dialog/task/chagneTaskID", null, 480, 272, false, false, true), 																					// OK
 	SAMPLE_CREATE("/pages/dialog/task/sample/createSample", null, 480, 272, false, false, true), 																			// OK				// TEST OK
-	BIO_BANK("/pages/dialog/biobank/biobank", null, 858, 484, false, false, true), // 16:9
+	BIO_BANK("/pages/dialog/biobank/biobank", null, 858, 484, false, false, true), 																							// OK					
 	SLIDE_OVERVIEW("/pages/dialog/task/staining/slideOverview", null, 1024, 600, false, false, true), 																		// OK 				// TEST OK
 	SLIDE_NAMING("/pages/dialog/task/staining/slideNaming", null,430, 270, false, false, true), 																			// OK				// TEST OK
 	SLIDE_CREATE("/pages/dialog/task/staining/addSlide", null, 858, 484, false, false, true),																				// OK				// TEST OK
