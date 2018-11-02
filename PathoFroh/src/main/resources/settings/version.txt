@@ -1,5 +1,4 @@
- -XXaltjvm=dcevm -javaagent:C:/Users/andi/Documents/develop/hotswap-agent-1.3.0.jar=autoHotswap=true
-https://dzone.com/articles/hot-swap-java-bytecode-on-runtime
+
 
 // speed for rendering 
 -Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider
@@ -7,44 +6,26 @@ https://dzone.com/articles/hot-swap-java-bytecode-on-runtime
 [{"printer":"10.250.3.227","tuerschild":"10.250.0.101","ip":"10.250.0.252","bemerkung":"Amulanz\/EG W2-U01 (Fenster)   aktuell:   18:03:73:1E:85:AD     AUG-11961 ","roomid":361,"aktiv":"A","aufrufwartekreis":"AUG-EG-W-2","laufrichtung":"L","zeitpunkt":"2015-05-18 07:31:01","aufruftext":"U1"}]
 http://10.210.21.11:3009/DB/PLS/ip2room/ip/10.250.0.252
 
- 
 
 -> less https://github.com/palantir/eclipse-less
 --> your-project/.settings/com.palantir.less.prefs
 --> srcFiles=WebContent/resources/style/style.less;WebContent/resources/style/specificStyle.less;WebContent/resources/style/common.less
 -> atmosphere https://forum.primefaces.org/viewtopic.php?t=48289
--> UTF 8 Tomcat: -Dfile.encoding=UTF8
+-> UTF 8 Tomcat: -Dfile.encoding=UTF8 -Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider
 -> plink windows set PATH=C:\path\to\putty\directory;%PATH%
 -> https://vladmihalcea.com/2015/02/09/hibernate-locking-patterns-how-does-optimistic_force_increment-lock-mode-work/
 -> Session Refresh: http://stackoverflow.com/questions/3642919/javax-faces-application-viewexpiredexception-view-could-not-be-restored
-// generierung befundbericht final
-//					if (userHandlerAction.getCurrentUser().getSettings().isPdfPreviewOnDiagnosisApproval()) {
-//						// generating final diagnosis report
-//						if (dialogHandlerAction.getPrintDialog().getPdfContainer()
-//								.getType() != DocumentType.DIAGNOSIS_REPORT) {
-//							dialogHandlerAction.getPrintDialog()
-//									.setDefaultTemplateOfType(DocumentType.DIAGNOSIS_REPORT);
-//						}
-//
-//						dialogHandlerAction.getPrintDialog().getPdfContainer()
-//								.setType(DocumentType.DIAGNOSIS_REPORT_COMPLETED);
-//
-//						pdfDAO.attachPDF(getTask().getPatient(), getTask(),
-//								dialogHandlerAction.getPrintDialog().getPdfContainer());
-//					}
 
 helper getPrinterForIP => sub { my ($self, $ip)=@_;
     my $room = Mojo::UserAgent->new->get('http://10.210.21.11:3009/DB/PLS/ip2room/ip/'.$ip)->res->json->[0]->{aufruftext};
     return sprintf("Amb-U%02d", $1) if $room =~/U([0-9]+)$/oi;
 };
 
-
 select flist.id, flist.name, coalesce(bool_or(fitem.task_id = 1),false) As containsTask from favouritelist flist 
 left join favouritepermissionsgroup fgroup on fgroup.favouritelist_id = flist.id  
 left join favouritepermissionsuser fuser on fuser.favouritelist_id = flist.id
 left join favouritelistitem fitem on fitem.favouritelist_id = flist.id
 left join favouritelist_histouser hideList on hideList.favouritelist_id = flist.id
-
 where (owner_id = 1 or fgroup.group_id = 1 or fuser.user_id = 1) and (hideList.hidelistforuser_id IS NULL or hideList.hidelistforuser_id != 1) GROUP BY flist.id 
 
 create view patientmenumodel as select patient.id, person.lastname, person.firstname, person.title, patient.piz, person.birthday from patient, person, contact where patient.person_id = person.id and person.contact_id = contact.id
