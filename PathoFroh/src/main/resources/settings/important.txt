@@ -1,9 +1,12 @@
-VM Arguments: -Dfile.encoding=UTF8 -Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider -javaagent:Q:/AUG-T-HISTO/agents/aspectweaver-1.8.13.jar -javaagent:Q:/AUG-T-HISTO/agents/spring-instrument-5.0.9.RELEASE.jar
+VM Arguments: 
+-javaagent:${m2_repo}/org/springframework/spring-instrument/5.0.9.RELEASE/spring-instrument-5.0.9.RELEASE.jar
+-javaagent:${m2_repo}/org/aspectj/aspectjweaver/1.8.13/aspectjweaver-1.8.13.jar
+-XXaltjvm=dcevm -javaagent:${m2_repo}/org/hotswapagent/hotswap-agent-core/1.3.0/hotswap-agent-core-1.3.0.jar=autoHotswap=true 
+-Xms256m -Xmx2G 
+-Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider
+-Dfile.encoding=UTF8
 
-
-Load Time Weaving
--javaagent:Q:\AUG-T-HISTO\agents\aspectweaver-1.8.13.jar -javaagent:Q:\AUG-T-HISTO\agents\spring-instrument-5.0.9.RELEASE.jar
-
+${m2_repo} has to be set under run -> variables 
 
 HotSwap:
 -> https://dzone.com/articles/hot-swap-java-bytecode-on-runtime
@@ -15,8 +18,3 @@ Handel Version Erros in Dialoges
 -> if nested dialog, parent should catch ReloadEvent() 
 
 
--javaagent:C:/Users/andi/.m2/repository/org/springframework/spring-instrument/5.0.6.RELEASE/spring-instrument-5.0.6.RELEASE.jar 
--javaagent:C:/Users/andi/.m2/repository/org/aspectj/aspectjweaver/1.8.13/aspectjweaver-1.8.13.jar
--XXaltjvm=dcevm -javaagent:C:/Users/andi/Documents/develop/hotswap-agent-core-1.3.0.jar=autoHotswap=true 
--Xms256m -Xmx2G 
--Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider

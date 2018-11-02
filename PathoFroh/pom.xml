@@ -232,7 +232,11 @@
 			<artifactId>univocity-parsers</artifactId>
 			<version>2.7.6</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.hotswapagent</groupId>
+			<artifactId>hotswap-agent-core</artifactId>
+			<version>1.3.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
@@ -306,30 +310,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>properties</goal>
-						</goals>
-					</execution>
-					<action>
-						<execute>
-							<runOnIncremental>false</runOnIncremental>
-						</execute>
-					</action>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>-javaagent:${org.aspectj:aspectjweaver:jar}</argLine>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
