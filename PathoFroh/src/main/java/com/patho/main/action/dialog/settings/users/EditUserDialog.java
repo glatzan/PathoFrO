@@ -34,8 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-@Slf4j
-public class EditUserDialog extends AbstractDialog implements OrganizationFunctions {
+public class EditUserDialog extends AbstractDialog<EditUserDialog> implements OrganizationFunctions {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -46,21 +45,11 @@ public class EditUserDialog extends AbstractDialog implements OrganizationFuncti
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private UserService userService;
-	
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GroupRepository groupRepository;
-	
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private LogDAO logDAO;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
+	private GroupRepository groupRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -77,30 +66,34 @@ public class EditUserDialog extends AbstractDialog implements OrganizationFuncti
 
 	private DefaultTransformer<Organization> organizationTransformer;
 
+	private boolean roleChange;
+
 	/**
 	 * True if userdata where changed, an the dialog needs to be saved.
 	 */
 	private boolean saveAble;
 
-	public void initAndPrepareBean(HistoUser user) {
+	public EditUserDialog initAndPrepareBean(HistoUser user) {
 		if (initBean(user))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(HistoUser user) {
 		Optional<HistoUser> oUser = userRepository.findById(user.getId());
-		
-		if(!oUser.isPresent())
+
+		if (!oUser.isPresent())
 			return false;
-		
+
 		setUser(oUser.get());
-		
+
 		setAllRoles(Arrays.asList(ContactRole.values()));
 
 		setSaveAble(false);
 
 		setGroups(groupRepository.findAll(true));
-		
+
 		setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
 
 		// setting organization transformer for selecting default address
@@ -115,34 +108,18 @@ public class EditUserDialog extends AbstractDialog implements OrganizationFuncti
 	 * Saves user data
 	 */
 	public void saveUser() {
-		try {
-			userService.saveUser(user);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
-	}
-
-	/**
-	 * Changes the group on the user, saves all data
-	 */
-	public void onChangeUserGroup() {
-		try {
+		// changes role settings and saves the user
+		if (roleChange)
 			userService.updateGroupOfUser(user, user.getGroup());
-			setSaveAble(false);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+		else
+			userService.saveUser(user);
 	}
 
 	/**
 	 * Updates the data of the physician with data from the clinic backend
 	 */
 	public void updateDataFromLdap() {
-		try {
-			userService.updateUserWithLdapData(user);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+		userService.updateUserWithLdapData(user);
 	}
 
 	/**
@@ -169,13 +146,12 @@ public class EditUserDialog extends AbstractDialog implements OrganizationFuncti
 	 * disabling the user.
 	 */
 	public void deleteUser() {
-		try {
-			userDao.remove(user);
-			hideDialog(true);
-		} catch (HistoDatabaseConstraintViolationException e) {
-			log.debug("Delete not possible, change group dialog");
-			prepareDialog(Dialog.SETTINGS_USERS_DELETE_DISABLE);
-		}
+		userDao.remove(user);
+		hideDialog(true);
+
+		// } catch (HistoDatabaseConstraintViolationException e) {
+		logger.debug("Delete not possible, change group dialog");
+		prepareDialog(Dialog.SETTINGS_USERS_DELETE_DISABLE);
 	}
 
 	/**

@@ -31,8 +31,8 @@ public class OrganizationService extends AbstractService {
 	 * @param contact
 	 * @return
 	 */
-	public Organization addOrganization(String name, Contact contact) {
-		return addOrganization(new Organization(name, contact));
+	public Organization addOrSaveOrganization(String name, Contact contact) {
+		return addOrSaveOrganization(new Organization(name, contact));
 	}
 
 	/**
@@ -41,12 +41,11 @@ public class OrganizationService extends AbstractService {
 	 * @param organization
 	 * @return
 	 */
-	public Organization addOrganization(Organization organization) {
+	public Organization addOrSaveOrganization(Organization organization) {
 		String log = resourceBundle.get(
 				organization.getId() == 0 ? "log.organization.save" : "log.organization.created",
 				organization.getName());
-		organizationRepository.save(organization, log);
-		return organization;
+		return organizationRepository.save(organization, log);
 	}
 
 	/**
@@ -121,10 +120,11 @@ public class OrganizationService extends AbstractService {
 
 			// do not reload loaded organizations
 			if (organizations.get(i).getId() == 0) {
-				Optional<Organization> databaseOrganization = organizationRepository.findOptionalByName(organizations.get(i).getName());
+				Optional<Organization> databaseOrganization = organizationRepository
+						.findOptionalByName(organizations.get(i).getName());
 				if (!databaseOrganization.isPresent()) {
 					logger.debug("Organization " + organizations.get(i).getName() + " not found, creating!");
-					addOrganization(organizations.get(i));
+					addOrSaveOrganization(organizations.get(i));
 				} else {
 					logger.debug("Organization " + organizations.get(i).getName() + " found, replacing in linst!");
 					organizations.remove(i);

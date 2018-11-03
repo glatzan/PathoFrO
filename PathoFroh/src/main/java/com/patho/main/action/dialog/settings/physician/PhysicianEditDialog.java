@@ -25,7 +25,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class PhysicianEditDialog extends AbstractDialog implements OrganizationFunctions {
+public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> implements OrganizationFunctions {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -43,9 +43,10 @@ public class PhysicianEditDialog extends AbstractDialog implements OrganizationF
 
 	private DefaultTransformer<Organization> organizationTransformer;
 
-	public void initAndPrepareBean(Physician physician) {
+	public PhysicianEditDialog initAndPrepareBean(Physician physician) {
 		if (initBean(physician))
 			prepareDialog();
+		return this;
 	}
 
 	public boolean initBean(Physician physician) {
@@ -67,28 +68,19 @@ public class PhysicianEditDialog extends AbstractDialog implements OrganizationF
 	 * @param physician
 	 */
 	public void save() {
-		try {
-			if (getPhysician().hasNoAssociateRole())
-				getPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
+		if (getPhysician().hasNoAssociateRole())
+			getPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
 
-			physicianRepository.save(getPhysician(), resourceBundle.get("log.settings.physician.physician.edit",
-					getPhysician().getPerson().getFullName()));
-
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+		physicianRepository.save(getPhysician(),
+				resourceBundle.get("log.settings.physician.physician.edit", getPhysician().getPerson().getFullName()));
 	}
 
 	/**
 	 * Updates the data of the physician with data from the clinic backend
 	 */
 	public void updateDataFromLdap() {
-		try {
-			physicianService.updatePhysicianWithLdapData(getPhysician());
-			updateOrganizationSelection();
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+		physicianService.updatePhysicianWithLdapData(getPhysician());
+		updateOrganizationSelection();
 	}
 
 	/**

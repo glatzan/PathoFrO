@@ -9,18 +9,19 @@
 
 <h:head>
 	<title><h:outputLabel
-			rendered="#{dialogHandlerAction.organizationEditDialog.newOrganization}"
+			rendered="#{dialog.organizationEditDialog.newOrganization}"
 			value="#{msg['dialog.organizationEdit.headline.new']}" /> <h:outputFormat
-			rendered="#{!dialogHandlerAction.organizationEditDialog.newOrganization}"
+			rendered="#{!dialog.organizationEditDialog.newOrganization}"
 			value="#{msg['dialog.organizationEdit.headline.edit']}">
-			<f:param
-				value="#{dialogHandlerAction.organizationEditDialog.organization.name}" />
+			<f:param value="#{dialog.organizationEditDialog.organization.name}" />
 		</h:outputFormat></title>
-	<h:outputScript library="scripts" name="commonFunctions.js" />	
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 
 	<h:outputScript library="scripts" name="selectCheckboxMenuTop.js" />
 
@@ -28,20 +29,19 @@
 
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
+				styleClass="defaultHistoTable">
 				<h:panelGroup>
 					<h:outputLabel
-						rendered="#{dialogHandlerAction.organizationEditDialog.newOrganization}"
+						rendered="#{dialog.organizationEditDialog.newOrganization}"
 						value="#{msg['dialog.organizationEdit.headline.new']}" />
 					<h:outputFormat
-						rendered="#{!dialogHandlerAction.organizationEditDialog.newOrganization}"
+						rendered="#{!dialog.organizationEditDialog.newOrganization}"
 						value="#{msg['dialog.organizationEdit.headline.edit']}">
 						<f:param
-							value="#{dialogHandlerAction.organizationEditDialog.organization.name}" />
+							value="#{dialog.organizationEditDialog.organization.name}" />
 					</h:outputFormat>
 				</h:panelGroup>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -50,8 +50,8 @@
 
 		<div class="dialogContent">
 
-			<h:panelGrid columns="5" styleClass="newStyleListingTable"
-				columnClasses="columnLabelContainer150, , , ,">
+			<h:panelGrid columns="5" styleClass="defaultHistoTable"
+				columnClasses="columnWidth150, , , ,">
 
 				<!-- organization -->
 				<h:outputLabel
@@ -61,13 +61,13 @@
 				<!-- name -->
 				<p:outputLabel value="#{msg['dialog.organizationEdit.name']}" />
 				<p:inputText id="organizationName"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.name}" />
+					value="#{dialog.organizationEditDialog.organization.name}" />
 
 				<!-- clinic -->
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.clinicIntern']}" />
 				<p:selectBooleanCheckbox id="organizationIntern"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.intern}" />
+					value="#{dialog.organizationEditDialog.organization.intern}" />
 
 				<!-- adress -->
 				<h:outputLabel value="#{msg['dialog.organizationEdit.adress']}"
@@ -78,14 +78,14 @@
 					value="#{msg['dialog.organizationEdit.adress.street']}" />
 				<p:inputText id="_street" name="street-address"
 					autocomplete="street-address"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.street}" />
+					value="#{dialog.organizationEditDialog.organization.contact.street}" />
 
 				<!-- building -->
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.building']}" />
 				<p:inputText id="_building" name="building-address"
 					autocomplete="building-address"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.building}" />
+					value="#{dialog.organizationEditDialog.organization.contact.building}" />
 
 				<h:outputLabel value="" />
 
@@ -93,13 +93,13 @@
 				<h:outputLabel
 					value="#{msg['component.personDataMask.contact.additionOne']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.addressadditon}" />
+					value="#{dialog.organizationEditDialog.organization.contact.addressadditon}" />
 
 				<!-- address addition two -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.contact.additionTwo']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.addressadditon2}" />
+					value="#{dialog.organizationEditDialog.organization.contact.addressadditon2}" />
 
 				<h:outputLabel value="" />
 
@@ -107,13 +107,13 @@
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.postCode']}" />
 				<p:inputText style="width:75px;"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.postcode}"
+					value="#{dialog.organizationEditDialog.organization.contact.postcode}"
 					name="postal-code" autocomplete="postal-code" />
 
 				<!-- Town -->
 				<p:outputLabel value="#{msg['dialog.organizationEdit.adress.town']}" />
 				<p:inputText id="_town" name="city" autocomplete="address-level2"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.town}" />
+					value="#{dialog.organizationEditDialog.organization.contact.town}" />
 
 				<!-- miscellaneous -->
 				<h:outputLabel styleClass="bigFont"
@@ -123,14 +123,14 @@
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.phone']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.phone}"
+					value="#{dialog.organizationEditDialog.organization.contact.phone}"
 					name="phone" autocomplete="tel" />
 
 				<!-- mobile -->
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.mobile']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.phone}"
+					value="#{dialog.organizationEditDialog.organization.contact.phone}"
 					name="phone" autocomplete="tel" />
 
 				<h:outputLabel value="" />
@@ -139,13 +139,13 @@
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.homepage']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.homepage}"
+					value="#{dialog.organizationEditDialog.organization.contact.homepage}"
 					name="homepage" autocomplete="homepage" />
 
 				<!-- fax -->
 				<p:outputLabel value="#{msg['dialog.organizationEdit.adress.fax']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.fax}"
+					value="#{dialog.organizationEditDialog.organization.contact.fax}"
 					name="fax" autocomplete="fax" />
 
 				<h:outputLabel value="" />
@@ -154,36 +154,36 @@
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.email']}" />
 				<p:inputText id="_email" name="mail" autocomplete="mail"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.contact.email}" />
+					value="#{dialog.organizationEditDialog.organization.contact.email}" />
 			</h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newStyleListingTable"
-				columnClasses="columnLabelContainer150, ">
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				columnClasses="columnWidth150 , ">
 
 				<!-- note -->
 				<h:outputLabel value="#{msg['dialog.organizationEdit.note']}"
 					styleClass="bigFont" />
 				<p:inputTextarea id="organizationNote" style="width:85%"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.note}" />
+					value="#{dialog.organizationEditDialog.organization.note}" />
 
 				<!-- persons -->
 				<h:outputLabel value="#{msg['dialog.organizationEdit.persons']}"
 					styleClass="bigFont" />
-				<p:dataTable id="userTable" styleClass="newStyleDataTable"
-					value="#{dialogHandlerAction.organizationEditDialog.organization.persons}"
-					var="person" style="width:85%" scrollable="true" scrollHeight="150">
+				<p:dataTable id="userTable" styleClass="defaultHistoDataTable"
+					value="#{dialog.organizationEditDialog.organization.persons}"
+					var="person" style="width:86%" scrollable="true" scrollHeight="150">
 					<p:column
 						headerText="#{msg['dialog.organizationEdit.persons.name']}">
-						<h:outputLabel value="#{person.fullName}" />
+						<h:outputLabel value="#{person.getFullName()}" />
 
 					</p:column>
 
-					<p:column headerText="#" style="width:15px">
+					<p:column headerText="#" style="width:15px;text-align: center;">
 						<p:commandLink update="@form" process="@form" partialSubmit="true"
 							title="#{msg['dialog.organizationEdit.persons.remove']}">
-							<i class="fa fa-remove" style="margin-left: 8px" />
+							<i class="fa fa-remove" />
 							<f:actionListener
-								binding="#{dialogHandlerAction.organizationEditDialog.removePersonFromOrganization(person, dialogHandlerAction.organizationEditDialog.organization)}" />
+								binding="#{dialog.organizationEditDialog.removePersonFromOrganization(person, dialog.organizationEditDialog.organization)}" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
@@ -191,32 +191,28 @@
 		</div>
 
 		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+			<h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
+				<h:panelGrid columns="1" styleClass="left">
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<h:panelGrid columns="2" styleClass="right">
 					<!-- Save button -->
 					<p:commandButton value="#{msg['general.save']}"
 						icon="fa fa-check-circle-o">
 						<f:actionListener
-							binding="#{dialogHandlerAction.organizationEditDialog.save()}"></f:actionListener>
-						<f:actionListener
-							binding="#{dialogHandlerAction.organizationEditDialog.hideDialog()}"></f:actionListener>
+							binding="#{dialog.organizationEditDialog.saveAndHide()}"></f:actionListener>
 					</p:commandButton>
 
 					<!-- Close button -->
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
 						icon="fa fa-times-circle">
 						<f:actionListener
-							binding="#{dialogHandlerAction.organizationEditDialog.hideDialog()}"></f:actionListener>
+							binding="#{dialog.organizationEditDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
-
 	</h:form>
 </h:body>
 </html>

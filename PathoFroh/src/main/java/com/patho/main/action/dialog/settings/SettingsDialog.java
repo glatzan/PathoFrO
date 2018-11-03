@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.primefaces.event.ReorderEvent;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -37,6 +38,7 @@ import com.patho.main.service.PhysicianService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.ListChooser;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -194,10 +196,6 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		private List<HistoUser> users;
 
-		private List<HistoGroup> groups;
-
-		private DefaultTransformer<HistoGroup> groupTransformer;
-
 		private boolean showArchived;
 
 		public HistoUserTab() {
@@ -215,17 +213,17 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		public void updateData() {
 			setUsers(userRepository.findAllIgnoreArchived(!showArchived));
-			setGroups(groupRepository.findAll(true));
-			setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
-		}
-
-		public void onChangeUserGroup(HistoUser histoUser) {
-			userService.updateGroupOfUser(histoUser, histoUser.getGroup());
 		}
 
 		public void addHistoUser(Physician physician) {
 			if (physician != null) {
 				userService.addOrMergeUser(physician);
+				updateData();
+			}
+		}
+
+		public void onAddHistoUser(SelectEvent event) {
+			if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
 				updateData();
 			}
 		}
@@ -829,8 +827,6 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		private List<Organization> organizations;
 
-		private Organization selectedOrganization;
-
 		private boolean showArchived;
 
 		public OrganizationTab() {
@@ -849,7 +845,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setOrganizations(organizationRepository.findAll(!showArchived));
+			setOrganizations(organizationRepository.findAllOrderByIdAsc(!showArchived));
 		}
 
 	}

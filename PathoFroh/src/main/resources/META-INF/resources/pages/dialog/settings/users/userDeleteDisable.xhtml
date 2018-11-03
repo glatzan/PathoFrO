@@ -10,7 +10,7 @@
 	<title><h:outputFormat
 			value="#{msg['dialog.userDeleteError.headline']}">
 			<f:param
-				value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+				value="#{dialog.editUserDialog.user.physician.person.fullName}" />
 		</h:outputFormat></title>
 	<h:outputStylesheet name="histo.css" value="histo.css" />
 	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
@@ -25,7 +25,7 @@
 				styleClass="newTableContainer">
 				<h:outputFormat value="#{msg['dialog.userDeleteError.headline']}">
 					<f:param
-						value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+						value="#{dialog.editUserDialog.user.physician.person.fullName}" />
 				</h:outputFormat>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					styleClass="noUnderlineAtLink"
@@ -55,15 +55,15 @@
 						value="#{msg['dialog.userDeleteError.button.archive']}"
 						icon="fa fa-check-circle-o">
 						<f:actionListener
-							binding="#{dialogHandlerAction.editUserDialog.disableUser()}" />
+							binding="#{dialog.editUserDialog.disableUser()}" />
 						<f:actionListener
-							binding="#{dialogHandlerAction.editUserDialog.hideDialog()}" />
+							binding="#{dialog.editUserDialog.hideDialog()}" />
 					</p:commandButton>
 
 					<!-- abort -->
 					<p:commandButton value="#{msg['general.abort']}"
 						icon="fa fa-times-circle" id="closeBtn"
-						actionListener="#{dialogHandlerAction.editUserDialog.hideDialog()}"></p:commandButton>
+						actionListener="#{dialog.editUserDialog.hideDialog()}"></p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>

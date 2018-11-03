@@ -10,7 +10,7 @@
 
 <h:outputFormat value="#{msg['dialog.userDelete.headline']}">
 	<f:param
-		value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+		value="#{dialog.editUserDialog.user.physician.person.fullName}" />
 </h:outputFormat>
 
 <h:head>
@@ -89,7 +89,7 @@
 					<p:commandButton value="#{msg['general.save']}"
 						icon="fa fa-check-circle-o">
 						<f:actionListener
-							binding="#{dialogHandlerAction.physicianSearchDialog.hideDialog()}"></f:actionListener>
+							binding="#{dialog.physicianSearchDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 
 					<!-- Close button -->

@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.Contact;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
+import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PersonRepository;
 import com.patho.main.service.OrganizationService;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
@@ -22,7 +24,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class OrganizationEditDialog extends AbstractDialog {
+public class OrganizationEditDialog extends AbstractDialog<OrganizationEditDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -32,8 +34,13 @@ public class OrganizationEditDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
+	private OrganizationRepository organizationRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	private PersonRepository personRepository;
-	
+
 	private Organization organization;
 
 	private boolean newOrganization;
@@ -43,27 +50,44 @@ public class OrganizationEditDialog extends AbstractDialog {
 	 */
 	private List<Person> removeFromOrganization;
 
-	public void initAndPrepareBean() {
-		if (initBean(new Organization(new Contact())))
-			prepareDialog();
+	public OrganizationEditDialog initAndPrepareBean() {
+		return initAndPrepareBean(new Organization(new Contact()));
 	}
 
-	public void initAndPrepareBean(Organization organization) {
+	public OrganizationEditDialog initAndPrepareBean(Organization organization) {
 		if (initBean(organization))
 			prepareDialog();
+		return this;
 	}
 
 	public boolean initBean(Organization organization) {
 
-		setOrganization(organization);
-
-		setNewOrganization(organization.getId() == 0);
+		if (organization.getId() == 0) {
+			setOrganization(organization);
+			setNewOrganization(true);
+		} else {
+			setOrganization(organizationRepository.findOptionalByID(organization.getId(), true).get());
+			setNewOrganization(false);
+		}
 
 		setRemoveFromOrganization(new ArrayList<Person>());
 
-		super.initBean(task, Dialog.SETTINGS_ORGANIZATION_EDIT);
+		return super.initBean(task, Dialog.SETTINGS_ORGANIZATION_EDIT);
+	}
 
-		return true;
+	public OrganizationEditDialog newOrganizationMode(boolean newOrganization) {
+		this.newOrganization = newOrganization;
+		return this;
+	}
+
+	public void selectAndHide() {
+		save();
+		hideDialog(new OrganizationSelectReturnEvent(organization));
+	}
+
+	public void saveAndHide() {
+		save();
+		hideDialog();
 	}
 
 	/**
@@ -71,16 +95,11 @@ public class OrganizationEditDialog extends AbstractDialog {
 	 * 
 	 * @param physician
 	 */
-	public void save() {
-		try {
-			organizationService.addOrganization(organization);
+	private void save() {
+		organization = organizationService.addOrSaveOrganization(organization);
 
-			for (Person person : removeFromOrganization) {
-				personRepository.save(person, resourceBundle.get("log.person.organization.remove", person, organization));
-			}
-
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
+		for (Person person : removeFromOrganization) {
+			personRepository.save(person, resourceBundle.get("log.person.organization.remove", person, organization));
 		}
 	}
 
@@ -95,4 +114,5 @@ public class OrganizationEditDialog extends AbstractDialog {
 		organizationService.removePerson(organization, person, false);
 		getRemoveFromOrganization().add(person);
 	}
+
 }

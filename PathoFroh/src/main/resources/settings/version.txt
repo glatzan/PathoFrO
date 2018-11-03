@@ -28,6 +28,7 @@ Short Keys:
 CTRL + C: New Council
 CTRL + N: New Task
 Alt  + B: Notification
+Alt + Shift + S: Settings
 
 Tasks:
 -> ReportView: FIX  Update for 2 > pdf thubnails Diagnosis-Reports in DiagnosisReport View

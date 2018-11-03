@@ -67,14 +67,14 @@
 			<!-- Employee  -->
 			<h:panelGrid columns="2" columnClasses="defaultListingTableColumn15,"
 				styleClass="defaultListingTableFirstColumEnummeration"
-				rendered="#{dialogHandlerAction.physicianSearchDialog.externalMode}">
+				rendered="#{dialog.physicianSearchDialog.externalMode}">
 
 				<!-- ****************** Person ****************** -->
 				<h:outputLabel value="#{msg['dialog.physicianSearch.employe']}" />
 
 				<h:panelGrid columns="1" styleClass="defaultListingTableContainer">
 					<p:selectOneButton
-						value="#{dialogHandlerAction.physicianSearchDialog.searchView}">
+						value="#{dialog.physicianSearchDialog.searchView}">
 						<f:selectItem
 							itemLabel="#{msg['dialog.physicianSearch.person.new.external']}"
 							itemValue="EXTERNAL" />
@@ -82,30 +82,30 @@
 							itemLabel="#{msg['dialog.physicianSearch.person.new.internal']}"
 							itemValue="INTERNAL" />
 						<p:ajax update="@form" partialSubmit="true" process="@this"
-							listener="#{dialogHandlerAction.physicianSearchDialog.changeMode()}"></p:ajax>
+							listener="#{dialog.physicianSearchDialog.changeMode()}"></p:ajax>
 					</p:selectOneButton>
 				</h:panelGrid>
 			</h:panelGrid>
 
 			<!-- external person -->
 			<ui:fragment
-				rendered="#{dialogHandlerAction.physicianSearchDialog.searchView eq 'EXTERNAL'}">
+				rendered="#{dialog.physicianSearchDialog.searchView eq 'EXTERNAL'}">
 				<!-- External Physician -->
 				<histo:newPersonDataMask
-					person="#{dialogHandlerAction.physicianSearchDialog.selectedPhysician.person}"
+					person="#{dialog.physicianSearchDialog.selectedPhysician.person}"
 					pannelID="editPhysician" disabled="false" />
 			</ui:fragment>
 
 			<!-- internal person -->
 			<ui:fragment
-				rendered="#{dialogHandlerAction.physicianSearchDialog.searchView eq 'INTERNAL'}">
+				rendered="#{dialog.physicianSearchDialog.searchView eq 'INTERNAL'}">
 				<!-- Internal Physician (Employee, get data from LDAP)-->
 				<histo:ldapPhysicianDataMask
-					physicianList="#{dialogHandlerAction.physicianSearchDialog.physicianList}"
-					searchString="#{dialogHandlerAction.physicianSearchDialog.searchString}"
+					physicianList="#{dialog.physicianSearchDialog.physicianList}"
+					searchString="#{dialog.physicianSearchDialog.searchString}"
 					performSearch="searchForPhysician"
 					performObject="#{dialogHandlerAction.physicianSearchDialog}"
-					selection="#{dialogHandlerAction.physicianSearchDialog.selectedPhysician}" />
+					selection="#{dialog.physicianSearchDialog.selectedPhysician}" />
 			</ui:fragment>
 
 			<!-- Role -->
@@ -117,7 +117,7 @@
 				<p:selectCheckboxMenu updateLabel="true" appendTo="dialogContent"
 					immediate="true" styleClass="customSelectCheckboxMenu"
 					style="width:90%"
-					value="#{dialogHandlerAction.physicianSearchDialog.associatedRoles}"
+					value="#{dialog.physicianSearchDialog.associatedRoles}"
 					multiple="true">
 					<f:selectItems var="role"
 						value="#{dialogHandlerAction.physicianEditDialog.allRoles}"
@@ -141,7 +141,7 @@
 						styleClass="smallButton buttonRighMarginInList"
 						icon="fa fa-check-circle-o">
 						<f:actionListener
-							binding="#{dialogHandlerAction.physicianSearchDialog.hideDialog()}"></f:actionListener>
+							binding="#{dialog.physicianSearchDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 
 					<!-- Close button -->
@@ -149,9 +149,9 @@
 						styleClass="smallButton buttonRighMarginInList"
 						icon="fa fa-times-circle">
 						<f:actionListener
-							binding="#{dialogHandlerAction.physicianSearchDialog.setSelectedPhysician(null)}"></f:actionListener>
+							binding="#{dialog.physicianSearchDialog.setSelectedPhysician(null)}"></f:actionListener>
 						<f:actionListener
-							binding="#{dialogHandlerAction.physicianSearchDialog.hideDialog()}"></f:actionListener>
+							binding="#{dialog.physicianSearchDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>

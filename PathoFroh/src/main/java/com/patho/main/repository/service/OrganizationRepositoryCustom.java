@@ -7,7 +7,9 @@ import com.patho.main.model.Organization;
 
 public interface OrganizationRepositoryCustom {
 
-	public Optional<Organization> findOptionalByNameAndInitializePersons(String name);
+	public Optional<Organization> findOptionalByName(String name, boolean initilizePerson);
+
+	public Optional<Organization> findOptionalByID(long id, boolean initilizePerson);
 
 	public List<Organization> findAll(boolean irgnoreArchived);
 

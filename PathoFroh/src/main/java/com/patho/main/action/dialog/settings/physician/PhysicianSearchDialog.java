@@ -8,9 +8,12 @@ import java.util.List;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.AbstractTabDialog;
+import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -18,15 +21,28 @@ import com.patho.main.model.Contact;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
+import com.patho.main.repository.LDAPRepository;
+import com.patho.main.repository.PhysicianRepository;
+import com.patho.main.service.PhysicianService;
 import com.patho.main.ui.transformer.DefaultTransformer;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Configurable
 @Getter
 @Setter
-public class PhysicianSearchDialog extends AbstractDialog implements OrganizationFunctions {
+public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDialog> implements OrganizationFunctions {
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private LDAPRepository ldapRepository;
+
+	private InternalPhysician internalPhysicianTab;
+
+	private ExternalPhysician externalPhysicianTab;
 
 	/**
 	 * If true it is possible to create an external physician or patient
@@ -34,94 +50,105 @@ public class PhysicianSearchDialog extends AbstractDialog implements Organizatio
 	private boolean externalMode;
 
 	/**
-	 * Tabindex of the settings tab
-	 */
-	private SearchView searchView;
-
-	/**
-	 * List containing all physicians known in the histo database
-	 */
-	private List<Physician> physicianList;
-
-	/**
-	 * Used for creating new or for editing existing physicians
-	 */
-	private Physician selectedPhysician;
-
-	/**
-	 * String is used for searching for internal physicians
-	 */
-	private String searchString;
-
-	/**
-	 * Array of roles which the physician should be associated
-	 */
-	private ContactRole[] associatedRoles;
-
-	private List<ContactRole> allRoles;
-
-	/**
 	 * Transformer for selecting organization for external physicians
 	 */
 	private DefaultTransformer<Organization> organizationTransformer;
-	
-	public void initAndPrepareBean() {
-		initAndPrepareBean(false);
+
+	public PhysicianSearchDialog() {
+		setInternalPhysicianTab(new InternalPhysician());
+		setExternalPhysicianTab(new ExternalPhysician());
+
+		tabs = new AbstractTab[] { internalPhysicianTab, externalPhysicianTab };
 	}
 
-	public void initAndPrepareBean(boolean externalMode) {
+	public PhysicianSearchDialog initAndPrepareBean() {
+		return initAndPrepareBean(false);
+	}
+
+	public PhysicianSearchDialog initAndPrepareBean(boolean externalMode) {
 		if (initBean(externalMode))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(boolean externalMode) {
-		setSelectedPhysician(null);
-		setSearchString("");
-		setPhysicianList(null);
 		setExternalMode(externalMode);
-		setSearchView(SearchView.INTERNAL);
-		setAssociatedRoles(new ContactRole[] { ContactRole.NONE });
-		setAllRoles(Arrays.asList(ContactRole.values()));
 
-		super.initBean(task, Dialog.SETTINGS_PHYSICIAN_SEARCH);
-		return true;
+		return super.initBean(task, Dialog.SETTINGS_PHYSICIAN_SEARCH);
 	}
 
-	/**
-	 * Generates an ldap search filter (?(xxx)....) and offers the result list. The
-	 * result list is a physician list with minimal details. Before adding an clinic
-	 * physician a ldap fetch for more details has to be done
-	 *
-	 * @param name
-	 */
-	public void searchForPhysician(String name) {
-		if (name != null && name.length() > 3) {
-			// removing multiple spaces an commas and replacing them with one
-			// space,
-			// splitting the whole thing into an array
-			String[] arr = name.replaceAll("[ ,]+", " ").split(" ");
-			StringBuffer request = new StringBuffer("(&");
-			for (int i = 0; i < arr.length; i++) {
-				request.append("(cn=*" + arr[i] + "*)");
-			}
-			request.append(")");
+	@Getter
+	@Setter
+	public class InternalPhysician extends AbstractTab {
+		/**
+		 * List containing all physicians known in the histo database
+		 */
+		private List<Physician> physicianList;
 
-			try {
-				log.debug("Search for " + request.toString());
+		/**
+		 * Used for creating new or for editing existing physicians
+		 */
+		private Physician selectedPhysician;
 
-				LdapHandler ldapHandler = globalSettings.getLdapHandler();
-				DirContext connection = ldapHandler.openConnection();
+		/**
+		 * String is used for searching for internal physicians
+		 */
+		private String searchString;
 
-				setPhysicianList(ldapHandler.getListOfPhysicians(connection, request.toString()));
+		/**
+		 * Array of roles which the physician should be associated
+		 */
+		private ContactRole[] associatedRoles;
 
-				ldapHandler.closeConnection(connection);
+		/**
+		 * all roles
+		 */
+		private List<ContactRole> allRoles;
+
+		public InternalPhysician() {
+			setTabName("InternalPhysicianTab");
+			setName("dialog.physicianSearch.internal");
+			setViewID("internalPhysicianSearch");
+			setCenterInclude("include/clinicSearch.xhtml");
+		}
+
+		public boolean initTab() {
+			setSelectedPhysician(null);
+			setSearchString("");
+			setPhysicianList(null);
+			setAssociatedRoles(new ContactRole[] { ContactRole.NONE });
+			setAllRoles(Arrays.asList(ContactRole.values()));
+			return true;
+		}
+
+		/**
+		 * Generates an ldap search filter (?(xxx)....) and offers the result list. The
+		 * result list is a physician list with minimal details. Before adding an clinic
+		 * physician a ldap fetch for more details has to be done
+		 *
+		 * @param name
+		 */
+		public void searchForPhysician() {
+			if (searchString != null && searchString.length() > 3) {
+				// removing multiple spaces an commas and replacing them with one
+				// space,
+				// splitting the whole thing into an array
+				String[] arr = searchString.replaceAll("[ ,]+", " ").split(" ");
+
+				setPhysicianList(ldapRepository.findAllByName(arr));
 
 				setSelectedPhysician(null);
-
-			} catch (NamingException | IOException e) {
-				setPhysicianList(new ArrayList<Physician>());
-				// TODO to many results
 			}
+		}
+	}
+
+	public class ExternalPhysician extends AbstractTab {
+		public ExternalPhysician() {
+			setTabName("ExternalPhysicianTab");
+			setName("dialog.physicianSearch.extenal");
+			setViewID("ecternalPhysicianSearch");
+			setCenterInclude("include/externalPerson.xhtml");
 		}
 	}
 
@@ -133,8 +160,9 @@ public class PhysicianSearchDialog extends AbstractDialog implements Organizatio
 			// person is not auto update able
 			getSelectedPhysician().getPerson().setAutoUpdate(false);
 			getSelectedPhysician().getPerson().setOrganizsations(new ArrayList<Organization>());
-			
-			setOrganizationTransformer(new DefaultTransformer<Organization>(getSelectedPhysician().getPerson().getOrganizsations()));
+
+			setOrganizationTransformer(
+					new DefaultTransformer<Organization>(getSelectedPhysician().getPerson().getOrganizsations()));
 		} else
 			setSelectedPhysician(null);
 	}
@@ -154,13 +182,10 @@ public class PhysicianSearchDialog extends AbstractDialog implements Organizatio
 
 	/**
 	 * returns the person of the physician
+	 * 
 	 * @return
 	 */
 	public Person getPerson() {
 		return selectedPhysician != null ? selectedPhysician.getPerson() : null;
-	}
-
-	public enum SearchView {
-		EXTERNAL, INTERNAL;
 	}
 }

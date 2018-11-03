@@ -10,7 +10,7 @@
 // .listingHistoHiddenTableContainer
 
 // default scroll data table layout
-// .defaultHistoDataTable 
+// .defaultHistoDataTable , centerChildElements ,centerHeaderChildElements
 
 // big scroll data table layout without border
 // .bigHistoDataTable 
@@ -194,6 +194,22 @@ body {
 	
 	.forcedLineBreak {
 		white-space: pre-line !important;
+	}
+	
+	/* removes the box shadow from SelectCheckboxMenu*/
+	.ui-selectcheckboxmenu-multiple{
+		.ui-inputfield {
+			box-shadow: none;
+		}
+		
+		.ui-selectcheckboxmenu-multiple-container{
+			padding: 0px !important;
+			min-height: 16px;
+			
+			.ui-selectcheckboxmenu-token{
+				margin: 1px 2px;
+			}
+		}
 	}
 }
 
@@ -424,6 +440,10 @@ body {
 						padding: @defualt_padding;
 						.histo_font();					
 					}
+					
+					th.centerHeaderChildElements{
+						 text-align: center;
+					}
 				}
 			}
 		}
@@ -474,6 +494,10 @@ body {
 					td.manual-column-color {
 						border: 1px solid transparent;
 						background-color: @alternate_row_background_color;
+					}
+					
+					td.centerChildElements{
+						 text-align: center;
 					}
 					
 				}
@@ -531,6 +555,10 @@ body {
 						padding: @defualt_padding;
 						.histo_font();					
 					}
+					
+					th.centerHeaderChildElements{
+						 text-align: center;
+					}
 				}
 			}
 			
@@ -561,6 +589,10 @@ body {
 					td.manual-column-color {
 						border: 1px solid transparent;
 						background-color: @alternate_row_background_color;
+					}
+					
+					td.centerChildElements{
+						 text-align: center;
 					}
 					
 				}

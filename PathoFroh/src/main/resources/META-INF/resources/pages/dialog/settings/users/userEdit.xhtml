@@ -11,14 +11,15 @@
 	<title><h:outputFormat
 			value="#{msg['dialog.userEdit.headline']}">
 			<f:param
-				value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+				value="#{dialog.editUserDialog.user.physician.person.getFullName()}" />
 		</h:outputFormat></title>
-	<h:outputStylesheet name="histo.css" value="histo.css" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 
 	<h:outputScript library="scripts" name="selectCheckboxMenuTop.js" />
 
@@ -26,13 +27,12 @@
 
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
+				styleClass="defaultHistoTable">
 				<h:outputFormat value="#{msg['dialog.userEdit.headline']}">
 					<f:param
-						value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+						value="#{dialog.editUserDialog.user.physician.person.getFullName()}" />
 				</h:outputFormat>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -40,8 +40,9 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="5" styleClass="newStyleListingTable"
-				columnClasses="columnLabelContainer150, , , ,">
+			<h:panelGrid columns="5" styleClass="defaultHistoTable"
+				columnClasses="columnWidth150, , ,columnWidth150 ,">
+
 				<!-- User -->
 				<h:outputLabel value="#{msg['dialog.userEdit.user']}"
 					styleClass="bigFont" />
@@ -49,22 +50,21 @@
 				<!-- User name -->
 				<h:outputLabel value="#{msg['dialog.userEdit.user.name']}" />
 				<p:inputText required="true"
-					value="#{dialogHandlerAction.editUserDialog.user.username}" />
+					value="#{dialog.editUserDialog.user.username}" />
 
 				<!-- User role -->
 				<h:outputLabel value="#{msg['dialog.userEdit.user.role']}" />
 				<p:selectOneMenu style="margin-top:1px;"
 					title="#{msg['body.worklist.header.view']}"
-					value="#{dialogHandlerAction.editUserDialog.user.group}"
-					converter="#{dialogHandlerAction.editUserDialog.groupTransformer}"
+					value="#{dialog.editUserDialog.user.group}"
+					converter="#{dialog.editUserDialog.groupTransformer}"
 					disabled="#{!userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_USER')}">
 
 					<p:ajax event="change" execute="histoUser" partialSubmit="true"
-						listener="#{dialogHandlerAction.editUserDialog.onChangeUserGroup()}"></p:ajax>
+						listener="#{dialog.editUserDialog.setRoleChange(true)}"></p:ajax>
 
-					<f:selectItems value="#{dialogHandlerAction.editUserDialog.groups}"
-						var="group" itemValue="#{group}" itemLabel="#{group.name}" />
-
+					<f:selectItems value="#{dialog.editUserDialog.groups}" var="group"
+						itemValue="#{group}" itemLabel="#{group.name}" />
 				</p:selectOneMenu>
 
 				<!-- Person -->
@@ -74,7 +74,7 @@
 				<!-- Title -->
 				<h:outputLabel value="#{msg['component.personDataMask.title']}" />
 				<p:selectOneMenu style="width:100px" editable="true"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.title}">
+					value="#{dialog.editUserDialog.user.physician.person.title}">
 					<f:selectItem itemLabel="" itemValue="" />
 					<f:selectItem
 						itemLabel="#{msg['component.personDataMask.title.dr']}"
@@ -87,7 +87,7 @@
 				<!-- birthday -->
 				<h:outputLabel value="#{msg['component.personDataMask.birthday']}" />
 				<p:calendar id="birthday" name="bday" autocomplete="bday"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.birthday}"
+					value="#{dialog.editUserDialog.user.physician.person.birthday}"
 					locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true" />
 
 				<h:outputLabel value="" />
@@ -95,12 +95,12 @@
 				<!-- Name -->
 				<h:outputLabel value="#{msg['component.personDataMask.lastname']}" />
 				<p:inputText name="lname" autocomplete="family-name" required="true"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.lastName}" />
+					value="#{dialog.editUserDialog.user.physician.person.lastName}" />
 
 				<!-- gender -->
 				<h:outputLabel value="#{msg['component.personDataMask.gender']}" />
 				<p:selectOneMenu style="width:100px" name="sex" autocomplete="sex"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.gender}">
+					value="#{dialog.editUserDialog.user.physician.person.gender}">
 					<f:selectItem
 						itemLabel="#{msg['component.personDataMask.gender.select']}"
 						itemValue="#{null}" />
@@ -120,7 +120,7 @@
 				<!-- firstName -->
 				<h:outputLabel value="#{msg['component.personDataMask.firstName']}" />
 				<p:inputText name="fname" autocomplete="given-name" required="true"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.firstName}" />
+					value="#{dialog.editUserDialog.user.physician.person.firstName}" />
 
 				<h:outputLabel value="" />
 				<h:outputLabel value="" />
@@ -133,7 +133,7 @@
 				<h:outputLabel
 					value="#{msg['component.personDataMask.contact.street']}" />
 				<p:inputText name="street-address" autocomplete="street-address"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.street}" />
+					value="#{dialog.editUserDialog.user.physician.person.contact.street}" />
 
 				<h:outputText value="" />
 				<h:outputText value="" />
@@ -144,27 +144,27 @@
 				<h:outputLabel
 					value="#{msg['component.personDataMask.contact.additionOne']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.addressadditon}" />
+					value="#{dialog.editUserDialog.user.physician.person.contact.addressadditon}" />
 
 				<!-- address addition two -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.contact.additionTwo']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.addressadditon2}" />
+					value="#{dialog.editUserDialog.user.physician.person.contact.addressadditon2}" />
 
 				<h:outputLabel value="" />
 
 				<!-- Postcode -->
 				<h:outputLabel value="#{msg['component.personDataMask.adress.plz']}" />
 				<p:inputText style="width:75px;"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.postcode}"
+					value="#{dialog.editUserDialog.user.physician.person.contact.postcode}"
 					name="postal-code" autocomplete="postal-code" />
 
 				<!-- Town -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.contact.town']}" />
 				<p:inputText name="city" autocomplete="address-level2"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.town}" />
+					value="#{dialog.editUserDialog.user.physician.person.contact.town}" />
 
 
 				<!-- miscellaneous -->
@@ -176,14 +176,14 @@
 				<h:outputLabel
 					value="#{msg['component.personDataMask.contact.phone']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.phone}"
+					value="#{dialog.editUserDialog.user.physician.person.contact.phone}"
 					name="phone" autocomplete="tel" />
 
 				<!-- fax -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.miscellaneous.fax']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.fax}"
+					value="#{dialog.editUserDialog.user.physician.person.contact.fax}"
 					name="fax" autocomplete="fax" />
 
 				<h:outputLabel value="" />
@@ -192,14 +192,14 @@
 				<h:outputLabel
 					value="#{msg['component.personDataMask.miscellaneous.mobile']}" />
 				<p:inputText
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.phone}"
+					value="#{dialog.editUserDialog.user.physician.person.contact.phone}"
 					name="phone" autocomplete="tel" />
 
 				<!-- mail -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.miscellaneous.mail']}" />
 				<p:inputText name="mail" autocomplete="mail"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.contact.email}" />
+					value="#{dialog.editUserDialog.user.physician.person.contact.email}" />
 
 				<!-- program settings-->
 				<h:outputLabel
@@ -209,22 +209,22 @@
 				<!-- auto update -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.clinicSpecific.autoUpdate']}" />
-				<p:selectBooleanCheckbox styleClass="smallCheckbox"
+				<p:selectBooleanCheckbox
 					title="#{msg['component.personDataMask.clinicSpecific.autoUpdate.text']}"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.autoUpdate}">
+					value="#{dialog.editUserDialog.user.physician.person.autoUpdate}">
 				</p:selectBooleanCheckbox>
 
 				<!-- clinical function -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.clinicSpecific.clinicFunction']}" />
 				<p:inputText required="true"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.clinicRole}" />
+					value="#{dialog.editUserDialog.user.physician.clinicRole}" />
 
 			</h:panelGrid>
 
 			<!-- Function -->
-			<h:panelGrid columns="2" styleClass="newStyleListingTable"
-				columnClasses="columnLabelContainer150, ">
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				columnClasses="columnWidth150, ">
 				<!-- role -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.programRole']}"
@@ -232,13 +232,11 @@
 
 				<p:selectCheckboxMenu updateLabel="true"
 					styleClass="customSelectCheckboxMenu" style="width:90%"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.associatedRolesAsArray}"
+					value="#{dialog.editUserDialog.user.physician.associatedRolesAsArray}"
 					multiple="true">
-					<f:selectItems var="role"
-						value="#{dialogHandlerAction.editUserDialog.allRoles}"
+					<f:selectItems var="role" value="#{dialog.editUserDialog.allRoles}"
 						itemValue="#{role}"
 						itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
-
 					<p:ajax partialSubmit="true" process="@this" />
 				</p:selectCheckboxMenu>
 
@@ -247,25 +245,26 @@
 					title="#{msg['component.personDataMask.defaultAddress.text']}"
 					value="#{msg['component.personDataMask.defaultAddress']}"
 					styleClass="bigFont" />
-					
+
 				<p:selectOneMenu style="margin-top:1px;"
 					title="#{msg['component.personDataMask.defaultAddress.text']}"
-					value="#{dialogHandlerAction.editUserDialog.person.defaultAddress}"
-					converter="#{dialogHandlerAction.editUserDialog.organizationTransformer}"
+					value="#{dialog.editUserDialog.person.defaultAddress}"
+					converter="#{dialog.editUserDialog.organizationTransformer}"
 					disabled="#{!userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_USER')}">
 
-					<f:selectItem value="#{null}" itemLabel="#{msg['component.personDataMask.defaultAddress.none']}"></f:selectItem>
+					<f:selectItem value="#{null}"
+						itemLabel="#{msg['component.personDataMask.defaultAddress.none']}"></f:selectItem>
 
 					<f:selectItems
-						value="#{dialogHandlerAction.editUserDialog.person.organizsations}"
-						var="group" itemValue="#{group}" itemLabel="#{group.name}" />
+						value="#{dialog.editUserDialog.person.organizsations}" var="group"
+						itemValue="#{group}" itemLabel="#{group.name}" />
 				</p:selectOneMenu>
 
 			</h:panelGrid>
 
 			<!-- Organization -->
-			<h:panelGrid columns="2" styleClass="newStyleListingTable"
-				columnClasses="columnLabelContainer150, ">
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				columnClasses="columnWidth150, ">
 
 				<h:outputLabel
 					value="#{msg['component.personDataMask.organization']}"
@@ -273,8 +272,8 @@
 
 				<p:dataTable var="organization" style="width:90%;" scrollable="true"
 					id="organizationTab" scrollHeight="75" draggableRows="true"
-					styleClass="newStyleDataTable"
-					value="#{dialogHandlerAction.editUserDialog.user.physician.person.organizsations}">
+					styleClass="defaultHistoDataTable"
+					value="#{dialog.editUserDialog.user.physician.person.organizsations}">
 
 					<p:column
 						headerText="#{msg['component.personDataMask.organization.name']}">
@@ -290,7 +289,7 @@
 						</h:outputLabel>
 					</p:column>
 
-					<p:column style="width:15px">
+					<p:column style="width:15px" styleClass="text-align: center;">
 						<ui:fragment rendered="#{organization.intern}">
 							<i class="fa fa-fw fa-check-circle icon-green"
 								style="margin-left: 5px"
@@ -298,18 +297,19 @@
 						</ui:fragment>
 					</p:column>
 
-					<p:column style="width:30px">
+					<p:column style="width:30px" styleClass="text-align: center;">
 						<f:facet name="header">
 							<p:commandLink id="upload"
-								title="#{msg['component.personDataMask.organization.add']}" process="@this"
-								actionListener="#{dialogHandlerAction.organizationListDialog.initAndPrepareBean(true)}">
+								title="#{msg['component.personDataMask.organization.add']}"
+								process="@this"
+								actionListener="#{dialog.organizationListDialog.initAndPrepareBean().selectMode(true)}">
 								<p:ajax event="dialogReturn" update="@form" process="@form"
-									listener="#{dialogHandlerAction.editUserDialog.onReturnOrganizationDialog}" />
+									listener="#{dialog.editUserDialog.onReturnOrganizationDialog}" />
 								<i class="fa fa-plus" />
 							</p:commandLink>
 						</f:facet>
 						<p:commandLink
-							actionListener="#{dialogHandlerAction.editUserDialog.removeFromOrganization(organization)}"
+							actionListener="#{dialog.editUserDialog.removeFromOrganization(organization)}"
 							update="@form" partialSubmit="true" process="@this"
 							title="#{msg['component.personDataMask.organization.remove']}">
 							<i class="fa fa-remove" style="margin-left: 8px" />
@@ -321,10 +321,9 @@
 		</div>
 
 		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+			<h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
+				<h:panelGrid columns="1" styleClass="left">
 					<h:panelGroup>
 
 						<p:splitButton value="#{msg['general.refresh']}"
@@ -339,44 +338,43 @@
 						<p:commandButton immediate="true" id="deleteBtn"
 							widgetVar="deleteBtn" style="display:none">
 							<f:actionListener
-								binding="#{dialogHandlerAction.editUserDialog.prepareDeleteUser()}"></f:actionListener>
+								binding="#{dialog.editUserDialog.prepareDeleteUser()}"></f:actionListener>
 
 							<p:ajax event="dialogReturn"
-								listener="#{dialogHandlerAction.editUserDialog.onDeleteDialogReturn}"
+								listener="#{dialog.editUserDialog.onDeleteDialogReturn}"
 								update="@form" />
 						</p:commandButton>
 
 						<!-- Refresh -->
-						<p:commandButton id="refreshBtn" style="display:none" update="@form"
-							widgetVar="refreshBtn" onstart="PF('blockUIWidget').block()"
+						<p:commandButton id="refreshBtn" style="display:none"
+							update="@form" widgetVar="refreshBtn"
+							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()">
 							<f:actionListener
-								binding="#{dialogHandlerAction.editUserDialog.updateDataFromLdap()}"></f:actionListener>
+								binding="#{dialog.editUserDialog.updateDataFromLdap()}"></f:actionListener>
 						</p:commandButton>
 					</h:panelGroup>
 
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<h:panelGrid columns="2" styleClass="right">
 					<!-- Save button -->
 					<p:commandButton value="#{msg['general.save']}" update="@form"
 						icon="fa fa-check-circle-o">
-						<f:actionListener
-							binding="#{dialogHandlerAction.editUserDialog.saveUser()}"></f:actionListener>
-						<f:actionListener
-							binding="#{dialogHandlerAction.editUserDialog.hideDialog()}"></f:actionListener>
+						<f:actionListener binding="#{dialog.editUserDialog.saveUser()}"></f:actionListener>
+						<f:actionListener binding="#{dialog.editUserDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 
 					<!-- Close button -->
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
 						update="@form" immediate="true" icon="fa fa-times-circle">
-						<f:actionListener
-							binding="#{dialogHandlerAction.editUserDialog.hideDialog()}"></f:actionListener>
+						<f:actionListener binding="#{dialog.editUserDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
-		<ui:include src="../../../template/blockUi.xhtml"></ui:include>
+
+		<ui:include src="../../../../template/blockUi.xhtml"></ui:include>
 	</h:form>
 </h:body>
 </html>

@@ -15,13 +15,14 @@
 			<f:param
 				value="#{dialogHandlerAction.physicianEditDialog.physician.isClinicEmployee() ? mgs['dialog.physicianEdit.headline.person.clinic'] : mgs['dialog.physicianEdit.headline.person.extern'] }" />
 		</h:outputFormat></title>
-
-	<h:outputStylesheet name="histo.css" value="histo.css" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+		
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 
 	<h:outputScript library="scripts" name="selectCheckboxMenuTop.js" />
 
@@ -289,7 +290,7 @@
 						<f:facet name="header">
 							<p:commandLink
 								title="#{msg['component.personDataMask.organization.add']}"  process="@this"
-								actionListener="#{dialogHandlerAction.organizationListDialog.initAndPrepareBean(true)}">
+								actionListener="#{dialog.organizationListDialog.initAndPrepareBean().selectMode(true)}">
 								<p:ajax event="dialogReturn" update="@form"  process="@form"
 									listener="#{dialogHandlerAction.physicianEditDialog.onReturnOrganizationDialog}" />
 								<i class="fa fa-plus" />

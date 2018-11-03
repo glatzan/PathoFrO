@@ -10,7 +10,7 @@
 	<title><h:outputFormat
 			value="#{msg['dialog.userDelete.headline']}">
 			<f:param
-				value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+				value="#{dialog.editUserDialog.user.physician.person.fullName}" />
 		</h:outputFormat></title>
 	<h:outputStylesheet name="histo.css" value="histo.css" />
 	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
@@ -27,7 +27,7 @@
 				styleClass="newTableContainer">
 				<h:outputFormat value="#{msg['dialog.userDelete.headline']}">
 					<f:param
-						value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+						value="#{dialog.editUserDialog.user.physician.person.fullName}" />
 				</h:outputFormat>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					styleClass="noUnderlineAtLink"
@@ -42,7 +42,7 @@
 				columnClasses="columnLongText">
 				<h:outputFormat value="#{msg['dialog.userDelete.text']}">
 					<f:param
-						value="#{dialogHandlerAction.editUserDialog.user.physician.person.fullName}" />
+						value="#{dialog.editUserDialog.user.physician.person.fullName}" />
 				</h:outputFormat>
 			</h:panelGrid>
 		</div>
@@ -60,17 +60,17 @@
 						id="userDeleteBtn" icon="fa fa-fw fa-trash"
 						onclick="disableButton(true, 'userDeleteBtn', 'closeBtn')">
 						<f:actionListener
-							binding="#{dialogHandlerAction.editUserDialog.deleteUser()}" />
+							binding="#{dialog.editUserDialog.deleteUser()}" />
 
 						<p:ajax event="dialogReturn" 
-							listener="#{dialogHandlerAction.editUserDialog.hideDialog()}"
+							listener="#{dialog.editUserDialog.hideDialog()}"
 							update="@form" />
 					</p:commandButton>
 
 					<!-- abort -->
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn" widgetVar="closeBtn"
 						icon="fa fa-times-circle"
-						actionListener="#{dialogHandlerAction.editUserDialog.hideDialog()}"></p:commandButton>
+						actionListener="#{dialog.editUserDialog.hideDialog()}"></p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>

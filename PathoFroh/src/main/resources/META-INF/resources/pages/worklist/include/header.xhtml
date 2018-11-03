@@ -276,7 +276,7 @@
 					listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}" />
 			</p:commandButton>
 
-			<p:hotkey bind="alt+b" 
+			<p:hotkey bind="alt+b"
 				oncomplete="$('#headerForm\\:notificationPerformBtn').click();return false;" />
 
 
@@ -324,7 +324,7 @@
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm headerForm" />
 			</p:commandButton>
-			
+
 			<p:hotkey bind="alt+p"
 				oncomplete="$('#headerForm\\:printBtn').click();return false;" />
 			<!-- *************** Task Menu *************** -->
@@ -345,6 +345,11 @@
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm" />
 			</p:commandButton>
+
+			<p:hotkey bind="alt+shift+s"
+				oncomplete="$('#headerForm\\:settingsDialogBtn').click();return false;" />
+
+
 
 			<!-- accounting button -->
 			<p:commandButton id="accountingDialogBtn" partialSubmit="true"

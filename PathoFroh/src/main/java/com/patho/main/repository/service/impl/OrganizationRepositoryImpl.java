@@ -19,15 +19,34 @@ import com.patho.main.repository.service.OrganizationRepositoryCustom;
 public class OrganizationRepositoryImpl extends AbstractRepositoryCustom implements OrganizationRepositoryCustom {
 
 	@Override
-	public Optional<Organization> findOptionalByNameAndInitializePersons(String name) {
+	public Optional<Organization> findOptionalByName(String name, boolean initilizePerson) {
 		CriteriaQuery<Organization> criteria = getCriteriaBuilder().createQuery(Organization.class);
 		Root<Organization> root = criteria.from(Organization.class);
 
 		criteria.select(root);
 
-		root.fetch(Organization_.persons, JoinType.LEFT);
+		if (initilizePerson)
+			root.fetch(Organization_.persons, JoinType.LEFT);
 
 		criteria.where(getCriteriaBuilder().equal(root.get(Organization_.name), name));
+
+		criteria.distinct(true);
+
+		List<Organization> organizations = getSession().createQuery(criteria).getResultList();
+
+		return Optional.ofNullable(!organizations.isEmpty() ? organizations.get(0) : null);
+	}
+
+	public Optional<Organization> findOptionalByID(long id, boolean initilizePerson) {
+		CriteriaQuery<Organization> criteria = getCriteriaBuilder().createQuery(Organization.class);
+		Root<Organization> root = criteria.from(Organization.class);
+
+		criteria.select(root);
+
+		if (initilizePerson)
+			root.fetch(Organization_.persons, JoinType.LEFT);
+
+		criteria.where(getCriteriaBuilder().equal(root.get(Organization_.id), id));
 
 		criteria.distinct(true);
 

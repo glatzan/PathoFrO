@@ -33,7 +33,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class SearchPatientDialog extends AbstractTabDialog {
+public class SearchPatientDialog extends AbstractTabDialog<SearchPatientDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -80,19 +80,14 @@ public class SearchPatientDialog extends AbstractTabDialog {
 	}
 
 	public void initBean(String name, String surename, String piz, Date date, boolean showExternPatientTab) {
-		super.initBean(null, Dialog.PATIENT_ADD);
 		this.showExternPatientTab = showExternPatientTab;
-
-		for (int i = 0; i < tabs.length; i++) {
-			tabs[i].initTab();
-		}
 
 		clinicSearchTab.setPatientName(name);
 		clinicSearchTab.setPatientSurname(surename);
 		clinicSearchTab.setPatientPiz(piz);
 		clinicSearchTab.setPatientBirthday(date);
-
-		onTabChange(tabs[0]);
+		
+		super.initBean(null, Dialog.PATIENT_ADD);
 	}
 
 	@Getter

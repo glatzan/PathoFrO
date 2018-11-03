@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel value="#{msg['dialog.searchPatient.search']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannel">
+		<h:panelGrid styleClass="defaultHistoTable" columns="2">
+
+			<!-- search -->
+			<h:outputLabel value="#{msg['dialog.searchPatient.search.person']}"
+				styleClass="bigFont" />
+			<h:panelGroup>
+				<p:inputText
+					value="#{dialog.physicianSearchDialog.internalPhysicianTab.searchString}"
+					id="searchStringInput" widgetVar="searchStringInput"
+					style="width: 98%">
+					<p:ajax event="keyup" delay="500"
+						onstart="PF('blockSeach').block()"
+						oncomplete="PF('blockSeach').unblock()"
+						listener="#{dialog.physicianSearchDialog.searchForPhysician()}"
+						update="ldapPhysicianList" process="@this" />
+				</p:inputText>
+				<p:watermark for="searchStringInput"
+					value="#{msg['include.ladpPhysician.search.watermark']}" />
+			</h:panelGroup>
+
+			<!-- physician list -->
+			<h:outputLabel value="#{msg['dialog.searchPatient.search.person']}"
+				styleClass="bigFont" />
+
+			<p:dataTable var="physician"
+				value="#{dialog.physicianSearchDialog.internalPhysicianTab.physicianList}"
+				id="ldapPhysicianList" selectionMode="single" scrollable="true"
+				scrollHeight="300" rowKey="#{physician.id}"
+				selection="#{dialog.physicianSearchDialog.internalPhysicianTab.selectedPhysician}"
+				style="width: 99%" styleClass="defaultHistoDataTable">
+
+				<!-- name -->
+				<p:column sortBy="#{physician.person.lastName}"
+					headerText="#{msg['include.ladpPhysician.search.name']}"
+					style="width:20%">
+					<h:outputText value="#{physician.person.getFullName()}" />
+				</p:column>
+
+				<!-- role -->
+				<p:column sortBy="#{physician.clinicRole}"
+					headerText="#{msg['include.ladpPhysician.search.role']}"
+					style="width:20%">
+					<h:outputText value="#{physician.clinicRole}" />
+				</p:column>
+
+				<p:ajax event="rowSelect" process="@this" />
+			</p:dataTable>
+
+			<h:outputLabel value="#{msg['dialog.physicianSearch.person.role']}"
+				styleClass="bigFont" />
+
+			<p:selectCheckboxMenu updateLabel="true" appendTo="dialogContent"
+				style="width:90%"
+				value="#{dialog.physicianSearchDialog.internalPhysicianTab.associatedRoles}"
+				multiple="true">
+				<f:selectItems var="role"
+					value="#{dialog.physicianSearchDialog.internalPhysicianTab.allRoles}"
+					itemValue="#{role}"
+					itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
+
+				<p:ajax partialSubmit="true" process="@this" />
+			</p:selectCheckboxMenu>
+		</h:panelGrid>
+	</p:outputPanel>
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2">
+
+			<h:panelGrid columns="1" styleClass="left">
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="right">
+				<!-- Close button -->
+				<p:commandButton value="select" icon="fa fa-check-circle-o"
+					update="@form" process="@form">
+					<f:actionListener
+						binding="#{dialog.physicianSearchDialog.hideDialog()}"></f:actionListener>
+				</p:commandButton>
+
+				<!-- Close button -->
+				<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+					immediate="true" icon="fa fa-times-circle"
+					actionListener="#{dialog.physicianSearchDialog.hideDialog()}">
+				</p:commandButton>
+			</h:panelGrid>
+		</h:panelGrid>
+	</div>
+
+</ui:composition>
