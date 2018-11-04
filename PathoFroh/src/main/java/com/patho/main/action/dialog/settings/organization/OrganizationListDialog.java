@@ -2,15 +2,18 @@ package com.patho.main.action.dialog.settings.organization;
 
 import java.util.List;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,7 +46,7 @@ public class OrganizationListDialog extends AbstractDialog<OrganizationListDialo
 
 	public boolean initBean() {
 		setSelectMode(false);
-		updateOrganizationList();
+		update();
 		return super.initBean(null, Dialog.SETTINGS_ORGANIZATION_LIST);
 	}
 
@@ -51,13 +54,9 @@ public class OrganizationListDialog extends AbstractDialog<OrganizationListDialo
 		setSelectMode(selectMode);
 	}
 
-	public void updateOrganizationList() {
+	private void update() {
 		setSelectedOrganization(null);
 		setOrganizations(organizationRepository.findAll(true));
-	}
-
-	public void removeOrganization(Person person, Organization organization) {
-		person.getOrganizsations().remove(organization);
 	}
 
 	/**
@@ -65,6 +64,12 @@ public class OrganizationListDialog extends AbstractDialog<OrganizationListDialo
 	 */
 	public void selectAndHide() {
 		hideDialog(new OrganizationSelectReturnEvent(getSelectedOrganization()));
+	}
+
+	public void onDefaultDialogReturn(SelectEvent event) {
+		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
+			update();
+		}
 	}
 
 	@Getter

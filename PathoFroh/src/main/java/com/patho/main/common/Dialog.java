@@ -32,7 +32,7 @@ public enum Dialog {
 	CONTACTS_SELECT("/pages/dialog/contact/contactSelect", null, 858, 484, false, false, true), 																			// OK				// TEST OK
 	SETTINGS("/pages/dialog/settings/globalSettings/settings", null, 1024, 600, false, false, true), // 16:9
 	SETTINGS_PHYSICIAN_SEARCH("/pages/dialog/settings/physician/physicianSearch/physicianSearch", null, 1280, 720, false, false, true), // 16:9
-	SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1024, 600, false, false, true), //  16:9
+	SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1280, 720, false, false, true), //  16:9
 	SETTINGS_STAINING_EDIT("/pages/dialog/settings/staining/stainingEdit", null, 1024, 600, false, false, true), //  16:9
 	SETTINGS_GROUP_LIST("/pages/dialog/settings/groups/groupList", null, 1024, 600, false, false, true), //  16:9
 	SETTINGS_GROUP_EDIT("/pages/dialog/settings/groups/groupEdit", null, 1024, 600, false, false, true), //  16:9

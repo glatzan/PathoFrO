@@ -69,6 +69,7 @@
 				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.firstName}" />
 
 		</h:panelGrid>
+
 		<!-- Separator -->
 		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
 			<p:separator />
@@ -150,12 +151,6 @@
 			<p:inputText name="mail" autocomplete="mail"
 				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.email}" />
 
-			<h:outputText value="&nbsp;" />
-			<h:outputText value=" " />
-
-			<h:outputText value=" " />
-			<h:outputText value=" " />
-
 		</h:panelGrid>
 
 		<!-- Separator -->
@@ -169,8 +164,7 @@
 			<!-- role -->
 			<h:outputLabel value="#{msg['component.personDataMask.programRole']}" />
 
-			<p:selectCheckboxMenu updateLabel="true"
-				styleClass="customSelectCheckboxMenu" style="width:90%"
+			<p:selectCheckboxMenu updateLabel="true" style="width:90%"
 				value="#{dialog.physicianSearchDialog.externalPhysicianTab.associatedRoles}"
 				multiple="true">
 				<f:selectItems var="role"
@@ -202,7 +196,7 @@
 			<p:selectOneMenu style="margin-top:1px;"
 				title="#{msg['component.personDataMask.defaultAddress.text']}"
 				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.defaultAddress}"
-				converter="#{dialog.physicianSearchDialog.externalPhysicianTab.organizationTransformer}">
+				converter="#{dialog.physicianSearchDialog.externalPhysicianTab.contactOrganizations}">
 
 				<f:selectItem value="#{null}"
 					itemLabel="#{msg['component.personDataMask.defaultAddress.none']}"></f:selectItem>
@@ -252,7 +246,7 @@
 							process="@this"
 							actionListener="#{dialog.organizationListDialog.initAndPrepareBean().selectMode(true)}">
 							<p:ajax event="dialogReturn" update="@form" process="@form"
-								listener="#{dialog.physicianSearchDialog.onReturnOrganizationDialog}" />
+								listener="#{dialog.physicianSearchDialog.externalPhysicianTab.onDefaultDialogReturn}" />
 							<i class="fa fa-plus" />
 						</p:commandLink>
 					</f:facet>

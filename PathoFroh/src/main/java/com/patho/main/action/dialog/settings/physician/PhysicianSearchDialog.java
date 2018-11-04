@@ -172,7 +172,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 
 	@Getter
 	@Setter
-	public class ExternalPhysician extends AbstractTab implements OrganizationFunctions {
+	public class ExternalPhysician extends AbstractTab {
 
 		/**
 		 * Used for creating new or for editing existing physicians
@@ -207,31 +207,34 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 			getSelectedPhysician().getPerson().setAutoUpdate(false);
 			getSelectedPhysician().getPerson().setOrganizsations(new ArrayList<Organization>());
 
-			// setting organization for selecting an default notification
-			setContactOrganizations(
-					new DefaultTransformer<Organization>(getSelectedPhysician().getPerson().getOrganizsations()));
-
 			setAssociatedRoles(new ContactRole[] { ContactRole.OTHER_PHYSICIAN });
 			setAllRoles(Arrays.asList(ContactRole.values()));
+
+			updateData();
 
 			return true;
 		}
 
 		@Override
-		public Person getPerson() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+		public void updateData() {
+			// setting organization for selecting an default notification
+			setContactOrganizations(
+					new DefaultTransformer<Organization>(getSelectedPhysician().getPerson().getOrganizsations()));
 
-		@Override
-		public DefaultTransformer<Organization> getOrganizationTransformer() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+			// checking if organization exists within the organization array
+			boolean organizationExsists = false;
+			for (Organization organization : getSelectedPhysician().getPerson().getOrganizsations()) {
+				if (getSelectedPhysician().getPerson().getDefaultAddress() != null
+						&& getSelectedPhysician().getPerson().getDefaultAddress().equals(organization)) {
+					organizationExsists = true;
+					break;
+				}
+			}
 
-		@Override
-		public void setOrganizationTransformer(DefaultTransformer<Organization> transformer) {
+			if (!organizationExsists)
+				getSelectedPhysician().getPerson().setDefaultAddress(null);
 
+			super.updateData();
 		}
 
 		public void selectAndHide() {
@@ -249,11 +252,22 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 				getSelectedPhysician()
 						.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
 
-				if (getSelectedPhysician().getAssociatedRoles().size() == 0)
+				if (getSelectedPhysician().hasNoAssociateRole())
 					getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
 
 				setSelectedPhysician(physicianService.addOrMergePhysician(getSelectedPhysician()));
 			}
+		}
+
+		/**
+		 * Removes an organization from the user and updates the default address
+		 * selection
+		 * 
+		 * @param organization
+		 */
+		public void removeFromOrganization(Organization organization) {
+			getSelectedPhysician().getPerson().getOrganizsations().remove(organization);
+			updateData();
 		}
 
 		public void onDefaultDialogReturn(SelectEvent event) {

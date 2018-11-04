@@ -84,7 +84,7 @@
 						<!-- Edit -->
 						<p:commandLink title="#{msg['dialog.userList.list.options.edit']}"
 							execute="@this" partialSubmit="true"
-							actionListener="#{dialogHandlerAction.physicianEditDialog.initAndPrepareBean(user.physician)}">
+							actionListener="#{dialog.physicianEditDialog.initAndPrepareBean(user.physician)}">
 							<i class="fa fa-fw fa-cog" />
 							<p:ajax event="dialogReturn"
 								listener="#{dialogHandlerAction.userListDialog.updateData()}"

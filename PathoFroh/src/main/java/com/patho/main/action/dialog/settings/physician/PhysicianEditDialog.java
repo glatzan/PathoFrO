@@ -1,21 +1,27 @@
 package com.patho.main.action.dialog.settings.physician;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
+import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
+import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
@@ -25,7 +31,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> implements OrganizationFunctions {
+public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -41,7 +47,7 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> imp
 
 	private List<ContactRole> allRoles;
 
-	private DefaultTransformer<Organization> organizationTransformer;
+	private DefaultTransformer<Organization> contactOrganizations;
 
 	public PhysicianEditDialog initAndPrepareBean(Physician physician) {
 		if (initBean(physician))
@@ -53,13 +59,42 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> imp
 		setPhysician(physician);
 		setAllRoles(Arrays.asList(ContactRole.values()));
 
-		// setting organization transformer for selecting default address
-		setOrganizationTransformer(
-				new DefaultTransformer<Organization>(getPhysician().getPerson().getOrganizsations()));
-
 		super.initBean(task, Dialog.SETTINGS_PHYSICIAN_EDIT);
 
+		update();
+
 		return true;
+	}
+
+	public void update() {
+		
+	}
+	
+	public void update(boolean reloadPhysician) {
+		
+		if (reloadPhysician) {
+			physicianRepository.findop
+			Optional<Task> oTask = taskRepository.findOptionalByIdAndInitialize(getTask().getId(), false, false, false,
+					false, true);
+			setTask(oTask.get());
+		}
+		
+		
+		// setting organization for selecting an default notification
+		setContactOrganizations(new DefaultTransformer<Organization>(getPhysician().getPerson().getOrganizsations()));
+
+		// checking if organization exists within the organization array
+		boolean organizationExsists = false;
+		for (Organization organization : getPhysician().getPerson().getOrganizsations()) {
+			if (getPhysician().getPerson().getDefaultAddress() != null
+					&& getPhysician().getPerson().getDefaultAddress().equals(organization)) {
+				organizationExsists = true;
+				break;
+			}
+		}
+
+		if (!organizationExsists)
+			getPhysician().getPerson().setDefaultAddress(null);
 	}
 
 	/**
@@ -68,11 +103,13 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> imp
 	 * @param physician
 	 */
 	public void save() {
-		if (getPhysician().hasNoAssociateRole())
-			getPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
+		if (getPhysician() != null) {
+			if (getPhysician().hasNoAssociateRole())
+				getPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
 
-		physicianRepository.save(getPhysician(),
-				resourceBundle.get("log.settings.physician.physician.edit", getPhysician().getPerson().getFullName()));
+			setPhysician(physicianRepository.save(getPhysician(), resourceBundle
+					.get("log.settings.physician.physician.edit", getPhysician().getPerson().getFullName())));
+		}
 	}
 
 	/**
@@ -80,13 +117,26 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> imp
 	 */
 	public void updateDataFromLdap() {
 		physicianService.updatePhysicianWithLdapData(getPhysician());
-		updateOrganizationSelection();
+		update();
 	}
 
 	/**
-	 * Getting person from physician
+	 * Removes an organization from the user and updates the default address
+	 * selection
+	 * 
+	 * @param organization
 	 */
-	public Person getPerson() {
-		return getPhysician().getPerson();
+	public void removeFromOrganization(Organization organization) {
+		getPhysician().getPerson().getOrganizsations().remove(organization);
+		update();
+	}
+
+	public void onDefaultDialogReturn(SelectEvent event) {
+		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
+			hideDialog();
+		} else if (event.getObject() != null && event.getObject() instanceof OrganizationSelectReturnEvent) {
+			getPhysician().getPerson().getOrganizsations()
+					.add(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
+		}
 	}
 }

@@ -15,6 +15,7 @@ import com.patho.main.model.Person;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PersonRepository;
 import com.patho.main.service.OrganizationService;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
@@ -75,11 +76,6 @@ public class OrganizationEditDialog extends AbstractDialog<OrganizationEditDialo
 		return super.initBean(task, Dialog.SETTINGS_ORGANIZATION_EDIT);
 	}
 
-	public OrganizationEditDialog newOrganizationMode(boolean newOrganization) {
-		this.newOrganization = newOrganization;
-		return this;
-	}
-
 	public void selectAndHide() {
 		save();
 		hideDialog(new OrganizationSelectReturnEvent(organization));
@@ -87,7 +83,7 @@ public class OrganizationEditDialog extends AbstractDialog<OrganizationEditDialo
 
 	public void saveAndHide() {
 		save();
-		hideDialog();
+		hideDialog(new ReloadEvent());
 	}
 
 	/**

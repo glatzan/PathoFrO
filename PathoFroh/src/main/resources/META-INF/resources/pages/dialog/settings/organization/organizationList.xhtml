@@ -87,7 +87,7 @@
 						actionListener="#{dialog.organizationEditDialog.initAndPrepareBean()}"
 						partialSubmit="true" update="@form">
 						<p:ajax event="dialogReturn"
-							listener="#{dialog.organizationListDialog.updateOrganizationList()}"
+							listener="#{dialog.organizationListDialog.onDefaultDialogReturn}"
 							update="@form" />
 					</p:commandButton>
 				</h:panelGrid>

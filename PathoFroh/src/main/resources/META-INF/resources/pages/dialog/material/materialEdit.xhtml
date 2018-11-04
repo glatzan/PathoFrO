@@ -115,13 +115,11 @@
 				<!-- role -->
 				<h:outputLabel value="#{msg['dialog.physicianSearch.person.role']}" />
 				<p:selectCheckboxMenu updateLabel="true" appendTo="dialogContent"
-					immediate="true" styleClass="customSelectCheckboxMenu"
-					style="width:90%"
+					immediate="true" style="width:90%"
 					value="#{dialog.physicianSearchDialog.associatedRoles}"
 					multiple="true">
 					<f:selectItems var="role"
-						value="#{dialogHandlerAction.physicianEditDialog.allRoles}"
-						itemValue="#{role}"
+						value="#{dialog.physicianEditDialog.allRoles}" itemValue="#{role}"
 						itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
 
 					<p:ajax partialSubmit="true" process="@this" />
