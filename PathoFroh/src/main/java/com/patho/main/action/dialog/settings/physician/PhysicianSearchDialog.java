@@ -1,20 +1,17 @@
 package com.patho.main.action.dialog.settings.physician;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
-import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.AbstractTabDialog;
-import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
+import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.Contact;
@@ -25,20 +22,28 @@ import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialogReturn.DialogReturnEvent;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Configurable
 @Getter
 @Setter
-public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDialog> implements OrganizationFunctions {
+public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private LDAPRepository ldapRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PhysicianService physicianService;
 
 	private InternalPhysician internalPhysicianTab;
 
@@ -48,11 +53,6 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 	 * If true it is possible to create an external physician or patient
 	 */
 	private boolean externalMode;
-
-	/**
-	 * Transformer for selecting organization for external physicians
-	 */
-	private DefaultTransformer<Organization> organizationTransformer;
 
 	public PhysicianSearchDialog() {
 		setInternalPhysicianTab(new InternalPhysician());
@@ -87,7 +87,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 		private List<Physician> physicianList;
 
 		/**
-		 * Used for creating new or for editing existing physicians
+		 * Used for selecting a physician
 		 */
 		private Physician selectedPhysician;
 
@@ -108,7 +108,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 
 		public InternalPhysician() {
 			setTabName("InternalPhysicianTab");
-			setName("dialog.physicianSearch.internal");
+			setName("dialog.physicianSearch.person.new.internal");
 			setViewID("internalPhysicianSearch");
 			setCenterInclude("include/clinicSearch.xhtml");
 		}
@@ -117,7 +117,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 			setSelectedPhysician(null);
 			setSearchString("");
 			setPhysicianList(null);
-			setAssociatedRoles(new ContactRole[] { ContactRole.NONE });
+			setAssociatedRoles(new ContactRole[] { ContactRole.OTHER_PHYSICIAN });
 			setAllRoles(Arrays.asList(ContactRole.values()));
 			return true;
 		}
@@ -135,57 +135,143 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 				// space,
 				// splitting the whole thing into an array
 				String[] arr = searchString.replaceAll("[ ,]+", " ").split(" ");
-
+				logger.debug("Hallo " + searchString);
 				setPhysicianList(ldapRepository.findAllByName(arr));
+
+				int i = 0;
+				for (Physician phys : getPhysicianList()) {
+					phys.setId(i++);
+				}
 
 				setSelectedPhysician(null);
 			}
 		}
-	}
 
-	public class ExternalPhysician extends AbstractTab {
-		public ExternalPhysician() {
-			setTabName("ExternalPhysicianTab");
-			setName("dialog.physicianSearch.extenal");
-			setViewID("ecternalPhysicianSearch");
-			setCenterInclude("include/externalPerson.xhtml");
+		public void selectAndHide() {
+			save();
+			hideDialog(new PhysicianReturnEvent(getSelectedPhysician()));
+		}
+
+		public void saveAndHide() {
+			save();
+			hideDialog();
+		}
+
+		private void save() {
+			if (getSelectedPhysician() != null) {
+				getSelectedPhysician()
+						.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
+
+				if (getSelectedPhysician().getAssociatedRoles().size() == 0)
+					getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
+
+				setSelectedPhysician(physicianService.addOrMergePhysician(getSelectedPhysician()));
+			}
 		}
 	}
 
-	public void changeMode() {
-		setAssociatedRoles(new ContactRole[] { ContactRole.NONE });
+	@Getter
+	@Setter
+	public class ExternalPhysician extends AbstractTab implements OrganizationFunctions {
 
-		if (searchView == SearchView.EXTERNAL) {
+		/**
+		 * Used for creating new or for editing existing physicians
+		 */
+		private Physician selectedPhysician;
+
+		/**
+		 * Array of roles which the physician should be associated
+		 */
+		private ContactRole[] associatedRoles;
+
+		/**
+		 * all roles
+		 */
+		private List<ContactRole> allRoles;
+
+		/**
+		 * Transformer for selection an organization as contact address
+		 */
+		private DefaultTransformer<Organization> contactOrganizations;
+
+		public ExternalPhysician() {
+			setTabName("ExternalPhysicianTab");
+			setName("dialog.physicianSearch.person.new.external");
+			setViewID("ecternalPhysicianSearch");
+			setCenterInclude("include/externalPerson.xhtml");
+		}
+
+		public boolean initTab() {
 			setSelectedPhysician(new Physician(new Person(new Contact())));
 			// person is not auto update able
 			getSelectedPhysician().getPerson().setAutoUpdate(false);
 			getSelectedPhysician().getPerson().setOrganizsations(new ArrayList<Organization>());
 
-			setOrganizationTransformer(
+			// setting organization for selecting an default notification
+			setContactOrganizations(
 					new DefaultTransformer<Organization>(getSelectedPhysician().getPerson().getOrganizsations()));
-		} else
-			setSelectedPhysician(null);
-	}
 
-	/**
-	 * Sets the role Array and returns the physician
-	 * 
-	 * @return
-	 */
-	public Physician getPhysician() {
-		if (getSelectedPhysician() == null)
+			setAssociatedRoles(new ContactRole[] { ContactRole.OTHER_PHYSICIAN });
+			setAllRoles(Arrays.asList(ContactRole.values()));
+
+			return true;
+		}
+
+		@Override
+		public Person getPerson() {
+			// TODO Auto-generated method stub
 			return null;
+		}
 
-		getSelectedPhysician().setAssociatedRolesAsArray(getAssociatedRoles());
-		return getSelectedPhysician();
+		@Override
+		public DefaultTransformer<Organization> getOrganizationTransformer() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setOrganizationTransformer(DefaultTransformer<Organization> transformer) {
+
+		}
+
+		public void selectAndHide() {
+			save();
+			hideDialog(new PhysicianReturnEvent(getSelectedPhysician()));
+		}
+
+		public void saveAndHide() {
+			save();
+			hideDialog();
+		}
+
+		private void save() {
+			if (getSelectedPhysician() != null) {
+				getSelectedPhysician()
+						.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
+
+				if (getSelectedPhysician().getAssociatedRoles().size() == 0)
+					getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
+
+				setSelectedPhysician(physicianService.addOrMergePhysician(getSelectedPhysician()));
+			}
+		}
+
+		public void onDefaultDialogReturn(SelectEvent event) {
+			if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
+				hideDialog();
+			} else if (event.getObject() != null && event.getObject() instanceof OrganizationSelectReturnEvent) {
+				getSelectedPhysician().getPerson().getOrganizsations()
+						.add(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
+			}
+		}
+
 	}
 
-	/**
-	 * returns the person of the physician
-	 * 
-	 * @return
-	 */
-	public Person getPerson() {
-		return selectedPhysician != null ? selectedPhysician.getPerson() : null;
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class PhysicianReturnEvent implements DialogReturnEvent {
+		private Physician physician;
 	}
+
 }

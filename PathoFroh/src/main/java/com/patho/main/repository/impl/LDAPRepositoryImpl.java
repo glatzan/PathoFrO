@@ -75,7 +75,7 @@ public class LDAPRepositoryImpl implements LDAPRepository {
 	@Override
 	public List<Physician> findAllByName(List<String> names) {
 		ContainerCriteria query = query().where("objectclass").is("person");
-		names.forEach(p -> query.and(query().where("cn").like(p)));
+		names.forEach(p -> query.and(query().where("cn").like("*"+p+"*")));
 		List<LDAPUserMapper> result = ldapTemplate.find(query, LDAPUserMapper.class);
 		return result.stream().map(p -> p.getPhysician()).collect(Collectors.toList());
 	}

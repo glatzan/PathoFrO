@@ -84,9 +84,8 @@
 					<!-- new organization -->
 					<p:commandButton value="#{msg['dialog.organization.list.new']}"
 						icon="fa fa-fw fa-plus-circle" process="@this"
+						actionListener="#{dialog.organizationEditDialog.initAndPrepareBean()}"
 						partialSubmit="true" update="@form">
-						<f:actionListener
-							binding="#{dialog.organizationEditDialog.initAndPrepareBean()}" />
 						<p:ajax event="dialogReturn"
 							listener="#{dialog.organizationListDialog.updateOrganizationList()}"
 							update="@form" />

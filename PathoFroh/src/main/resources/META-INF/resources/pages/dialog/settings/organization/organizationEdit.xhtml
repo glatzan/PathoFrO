@@ -50,14 +50,14 @@
 
 		<div class="dialogContent">
 
-			<h:panelGrid columns="5" styleClass="defaultHistoTable"
-				columnClasses="columnWidth150, , , ,">
-
-				<!-- organization -->
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
 				<h:outputLabel
 					value="#{msg['dialog.organizationEdit.organization']}"
-					styleClass="bigFont" />
+					styleClass="headline" />
+			</h:panelGrid>
 
+			<h:panelGrid columns="4" styleClass="defaultHistoTable"
+				columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
 				<!-- name -->
 				<p:outputLabel value="#{msg['dialog.organizationEdit.name']}" />
 				<p:inputText id="organizationName"
@@ -68,11 +68,16 @@
 					value="#{msg['dialog.organizationEdit.clinicIntern']}" />
 				<p:selectBooleanCheckbox id="organizationIntern"
 					value="#{dialog.organizationEditDialog.organization.intern}" />
+			</h:panelGrid>
 
-				<!-- adress -->
-				<h:outputLabel value="#{msg['dialog.organizationEdit.adress']}"
-					styleClass="bigFont" />
+			<!-- Separator -->
+			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+				<p:separator />
+				<h:outputLabel value="#{msg['dialog.organizationEdit.adress']}" />
+			</h:panelGrid>
 
+			<h:panelGrid columns="4" styleClass="defaultHistoTable"
+				columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
 				<!-- street -->
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.street']}" />
@@ -87,8 +92,6 @@
 					autocomplete="building-address"
 					value="#{dialog.organizationEditDialog.organization.contact.building}" />
 
-				<h:outputLabel value="" />
-
 				<!-- address addition one -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.contact.additionOne']}" />
@@ -101,8 +104,6 @@
 				<p:inputText
 					value="#{dialog.organizationEditDialog.organization.contact.addressadditon2}" />
 
-				<h:outputLabel value="" />
-
 				<!-- Postcode -->
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.postCode']}" />
@@ -114,10 +115,18 @@
 				<p:outputLabel value="#{msg['dialog.organizationEdit.adress.town']}" />
 				<p:inputText id="_town" name="city" autocomplete="address-level2"
 					value="#{dialog.organizationEditDialog.organization.contact.town}" />
+			</h:panelGrid>
 
-				<!-- miscellaneous -->
-				<h:outputLabel styleClass="bigFont"
+			<!-- Separator -->
+			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+				<p:separator />
+				<h:outputLabel
 					value="#{msg['dialog.organizationEdit.miscellaneous']}" />
+			</h:panelGrid>
+
+
+			<h:panelGrid columns="4" styleClass="defaultHistoTable"
+				columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
 
 				<!-- phone -->
 				<p:outputLabel
@@ -133,8 +142,6 @@
 					value="#{dialog.organizationEditDialog.organization.contact.phone}"
 					name="phone" autocomplete="tel" />
 
-				<h:outputLabel value="" />
-
 				<!-- homepage -->
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.homepage']}" />
@@ -148,8 +155,6 @@
 					value="#{dialog.organizationEditDialog.organization.contact.fax}"
 					name="fax" autocomplete="fax" />
 
-				<h:outputLabel value="" />
-
 				<!-- mail -->
 				<p:outputLabel
 					value="#{msg['dialog.organizationEdit.adress.email']}" />
@@ -157,28 +162,38 @@
 					value="#{dialog.organizationEditDialog.organization.contact.email}" />
 			</h:panelGrid>
 
+			<!-- Separator -->
+			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+				<p:separator />
+				<h:outputLabel value="#{msg['dialog.organizationEdit.note']}" />
+			</h:panelGrid>
+
 			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				columnClasses="columnWidth150 , ">
-
-				<!-- note -->
-				<h:outputLabel value="#{msg['dialog.organizationEdit.note']}"
-					styleClass="bigFont" />
-				<p:inputTextarea id="organizationNote" style="width:85%"
+				columnClasses="columnWidth125, ">
+				<p:inputTextarea id="organizationNote" style="width:95%"
 					value="#{dialog.organizationEditDialog.organization.note}" />
+			</h:panelGrid>
 
-				<!-- persons -->
-				<h:outputLabel value="#{msg['dialog.organizationEdit.persons']}"
-					styleClass="bigFont" />
+
+			<!-- Separator -->
+			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+				<p:separator />
+				<h:outputLabel value="#{msg['dialog.organizationEdit.persons']}" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				columnClasses="columnWidth125, ">
 				<p:dataTable id="userTable" styleClass="defaultHistoDataTable"
 					value="#{dialog.organizationEditDialog.organization.persons}"
-					var="person" style="width:86%" scrollable="true" scrollHeight="150">
+					var="person" style="width:96%" scrollable="true" scrollHeight="150">
 					<p:column
 						headerText="#{msg['dialog.organizationEdit.persons.name']}">
 						<h:outputLabel value="#{person.getFullName()}" />
 
 					</p:column>
 
-					<p:column headerText="#" style="width:15px;text-align: center;">
+					<p:column headerText="#" style="width:15px;"
+						styleClass="centerChildElements ,centerHeaderChildElements">
 						<p:commandLink update="@form" process="@form" partialSubmit="true"
 							title="#{msg['dialog.organizationEdit.persons.remove']}">
 							<i class="fa fa-remove" />

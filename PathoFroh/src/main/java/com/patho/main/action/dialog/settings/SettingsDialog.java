@@ -797,6 +797,17 @@ public class SettingsDialog extends AbstractTabDialog {
 			setPhysicianList(physicianRepository.findAllByRole(getShowPhysicianRoles(), !showArchived));
 		}
 
+		/**
+		 * Return handles a version error and a selected physician
+		 * 
+		 * @param event
+		 */
+		public void onDefaultDialogReturn(SelectEvent event) {
+			if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
+				updateData();
+			}
+		}
+
 		public void addPhysician(Physician physician) {
 			if (physician != null) {
 				physicianService.addOrMergePhysician(physician);

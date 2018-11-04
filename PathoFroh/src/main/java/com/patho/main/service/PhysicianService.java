@@ -1,4 +1,4 @@
- package com.patho.main.service;
+package com.patho.main.service;
 
 import java.util.Optional;
 import java.util.Set;
@@ -22,21 +22,22 @@ public class PhysicianService extends AbstractService {
 
 	@Autowired
 	private OrganizationService organizationService;
-	
+
 	@Autowired
 	private LDAPRepository ldapRepository;
 
 	/**
-	 * Updates the data of a physician from the ldap backend 
+	 * Updates the data of a physician from the ldap backend
+	 * 
 	 * @param user
 	 */
 	public void updatePhysicianWithLdapData(Physician physician) {
 		Optional<Physician> oPhysician = ldapRepository.findByUid(physician.getUid());
-		
-		if(oPhysician.isPresent())
+
+		if (oPhysician.isPresent())
 			mergePhysicians(oPhysician.get(), physician);
 	}
-	
+
 	/**
 	 * Checks if physician is saved in database, if so the saved physician will be
 	 * updated, otherwise a new physician will be created.
@@ -47,7 +48,7 @@ public class PhysicianService extends AbstractService {
 	public Physician addOrMergePhysician(Physician physician) {
 		// if the physician was added as surgeon the useracc an the
 		// physician will be merged
-		Optional<Physician> physicianFromDatabase = physicianRepository.findOptionalByUid(physician.getUid());
+		Optional<Physician> physicianFromDatabase = physician.getUid() != null ? physicianRepository.findOptionalByUid(physician.getUid()) : Optional.empty();
 
 		// undating the foud physician
 		if (physicianFromDatabase.isPresent()) {

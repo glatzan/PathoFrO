@@ -252,6 +252,7 @@ body {
 		.headline {
 			font-size: 14px;
 			font-weight: bold;
+			color: #555555;
 		}
 
 		tr.alternate_row_background td {
@@ -432,10 +433,10 @@ body {
 	// header
 	.ui-datatable-scrollable-header{
 		table{
+			width:100%;
 			thead{
 				tr{
 					width:100%;
-				
 					th, td{
 						padding: @defualt_padding;
 						.histo_font();					
@@ -443,6 +444,10 @@ body {
 					
 					th.centerHeaderChildElements{
 						 text-align: center;
+					}
+					
+					th:last-child, td:last-child{
+						border-right: 0px;
 					}
 				}
 			}
@@ -680,6 +685,7 @@ table.contentSpaceContainer {
 	> tbody .headline {
 		font-size: 14px ! important;
 		font-weight: bold;
+		color: #555555;
 	}
 }
 

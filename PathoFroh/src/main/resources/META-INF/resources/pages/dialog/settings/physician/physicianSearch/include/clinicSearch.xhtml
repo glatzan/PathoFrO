@@ -5,7 +5,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:histo="http://java.sun.com/jsf/composite/components"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 
 	<p:outputPanel styleClass="headerPannel">
@@ -18,20 +20,18 @@
 			<!-- search -->
 			<h:outputLabel value="#{msg['dialog.searchPatient.search.person']}"
 				styleClass="bigFont" />
-			<h:panelGroup>
-				<p:inputText
-					value="#{dialog.physicianSearchDialog.internalPhysicianTab.searchString}"
-					id="searchStringInput" widgetVar="searchStringInput"
-					style="width: 98%">
-					<p:ajax event="keyup" delay="500"
-						onstart="PF('blockSeach').block()"
-						oncomplete="PF('blockSeach').unblock()"
-						listener="#{dialog.physicianSearchDialog.searchForPhysician()}"
-						update="ldapPhysicianList" process="@this" />
-				</p:inputText>
+			<p:inputText
+				value="#{dialog.physicianSearchDialog.internalPhysicianTab.searchString}"
+				id="searchStringInput" widgetVar="searchStringInput"
+				style="width: 98%">
+				<p:ajax event="keyup" delay="500" onstart="PF('blockSeach').block()"
+					oncomplete="PF('blockSeach').unblock()"
+					listener="#{dialog.physicianSearchDialog.internalPhysicianTab.searchForPhysician()}"
+					update="ldapPhysicianList" process="@this" />
+
 				<p:watermark for="searchStringInput"
 					value="#{msg['include.ladpPhysician.search.watermark']}" />
-			</h:panelGroup>
+			</p:inputText>
 
 			<!-- physician list -->
 			<h:outputLabel value="#{msg['dialog.searchPatient.search.person']}"
@@ -58,14 +58,14 @@
 					<h:outputText value="#{physician.clinicRole}" />
 				</p:column>
 
-				<p:ajax event="rowSelect" process="@this" />
+				<p:ajax event="rowSelect" process="@form" />
 			</p:dataTable>
 
+			<!-- role -->
 			<h:outputLabel value="#{msg['dialog.physicianSearch.person.role']}"
 				styleClass="bigFont" />
 
-			<p:selectCheckboxMenu updateLabel="true" appendTo="dialogContent"
-				style="width:90%"
+			<p:selectCheckboxMenu updateLabel="true" style="width:90%"
 				value="#{dialog.physicianSearchDialog.internalPhysicianTab.associatedRoles}"
 				multiple="true">
 				<f:selectItems var="role"
@@ -73,7 +73,7 @@
 					itemValue="#{role}"
 					itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
 
-				<p:ajax partialSubmit="true" process="@this" />
+				<p:ajax partialSubmit="true" process="@form" />
 			</p:selectCheckboxMenu>
 		</h:panelGrid>
 	</p:outputPanel>
@@ -85,11 +85,11 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right">
-				<!-- Close button -->
-				<p:commandButton value="select" icon="fa fa-check-circle-o"
-					update="@form" process="@form">
+				<!-- select button -->
+				<p:commandButton value="#{msg['general.select']}"
+					icon="fa fa-check-circle-o" update="@form" process="@form">
 					<f:actionListener
-						binding="#{dialog.physicianSearchDialog.hideDialog()}"></f:actionListener>
+						binding="#{dialog.physicianSearchDialog.internalPhysicianTab.saveAndHide()}"></f:actionListener>
 				</p:commandButton>
 
 				<!-- Close button -->
@@ -100,5 +100,8 @@
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
+
+	<histo:blockUI target="adminForm:ldapPhysicianList"
+		widgetVar="blockSeach" />
 
 </ui:composition>
