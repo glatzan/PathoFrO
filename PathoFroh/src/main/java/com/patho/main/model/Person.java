@@ -4,6 +4,7 @@ import static org.hibernate.annotations.LazyCollectionOption.FALSE;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -52,7 +53,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "person_sequencegenerator", sequenceName = "person_sequence")
 @Getter
 @Setter
-public class Person implements Serializable, LogAble, ArchivAble, ID, FullName  {
+public class Person implements Serializable, LogAble, ArchivAble, ID, FullName {
 
 	private static final long serialVersionUID = 2533238775751991883L;
 
@@ -101,18 +102,17 @@ public class Person implements Serializable, LogAble, ArchivAble, ID, FullName  
 	@ManyToMany()
 	@OrderBy("id ASC")
 	@Fetch(value = FetchMode.SUBSELECT)
+	@LazyCollection(FALSE)
 	@JoinTable(name = "person_organization", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "organization_id"))
 	private Set<Organization> organizsations;
-	
+
+	protected boolean archived;
+
 	/**
 	 * Default address for notification
 	 */
 	@OneToOne
 	private Organization defaultAddress;
-	
-	public enum Gender {
-		MALE, FEMALE, UNKNOWN;
-	}
 
 	public Person() {
 	}
@@ -130,7 +130,19 @@ public class Person implements Serializable, LogAble, ArchivAble, ID, FullName  
 		this.contact = contact;
 	}
 
-	protected boolean archived;
+	/**
+	 * Adds an organization if not present to the organization list
+	 * 
+	 * @param organization
+	 */
+	@Transient
+	public void addOrganization(Organization organization) {
+		if (getOrganizsations() == null)
+			setOrganizsations(new HashSet<Organization>());
+
+		if (!getOrganizsations().stream().anyMatch(p -> p.equals(organization)))
+			getOrganizsations().add(organization);
+	}
 
 	@Transient
 	public String patienDataAsGson() {
@@ -175,8 +187,12 @@ public class Person implements Serializable, LogAble, ArchivAble, ID, FullName  
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	/********************************************************
 	 * Interace archive able
 	 ********************************************************/
 
+	public static enum Gender {
+		MALE, FEMALE, UNKNOWN;
+	}
 }

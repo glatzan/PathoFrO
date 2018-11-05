@@ -31,8 +31,8 @@ public enum Dialog {
 	CONTACTS_NOTIFICATION("/pages/dialog/contact/contactNotification", null, 858, 484, false, false, true), 																// OK				// TEST OK
 	CONTACTS_SELECT("/pages/dialog/contact/contactSelect", null, 858, 484, false, false, true), 																			// OK				// TEST OK
 	SETTINGS("/pages/dialog/settings/globalSettings/settings", null, 1024, 600, false, false, true), // 16:9
-	SETTINGS_PHYSICIAN_SEARCH("/pages/dialog/settings/physician/physicianSearch/physicianSearch", null, 1280, 720, false, false, true), // 16:9
-	SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1280, 720, false, false, true), //  16:9
+	SETTINGS_PHYSICIAN_SEARCH("/pages/dialog/settings/physician/physicianSearch/physicianSearch", null, 1280, 720, false, false, true), // 16:9								// OK
+	SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1280, 740, false, false, true), 														// OK
 	SETTINGS_STAINING_EDIT("/pages/dialog/settings/staining/stainingEdit", null, 1024, 600, false, false, true), //  16:9
 	SETTINGS_GROUP_LIST("/pages/dialog/settings/groups/groupList", null, 1024, 600, false, false, true), //  16:9
 	SETTINGS_GROUP_EDIT("/pages/dialog/settings/groups/groupEdit", null, 1024, 600, false, false, true), //  16:9
@@ -41,8 +41,9 @@ public enum Dialog {
 	SETTINGS_USERS_DELETE("/pages/dialog/settings/users/userDelete", null, 480, 272, false, false, true), //  16:9
 	SETTINGS_USERS_DELETE_DISABLE("/pages/dialog/settings/users/userDeleteDisable", null, 480, 272, false, false, true), //  16:9
 	SETTINGS_ORGANIZATION_EDIT("/pages/dialog/settings/organization/organizationEdit", null, 1280, 720, false, false, true),												// OK
-	SETTINGS_ORGANIZATION_LIST("/pages/dialog/settings/organization/organizationList", null, 858, 484, false, false, true), // 16:9
+	SETTINGS_ORGANIZATION_LIST("/pages/dialog/settings/organization/organizationList", null, 858, 484, false, false, true), 												// OK
 	SETTINGS_FAVOURITE_LIST_EDIT("/pages/dialog/settings/favouriteList/favouriteListEdit", null, 1024, 600, false, false, true), //  16:9
+	SETTINGS_LISTITEM_EDIT("/pages/dialog/settings/listitem/listItemEdit", null, 480, 272, false, false, true), 															// OK
 	FAVOURITE_LIST_ITEM_REMOVE("/pages/dialog/settings/favouriteList/favouriteListItemRemove", null,  480, 272, false, false, true), // 16:9
 	PRINT("/pages/dialog/print/print", null, 1280, 720, false, false, true), // 16:9
 	PRINT_ADDRESS("/pages/dialog/print/address", null,  480, 272, false, false, true), 																						// OK

@@ -36,29 +36,6 @@ import com.patho.main.ui.selectors.PhysicianSelector;
 public class PhysicianRepositoryImpl extends AbstractRepositoryCustom implements PhysicianRepositoryCustom {
 
 	@Override
-	public Optional<Physician> findOptionalByID(long id, boolean loadOrganizations) {
-		CriteriaQuery<Physician> criteria = getCriteriaBuilder().createQuery(Physician.class);
-		Root<Physician> root = criteria.from(Physician.class);
-
-		criteria.select(root);
-
-		Fetch<Physician, Person> personFetch = root.fetch(Physician_.person, JoinType.LEFT);
-		root.fetch(Physician_.associatedRoles, JoinType.LEFT);
-
-		if (loadOrganizations) {
-			System.out.println("fetching");
-			personFetch.fetch(Person_.organizsations, JoinType.LEFT);
-		}
-		criteria.where(getCriteriaBuilder().equal(root.get(Physician_.id), id));
-
-		criteria.distinct(true);
-
-		List<Physician> physicians = getSession().createQuery(criteria).getResultList();
-
-		return Optional.ofNullable(!physicians.isEmpty() ? physicians.get(0) : null);
-	}
-
-	@Override
 	public List<Physician> findAllByRole(ContactRole role, boolean irgnoreArchived) {
 		return findAllByRole(Arrays.asList(role), irgnoreArchived, SortOrder.NAME);
 	}

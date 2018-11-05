@@ -230,10 +230,9 @@
 					</h:outputLabel>
 				</p:column>
 
-				<p:column style="width:15px">
+				<p:column style="width:15px" styleClass="centerChildElements">
 					<ui:fragment rendered="#{organization.intern}">
 						<i class="fa fa-fw fa-check-circle icon-green"
-							style="margin-left: 5px"
 							title="#{msg['component.personDataMask.organization.clinicIntern']}" />
 					</ui:fragment>
 				</p:column>
@@ -254,7 +253,7 @@
 						actionListener="#{dialog.physicianSearchDialog.removeOrganization(organization)}"
 						update="@form"
 						title="#{msg['component.personDataMask.organization.remove']}">
-						<i class="fa fa-remove" style="margin-left: 8px" />
+						<i class="fa fa-remove" />
 					</p:commandLink>
 				</p:column>
 

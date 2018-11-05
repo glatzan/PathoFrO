@@ -53,16 +53,32 @@
 				</p:repeat>
 			</p:column>
 
+			<!-- archived -->
+			<p:column headerText="#{msg['dialog.settings.person.list.archived']}"
+				styleClass="centerChildElements" sortBy="#{physician.archived}"
+				style="width:11% !important;"
+				rendered="#{dialog.settingsDialog.physicianSettingsTab.showArchived}">
+				<ui:fragment rendered="#{physician.archived}">
+					<i class="fa fa-archive icon-red"
+						title="#{msg['dialog.organization.list.archive.info']}" />
+				</ui:fragment>
+			</p:column>
+			
 			<!-- clinical employee -->
-			<p:column headerText="#{msg['dialog.settings.person.list.employee']}"
+			<p:column style="width:30px;"
 				styleClass="centerChildElements">
+				<f:facet name="header">
+					<h:outputLabel
+						value="#{msg['dialog.settings.person.list.employee']}"
+						title="#{msg['dialog.settings.person.list.employee.info']}"></h:outputLabel>
+				</f:facet>
 				<h:panelGroup rendered="#{physician.clinicEmployee}">
 					<i class="fa fa-fw fa-check-circle icon-green" />
 				</h:panelGroup>
 			</p:column>
 
 			<!-- Optionen -->
-			<p:column style="width:10%;"
+			<p:column style="width:8%;"
 				styleClass="centerChildElements centerHeaderChildElements">
 				<f:facet name="header">
 					<i class="fa fa-cog"
@@ -79,18 +95,6 @@
 					<p:ajax event="dialogReturn"
 						listener="#{dialog.settingsDialog.physicianSettingsTab.updateData()}"
 						update="@form" />
-				</p:commandLink>
-
-				<!-- refresh -->
-				<p:commandLink
-					title="#{msg['dialog.settings.person.list.options.update']}"
-					disabled="#{!physician.person.autoUpdate or physician.uid eq null}"
-					update="@form" partialSubmit="true" process="@this"
-					actionListener="#{dialog.settingsDialog.physicianSettingsTab.updateDataFromLdap(physician)}">
-					<i class="fa fa-fw fa-undo " />
-
-					<f:actionListener
-						binding="#{dialog.settingsDialog.physicianSettingsTab.updateData()}" />
 				</p:commandLink>
 
 				<!-- archive -->
@@ -124,6 +128,7 @@
 					value="#{msg['dialog.settings.person.list.checkbox.archived']}"
 					style="margin-left:5px;"></h:outputLabel>
 
+				<!-- roles -->
 				<h:panelGroup style="margin-left:20px; ">
 					<p:selectCheckboxMenu id="roleSelect"
 						label="#{msg['dialog.settings.person.list.show.roles']}"
@@ -143,17 +148,16 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right">
-				<h:panelGroup>
-					<p:commandButton
-						value="#{msg['dialog.settings.person.list.button.new']}"
-						icon="fa fa-fw fa-plus-circle" process="@this"
-						partialSubmit="true"
-						actionListener="#{dialog.physicianSearchDialog.initAndPrepareBean(true)}">
-						<p:ajax event="dialogReturn" update="@form"
-							listener="#{dialog.settingsDialog.physicianSettingsTab.onDefaultDialogReturn}" />
-					</p:commandButton>
-				</h:panelGroup>
+				<!-- add -->
+				<p:commandButton
+					value="#{msg['dialog.settings.person.list.button.new']}"
+					icon="fa fa-fw fa-user" process="@this" partialSubmit="true"
+					actionListener="#{dialog.physicianSearchDialog.initAndPrepareBean(true)}">
+					<p:ajax event="dialogReturn" update="@form"
+						listener="#{dialog.settingsDialog.physicianSettingsTab.onDefaultDialogReturn}" />
+				</p:commandButton>
 
+				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
 					actionListener="#{dialog.settingsDialog.hideDialog()}" />

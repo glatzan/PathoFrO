@@ -35,13 +35,14 @@
 				</h:outputLabel>
 			</p:column>
 
-
-			<p:column headerText="#{msg['dialog.organization.list.archive']}"
+			<!-- archived -->
+			<p:column
+				headerText="#{msg['dialog.settings.organization.list.archived']}"
 				styleClass="centerChildElements" sortBy="#{organization.archived}"
 				style="width:11% !important;"
 				rendered="#{dialog.settingsDialog.organizationTab.showArchived}">
-				<ui:fragment rendered="#{user.archived}">
-					<i class="fa fa-check-circle icon-green"
+				<ui:fragment rendered="#{organization.archived}">
+					<i class="fa fa-archive icon-red"
 						title="#{msg['dialog.organization.list.archive.info']}" />
 				</ui:fragment>
 			</p:column>
@@ -92,7 +93,7 @@
 						partialSubmit="true" process="@this" update="@form" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
-					value="#{msg['dialog.settings.organization.list.archived']}"></h:outputLabel>
+					value="#{msg['dialog.settings.organization.list.checkbox.archived']}"></h:outputLabel>
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right">
@@ -100,7 +101,7 @@
 				<p:commandButton
 					actionListener="#{dialog.organizationEditDialog.initAndPrepareBean()}"
 					value="#{msg['dialog.settings.organization.list.new']}"
-					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
+					icon="fa fa-fw fa-university" process="@this" partialSubmit="true"
 					update="@form">
 					<p:ajax event="dialogReturn"
 						listener="#{dialog.settingsDialog.organizationTab.updateData()}"

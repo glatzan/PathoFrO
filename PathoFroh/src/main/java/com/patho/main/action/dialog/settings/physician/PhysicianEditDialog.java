@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.Organization;
@@ -47,6 +48,11 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
 
 	private List<ContactRole> allRoles;
 
+	/**
+	 * Array of roles which the physician should be associated
+	 */
+	private ContactRole[] associatedRoles;
+
 	private DefaultTransformer<Organization> contactOrganizations;
 
 	public PhysicianEditDialog initAndPrepareBean(Physician physician) {
@@ -58,26 +64,14 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
 	public boolean initBean(Physician physician) {
 		setPhysician(physician);
 		setAllRoles(Arrays.asList(ContactRole.values()));
+		setAssociatedRoles(getPhysician().getAssociatedRolesAsArray());
 
-		super.initBean(task, Dialog.SETTINGS_PHYSICIAN_EDIT);
+		update();
 
-		update(true);
-
-		return true;
+		return super.initBean(task, Dialog.SETTINGS_PHYSICIAN_EDIT);
 	}
 
 	public void update() {
-		update(false);
-	}
-
-	public void update(boolean reloadPhysician) {
-
-		if (reloadPhysician) {
-
-			Optional<Physician> oPhysician = physicianRepository.findOptionalByID(getPhysician().getId(), true);
-
-			setPhysician(oPhysician.get());
-		}
 
 		// setting organization for selecting an default notification
 		setContactOrganizations(new DefaultTransformer<Organization>(getPhysician().getPerson().getOrganizsations()));
@@ -103,6 +97,8 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
 	 */
 	public void save() {
 		if (getPhysician() != null) {
+			getPhysician().setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
+
 			if (getPhysician().hasNoAssociateRole())
 				getPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
 
@@ -115,8 +111,20 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
 	 * Updates the data of the physician with data from the clinic backend
 	 */
 	public void updateDataFromLdap() {
-		physicianService.updatePhysicianWithLdapData(getPhysician());
-		update();
+		try {
+			Physician updatePhyscian = physicianRepository.findById(getPhysician().getId()).get();
+			updatePhyscian.getPerson().setAutoUpdate(true);
+			setPhysician(physicianService
+					.updatePhysicianWithLdapData(physicianRepository.findById(getPhysician().getId()).get()));
+			setAssociatedRoles(getPhysician().getAssociatedRolesAsArray());
+			update();
+			MessageHandler.sendGrowlMessagesAsResource("growl.patient.updateLadp.success",
+					"growl.patient.updateLadp.success.info");
+		} catch (IllegalStateException e) {
+			update();
+			MessageHandler.sendGrowlMessagesAsResource("growl.patient.updateLadp.failed",
+					"growl.patient.updateLadp.failed.info");
+		}
 	}
 
 	/**
@@ -130,14 +138,17 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
 		update();
 	}
 
+	/**
+	 * Return from dialog, on reloadevent or OrganizationSelectReturnEvent
+	 * 
+	 * @param event
+	 */
 	public void onDefaultDialogReturn(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
 			hideDialog();
 		} else if (event.getObject() != null && event.getObject() instanceof OrganizationSelectReturnEvent) {
-			System.out.println("org");
-			getPhysician().getPerson().getOrganizsations()
-					.add(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
-			System.out.println("org2");
+			getPhysician().getPerson()
+					.addOrganization(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
 		}
 	}
 }

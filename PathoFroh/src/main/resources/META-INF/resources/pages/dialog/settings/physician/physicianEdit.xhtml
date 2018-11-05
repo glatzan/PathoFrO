@@ -192,43 +192,61 @@
 				<h:outputLabel value="#{msg['component.personDataMask.function']}" />
 			</h:panelGrid>
 
-			<h:panelGrid columns="4" styleClass="defaultHistoTable"
-				columnClasses="columnWidth125, ,columnWidth125, ">
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				columnClasses="columnWidth125, ">
 
 				<!-- role -->
 				<h:outputLabel
 					value="#{msg['component.personDataMask.programRole']}" />
 
 				<p:selectCheckboxMenu updateLabel="true" style="width:90%"
-					value="#{dialog.physicianEditDialog.physician.associatedRoles}"
+					value="#{dialog.physicianEditDialog.associatedRoles}"
 					multiple="true">
 					<f:selectItems var="role"
 						value="#{dialog.physicianEditDialog.allRoles}" itemValue="#{role}"
 						itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
 
-					<p:ajax partialSubmit="true" process="@this" />
 				</p:selectCheckboxMenu>
 
-				<h:outputLabel value=" " />
-				<h:outputLabel value=" " />
+				<!-- auto update -->
+				<h:outputLabel value="#{msg['component.personDataMask.archived']}" />
+				<p:selectBooleanCheckbox
+					title="#{msg['component.personDataMask.archived']}"
+					value="#{dialog.physicianEditDialog.physician.archived}">
+				</p:selectBooleanCheckbox>
+			</h:panelGrid>
+
+			<!-- Separator -->
+			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable"
+				rendered="#{dialog.physicianEditDialog.physician.clinicEmployee}">
+				<p:separator />
+				<h:outputLabel
+					value="#{msg['component.personDataMask.clinicSpecific']}" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="4" styleClass="defaultHistoTable"
+				rendered="#{dialog.physicianEditDialog.physician.clinicEmployee}"
+				columnClasses="columnWidth125, ,columnWidth125, ">
 
 				<!-- auto update -->
 				<h:outputLabel
-					rendered="#{dialog.physicianEditDialog.physician.clinicEmployee}"
 					value="#{msg['component.personDataMask.clinicSpecific.autoUpdate']}" />
 				<p:selectBooleanCheckbox
-					rendered="#{dialog.physicianEditDialog.physician.clinicEmployee}"
 					title="#{msg['component.personDataMask.clinicSpecific.autoUpdate.text']}"
 					value="#{dialog.physicianEditDialog.physician.person.autoUpdate}">
 				</p:selectBooleanCheckbox>
 
 				<!-- User clinic function -->
 				<h:outputLabel
-					value="#{msg['component.personDataMask.clinicSpecific.clinicFunction']}"
-					rendered="#{dialog.physicianEditDialog.physician.clinicEmployee}" />
+					value="#{msg['component.personDataMask.clinicSpecific.clinicFunction']}" />
 				<p:inputText required="true"
-					rendered="#{dialog.physicianEditDialog.physician.clinicEmployee}"
 					value="#{dialog.physicianEditDialog.physician.clinicRole}" />
+
+				<!-- User clinic function -->
+				<h:outputLabel
+					value="#{msg['component.personDataMask.clinicSpecific.userName']}" />
+				<p:inputText required="true"
+					value="#{dialog.physicianEditDialog.physician.uid}" />
 
 			</h:panelGrid>
 
@@ -288,7 +306,6 @@
 					<p:column style="width:15px">
 						<ui:fragment rendered="#{organization.intern}">
 							<i class="fa fa-fw fa-check-circle icon-green"
-								style="margin-left: 5px"
 								title="#{msg['component.personDataMask.organization.clinicIntern']}" />
 						</ui:fragment>
 					</p:column>
@@ -305,11 +322,12 @@
 								<i class="fa fa-plus" />
 							</p:commandLink>
 						</f:facet>
+						
 						<p:commandLink
 							actionListener="#{dialog.physicianSearchDialog.removeOrganization(organization)}"
 							update="@form"
 							title="#{msg['component.personDataMask.organization.remove']}">
-							<i class="fa fa-remove" style="margin-left: 8px" />
+							<i class="fa fa-remove" />
 						</p:commandLink>
 					</p:column>
 
@@ -320,12 +338,12 @@
 		<div class="buttonContainer">
 			<h:panelGrid columns="2" style="width:100%"
 				styleClass="newTableContainer">
-
+				
 				<h:panelGrid columns="1" styleClass="newTableContainer left">
+					<!-- update physician with ldap data -->
 					<p:commandButton id="refreshBtn" value="#{msg['general.refresh']}"
-						icon="fa fa-fw fa-undo" widgetVar="refreshBtn" update="@form"
-						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()">
+						rendered="#{dialog.physicianEditDialog.physician.clinicEmployee}"
+						icon="fa fa-fw fa-undo" widgetVar="refreshBtn" update="@form">
 						<f:actionListener
 							binding="#{dialog.physicianEditDialog.updateDataFromLdap()}"></f:actionListener>
 					</p:commandButton>
@@ -349,7 +367,6 @@
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
-
 	</h:form>
 </h:body>
 </html>

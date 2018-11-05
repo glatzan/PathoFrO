@@ -3,6 +3,7 @@ package com.patho.main.service;
 import java.util.Optional;
 import java.util.Set;
 
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +32,13 @@ public class PhysicianService extends AbstractService {
 	 * 
 	 * @param user
 	 */
-	public void updatePhysicianWithLdapData(Physician physician) {
+	public Physician updatePhysicianWithLdapData(Physician physician) {
 		Optional<Physician> oPhysician = ldapRepository.findByUid(physician.getUid());
 
 		if (oPhysician.isPresent())
-			mergePhysicians(oPhysician.get(), physician);
+			return mergePhysicians(oPhysician.get(), physician);
+		else
+			throw new IllegalStateException("No user was found"); 
 	}
 
 	/**
@@ -48,14 +51,16 @@ public class PhysicianService extends AbstractService {
 	public Physician addOrMergePhysician(Physician physician) {
 		// if the physician was added as surgeon the useracc an the
 		// physician will be merged
-		Optional<Physician> physicianFromDatabase = physician.getUid() != null ? physicianRepository.findOptionalByUid(physician.getUid()) : Optional.empty();
+		Optional<Physician> physicianFromDatabase = physician.getUid() != null
+				? physicianRepository.findOptionalByUid(physician.getUid())
+				: Optional.empty();
 
 		// undating the foud physician
 		if (physicianFromDatabase.isPresent()) {
 			logger.info("Physician already in database " + physician.getPerson().getFullName());
 
 			Set<ContactRole> tmpRoles = physician.getAssociatedRoles();
-			
+
 			physician = mergePhysicians(physician, physicianFromDatabase.get());
 
 			physician.setArchived(false);

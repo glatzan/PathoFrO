@@ -12,16 +12,6 @@ import com.patho.main.ui.selectors.PhysicianSelector;
 public interface PhysicianRepositoryCustom {
 
 	/**
-	 * Loads a physician by id, if loadOrganizations is true, the orgnaization of
-	 * the associated person are loaded as well
-	 * 
-	 * @param id
-	 * @param loadOrganizations
-	 * @return
-	 */
-	public Optional<Physician> findOptionalByID(long id, boolean loadOrganizations);
-
-	/**
 	 * Returns a list of all physicians which are associated with the given role.
 	 * 
 	 * @param role

@@ -185,9 +185,7 @@ public class Physician implements Serializable, ArchivAble, ID {
 	 */
 	@Transient
 	public boolean hasNoAssociateRole() {
-		if (getAssociatedRoles().size() == 0)
-			return true;
-		return false;
+		return getAssociatedRoles().size() == 0;
 	}
 
 	/**

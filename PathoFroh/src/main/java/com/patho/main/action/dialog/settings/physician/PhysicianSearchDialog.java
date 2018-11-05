@@ -154,7 +154,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 
 		public void saveAndHide() {
 			save();
-			hideDialog();
+			hideDialog(new ReloadEvent());
 		}
 
 		private void save() {
@@ -244,7 +244,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 
 		public void saveAndHide() {
 			save();
-			hideDialog();
+			hideDialog(new ReloadEvent());
 		}
 
 		private void save() {
@@ -274,8 +274,8 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 			if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
 				hideDialog();
 			} else if (event.getObject() != null && event.getObject() instanceof OrganizationSelectReturnEvent) {
-				getSelectedPhysician().getPerson().getOrganizsations()
-						.add(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
+				getSelectedPhysician().getPerson()
+						.addOrganization(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
 			}
 		}
 

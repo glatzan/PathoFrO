@@ -605,15 +605,9 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	}
 
-	public enum StaticListPage {
-		LIST, EDIT;
-	}
-
 	@Getter
 	@Setter
 	public class StaticListTab extends AbstractTab {
-
-		private StaticListPage page;
 
 		/**
 		 * Current static list to edit
@@ -633,75 +627,18 @@ public class SettingsDialog extends AbstractTabDialog {
 		/**
 		 * If true archived object will be shown.
 		 */
-		private boolean showArchivedListItems;
-
-		private boolean newListItem;
+		private boolean showArchived;
 
 		public StaticListTab() {
 			setTabName("StaticListTab");
 			setName("dialog.settings.staticLists");
 			setViewID("staticLists");
-			setPage(StaticListPage.LIST);
+			setCenterInclude("include/staticLists.xhtml");
 		}
 
 		@Override
 		public void updateData() {
-			switch (getPage()) {
-			case EDIT:
-				break;
-			default:
-				loadStaticList();
-				break;
-			}
-		}
-
-		public void loadStaticList() {
-			setStaticListContent(listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(
-					getSelectedStaticList(), isShowArchivedListItems()));
-		}
-
-		public void prepareNewListItem() {
-			prepareEditListItem(new ListItem());
-		}
-
-		public void prepareEditListItem(ListItem listItem) {
-			setEditListItem(listItem);
-			setPage(StaticListPage.EDIT);
-			setNewListItem(listItem.getId() == 0 ? true : false);
-		}
-
-		public void saveListItem() {
-			if (getEditListItem().getId() == 0) {
-
-				getEditListItem().setListType(getSelectedStaticList());
-
-				logger.debug("Creating new ListItem " + getEditListItem().getValue() + " for "
-						+ getSelectedStaticList().toString());
-				// case new, save
-				getStaticListContent().add(getEditListItem());
-
-				listItemRepository.save(getEditListItem(), resourceBundle.get("log.settings.staticList.new",
-						getEditListItem().getValue(), getSelectedStaticList().toString()));
-
-				ListOrder.reOrderList(getStaticListContent());
-
-				listItemRepository.saveAll(getStaticListContent(),
-						resourceBundle.get("log.settings.staticList.list.reoder", getSelectedStaticList()));
-
-			} else {
-				logger.debug("Updating ListItem " + getEditListItem().getValue());
-				// case edit: update an save
-
-				listItemRepository.save(getEditListItem(), resourceBundle.get("log.settings.staticList.update",
-						getEditListItem().getValue(), getSelectedStaticList().toString()));
-			}
-		}
-
-		public void discardListItem() {
-			setEditListItem(null);
-			setPage(StaticListPage.LIST);
-
-			updateData();
+			setStaticListContent(listItemRepository.findAll(getSelectedStaticList(), !isShowArchived()));
 		}
 
 		public void archiveListItem(ListItem item, boolean archive) {
@@ -724,17 +661,6 @@ public class SettingsDialog extends AbstractTabDialog {
 			listItemRepository.saveAll(getStaticListContent(),
 					resourceBundle.get("log.settings.staticList.list.reoder", getSelectedStaticList()));
 		}
-
-		@Override
-		public String getCenterInclude() {
-			switch (getPage()) {
-			case EDIT:
-				return "include/staticListsEdit.xhtml";
-			default:
-				return "include/staticLists.xhtml";
-			}
-		}
-
 	}
 
 	@Getter
@@ -808,12 +734,6 @@ public class SettingsDialog extends AbstractTabDialog {
 			}
 		}
 
-		public void addPhysician(Physician physician) {
-			if (physician != null) {
-				physicianService.addOrMergePhysician(physician);
-			}
-		}
-
 		/**
 		 * Archvies or dearchvies physicians depending on the given parameters.
 		 *
@@ -822,13 +742,7 @@ public class SettingsDialog extends AbstractTabDialog {
 		 */
 		public void archivePhysician(Physician physician, boolean archive) {
 			physicianService.archivePhysician(physician, archive);
-		}
-
-		/**
-		 * Updates the data of the physician with data from the clinic backend
-		 */
-		public void updateDataFromLdap(Physician physician) {
-			physicianService.updatePhysicianWithLdapData(physician);
+			updateData();
 		}
 	}
 
