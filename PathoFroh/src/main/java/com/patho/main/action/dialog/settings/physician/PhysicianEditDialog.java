@@ -61,25 +61,24 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
 
 		super.initBean(task, Dialog.SETTINGS_PHYSICIAN_EDIT);
 
-		update();
+		update(true);
 
 		return true;
 	}
 
 	public void update() {
-		
+		update(false);
 	}
-	
+
 	public void update(boolean reloadPhysician) {
-		
+
 		if (reloadPhysician) {
-			physicianRepository.findop
-			Optional<Task> oTask = taskRepository.findOptionalByIdAndInitialize(getTask().getId(), false, false, false,
-					false, true);
-			setTask(oTask.get());
+
+			Optional<Physician> oPhysician = physicianRepository.findOptionalByID(getPhysician().getId(), true);
+
+			setPhysician(oPhysician.get());
 		}
-		
-		
+
 		// setting organization for selecting an default notification
 		setContactOrganizations(new DefaultTransformer<Organization>(getPhysician().getPerson().getOrganizsations()));
 
@@ -135,8 +134,10 @@ public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
 		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
 			hideDialog();
 		} else if (event.getObject() != null && event.getObject() instanceof OrganizationSelectReturnEvent) {
+			System.out.println("org");
 			getPhysician().getPerson().getOrganizsations()
 					.add(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
+			System.out.println("org2");
 		}
 	}
 }

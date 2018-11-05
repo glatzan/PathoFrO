@@ -3,8 +3,12 @@ package com.patho.main.repository.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import javax.persistence.FetchType;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Fetch;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -15,10 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.SortOrder;
+import com.patho.main.model.Organization;
+import com.patho.main.model.Organization_;
 import com.patho.main.model.Person;
 import com.patho.main.model.Person_;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Physician_;
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.patient.Patient_;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.service.PhysicianRepositoryCustom;
 import com.patho.main.ui.selectors.PhysicianSelector;
@@ -26,6 +34,29 @@ import com.patho.main.ui.selectors.PhysicianSelector;
 @Service
 @Transactional
 public class PhysicianRepositoryImpl extends AbstractRepositoryCustom implements PhysicianRepositoryCustom {
+
+	@Override
+	public Optional<Physician> findOptionalByID(long id, boolean loadOrganizations) {
+		CriteriaQuery<Physician> criteria = getCriteriaBuilder().createQuery(Physician.class);
+		Root<Physician> root = criteria.from(Physician.class);
+
+		criteria.select(root);
+
+		Fetch<Physician, Person> personFetch = root.fetch(Physician_.person, JoinType.LEFT);
+		root.fetch(Physician_.associatedRoles, JoinType.LEFT);
+
+		if (loadOrganizations) {
+			System.out.println("fetching");
+			personFetch.fetch(Person_.organizsations, JoinType.LEFT);
+		}
+		criteria.where(getCriteriaBuilder().equal(root.get(Physician_.id), id));
+
+		criteria.distinct(true);
+
+		List<Physician> physicians = getSession().createQuery(criteria).getResultList();
+
+		return Optional.ofNullable(!physicians.isEmpty() ? physicians.get(0) : null);
+	}
 
 	@Override
 	public List<Physician> findAllByRole(ContactRole role, boolean irgnoreArchived) {

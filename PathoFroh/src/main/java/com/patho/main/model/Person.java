@@ -5,6 +5,7 @@ import static org.hibernate.annotations.LazyCollectionOption.FALSE;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,11 +20,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.annotations.Type;
@@ -95,9 +99,10 @@ public class Person implements Serializable, LogAble, ArchivAble, ID, FullName  
 	private boolean autoUpdate = true;
 
 	@ManyToMany()
-	@LazyCollection(FALSE)
+	@OrderBy("id ASC")
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinTable(name = "person_organization", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "organization_id"))
-	private List<Organization> organizsations;
+	private Set<Organization> organizsations;
 	
 	/**
 	 * Default address for notification

@@ -1,6 +1,7 @@
 package com.patho.main.model.dto.ldap;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.naming.Name;
 
@@ -113,7 +114,7 @@ public final class LDAPUserMapper {
 		physician.getPerson().setGender(getSex().equals("1") ? Person.Gender.MALE : Person.Gender.FEMALE);
 
 		if (physician.getPerson().getOrganizsations() == null)
-			physician.getPerson().setOrganizsations(new ArrayList<Organization>());
+			physician.getPerson().setOrganizsations(new HashSet<Organization>());
 
 		Organization organization = new Organization(getOrganization(), new Contact(), true);
 		if (!physician.getPerson().getOrganizsations().stream()

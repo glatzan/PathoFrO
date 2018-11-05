@@ -205,7 +205,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDial
 			setSelectedPhysician(new Physician(new Person(new Contact())));
 			// person is not auto update able
 			getSelectedPhysician().getPerson().setAutoUpdate(false);
-			getSelectedPhysician().getPerson().setOrganizsations(new ArrayList<Organization>());
+			getSelectedPhysician().getPerson().setOrganizsations(new HashSet<Organization>());
 
 			setAssociatedRoles(new ContactRole[] { ContactRole.OTHER_PHYSICIAN });
 			setAllRoles(Arrays.asList(ContactRole.values()));

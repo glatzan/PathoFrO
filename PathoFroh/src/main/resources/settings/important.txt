@@ -12,6 +12,8 @@ PLV8 Javascript Postgres
 Postgres 10 -> http://www.postgresonline.com/journal/archives/379-PLV8-binaries-for-PostgreSQL-10-windows-both-32-bit-and-64-bit.html
 Overview -> http://www.postgresonline.com/winextensions.php
 
+PDFLatex
+-> Miktex -> https://miktex.org/
 
 HotSwap:
 -> https://dzone.com/articles/hot-swap-java-bytecode-on-runtime

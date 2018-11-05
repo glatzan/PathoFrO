@@ -79,7 +79,6 @@ public class Physician implements Serializable, ArchivAble, ID {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
-	@Fetch(value = FetchMode.SUBSELECT)
 	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
 	private Set<ContactRole> associatedRoles;
 
