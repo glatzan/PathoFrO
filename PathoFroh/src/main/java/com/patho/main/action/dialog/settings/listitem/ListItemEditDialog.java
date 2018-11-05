@@ -22,6 +22,7 @@ import com.patho.main.model.Person;
 import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PersonRepository;
+import com.patho.main.service.ListItemService;
 import com.patho.main.service.OrganizationService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
@@ -38,12 +39,7 @@ public class ListItemEditDialog extends AbstractDialog<ListItemEditDialog> {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private OrganizationService organizationService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private OrganizationRepository organizationRepository;
+	private ListItemService listItemService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -54,8 +50,8 @@ public class ListItemEditDialog extends AbstractDialog<ListItemEditDialog> {
 
 	private boolean newListItem;
 
-	public ListItemEditDialog initAndPrepareBean() {
-		return initAndPrepareBean(new ListItem());
+	public ListItemEditDialog initAndPrepareBean(ListItem.StaticList type) {
+		return initAndPrepareBean(new ListItem(type));
 	}
 
 	public ListItemEditDialog initAndPrepareBean(ListItem listItem) {
@@ -77,48 +73,8 @@ public class ListItemEditDialog extends AbstractDialog<ListItemEditDialog> {
 		hideDialog(new ReloadEvent());
 	}
 
-	public static Specification<ListItem> isLongTermCustomer() {
-		    return new Specification<ListItem> {
-		    	 	
-		      Predicate toPredicate(Root<ListItem> root, CriteriaQuery query, CriteriaBuilder cb) {
-		        return null;
-		      }
-		   
-		    };
-	}
-
 	private void save() {
-
-		if (getEditListItem().getId() == 0) {
-
-			getEditListItem().setListType(getSelectedStaticList());
-
-			logger.debug("Creating new ListItem " + getEditListItem().getValue() + " for "
-					+ getSelectedStaticList().toString());
-			// case new, save
-			getStaticListContent().add(getEditListItem());
-
-			listItemRepository.save(getEditListItem(), resourceBundle.get("log.settings.staticList.new",
-					getEditListItem().getValue(), getSelectedStaticList().toString()));
-
-			ListOrder.reOrderList(getStaticListContent());
-
-			listItemRepository.saveAll(getStaticListContent(),
-					resourceBundle.get("log.settings.staticList.list.reoder", getSelectedStaticList()));
-
-		} else {
-			logger.debug("Updating ListItem " + getEditListItem().getValue());
-			// case edit: update an save
-
-			listItemRepository.save(getEditListItem(), resourceBundle.get("log.settings.staticList.update",
-					getEditListItem().getValue(), getSelectedStaticList().toString()));
-		}
-
-		organization = organizationService.addOrSaveOrganization(organization);
-
-		for (Person person : removeFromOrganization) {
-			personRepository.save(person, resourceBundle.get("log.person.organization.remove", person, organization));
-		}
+		listItemService.addOrUpdate(getListItem());
 	}
 
 }

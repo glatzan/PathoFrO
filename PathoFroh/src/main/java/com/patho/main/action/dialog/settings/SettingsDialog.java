@@ -34,6 +34,7 @@ import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.repository.UserRepository;
+import com.patho.main.service.ListItemService;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.ListChooser;
@@ -102,6 +103,11 @@ public class SettingsDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private ListItemRepository listItemRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private ListItemService listItemService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -620,11 +626,6 @@ public class SettingsDialog extends AbstractTabDialog {
 		private List<ListItem> staticListContent;
 
 		/**
-		 * Is used for creating and editing static lists items
-		 */
-		private ListItem editListItem;
-
-		/**
 		 * If true archived object will be shown.
 		 */
 		private boolean showArchived;
@@ -642,24 +643,13 @@ public class SettingsDialog extends AbstractTabDialog {
 		}
 
 		public void archiveListItem(ListItem item, boolean archive) {
-			item.setArchived(archive);
-			if (archive) {
-				listItemRepository.save(item, resourceBundle.get("log.settings.staticList.archive", item.getValue(),
-						getSelectedStaticList().toString()));
-			} else {
-				listItemRepository.save(item, resourceBundle.get("log.settings.staticList.dearchive", item.getValue(),
-						getSelectedStaticList().toString()));
-			}
-
-			// removing item from current list
-			getStaticListContent().remove(item);
+			listItemService.archiveListItem(item, archive);
+			updateData();
 		}
 
 		public void onReorderList(ReorderEvent event) {
-			ListOrder.reOrderList(getStaticListContent());
-
-			listItemRepository.saveAll(getStaticListContent(),
-					resourceBundle.get("log.settings.staticList.list.reoder", getSelectedStaticList()));
+			listItemService.updateReoderedList(getStaticListContent(), getSelectedStaticList());
+			updateData();
 		}
 	}
 

@@ -27,6 +27,7 @@ import com.patho.main.action.dialog.print.FaxDocumentDialog;
 import com.patho.main.action.dialog.print.PrintDialog;
 import com.patho.main.action.dialog.settings.SettingsDialog;
 import com.patho.main.action.dialog.settings.favourites.FavouriteListEditDialog;
+import com.patho.main.action.dialog.settings.listitem.ListItemEditDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationEditDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationListDialog;
 import com.patho.main.action.dialog.settings.physician.PhysicianEditDialog;
@@ -86,4 +87,5 @@ public class DialogHandler {
 	private OrganizationEditDialog organizationEditDialog = new OrganizationEditDialog();
 	private PhysicianEditDialog physicianEditDialog = new PhysicianEditDialog();
 	private PhysicianSearchDialog physicianSearchDialog = new PhysicianSearchDialog();
+	private ListItemEditDialog listItemEditDialog = new ListItemEditDialog();
 }

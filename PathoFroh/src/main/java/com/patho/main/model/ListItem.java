@@ -31,10 +31,6 @@ import lombok.Setter;
 @Setter
 public class ListItem implements ListOrder<ListItem>, ArchivAble, ID {
 
-	public enum StaticList {
-		WARDS, CASE_HISTORY, COUNCIL_ATTACHMENT, SLIDES, TASK_RESTORE;
-	}
-
 	@Id
 	@GeneratedValue(generator = "listItem_sequencegenerator")
 	@Column(unique = true, nullable = false)
@@ -48,6 +44,13 @@ public class ListItem implements ListOrder<ListItem>, ArchivAble, ID {
 	private int indexInList;
 	@Column
 	private boolean archived;
+
+	public ListItem() {
+	}
+
+	public ListItem(StaticList staticList) {
+		this.listType = staticList;
+	}
 
 	/********************************************************
 	 * Interface ArchiveAble
@@ -63,7 +66,12 @@ public class ListItem implements ListOrder<ListItem>, ArchivAble, ID {
 	public Dialog getArchiveDialog() {
 		return null;
 	}
+
 	/********************************************************
 	 * Interface ArchiveAble
 	 ********************************************************/
+
+	public static enum StaticList {
+		WARDS, CASE_HISTORY, COUNCIL_ATTACHMENT, SLIDES, TASK_RESTORE;
+	}
 }

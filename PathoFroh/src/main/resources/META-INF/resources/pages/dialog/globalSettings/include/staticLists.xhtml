@@ -25,7 +25,7 @@
 					itemLabel="#{msg['enum.staticList.'.concat(staticList)]}" />
 
 				<p:ajax event="change" process="@form" partialSubmit="true"
-					listener="#{dialog.settingsDialog.staticListTab.loadStaticList()}"
+					listener="#{dialog.settingsDialog.staticListTab.updateData()}"
 					update="@form"></p:ajax>
 			</p:selectOneMenu>
 		</h:panelGrid>
@@ -57,11 +57,14 @@
 					<i class="fa fa-cog" />
 				</f:facet>
 
+				<!-- edit -->
 				<p:commandLink title="#{msg['dialog.settings.material.edit']}"
-					actionListener="#{dialog.settingsDialog.staticListTab.prepareEditListItem(item)}"
-					styleClass="noUnderlineAtLink" update="@form" process="@this"
-					partialSubmit="true">
+					actionListener="#{dialog.listItemEditDialog.initAndPrepareBean(item)}"
+					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-cog" />
+					<p:ajax event="dialogReturn"
+						listener="#{dialog.settingsDialog.staticListTab.updateData()}"
+						update="@form" />
 				</p:commandLink>
 
 				<p:commandLink title="#{msg['dialog.settings.material.edit']}"
@@ -85,28 +88,34 @@
 
 		</p:dataTable>
 	</p:outputPanel>
-	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
 
-			<h:panelGrid columns="2" styleClass="newTableContainer left">
-				<p:selectBooleanCheckbox styleClass="smallCheckbox"
+
+	<div class="buttonContainer">
+		<h:panelGrid columns="2">
+
+			<h:panelGrid columns="2" styleClass="left">
+				<!-- archived -->
+				<p:selectBooleanCheckbox
 					value="#{dialog.settingsDialog.staticListTab.showArchived}">
 					<p:ajax event="change" update="@form" process="@this"
 						partialSubmit="true"
 						listener="#{dialog.settingsDialog.staticListTab.updateData()}" />
 				</p:selectBooleanCheckbox>
-
 				<h:outputLabel
-					value="#{msg['dialog.settings.list.checkbox.archived']}" />
+					value="#{msg['dialog.settings.material.checkbox.archived']}" />
 			</h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newTableContainer right">
+			<h:panelGrid columns="2" styleClass="right">
+				<!-- new -->
 				<p:commandButton value="#{msg['dialog.settings.list.new']}"
 					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
-					actionListener="#{dialog.settingsDialog.staticListTab.prepareNewListItem()}"
-					update="@form" />
-
+					actionListener="#{dialog.listItemEditDialog.initAndPrepareBean(dialog.settingsDialog.staticListTab.selectedStaticList)}"
+					update="@form">
+					<p:ajax event="dialogReturn"
+						listener="#{dialog.settingsDialog.staticListTab.updateData()}"
+						update="@form" />
+				</p:commandButton>
+				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
 					actionListener="#{dialog.settingsDialog.hideDialog()}" />
