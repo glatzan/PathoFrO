@@ -13,45 +13,65 @@
 
 	<p:outputPanel styleClass="bodyPannelFull">
 
-		<p:dataTable var="staining" style="width:100%;" scrollable="true"
-			scrollHeight="460" draggableRows="true"
-			styleClass="highlightedDataTable noBordersAll collapsedBordersAll"
-			value="#{dialog.settingsDialog.stainingTab.allStainingsList}">
+		<p:accordionPanel styleClass="contentAccordionPannel"
+			style="height:460px"
+			value="#{dialog.settingsDialog.stainingTab.container}"
+			var="container">
 
-			<p:column headerText="#{msg['dialog.settings.stainings.staining']}"
-				sortBy="#{staining.name}" style="width:20%">
-				<h:outputText value="#{staining.name}" />
-			</p:column>
+			<p:tab title="#{msg['enum.stainingType.'.concat(container.type)]}">
+				<p:dataTable var="staining" styleClass="defaultHistoDataTable"
+					rowKey="#{staining.id}" scrollHeight="430" scrollable="true"
+					value="#{container.prototpyes}">
 
-			<p:column headerText="#{msg['dialog.settings.stainings.type']}"
-				sortBy="#{staining.type}" style="width:20%">
-				<h:outputText
-					value="#{msg['enum.stainingType.'.concat(staining.type)]}" />
-			</p:column>
+					<!-- name -->
+					<p:column headerText="#{msg['dialog.settings.stainings.staining']}"
+						sortBy="#{staining.name}" style="width:20%">
+						<h:outputText value="#{staining.name}" />
+					</p:column>
 
-			<p:column headerText="#{msg['dialog.settings.stainings.commentary']}"
-				style="width:50%">
-				<h:outputText value="#{staining.commentary}" />
-			</p:column>
-			<p:column style="width:10%; text-align:center;">
-				<f:facet name="header">
-					<i class="fa fa-cog" />
-				</f:facet>
-				<p:commandLink title="#{msg['dialog.settings.stainings.edit']}"
-					partialSubmit="true" process="@this"
-					actionListener="#{dialogHandlerAction.stainingEditDialog.initAndPrepareBean(staining)}"
-					styleClass="noUnderlineAtLink">
-					<i class="fa fa-cog" />
+					<!-- type -->
+					<p:column headerText="#{msg['dialog.settings.stainings.type']}"
+						sortBy="#{staining.type}" style="width:20%">
+						<h:outputText
+							value="#{msg['enum.stainingType.'.concat(staining.type)]}" />
+					</p:column>
 
-					<p:ajax event="dialogReturn" update="@form"
-						listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
-				</p:commandLink>
-			</p:column>
-			<p:ajax event="rowReorder"
-				listener="#{dialog.settingsDialog.stainingTab.onReorderList}" />
-		</p:dataTable>
+					<!-- commentary -->
+					<p:column
+						headerText="#{msg['dialog.settings.stainings.commentary']}"
+						style="width:auto">
+						<h:outputText value="#{staining.commentary}"
+							title="#{staining.commentary}">
+							<f:converter converterId="org.histo.ui.TruncateConverter" />
+							<f:attribute name="truncateAt" value="25" />
+							<f:attribute name="continuationMark" value="..." />
+						</h:outputText>
+					</p:column>
+
+					<p:column>
+						<h:outputLabel value="#{staining.indexInList}"></h:outputLabel>
+
+					</p:column>
+
+					<!-- options -->
+					<p:column style="width:10px">
+						<f:facet name="header">
+							<i class="fa fa-cog" />
+						</f:facet>
+						<p:commandLink title="#{msg['dialog.settings.stainings.edit']}"
+							partialSubmit="true" process="@this"
+							actionListener="#{dialog.stainingEditDialog.initAndPrepareBean(staining)}">
+							<i class="fa fa-cog" />
+
+							<p:ajax event="dialogReturn" update="@form"
+								listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+		</p:accordionPanel>
 	</p:outputPanel>
-	
+
 	<div class="buttonContainer">
 		<h:panelGrid columns="2" style="width:100%"
 			styleClass="newTableContainer">
@@ -63,8 +83,8 @@
 
 			<h:panelGrid columns="2" styleClass="newTableContainer right">
 				<p:commandButton value="#{msg['dialog.settings.stainings.new']}"
-					icon="fa fa-fw fa-plus-circle" partialSubmit="true" process="@this"
-					actionListener="#{dialogHandlerAction.stainingEditDialog.initAndPrepareBean()}">
+					icon="fa fa-fw fa-picture-o" partialSubmit="true" process="@this"
+					actionListener="#{dialog.stainingEditDialog.initAndPrepareBean()}">
 					<p:ajax event="dialogReturn" update="@form"
 						listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
 				</p:commandButton>

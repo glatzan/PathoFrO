@@ -53,7 +53,7 @@
 			<h:panelGrid columns="1" styleClass="newStyleListingTable">
 				<p:dataTable var="batch" scrollable="true" scrollHeight="250"
 					rowIndexVar="rowIdx" id="batchList" styleClass="newStyleDataTable"
-					value="#{dialogHandlerAction.stainingEditDialog.stainingPrototype.batchDetails}">
+					value="#{dialog.stainingEditDialog.stainingPrototype.batchDetails}">
 				</p:dataTable>
 			</h:panelGrid>
 
@@ -80,7 +80,7 @@
 					<!-- Save button -->
 					<p:commandButton value="#{msg['general.save']}" icon="fa fa-plus">
 						<f:actionListener
-							binding="#{dialogHandlerAction.stainingEditDialog.addBatch()}"></f:actionListener>
+							binding="#{dialog.stainingEditDialog.addBatch()}"></f:actionListener>
 					</p:commandButton>
 				</h:panelGrid>
 
@@ -96,7 +96,7 @@
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
 						icon="fa fa-times-circle">
 						<f:actionListener
-							binding="#{dialogHandlerAction.stainingEditDialog.hideDialog()}"></f:actionListener>
+							binding="#{dialog.stainingEditDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>

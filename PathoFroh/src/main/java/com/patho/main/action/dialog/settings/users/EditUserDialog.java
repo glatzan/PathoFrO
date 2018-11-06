@@ -7,13 +7,11 @@ import java.util.Optional;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.dao.LogDAO;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.user.HistoGroup;
@@ -23,13 +21,10 @@ import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.exception.HistoDatabaseConstraintViolationException;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

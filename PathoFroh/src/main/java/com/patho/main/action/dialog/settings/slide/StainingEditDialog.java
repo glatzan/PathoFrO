@@ -12,70 +12,62 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-import com.patho.main.dao.SettingsDAO;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
+import com.patho.main.repository.StainingPrototypeRepository;
+import com.patho.main.service.StainingPrototypeService;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter
 @Setter
-@Slf4j
-public class StainingEditDialog extends AbstractDialog {
-
-	@Autowired
-	private SettingsDAO settingsDAO;
+public class StainingEditDialog extends AbstractDialog<StainingEditDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
+	private StainingPrototypeRepository stainingPrototypeRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private StainingPrototypeService stainingPrototypeService;
 
 	private boolean newStaining;
 
 	private StainingPrototype stainingPrototype;
 
-	private List<StainingPrototypeDetails> toRemove;
+	private List<StainingPrototypeDetails> removeDetails;
 
 	public void initAndPrepareBean() {
-		StainingPrototype staining = new StainingPrototype();
-
-		if (initBean(staining, false))
+		if (initBean(new StainingPrototype()))
 			prepareDialog();
 	}
-
+	
 	public void initAndPrepareBean(StainingPrototype staining) {
-		if (initBean(staining, true))
+		if (initBean(staining))
 			prepareDialog();
 	}
 
-	public boolean initBean(StainingPrototype staining, boolean initialize) {
+	public boolean initBean(StainingPrototype staining) {
 
-		if (initialize) {
-			try {
-				setStainingPrototype(settingsDAO.initializeStainingPrototype(staining, true));
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				log.debug("Version conflict, updating entity");
-				setStainingPrototype(settingsDAO.getStainingPrototype(stainingPrototype.getId(), true));
-			}
+		// reloading stating with batch details
+		if (staining.getId() != 0) {
+			setStainingPrototype(
+					stainingPrototypeRepository.findOptionalByIdAndInitilize(staining.getId(), true).get());
+			setNewStaining(false);
 		} else {
+			setNewStaining(true);
 			setStainingPrototype(staining);
 		}
 
-		setNewStaining(staining.getId() == 0 ? true : false);
+		setRemoveDetails(new ArrayList<StainingPrototypeDetails>());
 
-		setToRemove(new ArrayList<StainingPrototypeDetails>());
-
-		if (staining.getBatchDetails() == null)
-			staining.setBatchDetails(new ArrayList<StainingPrototypeDetails>());
-
-		super.initBean(task, Dialog.SETTINGS_STAINING_EDIT);
-		return true;
+		return super.initBean(task, Dialog.SETTINGS_STAINING_EDIT);
 	}
 
 	public void addBatch() {
@@ -89,7 +81,7 @@ public class StainingEditDialog extends AbstractDialog {
 
 		// delete if user clicks save
 		if (stainingPrototypeDetails.getId() != 0) {
-			toRemove.add(stainingPrototypeDetails);
+			getRemoveDetails().add(stainingPrototypeDetails);
 		}
 	}
 
@@ -102,32 +94,12 @@ public class StainingEditDialog extends AbstractDialog {
 		}
 	}
 
-	public void saveStaining() {
-		try {
+	public void saveAndHide() {
+		save();
+		hideDialog(new ReloadEvent());
+	}
 
-			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-				public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-
-					for (StainingPrototypeDetails stainingPrototypeDetails : toRemove) {
-						settingsDAO.delete(stainingPrototypeDetails);
-					}
-
-					if (stainingPrototype.getId() == 0) {
-						settingsDAO.save(stainingPrototype,
-								resourceBundle.get("log.settings.staining.new", stainingPrototype));
-					} else {
-						settingsDAO.save(stainingPrototype,
-								resourceBundle.get("log.settings.staining.update", stainingPrototype));
-					}
-				}
-			});
-			// TODO Lock
-			// genericDAO.lockParent(task);
-
-		} catch (Exception e) {
-			onDatabaseVersionConflict();
-		}
-
+	private void save() {
+		stainingPrototypeService.addOrUpdate(getStainingPrototype(), getRemoveDetails());
 	}
 }

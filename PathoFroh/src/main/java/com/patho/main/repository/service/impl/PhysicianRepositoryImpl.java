@@ -3,12 +3,8 @@ package com.patho.main.repository.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.FetchType;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Fetch;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -19,14 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.SortOrder;
-import com.patho.main.model.Organization;
-import com.patho.main.model.Organization_;
 import com.patho.main.model.Person;
 import com.patho.main.model.Person_;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Physician_;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Patient_;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.service.PhysicianRepositoryCustom;
 import com.patho.main.ui.selectors.PhysicianSelector;

@@ -35,10 +35,10 @@
 		</script>
 
 		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg[' ']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -54,7 +54,7 @@
 				<p:dataTable var="batch" scrollable="true" scrollHeight="250"
 					rowIndexVar="rowIdx" id="batchList"
 					styleClass="defaultHistoDataTable"
-					value="#{dialogHandlerAction.stainingEditDialog.stainingPrototype.batchDetails}">
+					value="#{dialog.stainingEditDialog.stainingPrototype.batchDetails}">
 				</p:dataTable>
 			</h:panelGrid>
 

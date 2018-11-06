@@ -33,4 +33,27 @@ public class ListItemRepositoryImpl extends AbstractRepositoryCustom implements 
 		return getSession().createQuery(criteria).getResultList();
 	}
 
+	public List<ListItem> findAllOrderByIndex(ListItem.StaticList listType, boolean irgnoreArchived) {
+
+		CriteriaQuery<ListItem> criteria = getCriteriaBuilder().createQuery(ListItem.class);
+		Root<ListItem> root = criteria.from(ListItem.class);
+
+		criteria.select(root);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		predicates.add(getCriteriaBuilder().equal(root.get(ListItem_.listType), listType));
+
+		if (irgnoreArchived)
+			predicates.add(getCriteriaBuilder().equal(root.get(ListItem_.archived), false));
+
+		criteria.where(getCriteriaBuilder().and(predicates.toArray(new Predicate[predicates.size()])));
+
+		criteria.orderBy(getCriteriaBuilder().asc(root.get(ListItem_.indexInList)));
+
+		criteria.distinct(true);
+
+		return getSession().createQuery(criteria).getResultList();
+
+	}
+
 }

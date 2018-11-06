@@ -16,7 +16,6 @@ import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PersonRepository;
 import com.patho.main.service.OrganizationService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;

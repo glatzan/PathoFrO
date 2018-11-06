@@ -35,6 +35,7 @@
 				var="container">
 				<p:tab title="#{container.type}">
 					<h:panelGrid columns="2" cellpadding="5">
+					
 						<p:dataTable var="stainingHolder"
 							styleClass="defaultHistoDataTable"
 							rowKey="#{stainingHolder.prototype.id}"
@@ -63,6 +64,7 @@
 							<p:ajax event="rowUnselectCheckbox"
 								update=":dialogContent:buttonContainer"></p:ajax>
 						</p:dataTable>
+						
 					</h:panelGrid>
 				</p:tab>
 			</p:accordionPanel>

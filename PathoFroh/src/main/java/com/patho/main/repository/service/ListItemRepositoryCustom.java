@@ -6,4 +6,6 @@ import com.patho.main.model.ListItem;
 
 public interface ListItemRepositoryCustom {
 	public List<ListItem> findAll(ListItem.StaticList listType, boolean irgnoreArchived);
+
+	public List<ListItem> findAllOrderByIndex(ListItem.StaticList listType, boolean irgnoreArchived);
 }

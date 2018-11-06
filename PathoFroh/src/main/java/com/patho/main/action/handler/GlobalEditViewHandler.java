@@ -234,9 +234,10 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		getNavigationData().setLastDefaultView(userHandlerAction.getCurrentUser().getSettings().getDefaultView());
 
 		logger.debug("5. Init task data");
-
-		generateViewData(TaskInitilize.GENERATE_TASK_STATUS, TaskInitilize.GENERATE_MENU_MODEL,
-				TaskInitilize.RELOAD_MENU_MODEL_FAVOURITE_LISTS);
+		
+		//TODO check if problem, this should be allread done by goToNavigation
+//		generateViewData(TaskInitilize.GENERATE_TASK_STATUS, TaskInitilize.GENERATE_MENU_MODEL,
+//				TaskInitilize.RELOAD_MENU_MODEL_FAVOURITE_LISTS);
 
 	}
 

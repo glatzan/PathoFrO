@@ -9,54 +9,23 @@
 
 <h:head>
 	<title><h:outputFormat
-			value="#{dialogHandlerAction.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}" /></title>
-	<h:outputStylesheet name="histo.css" value="histo.css" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+			value="#{dialog.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 
 	<h:form enctype="multipart/form-data" id="dialogContent">
-		<script type="text/javascript">
-			// sets the position to the top of the p:selectCheckboxMenu
-			(function() {
-				PrimeFaces.widget.SelectCheckboxMenu.prototype.alignPanel = function() {
-					var fixedPosition = this.panel.css('position') == 'fixed', win = $(window), positionOffset = fixedPosition ? '-'
-							+ win.scrollLeft() + ' -' + win.scrollTop()
-							: null, panelStyle = this.panel.attr('style');
-
-					this.panel.css({
-						'left' : '',
-						'top' : '',
-						'z-index' : ++PrimeFaces.zindex
-					});
-
-					if (this.panel.parent().attr('id') === this.id) {
-						this.panel.css({
-							left : 0,
-							top : this.jq.innerHeight()
-						});
-					} else {
-						this.panel.position({
-							my : 'left bottom',
-							at : 'left top',
-							of : this.jq,
-							offset : positionOffset
-						});
-					}
-
-				};
-			})();
-		</script>
 
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
+				styleClass="defaultHistoTable">
 				<h:outputLabel
-					value="#{dialogHandlerAction.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}" />
+					value="#{dialog.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -64,22 +33,24 @@
 		</div>
 
 
-		<div class="dialogContent" style="height: 500px;">
+		<div class="dialogContent">
 
-			<h:panelGrid columns="2" styleClass="newStyleListingTable"
-				columnClasses="columnLabelContainer150,columnInputContainer300">
-
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				columnClasses="columnWidth150, ">
+				<!-- name -->
 				<h:outputLabel value="#{msg['dialog.stainingEdit.name']}"></h:outputLabel>
-				<p:inputText
-					value="#{dialogHandlerAction.stainingEditDialog.stainingPrototype.name}"></p:inputText>
+				<p:inputText style="widht: 200px"
+					value="#{dialog.stainingEditDialog.stainingPrototype.name}"></p:inputText>
 
+				<!-- commentary -->
 				<h:outputLabel value="#{msg['dialog.stainingEdit.commentary']}"></h:outputLabel>
-				<p:inputTextarea rows="3"
-					value="#{dialogHandlerAction.stainingEditDialog.stainingPrototype.commentary}" />
+				<p:inputTextarea rows="3" style="width:80%"
+					value="#{dialog.stainingEditDialog.stainingPrototype.commentary}" />
 
+				<!-- type -->
 				<h:outputLabel value="#{msg['dialog.stainingEdit.type']}"></h:outputLabel>
 				<p:selectOneMenu
-					value="#{dialogHandlerAction.stainingEditDialog.stainingPrototype.type}">
+					value="#{dialog.stainingEditDialog.stainingPrototype.type}">
 
 					<f:selectItems value="#{enumProvider.stainingTypes}"
 						var="stainingType"
@@ -87,55 +58,72 @@
 				</p:selectOneMenu>
 			</h:panelGrid>
 
-			<h:panelGrid columns="1" styleClass="newStyleListingTable"
-				style="margin-top:10px;">
+			<!-- Separator -->
+			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+				<p:separator />
+				<h:outputLabel value="#{msg['dialog.stainingEdit.batch']}" />
+			</h:panelGrid>
 
-				<h:outputLabel value="#{msg['dialog.stainingEdit.batch']}"></h:outputLabel>
-
+			<!-- batch -->
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+			
 				<p:dataTable var="batch" scrollable="true" scrollHeight="330"
 					rowStatePreserved="true" rowIndexVar="rowIdx" id="batchList"
-					styleClass="newStyleDataTable"
-					value="#{dialogHandlerAction.stainingEditDialog.stainingPrototype.batchDetails}">
+					styleClass="defaultHistoDataTable"
+					value="#{dialog.stainingEditDialog.stainingPrototype.batchDetails}">
+
+					<!-- toggler -->
 					<p:column style="width:16px">
 						<p:rowToggler />
 					</p:column>
+
+					<!-- name -->
 					<p:column headerText="#{msg['dialog.stainingEdit.batch.name']}">
 						<h:outputLabel value="#{batch.supplier} " />
 						<h:outputLabel value="#{batch.deliveryDate}">
 							<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" />
 						</h:outputLabel>
 					</p:column>
-					<p:column headerText="#" style="width:40px">
+
+					<!-- options -->
+					<p:column headerText="#" style="width:40px"
+						styleClass="centerHeaderChildElements">
+						<!-- clone -->
 						<p:commandLink title="#{msg['dialog.stainingEdit.batch.clone']}"
-							actionListener="#{dialogHandlerAction.stainingEditDialog.cloneBatch(batch)}"
-							styleClass="noUnderlineAtLink" update="@form" process="@this"
-							partialSubmit="true">
+							actionListener="#{dialog.stainingEditDialog.cloneBatch(batch)}"
+							update="@form" process="@this" partialSubmit="true">
 							<i class="fa fa-fw fa-copy" />
 						</p:commandLink>
 
+						<!-- remove -->
 						<p:commandLink title="#{msg['dialog.stainingEdit.batch.remove']}"
-							styleClass="noUnderlineAtLink"
-							actionListener="#{dialogHandlerAction.stainingEditDialog.removeBatch(batch)}"
+							actionListener="#{dialog.stainingEditDialog.removeBatch(batch)}"
 							update="@form" process="@this" partialSubmit="true">
 							<i class="fa fa-fw fa-times-circle" />
 						</p:commandLink>
 					</p:column>
 
-					<p:rowExpansion styleClass="noPadding">
-						<h:panelGrid columns="6" styleClass="newStyleListingTable"
+					<!-- content -->
+					<p:rowExpansion >
+						<h:panelGrid columns="6" styleClass="defaultHistoTable"
 							columnClasses="columnMinWidth, columnAutoWidth, columnMinWidth, columnAutoWidth, columnMinWidth, columnAutoWidth ">
+
+							<!-- supplier -->
 							<h:outputLabel
 								value="#{msg['dialog.stainingEdit.batch.supplier']}" />
 							<p:inputText value="#{batch.supplier}"></p:inputText>
 
+							<!-- quantity -->
 							<h:outputLabel
 								value="#{msg['dialog.stainingEdit.batch.quantityDelivered']}" />
 							<p:inputText value="#{batch.quantityDelivered}"></p:inputText>
 
+							<!-- storage -->
 							<h:outputLabel
 								value="#{msg['dialog.stainingEdit.batch.storage']}" />
 							<p:inputText value="#{batch.storage}"></p:inputText>
 
+							<!--  -->
 							<h:outputLabel value="#{msg['dialog.stainingEdit.batch.host']}" />
 							<p:inputText value="#{batch.host}">
 								<p:ajax event="keyup" process="@this" partialSubmit="true"
@@ -204,33 +192,27 @@
 		</div>
 
 		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+			<h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
-					<!-- Save button -->
+				<h:panelGrid columns="1" styleClass="left">
+					<!-- add batch button -->
 					<p:commandButton
 						value="#{msg['dialog.stainingEdit.button.newBatch']}"
-						icon="fa fa-plus-circle" update="@form">
-						<f:actionListener
-							binding="#{dialogHandlerAction.stainingEditDialog.addBatch()}"></f:actionListener>
+						icon="fa fa-bullseye" update="@form"
+						actionListener="#{dialog.stainingEditDialog.addBatch()}">
 					</p:commandButton>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<h:panelGrid columns="2" styleClass="right">
 					<!-- Save button -->
-					<p:commandButton value="#{msg['general.save']}" icon="fa fa-save">
-						<f:actionListener
-							binding="#{dialogHandlerAction.stainingEditDialog.saveStaining()}"></f:actionListener>
-						<f:actionListener
-							binding="#{dialogHandlerAction.stainingEditDialog.hideDialog()}"></f:actionListener>
+					<p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
+						actionListener="#{dialog.stainingEditDialog.saveAndHide()}">
 					</p:commandButton>
 
 					<!-- Close button -->
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+						actionListener="#{dialog.stainingEditDialog.hideDialog()}"
 						icon="fa fa-times-circle">
-						<f:actionListener
-							binding="#{dialogHandlerAction.stainingEditDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>

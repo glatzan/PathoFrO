@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototype.StainingType;
+import com.patho.main.repository.service.StainingPrototypeRepositoryCustom;
 
-public interface StainingPrototypeRepository extends BaseRepository<StainingPrototype, Long> {
-	
-	public List<StainingPrototype> findAllByOrderByIndexInListAsc();
-	
-	public List<StainingPrototype> findAllByTypeOrderByIndexInListAsc(StainingType type);
-	
+public interface StainingPrototypeRepository
+		extends BaseRepository<StainingPrototype, Long>, StainingPrototypeRepositoryCustom {
+
+	List<StainingPrototype> findAllByOrderByIndexInListAsc();
+
+	List<StainingPrototype> findAllByTypeOrderByIndexInListAsc(StainingType type);
+
 }

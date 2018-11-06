@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.settings;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
+import com.patho.main.action.dialog.slides.AddSlidesDialog.StainingPrototypeHolder;
+import com.patho.main.action.dialog.slides.AddSlidesDialog.StainingTypeContainer;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.util.ResourceBundle;
@@ -20,6 +23,7 @@ import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
+import com.patho.main.model.StainingPrototype.StainingType;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.model.log.Log;
@@ -573,16 +577,9 @@ public class SettingsDialog extends AbstractTabDialog {
 	public class StainingTab extends AbstractTab {
 
 		/**
-		 * A List with all staings
+		 * Tab container
 		 */
-		private List<StainingPrototype> allStainingsList;
-
-		/**
-		 * StainingPrototype for creating and editing
-		 */
-		private StainingPrototype editStaining;
-
-		private boolean newStaining;
+		private List<StainingContainer> container = new ArrayList<StainingContainer>();
 
 		public StainingTab() {
 			setTabName("StainingTab");
@@ -593,7 +590,12 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setAllStainingsList(stainingPrototypeRepository.findAllByOrderByIndexInListAsc());
+			getContainer().clear();
+			// adding tabs dynamically
+			for (StainingType type : StainingType.values()) {
+				getContainer().add(new StainingContainer(type,
+						stainingPrototypeRepository.findAllByTypeOrderByIndexInListAsc(type)));
+			}
 		}
 
 		/**
@@ -602,13 +604,24 @@ public class SettingsDialog extends AbstractTabDialog {
 		 * @param event
 		 */
 		public void onReorderList(ReorderEvent event) {
-			logger.debug(
-					"List order changed, moved staining from " + event.getFromIndex() + " to " + event.getToIndex());
-			ListOrder.reOrderList(getAllStainingsList());
-			stainingPrototypeRepository.saveAll(getAllStainingsList(), "log.settings.staining.list.reoder");
+//			logger.debug(
+//					"List order changed, moved staining from " + event.getFromIndex() + " to " + event.getToIndex());
+//			ListOrder.reOrderList(getAllStainingsList());
+//			stainingPrototypeRepository.saveAll(getAllStainingsList(), "log.settings.staining.list.reoder");
 
 		}
 
+		@Getter
+		@Setter
+		public class StainingContainer {
+			private StainingType type;
+			private List<StainingPrototype> prototpyes;
+
+			public StainingContainer(StainingType type, List<StainingPrototype> prototypes) {
+				this.type = type;
+				this.prototpyes = prototypes;
+			}
+		}
 	}
 
 	@Getter
@@ -639,7 +652,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setStaticListContent(listItemRepository.findAll(getSelectedStaticList(), !isShowArchived()));
+			setStaticListContent(listItemRepository.findAllOrderByIndex(getSelectedStaticList(), !isShowArchived()));
 		}
 
 		public void archiveListItem(ListItem item, boolean archive) {

@@ -432,7 +432,6 @@ public class AssociatedContactService extends AbstractService {
 		}
 
 		return null;
-
 	}
 
 	@Getter

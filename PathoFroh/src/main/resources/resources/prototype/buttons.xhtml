@@ -15,16 +15,16 @@
 	<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
 		icon="fa fa-times-circle">
 		<f:actionListener
-			binding="#{dialogHandlerAction.stainingEditDialog.hideDialog()}"></f:actionListener>
+			binding="#{dialog.stainingEditDialog.hideDialog()}"></f:actionListener>
 	</p:commandButton>
 
 
 	<!-- Save button -->
 	<p:commandButton value="#{msg['general.save']}" icon="fa fa-save">
 		<f:actionListener
-			binding="#{dialogHandlerAction.stainingEditDialog.saveStaining(dialogHandlerAction.stainingEditDialog.stainingPrototype)}"></f:actionListener>
+			binding="#{dialog.stainingEditDialog.saveStaining(dialog.stainingEditDialog.stainingPrototype)}"></f:actionListener>
 		<f:actionListener
-			binding="#{dialogHandlerAction.stainingEditDialog.hideDialog()}"></f:actionListener>
+			binding="#{dialog.stainingEditDialog.hideDialog()}"></f:actionListener>
 	</p:commandButton>
 
 	<!-- *************************************** Icons table -->
