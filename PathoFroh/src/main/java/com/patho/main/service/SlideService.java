@@ -24,6 +24,9 @@ public class SlideService extends AbstractService {
 
 	@Autowired
 	private SlideRepository slideRepository;
+	
+	@Autowired
+	private StainingPrototypeService stainingPrototypeService;
 
 	public void createSlideAndPersist(StainingPrototype prototype, Block block) {
 		createSlide(prototype, block, null, false, true, false, true);
@@ -127,7 +130,7 @@ public class SlideService extends AbstractService {
 		Slide slide = new Slide();
 
 		slide.setCreationDate(System.currentTimeMillis());
-		slide.setSlidePrototype(prototype);
+		slide.setSlidePrototype(stainingPrototypeService.incrementContactPriorityCounter(prototype));
 		slide.setParent(block);
 
 		// setting unique slide number

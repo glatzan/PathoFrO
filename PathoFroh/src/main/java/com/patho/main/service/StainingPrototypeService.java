@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
@@ -37,13 +36,14 @@ public class StainingPrototypeService extends AbstractService {
 	}
 
 	public StainingPrototype incrementContactPriorityCounter(StainingPrototype prototype) {
-		prototype.
+		Optional<StainingPrototype> p = stainingPrototypeRepository.findById(prototype.getId());
+
 		if (p.isPresent()) {
 			p.get().setPriorityCount(p.get().getPriorityCount() + 1);
-			return physicianRepository.save(p.get(), resourceBundle.get("log.contact.priority.increment",
-					p.get().getPerson().getFullName(), p.get().getPriorityCount()));
+			return stainingPrototypeRepository.save(p.get(), resourceBundle.get(
+					"log.settings.staining.priority.increment", p.get().getName(), p.get().getPriorityCount()));
 		}
 
-		return null;
+		return prototype;
 	}
 }

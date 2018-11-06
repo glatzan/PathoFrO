@@ -9,8 +9,8 @@ import com.patho.main.repository.service.StainingPrototypeRepositoryCustom;
 public interface StainingPrototypeRepository
 		extends BaseRepository<StainingPrototype, Long>, StainingPrototypeRepositoryCustom {
 
-	List<StainingPrototype> findAllByOrderByIndexInListAsc();
+	List<StainingPrototype> findAllByOrderByPriorityCountDesc();
 
-	List<StainingPrototype> findAllByTypeOrderByIndexInListAsc(StainingType type);
+	List<StainingPrototype> findAllByTypeOrderByPriorityCountDesc(StainingType type);
 
 }

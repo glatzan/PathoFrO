@@ -16,7 +16,6 @@ import javax.persistence.OrderColumn;
 import javax.persistence.SequenceGenerator;
 
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.model.interfaces.LogAble;
 
 import lombok.Getter;
@@ -26,7 +25,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "stainingPrototype_sequencegenerator", sequenceName = "stainingPrototype_sequence")
 @Getter
 @Setter
-public class StainingPrototype implements LogAble, ListOrder<StainingPrototype>, ID {
+public class StainingPrototype implements LogAble, ID {
 
 	public static final int TYPE_NORMAL = 0;
 	public static final int TYPE_IMMUN = 1;
@@ -48,9 +47,6 @@ public class StainingPrototype implements LogAble, ListOrder<StainingPrototype>,
 	@Column
 	private boolean archived;
 
-	@Column
-	private int indexInList;
-	
 	/**
 	 * On every selection of the staining, this number will be increased. The
 	 * staining can be ordered according to this value. So often used physicians

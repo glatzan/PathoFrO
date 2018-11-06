@@ -132,7 +132,7 @@ public class AddSlidesDialog extends AbstractDialog {
 		// adding tabs dynamically
 		for (StainingType type : StainingType.values()) {
 			getContainer().add(
-					new StainingTypeContainer(type, stainingPrototypeRepository.findAllByTypeOrderByIndexInListAsc(type)
+					new StainingTypeContainer(type, stainingPrototypeRepository.findAllByTypeOrderByPriorityCountDesc(type)
 							.stream().map(p -> new StainingPrototypeHolder(p)).collect(Collectors.toList())));
 		}
 

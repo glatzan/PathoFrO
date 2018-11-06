@@ -142,6 +142,11 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* Adding prioritycount for stainingprototype*/
+Alter table stainingprototype add priorityCount int;
+UPDATE stainingprototype SET priorityCount = 0;
+Alter table stainingprototype drop indexInList;
+
 /* Adding field for biobank*/
 /* audit for task container */
 Alter table biobank add createdOn bigint;

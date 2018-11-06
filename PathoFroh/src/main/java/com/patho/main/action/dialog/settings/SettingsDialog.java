@@ -441,8 +441,8 @@ public class SettingsDialog extends AbstractTabDialog {
 			switch (getPage()) {
 			case EDIT:
 			case ADD_STAINING:
-				setStainingListChooserForMaterial(stainingPrototypeRepository.findAllByOrderByIndexInListAsc().stream()
-						.map(p -> new ListChooser<StainingPrototype>(p)).collect(Collectors.toList()));
+				setStainingListChooserForMaterial(stainingPrototypeRepository.findAllByOrderByPriorityCountDesc()
+						.stream().map(p -> new ListChooser<StainingPrototype>(p)).collect(Collectors.toList()));
 				break;
 			default:
 				setAllMaterialList(materialPresetRepository.findAll(true));
@@ -594,7 +594,7 @@ public class SettingsDialog extends AbstractTabDialog {
 			// adding tabs dynamically
 			for (StainingType type : StainingType.values()) {
 				getContainer().add(new StainingContainer(type,
-						stainingPrototypeRepository.findAllByTypeOrderByIndexInListAsc(type)));
+						stainingPrototypeRepository.findAllByTypeOrderByPriorityCountDesc(type)));
 			}
 		}
 
