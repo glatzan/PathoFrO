@@ -14,6 +14,7 @@ import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog.StainingPrototypeHolder;
 import com.patho.main.action.dialog.slides.AddSlidesDialog.StainingTypeContainer;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.util.ResourceBundle;
@@ -40,6 +41,7 @@ import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.ListItemService;
 import com.patho.main.service.PhysicianService;
+import com.patho.main.service.StainingPrototypeService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.ListChooser;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -97,6 +99,11 @@ public class SettingsDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private StainingPrototypeRepository stainingPrototypeRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private StainingPrototypeService stainingPrototypeService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -581,11 +588,17 @@ public class SettingsDialog extends AbstractTabDialog {
 		 */
 		private List<StainingContainer> container = new ArrayList<StainingContainer>();
 
+		/**
+		 * If true archived object will be shown.
+		 */
+		private boolean showArchived;
+
 		public StainingTab() {
 			setTabName("StainingTab");
 			setName("dialog.settings.stainings");
 			setViewID("staining");
 			setCenterInclude("include/stainingsList.xhtml");
+			setShowArchived(false);
 		}
 
 		@Override
@@ -593,22 +606,22 @@ public class SettingsDialog extends AbstractTabDialog {
 			getContainer().clear();
 			// adding tabs dynamically
 			for (StainingType type : StainingType.values()) {
-				getContainer().add(new StainingContainer(type,
-						stainingPrototypeRepository.findAllByTypeOrderByPriorityCountDesc(type)));
+				getContainer().add(new StainingContainer(type, stainingPrototypeRepository
+						.findAllByTypeIgnoreArchivedOrderByPriorityCountDesc(type, false, !isShowArchived())));
 			}
 		}
 
-		/**
-		 * Is fired if the list is reordered by the user via drag and drop
-		 *
-		 * @param event
-		 */
-		public void onReorderList(ReorderEvent event) {
-//			logger.debug(
-//					"List order changed, moved staining from " + event.getFromIndex() + " to " + event.getToIndex());
-//			ListOrder.reOrderList(getAllStainingsList());
-//			stainingPrototypeRepository.saveAll(getAllStainingsList(), "log.settings.staining.list.reoder");
-
+		public void archiveOrDelete(StainingPrototype p, boolean archive) {
+			if (archive) {
+				if (stainingPrototypeService.deleteOrArchive(p)) {
+					MessageHandler.sendGrowlMessagesAsResource("growl.staining.deleted");
+				} else
+					MessageHandler.sendGrowlMessagesAsResource("growl.staining.archive");
+			} else {
+				stainingPrototypeService.archive(p, false);
+				MessageHandler.sendGrowlMessagesAsResource("growl.staining.dearchive");
+			}
+			updateData();
 		}
 
 		@Getter
@@ -648,6 +661,7 @@ public class SettingsDialog extends AbstractTabDialog {
 			setName("dialog.settings.staticLists");
 			setViewID("staticLists");
 			setCenterInclude("include/staticLists.xhtml");
+			setShowArchived(false);
 		}
 
 		@Override

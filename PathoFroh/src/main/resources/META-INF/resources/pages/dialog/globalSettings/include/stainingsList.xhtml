@@ -48,16 +48,32 @@
 						</h:outputText>
 					</p:column>
 
-					<p:column>
+					<!-- priority -->
+					<p:column style="width:8%" sortBy="#{staining.priorityCount}"
+						headerText="#{msg['dialog.settings.stainings.priority']}"
+						styleClass="centerChildElements">
 						<h:outputLabel value="#{staining.priorityCount}"></h:outputLabel>
+					</p:column>
 
+					<!-- archived -->
+					<p:column headerText="#{msg['dialog.settings.stainings.archived']}"
+						styleClass="centerChildElements" sortBy="#{staining.archived}"
+						style="width:10% !important;"
+						rendered="#{dialog.settingsDialog.stainingTab.showArchived}">
+						<ui:fragment rendered="#{staining.archived}">
+							<i class="fa fa-archive icon-red"
+								title="#{msg['dialog.settings.list.archived.info']}" />
+						</ui:fragment>
 					</p:column>
 
 					<!-- options -->
-					<p:column style="width:10px">
+					<p:column style="width:5%;"
+						styleClass="centerChildElements centerHeaderChildElements">
 						<f:facet name="header">
 							<i class="fa fa-cog" />
 						</f:facet>
+
+						<!-- edit -->
 						<p:commandLink title="#{msg['dialog.settings.stainings.edit']}"
 							partialSubmit="true" process="@this"
 							actionListener="#{dialog.stainingEditDialog.initAndPrepareBean(staining)}">
@@ -66,6 +82,24 @@
 							<p:ajax event="dialogReturn" update="@form"
 								listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
 						</p:commandLink>
+
+						<!-- delete -->
+						<p:commandLink title="#{msg['dialog.settings.stainings.archive']}"
+							rendered="#{!staining.archived}"
+							actionListener="#{dialog.settingsDialog.stainingTab.archiveOrDelete(staining, true)}"
+							update="@form" process="@this" partialSubmit="true">
+							<i class="fa fa-fw fa-times" />
+						</p:commandLink>
+
+						<!-- unarchive -->
+						<p:commandLink
+							title="#{msg['dialog.settings.stainings.dearchive']}"
+							rendered="#{staining.archived}"
+							actionListener="#{dialog.settingsDialog.stainingTab.archiveOrDelete(staining, false)}"
+							update="@form" process="@this" partialSubmit="true">
+							<i class="fa fa-fw fa-check" />
+						</p:commandLink>
+
 					</p:column>
 				</p:dataTable>
 			</p:tab>
@@ -73,15 +107,22 @@
 	</p:outputPanel>
 
 	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
+		<h:panelGrid columns="2">
 
-			<h:panelGrid columns="2" styleClass="newTableContainer left">
-				<p:selectBooleanCheckbox styleClass="smallCheckbox"></p:selectBooleanCheckbox>
-				<h:outputLabel value="#{msg['dialog.settings.stainings.archived']}"></h:outputLabel>
+			<h:panelGrid columns="2" styleClass="left">
+				<!-- archived -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.settingsDialog.stainingTab.showArchived}">
+					<p:ajax event="change" update="@form" process="@this"
+						partialSubmit="true"
+						listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.settings.stainings.checkbox.archived']}" />
 			</h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newTableContainer right">
+			<h:panelGrid columns="2" styleClass="right">
+				<!-- new -->
 				<p:commandButton value="#{msg['dialog.settings.stainings.new']}"
 					icon="fa fa-fw fa-picture-o" partialSubmit="true" process="@this"
 					actionListener="#{dialog.stainingEditDialog.initAndPrepareBean()}">
@@ -89,6 +130,7 @@
 						listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
 				</p:commandButton>
 
+				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
 					actionListener="#{dialog.settingsDialog.hideDialog()}" />

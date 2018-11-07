@@ -41,6 +41,8 @@ Tasks:
 -> Accounting: Add rights for accounting dialog
 -> Programm Version Dialog: Enable emails in this dialog
 
+-> Enable Delete Funktion in Settings Dialog for Organizations, Persons, ListItems, currently only archving is possibleS
+
 Next Changes:
 -> patienten 1502 und 1503 löschen
 -> Patient menu aufräumen 

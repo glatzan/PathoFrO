@@ -12,5 +12,4 @@ public interface StainingPrototypeRepository
 	List<StainingPrototype> findAllByOrderByPriorityCountDesc();
 
 	List<StainingPrototype> findAllByTypeOrderByPriorityCountDesc(StainingType type);
-
 }

@@ -56,6 +56,11 @@
 						var="stainingType"
 						itemLabel="#{msg['enum.stainingType.'.concat(stainingType)]}" />
 				</p:selectOneMenu>
+
+				<!-- priority -->
+				<h:outputLabel value="#{msg['dialog.stainingEdit.priority']}"></h:outputLabel>
+				<p:inputText
+					value="#{dialog.stainingEditDialog.stainingPrototype.priorityCount}" />
 			</h:panelGrid>
 
 			<!-- Separator -->
@@ -66,8 +71,8 @@
 
 			<!-- batch -->
 			<h:panelGrid columns="1" styleClass="defaultHistoTable">
-			
-				<p:dataTable var="batch" scrollable="true" scrollHeight="330"
+
+				<p:dataTable var="batch" scrollable="true" scrollHeight="310"
 					rowStatePreserved="true" rowIndexVar="rowIdx" id="batchList"
 					styleClass="defaultHistoDataTable"
 					value="#{dialog.stainingEditDialog.stainingPrototype.batchDetails}">
@@ -104,13 +109,13 @@
 					</p:column>
 
 					<!-- content -->
-					<p:rowExpansion >
+					<p:rowExpansion>
 						<h:panelGrid columns="6" styleClass="defaultHistoTable"
 							columnClasses="columnMinWidth, columnAutoWidth, columnMinWidth, columnAutoWidth, columnMinWidth, columnAutoWidth ">
 
 							<!-- supplier -->
 							<h:outputLabel
-								value="#{msg['dialog.stainingEdit.batch.supplier']}" />
+								value="#{msg['dialog.stainingEdit.batch.supplier']} #{rowIdx}" /> 
 							<p:inputText value="#{batch.supplier}"></p:inputText>
 
 							<!-- quantity -->

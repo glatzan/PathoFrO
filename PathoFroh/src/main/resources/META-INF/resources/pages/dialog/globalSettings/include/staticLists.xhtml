@@ -16,7 +16,7 @@
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
 			style="width:100%">
 
-			<h:outputLabel value="#{msg['dialog.settings.material.new.name']}"></h:outputLabel>
+			<h:outputLabel value="#{msg['dialog.settings.list.list']}"></h:outputLabel>
 
 			<p:selectOneMenu title="#{msg['body.worklist.header.view']}"
 				value="#{dialog.settingsDialog.staticListTab.selectedStaticList}">
@@ -36,29 +36,30 @@
 			value="#{dialog.settingsDialog.staticListTab.staticListContent}">
 
 			<!-- name -->
-			<p:column headerText="#{msg['dialog.settings.material.name']}"
+			<p:column headerText="#{msg['dialog.settings.list.name']}"
 				sortBy="#{item.value}" style="width:auto">
 				<h:outputText value="#{item.value}" />
 			</p:column>
 
 			<!-- archived -->
-			<p:column headerText="#{msg['dialog.settings.material.archived']}"
+			<p:column headerText="#{msg['dialog.settings.list.archived']}"
 				styleClass="centerChildElements" sortBy="#{item.archived}"
-				style="width:11% !important;"
+				style="width:10% !important;"
 				rendered="#{dialog.settingsDialog.staticListTab.showArchived}">
 				<ui:fragment rendered="#{item.archived}">
 					<i class="fa fa-archive icon-red"
-						title="#{msg['dialog.organization.list.archive.info']}" />
+						title="#{msg['dialog.settings.list.archived.info']}" />
 				</ui:fragment>
 			</p:column>
 
-			<p:column style="width:7%; text-align:center;">
+			<p:column style="width:5%;"
+				styleClass="centerChildElements centerHeaderChildElements">
 				<f:facet name="header">
 					<i class="fa fa-cog" />
 				</f:facet>
 
 				<!-- edit -->
-				<p:commandLink title="#{msg['dialog.settings.material.edit']}"
+				<p:commandLink title="#{msg['dialog.settings.list.edit']}"
 					actionListener="#{dialog.listItemEditDialog.initAndPrepareBean(item)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-cog" />
@@ -67,14 +68,14 @@
 						update="@form" />
 				</p:commandLink>
 
-				<p:commandLink title="#{msg['dialog.settings.material.edit']}"
+				<p:commandLink title="#{msg['dialog.settings.list.archive']}"
 					rendered="#{!item.archived}" styleClass="noUnderlineAtLink"
 					actionListener="#{dialog.settingsDialog.staticListTab.archiveListItem(item, true)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 
-				<p:commandLink title="#{msg['dialog.settings.material.edit']}"
+				<p:commandLink title="#{msg['dialog.settings.list.dearchive']}"
 					rendered="#{item.archived}" styleClass="noUnderlineAtLink"
 					actionListener="#{dialog.settingsDialog.staticListTab.archiveListItem(item, false)}"
 					update="@form" process="@this" partialSubmit="true">
@@ -102,7 +103,7 @@
 						listener="#{dialog.settingsDialog.staticListTab.updateData()}" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
-					value="#{msg['dialog.settings.material.checkbox.archived']}" />
+					value="#{msg['dialog.settings.list.checkbox.archived']}" />
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right">
