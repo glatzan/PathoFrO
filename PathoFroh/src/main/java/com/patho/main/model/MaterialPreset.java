@@ -58,6 +58,8 @@ public class MaterialPreset implements EditAbleEntity<MaterialPreset>, LogAble, 
 	@Column
 	private int priorityCount;
 
+	@Column
+	private boolean archived;
 	
 	public MaterialPreset() {
 	}

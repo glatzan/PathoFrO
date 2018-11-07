@@ -40,6 +40,7 @@ import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.ListItemService;
+import com.patho.main.service.MaterialPresetService;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.StainingPrototypeService;
 import com.patho.main.service.UserService;
@@ -110,6 +111,11 @@ public class SettingsDialog extends AbstractTabDialog {
 	@Setter(AccessLevel.NONE)
 	private MaterialPresetRepository materialPresetRepository;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private MaterialPresetService materialPresetService;
+	
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -423,126 +429,62 @@ public class SettingsDialog extends AbstractTabDialog {
 		private List<ListChooser<StainingPrototype>> stainingListChooserForMaterial;
 
 		private boolean newMaterial;
+		/**
+		 * If true archived object will be shown.
+		 */
+		private boolean showArchived;
 
 		public MaterialTab() {
 			setTabName("MaterialTab");
 			setName("dialog.settings.materials");
+			setCenterInclude("include/materialList.xhtml");
 			setViewID("material");
+			setShowArchived(false);
 		}
 
 		@Override
 		public void updateData() {
-			setAllMaterials(materialPresetRepository.findAll(true));
+			setAllMaterials(
+					materialPresetRepository.findAllIgnoreArchivedOrderByPriorityCountDesc(false, !isShowArchived()));
 		}
 
-		/**
-		 * Prepares a new StainingListChooser for editing
-		 */
-		public void prepareNewMaterial() {
-			prepareEditMaterial(new MaterialPreset());
-		}
-
-		/**
-		 * Shows the edit material form
-		 *
-		 * @param stainingPrototype
-		 */
-		public void prepareEditMaterial(MaterialPreset material) {
-			setPage(MaterialPage.EDIT);
-			setEditMaterial(material);
-
-			setNewMaterial(material.getId() == 0 ? true : false);
-
-			updateData();
-		}
-
-		/**
-		 * Saves a material or creates a new one
-		 *
-		 * @param newStainingPrototypeList
-		 * @param origStainingPrototypeList
-		 */
-		public void saveMaterial() {
-			if (getEditMaterial().getId() == 0) {
-				logger.debug("Creating new Material " + getEditMaterial().getName());
-				// case new, save+
-				getAllMaterialList().add(getEditMaterial());
-
-				materialPresetRepository.save(getEditMaterial(),
-						resourceBundle.get("log.settings.material.new", getEditMaterial().getName()));
-
-				ListOrder.reOrderList(getAllMaterialList());
-
-				materialPresetRepository.saveAll(getAllMaterialList(),
-						resourceBundle.get("log.settings.material.list.reoder"));
-
+		public void archiveOrDelete(MaterialPreset m, boolean archive) {
+			if (archive) {
+				if (materialPresetService.deleteOrArchive(m)) {
+					MessageHandler.sendGrowlMessagesAsResource("growl.material.deleted");
+				} else
+					MessageHandler.sendGrowlMessagesAsResource("growl.material.archive");
 			} else {
-				logger.debug("Updating Material " + getEditMaterial().getName());
-				// case edit: update an save
-				materialPresetRepository.save(getEditMaterial(),
-						resourceBundle.get("log.settings.material.update", getEditMaterial().getName()));
+				materialPresetService.archive(m, false);
+				MessageHandler.sendGrowlMessagesAsResource("growl.material.dearchive");
 			}
-		}
-
-		/**
-		 * discards all changes for the stainingList
-		 */
-		public void discardMaterial() {
-			setPage(MaterialPage.LIST);
-			setEditMaterial(null);
-
 			updateData();
 		}
 
-		/**
-		 * show a list with all stanings for adding them to a material
-		 */
-		public void prepareAddStainingToMaterial() {
-			setPage(MaterialPage.ADD_STAINING);
-		}
+//		/**
+//		 * Adds all selected staining prototypes to the material
+//		 *
+//		 * @param stainingListChoosers
+//		 * @param stainingPrototypeList
+//		 */
+//		public void addStainingToMaterial() {
+//			getStainingListChooserForMaterial().forEach(p -> {
+//				if (p.isChoosen()) {
+//					getEditMaterial().getStainingPrototypes().add(p.getListItem());
+//				}
+//			});
+//		}
+//
+//		/**
+//		 * Removes a staining from a material
+//		 *
+//		 * @param toRemove
+//		 * @param stainingPrototypeList
+//		 */
+//		public void removeStainingFromStainingList(StainingPrototype toRemove) {
+//			getEditMaterial().getStainingPrototypes().remove(toRemove);
+//		}
 
-		/**
-		 * Adds all selected staining prototypes to the material
-		 *
-		 * @param stainingListChoosers
-		 * @param stainingPrototypeList
-		 */
-		public void addStainingToMaterial() {
-			getStainingListChooserForMaterial().forEach(p -> {
-				if (p.isChoosen()) {
-					getEditMaterial().getStainingPrototypes().add(p.getListItem());
-				}
-			});
-		}
-
-		/**
-		 * Removes a staining from a material
-		 *
-		 * @param toRemove
-		 * @param stainingPrototypeList
-		 */
-		public void removeStainingFromStainingList(StainingPrototype toRemove) {
-			getEditMaterial().getStainingPrototypes().remove(toRemove);
-		}
-
-		public void discardAddStainingToMaterial() {
-			setPage(MaterialPage.EDIT);
-		}
-
-		/**
-		 * Is fired if the list is reordered by the user via drag and drop
-		 *
-		 * @param event
-		 */
-		public void onReorderList(ReorderEvent event) {
-			logger.debug(
-					"List order changed, moved material from " + event.getFromIndex() + " to " + event.getToIndex());
-			ListOrder.reOrderList(getAllMaterialList());
-
-			materialPresetRepository.saveAll(getAllMaterialList(),
-					resourceBundle.get("log.settings.staining.list.reoder"));
-
-		}
 	}
 
 	@Getter

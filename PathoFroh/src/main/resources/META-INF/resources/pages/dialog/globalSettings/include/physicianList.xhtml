@@ -56,7 +56,7 @@
 			<!-- archived -->
 			<p:column headerText="#{msg['dialog.settings.person.list.archived']}"
 				styleClass="centerChildElements" sortBy="#{physician.archived}"
-				style="width:10% !important;"
+				style="width:80px;"
 				rendered="#{dialog.settingsDialog.physicianSettingsTab.showArchived}">
 				<ui:fragment rendered="#{physician.archived}">
 					<i class="fa fa-archive icon-red"
@@ -78,7 +78,7 @@
 			</p:column>
 
 			<!-- Optionen -->
-			<p:column style="width:5%;"
+			<p:column style="width:35px;"
 				styleClass="centerChildElements centerHeaderChildElements">
 				<f:facet name="header">
 					<i class="fa fa-cog"

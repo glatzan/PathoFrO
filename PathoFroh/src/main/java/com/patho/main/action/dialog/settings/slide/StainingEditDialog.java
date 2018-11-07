@@ -43,14 +43,14 @@ public class StainingEditDialog extends AbstractDialog<StainingEditDialog> {
 
 	private List<StainingPrototypeDetails> removeDetails;
 
-	public void initAndPrepareBean() {
-		if (initBean(new StainingPrototype()))
-			prepareDialog();
+	public StainingEditDialog initAndPrepareBean() {
+		return initAndPrepareBean(new StainingPrototype());
 	}
-	
-	public void initAndPrepareBean(StainingPrototype staining) {
+
+	public StainingEditDialog initAndPrepareBean(StainingPrototype staining) {
 		if (initBean(staining))
 			prepareDialog();
+		return this;
 	}
 
 	public boolean initBean(StainingPrototype staining) {

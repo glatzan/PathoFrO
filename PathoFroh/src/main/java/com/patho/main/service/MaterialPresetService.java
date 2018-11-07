@@ -14,6 +14,7 @@ import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
+import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.repository.StainingPrototypeDetailsRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
@@ -25,46 +26,33 @@ public class MaterialPresetService extends AbstractService {
 	@Autowired
 	private MaterialPresetRepository materialPresetRepository;
 
-	@Autowired
-	private StainingPrototypeDetailsRepository stainingPrototypeDetailsRepository;
+	public MaterialPreset addOrUpdate(MaterialPreset m) {
 
-	public StainingPrototype addOrUpdate(StainingPrototype p, List<StainingPrototypeDetails> removeDetails) {
+		m = materialPresetRepository.save(m, resourceBundle
+				.get(m.getId() == 0 ? "llog.settings.material.new" : "log.settings.material.update", m.getName()));
 
-		p = stainingPrototypeRepository.save(p,
-				resourceBundle.get(p.getId() == 0 ? "log.settings.staining.new" : "log.settings.staining.update", p));
-
-		for (StainingPrototypeDetails stainingPrototypeDetails : removeDetails) {
-			stainingPrototypeDetailsRepository.delete(stainingPrototypeDetails);
-		}
-
-		return p;
+		return m;
 	}
 
-	public StainingPrototype incrementPriorityCounter(MaterialPreset materialPreset) {
+	public MaterialPreset incrementPriorityCounter(MaterialPreset materialPreset) {
 		Optional<MaterialPreset> p = materialPresetRepository.findById(materialPreset.getId());
 
 		if (p.isPresent()) {
 			p.get().setPriorityCount(p.get().getPriorityCount() + 1);
-			return stainingPrototypeRepository.save(p.get(), resourceBundle
-					.get("log.settings.staining.priority.increment", p.get().getName(), p.get().getPriorityCount()));
+			return materialPresetRepository.save(p.get(), resourceBundle.get("log.settings.staining.priority.increment",
+					p.get().getName(), p.get().getPriorityCount()));
 		}
 
-		return prototype;
+		return materialPreset;
 	}
 
-	/**
-	 * Tries to delete the stainingprototype, if not possible the prototype will be
-	 * deleted
-	 * 
-	 * @param p
-	 */
 	@Transactional(propagation = Propagation.NEVER)
-	public boolean deleteOrArchive(StainingPrototype p) {
+	public boolean deleteOrArchive(MaterialPreset m) {
 		try {
-			stainingPrototypeRepository.delete(p, "log.settings.staining.deleted");
+			materialPresetRepository.delete(m, "log.settings.material.deleted");
 			return true;
 		} catch (Exception e) {
-			archive(p, true);
+			archive(m, true);
 			return false;
 		}
 	}
@@ -76,9 +64,9 @@ public class MaterialPresetService extends AbstractService {
 	 * @param archive
 	 * @return
 	 */
-	public StainingPrototype archive(StainingPrototype p, boolean archive) {
-		p.setArchived(archive);
-		return stainingPrototypeRepository.save(p, resourceBundle
-				.get(archive ? "log.settings.staining.archived" : "log.settings.staining.dearchived", p.getName()));
+	public MaterialPreset archive(MaterialPreset m, boolean archive) {
+		m.setArchived(archive);
+		return materialPresetRepository.save(m, resourceBundle
+				.get(archive ? "log.settings.material.archived" : "log.material.staining.dearchived", m.getName()));
 	}
 }

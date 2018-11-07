@@ -54,22 +54,22 @@ public class MaterialPresetRepositoryImpl extends AbstractRepositoryCustom imple
 		return getSession().createQuery(criteria).getResultList();
 	}
 
-	public List<StainingPrototype> findAllIgnoreArchivedOrderByPriorityCountDesc(StainingType type,
-			boolean loadStainings, boolean irgnoreArchived) {
+	public List<MaterialPreset> findAllIgnoreArchivedOrderByPriorityCountDesc(boolean loadStainings,
+			boolean irgnoreArchived) {
 		CriteriaBuilder qb = getCriteriaBuilder();
 		CriteriaQuery<MaterialPreset> criteria = qb.createQuery(MaterialPreset.class);
 		Root<MaterialPreset> root = criteria.from(MaterialPreset.class);
 
 		criteria.select(root);
 
-		criteria.where(getCriteriaBuilder().like(getCriteriaBuilder().lower(root.get(MaterialPreset_.name)),
-				name.toLowerCase()));
-
 		if (loadStainings)
 			root.fetch(MaterialPreset_.stainingPrototypes, JoinType.LEFT);
 
-		criteria.orderBy(getCriteriaBuilder().desc(root.get(MaterialPreset.priorityCount)));
-		
+		if (irgnoreArchived)
+			criteria.where(getCriteriaBuilder().equal(root.get(MaterialPreset_.archived), false));
+
+		criteria.orderBy(getCriteriaBuilder().desc(root.get(MaterialPreset_.priorityCount)));
+
 		criteria.distinct(true);
 
 		return getSession().createQuery(criteria).getResultList();

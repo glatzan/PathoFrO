@@ -49,7 +49,7 @@
 					</p:column>
 
 					<!-- priority -->
-					<p:column style="width:8%" sortBy="#{staining.priorityCount}"
+					<p:column style="width:9%" sortBy="#{staining.priorityCount}"
 						headerText="#{msg['dialog.settings.stainings.priority']}"
 						styleClass="centerChildElements">
 						<h:outputLabel value="#{staining.priorityCount}"></h:outputLabel>
@@ -58,7 +58,7 @@
 					<!-- archived -->
 					<p:column headerText="#{msg['dialog.settings.stainings.archived']}"
 						styleClass="centerChildElements" sortBy="#{staining.archived}"
-						style="width:10% !important;"
+						style="width:80px;"
 						rendered="#{dialog.settingsDialog.stainingTab.showArchived}">
 						<ui:fragment rendered="#{staining.archived}">
 							<i class="fa fa-archive icon-red"

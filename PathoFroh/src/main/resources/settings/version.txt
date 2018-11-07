@@ -144,11 +144,14 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
-
-/* Adding prioritycount for maerial*/
-Alter table materialpreset add priorityCount int;
+/* archvied for materiapreset*/
+Alter table materialpreset add archived boolean;
+UPDATE materialpreset SET archived = false;	
+	
+/* Adding prioritycount for material*/
+alter table materialpreset add priorityCount int;
 UPDATE materialpreset SET priorityCount = 0;
-Alter table materialpreset drop indexInList;
+alter table materialpreset drop indexInList;
 
 /* Adding prioritycount for stainingprototype*/
 Alter table stainingprototype add priorityCount int;

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:histo="http://java.sun.com/jsf/composite/components">
+
+<h:head>
+	<title><h:outputFormat
+			value="#{dialog.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}" /></title>
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
+	<h:outputScript library="scripts" name="commonFunctions.js" />
+</h:head>
+
+<h:body styleClass="histoDialogStyle">
+
+	<h:form enctype="multipart/form-data" id="dialogContent">
+
+		<div class="dialogHeader">
+			<h:panelGrid style="width:100%;" columns="2"
+				styleClass="defaultHistoTable">
+				<h:outputLabel
+					value="#{dialog.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}" />
+				<p:commandLink title="#{msg['general.close']}" style="float:right;"
+					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+			</h:panelGrid>
+		</div>
+
+
+		<div class="dialogContent">
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				columnClasses="columnWidth150, ">
+				<!-- name -->
+				<h:outputLabel value="#{msg['dialog.stainingEdit.name']}"></h:outputLabel>
+				<p:inputText style="widht: 200px"
+					value="#{dialog.stainingEditDialog.stainingPrototype.name}"></p:inputText>
+
+				<!-- commentary -->
+				<h:outputLabel value="#{msg['dialog.stainingEdit.commentary']}"></h:outputLabel>
+				<p:inputTextarea rows="3" style="width:80%"
+					value="#{dialog.stainingEditDialog.stainingPrototype.commentary}" />
+
+				<!-- type -->
+				<h:outputLabel value="#{msg['dialog.stainingEdit.type']}"></h:outputLabel>
+				<p:selectOneMenu
+					value="#{dialog.stainingEditDialog.stainingPrototype.type}">
+
+					<f:selectItems value="#{enumProvider.stainingTypes}"
+						var="stainingType"
+						itemLabel="#{msg['enum.stainingType.'.concat(stainingType)]}" />
+				</p:selectOneMenu>
+
+				<!-- priority -->
+				<h:outputLabel value="#{msg['dialog.stainingEdit.priority']}"></h:outputLabel>
+				<p:inputText
+					value="#{dialog.stainingEditDialog.stainingPrototype.priorityCount}" />
+			</h:panelGrid>
+
+			<!-- Separator -->
+			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+				<p:separator />
+				<h:outputLabel value="#{msg['dialog.stainingEdit.batch']}" />
+			</h:panelGrid>
+
+			<!-- batch -->
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+
+				<p:dataTable var="batch" scrollable="true" scrollHeight="310"
+					rowStatePreserved="true" rowIndexVar="rowIdx" id="batchList"
+					styleClass="defaultHistoDataTable"
+					value="#{dialog.stainingEditDialog.stainingPrototype.batchDetails}">
+
+					<!-- toggler -->
+					<p:column style="width:16px">
+						<p:rowToggler />
+					</p:column>
+
+					<!-- name -->
+					<p:column headerText="#{msg['dialog.stainingEdit.batch.name']}">
+						<h:outputLabel value="#{batch.supplier} " />
+						<h:outputLabel value="#{batch.deliveryDate}">
+							<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<!-- options -->
+					<p:column headerText="#" style="width:40px"
+						styleClass="centerHeaderChildElements">
+						<!-- clone -->
+						<p:commandLink title="#{msg['dialog.stainingEdit.batch.clone']}"
+							actionListener="#{dialog.stainingEditDialog.cloneBatch(batch)}"
+							update="@form" process="@this" partialSubmit="true">
+							<i class="fa fa-fw fa-copy" />
+						</p:commandLink>
+
+						<!-- remove -->
+						<p:commandLink title="#{msg['dialog.stainingEdit.batch.remove']}"
+							actionListener="#{dialog.stainingEditDialog.removeBatch(batch)}"
+							update="@form" process="@this" partialSubmit="true">
+							<i class="fa fa-fw fa-times-circle" />
+						</p:commandLink>
+					</p:column>
+
+					<!-- content -->
+					<p:rowExpansion>
+						<h:panelGrid columns="6" styleClass="defaultHistoTable"
+							columnClasses="columnMinWidth, columnAutoWidth, columnMinWidth, columnAutoWidth, columnMinWidth, columnAutoWidth ">
+
+							<!-- supplier -->
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.supplier']} #{rowIdx}" /> 
+							<p:inputText value="#{batch.supplier}"></p:inputText>
+
+							<!-- quantity -->
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.quantityDelivered']}" />
+							<p:inputText value="#{batch.quantityDelivered}"></p:inputText>
+
+							<!-- storage -->
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.storage']}" />
+							<p:inputText value="#{batch.storage}"></p:inputText>
+
+							<!--  -->
+							<h:outputLabel value="#{msg['dialog.stainingEdit.batch.host']}" />
+							<p:inputText value="#{batch.host}">
+								<p:ajax event="keyup" process="@this" partialSubmit="true"
+									update=":dialogContent:batchList:@row(#{rowIdx})" />
+							</p:inputText>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.specifity']}" />
+							<p:inputText value="#{batch.specifity}"></p:inputText>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.incubationTime']}" />
+							<p:inputText value="#{batch.incubationTime}"></p:inputText>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.deliveryDate']}" />
+							<p:calendar value="#{batch.deliveryDate}" locale="de"
+								navigator="true" pattern="dd.MM.yyyy" mask="true">
+								<p:ajax event="dateSelect" update=":dialogContent:batchList" />
+								<f:ajax event="change" update=":dialogContent:batchList" />
+							</p:calendar>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.bestBefore']}" />
+							<p:calendar value="#{batch.bestBefore}" locale="de"
+								navigator="true" pattern="dd.MM.yyyy" mask="true">
+								<p:ajax event="dateSelect" process="@this" partialSubmit="true"
+									update=":dialogContent:batchList:@row(#{rowIdx})" />
+								<f:ajax event="change" process="@this" partialSubmit="true"
+									update=":dialogContent:batchList:@row(#{rowIdx})" />
+							</p:calendar>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.deliveryDate']}" />
+							<p:calendar value="#{batch.emptyDate}" locale="de"
+								navigator="true" pattern="dd.MM.yyyy" mask="true">
+								<p:ajax event="dateSelect" process="@this" partialSubmit="true"
+									update=":dialogContent:batchList:@row(#{rowIdx})" />
+								<f:ajax event="change" process="@this" partialSubmit="true"
+									update=":dialogContent:batchList:@row(#{rowIdx})" />
+							</p:calendar>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.treatment']}" />
+							<p:inputText value="#{batch.treatment}"></p:inputText>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.dilution']}" />
+							<p:inputText value="#{batch.dilution}"></p:inputText>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.standardDilution']}" />
+							<p:inputText value="#{batch.standardDilution}"></p:inputText>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.positiveControl']}" />
+							<p:inputText value="#{batch.positiveControl}"></p:inputText>
+
+							<h:outputLabel
+								value="#{msg['dialog.stainingEdit.batch.process']}" />
+							<p:inputText value="#{batch.process}"></p:inputText>
+						</h:panelGrid>
+					</p:rowExpansion>
+				</p:dataTable>
+			</h:panelGrid>
+		</div>
+
+		<div class="buttonContainer">
+			<h:panelGrid columns="2">
+
+				<h:panelGrid columns="1" styleClass="left">
+					<!-- add batch button -->
+					<p:commandButton
+						value="#{msg['dialog.stainingEdit.button.newBatch']}"
+						icon="fa fa-bullseye" update="@form"
+						actionListener="#{dialog.stainingEditDialog.addBatch()}">
+					</p:commandButton>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" styleClass="right">
+					<!-- Save button -->
+					<p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
+						actionListener="#{dialog.stainingEditDialog.saveAndHide()}">
+					</p:commandButton>
+
+					<!-- Close button -->
+					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+						actionListener="#{dialog.stainingEditDialog.hideDialog()}"
+						icon="fa fa-times-circle">
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

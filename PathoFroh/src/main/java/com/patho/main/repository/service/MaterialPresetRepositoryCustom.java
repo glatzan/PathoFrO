@@ -11,12 +11,6 @@ public interface MaterialPresetRepositoryCustom {
 
 	public List<MaterialPreset> findAllByName(String name, boolean loadStainings);
 
-	/**
-	 * 
-	 * @param type
-	 * @param ignoreArchived
-	 * @return
-	 */
-	public List<StainingPrototype> findAllIgnoreArchivedOrderByPriorityCountDesc(StainingType type,
-			boolean loadStainings, boolean irgnoreArchived);
+	public List<MaterialPreset> findAllIgnoreArchivedOrderByPriorityCountDesc(boolean loadStainings,
+			boolean irgnoreArchived);
 }
