@@ -10,18 +10,20 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.action.handler.MessageHandler;
+import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
+import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.repository.StainingPrototypeDetailsRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
 
 @Service
 @Transactional
-public class StainingPrototypeService extends AbstractService {
+public class MaterialPresetService extends AbstractService {
 
 	@Autowired
-	private StainingPrototypeRepository stainingPrototypeRepository;
+	private MaterialPresetRepository materialPresetRepository;
 
 	@Autowired
 	private StainingPrototypeDetailsRepository stainingPrototypeDetailsRepository;
@@ -38,8 +40,8 @@ public class StainingPrototypeService extends AbstractService {
 		return p;
 	}
 
-	public StainingPrototype incrementPriorityCounter(StainingPrototype prototype) {
-		Optional<StainingPrototype> p = stainingPrototypeRepository.findById(prototype.getId());
+	public StainingPrototype incrementPriorityCounter(MaterialPreset materialPreset) {
+		Optional<MaterialPreset> p = materialPresetRepository.findById(materialPreset.getId());
 
 		if (p.isPresent()) {
 			p.get().setPriorityCount(p.get().getPriorityCount() + 1);

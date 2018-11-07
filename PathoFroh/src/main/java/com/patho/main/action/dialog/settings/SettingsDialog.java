@@ -410,22 +410,11 @@ public class SettingsDialog extends AbstractTabDialog {
 		}
 	}
 
-	public enum MaterialPage {
-		LIST, EDIT, ADD_STAINING;
-	}
-
 	@Getter
 	@Setter
 	public class MaterialTab extends AbstractTab {
 
-		public MaterialPage page;
-
-		private List<MaterialPreset> allMaterialList;
-
-		/**
-		 * StainingPrototype for creating and editing
-		 */
-		private MaterialPreset editMaterial;
+		private List<MaterialPreset> allMaterials;
 
 		/**
 		 * List for selecting staining, this list contains all stainings. They can be
@@ -439,22 +428,11 @@ public class SettingsDialog extends AbstractTabDialog {
 			setTabName("MaterialTab");
 			setName("dialog.settings.materials");
 			setViewID("material");
-			setPage(MaterialPage.LIST);
 		}
 
 		@Override
 		public void updateData() {
-
-			switch (getPage()) {
-			case EDIT:
-			case ADD_STAINING:
-				setStainingListChooserForMaterial(stainingPrototypeRepository.findAllByOrderByPriorityCountDesc()
-						.stream().map(p -> new ListChooser<StainingPrototype>(p)).collect(Collectors.toList()));
-				break;
-			default:
-				setAllMaterialList(materialPresetRepository.findAll(true));
-				break;
-			}
+			setAllMaterials(materialPresetRepository.findAll(true));
 		}
 
 		/**
@@ -564,18 +542,6 @@ public class SettingsDialog extends AbstractTabDialog {
 			materialPresetRepository.saveAll(getAllMaterialList(),
 					resourceBundle.get("log.settings.staining.list.reoder"));
 
-		}
-
-		@Override
-		public String getCenterInclude() {
-			switch (getPage()) {
-			case EDIT:
-				return "include/materialEdit.xhtml";
-			case ADD_STAINING:
-				return "include/materialAddStaining.xhtml";
-			default:
-				return "include/materialList.xhtml";
-			}
 		}
 	}
 

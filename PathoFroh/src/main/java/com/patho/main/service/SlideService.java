@@ -130,7 +130,7 @@ public class SlideService extends AbstractService {
 		Slide slide = new Slide();
 
 		slide.setCreationDate(System.currentTimeMillis());
-		slide.setSlidePrototype(stainingPrototypeService.incrementContactPriorityCounter(prototype));
+		slide.setSlidePrototype(stainingPrototypeService.incrementPriorityCounter(prototype));
 		slide.setParent(block);
 
 		// setting unique slide number

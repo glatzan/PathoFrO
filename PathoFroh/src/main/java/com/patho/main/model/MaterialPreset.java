@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,25 +24,41 @@ import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.model.interfaces.LogAble;
 
-@Entity
-@SequenceGenerator(name = "materialPreset_sequencegenerator", sequenceName = "materialPreset_sequence")
-public class MaterialPreset implements EditAbleEntity<MaterialPreset>, ListOrder<MaterialPreset>, LogAble, ID {
+import lombok.Getter;
+import lombok.Setter;
 
-	@Expose
+@Entity
+@Getter
+@Setter
+@SelectBeforeUpdate(true)
+@SequenceGenerator(name = "materialPreset_sequencegenerator", sequenceName = "materialPreset_sequence")
+public class MaterialPreset implements EditAbleEntity<MaterialPreset>, LogAble, ID {
+
+	@Id
+	@GeneratedValue(generator = "materialPreset_sequencegenerator")
+	@Column(unique = true, nullable = false)
+
 	private long id;
 
-	@Expose
+	@Column
 	private String name;
 
-	@Expose
+	@Column(columnDefinition = "text")
 	private String commentary;
 
-	@Expose
-	private List<StainingPrototype> stainingPrototypes;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<StainingPrototype> stainingPrototypes = new ArrayList<StainingPrototype>();
 
-	@Expose
-	private int indexInList;
+	/**
+	 * On every selection of the material, this number will be increased. The
+	 * materials can be ordered according to this value. So often used materials
+	 * will be displayed first.
+	 */
+	@Column
+	private int priorityCount;
 
+	
 	public MaterialPreset() {
 	}
 
@@ -54,71 +71,6 @@ public class MaterialPreset implements EditAbleEntity<MaterialPreset>, ListOrder
 	public String toString() {
 		return "ID: " + getId() + " Name: " + getName();
 	}
-
-	/********************************************************
-	 * Getter/Setter
-	 ********************************************************/
-	@Id
-	@GeneratedValue(generator = "materialPreset_sequencegenerator")
-	@Column(unique = true, nullable = false)
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	@Column
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Column(columnDefinition = "text")
-	public String getCommentary() {
-		return commentary;
-	}
-
-	public void setCommentary(String commentary) {
-		this.commentary = commentary;
-	}
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	public List<StainingPrototype> getStainingPrototypes() {
-		if (stainingPrototypes == null)
-			stainingPrototypes = new ArrayList<StainingPrototype>();
-
-		return stainingPrototypes;
-	}
-
-	public void setStainingPrototypes(List<StainingPrototype> stainingPrototypes) {
-		this.stainingPrototypes = stainingPrototypes;
-	}
-
-	/********************************************************
-	 * Getter/Setter
-	 ********************************************************/
-
-	/********************************************************
-	 * Interface ListOrder
-	 ********************************************************/
-	@Column
-	public int getIndexInList() {
-		return indexInList;
-	}
-
-	public void setIndexInList(int indexInList) {
-		this.indexInList = indexInList;
-	}
-
-	/********************************************************
-	 * Interface ListOrder
-	 ********************************************************/
 
 	@Transient
 	public void update(MaterialPreset stainingPrototypeList) {

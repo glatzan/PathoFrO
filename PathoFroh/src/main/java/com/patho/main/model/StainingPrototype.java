@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.annotations.SelectBeforeUpdate;
+
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.LogAble;
 
@@ -22,6 +24,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@SelectBeforeUpdate(true)
 @SequenceGenerator(name = "stainingPrototype_sequencegenerator", sequenceName = "stainingPrototype_sequence")
 @Getter
 @Setter
@@ -49,7 +52,7 @@ public class StainingPrototype implements LogAble, ID {
 
 	/**
 	 * On every selection of the staining, this number will be increased. The
-	 * staining can be ordered according to this value. So often used physicians
+	 * staining can be ordered according to this value. So often used stainings
 	 * will be displayed first.
 	 */
 	@Column
