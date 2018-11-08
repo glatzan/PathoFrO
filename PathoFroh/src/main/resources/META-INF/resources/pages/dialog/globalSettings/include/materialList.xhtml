@@ -19,6 +19,7 @@
 
 			<!-- name -->
 			<p:column headerText="#{msg['dialog.settings.material.name']}"
+				filterBy="#{material.name}" filterMatchMode="contains"
 				sortBy="#{material.name}" style="width:20%">
 				<h:outputText value="#{material.name}" />
 			</p:column>

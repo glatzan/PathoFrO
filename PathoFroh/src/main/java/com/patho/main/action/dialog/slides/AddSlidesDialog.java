@@ -51,7 +51,7 @@ public class AddSlidesDialog extends AbstractDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private WorkPhaseService workPhaseService;
-	
+
 	/**
 	 * Current block for which the slides are created
 	 */
@@ -122,18 +122,19 @@ public class AddSlidesDialog extends AbstractDialog {
 		setSlideCommentary(
 				listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.SLIDES, false));
 
-		setRestaining(block.getTask().isListedInFavouriteList(PredefinedFavouriteList.DiagnosisList,
-				PredefinedFavouriteList.ReDiagnosisList) || TaskStatus.checkIfReStainingFlag(block.getParent()));
-
 		setSelectMode(block == null);
+
+		if (!isSelectMode())
+			setRestaining(block.getTask().isListedInFavouriteList(PredefinedFavouriteList.DiagnosisList,
+					PredefinedFavouriteList.ReDiagnosisList) || TaskStatus.checkIfReStainingFlag(block.getParent()));
 
 		setContainer(new ArrayList<StainingTypeContainer>());
 
 		// adding tabs dynamically
 		for (StainingType type : StainingType.values()) {
-			getContainer().add(
-					new StainingTypeContainer(type, stainingPrototypeRepository.findAllByTypeOrderByPriorityCountDesc(type)
-							.stream().map(p -> new StainingPrototypeHolder(p)).collect(Collectors.toList())));
+			getContainer().add(new StainingTypeContainer(type,
+					stainingPrototypeRepository.findAllByTypeOrderByPriorityCountDesc(type).stream()
+							.map(p -> new StainingPrototypeHolder(p)).collect(Collectors.toList())));
 		}
 
 		return true;
@@ -149,21 +150,35 @@ public class AddSlidesDialog extends AbstractDialog {
 				.anyMatch(p -> p.getSelectedPrototypes() != null && !p.getSelectedPrototypes().isEmpty());
 	}
 
-	/**
-	 * Hides the dialog and returns the selection
-	 */
-	public void addSlidesAndHide() {
+	private List<StainingPrototypeHolder> getSelectedPrototypeHolders() {
 		// adding all selected prototypes to the result
 		List<StainingPrototypeHolder> prototpyes = new ArrayList<StainingPrototypeHolder>();
 
 		getContainer().stream().map(p -> p.getSelectedPrototypes()).collect(Collectors.toList())
 				.forEach(p -> prototpyes.addAll(p));
 
+		return prototpyes;
+	}
+
+	/**
+	 * Hides the dialog and returns the selection
+	 */
+	public void addAndHide() {
+		// adding all selected prototypes to the result
+		List<StainingPrototypeHolder> prototpyes = getSelectedPrototypeHolders();
+
 		if (!prototpyes.isEmpty()) {
 			Task task = slideService.createSlidesXTimesAndPersist(prototpyes, block, commentary, restaining, true,
 					asCompleted);
 			hideDialog(new StainingPhaseUpdateEvent(task));
 		}
+	}
+
+	public void selectAndHide() {
+		// adding all selected prototypes to the result
+		List<StainingPrototypeHolder> prototpyes = getSelectedPrototypeHolders();
+
+		hideDialog(new SlideSelectResult(prototpyes));
 	}
 
 	/**
@@ -202,7 +217,7 @@ public class AddSlidesDialog extends AbstractDialog {
 			this.prototype = stainingPrototype;
 		}
 	}
-	
+
 	/**
 	 * Return result, as a single object for passing via select event
 	 * 
@@ -213,18 +228,9 @@ public class AddSlidesDialog extends AbstractDialog {
 	@Setter
 	public class SlideSelectResult implements DialogReturnEvent {
 		private List<StainingPrototypeHolder> prototpyes;
-		private Block block;
-		private String commentary;
-		private boolean restaining;
-		private boolean asCompleted;
 
-		public SlideSelectResult(List<StainingTypeContainer> containers) {
-			this.block = AddSlidesDialog.this.block;
-			this.commentary = AddSlidesDialog.this.commentary;
-			this.restaining = AddSlidesDialog.this.restaining;
-			this.asCompleted = AddSlidesDialog.this.asCompleted;
-
-			this.prototpyes = new ArrayList<StainingPrototypeHolder>();
+		public SlideSelectResult(List<StainingPrototypeHolder> prototypes) {
+			this.prototpyes = prototypes;
 
 		}
 	}

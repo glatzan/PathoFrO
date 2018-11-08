@@ -115,7 +115,7 @@ public class SettingsDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private MaterialPresetService materialPresetService;
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -280,111 +280,27 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	}
 
-	public enum DiagnosisPage {
-		LIST, EDIT, EDIT_TEXT_TEMPLATE;
-	}
-
 	@Getter
 	@Setter
 	public class DiagnosisTab extends AbstractTab {
 
-		private DiagnosisPage page;
-
 		private List<DiagnosisPreset> diagnosisPresets;
 
-		private DefaultTransformer<DiagnosisPreset> diagnosisPresetsTransformer;
-
-		private DiagnosisPreset selectedDiagnosisPreset;
-
-		private boolean newDiagnosisPreset;
-
-		private ContactRole[] allRoles;
+		/**
+		 * If true archived object will be shown.
+		 */
+		private boolean showArchived;
 
 		public DiagnosisTab() {
 			setTabName("DiagnosisTab");
 			setName("dialog.settings.diagnosis");
 			setViewID("diagnoses");
-			setPage(DiagnosisPage.LIST);
-
-			setAllRoles(new ContactRole[] { ContactRole.FAMILY_PHYSICIAN, ContactRole.PATIENT, ContactRole.SURGEON,
-					ContactRole.PRIVATE_PHYSICIAN, ContactRole.RELATIVES });
+			setCenterInclude("include/diagnosisList.xhtml");
 		}
 
 		@Override
 		public void updateData() {
-			switch (getPage()) {
-			case EDIT:
-			case EDIT_TEXT_TEMPLATE:
-				if (getSelectedDiagnosisPreset() != null && getSelectedDiagnosisPreset().getId() != 0) {
-					setSelectedDiagnosisPreset(
-							diagnosisPresetRepository.findById(getSelectedDiagnosisPreset().getId()).orElse(null));
-				}
-				break;
-			default:
-				setDiagnosisPresets(diagnosisPresetRepository.findAllByOrderByIndexInListAsc());
-				break;
-			}
-
-		}
-
-		public void prepareNewDiagnosisPreset() {
-			prepareEditDiagnosisPreset(new DiagnosisPreset());
-		}
-
-		public void prepareEditDiagnosisPreset(DiagnosisPreset diagnosisPreset) {
-			setSelectedDiagnosisPreset(diagnosisPreset);
-			setPage(DiagnosisPage.EDIT);
-
-			setNewDiagnosisPreset(diagnosisPreset.getId() == 0 ? true : false);
-
-			updateData();
-		}
-
-		public void saveDiagnosisPreset() {
-			if (getSelectedDiagnosisPreset().getId() == 0) {
-
-				// case new, save
-				logger.debug("Creating new diagnosis " + getSelectedDiagnosisPreset().getCategory());
-
-				getDiagnosisPresets().add(getSelectedDiagnosisPreset());
-
-				diagnosisPresetRepository.save(getSelectedDiagnosisPreset(),
-						resourceBundle.get("log.settings.diagnosis.new", getSelectedDiagnosisPreset().getCategory()));
-
-				ListOrder.reOrderList(getDiagnosisPresets());
-
-				diagnosisPresetRepository.saveAll(getDiagnosisPresets(),
-						resourceBundle.get("log.settings.diagnosis.list.reoder"));
-
-			} else {
-
-				// case edit: update an save
-				logger.debug("Updating diagnosis " + getSelectedDiagnosisPreset().getCategory());
-
-				diagnosisPresetRepository.save(getSelectedDiagnosisPreset(), resourceBundle
-						.get("log.settings.diagnosis.update", getSelectedDiagnosisPreset().getCategory()));
-			}
-
-			discardDiagnosisPreset();
-
-		}
-
-		/**
-		 * Discards all changes of a diagnosisPrototype
-		 */
-		public void discardDiagnosisPreset() {
-			setPage(DiagnosisPage.LIST);
-			setSelectedDiagnosisPreset(null);
-
-			updateData();
-		}
-
-		public void prepareEditDiagnosisPresetTemplate() {
-			setPage(DiagnosisPage.EDIT_TEXT_TEMPLATE);
-		}
-
-		public void discardEditDiagnosisPresetTemplate() {
-			setPage(DiagnosisPage.EDIT);
+			setDiagnosisPresets(diagnosisPresetRepository.findAllByOrderByIndexInListAsc());
 		}
 
 		/**
@@ -402,18 +318,6 @@ public class SettingsDialog extends AbstractTabDialog {
 					resourceBundle.get("log.settings.diagnosis.list.reoder"));
 
 		}
-
-		@Override
-		public String getCenterInclude() {
-			switch (getPage()) {
-			case EDIT:
-				return "include/diagnosisEdit.xhtml";
-			case EDIT_TEXT_TEMPLATE:
-				return "include/diagnosisEditTemplate.xhtml";
-			default:
-				return "include/diagnosisList.xhtml";
-			}
-		}
 	}
 
 	@Getter
@@ -429,6 +333,7 @@ public class SettingsDialog extends AbstractTabDialog {
 		private List<ListChooser<StainingPrototype>> stainingListChooserForMaterial;
 
 		private boolean newMaterial;
+
 		/**
 		 * If true archived object will be shown.
 		 */
@@ -460,31 +365,6 @@ public class SettingsDialog extends AbstractTabDialog {
 			}
 			updateData();
 		}
-
-//		/**
-//		 * Adds all selected staining prototypes to the material
-//		 *
-//		 * @param stainingListChoosers
-//		 * @param stainingPrototypeList
-//		 */
-//		public void addStainingToMaterial() {
-//			getStainingListChooserForMaterial().forEach(p -> {
-//				if (p.isChoosen()) {
-//					getEditMaterial().getStainingPrototypes().add(p.getListItem());
-//				}
-//			});
-//		}
-//
-//		/**
-//		 * Removes a staining from a material
-//		 *
-//		 * @param toRemove
-//		 * @param stainingPrototypeList
-//		 */
-//		public void removeStainingFromStainingList(StainingPrototype toRemove) {
-//			getEditMaterial().getStainingPrototypes().remove(toRemove);
-//		}
-
 	}
 
 	@Getter
@@ -767,8 +647,6 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			// TODO Auto-generated method stub
-
 		}
 
 	}

@@ -9,7 +9,7 @@
 
 <h:head>
 	<title><h:outputFormat
-			value="#{dialog.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}" /></title>
+			value="#{dialog.materialEditDialog.newMaterial ? msg['dialog.materialEdit.new'] : msg['dialog.materialEdit.edit']}" /></title>
 	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
 		library="css" />
@@ -24,7 +24,7 @@
 			<h:panelGrid style="width:100%;" columns="2"
 				styleClass="defaultHistoTable">
 				<h:outputLabel
-					value="#{dialog.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}" />
+					value="#{dialog.materialEditDialog.newMaterial ? msg['dialog.materialEdit.new'] : msg['dialog.materialEdit.edit']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
@@ -35,49 +35,63 @@
 
 		<div class="dialogContent">
 
-			<p:panelGrid columns="2"
-				columnClasses="defaultListingTableColumnTop, "
-				styleClass="noBordersAll collapsedBordersAll " style="width:100%">
-				<h:outputLabel value="#{msg['dialog.settings.material.new.name']}"></h:outputLabel>
+			<h:panelGrid columns="2" styleClass="defaultHistoTable">
+
+				<!-- name -->
+				<h:outputLabel value="#{msg['dialog.materialEdit.name']}"></h:outputLabel>
 				<p:inputText style="width:390px"
-					value="#{dialog.settingsDialog.materialTab.editMaterial.name}" />
+					value="#{dialog.materialEditDialog.materialPreset.name}" />
 
-				<h:outputLabel
-					value="#{msg['dialog.settings.material.new.commentary']}"></h:outputLabel>
+				<!-- commentary -->
+				<h:outputLabel value="#{msg['dialog.materialEdit.commentary']}"></h:outputLabel>
 				<p:inputTextarea rows="3" style="width:390px"
-					value="#{dialog.settingsDialog.materialTab.editMaterial.commentary}" />
+					value="#{dialog.materialEditDialog.materialPreset.commentary}" />
 
-				<h:outputLabel
-					value="#{msg['dialog.settings.material.new.stainings']}"></h:outputLabel>
+				<!-- priority -->
+				<h:outputLabel value="#{msg['dialog.materialEdit.priority']}"></h:outputLabel>
+				<p:inputText
+					value="#{dialog.materialEditDialog.materialPreset.priorityCount}" />
 
-				<p:dataTable var="staining" style="width:400px" scrollable="true"
-					scrollHeight="150" styleClass="highlightedDataTable"
-					value="#{dialog.settingsDialog.materialTab.editMaterial.stainingPrototypes}">
+			</h:panelGrid>
 
-					<p:column
-						headerText="#{msg['dialog.settings.material.new.stainings.name']}"
+			<!-- Separator -->
+			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+				<p:separator />
+				<h:outputLabel value="#{msg['dialog.materialEdit.stainings']}" />
+			</h:panelGrid>
+
+			<!-- stanings -->
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+				<p:dataTable var="staining" scrollable="true" scrollHeight="250"
+					styleClass="defaultHistoDataTable"
+					value="#{dialog.materialEditDialog.materialPreset.stainingPrototypes}">
+
+					<p:column headerText="#{msg['dialog.materialEdit.stainings.name']}"
 						sortBy="#{staining.name}" style="width:30%">
 						<h:outputText value="#{staining.name}" />
 					</p:column>
 
-					<p:column
-						headerText="#{msg['dialog.settings.material.new.stainings.type']}"
+					<p:column headerText="#{msg['dialog.materialEdit.stainings.type']}"
 						sortBy="#{staining.type}">
 						<h:outputText
 							value="#{msg['enum.stainingType.'.concat(staining.type)]}" />
 					</p:column>
 
-					<p:column style="width:10%; text-align:center;">
+					<!-- remove -->
+					<p:column style="width:15px;"
+						styleClass="centerChildElements centerChildElements">
+						<f:facet name="header">
+							<i class="fa fa-cog" />
+						</f:facet>
 						<p:commandLink title="#{msg['general.remove']}"
-							actionListener="#{dialog.settingsDialog.materialTab.removeStainingFromStainingList(staining)}"
+							actionListener="#{dialog.materialEditDialog.removeStaining(staining)}"
 							update="@form">
 							<i class="fa fa-trash-o" />
 						</p:commandLink>
 					</p:column>
 
 				</p:dataTable>
-
-			</p:panelGrid>
+			</h:panelGrid>
 		</div>
 
 		<div class="buttonContainer">
@@ -86,21 +100,23 @@
 				<h:panelGrid columns="1" styleClass="left">
 					<!-- add batch button -->
 					<p:commandButton
-						value="#{msg['dialog.settings.material.new.stainings.add']}"
-						icon="fa fa-bullseye" update="@form"
-						actionListener="#{dialog.stainingEditDialog.addBatch()}">
+						value="#{msg['dialog.materialEdit.stainings.add']}"
+						icon="fa fa-picture-o" update="@form"
+						actionListener="#{dialog.addSlidesDialog.initAndPrepareBean()}">
+						<p:ajax event="dialogReturn" update="@form"
+							listener="#{dialog.materialEditDialog.onDefaultDialogReturn}" />
 					</p:commandButton>
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" styleClass="right">
 					<!-- Save button -->
 					<p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
-						actionListener="#{dialog.stainingEditDialog.saveAndHide()}">
+						actionListener="#{dialog.materialEditDialog.saveAndHide()}">
 					</p:commandButton>
 
 					<!-- Close button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						actionListener="#{dialog.stainingEditDialog.hideDialog()}"
+					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
+						actionListener="#{dialog.materialEditDialog.hideDialog()}"
 						icon="fa fa-times-circle">
 					</p:commandButton>
 				</h:panelGrid>

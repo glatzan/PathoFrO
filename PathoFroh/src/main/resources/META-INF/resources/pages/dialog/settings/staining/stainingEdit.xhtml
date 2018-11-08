@@ -110,12 +110,11 @@
 
 					<!-- content -->
 					<p:rowExpansion>
-						<h:panelGrid columns="6" styleClass="defaultHistoTable"
-							columnClasses="columnMinWidth, columnAutoWidth, columnMinWidth, columnAutoWidth, columnMinWidth, columnAutoWidth ">
+						<h:panelGrid columns="6" styleClass="defaultHistoTable">
 
 							<!-- supplier -->
 							<h:outputLabel
-								value="#{msg['dialog.stainingEdit.batch.supplier']} #{rowIdx}" /> 
+								value="#{msg['dialog.stainingEdit.batch.supplier']}" />
 							<p:inputText value="#{batch.supplier}"></p:inputText>
 
 							<!-- quantity -->
@@ -131,8 +130,6 @@
 							<!--  -->
 							<h:outputLabel value="#{msg['dialog.stainingEdit.batch.host']}" />
 							<p:inputText value="#{batch.host}">
-								<p:ajax event="keyup" process="@this" partialSubmit="true"
-									update=":dialogContent:batchList:@row(#{rowIdx})" />
 							</p:inputText>
 
 							<h:outputLabel
@@ -147,28 +144,18 @@
 								value="#{msg['dialog.stainingEdit.batch.deliveryDate']}" />
 							<p:calendar value="#{batch.deliveryDate}" locale="de"
 								navigator="true" pattern="dd.MM.yyyy" mask="true">
-								<p:ajax event="dateSelect" update=":dialogContent:batchList" />
-								<f:ajax event="change" update=":dialogContent:batchList" />
 							</p:calendar>
 
 							<h:outputLabel
 								value="#{msg['dialog.stainingEdit.batch.bestBefore']}" />
 							<p:calendar value="#{batch.bestBefore}" locale="de"
 								navigator="true" pattern="dd.MM.yyyy" mask="true">
-								<p:ajax event="dateSelect" process="@this" partialSubmit="true"
-									update=":dialogContent:batchList:@row(#{rowIdx})" />
-								<f:ajax event="change" process="@this" partialSubmit="true"
-									update=":dialogContent:batchList:@row(#{rowIdx})" />
 							</p:calendar>
 
 							<h:outputLabel
 								value="#{msg['dialog.stainingEdit.batch.deliveryDate']}" />
 							<p:calendar value="#{batch.emptyDate}" locale="de"
 								navigator="true" pattern="dd.MM.yyyy" mask="true">
-								<p:ajax event="dateSelect" process="@this" partialSubmit="true"
-									update=":dialogContent:batchList:@row(#{rowIdx})" />
-								<f:ajax event="change" process="@this" partialSubmit="true"
-									update=":dialogContent:batchList:@row(#{rowIdx})" />
 							</p:calendar>
 
 							<h:outputLabel

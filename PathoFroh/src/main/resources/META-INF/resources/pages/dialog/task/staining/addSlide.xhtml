@@ -35,7 +35,7 @@
 				var="container">
 				<p:tab title="#{container.type}">
 					<h:panelGrid columns="2" cellpadding="5">
-					
+
 						<p:dataTable var="stainingHolder"
 							styleClass="defaultHistoDataTable"
 							rowKey="#{stainingHolder.prototype.id}"
@@ -64,7 +64,7 @@
 							<p:ajax event="rowUnselectCheckbox"
 								update=":dialogContent:buttonContainer"></p:ajax>
 						</p:dataTable>
-						
+
 					</h:panelGrid>
 				</p:tab>
 			</p:accordionPanel>
@@ -118,11 +118,21 @@
 				<h:panelGrid columns="2" styleClass="right" id="buttonContainer">
 					<!-- confirm -->
 					<p:commandButton value="#{msg['general.create']}"
+						rendered="#{!dialog.addSlidesDialog.selectMode}"
+						icon="fa fa-check-circle-o"
+						process="@this :dialogContent:commentaryTable"
+						disabled="#{!dialog.addSlidesDialog.isStainingSelected()}">
+						<f:actionListener binding="#{dialog.addSlidesDialog.addAndHide()}"></f:actionListener>
+					</p:commandButton>
+
+					<!-- select -->
+					<p:commandButton value="#{msg['general.create']}"
+						rendered="#{dialog.addSlidesDialog.selectMode}"
 						icon="fa fa-check-circle-o"
 						process="@this :dialogContent:commentaryTable"
 						disabled="#{!dialog.addSlidesDialog.isStainingSelected()}">
 						<f:actionListener
-							binding="#{dialog.addSlidesDialog.addSlidesAndHide()}"></f:actionListener>
+							binding="#{dialog.addSlidesDialog.selectAndHide()}"></f:actionListener>
 					</p:commandButton>
 
 					<!-- Abort button -->
