@@ -14,18 +14,28 @@
 
 	<p:outputPanel styleClass="bodyPannelFull">
 
-		<p:dataTable var="group" scrollable="true" scrollHeight="440"
+		<p:dataTable var="group" scrollable="true" scrollHeight="460"
 			rowKey="#{group.id}" rowIndexVar="rowIdx" id="batchList"
-			styleClass="newStyleDataTable"
+			styleClass="defaultHistoDataTable"
 			value="#{dialog.settingsDialog.histoGroupTab.groups}">
 
+			<!-- name -->
 			<p:column headerText="#{msg['dialog.settings.group.name']}">
 				<h:outputText value="#{group.name}" />
 			</p:column>
 
-			<p:column 
+			<!-- archive -->
+			<p:commandLink title="#{msg['dialog.settings.group.archived']}"
+				rendered="#{!group.archived}"
+				actionListener="#{dialog.settingsDialog.histoGroupTab.archiveOrDelete(group, true)}"
+				update="@form" process="@this" partialSubmit="true">
+				<i class="fa fa-fw fa-times" />
+			</p:commandLink>
+
+			<p:column
 				rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_GROUP')}"
-				style="width:40px;" styleClass="optionsColumn">
+				style="width:35px;"
+				styleClass="centerChildElements centerHeaderChildElements">
 
 				<f:facet name="header">
 					<i class="fa fa-cog"
@@ -40,6 +50,24 @@
 						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
 						update="@form" />
 					<i class="fa fa-fw fa-cog" />
+				</p:commandLink>
+
+				<!-- archive -->
+				<p:commandLink
+					title="#{msg['dialog.settings.diagnosis.list.option.archive']}"
+					rendered="#{!diagnosisPreset.archived}"
+					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, true)}"
+					update="@form" process="@this" partialSubmit="true">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+
+				<!-- dearchive -->
+				<p:commandLink
+					title="#{msg['dialog.settings.diagnosis.list.option.dearchive']}"
+					rendered="#{diagnosisPreset.archived}"
+					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, false)}"
+					update="@form" process="@this" partialSubmit="true">
+					<i class="fa fa-fw fa-undo" />
 				</p:commandLink>
 
 				<!-- archive -->
@@ -63,7 +91,7 @@
 
 			<h:panelGrid columns="2" styleClass="newTableContainer left">
 				<p:selectBooleanCheckbox styleClass="centerCheckbox"
-					title="#{msg['dialog.settings.group.archive.text']}"
+					title="#{msg['dialog.settings.group.checkboxarchive.text']}"
 					value="#{dialog.settingsDialog.histoGroupTab.showArchived}">
 					<p:ajax
 						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
@@ -71,7 +99,7 @@
 				</p:selectBooleanCheckbox>
 
 				<h:outputLabel styleClass="standardFont"
-					value="#{msg['dialog.settings.group.archive']}"
+					value="#{msg['dialog.settings.group.checkbox.archive=']}"
 					style="margin-left:5px;"></h:outputLabel>
 			</h:panelGrid>
 

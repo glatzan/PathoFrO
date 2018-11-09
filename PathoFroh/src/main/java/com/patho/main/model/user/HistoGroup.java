@@ -34,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @SequenceGenerator(name = "group_sequencegenerator", sequenceName = "group_sequence")
 @Getter
 @Setter
-@Slf4j
 public class HistoGroup implements GrantedAuthority, ID, ArchivAble {
 
 	private static final long serialVersionUID = 5926752130546123895L;
@@ -80,13 +79,13 @@ public class HistoGroup implements GrantedAuthority, ID, ArchivAble {
 	@Column
 	private boolean userDeactivated;
 	
+	@Column(columnDefinition = "boolean default true")
+	private boolean archived;
+	
 	@Transient
 	public String getAuthority() {
 		return authRole.name();
 	}
-
-	@Column(columnDefinition = "boolean default true")
-	private boolean archived;
 
 	public HistoGroup() {
 	}

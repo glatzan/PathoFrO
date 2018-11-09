@@ -19,25 +19,30 @@
 			value="#{dialog.settingsDialog.diagnosisTab.diagnosisPresets}"
 			styleClass="defaultHistoDataTable">
 
-			<!-- diagnosis text -->
+			<!-- diagnosis name -->
 			<p:column sortBy="#{diagnosisPreset.diagnosisText}"
 				headerText="#{msg['dialog.settings.diagnosis.list.diagnosis']}"
-				style="width:40%">
+				style="width:35%">
 				<h:outputText value="#{diagnosisPreset.diagnosis}" />
 			</p:column>
 
-			<!-- diagnosis name -->
+			<!-- diagnosis category -->
 			<p:column sortBy="#{diagnosisPreset.name}"
 				headerText="#{msg['dialog.settings.diagnosis.list.category']}"
-				style="width:auto">
-				<h:outputText value="#{diagnosisPreset.category}" />
+				style="width:15%">
+				<h:outputLabel value="#{diagnosisPreset.category}"
+					title="#{diagnosisPreset.category}">
+					<f:converter converterId="org.histo.ui.TruncateConverter"
+						truncateAt="15" />
+					<f:attribute name="truncateAt" value="15" />
+					<f:attribute name="continuationMark" value="..." />
+				</h:outputLabel>
 			</p:column>
-
 
 			<!-- commentary -->
 			<p:column
 				headerText="#{msg['dialog.settings.diagnosis.list.commentary']}"
-				style="width:20%">
+				style="width:atuo">
 				<h:outputLabel value="#{diagnosisPreset.commentary}">
 					<f:converter converterId="org.histo.ui.TruncateConverter"
 						truncateAt="40" />
@@ -46,21 +51,56 @@
 				</h:outputLabel>
 			</p:column>
 
-			<p:column style="width:7%; text-align:center;">
+			<!-- archived -->
+			<p:column headerText="#{msg['dialog.settings.diagnosis.list.archived']}"
+				styleClass="centerChildElements" sortBy="#{diagnosisPreset.archived}"
+				style="width:80px;"
+				rendered="#{dialog.settingsDialog.diagnosisTab.showArchived}">
+				<ui:fragment rendered="#{diagnosisPreset.archived}">
+					<i class="fa fa-archive icon-red"
+						title="#{msg['dialog.settings.diagnosis.list.archived.info']}" />
+				</ui:fragment>
+			</p:column>
+
+			<!-- options -->
+			<p:column style="width:35px;"
+				styleClass="centerChildElements centerHeaderChildElements">
 				<f:facet name="header">
 					<i class="fa fa-cog"
 						title="#{msg['dialog.settings.diagnosis.list.options']}" />
 				</f:facet>
+
+				<!-- edit -->
 				<p:commandLink
 					title="#{msg['dialog.settings.diagnosis.list.options.edit']}"
-					actionListener="#{dialog.settingsDialog.diagnosisTab.prepareEditDiagnosisPreset(diagnosisPreset)}"
+					actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean(diagnosisPreset)}"
 					update="@form" partialSubmit="true" process="@this">
 					<i class="fa fa-fw fa-cog" />
+					<p:ajax event="dialogReturn"
+						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"
+						update="@form" />
+				</p:commandLink>
+
+				<!-- archive -->
+				<p:commandLink
+					title="#{msg['dialog.settings.diagnosis.list.archive']}"
+					rendered="#{!diagnosisPreset.archived}"
+					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, true)}"
+					update="@form" process="@this" partialSubmit="true">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+
+				<!-- dearchive -->
+				<p:commandLink
+					title="#{msg['dialog.settings.diagnosis.list.dearchive']}"
+					rendered="#{diagnosisPreset.archived}"
+					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, false)}"
+					update="@form" process="@this" partialSubmit="true">
+					<i class="fa fa-fw fa-undo" />
 				</p:commandLink>
 			</p:column>
 
 			<p:ajax event="rowReorder" update="@form" process="@form"
-				partialSubmit="true"
 				listener="#{dialog.settingsDialog.diagnosisTab.onReorderList}" />
 		</p:dataTable>
 	</p:outputPanel>
@@ -70,18 +110,29 @@
 			styleClass="newTableContainer">
 
 			<h:panelGrid columns="2" styleClass="newTableContainer left">
-				<p:selectBooleanCheckbox styleClass="smallCheckbox"></p:selectBooleanCheckbox>
-				<h:outputLabel style="margin-left:5px;"
-					value="#{msg['dialog.settings.diagnosis.list.checkbox.archived']}"></h:outputLabel>
+				<!-- archived -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.settingsDialog.diagnosisTab.showArchived}">
+					<p:ajax event="change" update="@form" process="@this"
+						partialSubmit="true"
+						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}" />
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.settings.diagnosis.list.checkbox.archived']}" />
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<!--  new diagnosis -->
 				<p:commandButton
 					value="#{msg['dialog.settings.diagnosis.list.button.new']}"
-					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
-					actionListener="#{dialog.settingsDialog.diagnosisTab.prepareNewDiagnosisPreset()}"
-					update="@form"></p:commandButton>
+					icon="fa fa-fw fa-plus-circle"
+					actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean()}">
+					<p:ajax event="dialogReturn"
+						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"
+						update="@form" />
+				</p:commandButton>
 
+				<!-- abor -->
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle" partialSubmit="true" process="@this"
 					actionListener="#{dialog.settingsDialog.hideDialog()}" />

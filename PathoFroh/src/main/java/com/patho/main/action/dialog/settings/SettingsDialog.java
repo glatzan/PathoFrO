@@ -39,6 +39,8 @@ import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.repository.UserRepository;
+import com.patho.main.service.DiagnosisPresetService;
+import com.patho.main.service.DiagnosisService;
 import com.patho.main.service.ListItemService;
 import com.patho.main.service.MaterialPresetService;
 import com.patho.main.service.PhysicianService;
@@ -90,11 +92,6 @@ public class SettingsDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private GroupRepository groupRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DiagnosisPresetRepository diagnosisPresetRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -282,7 +279,18 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class DiagnosisTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private DiagnosisPresetService diagnosisPresetService;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private DiagnosisPresetRepository diagnosisPresetRepository;
 
 		private List<DiagnosisPreset> diagnosisPresets;
 
@@ -296,11 +304,13 @@ public class SettingsDialog extends AbstractTabDialog {
 			setName("dialog.settings.diagnosis");
 			setViewID("diagnoses");
 			setCenterInclude("include/diagnosisList.xhtml");
+			setShowArchived(false);
 		}
 
 		@Override
 		public void updateData() {
-			setDiagnosisPresets(diagnosisPresetRepository.findAllByOrderByIndexInListAsc());
+			setDiagnosisPresets(
+					diagnosisPresetRepository.findAllIgnoreArchivedByOrderByIndexInListAsc(!isShowArchived()));
 		}
 
 		/**
@@ -311,12 +321,26 @@ public class SettingsDialog extends AbstractTabDialog {
 		public void onReorderList(ReorderEvent event) {
 			logger.debug(
 					"List order changed, moved material from " + event.getFromIndex() + " to " + event.getToIndex());
+			diagnosisPresetService.reoderList(getDiagnosisPresets());
+			updateData();
+		}
 
-			ListOrder.reOrderList(getDiagnosisPresets());
-
-			diagnosisPresetRepository.saveAll(getDiagnosisPresets(),
-					resourceBundle.get("log.settings.diagnosis.list.reoder"));
-
+		/**
+		 * 
+		 * @param d
+		 * @param archive
+		 */
+		public void archiveOrDelete(DiagnosisPreset d, boolean archive) {
+			if (archive) {
+				if (diagnosisPresetService.deleteOrArchive(d)) {
+					MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.deleted");
+				} else
+					MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.archive");
+			} else {
+				diagnosisPresetService.archive(d, false);
+				MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.dearchive");
+			}
+			updateData();
 		}
 	}
 

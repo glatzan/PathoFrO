@@ -33,7 +33,7 @@
 		</div>
 
 
-		<div class="dialogContent" style="height: 500px;">
+		<div class="dialogContent">
 
 			<h:panelGrid columns="2" styleClass="defaultHistoTable"
 				columnClasses="columnWidth150, ">
@@ -52,6 +52,7 @@
 
 				</p:selectOneMenu>
 
+				<!-- archived -->
 				<h:outputLabel value="#{msg['dialog.listItem.archived']}"></h:outputLabel>
 				<p:selectBooleanCheckbox
 					value="#{dialog.listItemEditDialog.listItem.archived}">

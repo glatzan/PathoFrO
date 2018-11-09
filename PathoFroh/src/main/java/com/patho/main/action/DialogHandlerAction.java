@@ -67,8 +67,6 @@ public class DialogHandlerAction {
 
 	private EditUserDialog editUserDialog = new EditUserDialog();
 
-	private OrganizationEditDialog organizationEditDialog = new OrganizationEditDialog();
-
 	private NotificationPhaseExitDialog notificationPhaseExitDialog = new NotificationPhaseExitDialog();
 
 }

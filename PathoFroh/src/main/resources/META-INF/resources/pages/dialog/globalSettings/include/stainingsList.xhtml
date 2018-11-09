@@ -62,7 +62,7 @@
 						rendered="#{dialog.settingsDialog.stainingTab.showArchived}">
 						<ui:fragment rendered="#{staining.archived}">
 							<i class="fa fa-archive icon-red"
-								title="#{msg['dialog.settings.list.archived.info']}" />
+								title="#{msg['dialog.settings.stainings.archived.info']}" />
 						</ui:fragment>
 					</p:column>
 
@@ -84,7 +84,7 @@
 						</p:commandLink>
 
 						<!-- delete -->
-						<p:commandLink title="#{msg['dialog.settings.stainings.archive']}"
+						<p:commandLink title="#{msg['dialog.settings.stainings.option.archive']}"
 							rendered="#{!staining.archived}"
 							actionListener="#{dialog.settingsDialog.stainingTab.archiveOrDelete(staining, true)}"
 							update="@form" process="@this" partialSubmit="true">
@@ -93,11 +93,11 @@
 
 						<!-- unarchive -->
 						<p:commandLink
-							title="#{msg['dialog.settings.stainings.dearchive']}"
+							title="#{msg['dialog.settings.stainings.option.dearchive']}"
 							rendered="#{staining.archived}"
 							actionListener="#{dialog.settingsDialog.stainingTab.archiveOrDelete(staining, false)}"
 							update="@form" process="@this" partialSubmit="true">
-							<i class="fa fa-fw fa-check" />
+							<i class="fa fa-fw fa-undo" />
 						</p:commandLink>
 
 					</p:column>

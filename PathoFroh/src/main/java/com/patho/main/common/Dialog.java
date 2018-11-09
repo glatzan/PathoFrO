@@ -33,8 +33,9 @@ public enum Dialog {
 	SETTINGS("/pages/dialog/globalSettings/settings", null, 1024, 600, false, false, true), // 16:9
 	SETTINGS_PHYSICIAN_SEARCH("/pages/dialog/settings/physician/physicianSearch/physicianSearch", null, 1280, 720, false, false, true), // 16:9								// OK
 	SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1280, 740, false, false, true), 														// OK
-	SETTINGS_STAINING_EDIT("/pages/dialog/settings/staining/stainingEdit", null, 1024, 600, false, false, true), //  16:9
-	SETTINGS_MATERIAL_EDIT("/pages/dialog/settings/material/materialEdit", null, 1024, 600, false, false, true), //  16:9
+	SETTINGS_STAINING_EDIT("/pages/dialog/settings/staining/stainingEdit", null, 1024, 600, false, false, true), 															// OK
+	SETTINGS_MATERIAL_EDIT("/pages/dialog/settings/material/materialEdit", null, 1024, 600, false, false, true), 															// OK
+	SETTINGS_DIAGNOSIS_EDIT("/pages/dialog/settings/diagnosis/diagnosisEdit", null, 1024, 600, false, false, true), 														// OK														
 	SETTINGS_GROUP_LIST("/pages/dialog/settings/groups/groupList", null, 1024, 600, false, false, true), //  16:9
 	SETTINGS_GROUP_EDIT("/pages/dialog/settings/groups/groupEdit", null, 1024, 600, false, false, true), //  16:9
 	SETTINGS_USERS_LIST("/pages/dialog/settings/users/usersList", null, 1024, 600, false, false, true), //  16:9

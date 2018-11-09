@@ -26,6 +26,7 @@ import com.patho.main.action.dialog.print.CustomAddressDialog;
 import com.patho.main.action.dialog.print.FaxDocumentDialog;
 import com.patho.main.action.dialog.print.PrintDialog;
 import com.patho.main.action.dialog.settings.SettingsDialog;
+import com.patho.main.action.dialog.settings.diagnosis.DiagnosisPresetEditDialog;
 import com.patho.main.action.dialog.settings.favourites.FavouriteListEditDialog;
 import com.patho.main.action.dialog.settings.listitem.ListItemEditDialog;
 import com.patho.main.action.dialog.settings.material.MaterialEditDialog;
@@ -92,4 +93,6 @@ public class DialogHandler {
 	private ListItemEditDialog listItemEditDialog = new ListItemEditDialog();
 	private StainingEditDialog stainingEditDialog = new StainingEditDialog();
 	private MaterialEditDialog materialEditDialog = new MaterialEditDialog();
+	private DiagnosisPresetEditDialog diagnosisPresetEditDialog = new DiagnosisPresetEditDialog();
+	private GroupEditDialog groupEditDialog = new GroupEditDialog();
 }

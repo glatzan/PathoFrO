@@ -49,7 +49,7 @@
 				rendered="#{dialog.settingsDialog.materialTab.showArchived}">
 				<ui:fragment rendered="#{material.archived}">
 					<i class="fa fa-archive icon-red"
-						title="#{msg['dialog.settings.list.archived.info']}" />
+						title="#{msg['dialog.settings.material.archived.info']}" />
 				</ui:fragment>
 			</p:column>
 
@@ -71,7 +71,7 @@
 				</p:commandLink>
 
 				<!-- delete -->
-				<p:commandLink title="#{msg['dialog.settings.material.archive']}"
+				<p:commandLink title="#{msg['dialog.settings.material.option.archive']}"
 					rendered="#{!material.archived}"
 					actionListener="#{dialog.settingsDialog.materialTab.archiveOrDelete(material, true)}"
 					update="@form" process="@this" partialSubmit="true">
@@ -79,11 +79,11 @@
 				</p:commandLink>
 
 				<!-- unarchive -->
-				<p:commandLink title="#{msg['dialog.settings.material.dearchive']}"
+				<p:commandLink title="#{msg['dialog.settings.material.option.dearchive']}"
 					rendered="#{material.archived}"
 					actionListener="#{dialog.settingsDialog.materialTab.archiveOrDelete(material, false)}"
 					update="@form" process="@this" partialSubmit="true">
-					<i class="fa fa-fw fa-check" />
+					<i class="fa fa-fw fa-undo" />
 				</p:commandLink>
 			</p:column>
 		</p:dataTable>

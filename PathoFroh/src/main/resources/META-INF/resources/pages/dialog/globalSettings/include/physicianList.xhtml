@@ -63,10 +63,9 @@
 						title="#{msg['dialog.organization.list.archive.info']}" />
 				</ui:fragment>
 			</p:column>
-			
+
 			<!-- clinical employee -->
-			<p:column style="width:30px;"
-				styleClass="centerChildElements">
+			<p:column style="width:30px;" styleClass="centerChildElements">
 				<f:facet name="header">
 					<h:outputLabel
 						value="#{msg['dialog.settings.person.list.employee']}"
@@ -97,16 +96,24 @@
 						update="@form" />
 				</p:commandLink>
 
-				<!-- archive -->
+				<!-- delete -->
 				<p:commandLink
-					title="#{physician.archived ? msg['dialog.settings.person.list.options.archive.undo'] :  msg['dialog.settings.person.list.options.archive']}"
-					update="@form" partialSubmit="true" process="@this"
-					actionListener="#{dialog.settingsDialog.physicianSettingsTab.archivePhysician(physician, !physician.archived)}">
-					<i class="fa fa-fw #{physician.archived ? 'fa-user' : 'fa-times' }" />
-
-					<f:actionListener
-						binding="#{dialog.settingsDialog.physicianSettingsTab.updateData()}" />
+					title="#{msg['dialog.settings.person.list.options.archive']}"
+					rendered="#{!physician.archived}"
+					actionListener="#{dialog.settingsDialog.physicianSettingsTab.archivePhysician(physician, true)}"
+					update="@form" process="@this" partialSubmit="true">
+					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
+
+				<!-- unarchive -->
+				<p:commandLink
+					title="#{msg['dialog.settings.person.list.options.dearchive']}"
+					rendered="#{physician.archived}"
+					actionListener="#{dialog.settingsDialog.physicianSettingsTab.archivePhysician(physician, false)}"
+					update="@form" process="@this" partialSubmit="true">
+					<i class="fa fa-fw fa-undo" />
+				</p:commandLink>
+
 			</p:column>
 		</p:dataTable>
 	</p:outputPanel>

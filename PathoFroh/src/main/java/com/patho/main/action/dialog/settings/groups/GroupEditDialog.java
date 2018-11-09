@@ -34,8 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-@Slf4j
-public class GroupEditDialog extends AbstractTabDialog {
+public class GroupEditDialog extends AbstractTabDialog<GroupEditDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -78,36 +77,35 @@ public class GroupEditDialog extends AbstractTabDialog {
 		tabs = new AbstractTab[] { nameTab, generalTab, permissionTab };
 	}
 
-	public void initAndPrepareBean() {
+	public GroupEditDialog initAndPrepareBean() {
 		HistoGroup group = new HistoGroup(new HistoSettings());
 		group.getSettings().setAvailableViews(new ArrayList<View>());
 		group.setAuthRole(AuthRole.ROLE_NONEAUTH);
 		group.setPermissions(new HashSet<HistoPermissions>());
 
-		if (initBean(group, false))
-			prepareDialog();
+		return initAndPrepareBean(group);
 	}
 
-	public void initAndPrepareBean(HistoGroup group) {
+	public GroupEditDialog initAndPrepareBean(HistoGroup group) {
 		if (initBean(group, true))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(HistoGroup group, boolean initialize) {
 
-		if (initialize) {
-			try {
-				setGroup(groupDao.initialize(group));
-			} catch (HistoDatabaseInconsistentVersionException e) {
-				log.debug("Version conflict, updating entity");
-				setGroup(groupDao.find(group.getId(), true));
-			}
+		if (group.getId() != 0) {
+			groupRepository.fi
+			setGroup(groupDao.find(group.getId(), true));
+			setNewGroup(false);
 		} else {
 			setGroup(group);
+			setNewGroup(true);
 		}
 
 		// if new group
-		setNewGroup(group.getId() == 0 ? true : false);
+	
 
 		return super.initBean(Dialog.SETTINGS_GROUP_EDIT);
 	}

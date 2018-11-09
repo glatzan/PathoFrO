@@ -17,6 +17,7 @@ import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
 import com.patho.main.model.interfaces.ListOrder;
+import com.patho.main.service.DiagnosisPresetService;
 import com.patho.main.service.MaterialPresetService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
@@ -27,24 +28,24 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class DiagnosisEditDialog extends AbstractDialog<DiagnosisEditDialog> {
+public class DiagnosisPresetEditDialog extends AbstractDialog<DiagnosisPresetEditDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private MaterialPresetService materialPresetService;
+	private DiagnosisPresetService diagnosisPresetService;
 
 	private boolean newDiagnosis;
 
-	private DiagnosisPreset diagnosisPresets;
+	private DiagnosisPreset diagnosisPreset;
 
 	private ContactRole[] allRoles;
 
-	public DiagnosisEditDialog initAndPrepareBean() {
+	public DiagnosisPresetEditDialog initAndPrepareBean() {
 		return initAndPrepareBean(new DiagnosisPreset());
 	}
 
-	public DiagnosisEditDialog initAndPrepareBean(DiagnosisPreset diagnosisPresets) {
+	public DiagnosisPresetEditDialog initAndPrepareBean(DiagnosisPreset diagnosisPresets) {
 		if (initBean(diagnosisPresets))
 			prepareDialog();
 		return this;
@@ -52,15 +53,16 @@ public class DiagnosisEditDialog extends AbstractDialog<DiagnosisEditDialog> {
 
 	public boolean initBean(DiagnosisPreset diagnosisPresets) {
 		setNewDiagnosis(diagnosisPresets.getId() == 0);
-		setDiagnosisPresets(diagnosisPresets);
+		setDiagnosisPreset(diagnosisPresets);
 
 		setAllRoles(new ContactRole[] { ContactRole.FAMILY_PHYSICIAN, ContactRole.PATIENT, ContactRole.SURGEON,
 				ContactRole.PRIVATE_PHYSICIAN, ContactRole.RELATIVES });
-		
-		return super.initBean(task, Dialog.SETTINGS_MATERIAL_EDIT);
+
+		return super.initBean(task, Dialog.SETTINGS_DIAGNOSIS_EDIT);
 	}
 
 	public void saveAndHide() {
+		diagnosisPresetService.addOrUpdate(getDiagnosisPreset());
 		hideDialog(new ReloadEvent());
 	}
 
@@ -73,34 +75,5 @@ public class DiagnosisEditDialog extends AbstractDialog<DiagnosisEditDialog> {
 		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
 		} else if (event.getObject() != null && event.getObject() instanceof SlideSelectResult) {
 		}
-	}
-	
-	public void saveDiagnosisPreset() {
-		if (getSelectedDiagnosisPreset().getId() == 0) {
-
-			// case new, save
-			logger.debug("Creating new diagnosis " + getSelectedDiagnosisPreset().getCategory());
-
-			getDiagnosisPresets().add(getSelectedDiagnosisPreset());
-
-			diagnosisPresetRepository.save(getSelectedDiagnosisPreset(),
-					resourceBundle.get("log.settings.diagnosis.new", getSelectedDiagnosisPreset().getCategory()));
-
-			ListOrder.reOrderList(getDiagnosisPresets());
-
-			diagnosisPresetRepository.saveAll(getDiagnosisPresets(),
-					resourceBundle.get("log.settings.diagnosis.list.reoder"));
-
-		} else {
-
-			// case edit: update an save
-			logger.debug("Updating diagnosis " + getSelectedDiagnosisPreset().getCategory());
-
-			diagnosisPresetRepository.save(getSelectedDiagnosisPreset(), resourceBundle
-					.get("log.settings.diagnosis.update", getSelectedDiagnosisPreset().getCategory()));
-		}
-
-		discardDiagnosisPreset();
-
 	}
 }

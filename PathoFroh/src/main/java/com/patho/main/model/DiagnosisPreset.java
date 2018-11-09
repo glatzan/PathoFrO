@@ -37,26 +37,37 @@ public class DiagnosisPreset implements LogAble, ListOrder<DiagnosisPreset>, ID 
 	@GeneratedValue(generator = "diagnosisPreset_sequencegenerator")
 	@Column(unique = true, nullable = false)
 	private long id;
+	
 	@Column(columnDefinition = "VARCHAR")
 	private String category;
+	
 	@Column(columnDefinition = "VARCHAR")
 	private String icd10;
+	
 	@Column(columnDefinition = "VARCHAR")
 	private boolean malign;
+	
 	@Column(columnDefinition = "text")
 	private String diagnosis;
+	
 	@Column(columnDefinition = "text")
 	private String extendedDiagnosisText;
+	
 	@Column(columnDefinition = "text")
 	private String commentary;
+	
 	@Column
 	private int indexInList;
+	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
 	private Set<ContactRole> diagnosisReportAsLetter;
 
+	@Column
+	private boolean archived;
+	
 	public DiagnosisPreset() {
 	}
 
@@ -74,7 +85,7 @@ public class DiagnosisPreset implements LogAble, ListOrder<DiagnosisPreset>, ID 
 
 		return super.equals(obj);
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return (int) getId();

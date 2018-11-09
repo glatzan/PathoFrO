@@ -144,6 +144,10 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* archived for diangosispreset*/
+Alter table diagnosisPreset add archived boolean;
+UPDATE diagnosisPreset SET archived = false;	
+
 /* archvied for materiapreset*/
 Alter table materialpreset add archived boolean;
 UPDATE materialpreset SET archived = false;	

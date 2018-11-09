@@ -68,23 +68,24 @@
 						update="@form" />
 				</p:commandLink>
 
-				<p:commandLink title="#{msg['dialog.settings.list.archive']}"
-					rendered="#{!item.archived}" styleClass="noUnderlineAtLink"
+				<!-- archive -->
+				<p:commandLink title="#{msg['dialog.settings.list.option.archive']}"
+					rendered="#{!item.archived}"
 					actionListener="#{dialog.settingsDialog.staticListTab.archiveListItem(item, true)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 
-				<p:commandLink title="#{msg['dialog.settings.list.dearchive']}"
-					rendered="#{item.archived}" styleClass="noUnderlineAtLink"
+				<!-- dearchive -->
+				<p:commandLink title="#{msg['dialog.settings.list.option.dearchive']}"
+					rendered="#{item.archived}"
 					actionListener="#{dialog.settingsDialog.staticListTab.archiveListItem(item, false)}"
 					update="@form" process="@this" partialSubmit="true">
-					<i class="fa fa-fw fa-check" />
+					<i class="fa fa-fw fa-undo" />
 				</p:commandLink>
-
 			</p:column>
 
-			<p:ajax event="rowReorder"
+			<p:ajax event="rowReorder" update="@form" process="@form"
 				listener="#{dialog.settingsDialog.staticListTab.onReorderList}" />
 
 		</p:dataTable>
