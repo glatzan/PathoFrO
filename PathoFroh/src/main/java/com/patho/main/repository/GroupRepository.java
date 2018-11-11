@@ -10,4 +10,5 @@ public interface GroupRepository extends BaseRepository<HistoGroup, Long>, Group
 	Optional<HistoGroup> findOptionalById(Long id);
 
 	Optional<HistoGroup> findOptionalByName(String name);
+	
 }

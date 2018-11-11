@@ -22,7 +22,9 @@ import com.patho.main.model.user.HistoSettings;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.UserRepository;
+import com.patho.main.service.GroupService;
 import com.patho.main.service.UserService;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
@@ -39,27 +41,12 @@ public class GroupEditDialog extends AbstractTabDialog<GroupEditDialog> {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private ResourceBundle resourceBundle;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private GroupRepository groupRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private UserRepository userRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserService userService;
+	private GroupService groupService;
 
 	private GeneralTab generalTab;
 	private NameTab nameTab;
@@ -96,22 +83,19 @@ public class GroupEditDialog extends AbstractTabDialog<GroupEditDialog> {
 	public boolean initBean(HistoGroup group, boolean initialize) {
 
 		if (group.getId() != 0) {
-			groupRepository.fi
-			setGroup(groupDao.find(group.getId(), true));
+			setGroup(groupRepository.findOptionalById(group.getId(), true).get());
 			setNewGroup(false);
 		} else {
 			setGroup(group);
 			setNewGroup(true);
 		}
 
-		// if new group
-	
-
 		return super.initBean(Dialog.SETTINGS_GROUP_EDIT);
 	}
 
-	public void saveGroup() {
+	public void saveAndHide() {
 
+		// setting default view if not set
 		if (getGroup().getSettings().getDefaultView() == null) {
 			if (getGroup().getSettings().getAvailableViews() == null
 					&& getGroup().getSettings().getAvailableViews().size() > 0)
@@ -128,25 +112,10 @@ public class GroupEditDialog extends AbstractTabDialog<GroupEditDialog> {
 			}
 		});
 
-		try {
-			if (getGroup().getId() == 0) {
-				groupRepository.save(getGroup(), resourceBundle.get("log.settings.group.new", getGroup()));
-			} else {
-				groupRepository.save(getGroup(), resourceBundle.get("log.settings.group.edit", getGroup()));
+		// saving
+		groupService.addOrUpdate(getGroup());
 
-				// updating user settings
-				List<HistoUser> usersOfGroup = userRepository.findByGroupId(getGroup().getId());
-
-				for (HistoUser histoUser : usersOfGroup) {
-					userService.updateGroupOfUser(histoUser, getGroup());
-				}
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			onDatabaseVersionConflict();
-		}
-
+		hideDialog(new ReloadEvent());
 	}
 
 	@Getter

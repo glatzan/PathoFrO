@@ -71,7 +71,7 @@
 				<!-- archive -->
 				<p:commandLink title="#{msg['dialog.settings.list.option.archive']}"
 					rendered="#{!item.archived}"
-					actionListener="#{dialog.settingsDialog.staticListTab.archiveListItem(item, true)}"
+					actionListener="#{dialog.settingsDialog.staticListTab.archiveOrDelete(item, true)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -79,7 +79,7 @@
 				<!-- dearchive -->
 				<p:commandLink title="#{msg['dialog.settings.list.option.dearchive']}"
 					rendered="#{item.archived}"
-					actionListener="#{dialog.settingsDialog.staticListTab.archiveListItem(item, false)}"
+					actionListener="#{dialog.settingsDialog.staticListTab.archiveOrDelete(item, false)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-undo" />
 				</p:commandLink>

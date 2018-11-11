@@ -59,7 +59,7 @@ public class StainingPrototypeService extends AbstractService {
 	@Transactional(propagation = Propagation.NEVER)
 	public boolean deleteOrArchive(StainingPrototype p) {
 		try {
-			stainingPrototypeRepository.delete(p, "log.settings.staining.deleted");
+			stainingPrototypeRepository.delete(p, resourceBundle.get("log.settings.staining.deleted", p.getName()));
 			return true;
 		} catch (Exception e) {
 			archive(p, true);

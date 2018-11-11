@@ -15,60 +15,51 @@
 	<p:outputPanel styleClass="bodyPannel">
 
 		<!-- Name -->
-		<h:panelGrid columns="2" styleClass="newStyleListingTable"
-			columnClasses="columnLabelContainer150, columnAutoWidth, columnLabelContainer150, columnAutoWidth">
-			<h:outputLabel value="#{msg['dialog.groupEdit.tab.group.name']}" />
-			<p:inputText
-				value="#{dialogHandlerAction.groupEditDialog.group.name}"></p:inputText>
+		<h:panelGrid columns="2" styleClass="defaultHistoTable"
+			columnClasses="columnWidth125,">
 
+			<!-- name -->
+			<h:outputLabel value="#{msg['dialog.groupEdit.tab.group.name']}" />
+			<p:inputText value="#{dialog.groupEditDialog.group.name}"></p:inputText>
+
+			<!-- program group -->
 			<h:outputLabel
 				value="#{msg['dialog.groupEdit.tab.group.programmGroup']}" />
-			<p:selectOneMenu
-				value="#{dialogHandlerAction.groupEditDialog.group.authRole}">
-
+			<p:selectOneMenu value="#{dialog.groupEditDialog.group.authRole}">
 				<f:selectItems value="#{enumProvider.authRoles}" var="authRole"
 					itemLabel="#{msg['enum.authRole.'.concat(authRole)]}" />
 			</p:selectOneMenu>
 
+			<!-- deactivated group -->
 			<h:outputLabel
 				value="#{msg['dialog.groupEdit.tab.group.deactivated']}" />
 			<p:selectBooleanCheckbox
 				title="#{msg['dialog.groupEdit.tab.group.deactivated.text']}"
-				value="#{dialogHandlerAction.groupEditDialog.group.userDeactivated}">
+				value="#{dialog.groupEditDialog.group.userDeactivated}">
 			</p:selectBooleanCheckbox>
-
 		</h:panelGrid>
 
 	</p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
 
-			<h:panelGrid columns="1" styleClass="newTableContainer left">
+	<div class="buttonContainer">
+		<h:panelGrid columns="2">
+
+			<h:panelGrid columns="1" styleClass="left">
 			</h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newTableContainer right">
+			<h:panelGrid columns="2" styleClass="right">
 				<!-- Save button -->
 				<p:commandButton value="#{msg['general.save']}" icon="fa fa-save "
-					widgetVar="saveBtn" onstart="PF('blockUIWidget').block()"
-					oncomplete="PF('blockUIWidget').unblock()"
-					onclick="disableButton(true, 'saveBtn', 'closeBtn')">
-					<f:actionListener
-						binding="#{dialogHandlerAction.groupEditDialog.saveGroup()}"></f:actionListener>
-					<f:actionListener
-						binding="#{dialogHandlerAction.groupEditDialog.hideDialog()}"></f:actionListener>
-				</p:commandButton>
+					actionListener="#{dialog.groupEditDialog.saveAndHide()}" />
 
 				<!-- Close button -->
 				<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+					actionListener="#{dialog.groupEditDialog.hideDialog()}"
 					widgetVar="closeBtn" icon="fa fa-times-circle">
-					<f:actionListener
-						binding="#{dialogHandlerAction.groupEditDialog.hideDialog()}"></f:actionListener>
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
-
 
 </ui:composition>

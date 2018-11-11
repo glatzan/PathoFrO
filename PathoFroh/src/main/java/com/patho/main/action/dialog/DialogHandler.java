@@ -28,6 +28,7 @@ import com.patho.main.action.dialog.print.PrintDialog;
 import com.patho.main.action.dialog.settings.SettingsDialog;
 import com.patho.main.action.dialog.settings.diagnosis.DiagnosisPresetEditDialog;
 import com.patho.main.action.dialog.settings.favourites.FavouriteListEditDialog;
+import com.patho.main.action.dialog.settings.groups.GroupEditDialog;
 import com.patho.main.action.dialog.settings.listitem.ListItemEditDialog;
 import com.patho.main.action.dialog.settings.material.MaterialEditDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationEditDialog;

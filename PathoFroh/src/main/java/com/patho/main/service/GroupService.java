@@ -2,12 +2,71 @@ package com.patho.main.service;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.patho.main.common.View;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
+import com.patho.main.repository.GroupRepository;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
-public class GroupService {
+@Service
+@Transactional
+public class GroupService extends AbstractService {
+
+	@Autowired
+	private GroupRepository groupRepository;
+
+	@Autowired
+	private UserService userService;
+
+	public HistoGroup addOrUpdate(HistoGroup g) {
+
+		boolean newList = g.getId() == 0;
+
+		g = groupRepository.save(g,
+				resourceBundle.get(newList ? "log.settings.group.new" : "log.settings.group.edit", g.getName()));
+
+		// updating user with groupsettings
+		if (!newList) {
+			userService.updateGroupOfUser(g);
+		}
+
+		return g;
+	}
+
+	/**
+	 * Tries to delete the old group
+	 * 
+	 * @param p
+	 */
+	@Transactional(propagation = Propagation.NEVER)
+	public boolean deleteOrArchive(HistoGroup g) {
+		try {
+			groupRepository.delete(g, resourceBundle.get("log.settings.group.deleted", g.getName()));
+			return true;
+		} catch (Exception e) {
+			archive(g, true);
+			return false;
+		}
+	}
+
+	/**
+	 * Archived or dearchives a group
+	 * 
+	 * @param p
+	 * @param archive
+	 * @return
+	 */
+	public HistoGroup archive(HistoGroup g, boolean archive) {
+		g.setArchived(archive);
+		return groupRepository.save(g, resourceBundle
+				.get(archive ? "log.settings.group.archived" : "log.settings.group.dearchived", g.getName()));
+	}
+
 	/**
 	 * Copies crucial settings from group settings to user settings
 	 * 

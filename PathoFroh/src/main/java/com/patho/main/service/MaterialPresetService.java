@@ -49,7 +49,7 @@ public class MaterialPresetService extends AbstractService {
 	@Transactional(propagation = Propagation.NEVER)
 	public boolean deleteOrArchive(MaterialPreset m) {
 		try {
-			materialPresetRepository.delete(m, "log.settings.material.deleted");
+			materialPresetRepository.delete(m, resourceBundle.get("log.settings.material.deleted", m.getName()));
 			return true;
 		} catch (Exception e) {
 			archive(m, true);

@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-@Slf4j
 public class GroupListDialog extends AbstractDialog {
 
 	@Autowired

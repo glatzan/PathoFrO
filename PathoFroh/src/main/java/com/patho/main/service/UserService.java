@@ -1,5 +1,6 @@
 package com.patho.main.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class UserService extends AbstractService {
 
 	@Autowired
 	private PhysicianRepository physicianRepository;
-	
+
 	@Autowired
 	private PhysicianService physicianService;
 
@@ -56,22 +57,21 @@ public class UserService extends AbstractService {
 
 		if (!histoUser.isPresent()) {
 			logger.info("No User found, creating new HistoUser " + physician.getPerson().getFullName());
-			
-			HistoUser newHistoUser = new HistoUser(physician.getUid());
 
+			HistoUser newHistoUser = new HistoUser(physician.getUid());
 
 			if (physician.getAssociatedRoles().size() == 0)
 				physician.addAssociateRole(ContactRole.NONE);
-			
+
 			// saving or updating physician, also updating organizations
 			physician = physicianService.addOrMergePhysician(physician);
 
 			newHistoUser.setPhysician(physician);
-			
-			userRepository.save(newHistoUser,resourceBundle.get("log.user.created",histoUser));
+
+			userRepository.save(newHistoUser, resourceBundle.get("log.user.created", histoUser));
 		} else {
 			physicianService.mergePhysicians(physician, histoUser.get().getPhysician());
-			userRepository.save(histoUser.get(),resourceBundle.get("log.user.update",histoUser));
+			userRepository.save(histoUser.get(), resourceBundle.get("log.user.update", histoUser));
 		}
 
 		return true;
@@ -88,6 +88,7 @@ public class UserService extends AbstractService {
 
 	/**
 	 * Save user
+	 * 
 	 * @param user
 	 */
 	public void saveUser(HistoUser user) {
@@ -99,6 +100,7 @@ public class UserService extends AbstractService {
 
 	/**
 	 * Disable User via group
+	 * 
 	 * @param user
 	 */
 	public void diableUser(HistoUser user) {
@@ -112,17 +114,30 @@ public class UserService extends AbstractService {
 
 	/**
 	 * Archive User
+	 * 
 	 * @param user
 	 * @param archive
 	 */
 	public void archiveUser(HistoUser user, boolean archive) {
 		user.setArchived(archive);
-		userRepository.save(user,
-				resourceBundle.get(archive ? "log.user.archived" : "log.user.dearchived", user));
+		userRepository.save(user, resourceBundle.get(archive ? "log.user.archived" : "log.user.dearchived", user));
 	}
 
 	/**
-	 * Setting the gourp of the user
+	 * Updates the user group settings for a changed groups
+	 * 
+	 * @param user
+	 * @param group
+	 */
+	public void updateGroupOfUser(HistoGroup group) {
+		// updating user settings
+		List<HistoUser> usersOfGroup = userRepository.findByGroupId(group.getId());
+		usersOfGroup.forEach(p -> updateGroupOfUser(p, group));
+	}
+
+	/**
+	 * Setting the group of the user
+	 * 
 	 * @param user
 	 * @param group
 	 */
@@ -132,13 +147,10 @@ public class UserService extends AbstractService {
 		if (user.getSettings() == null)
 			user.setSettings(new HistoSettings());
 
-		groupRepository.initializeGroupSettings(group);
-
 		GroupService.copyGroupSettings(user, group, false);
 
 		logger.debug("Role of user " + user.getUsername() + " to " + user.getGroup().toString());
 		userRepository.save(user, resourceBundle.get("log.user.role.changed", user.getGroup()));
 	}
-	
 
 }

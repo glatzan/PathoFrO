@@ -100,7 +100,7 @@
 				<p:commandLink
 					title="#{msg['dialog.settings.person.list.options.archive']}"
 					rendered="#{!physician.archived}"
-					actionListener="#{dialog.settingsDialog.physicianSettingsTab.archivePhysician(physician, true)}"
+					actionListener="#{dialog.settingsDialog.physicianSettingsTab.archiveOrDelete(physician, true)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -109,7 +109,7 @@
 				<p:commandLink
 					title="#{msg['dialog.settings.person.list.options.dearchive']}"
 					rendered="#{physician.archived}"
-					actionListener="#{dialog.settingsDialog.physicianSettingsTab.archivePhysician(physician, false)}"
+					actionListener="#{dialog.settingsDialog.physicianSettingsTab.archiveOrDelete(physician, false)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-undo" />
 				</p:commandLink>

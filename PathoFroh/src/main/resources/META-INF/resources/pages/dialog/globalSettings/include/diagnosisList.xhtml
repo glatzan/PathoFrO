@@ -52,9 +52,10 @@
 			</p:column>
 
 			<!-- archived -->
-			<p:column headerText="#{msg['dialog.settings.diagnosis.list.archived']}"
-				styleClass="centerChildElements" sortBy="#{diagnosisPreset.archived}"
-				style="width:80px;"
+			<p:column
+				headerText="#{msg['dialog.settings.diagnosis.list.archived']}"
+				styleClass="centerChildElements"
+				sortBy="#{diagnosisPreset.archived}" style="width:80px;"
 				rendered="#{dialog.settingsDialog.diagnosisTab.showArchived}">
 				<ui:fragment rendered="#{diagnosisPreset.archived}">
 					<i class="fa fa-archive icon-red"
@@ -73,8 +74,7 @@
 				<!-- edit -->
 				<p:commandLink
 					title="#{msg['dialog.settings.diagnosis.list.options.edit']}"
-					actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean(diagnosisPreset)}"
-					update="@form" partialSubmit="true" process="@this">
+					actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean(diagnosisPreset)}">
 					<i class="fa fa-fw fa-cog" />
 					<p:ajax event="dialogReturn"
 						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"
@@ -86,7 +86,7 @@
 					title="#{msg['dialog.settings.diagnosis.list.archive']}"
 					rendered="#{!diagnosisPreset.archived}"
 					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, true)}"
-					update="@form" process="@this" partialSubmit="true">
+					update="@form">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 
@@ -95,7 +95,7 @@
 					title="#{msg['dialog.settings.diagnosis.list.dearchive']}"
 					rendered="#{diagnosisPreset.archived}"
 					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, false)}"
-					update="@form" process="@this" partialSubmit="true">
+					update="@form">
 					<i class="fa fa-fw fa-undo" />
 				</p:commandLink>
 			</p:column>
@@ -106,23 +106,21 @@
 	</p:outputPanel>
 
 	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
+		<h:panelGrid columns="2">
 
-			<h:panelGrid columns="2" styleClass="newTableContainer left">
+			<h:panelGrid columns="2" styleClass="left">
 				<!-- archived -->
 				<p:selectBooleanCheckbox
 					value="#{dialog.settingsDialog.diagnosisTab.showArchived}">
-					<p:ajax event="change" update="@form" process="@this"
-						partialSubmit="true"
+					<p:ajax event="change"
 						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
 					value="#{msg['dialog.settings.diagnosis.list.checkbox.archived']}" />
 			</h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newTableContainer right">
-				<!--  new diagnosis -->
+			<h:panelGrid columns="2" styleClass="right">
+				<!-- new -->
 				<p:commandButton
 					value="#{msg['dialog.settings.diagnosis.list.button.new']}"
 					icon="fa fa-fw fa-plus-circle"
@@ -132,11 +130,12 @@
 						update="@form" />
 				</p:commandButton>
 
-				<!-- abor -->
+				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle" partialSubmit="true" process="@this"
+					icon="fa fa-times-circle"
 					actionListener="#{dialog.settingsDialog.hideDialog()}" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
+
 </ui:composition>

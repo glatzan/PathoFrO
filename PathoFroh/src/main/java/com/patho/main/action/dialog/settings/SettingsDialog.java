@@ -41,6 +41,7 @@ import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.DiagnosisPresetService;
 import com.patho.main.service.DiagnosisService;
+import com.patho.main.service.GroupService;
 import com.patho.main.service.ListItemService;
 import com.patho.main.service.MaterialPresetService;
 import com.patho.main.service.PhysicianService;
@@ -57,86 +58,11 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class SettingsDialog extends AbstractTabDialog {
+public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
 
 	public static final int DIAGNOSIS_LIST = 0;
 	public static final int DIAGNOSIS_EDIT = 1;
 	public static final int DIAGNOSIS_TEXT_TEMPLATE = 2;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserService userService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PhysicianService physicianService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private ResourceBundle resourceBundle;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserRepository userRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GroupRepository groupRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private StainingPrototypeRepository stainingPrototypeRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private StainingPrototypeService stainingPrototypeService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private MaterialPresetRepository materialPresetRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private MaterialPresetService materialPresetService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private ListItemRepository listItemRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private ListItemService listItemService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PhysicianRepository physicianRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private OrganizationRepository organizationRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private FavouriteListRepository favouriteListRepository;
 
 	private ProgramParentTab programParentTab;
 	private HistoUserTab histoUserTab;
@@ -170,14 +96,15 @@ public class SettingsDialog extends AbstractTabDialog {
 				logTab };
 	}
 
-	public void initAndPrepareBean() {
-		initBean("");
-		prepareDialog();
+	public SettingsDialog initAndPrepareBean() {
+		return initAndPrepareBean("");
 	}
 
-	public void initAndPrepareBean(String tabName) {
+	public SettingsDialog initAndPrepareBean(String tabName) {
 		if (initBean(tabName))
 			prepareDialog();
+
+		return this;
 	}
 
 	public boolean initBean(String tabName) {
@@ -212,7 +139,18 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class HistoUserTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private UserService userService;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private UserRepository userRepository;
 
 		private List<HistoUser> users;
 
@@ -252,7 +190,18 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class HistoGroupTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private GroupRepository groupRepository;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private GroupService groupService;
 
 		private List<HistoGroup> groups;
 
@@ -272,9 +221,21 @@ public class SettingsDialog extends AbstractTabDialog {
 		}
 
 		public void updateData() {
-			setGroups(groupRepository.findAll(!showArchived));
+			setGroups(groupRepository.findAllOrderByIdAsc(!showArchived));
 		}
 
+		public void archiveOrDelete(HistoGroup g, boolean archive) {
+			if (archive) {
+				if (groupService.deleteOrArchive(g)) {
+					MessageHandler.sendGrowlMessagesAsResource("growl.group.deleted");
+				} else
+					MessageHandler.sendGrowlMessagesAsResource("growl.group.archive");
+			} else {
+				groupService.archive(g, false);
+				MessageHandler.sendGrowlMessagesAsResource("growl.group.dearchive");
+			}
+			updateData();
+		}
 	}
 
 	@Getter
@@ -346,7 +307,18 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class MaterialTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private MaterialPresetRepository materialPresetRepository;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private MaterialPresetService materialPresetService;
 
 		private List<MaterialPreset> allMaterials;
 
@@ -393,7 +365,18 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class StainingTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private StainingPrototypeRepository stainingPrototypeRepository;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private StainingPrototypeService stainingPrototypeService;
 
 		/**
 		 * Tab container
@@ -451,7 +434,18 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class StaticListTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private ListItemRepository listItemRepository;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private ListItemService listItemService;
 
 		/**
 		 * Current static list to edit
@@ -481,8 +475,22 @@ public class SettingsDialog extends AbstractTabDialog {
 			setStaticListContent(listItemRepository.findAllOrderByIndex(getSelectedStaticList(), !isShowArchived()));
 		}
 
-		public void archiveListItem(ListItem item, boolean archive) {
-			listItemService.archiveListItem(item, archive);
+		/**
+		 * Archvies or dearchvies ListItem depending on the given parameters.
+		 *
+		 * @param physician
+		 * @param archive
+		 */
+		public void archiveOrDelete(ListItem item, boolean archive) {
+			if (archive) {
+				if (listItemService.deleteOrArchive(item)) {
+					MessageHandler.sendGrowlMessagesAsResource("growl.listitem.deleted");
+				} else
+					MessageHandler.sendGrowlMessagesAsResource("growl.listitem.archive");
+			} else {
+				listItemService.archive(item, false);
+				MessageHandler.sendGrowlMessagesAsResource("growl.listitem.dearchive");
+			}
 			updateData();
 		}
 
@@ -506,7 +514,18 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class PhysicianSettingsTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private PhysicianRepository physicianRepository;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private PhysicianService physicianService;
 
 		/**
 		 * True if archived physicians should be display
@@ -569,15 +588,29 @@ public class SettingsDialog extends AbstractTabDialog {
 		 * @param physician
 		 * @param archive
 		 */
-		public void archivePhysician(Physician physician, boolean archive) {
-			physicianService.archivePhysician(physician, archive);
+		public void archiveOrDelete(Physician p, boolean archive) {
+			if (archive) {
+				if (physicianService.deleteOrArchive(p)) {
+					MessageHandler.sendGrowlMessagesAsResource("growl.person.deleted");
+				} else
+					MessageHandler.sendGrowlMessagesAsResource("growl.person.archive");
+			} else {
+				physicianService.archive(p, false);
+				MessageHandler.sendGrowlMessagesAsResource("growl.person.dearchive");
+			}
 			updateData();
 		}
 	}
 
 	@Getter
 	@Setter
+	@Configurable
 	public class OrganizationTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private OrganizationRepository organizationRepository;
 
 		private List<Organization> organizations;
 
@@ -606,7 +639,13 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class FavouriteListTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private FavouriteListRepository favouriteListRepository;
 
 		/**
 		 * Array containing all favourite listis
@@ -622,7 +661,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setFavouriteLists(favouriteListRepository.findAll(true, true, true, true));
+			setFavouriteLists(favouriteListRepository.findAll(false, true, true, true));
 		}
 
 	}

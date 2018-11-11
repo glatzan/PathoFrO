@@ -10,10 +10,12 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.ListItem;
 import com.patho.main.model.ListItem_;
+import com.patho.main.model.Physician;
 import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.repository.ListItemRepository;
 
@@ -53,11 +55,35 @@ public class ListItemService extends AbstractService {
 		return listItem;
 	}
 
-	public ListItem archiveListItem(ListItem listItem, boolean archive) {
+	/**
+	 * Tries to delete the old listItem
+	 * 
+	 * @param p
+	 */
+	@Transactional(propagation = Propagation.NEVER)
+	public boolean deleteOrArchive(ListItem listItem) {
+		try {
+			listItemRepository.delete(listItem,
+					resourceBundle.get("log.settings.staticList.deleted", listItem.getValue(), listItem.getListType()));
+			return true;
+		} catch (Exception e) {
+			archive(listItem, true);
+			return false;
+		}
+	}
+
+	/**
+	 * Archived or dearchives a ListItem
+	 * 
+	 * @param p
+	 * @param archive
+	 * @return
+	 */
+	public ListItem archive(ListItem listItem, boolean archive) {
 		listItem.setArchived(archive);
 		return listItemRepository.save(listItem,
-				resourceBundle.get(archive ? "log.settings.staticList.archive" : "log.settings.staticList.dearchive",
-						listItem.getValue(), listItem.getListType().toString()));
+				resourceBundle.get(archive ? "log.settings.staticList.archived" : "log.settings.staticList.dearchived",
+						listItem.getValue(), listItem.getListType()));
 	}
 
 	public List<ListItem> updateReoderedList(List<ListItem> staticListContent, ListItem.StaticList type) {

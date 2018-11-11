@@ -38,7 +38,7 @@
 						value="#{dialog.physicianEditDialog.physician.clinicEmployee ? msg['dialog.physicianEdit.headline.person.clinic'] : msg['dialog.physicianEdit.headline.person.extern'] }" />
 				</h:outputFormat>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
+					actionListener="#{dialog.physicianSearchDialog.hideDialog()}">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 			</h:panelGrid>
@@ -322,7 +322,7 @@
 								<i class="fa fa-plus" />
 							</p:commandLink>
 						</f:facet>
-						
+
 						<p:commandLink
 							actionListener="#{dialog.physicianSearchDialog.removeOrganization(organization)}"
 							update="@form"
@@ -338,7 +338,7 @@
 		<div class="buttonContainer">
 			<h:panelGrid columns="2" style="width:100%"
 				styleClass="newTableContainer">
-				
+
 				<h:panelGrid columns="1" styleClass="newTableContainer left">
 					<!-- update physician with ldap data -->
 					<p:commandButton id="refreshBtn" value="#{msg['general.refresh']}"

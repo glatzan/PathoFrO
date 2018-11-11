@@ -32,15 +32,14 @@ public class DiagnosisPresetService extends AbstractService {
 	}
 
 	/**
-	 * Tries to delete the stainingprototype, if not possible the prototype will be
-	 * deleted
+	 * Tries to delete the diagnosis, if not possible the prototype will be archived
 	 * 
 	 * @param p
 	 */
 	@Transactional(propagation = Propagation.NEVER)
 	public boolean deleteOrArchive(DiagnosisPreset d) {
 		try {
-			diagnosisPresetRepository.delete(d, "log.settings.diagnosis.deleted");
+			diagnosisPresetRepository.delete(d, resourceBundle.get("log.settings.diagnosis.deleted", d.getDiagnosis()));
 			return true;
 		} catch (Exception e) {
 			archive(d, true);
@@ -61,6 +60,12 @@ public class DiagnosisPresetService extends AbstractService {
 				archive ? "log.settings.diagnosis.archived" : "log.settings.diagnosis.dearchived", d.getDiagnosis()));
 	}
 
+	/**
+	 * Saves all elements on reoder
+	 * 
+	 * @param presets
+	 * @return
+	 */
 	public List<DiagnosisPreset> reoderList(List<DiagnosisPreset> presets) {
 		ListOrder.reOrderList(presets);
 		return diagnosisPresetRepository.saveAll(presets, resourceBundle.get("log.settings.diagnosis.list.reoder"));

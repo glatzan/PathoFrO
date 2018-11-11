@@ -5,10 +5,12 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.Physician;
+import com.patho.main.model.user.HistoGroup;
 import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.util.helper.HistoUtil;
@@ -37,7 +39,7 @@ public class PhysicianService extends AbstractService {
 		if (oPhysician.isPresent())
 			return mergePhysicians(oPhysician.get(), physician);
 		else
-			throw new IllegalStateException("No user was found"); 
+			throw new IllegalStateException("No user was found");
 	}
 
 	/**
@@ -95,15 +97,33 @@ public class PhysicianService extends AbstractService {
 	}
 
 	/**
-	 * Archives or restores a physician.
+	 * Tries to delete the old group
 	 * 
-	 * @param physician
-	 * @param archive
+	 * @param p
 	 */
-	public Physician archivePhysician(Physician physician, boolean archive) {
+	@Transactional(propagation = Propagation.NEVER)
+	public boolean deleteOrArchive(Physician physician) {
+		try {
+			physicianRepository.delete(physician,
+					resourceBundle.get("log.settings.physician.deleted", physician.getPerson().getFullName()));
+			return true;
+		} catch (Exception e) {
+			archive(physician, true);
+			return false;
+		}
+	}
+
+	/**
+	 * Archived or dearchives a physician
+	 * 
+	 * @param p
+	 * @param archive
+	 * @return
+	 */
+	public Physician archive(Physician physician, boolean archive) {
 		physician.setArchived(archive);
 		return physicianRepository.save(physician,
-				resourceBundle.get(archive ? "log.settings.physician.archived" : "log.settings.physician.archived.undo",
+				resourceBundle.get(archive ? "log.settings.physician.archived" : "log.settings.physician.dearchived",
 						physician.getPerson().getFullName()));
 	}
 

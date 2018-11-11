@@ -24,14 +24,18 @@
 				<h:outputText value="#{group.name}" />
 			</p:column>
 
-			<!-- archive -->
-			<p:commandLink title="#{msg['dialog.settings.group.archived']}"
-				rendered="#{!group.archived}"
-				actionListener="#{dialog.settingsDialog.histoGroupTab.archiveOrDelete(group, true)}"
-				update="@form" process="@this" partialSubmit="true">
-				<i class="fa fa-fw fa-times" />
-			</p:commandLink>
+			<!-- archived -->
+			<p:column headerText="#{msg['dialog.settings.group.archived']}"
+				styleClass="centerChildElements" sortBy="#{group.archived}"
+				style="width:80px;"
+				rendered="#{dialog.settingsDialog.histoGroupTab.showArchived}">
+				<ui:fragment rendered="#{group.archived}">
+					<i class="fa fa-archive icon-red"
+						title="#{msg['dialog.settings.group.archived.info']}" />
+				</ui:fragment>
+			</p:column>
 
+			<!-- options -->
 			<p:column
 				rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_GROUP')}"
 				style="width:35px;"
@@ -44,7 +48,7 @@
 
 				<!-- edit -->
 				<p:commandLink title="#{msg['dialog.settings.group.options.edit']}"
-					actionListener="#{dialogHandlerAction.groupEditDialog.initAndPrepareBean(group)}"
+					actionListener="#{dialog.groupEditDialog.initAndPrepareBean(group)}"
 					process="@this" partialSubmit="true">
 					<p:ajax event="dialogReturn"
 						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
@@ -54,74 +58,59 @@
 
 				<!-- archive -->
 				<p:commandLink
-					title="#{msg['dialog.settings.diagnosis.list.option.archive']}"
-					rendered="#{!diagnosisPreset.archived}"
-					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, true)}"
+					title="#{msg['dialog.settings.group.options.archive']}"
+					rendered="#{!group.archived}"
+					actionListener="#{dialog.settingsDialog.histoGroupTab.archiveOrDelete(group, true)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 
 				<!-- dearchive -->
 				<p:commandLink
-					title="#{msg['dialog.settings.diagnosis.list.option.dearchive']}"
-					rendered="#{diagnosisPreset.archived}"
-					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, false)}"
+					title="#{msg['dialog.settings.group.options.dearchive']}"
+					rendered="#{group.archived}"
+					actionListener="#{dialog.settingsDialog.histoGroupTab.archiveOrDelete(group, false)}"
 					update="@form" process="@this" partialSubmit="true">
 					<i class="fa fa-fw fa-undo" />
-				</p:commandLink>
-
-				<!-- archive -->
-				<p:commandLink
-					title="#{group.archived ? msg['dialog.settings.group.options.dearchive'] :  msg['dialog.settings.group.options.archive']}"
-					update="@form" partialSubmit="true" process="@this">
-					<i class="fa fa-fw #{group.archived ? 'fa-undo' : 'fa-times' }" />
-
-					<f:actionListener
-						binding="#{dialogHandlerAction.groupListDialog.archive(group, !group.archived)}" />
-					<f:actionListener
-						binding="#{dialog.settingsDialog.histoGroupTab.updateData()}" />
 				</p:commandLink>
 			</p:column>
 		</p:dataTable>
 	</p:outputPanel>
 
 	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
+		<h:panelGrid columns="2">
 
-			<h:panelGrid columns="2" styleClass="newTableContainer left">
-				<p:selectBooleanCheckbox styleClass="centerCheckbox"
-					title="#{msg['dialog.settings.group.checkboxarchive.text']}"
-					value="#{dialog.settingsDialog.histoGroupTab.showArchived}">
-					<p:ajax
-						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
-						partialSubmit="true" process="@this" update="@form" />
+			<h:panelGrid columns="2" styleClass="left">
+				<!-- archived -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.settingsDialog.histoGroupTab.showArchived}"
+					title="#{msg['dialog.settings.group.checkbox.archive.text']}">
+					<p:ajax event="change" update="@form"
+						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}" />
 				</p:selectBooleanCheckbox>
-
-				<h:outputLabel styleClass="standardFont"
-					value="#{msg['dialog.settings.group.checkbox.archive=']}"
-					style="margin-left:5px;"></h:outputLabel>
+				<h:outputLabel
+					value="#{msg['dialog.settings.group.checkbox.archive']}" />
 			</h:panelGrid>
 
-			<h:panelGrid columns="3" styleClass="newTableContainer right">
+			<h:panelGrid columns="2" styleClass="right">
 				<!-- New group  -->
 				<p:commandButton
 					value="#{msg['dialog.settings.group.button.newGroup']}"
 					rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_GROUP')}"
+					actionListener="#{dialog.groupEditDialog.initAndPrepareBean()}"
 					icon="fa fa-plus-circle ">
-					<f:actionListener
-						binding="#{dialogHandlerAction.groupEditDialog.initAndPrepareBean()}"></f:actionListener>
 					<p:ajax event="dialogReturn"
 						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
 						update="@form" />
 				</p:commandButton>
 
+				<!-- close -->
 				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle" partialSubmit="true" process="@this"
+					icon="fa fa-times-circle"
 					actionListener="#{dialog.settingsDialog.hideDialog()}" />
+
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
-
 
 </ui:composition>
