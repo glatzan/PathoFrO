@@ -33,8 +33,9 @@
 		<div class="dialogContent">
 
 			<h:panelGrid columns="2" style="width:100%"
-				columnClasses="columnWidthPercent70 columnTop, columnWidthPercent30 columnTop"
+				columnClasses="columnWidthPercent60 columnTop, columnWidthPercent40 columnTop"
 				styleClass="listingHistoHiddenTableContainer">
+
 				<!-- left -->
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
 					columnClasses="columnWidth150 columnHeading columnTop,">
@@ -71,7 +72,7 @@
 						<p:commandLink
 							title="#{msg['dialog.favouriteListEdit.owner.change']}"
 							rendered="#{(dialog.favouriteListEditDialog.userPermission.owner or dialog.favouriteListEditDialog.adminMode) and !dialog.favouriteListEditDialog.favouriteList.defaultList}"
-							actionListener="#{dialogHandlerAction.userListDialog.initAndPrepareBean(true,false)}"
+							actionListener="#{dialog.userListDialog.initAndPrepareBean()}"
 							partialSubmit="true">
 							<p:ajax event="dialogReturn" update="@form"
 								listener="#{dialog.favouriteListEditDialog.onReturnSelectOwner}" />
@@ -290,9 +291,9 @@
 							<p:commandLink
 								title="#{msg['dialog.favouriteListEdit.permissions.add.text']}"
 								disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
-								actionListener="#{dialogHandlerAction.userListDialog.initAndPrepareBean(true,false)}">
+								actionListener="#{dialog.userListDialog.initAndPrepareBean()}">
 								<p:ajax event="dialogReturn" update="@form"
-									listener="#{dialog.favouriteListEditDialog.onReturnSelectUser}" />
+									listener="#{dialog.favouriteListEditDialog.onPermissionSelectEvent}" />
 								<i class="fa fa-plus" />
 							</p:commandLink>
 						</f:facet>
@@ -366,9 +367,9 @@
 							<p:commandLink
 								title="#{msg['dialog.favouriteListEdit.permissions.add.text']}"
 								disabled="#{(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"
-								actionListener="#{dialogHandlerAction.groupListDialog.initAndPrepareBean(true,false)}">
+								actionListener="#{dialog.groupListDialog.initAndPrepareBean()}">
 								<p:ajax event="dialogReturn" update="@form"
-									listener="#{dialog.favouriteListEditDialog.onReturnSelectGroup}" />
+									listener="#{dialog.favouriteListEditDialog.onPermissionSelectEvent}" />
 								<i class="fa fa-plus" />
 							</p:commandLink>
 						</f:facet>
@@ -393,22 +394,24 @@
 				<p:dataTable var="item" scrollable="true" scrollHeight="60"
 					styleClass="defaultHistoDataTable"
 					value="#{dialog.favouriteListEditDialog.favouriteList.items}">
+
+					<!--  id -->
 					<p:column headerText="#{msg['dialog.favouriteListEdit.tasks.id']}"
-						style="width:30%">
+						style="width:20%">
 						<h:outputText value="#{item.task.taskID}" />
 					</p:column>
-					<p:column headerText="Kommentar">
+
+					<!-- commentary -->
+					<p:column
+						headerText="#{msg['dialog.favouriteListEdit.tasks.commentary']}">
 						<h:outputLabel value="#{item.commentary}">
 							<f:converter converterId="org.histo.ui.TruncateConverter" />
 							<f:attribute name="truncateAt" value="50" />
 							<f:attribute name="continuationMark" value="..." />
 						</h:outputLabel>
-
 					</p:column>
 				</p:dataTable>
 			</h:panelGrid>
-
-
 		</div>
 
 		<div class="buttonContainer">
@@ -417,11 +420,8 @@
 					<!-- Save button -->
 					<p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
 						process="@form"
+						actionListener="#{dialog.favouriteListEditDialog.saveAndHide()}"
 						rendered="#{!(!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList)}">
-						<f:actionListener
-							binding="#{dialog.favouriteListEditDialog.saveFavouriteList()}"></f:actionListener>
-						<f:actionListener
-							binding="#{dialog.favouriteListEditDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 
 					<!-- Close button -->

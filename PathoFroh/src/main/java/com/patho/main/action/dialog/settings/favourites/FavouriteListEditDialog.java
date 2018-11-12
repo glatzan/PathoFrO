@@ -14,6 +14,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.settings.groups.GroupListDialog.GroupSelectEvent;
+import com.patho.main.action.dialog.settings.users.UserListDialog.HistoUserSelectEvent;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteListItem;
@@ -27,6 +29,7 @@ import com.patho.main.repository.FavouritePermissionsRepository;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
@@ -37,11 +40,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDialog> {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -57,11 +55,6 @@ public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDia
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private FavouriteListRepository favouriteListRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private FavouritePermissionsRepository favouritePermissionsRepository;
 
 	private boolean newFavouriteList;
 
@@ -109,6 +102,7 @@ public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDia
 	}
 
 	public boolean initBean(FavouriteList favouriteList, boolean adminMode, boolean initialize) {
+
 		if (initialize)
 			favouriteList = favouriteListRepository
 					.findOptionalByIdAndInitialize(favouriteList.getId(), true, true, true).get();
@@ -124,14 +118,7 @@ public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDia
 		// getting lists for dumplist option, if admin mod all lists are available, if
 		// user only the writeable lists are displayed
 		if (adminMode) {
-			//
-			//
-			//
-			// !---------------------check load
-			//
-			//
-			//
-			dumpLists = favouriteListRepository.findAll(true, true, true, true);
+			dumpLists = favouriteListRepository.findAll(false, false, false, false);
 		} else {
 			dumpLists = favouriteListRepository.findByUserAndWriteableAndReadable(userHandlerAction.getCurrentUser(),
 					true, false);
@@ -140,7 +127,6 @@ public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDia
 		setDumpListTransformer(new DefaultTransformer<FavouriteList>(dumpLists));
 
 		setUserPermission(new FavouriteListContainer(favouriteList, userHandlerAction.getCurrentUser()));
-
 		return super.initBean(task, Dialog.SETTINGS_FAVOURITE_LIST_EDIT);
 	}
 
@@ -163,48 +149,23 @@ public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDia
 	 * @param event
 	 */
 	public void onReturnSelectOwner(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof HistoUser) {
-			favouriteList.setOwner((HistoUser) event.getObject());
-		}
+		if (event.getObject() != null && event.getObject() instanceof HistoUserSelectEvent)
+			favouriteList.setOwner(((HistoUserSelectEvent) event.getObject()).getUser());
 	}
 
 	/**
-	 * Is called on user select dialog return. Adds an user to the permission list,
-	 * sets readable to true.
+	 * Is called on user or group select dialog return. Adds an user to the
+	 * permission list, sets readable to true.
 	 * 
 	 * @param event
 	 */
-	public void onReturnSelectUser(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof HistoUser) {
-			if (!favouriteList.getUsers().stream().anyMatch(p -> p.getUser().equals(event.getObject()))) {
-				FavouritePermissionsUser permission = new FavouritePermissionsUser((HistoUser) event.getObject());
-				favouriteList.getUsers().add(permission);
-				permission.setFavouriteList(favouriteList);
-				permission.setReadable(true);
-
-				if (favouriteList.isGlobalView())
-					permission.setReadable(true);
-			}
-		}
-	}
-
-	/**
-	 * Is called on group select dialog return. Adds a group to the permission list,
-	 * sets readable to true.
-	 * 
-	 * @param event
-	 */
-	public void onReturnSelectGroup(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof HistoGroup) {
-			if (!favouriteList.getGroups().stream().anyMatch(p -> p.getGroup().equals(event.getObject()))) {
-				FavouritePermissionsGroup permission = new FavouritePermissionsGroup((HistoGroup) event.getObject());
-				favouriteList.getGroups().add(permission);
-				permission.setFavouriteList(favouriteList);
-				permission.setReadable(true);
-
-				if (favouriteList.isGlobalView())
-					permission.setReadable(true);
-			}
+	public void onPermissionSelectEvent(SelectEvent event) {
+		if (event.getObject() != null && event.getObject() instanceof HistoUserSelectEvent) {
+			favouriteListService.addUserPermission(getFavouriteList(),
+					((HistoUserSelectEvent) event.getObject()).getUser(), true, false);
+		} else if (event.getObject() != null && event.getObject() instanceof GroupSelectEvent) {
+			favouriteListService.addGroupPermission(getFavouriteList(),
+					((GroupSelectEvent) event.getObject()).getGroup(), true, false);
 		}
 	}
 
@@ -235,21 +196,9 @@ public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDia
 	/**
 	 * Saves the list.
 	 */
-	public void saveFavouriteList() {
-		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-			public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-				if (!toDeleteList.isEmpty()) {
-					for (FavouritePermissions favouritePermissions : toDeleteList) {
-						favouritePermissionsRepository.delete(favouritePermissions);
-					}
-				}
-
-				favouriteListRepository.save(getFavouriteList(),
-						resourceBundle.get(getFavouriteList().getId() == 0 ? "log.settings.favouriteList.new"
-								: "log.settings.favouriteList.edit", getFavouriteList()));
-			}
-		});
+	public void saveAndHide() {
+		favouriteListService.addOrUpdate(getFavouriteList(), getToDeleteList());
+		super.hideDialog(new ReloadEvent());
 	}
 
 	public enum Mode {

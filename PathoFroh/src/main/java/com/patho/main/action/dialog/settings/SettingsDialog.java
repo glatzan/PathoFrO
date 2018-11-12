@@ -9,6 +9,9 @@ import org.primefaces.event.ReorderEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
@@ -25,15 +28,18 @@ import com.patho.main.model.Organization;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototype.StainingType;
+import com.patho.main.model.dto.TaskOverview;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.model.log.Log;
+import com.patho.main.model.log.Log_;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.DiagnosisPresetRepository;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.ListItemRepository;
+import com.patho.main.repository.LogRepository;
 import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PhysicianRepository;
@@ -44,6 +50,7 @@ import com.patho.main.service.DiagnosisService;
 import com.patho.main.service.GroupService;
 import com.patho.main.service.ListItemService;
 import com.patho.main.service.MaterialPresetService;
+import com.patho.main.service.OrganizationService;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.StainingPrototypeService;
 import com.patho.main.service.UserService;
@@ -612,6 +619,11 @@ public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
 		@Setter(AccessLevel.NONE)
 		private OrganizationRepository organizationRepository;
 
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private OrganizationService organizationService;
+
 		private List<Organization> organizations;
 
 		private boolean showArchived;
@@ -635,6 +647,24 @@ public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
 			setOrganizations(organizationRepository.findAllOrderByIdAsc(!showArchived));
 		}
 
+		/**
+		 * Archvies or dearchvies organization depending on the given parameters.
+		 *
+		 * @param physician
+		 * @param archive
+		 */
+		public void archiveOrDelete(Organization organization, boolean archive) {
+			if (archive) {
+				if (organizationService.deleteOrArchive(organization)) {
+					MessageHandler.sendGrowlMessagesAsResource("growl.organization.deleted");
+				} else
+					MessageHandler.sendGrowlMessagesAsResource("growl.organization.archive");
+			} else {
+				organizationService.archive(organization, false);
+				MessageHandler.sendGrowlMessagesAsResource("growl.organization .dearchive");
+			}
+			updateData();
+		}
 	}
 
 	@Getter
@@ -668,15 +698,19 @@ public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
 
 	@Getter
 	@Setter
+	@Configurable
 	public class LogTab extends AbstractTab {
 
-		private int logsPerPull;
+		@Autowired
+		private LogRepository logRepository;
 
-		private int selectedLogPage;
+		private int logsPerPage;
+
+		private int page;
+
+		private int pagesCount;
 
 		private List<Log> logs;
-
-		private int maxLogPages;
 
 		public LogTab() {
 			setTabName("LogTab");
@@ -684,18 +718,25 @@ public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
 			setViewID("logs");
 			setCenterInclude("include/log.xhtml");
 
-			setLogsPerPull(50);
-			setSelectedLogPage(1);
+			setLogsPerPage(500);
+			setPage(1);
 		}
 
 		@Override
 		public void updateData() {
-//			int maxPages = logDAO.countTotalLogs();
-//			int pagesCount = (int) Math.ceil((double) maxPages / logsPerPull);
-//
-//			setMaxLogPages(pagesCount);
-//
-//			setLogs(logDAO.getLogs(getLogsPerPull(), getSelectedLogPage() - 1));
+
+			// updating page count
+			long maxLogPages = logRepository.count();
+
+			pagesCount = (int) Math.ceil((double) maxLogPages / logsPerPage);
+
+			if (page > pagesCount) {
+				page = pagesCount;
+			}
+			
+			setLogs(logRepository
+					.findAll(PageRequest.of(page-1, getLogsPerPage(), Sort.by(Log_.id.getName()).descending()))
+					.getContent());
 		}
 
 	}

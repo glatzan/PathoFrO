@@ -31,42 +31,5 @@ import lombok.Getter;
 @Getter
 public class DialogHandlerAction {
 
-	private OrganizationListDialog organizationListDialog = new OrganizationListDialog();
-
-	private ContactDialog contactDialog = new ContactDialog();
-
-	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
-
-	private NotificationDialog notificationDialog = new NotificationDialog();
-
-	private DeleteTaskDialog deleteTaskDialog = new DeleteTaskDialog();
-
-	private EditPatientDialog editPatientDialog = new EditPatientDialog();
-
-	private ArchiveTaskDialog archiveTaskDialog = new ArchiveTaskDialog();
-
-	private StainingPhaseExitDialog stainingPhaseExitDialog = new StainingPhaseExitDialog();
-
-	private PhysicianSearchDialog physicianSearchDialog = new PhysicianSearchDialog();
-
-	private PhysicianEditDialog physicianEditDialog = new PhysicianEditDialog();
-
-	private MaterialEditDialog materialEditDialog = new MaterialEditDialog();
-
-	private StainingEditDialog stainingEditDialog = new StainingEditDialog();
-
-	private GroupListDialog groupListDialog = new GroupListDialog();
-
-	private GroupEditDialog groupEditDialog = new GroupEditDialog();
-
-	private UserListDialog userListDialog = new UserListDialog();
-
-	private AddSlidesDialog createSlidesDialog = new AddSlidesDialog();
-
-	private ChangeTaskIDDialog changeTaskIDDialog = new ChangeTaskIDDialog();
-
-	private EditUserDialog editUserDialog = new EditUserDialog();
-
-	private NotificationPhaseExitDialog notificationPhaseExitDialog = new NotificationPhaseExitDialog();
 
 }

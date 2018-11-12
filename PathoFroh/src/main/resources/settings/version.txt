@@ -144,6 +144,14 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* new sequence for favourite permissions*/
+create sequence favouritePermission_sequence increment by 50 minvalue 1 MAXVALUE 9223372036854775807 START WITH 100
+
+
+/* archived for FavouriteList*/
+Alter table favouriteList add archived boolean;
+UPDATE favouriteList SET archived = false;	
+
 /* archived for diangosispreset*/
 Alter table diagnosisPreset add archived boolean;
 UPDATE diagnosisPreset SET archived = false;	

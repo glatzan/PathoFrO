@@ -22,20 +22,32 @@ import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @SelectBeforeUpdate(true)
-@DynamicUpdate(true)
+@Getter
+@Setter
 @SequenceGenerator(name = "favouritelistitem_sequencegenerator", sequenceName = "favouritelistitem_sequence")
 public class FavouriteListItem implements ID {
 
+	@Id
+	@GeneratedValue(generator = "favouritelistitem_sequencegenerator")
+	@Column(unique = true, nullable = false)
 	private long id;
 
+	@ManyToOne(fetch = FetchType.LAZY)
 	private FavouriteList favouriteList;
 
+	@OneToOne
 	private Task task;
 
+	@Column
 	private String commentary;
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Slide> slides;
 
 	public FavouriteListItem() {
@@ -45,53 +57,4 @@ public class FavouriteListItem implements ID {
 		this.task = task;
 		this.favouriteList = favouriteList;
 	}
-
-	// ************************ Getter/Setter ************************
-	@Id
-	@GeneratedValue(generator = "favouritelistitem_sequencegenerator")
-	@Column(unique = true, nullable = false)
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	@OneToOne
-	public Task getTask() {
-		return task;
-	}
-
-	public void setTask(Task task) {
-		this.task = task;
-	}
-
-	public String getCommentary() {
-		return commentary;
-	}
-
-	public void setCommentary(String commentary) {
-		this.commentary = commentary;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	public List<Slide> getSlides() {
-		return slides;
-	}
-
-	public void setSlides(List<Slide> slides) {
-		this.slides = slides;
-	}
-
-	@ManyToOne(fetch=FetchType.LAZY)
-	public FavouriteList getFavouriteList() {
-		return favouriteList;
-	}
-
-	public void setFavouriteList(FavouriteList favouriteList) {
-		this.favouriteList = favouriteList;
-	}
-
 }

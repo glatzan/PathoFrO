@@ -7,21 +7,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.SequenceGenerator;
 
 import com.patho.main.model.interfaces.ID;
 
 import lombok.Getter;
 import lombok.Setter;
 
-//@Entity
 @Getter
 @Setter
 @MappedSuperclass
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class FavouritePermissions implements ID {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "favouritepermission_sequencegenerator")
+	@SequenceGenerator(name = "favouritepermission_sequencegenerator", sequenceName = "favouritepermission_sequence")
 	@Column(unique = true, nullable = false)
 	protected long id;
 

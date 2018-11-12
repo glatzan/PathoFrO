@@ -15,101 +15,55 @@ import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Configurable
 @Getter
 @Setter
-public class UserListDialog extends AbstractDialog {
-
-	@Autowired
-	private ResourceBundle resourceBundle;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
+public class UserListDialog extends AbstractDialog<UserListDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private UserRepository userRepository;
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GroupRepository groupRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserService userService;
-
 	private List<HistoUser> users;
-
-	private List<HistoGroup> groups;
-
-	private DefaultTransformer<HistoGroup> groupTransformer;
 
 	private boolean showArchived;
 
 	private HistoUser selectedUser;
 
-	private boolean selectMode;
-
-	private boolean editMode;
-
-	public void initAndPrepareBean() {
-		if (initBean(false, false))
+	public UserListDialog initAndPrepareBean() {
+		if (initBean())
 			prepareDialog();
+		return this;
 	}
 
-	public void initAndPrepareBean(boolean selectMode, boolean editMode) {
-		if (initBean(selectMode, editMode))
-			prepareDialog();
-	}
-
-	public boolean initBean(boolean selectMode, boolean editMode) {
+	public boolean initBean() {
 		setShowArchived(false);
-		setSelectMode(selectMode);
-		setEditMode(editMode);
-
 		setSelectedUser(null);
-
 		updateData();
-
-		super.initBean(task, Dialog.SETTINGS_USERS_LIST);
-		return true;
+		return super.initBean(task, Dialog.SETTINGS_USERS_LIST);
 	}
 
 	public void updateData() {
 		setUsers(userRepository.findAllIgnoreArchived(!showArchived));
-		setGroups(groupRepository.findAll(true));
-		setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
 	}
 
-	public void selectUserAndHide() {
-		super.hideDialog(getSelectedUser());
+	public void selectAndHide() {
+		super.hideDialog(new HistoUserSelectEvent(getSelectedUser()));
 	}
 
-	public void onChangeUserGroup(HistoUser user) {
-		try {
-			userService.updateGroupOfUser(user, user.getGroup());
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class HistoUserSelectEvent implements DialogReturnEvent {
+		private HistoUser user;
 	}
-
-	public void archive(HistoUser user, boolean archive) {
-		try {
-			userService.archiveUser(user, archive);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
-	}
-
 }

@@ -91,7 +91,7 @@ public class OrganizationEditDialog extends AbstractDialog<OrganizationEditDialo
 	 * @param physician
 	 */
 	private void save() {
-		organization = organizationService.addOrSaveOrganization(organization);
+		organization = organizationService.addOrUpdate(organization);
 
 		for (Person person : removeFromOrganization) {
 			personRepository.save(person, resourceBundle.get("log.person.organization.remove", person, organization));

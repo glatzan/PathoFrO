@@ -28,7 +28,8 @@
 			<!-- commentary -->
 			<p:column
 				headerText="#{msg['dialog.settings.organization.list.note']}">
-				<h:outputLabel value="#{organization.note}" title="#{organization.note}">
+				<h:outputLabel value="#{organization.note}"
+					title="#{organization.note}">
 					<f:converter converterId="org.histo.ui.TruncateConverter" />
 					<f:attribute name="truncateAt" value="25" />
 					<f:attribute name="continuationMark" value="..." />
@@ -75,6 +76,24 @@
 					<p:ajax event="dialogReturn"
 						listener="#{dialog.settingsDialog.organizationTab.updateData()}"
 						update="@form" />
+				</p:commandLink>
+
+				<!-- delete -->
+				<p:commandLink
+					title="#{msg['dialog.settings.organization.list.option.archive']}"
+					rendered="#{!organization.archived}"
+					actionListener="#{dialog.settingsDialog.organizationTab.archiveOrDelete(organization, true)}"
+					update="@form" process="@this" partialSubmit="true">
+					<i class="fa fa-fw fa-times" />
+				</p:commandLink>
+
+				<!-- unarchive -->
+				<p:commandLink
+					title="#{msg['dialog.settings.organization.list.option.dearchive']}"
+					rendered="#{organization.archived}"
+					actionListener="#{dialog.settingsDialog.organizationTab.archiveOrDelete(organization, false)}"
+					update="@form" process="@this" partialSubmit="true">
+					<i class="fa fa-fw fa-undo" />
 				</p:commandLink>
 			</p:column>
 

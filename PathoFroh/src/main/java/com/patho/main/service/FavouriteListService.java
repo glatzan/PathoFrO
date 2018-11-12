@@ -9,15 +9,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteListItem;
+import com.patho.main.model.favourites.FavouritePermissions;
+import com.patho.main.model.favourites.FavouritePermissionsGroup;
+import com.patho.main.model.favourites.FavouritePermissionsUser;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.user.HistoGroup;
+import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.FavouriteListItemRepository;
 import com.patho.main.repository.FavouriteListRepository;
+import com.patho.main.repository.FavouritePermissionsRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.util.helper.StreamUtils;
 
@@ -50,6 +58,11 @@ public class FavouriteListService extends AbstractService {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private FavouriteListItemRepository favouriteListItemRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private FavouritePermissionsRepository favouritePermissionsRepository;
 
 	public Task addTaskToList(long taskID, PredefinedFavouriteList predefinedFavouriteList) {
 		return addTaskToList(taskID, predefinedFavouriteList.getId());
@@ -206,16 +219,16 @@ public class FavouriteListService extends AbstractService {
 				}
 			}
 
-			if(itemToRemove == null)
+			if (itemToRemove == null)
 				throw new IllegalStateException();
-			
+
 			favouriteList.getItems().remove(itemToRemove);
 			// saving new fav item
 			favouriteListRepository.save(favouriteList);
 
 			favouriteListItemRepository.delete(itemToRemove,
 					resourceBundle.get("log.favouriteList.removed", task.getTaskID(), favouriteList.toString()));
-			
+
 		} catch (IllegalStateException e) {
 			// no item found
 			logger.debug("Can not remove task (" + task.getTaskID() + ") from favourite list ("
@@ -282,5 +295,117 @@ public class FavouriteListService extends AbstractService {
 			removeTaskFromList(oTask.get(), false, oSource.get());
 			addTaskToList(oTask.get(), oTarget.get(), commentary);
 		}
+	}
+
+	/**
+	 * Adds or updates a favourite list
+	 * 
+	 * @param favouriteList
+	 * @return
+	 */
+	public FavouriteList addOrUpdate(FavouriteList favouriteList) {
+		return addOrUpdate(favouriteList, null);
+	}
+
+	/**
+	 * Adds or updates a favourite list, if favouritePermissions is not empty the
+	 * permissions will be delete
+	 * 
+	 * @param favouriteList
+	 * @return
+	 */
+	public FavouriteList addOrUpdate(FavouriteList favouriteList,
+			List<FavouritePermissions> favouritePermissionsToDelete) {
+
+		if (!favouritePermissionsToDelete.isEmpty())
+			for (FavouritePermissions f : favouritePermissionsToDelete)
+				favouritePermissionsRepository.delete(f);
+
+		favouriteList = favouriteListRepository.save(favouriteList, resourceBundle.get(
+				favouriteList.getId() == 0 ? "log.settings.favouriteList.new" : "log.settings.favouriteList.update",
+				favouriteList.getName()));
+
+		return favouriteList;
+	}
+
+	/**
+	 * Tries to delete a favourite list, if not possible the list will be archived
+	 * 
+	 * @param favouriteList
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.NEVER)
+	public boolean deleteOrArchive(FavouriteList favouriteList) {
+		try {
+			favouriteListRepository.delete(favouriteList,
+					resourceBundle.get("log.settings.favouriteList.deleted", favouriteList.getName()));
+			return true;
+		} catch (Exception e) {
+			archive(favouriteList, true);
+			return false;
+		}
+	}
+
+	/**
+	 * Archived or dearchives a favourite list
+	 * 
+	 * @param p
+	 * @param archive
+	 * @return
+	 */
+	public FavouriteList archive(FavouriteList favouriteList, boolean archive) {
+		favouriteList.setArchived(archive);
+		return favouriteListRepository.save(favouriteList,
+				resourceBundle.get(
+						archive ? "log.settings.favouriteList.archived" : "log.settings.favouriteList.dearchived",
+						favouriteList.getName()));
+	}
+
+	/**
+	 * Adds an user permission to the favourite list
+	 * 
+	 * @param list
+	 * @param user
+	 * @param readable
+	 * @param editable
+	 * @return
+	 */
+	public FavouriteList addUserPermission(FavouriteList list, HistoUser user, boolean readable, boolean editable) {
+
+		// not adding the user twice
+		if (list.getUsers().stream().anyMatch(p -> p.getUser().equals(user)))
+			return list;
+
+		FavouritePermissionsUser permission = new FavouritePermissionsUser(user);
+		list.getUsers().add(permission);
+		permission.setFavouriteList(list);
+		permission.setReadable(readable);
+		permission.setEditable(editable);
+
+		return list;
+	}
+
+	/**
+	 * Adds a group permission to the favourite list
+	 * 
+	 * @param list
+	 * @param group
+	 * @param readable
+	 * @param editable
+	 * @return
+	 */
+	public FavouriteList addGroupPermission(FavouriteList list, HistoGroup group, boolean readable, boolean editable) {
+
+		// not adding the user twice
+		if (list.getGroups().stream().anyMatch(p -> p.getGroup().equals(group)))
+			return list;
+
+		FavouritePermissionsGroup permission = new FavouritePermissionsGroup(group);
+		list.getGroups().add(permission);
+		permission.setFavouriteList(list);
+		permission.setReadable(readable);
+		permission.setEditable(editable);
+
+		return list;
 	}
 }

@@ -29,7 +29,7 @@ public class MaterialPresetService extends AbstractService {
 	public MaterialPreset addOrUpdate(MaterialPreset m) {
 
 		m = materialPresetRepository.save(m, resourceBundle
-				.get(m.getId() == 0 ? "llog.settings.material.new" : "log.settings.material.update", m.getName()));
+				.get(m.getId() == 0 ? "log.settings.material.new" : "log.settings.material.update", m.getName()));
 
 		return m;
 	}

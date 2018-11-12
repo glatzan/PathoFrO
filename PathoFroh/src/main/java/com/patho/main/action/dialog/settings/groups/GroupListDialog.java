@@ -13,9 +13,11 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.repository.GroupRepository;
+import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,22 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-public class GroupListDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DialogHandlerAction dialogHandlerAction;
+public class GroupListDialog extends AbstractDialog<GroupListDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -51,62 +38,32 @@ public class GroupListDialog extends AbstractDialog {
 
 	private HistoGroup selectedGroup;
 
-	private boolean selectMode;
-
-	private boolean editMode;
-
-	public void initAndPrepareBean() {
-		if (initBean(false, true))
+	public GroupListDialog initAndPrepareBean() {
+		if (initBean())
 			prepareDialog();
+		return this;
 	}
 
-	public void initAndPrepareBean(boolean selectMode, boolean editMode) {
-		if (initBean(selectMode, editMode))
-			prepareDialog();
-	}
-
-	public boolean initBean(boolean selectMode, boolean editMode) {
-		updateData();
-
+	public boolean initBean() {
 		setShowArchived(false);
-
-		setSelectMode(selectMode);
-		setEditMode(editMode);
-
 		setSelectedGroup(null);
-
-		super.initBean(task, Dialog.SETTINGS_GROUP_LIST);
-		return true;
+		updateData();
+		return super.initBean(task, Dialog.SETTINGS_GROUP_LIST);
 	}
 
 	public void updateData() {
-		setGroups(groupRepository.findAll(!showArchived));
+		setGroups(groupRepository.findAllOrderByIdAsc(!showArchived));
 	}
 
-	public void onRowDblSelect() {
-		if (isSelectMode()) {
-			log.debug("Select Mode: hiding dialog");
-			selectGroupAndHide();
-		} else {
-			log.debug("Edit Mode: showing edit dialog");
-			if (userHandlerAction.currentUserHasPermission(HistoPermissions.PROGRAM_SETTINGS_GROUP)
-					&& selectedGroup != null)
-				dialogHandlerAction.getGroupEditDialog().initAndPrepareBean(selectedGroup);
-		}
+	public void selectAndHide() {
+		super.hideDialog(new GroupSelectEvent(getSelectedGroup()));
 	}
 
-	public void selectGroupAndHide() {
-		super.hideDialog(getSelectedGroup());
-	}
-
-	public void archive(HistoGroup group, boolean archive) {
-		try {
-			group.setArchived(archive);
-			groupRepository.save(group, resourceBundle
-					.get(archive ? "log.settings.group.archived" : "log.settings.group.dearchived", group));
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class GroupSelectEvent implements DialogReturnEvent {
+		private HistoGroup group;
 	}
 
 }

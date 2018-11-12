@@ -103,6 +103,9 @@ public class FavouriteList implements ID {
 	@Column
 	private String dumpCommentary;
 
+	@Column
+	private boolean archived;
+	
 	/**
 	 * If true the list will not be display within the normal add menu
 	 */
