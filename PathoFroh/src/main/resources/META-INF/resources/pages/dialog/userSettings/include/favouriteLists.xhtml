@@ -17,7 +17,7 @@
 			sortBy="#{favouriteListContainer.type}" scrollable="true"
 			expandableRowGroups="true" scrollHeight="450"
 			styleClass="userDialog_FavouriteListTable"
-			value="#{userSettingsDialog.favouriteListTab.containers}">
+			value="#{dialog.userSettingsDialog.favouriteListTab.containers}">
 
 			<p:headerRow>
 				<p:column colspan="3">
@@ -61,7 +61,7 @@
 					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
 					actionListener="#{dialog.favouriteListEditDialog.initAndPrepareBean()}">
 					<p:ajax event="dialogReturn"
-						listener="#{userSettingsDialog.favouriteListTab.updateData()}"
+						listener="#{dialog.userSettingsDialog.favouriteListTab.updateData()}"
 						update="@form" />
 				</p:commandButton>
 			</h:panelGrid>
@@ -71,15 +71,15 @@
 				<p:commandButton value="#{msg['general.save']}"
 					icon="fa fa-check-circle-o">
 					<f:actionListener
-						binding="#{userSettingsDialog.saveUserSettings()}" />
-					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+						binding="#{dialog.userSettingsDialog.saveUserSettings()}" />
+					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle">
 					<f:actionListener
-						binding="#{userSettingsDialog.resetUserSettings()}" />
-					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+						binding="#{dialog.userSettingsDialog.resetUserSettings()}" />
+					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

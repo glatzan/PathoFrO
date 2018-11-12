@@ -21,7 +21,7 @@
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.printer.autoPrinte']}" />
 			<p:selectBooleanCheckbox
-				value="#{userSettingsDialog.user.settings.autoSelectedPreferedPrinter}">
+				value="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferedPrinter}">
 				<p:ajax event="change" update="@form"
 					listener="#{userHandlerAction.updateSelectedDocumentPrinter()}" />
 			</p:selectBooleanCheckbox>
@@ -32,7 +32,7 @@
 				<!-- select printer -->
 				<p:selectOneMenu styleClass="searchSelectMenu"
 					style="width:80% !important;"
-					disabled="#{userSettingsDialog.user.settings.autoSelectedPreferedPrinter}"
+					disabled="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferedPrinter}"
 					panelStyleClass="searchSelectMenuPanel"
 					value="#{userHandlerAction.currentUser.settings.preferedPrinter}"
 					filter="true" filterMatchMode="contains">
@@ -67,7 +67,7 @@
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.labelPrinter.autoPrint']}" />
 			<p:selectBooleanCheckbox
-				value="#{userSettingsDialog.user.settings.autoSelectedPreferedLabelPrinter}">
+				value="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferedLabelPrinter}">
 				<p:ajax event="change" update="@form" />
 			</p:selectBooleanCheckbox>
 
@@ -79,7 +79,7 @@
 				<!-- select printer -->
 				<p:selectOneMenu styleClass="searchSelectMenu"
 					style="width:80% !important;"
-					disabled="#{userSettingsDialog.user.settings.autoSelectedPreferedLabelPrinter}"
+					disabled="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferedLabelPrinter}"
 					panelStyleClass="searchSelectMenuPanel"
 					value="#{userHandlerAction.currentUser.settings.preferedLabelPritner}"
 					filter="true" filterMatchMode="contains">
@@ -108,15 +108,15 @@
 				<p:commandButton value="#{msg['general.save']}" update="@form"
 					icon="fa fa-check-circle-o">
 					<f:actionListener
-						binding="#{userSettingsDialog.saveUserSettings()}" />
-					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+						binding="#{dialog.userSettingsDialog.saveUserSettings()}" />
+					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}" immediate="true"
 					icon="fa fa-times-circle">
 					<f:actionListener
-						binding="#{userSettingsDialog.resetUserSettings()}" />
-					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+						binding="#{dialog.userSettingsDialog.resetUserSettings()}" />
+					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

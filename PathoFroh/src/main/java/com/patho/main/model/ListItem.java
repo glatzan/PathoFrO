@@ -36,12 +36,16 @@ public class ListItem implements ListOrder<ListItem>, ArchivAble, ID {
 	@Column(unique = true, nullable = false)
 	@RevisionNumber
 	private long id;
+
 	@Enumerated(EnumType.STRING)
 	private StaticList listType;
+
 	@Column(columnDefinition = "VARCHAR")
 	private String value;
+
 	@Column
 	private int indexInList;
+
 	@Column
 	private boolean archived;
 

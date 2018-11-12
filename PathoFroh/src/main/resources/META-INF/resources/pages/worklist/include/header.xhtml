@@ -349,8 +349,6 @@
 			<p:hotkey bind="alt+shift+s"
 				oncomplete="$('#headerForm\\:settingsDialogBtn').click();return false;" />
 
-
-
 			<!-- accounting button -->
 			<p:commandButton id="accountingDialogBtn" partialSubmit="true"
 				process="@this"
@@ -358,13 +356,19 @@
 				<p:ajax event="dialogReturn" />
 			</p:commandButton>
 
+			<p:hotkey bind="alt+shift+a"
+				oncomplete="$('#headerForm\\:accountingDialogBtn').click();return false;" />
+
 			<!-- userSettings button -->
 			<p:commandButton id="userSettingsDialogBtn"
-				actionListener="#{userSettingsDialog.initAndPrepareBean()}">
+				actionListener="#{dialog.userSettingsDialog.initAndPrepareBean()}">
 				<p:ajax event="dialogReturn"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm" />
 			</p:commandButton>
+
+			<p:hotkey bind="alt+shift+u"
+				oncomplete="$('#headerForm\\:userSettingsDialogBtn').click();return false;" />
 
 			<!-- Info button -->
 			<p:commandButton id="infoDialogBtn"

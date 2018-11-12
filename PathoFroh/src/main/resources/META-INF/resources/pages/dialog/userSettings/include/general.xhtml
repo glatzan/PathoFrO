@@ -23,10 +23,10 @@
 
 			<p:selectOneMenu
 				title="#{msg['dialog.userSettings.general.defaultView.text']}"
-				value="#{userSettingsDialog.user.settings.defaultView}">
+				value="#{dialog.userSettingsDialog.user.settings.defaultView}">
 
 				<f:selectItems
-					value="#{userSettingsDialog.generalTab.availableViews}" var="page"
+					value="#{dialog.userSettingsDialog.generalTab.availableViews}" var="page"
 					itemLabel="#{msg['enum.pages.'.concat(page)]}" />
 			</p:selectOneMenu>
 
@@ -34,13 +34,13 @@
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.general.inputFieldColor']}" />
 			<p:colorPicker
-				value="#{userSettingsDialog.user.settings.inputFieldColor}" />
+				value="#{dialog.userSettingsDialog.user.settings.inputFieldColor}" />
 
 			<!-- font color of inputfields -->
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.general.inputFieldFontColor']}" />
 			<p:colorPicker
-				value="#{userSettingsDialog.user.settings.inputFieldFontColor}" />
+				value="#{dialog.userSettingsDialog.user.settings.inputFieldFontColor}" />
 
 		</h:panelGrid>
 
@@ -57,10 +57,10 @@
 				value="#{msg['dialog.userSettings.general.defaultWorklist']}" />
 			<p:selectOneMenu
 				title="#{msg['dialog.userSettings.general.defaultWorklist.text']}"
-				value="#{userSettingsDialog.user.settings.worklistToLoad}">
+				value="#{dialog.userSettingsDialog.user.settings.worklistToLoad}">
 
 				<f:selectItems
-					value="#{userSettingsDialog.generalTab.availableWorklistsToLoad}"
+					value="#{dialog.userSettingsDialog.generalTab.availableWorklistsToLoad}"
 					var="page"
 					itemLabel="#{msg['enum.worklistSearchOption.'.concat(page)]}" />
 			</p:selectOneMenu>
@@ -72,7 +72,7 @@
 				styleClass="listingHistoHiddenTableContainer">
 				<p:selectOneMenu
 					title="#{msg['dialog.userSettings.general.sorting.text']}"
-					value="#{userSettingsDialog.user.settings.worklistSortOrder}">
+					value="#{dialog.userSettingsDialog.user.settings.worklistSortOrder}">
 					<f:selectItem
 						itemLabel="#{msg['dialog.worklistorder.sorting.tasknumber']}"
 						itemValue="TASK_ID" />
@@ -88,7 +88,7 @@
 				</p:selectOneMenu>
 
 				<p:selectBooleanButton styleClass="smallButton"
-					value="#{userSettingsDialog.user.settings.worklistSortOrderAsc}"
+					value="#{dialog.userSettingsDialog.user.settings.worklistSortOrderAsc}"
 					style="margin-left:15px;"
 					onLabel="#{msg['dialog.userSettings.general.sorting.asc']}"
 					offLabel="#{msg['dialog.userSettings.general.sorting.desc']}" />
@@ -98,28 +98,28 @@
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.general.hideNonActiveTasks']}" />
 			<p:selectBooleanCheckbox
-				value="#{userSettingsDialog.user.settings.worklistHideNoneActiveTasks}"
+				value="#{dialog.userSettingsDialog.user.settings.worklistHideNoneActiveTasks}"
 				title="#{msg['dialog.userSettings.general.hideNonActiveTasks.text']}" />
 
 			<!-- auto update worklist -->
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.general.autoUpdate']}" />
 			<p:selectBooleanCheckbox
-				value="#{userSettingsDialog.user.settings.worklistAutoUpdate}"
+				value="#{dialog.userSettingsDialog.user.settings.worklistAutoUpdate}"
 				title="#{msg['dialog.userSettings.general.autoUpdate.text']}" />
 
 			<!-- auto update worklist -->
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.general.alternatePatientAddMode']}" />
 			<p:selectBooleanCheckbox
-				value="#{userSettingsDialog.user.settings.alternatePatientAddMode}"
+				value="#{dialog.userSettingsDialog.user.settings.alternatePatientAddMode}"
 				title="#{msg['dialog.userSettings.general.alternatePatientAddMode.text']}" />
 
 			<!-- on click add task-->
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.general.alternatePatientAddMode.oneClickAdd']}" />
 			<p:selectBooleanCheckbox
-				value="#{userSettingsDialog.user.settings.addTaskWithSingelClick}"
+				value="#{dialog.userSettingsDialog.user.settings.addTaskWithSingelClick}"
 				title="#{msg['dialog.userSettings.general.alternatePatientAddMode.oneClickAdd.text']}" />
 
 		</h:panelGrid>
@@ -143,15 +143,15 @@
 				<p:commandButton value="#{msg['general.save']}"
 					icon="fa fa-check-circle-o" partialSubmit="true" process="@form">
 					<f:actionListener
-						binding="#{userSettingsDialog.saveUserSettings()}" />
-					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+						binding="#{dialog.userSettingsDialog.saveUserSettings()}" />
+					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}"
 					icon="fa fa-times-circle">
 					<f:actionListener
-						binding="#{userSettingsDialog.resetUserSettings()}" />
-					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+						binding="#{dialog.userSettingsDialog.resetUserSettings()}" />
+					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

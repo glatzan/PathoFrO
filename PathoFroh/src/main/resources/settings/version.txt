@@ -41,7 +41,7 @@ Tasks:
 -> Accounting: Add rights for accounting dialog
 -> Programm Version Dialog: Enable emails in this dialog
 
--> Enable Delete Funktion in Settings Dialog for Organizations
+-> Audited for Settings (DiangosisPreset etc)
 
 Next Changes:
 -> patienten 1502 und 1503 löschen

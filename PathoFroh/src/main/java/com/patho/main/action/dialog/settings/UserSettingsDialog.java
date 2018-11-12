@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -25,12 +26,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Scope(value = "session")
+@Configurable
 @Getter
 @Setter
-@Slf4j
-public class UserSettingsDialog extends AbstractTabDialog {
+public class UserSettingsDialog extends AbstractTabDialog<UserSettingsDialog> {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -61,9 +60,10 @@ public class UserSettingsDialog extends AbstractTabDialog {
 		tabs = new AbstractTab[] { generalTab, printTab, favouriteListTab };
 	}
 
-	public void initAndPrepareBean() {
-		initBean();
-		prepareDialog();
+	public UserSettingsDialog initAndPrepareBean() {
+		if (initBean())
+			prepareDialog();
+		return this;
 	}
 
 	public boolean initBean() {
@@ -72,14 +72,14 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	}
 
 	public void saveUserSettings() {
-		log.debug("Saving user Settings");
+		logger.debug("Saving user Settings");
 
 		userRepository.save(getUser());
 		userHandlerAction.updateSelectedPrinters();
 	}
 
 	public void resetUserSettings() {
-		log.debug("Resetting user Settings");
+		logger.debug("Resetting user Settings");
 		setUser(userRepository.findById(user.getId()).orElse(null));
 	}
 
@@ -143,14 +143,14 @@ public class UserSettingsDialog extends AbstractTabDialog {
 		@Override
 		public void updateData() {
 			long test = System.currentTimeMillis();
-			log.info("start - > 0");
+			logger.info("start - > 0");
 
 			List<FavouriteList> list = favouriteListRepository.findByUserAndWriteableAndReadable(user, false, false,
-					true, true, true, false);
+					false, false, false, false);
 
 			containers = list.stream().map(p -> new FavouriteListContainer(p, user)).collect(Collectors.toList());
 
-			log.info("end -> " + (System.currentTimeMillis() - test));
+			logger.info("end -> " + (System.currentTimeMillis() - test));
 		}
 
 	}

@@ -10,9 +10,9 @@
 	<title><h:outputFormat
 			value="#{msg['dialog.userSettings.headline']}">
 		</h:outputFormat></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="style" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="style" />
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
@@ -24,7 +24,7 @@
 				<h:outputLabel value="#{msg['dialog.userSettings.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					immediate="true">
-					<f:actionListener binding="#{userSettingsDialog.hideDialog()}" />
+					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
 					<i class="fa fa-fw fa-times icon-grey" />
 				</p:commandLink>
 			</h:panelGrid>
@@ -33,17 +33,17 @@
 
 		<h:panelGrid columns="2" styleClass="dialogContainer">
 			<p:outputPanel id="navigationTable" styleClass="navigationTable">
-				<c:forEach items="#{userSettingsDialog.tabs}" var="tab"
+				<c:forEach items="#{dialog.userSettingsDialog.tabs}" var="tab"
 					varStatus="loop">
 					<p:commandButton value="#{msg[tab.name]}"
 						disabled="#{tab.disabled}"
-						styleClass="#{tab eq userSettingsDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
-						actionListener="#{userSettingsDialog.onTabChange(tab)}"
+						styleClass="#{tab eq dialog.userSettingsDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
+						actionListener="#{dialog.userSettingsDialog.onTabChange(tab)}"
 						update="navigationTable dialogContent" />
 				</c:forEach>
 			</p:outputPanel>
 			<p:outputPanel id="dialogContent" styleClass="dialogContent">
-				<ui:include src="#{userSettingsDialog.selectedTab.centerInclude}" />
+				<ui:include src="#{dialog.userSettingsDialog.selectedTab.centerInclude}" />
 			</p:outputPanel>
 		</h:panelGrid>
 	</h:form>

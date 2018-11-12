@@ -26,6 +26,7 @@ import com.patho.main.action.dialog.print.CustomAddressDialog;
 import com.patho.main.action.dialog.print.FaxDocumentDialog;
 import com.patho.main.action.dialog.print.PrintDialog;
 import com.patho.main.action.dialog.settings.SettingsDialog;
+import com.patho.main.action.dialog.settings.UserSettingsDialog;
 import com.patho.main.action.dialog.settings.diagnosis.DiagnosisPresetEditDialog;
 import com.patho.main.action.dialog.settings.favourites.FavouriteListEditDialog;
 import com.patho.main.action.dialog.settings.groups.GroupEditDialog;
@@ -100,4 +101,5 @@ public class DialogHandler {
 	private GroupEditDialog groupEditDialog = new GroupEditDialog();
 	private UserListDialog userListDialog = new UserListDialog();
 	private GroupListDialog groupListDialog = new GroupListDialog();
+	private UserSettingsDialog userSettingsDialog = new UserSettingsDialog();
 }
