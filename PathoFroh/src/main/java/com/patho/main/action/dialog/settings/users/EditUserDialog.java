@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -29,7 +30,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class EditUserDialog extends AbstractDialog<EditUserDialog> implements OrganizationFunctions {
+public class EditUserDialog extends AbstractTabDialog<EditUserDialog> implements OrganizationFunctions {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
