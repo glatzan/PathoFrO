@@ -11,10 +11,15 @@ import org.cups4j.CupsClient;
 import org.cups4j.CupsPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.patho.main.action.UserHandlerAction;
+import com.patho.main.model.user.HistoUser;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.json.JsonHandler;
@@ -40,13 +45,27 @@ public class PrintService extends AbstractService {
 	@PostConstruct
 	public void initilizePrinters() {
 		getCupsPrinter().initialize();
+		getLablePrinter().initialize();
 	}
-	
+
+	public ClinicPrinter getCurrentPrinter(HistoUser user) {
+		return cupsPrinter.findPrinterForUser(user);
+	}
+
+	/**
+	 * returns the current label priter
+	 * 
+	 * @return
+	 */
+	public LabelPrinter getCurrentLabelPrinter(HistoUser user) {
+		return lablePrinter.findPrinterForUser(user);
+	}
+
 	@Getter
 	@Setter
 	public static class CupsPrinterHandler {
 
-		protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 		private String host;
 
@@ -85,11 +104,40 @@ public class PrintService extends AbstractService {
 
 			} catch (Exception e) {
 				logger.error("Retriving printers failed" + e);
-				result.add(0, new ClinicPrinterDummy());
 				e.printStackTrace();
 			}
 
+			result.add(0, new ClinicPrinterDummy());
+
 			return result;
+		}
+
+		/**
+		 * Returns a printer for the given user
+		 * 
+		 * @param user
+		 * @return
+		 */
+		public ClinicPrinter findPrinterForUser(HistoUser user) {
+
+			if (user.getSettings().isAutoSelectedPreferedPrinter()) {
+				ClinicPrinter printer = getCupsPrinterForRoom();
+				if (printer != null) {
+					logger.debug("Pritner found, setting auto printer to " + printer.getName());
+					return printer;
+				} else
+					logger.debug("No Pritner found!, selecting default printer");
+
+			}
+
+			if (user.getSettings().getPreferedPrinter() == 0) {
+				// dummy printer is always there
+				return getPrinter().get(0);
+			} else {
+				// updating the current printer, if no printer was selected the dummy printer
+				// will be returned
+				return findPrinterByID(user.getSettings().getPreferedPrinter());
+			}
 		}
 
 		/**
@@ -152,8 +200,7 @@ public class PrintService extends AbstractService {
 		 *
 		 * Taken from https://stackoverflow.com/a/38468051/778272
 		 *
-		 * @param request
-		 *            - the request object where to get the remote address from
+		 * @param request - the request object where to get the remote address from
 		 * @return a string corresponding to the IP address of the remote machine
 		 */
 		public static String getRemoteAddress(HttpServletRequest request) {
@@ -172,6 +219,9 @@ public class PrintService extends AbstractService {
 	@Getter
 	@Setter
 	public static class LablePrinterHandler {
+
+		private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 		private String testPage;
 
 		/**
@@ -184,6 +234,10 @@ public class PrintService extends AbstractService {
 		 */
 		private DefaultTransformer<LabelPrinter> printerTransformer;
 
+		public void initialize() {
+			setPrinterTransformer(new DefaultTransformer<LabelPrinter>(getPrinter()));
+		}
+		
 		public LabelPrinter findPrinterByID(String id) {
 
 			for (LabelPrinter labelPrinter : getPrinter()) {
@@ -193,24 +247,30 @@ public class PrintService extends AbstractService {
 			}
 			return null;
 		}
+
+		/**
+		 * Returns a printer for the given user
+		 * 
+		 * @param user
+		 * @return
+		 */
+		public LabelPrinter findPrinterForUser(HistoUser user) {
+
+			// TODO auto select for roon
+			if (user.getSettings().getPreferedLabelPritner() == null) {
+				return printer.get(0);
+			} else {
+				LabelPrinter labelPrinter = findPrinterByID(user.getSettings().getPreferedLabelPritner());
+
+				if (labelPrinter != null) {
+					logger.debug("Settings printer " + labelPrinter.getName() + " as selected printer");
+					return labelPrinter;
+				} else {
+					// TODO serach for pritner in the same room
+					return printer.get(0);
+				}
+			}
+		}
 	}
 
 }
-
-// Type listType=new
-// TypeToken<ArrayList<LabelPrinter>>(){}.getType();setLabelPrinterList(gson.fromJson(o.get(SETTINGS_LABLE_PRINTERS),listType));setLabelPrinterListTransformer(new
-// DefaultTransformer<LabelPrinter>(getLabelPrinterList()));
-//
-// printerForRoomHandler=gson.fromJson(o.get(SETTINGS_PRINTER_FOR_ROOM),PrinterForRoomHandler.class);
-//
-// @Autowired
-// @Getter(AccessLevel.NONE)
-// @Setter(AccessLevel.NONE)
-// private GlobalSettings globalSettings;
-//
-// public List<ClinicPrinter> loadCupsPrinters(PrinterSettings settings,
-// DefaultDocuments defaultDocuments) {
-//
-//
-// return result;
-// }

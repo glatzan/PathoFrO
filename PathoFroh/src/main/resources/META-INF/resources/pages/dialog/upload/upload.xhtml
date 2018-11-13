@@ -35,8 +35,8 @@
 				columnClasses="columnWidth125">
 				<!-- save place -->
 				<h:outputLabel value="#{msg['dialog.upload.save']}"></h:outputLabel>
-				<p:selectOneMenu styleClass="customSerachSelectMenu"
-					panelStyleClass="customSerachSelectMenuPanel"
+				<p:selectOneMenu 
+					panelStyleClass="searchSelectMenuPanel"
 					converter="#{dialog.uploadDialog.dataListTransformer}"
 					value="#{dialog.uploadDialog.selectedDatalist}" filter="true"
 					filterMatchMode="contains">
@@ -58,8 +58,8 @@
 
 				<!-- types -->
 				<h:outputLabel value="#{msg['dialog.upload.type']}"></h:outputLabel>
-				<p:selectOneMenu styleClass="customSerachSelectMenu"
-					panelStyleClass="customSerachSelectMenuPanel"
+				<p:selectOneMenu 
+					panelStyleClass="searchSelectMenuPanel"
 					value="#{dialog.uploadDialog.fileType}" filter="true"
 					filterMatchMode="contains">
 

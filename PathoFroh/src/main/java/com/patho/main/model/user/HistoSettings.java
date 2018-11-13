@@ -37,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @SequenceGenerator(name = "settings_sequencegenerator", sequenceName = "settings_sequence")
 @Getter
 @Setter
-@Slf4j
 public class HistoSettings implements ID, Cloneable {
 
 	@Id

@@ -18,7 +18,10 @@ import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.UserRepository;
+import com.patho.main.service.PrintService;
 import com.patho.main.ui.FavouriteListContainer;
+import com.patho.main.util.printer.ClinicPrinter;
+import com.patho.main.util.printer.LabelPrinter;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
@@ -71,14 +74,13 @@ public class UserSettingsDialog extends AbstractTabDialog<UserSettingsDialog> {
 		return super.initBean(Dialog.USER_SETTINGS);
 	}
 
-	public void saveUserSettings() {
+	public void saveAndHide() {
 		logger.debug("Saving user Settings");
 
 		userRepository.save(getUser());
-		userHandlerAction.updateSelectedPrinters();
 	}
 
-	public void resetUserSettings() {
+	public void hideDialog() {
 		logger.debug("Resetting user Settings");
 		setUser(userRepository.findById(user.getId()).orElse(null));
 	}
@@ -99,25 +101,39 @@ public class UserSettingsDialog extends AbstractTabDialog<UserSettingsDialog> {
 		}
 
 		public boolean initTab() {
-
 			setAvailableViews(
 					new ArrayList<View>(userHandlerAction.getCurrentUser().getSettings().getAvailableViews()));
-
 			setAvailableWorklistsToLoad(userHandlerAction.getCurrentUser().getSettings().getAvailableWorklists());
-
 			return true;
 		}
 	}
 
 	@Getter
 	@Setter
+	@Configurable
 	public class PrinterTab extends AbstractTab {
+
+		@Autowired
+		private PrintService printService;
+
+		private ClinicPrinter clinicPrinter;
+		
+		private LabelPrinter labelPrinter;
 
 		public PrinterTab() {
 			setTabName("PrinterTab");
 			setName("dialog.userSettings.printer");
 			setViewID("printerTab");
 			setCenterInclude("include/printer.xhtml");
+		}
+
+		public boolean initTab() {
+			ClinicPrinter printer = printService.getCurrentPrinter(userHandlerAction.getCurrentUser());
+			LabelPrinter labelPrinter = printService.getCurrentLabelPrinter(userHandlerAction.getCurrentUser());
+			
+			setLabelPrinter(labelPrinter);
+			setClinicPrinter(printer);
+			return true;
 		}
 
 	}

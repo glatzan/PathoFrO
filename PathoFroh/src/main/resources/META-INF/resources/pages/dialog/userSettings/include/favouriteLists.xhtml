@@ -11,12 +11,12 @@
 		<h:outputLabel value="#{msg['dialog.userSettings.general']}" />
 	</p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel">
+	<p:outputPanel styleClass="bodyPannelFull">
 
 		<p:dataTable var="favouriteListContainer"
 			sortBy="#{favouriteListContainer.type}" scrollable="true"
 			expandableRowGroups="true" scrollHeight="450"
-			styleClass="userDialog_FavouriteListTable"
+			styleClass="defaultHistoTable"
 			value="#{dialog.userSettingsDialog.favouriteListTab.containers}">
 
 			<p:headerRow>
@@ -51,6 +51,27 @@
 
 	</p:outputPanel>
 
+<!-- 
+
+.userDialog_FavouriteListTable{
+	.dynamicScrollTable (true);
+
+	tr {
+		display: table;
+		td:nth-child(1) {
+		width: auto;
+	}
+		td:nth-child(2) {
+		width: 40%;
+		}
+		td:nth-child(3) {
+		width: 20px !important;
+	}
+	}
+}
+
+
+ -->
 
 	<div class="buttonContainer">
 		<h:panelGrid columns="2">

@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +44,7 @@ public class UserHandlerAction implements Serializable {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
+	@Lazy
 	private PrintService printService;
 
 	/********************************************************
@@ -72,7 +74,8 @@ public class UserHandlerAction implements Serializable {
 	 */
 	@PostConstruct
 	public void init() {
-		updateSelectedPrinters();
+		setSelectedPrinter(printService.getCurrentPrinter(getCurrentUser()));
+		setSelectedLabelPrinter(printService.getCurrentLabelPrinter(getCurrentUser()));
 	}
 
 	/**
@@ -135,55 +138,6 @@ public class UserHandlerAction implements Serializable {
 		globalSettings.getMailHandler().sendAdminMail(mail);
 
 		setUnlockRequestSend(true);
-	}
-
-	public void updateSelectedPrinters() {
-
-		updateSelectedDocumentPrinter();
-
-		if (getCurrentUser().getSettings().getPreferedLabelPritner() == null) {
-			setSelectedLabelPrinter(printService.getLablePrinter().getPrinter().get(0));
-			getCurrentUser().getSettings().setPreferedLabelPritner(Long.toString(getSelectedLabelPrinter().getId()));
-		} else {
-			LabelPrinter labelPrinter = printService.getLablePrinter()
-					.findPrinterByID(getCurrentUser().getSettings().getPreferedLabelPritner());
-
-			if (labelPrinter != null) {
-				logger.debug("Settings printer " + labelPrinter.getName() + " as selected printer");
-				setSelectedLabelPrinter(labelPrinter);
-			} else {
-				// TODO serach for pritner in the same room
-				setSelectedLabelPrinter(printService.getLablePrinter().getPrinter().get(0));
-			}
-		}
-	}
-
-	public boolean updateSelectedDocumentPrinter() {
-		if (getCurrentUser().getSettings().isAutoSelectedPreferedPrinter()) {
-			ClinicPrinter printer = printService.getCupsPrinter().getCupsPrinterForRoom();
-			if (printer != null) {
-				setSelectedPrinter(printer);
-				logger.debug("Pritner found, setting auto printer to " + printer.getName());
-				return true;
-			} else {
-				logger.debug("No Pritner found!, selecting default printer");
-			}
-		}
-
-		if (getCurrentUser().getSettings().getPreferedPrinter() == 0) {
-			// dummy printer is always there
-			setSelectedPrinter(printService.getCupsPrinter().getPrinter().get(0));
-			getCurrentUser().getSettings().setPreferedPrinter(getSelectedPrinter().getId());
-			return false;
-		} else {
-			// updating the current printer, if no printer was selected the dummy printer
-			// will be set.
-			ClinicPrinter printer = printService.getCupsPrinter()
-					.findPrinterByID(getCurrentUser().getSettings().getPreferedPrinter());
-			setSelectedPrinter(printer);
-			getCurrentUser().getSettings().setPreferedPrinter(printer.getId());
-			return true;
-		}
 	}
 
 }

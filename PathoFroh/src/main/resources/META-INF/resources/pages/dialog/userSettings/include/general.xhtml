@@ -12,22 +12,21 @@
 		<h:outputLabel value="#{msg['dialog.userSettings.general']}" />
 	</p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel">
+	<p:outputPanel styleClass="bodyPannelFull">
 
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth200 columnHeading columnTop,">
+			columnClasses="columnWidth150 ,">
 
 			<!-- standard view -->
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.general.defaultView']}" />
-
 			<p:selectOneMenu
 				title="#{msg['dialog.userSettings.general.defaultView.text']}"
 				value="#{dialog.userSettingsDialog.user.settings.defaultView}">
 
 				<f:selectItems
-					value="#{dialog.userSettingsDialog.generalTab.availableViews}" var="page"
-					itemLabel="#{msg['enum.pages.'.concat(page)]}" />
+					value="#{dialog.userSettingsDialog.generalTab.availableViews}"
+					var="page" itemLabel="#{msg['enum.pages.'.concat(page)]}" />
 			</p:selectOneMenu>
 
 			<!-- background color of inputfields -->
@@ -51,7 +50,7 @@
 		</h:panelGrid>
 
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth200 columnHeading columnTop,">
+			columnClasses="columnWidth150 ,">
 			<!-- standard work list -->
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.general.defaultWorklist']}" />
@@ -67,7 +66,6 @@
 
 			<!-- sorting -->
 			<h:outputLabel value="#{msg['dialog.userSettings.general.sorting']}" />
-
 			<h:panelGrid columns="2"
 				styleClass="listingHistoHiddenTableContainer">
 				<p:selectOneMenu
@@ -87,7 +85,8 @@
 						itemValue="PRIORITY" />
 				</p:selectOneMenu>
 
-				<p:selectBooleanButton styleClass="smallButton"
+				<!-- ascending -->
+				<p:selectBooleanButton
 					value="#{dialog.userSettingsDialog.user.settings.worklistSortOrderAsc}"
 					style="margin-left:15px;"
 					onLabel="#{msg['dialog.userSettings.general.sorting.asc']}"
@@ -141,17 +140,13 @@
 
 			<h:panelGrid columns="2" styleClass="right">
 				<p:commandButton value="#{msg['general.save']}"
+					actionListener="#{dialog.userSettingsDialog.saveAndHide()}"
 					icon="fa fa-check-circle-o" partialSubmit="true" process="@form">
-					<f:actionListener
-						binding="#{dialog.userSettingsDialog.saveUserSettings()}" />
-					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle">
-					<f:actionListener
-						binding="#{dialog.userSettingsDialog.resetUserSettings()}" />
-					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
+					icon="fa fa-times-circle"
+					actionListener="#{dialog.userSettingsDialog.hideDialog()}">
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

@@ -359,8 +359,8 @@
 						actionListener="#{dialog.pdfOrganizer.displayPrintNotification(userHandlerAction.selectedPrinter.print(dialog.pdfOrganizer.streamContainer.displayPDF))}"></p:commandButton>
 
 					<!-- select printer -->
-					<p:selectOneMenu styleClass="customSerachSelectMenu"
-						panelStyleClass="customSerachSelectMenuPanel"
+					<p:selectOneMenu 
+						panelStyleClass="searchSelectMenuPanel"
 						converter="#{printService.cupsPrinter.printerTransformer}"
 						value="#{userHandlerAction.selectedPrinter}" filter="true"
 						filterMatchMode="contains">

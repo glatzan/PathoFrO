@@ -11,11 +11,11 @@
 		<h:outputLabel value="#{msg['dialog.userSettings.printer']}" />
 	</p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel">
+	<p:outputPanel styleClass="bodyPannelFull">
 
 		<!-- standard view -->
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth200 columnHeading columnTop,">
+			columnClasses="columnWidth150,">
 
 			<!-- pritner select auto view -->
 			<h:outputLabel
@@ -30,25 +30,21 @@
 			<h:panelGrid columns="2"
 				styleClass="listingHistoHiddenTableContainer">
 				<!-- select printer -->
-				<p:selectOneMenu styleClass="searchSelectMenu"
-					style="width:80% !important;"
+				<p:selectOneMenu panelStyleClass="searchSelectMenuPanel"
+					converter="#{printService.cupsPrinter.printerTransformer}"
 					disabled="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferedPrinter}"
-					panelStyleClass="searchSelectMenuPanel"
-					value="#{userHandlerAction.currentUser.settings.preferedPrinter}"
+					value="#{dialog.userSettingsDialog.printTab.clinicPrinter}"
 					filter="true" filterMatchMode="contains">
 
-					<f:selectItems value="#{globalSettings.printerList}" var="printer"
-						itemLabel="#{printer.name}" itemValue="#{printer.id}" />
-
-					<p:ajax event="change"
-						listener="#{userHandlerAction.updateSelectedDocumentPrinter()}"></p:ajax>
+					<f:selectItems value="#{printService.cupsPrinter.printer}"
+						var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
 				</p:selectOneMenu>
 
 				<!-- testprint -->
 				<p:commandLink styleClass="icon-grey"
 					title="#{msg['dialog.userSettings.printer.testPage.hint']}"
 					style="margin-left:10px;"
-					actionListener="#{userHandlerAction.selectedPrinter.printTestPage()}">
+					actionListener="#{dialog.userSettingsDialog.printTab.clinicPrinter.printTestPage()}">
 					<i class="fa fa-fw fa-print" />
 				</p:commandLink>
 			</h:panelGrid>
@@ -62,7 +58,7 @@
 
 		<!-- label printer -->
 		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth200 columnHeading columnTop,">
+			columnClasses="columnWidth150,">
 			<!-- label printer -->
 			<h:outputLabel
 				value="#{msg['dialog.userSettings.labelPrinter.autoPrint']}" />
@@ -77,49 +73,44 @@
 			<h:panelGrid columns="2"
 				styleClass="listingHistoHiddenTableContainer">
 				<!-- select printer -->
-				<p:selectOneMenu styleClass="searchSelectMenu"
-					style="width:80% !important;"
+				<p:selectOneMenu
 					disabled="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferedLabelPrinter}"
+					converter="#{printService.lablePrinter.printerTransformer}"
 					panelStyleClass="searchSelectMenuPanel"
-					value="#{userHandlerAction.currentUser.settings.preferedLabelPritner}"
+					value="#{dialog.userSettingsDialog.printTab.labelPrinter}"
 					filter="true" filterMatchMode="contains">
 
-					<f:selectItems value="#{globalSettings.labelPrinterList}"
-						var="printer" itemLabel="#{printer.name}"
-						itemValue="#{printer.id}" />
-
+					<f:selectItems value="#{printService.lablePrinter.printer}"
+						var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
 				</p:selectOneMenu>
 
 				<!-- testprint -->
 				<p:commandLink styleClass="icon-grey"
 					title="#{msg['dialog.userSettings.labelPrinter.testPage.hint']}"
 					style="margin-left:10px;"
-					actionListener="#{userHandlerAction.selectedLabelPrinter.printTestPage()}">
+					actionListener="#{dialog.userSettingsDialog.printTab.labelPrinter.printTestPage()}">
 					<i class="fa fa-fw fa-print" />
 				</p:commandLink>
 			</h:panelGrid>
 		</h:panelGrid>
 	</p:outputPanel>
 
-
 	<div class="buttonContainer">
 		<h:panelGrid columns="2">
+			<h:panelGrid columns="1" styleClass="left">
+			</h:panelGrid>
+
 			<h:panelGrid columns="2" styleClass="right">
-				<p:commandButton value="#{msg['general.save']}" update="@form"
-					icon="fa fa-check-circle-o">
-					<f:actionListener
-						binding="#{dialog.userSettingsDialog.saveUserSettings()}" />
-					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
+				<p:commandButton value="#{msg['general.save']}"
+					actionListener="#{dialog.userSettingsDialog.saveAndHide()}"
+					icon="fa fa-check-circle-o" partialSubmit="true" process="@form">
 				</p:commandButton>
 
-				<p:commandButton value="#{msg['general.close']}" immediate="true"
-					icon="fa fa-times-circle">
-					<f:actionListener
-						binding="#{dialog.userSettingsDialog.resetUserSettings()}" />
-					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
+				<p:commandButton value="#{msg['general.close']}"
+					icon="fa fa-times-circle"
+					actionListener="#{dialog.userSettingsDialog.hideDialog()}">
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>
 	</div>
-
 </ui:composition>

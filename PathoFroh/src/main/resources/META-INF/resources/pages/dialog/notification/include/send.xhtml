@@ -229,9 +229,9 @@
 					title="#{msg['dialog.notification.tab.send.print.text']}" />
 
 				<!-- select printer -->
-				<p:selectOneMenu styleClass="customSerachSelectMenu"
+				<p:selectOneMenu 
 					title="#{msg['dialog.print.selectPrinter']}"
-					panelStyleClass="customSerachSelectMenuPanel"
+					panelStyleClass="searchSelectMenuPanel"
 					converter="#{printService.cupsPrinter.printerTransformer}"
 					value="#{userHandlerAction.selectedPrinter}" filter="true"
 					filterMatchMode="contains">
