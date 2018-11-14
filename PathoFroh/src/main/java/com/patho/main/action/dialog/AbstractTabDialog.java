@@ -1,5 +1,7 @@
 package com.patho.main.action.dialog;
 
+import org.omnifaces.el.functions.Arrays;
+
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 
@@ -8,11 +10,32 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDialog<I>> {
+public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDialog<I>>
+		implements AbstractTabChangeEvent {
 
 	protected AbstractTab[] tabs;
 
 	protected AbstractTab selectedTab;
+
+	/**
+	 * For all tabs in this array a tab change event can be fired
+	 */
+	protected AbstractTab[] onChangeEventTabs;
+
+	/**
+	 * if true the tab change event will be fired
+	 */
+	protected boolean fireTabChangeEvent;
+
+	/**
+	 * This tab will be selected after the event is finished
+	 */
+	protected AbstractTab changeToTabAfterEvent;
+
+	/**
+	 * This actionslistener will be fired on event occurrence
+	 */
+	protected AbstractTabChangeEvent abstractTabChangeEventHandler;
 
 	public boolean initBean(Task task, Dialog dialog) {
 		super.initBean(task, dialog);
@@ -21,7 +44,7 @@ public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDia
 			tabs[i].initTab();
 		}
 
-		onTabChange(tabs[0]);
+		onTabChange(tabs[0], true);
 
 		return true;
 	}
@@ -31,9 +54,19 @@ public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDia
 	}
 
 	public void onTabChange(AbstractTab tab) {
-		logger.debug("Changing tab to " + tab.getName());
-		setSelectedTab(tab);
-		tab.updateData();
+		onTabChange(tab, false);
+	}
+
+	public void onTabChange(AbstractTab tab, boolean ignoreTabChangeEvent) {
+		if (!ignoreTabChangeEvent && Arrays.contains(onChangeEventTabs, getSelectedTab())
+				&& (fireTabChangeEvent || getSelectedTab().isFireTabChangeEvent())) {
+			changeToTabAfterEvent = tab;
+			abstractTabChangeEventHandler.onStartTabChangeEvent();
+		} else {
+			logger.debug("Changing tab to " + tab.getName());
+			setSelectedTab(tab);
+			tab.updateData();
+		}
 	}
 
 	public void nextTab() {
@@ -84,6 +117,11 @@ public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDia
 		protected boolean disabled;
 
 		protected AbstractTab parentTab;
+
+		/**
+		 * If true an this tab is in the event array, the event will be fired
+		 */
+		protected boolean fireTabChangeEvent;
 
 		public boolean isParent() {
 			return parentTab != null;
