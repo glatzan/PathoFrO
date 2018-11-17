@@ -12,7 +12,6 @@ public enum Dialog {
 	PATIENT_DATA_CONFIRM("/pages/dialog/patient/confirmExternalPatientData/confirmExternalPatientData", null, 640, 360, false, false, true), 								// OK
 	PATIENT_MERGE("/pages/dialog/patient/merge/mergePatient", null, 640, 360, false, false, true), // 16:9
 	PATIENT_MERGE_CONFIRM("/pages/dialog/patient/merge/confirmMerge", null, 480, 272, false, false, true), // 16:9
-	WORKLIST_ACCOUNTING("/pages/dialog/task/accounting", null,480, 272, false, false, true), 
 	WORKLIST_ORDER("/pages/dialog/worklist/worklistOrder", null,480, 272, false, false, true),  // 16:9
 	WORKLIST_SETTINGS("/pages/dialog/worklist/worklistSettings", null,480, 272, false, false, true), 
 	PATIENT_EDIT("/pages/dialog/patient/editPatient", null, 1024, 600, false, false, true), // 16:9
@@ -30,7 +29,7 @@ public enum Dialog {
 	CONTACTS("/pages/dialog/contact/contacts", null, 1024, 600, false, false, true),																						// OK				// TEST OK
 	CONTACTS_NOTIFICATION("/pages/dialog/contact/contactNotification", null, 858, 484, false, false, true), 																// OK				// TEST OK
 	CONTACTS_SELECT("/pages/dialog/contact/contactSelect", null, 858, 484, false, false, true), 																			// OK				// TEST OK
-	SETTINGS("/pages/dialog/globalSettings/settings", null, 1024, 600, false, false, true), // 16:9
+	SETTINGS("/pages/dialog/globalSettings/settings", null, 1024, 600, false, false, true),																					// OK
 	SETTINGS_PHYSICIAN_SEARCH("/pages/dialog/settings/physician/physicianSearch/physicianSearch", null, 1280, 720, false, false, true), 									// OK
 	SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1280, 740, false, false, true), 														// OK
 	SETTINGS_STAINING_EDIT("/pages/dialog/settings/staining/stainingEdit", null, 1024, 600, false, false, true), 															// OK
