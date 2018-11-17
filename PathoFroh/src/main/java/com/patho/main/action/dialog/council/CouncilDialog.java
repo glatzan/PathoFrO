@@ -56,7 +56,7 @@ import lombok.experimental.Delegate;
 @Configurable
 @Getter
 @Setter
-public class CouncilDialog extends AbstractDialog<CouncilDialog> {
+public class CouncilDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

@@ -16,7 +16,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class CopyHistologicalRecordDialog extends AbstractDialog<CopyHistologicalRecordDialog> {
+public class CopyHistologicalRecordDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

@@ -1,6 +1,8 @@
 package com.patho.main.action;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -10,12 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
+import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PrintService;
 import com.patho.main.template.mail.RequestUnlockMail;
 import com.patho.main.util.printer.ClinicPrinter;
@@ -46,6 +53,11 @@ public class UserHandlerAction implements Serializable {
 	@Setter(AccessLevel.NONE)
 	@Lazy
 	private PrintService printService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private UserRepository userRepository;
 
 	/********************************************************
 	 * login
@@ -97,6 +109,19 @@ public class UserHandlerAction implements Serializable {
 	public HistoUser getCurrentUser() {
 		HistoUser user = (HistoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return user;
+	}
+
+	/**
+	 * Updates the current user object
+	 */
+	public void updateCurrentUser() {
+		HistoUser user = userRepository.findById(getCurrentUser().getId()).get();
+
+		List<GrantedAuthority> t = new ArrayList<GrantedAuthority>();
+		t.add(new SimpleGrantedAuthority("USER"));
+
+		Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, t);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
 	/**

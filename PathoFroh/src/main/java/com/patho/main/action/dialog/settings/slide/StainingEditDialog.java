@@ -25,7 +25,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class StainingEditDialog extends AbstractDialog<StainingEditDialog> {
+public class StainingEditDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

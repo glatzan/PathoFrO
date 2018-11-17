@@ -2,6 +2,7 @@ package com.patho.main.action.dialog;
 
 import org.omnifaces.el.functions.Arrays;
 
+import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 
@@ -10,41 +11,39 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDialog<I>>
-		implements AbstractTabChangeEvent {
+public abstract class AbstractTabDialog extends AbstractDialog {
 
 	protected AbstractTab[] tabs;
 
 	protected AbstractTab selectedTab;
 
-	/**
-	 * For all tabs in this array a tab change event can be fired
-	 */
-	protected AbstractTab[] onChangeEventTabs;
-
-	/**
-	 * if true the tab change event will be fired
-	 */
-	protected boolean fireTabChangeEvent;
-
-	/**
-	 * This tab will be selected after the event is finished
-	 */
-	protected AbstractTab changeToTabAfterEvent;
-
-	/**
-	 * This actionslistener will be fired on event occurrence
-	 */
-	protected AbstractTabChangeEvent abstractTabChangeEventHandler;
+	protected AbstractTabChangeEventHandler eventHandler;
 
 	public boolean initBean(Task task, Dialog dialog) {
+		return initBean(task, dialog, null);
+	}
+
+	public boolean initBean(Task task, Dialog dialog, String selectedTabName) {
 		super.initBean(task, dialog);
+
+		AbstractTab tabToSelect = null;
 
 		for (int i = 0; i < tabs.length; i++) {
 			tabs[i].initTab();
+			if (selectedTabName != null && tabs[i].getTabName().equals(selectedTabName))
+				tabToSelect = tabs[i];
 		}
 
-		onTabChange(tabs[0], true);
+		if (tabToSelect == null) {
+			// selecting the first not disabled tab
+			for (int i = 0; i < tabs.length; i++) {
+				if (!tabs[i].isDisabled()) {
+					onTabChange(tabs[i], true);
+					break;
+				}
+			}
+		} else
+			onTabChange(tabToSelect, true);
 
 		return true;
 	}
@@ -53,15 +52,17 @@ public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDia
 		return initBean(null, dialog);
 	}
 
+	public void setTabs(AbstractTab... abstractTabs) {
+		this.tabs = abstractTabs;
+	}
+
 	public void onTabChange(AbstractTab tab) {
 		onTabChange(tab, false);
 	}
 
 	public void onTabChange(AbstractTab tab, boolean ignoreTabChangeEvent) {
-		if (!ignoreTabChangeEvent && Arrays.contains(onChangeEventTabs, getSelectedTab())
-				&& (fireTabChangeEvent || getSelectedTab().isFireTabChangeEvent())) {
-			changeToTabAfterEvent = tab;
-			abstractTabChangeEventHandler.onStartTabChangeEvent();
+		if (eventHandler != null && !ignoreTabChangeEvent && eventHandler.isFireEvent(tab, getSelectedTab())) {
+			eventHandler.fireTabChangeEvent(tab, getSelectedTab());
 		} else {
 			logger.debug("Changing tab to " + tab.getName());
 			setSelectedTab(tab);
@@ -134,6 +135,11 @@ public abstract class AbstractTabDialog<I> extends AbstractDialog<AbstractTabDia
 		public boolean initTab() {
 			setInitialized(true);
 			return true;
+		}
+
+		public void triggerEventOnChange() {
+			System.out.println("trigger");
+			this.fireTabChangeEvent = true;
 		}
 
 	}

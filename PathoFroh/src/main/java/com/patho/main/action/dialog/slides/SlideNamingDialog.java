@@ -18,7 +18,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class SlideNamingDialog extends AbstractDialog<SlideNamingDialog> {
+public class SlideNamingDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

@@ -25,7 +25,7 @@ import lombok.experimental.Accessors;
 @Configurable
 @Getter
 @Setter
-public class ContactSelectDialog extends AbstractDialog<ContactSelectDialog> {
+public class ContactSelectDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

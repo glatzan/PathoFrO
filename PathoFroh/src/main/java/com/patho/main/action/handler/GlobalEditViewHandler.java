@@ -62,6 +62,7 @@ import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
+import com.patho.main.util.dialogReturn.ReloadUserEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
@@ -234,8 +235,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		getNavigationData().setLastDefaultView(userHandlerAction.getCurrentUser().getSettings().getDefaultView());
 
 		logger.debug("5. Init task data");
-		
-		//TODO check if problem, this should be allread done by goToNavigation
+
+		// TODO check if problem, this should be allread done by goToNavigation
 //		generateViewData(TaskInitilize.GENERATE_TASK_STATUS, TaskInitilize.GENERATE_MENU_MODEL,
 //				TaskInitilize.RELOAD_MENU_MODEL_FAVOURITE_LISTS);
 
@@ -568,6 +569,9 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_MENU_MODEL);
+				} else if (event.getObject() instanceof ReloadUserEvent) {
+					logger.debug("Updating user");
+					userHandlerAction.updateCurrentUser();
 				}
 
 			}

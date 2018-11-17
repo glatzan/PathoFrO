@@ -363,7 +363,7 @@
 			<p:commandButton id="userSettingsDialogBtn"
 				actionListener="#{dialog.userSettingsDialog.initAndPrepareBean()}">
 				<p:ajax event="dialogReturn"
-					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+				listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 					update="navigationForm:patientList contentForm" />
 			</p:commandButton>
 

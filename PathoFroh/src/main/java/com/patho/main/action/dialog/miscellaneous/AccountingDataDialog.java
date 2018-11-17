@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Configurable
-public class AccountingDataDialog extends AbstractDialog<AccountingDataDialog> {
+public class AccountingDataDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

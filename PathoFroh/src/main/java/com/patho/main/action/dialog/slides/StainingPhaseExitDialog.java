@@ -20,7 +20,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class StainingPhaseExitDialog extends AbstractDialog<StainingPhaseExitDialog> {
+public class StainingPhaseExitDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

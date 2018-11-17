@@ -18,7 +18,7 @@ import lombok.Setter;
 @Configurable
 @Setter
 @Getter
-public class DiagnosisPhaseExitDialog extends AbstractDialog<DiagnosisPhaseExitDialog> {
+public class DiagnosisPhaseExitDialog extends AbstractDialog {
 
 	private DiagnosisPhaseExitData data;
 	/**

@@ -24,7 +24,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class OrganizationEditDialog extends AbstractDialog<OrganizationEditDialog> {
+public class OrganizationEditDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

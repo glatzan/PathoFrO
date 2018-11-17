@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:histo="http://java.sun.com/jsf/composite/components">
+
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel value="#{msg['dialog.userSettings.general']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannelFull">
+		<histo:physicianEditMask
+			physician="#{dialog.editUserDialog.user.physician}"
+			dialog="#{dialog.editUserDialog.personTab}" />
+	</p:outputPanel>
+
+</ui:composition>

@@ -90,9 +90,8 @@ public class AddSlidesDialog extends AbstractDialog {
 	/**
 	 * Initializes the dialog for selecting stainings.
 	 */
-	public void initAndPrepareBean() {
-		if (initBean(null))
-			prepareDialog();
+	public AddSlidesDialog initAndPrepareBean() {
+		return initAndPrepareBean((Block)null);
 	}
 
 	/**
@@ -100,9 +99,10 @@ public class AddSlidesDialog extends AbstractDialog {
 	 * 
 	 * @param patient
 	 */
-	public void initAndPrepareBean(Block block) {
+	public AddSlidesDialog initAndPrepareBean(Block block) {
 		if (initBean(block))
 			prepareDialog();
+		return this;
 	}
 
 	/**

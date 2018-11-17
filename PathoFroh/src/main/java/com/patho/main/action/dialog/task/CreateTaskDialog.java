@@ -63,7 +63,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class CreateTaskDialog extends AbstractDialog<CreateTaskDialog> {
+public class CreateTaskDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

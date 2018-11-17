@@ -26,7 +26,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class UserListDialog extends AbstractDialog<UserListDialog> {
+public class UserListDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

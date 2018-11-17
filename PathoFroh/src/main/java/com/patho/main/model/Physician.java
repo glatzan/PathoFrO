@@ -40,7 +40,6 @@ import lombok.extern.slf4j.Slf4j;
 @SequenceGenerator(name = "physician_sequencegenerator", sequenceName = "physician_sequence")
 @Getter
 @Setter
-@Slf4j
 public class Physician implements Serializable, ArchivAble, ID {
 
 	private static final long serialVersionUID = 7358147861813210904L;

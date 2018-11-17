@@ -34,7 +34,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class PrintDialog extends AbstractDialog<PrintDialog> {
+public class PrintDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

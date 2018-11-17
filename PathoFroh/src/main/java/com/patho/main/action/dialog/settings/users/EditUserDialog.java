@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.AbstractTabDialog;
+import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
+import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.Organization;
@@ -22,6 +24,7 @@ import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,7 +33,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class EditUserDialog extends AbstractTabDialog<EditUserDialog> implements OrganizationFunctions {
+public class EditUserDialog extends AbstractTabDialog implements OrganizationFunctions {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -52,13 +55,14 @@ public class EditUserDialog extends AbstractTabDialog<EditUserDialog> implements
 	@Setter(AccessLevel.NONE)
 	private PhysicianService physicianService;
 
+	private UserTab userTab;
+	private SettingsTab settingsTab;
+	private PersonTab personTab;
+
 	private HistoUser user;
 
 	private List<ContactRole> allRoles;
 
-	private List<HistoGroup> groups;
-
-	private DefaultTransformer<HistoGroup> groupTransformer;
 
 	private DefaultTransformer<Organization> organizationTransformer;
 
@@ -68,6 +72,14 @@ public class EditUserDialog extends AbstractTabDialog<EditUserDialog> implements
 	 * True if userdata where changed, an the dialog needs to be saved.
 	 */
 	private boolean saveAble;
+
+	public EditUserDialog() {
+		setUserTab(new UserTab());
+		setSettingsTab(new SettingsTab());
+		setPersonTab(new PersonTab());
+
+		setTabs(getUserTab(), getSettingsTab(), getPersonTab());
+	}
 
 	public EditUserDialog initAndPrepareBean(HistoUser user) {
 		if (initBean(user))
@@ -88,9 +100,7 @@ public class EditUserDialog extends AbstractTabDialog<EditUserDialog> implements
 
 		setSaveAble(false);
 
-		setGroups(groupRepository.findAll(true));
-
-		setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
+	
 
 		// setting organization transformer for selecting default address
 		setOrganizationTransformer(
@@ -98,6 +108,102 @@ public class EditUserDialog extends AbstractTabDialog<EditUserDialog> implements
 
 		super.initBean(task, Dialog.SETTINGS_USERS_EDIT);
 		return true;
+	}
+
+	@Getter
+	@Setter
+	@Configurable
+	public class UserTab extends AbstractTab {
+		
+		private List<HistoGroup> groups;
+
+		private DefaultTransformer<HistoGroup> groupTransformer;
+		
+		private boolean roleChanged;
+		
+		public UserTab() {
+			setTabName("UserTab");
+			setName("dialog.userEdit.tab.userTab");
+			setViewID("userTab");
+			setCenterInclude("include/user.xhtml");
+		}
+		
+		@Override
+		public boolean initTab() {
+			setGroups(groupRepository.findAll(true));
+			setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
+			setRoleChange(false);
+			return true;
+		}
+		
+		public void roleChange() {
+			setRoleChange(true);
+		}
+	
+	}
+
+	@Getter
+	@Setter
+	@Configurable
+	public class SettingsTab extends AbstractTab {
+		public SettingsTab() {
+			setTabName("SettingsTab");
+			setName("dialog.userEdit.tab.settingsTab");
+			setViewID("settingsTab");
+			setCenterInclude("include/settings.xhtml");
+		}
+	}
+
+	@Getter
+	@Setter
+	@Configurable
+	public class PersonTab extends AbstractTab {
+
+		private List<ContactRole> allRoles;
+
+		/**
+		 * Array of roles which the physician should be associated
+		 */
+		private ContactRole[] associatedRoles;
+
+		private DefaultTransformer<Organization> contactOrganizations;
+
+		public PersonTab() {
+			setTabName("PersonTab");
+			setName("dialog.userEdit.tab.personTab");
+			setViewID("personTab");
+			setCenterInclude("include/person.xhtml");
+		}
+
+		@Override
+		public boolean initTab() {
+			setAllRoles(Arrays.asList(ContactRole.values()));
+			setAssociatedRoles(getUser().getPhysician().getAssociatedRolesAsArray());
+			return true;
+		}
+		
+		@Override
+		public void updateData() {
+			// setting organization for selecting an default notification
+			setContactOrganizations(
+					new DefaultTransformer<Organization>(getUser().getPhysician().getPerson().getOrganizsations()));
+			super.updateData();
+		}
+
+		/**
+		 * Removes an organization from the user and updates the default address
+		 * selection
+		 * 
+		 * @param organization
+		 */
+		public void removeFromOrganization(Organization organization) {
+//			getPhysician().getPerson().getOrganizsations().remove(organization);
+//			update();
+		}
+
+		public void onDefaultDialogReturn(SelectEvent event) {
+		}
+
 	}
 
 	/**

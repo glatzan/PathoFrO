@@ -19,7 +19,7 @@ import lombok.Setter;
 @Configurable
 @Setter
 @Getter
-public class DeleteDiagnosisRevisionDialog extends AbstractDialog<DeleteDiagnosisRevisionDialog> {
+public class DeleteDiagnosisRevisionDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

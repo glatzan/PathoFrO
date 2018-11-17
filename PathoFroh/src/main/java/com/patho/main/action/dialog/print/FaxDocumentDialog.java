@@ -25,7 +25,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class FaxDocumentDialog extends AbstractDialog<FaxDocumentDialog> {
+public class FaxDocumentDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

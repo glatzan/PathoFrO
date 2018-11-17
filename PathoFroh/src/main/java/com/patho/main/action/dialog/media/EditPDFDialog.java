@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Configurable
-public class EditPDFDialog extends AbstractDialog<AbstractDialog<?>> {
+public class EditPDFDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

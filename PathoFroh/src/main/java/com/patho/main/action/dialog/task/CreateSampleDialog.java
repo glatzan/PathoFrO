@@ -22,7 +22,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class CreateSampleDialog extends AbstractDialog<CreateSampleDialog> {
+public class CreateSampleDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

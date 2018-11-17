@@ -10,9 +10,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.patho.main.action.UserHandlerAction;
+import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.AbstractTabChangeEventHandler;
 import com.patho.main.action.dialog.AbstractTabDialog;
+import com.patho.main.action.dialog.settings.diagnosis.DiagnosisPresetEditDialog;
+import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.View;
+import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoUser;
@@ -20,6 +25,7 @@ import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PrintService;
 import com.patho.main.ui.FavouriteListContainer;
+import com.patho.main.util.dialogReturn.ReloadUserEvent;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
@@ -32,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-public class UserSettingsDialog extends AbstractTabDialog<UserSettingsDialog> {
+public class UserSettingsDialog extends AbstractTabDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -60,29 +66,47 @@ public class UserSettingsDialog extends AbstractTabDialog<UserSettingsDialog> {
 		printTab = new PrinterTab();
 		favouriteListTab = new FavouriteListTab();
 
-		tabs = new AbstractTab[] { generalTab, printTab, favouriteListTab };
-	}
+		setEventHandler(new AbstractTabChangeEventHandler(new AbstractDialog(Dialog.USER_SETTINGS_SAVE) {
+		}, false, generalTab, printTab) {
+			public void performEvent(boolean positive) {
+				getEventDialog().hideDialog();
 
-	public UserSettingsDialog initAndPrepareBean() {
-		if (initBean())
-			prepareDialog();
-		return this;
+				if (positive)
+					save();
+				else
+					update();
+				onTabChange(getTargetTab(), true);
+			}
+		});
+
+		setTabs(generalTab, printTab, favouriteListTab);
 	}
 
 	public boolean initBean() {
 		setUser(userHandlerAction.getCurrentUser());
+		update();
 		return super.initBean(Dialog.USER_SETTINGS);
+	}
+
+	public void save() {
+		getUser().getSettings().setPreferedLabelPritner(Long.toString(getPrintTab().getLabelPrinter().getId()));
+		getUser().getSettings().setPreferedPrinter(getPrintTab().getClinicPrinter().getId());
+		setUser(userRepository.save(getUser()));
+	}
+
+	public void update() {
+		setUser(userRepository.findById(user.getId()).get());
 	}
 
 	public void saveAndHide() {
 		logger.debug("Saving user Settings");
-
-		userRepository.save(getUser());
+		save();
+		super.hideDialog(new ReloadUserEvent());
 	}
 
 	public void hideDialog() {
 		logger.debug("Resetting user Settings");
-		setUser(userRepository.findById(user.getId()).orElse(null));
+		super.hideDialog(new ReloadUserEvent());
 	}
 
 	@Getter
@@ -117,7 +141,7 @@ public class UserSettingsDialog extends AbstractTabDialog<UserSettingsDialog> {
 		private PrintService printService;
 
 		private ClinicPrinter clinicPrinter;
-		
+
 		private LabelPrinter labelPrinter;
 
 		public PrinterTab() {
@@ -130,7 +154,7 @@ public class UserSettingsDialog extends AbstractTabDialog<UserSettingsDialog> {
 		public boolean initTab() {
 			ClinicPrinter printer = printService.getCurrentPrinter(userHandlerAction.getCurrentUser());
 			LabelPrinter labelPrinter = printService.getCurrentLabelPrinter(userHandlerAction.getCurrentUser());
-			
+
 			setLabelPrinter(labelPrinter);
 			setClinicPrinter(printer);
 			return true;

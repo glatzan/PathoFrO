@@ -44,9 +44,10 @@ public class ProgrammVersionDialog extends AbstractTabDialog {
 		tabs = new AbstractTab[] { versionTab, errorTab, aboutTab };
 	}
 
-	public void initAndPrepareBean() {
-		initBean();
-		prepareDialog();
+	public ProgrammVersionDialog initAndPrepareBean() {
+		if (initBean())
+			prepareDialog();
+		return this;
 	}
 
 	public boolean initBean() {

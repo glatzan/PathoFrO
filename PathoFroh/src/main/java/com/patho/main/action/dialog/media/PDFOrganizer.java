@@ -47,7 +47,7 @@ import lombok.experimental.Accessors;
 @Configurable
 @Getter
 @Setter
-public class PDFOrganizer extends AbstractDialog<PDFOrganizer> {
+public class PDFOrganizer extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

@@ -39,7 +39,7 @@ public enum Dialog {
 	SETTINGS_GROUP_LIST("/pages/dialog/settings/groups/groupList", null, 1024, 600, false, false, true), 																	// OK
 	SETTINGS_GROUP_EDIT("/pages/dialog/settings/groups/groupEdit", null, 1024, 600, false, false, true), 																	// OK
 	SETTINGS_USERS_LIST("/pages/dialog/settings/users/usersList", null, 1024, 600, false, false, true), 																	// OK
-	SETTINGS_USERS_EDIT("/pages/dialog/settings/users/userEdit", null, 1024, 600, false, false, true), //  16:9
+	SETTINGS_USERS_EDIT("/pages/dialog/settings/users/editUser/userEdit", null, 1280, 740, false, false, true), //  16:9
 	SETTINGS_USERS_DELETE("/pages/dialog/settings/users/userDelete", null, 480, 272, false, false, true), //  16:9
 	SETTINGS_USERS_DELETE_DISABLE("/pages/dialog/settings/users/userDeleteDisable", null, 480, 272, false, false, true), //  16:9
 	SETTINGS_ORGANIZATION_EDIT("/pages/dialog/settings/organization/organizationEdit", null, 1280, 720, false, false, true),												// OK
@@ -51,7 +51,8 @@ public enum Dialog {
 	PRINT_ADDRESS("/pages/dialog/print/address", null,  480, 272, false, false, true), 																						// OK
 	PRINT_FAX("/pages/dialog/print/fax", null,  480, 272, false, false, true), 																								// OK
 	COUNCIL("/pages/dialog/council/council", null,  1280, 720, false, false, true), 																						// OK
-	USER_SETTINGS("/pages/dialog/userSettings/userSettings", null,  1024, 600, false, false, true), // 16:9
+	USER_SETTINGS("/pages/dialog/userSettings/userSettings", null,  1024, 600, false, false, true), 																		// OK
+	USER_SETTINGS_SAVE("/pages/dialog/userSettings/confirmSave", null,  480, 272, false, false, true), 																		// OK		
 	MEDICAL_FINDINGS("/pages/dialog/medicalFindings/medicalFindings", null,  1024, 600, false, false, true),  // 16:9
 	NOTIFICATION_ALREADY_PERFORMED("/pages/dialog/notification/notification_already_performed", null,  480, 272, false, false, true), //  16:9
 	NOTIFICATION("/pages/dialog/notification/notification", null,  1024, 600, false, false, true),  // 16:9

@@ -15,7 +15,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class CustomAddressDialog extends AbstractDialog<CustomAddressDialog> {
+public class CustomAddressDialog extends AbstractDialog {
 
 	private ContactSelector contactContainer;
 

@@ -27,7 +27,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class PhysicianEditDialog extends AbstractDialog<PhysicianEditDialog> {
+public class PhysicianEditDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

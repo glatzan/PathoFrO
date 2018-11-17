@@ -39,7 +39,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class FavouriteListEditDialog extends AbstractDialog<FavouriteListEditDialog> {
+public class FavouriteListEditDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

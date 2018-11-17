@@ -30,7 +30,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class PhysicianSearchDialog extends AbstractTabDialog<PhysicianSearchDialog> {
+public class PhysicianSearchDialog extends AbstractTabDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

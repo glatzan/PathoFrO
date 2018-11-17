@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Configurable
-public class DeletePDFDialog extends AbstractDialog<DeletePDFDialog> {
+public class DeletePDFDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

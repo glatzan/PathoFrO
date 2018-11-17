@@ -52,7 +52,7 @@ import lombok.Synchronized;
 @Configurable
 @Getter
 @Setter
-public class NotificationDialog extends AbstractTabDialog<NotificationDialog> {
+public class NotificationDialog extends AbstractTabDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

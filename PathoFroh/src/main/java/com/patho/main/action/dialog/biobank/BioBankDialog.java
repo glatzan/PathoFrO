@@ -24,7 +24,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class BioBankDialog extends AbstractDialog<BioBankDialog> {
+public class BioBankDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

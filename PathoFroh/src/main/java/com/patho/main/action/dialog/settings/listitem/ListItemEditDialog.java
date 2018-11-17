@@ -17,7 +17,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class ListItemEditDialog extends AbstractDialog<ListItemEditDialog> {
+public class ListItemEditDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

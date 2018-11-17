@@ -35,7 +35,7 @@ import lombok.experimental.Accessors;
 @Configurable
 @Setter
 @Getter
-public class QuickAddDiangosisRevisionDialog extends AbstractDialog<QuickAddDiangosisRevisionDialog> {
+public class QuickAddDiangosisRevisionDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

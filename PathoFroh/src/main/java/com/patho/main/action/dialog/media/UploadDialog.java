@@ -31,7 +31,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class UploadDialog extends AbstractDialog<UploadDialog> {
+public class UploadDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

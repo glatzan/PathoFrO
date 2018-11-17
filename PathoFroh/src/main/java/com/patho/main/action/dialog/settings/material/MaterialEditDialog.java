@@ -24,7 +24,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class MaterialEditDialog extends AbstractDialog<MaterialEditDialog> {
+public class MaterialEditDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

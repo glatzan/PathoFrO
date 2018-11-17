@@ -65,7 +65,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
+public class SettingsDialog extends AbstractTabDialog {
 
 	public static final int DIAGNOSIS_LIST = 0;
 	public static final int DIAGNOSIS_EDIT = 1;
@@ -97,10 +97,8 @@ public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
 		setPhysicianSettingsTab(new PhysicianSettingsTab());
 		setOrganizationTab(new OrganizationTab());
 		setLogTab(new LogTab());
-
-		tabs = new AbstractTab[] { programParentTab, histoUserTab, histoGroupTab, diagnosisTab, materialTab,
-				stainingTab, staticListTab, favouriteListTab, personParentTab, physicianSettingsTab, organizationTab,
-				logTab };
+		setTabs(programParentTab, histoUserTab, histoGroupTab, diagnosisTab, materialTab, stainingTab, staticListTab,
+				favouriteListTab, personParentTab, physicianSettingsTab, organizationTab, logTab);
 	}
 
 	public SettingsDialog initAndPrepareBean() {
@@ -115,23 +113,7 @@ public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
 	}
 
 	public boolean initBean(String tabName) {
-		super.initBean(null, Dialog.SETTINGS);
-
-		AbstractTab foundTab = null;
-
-		for (int i = 0; i < tabs.length; i++) {
-			tabs[i].initTab();
-			if (tabs[i].getTabName().equals(tabName))
-				foundTab = tabs[i];
-		}
-
-		if (tabName == null || foundTab == null)
-			onTabChange(tabs[1]);
-		else {
-			onTabChange(foundTab);
-		}
-
-		return true;
+		return super.initBean(null, Dialog.SETTINGS, tabName);
 	}
 
 	public class ProgramParentTab extends AbstractTab {
@@ -733,9 +715,9 @@ public class SettingsDialog extends AbstractTabDialog<SettingsDialog> {
 			if (page > pagesCount) {
 				page = pagesCount;
 			}
-			
+
 			setLogs(logRepository
-					.findAll(PageRequest.of(page-1, getLogsPerPage(), Sort.by(Log_.id.getName()).descending()))
+					.findAll(PageRequest.of(page - 1, getLogsPerPage(), Sort.by(Log_.id.getName()).descending()))
 					.getContent());
 		}
 

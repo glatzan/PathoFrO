@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-public class GroupEditDialog extends AbstractTabDialog<GroupEditDialog> {
+public class GroupEditDialog extends AbstractTabDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

@@ -29,7 +29,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class ContactDialog extends AbstractDialog<ContactDialog> {
+public class ContactDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

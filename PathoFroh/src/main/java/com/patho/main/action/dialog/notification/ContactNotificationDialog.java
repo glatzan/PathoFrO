@@ -27,7 +27,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class ContactNotificationDialog extends AbstractDialog<ContactNotificationDialog> {
+public class ContactNotificationDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

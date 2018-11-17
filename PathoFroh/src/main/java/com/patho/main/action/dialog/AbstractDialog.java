@@ -20,7 +20,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractDialog<T extends AbstractDialog<?>> {
+public abstract class AbstractDialog {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -40,20 +40,42 @@ public abstract class AbstractDialog<T extends AbstractDialog<?>> {
 
 	protected UniqueRequestID uniqueRequestID = new UniqueRequestID();
 
-	public T initAndPrepareBean(Task dialog) {
+	public AbstractDialog() {
+
+	}
+
+	public AbstractDialog(Dialog dialog) {
+		setDilaog(dialog);
+	}
+
+	public AbstractDialog initAndPrepareBean() {
+		if (initBean())
+			prepareDialog();
+		return this;
+	}
+
+	public AbstractDialog initAndPrepareBean(Task dialog) {
 		return null;
 	}
 
-	public T initAndPrepareBean(Dialog dialog) {
+	public AbstractDialog initAndPrepareBean(Dialog dialog) {
 		initBean(null, dialog);
 		prepareDialog();
 		return null;
 	}
 
-	public T initAndPrepareBean(Task task, Dialog dialog) {
+	public AbstractDialog initAndPrepareBean(Task task, Dialog dialog) {
 		initBean(task, dialog);
 		prepareDialog();
 		return null;
+	}
+
+	public boolean initBean() {
+		return initBean(null, getDilaog());
+	}
+
+	public boolean initBean(Dialog dialog) {
+		return initBean(null, dialog);
 	}
 
 	public boolean initBean(Task task, Dialog dialog) {

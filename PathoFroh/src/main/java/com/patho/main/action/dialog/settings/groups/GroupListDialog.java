@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-public class GroupListDialog extends AbstractDialog<GroupListDialog> {
+public class GroupListDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

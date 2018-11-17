@@ -30,7 +30,7 @@ import lombok.experimental.Delegate;
 @Configurable
 @Setter
 @Getter
-public class CreateDiagnosisRevisionDialog extends AbstractDialog<CreateDiagnosisRevisionDialog> {
+public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

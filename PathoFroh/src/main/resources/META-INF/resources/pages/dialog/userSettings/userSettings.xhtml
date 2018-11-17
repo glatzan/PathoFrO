@@ -24,7 +24,8 @@
 				<h:outputLabel value="#{msg['dialog.userSettings.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					immediate="true">
-					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
+					<f:actionListener
+						binding="#{dialog.userSettingsDialog.hideDialog()}" />
 					<i class="fa fa-fw fa-times icon-grey" />
 				</p:commandLink>
 			</h:panelGrid>
@@ -39,11 +40,15 @@
 						disabled="#{tab.disabled}"
 						styleClass="#{tab eq dialog.userSettingsDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
 						actionListener="#{dialog.userSettingsDialog.onTabChange(tab)}"
-						update="navigationTable dialogContent" />
+						update="navigationTable dialogContent">
+						<p:ajax event="dialogReturn"
+							update="navigationTable dialogContent"></p:ajax>
+					</p:commandButton>
 				</c:forEach>
 			</p:outputPanel>
 			<p:outputPanel id="dialogContent" styleClass="dialogContent">
-				<ui:include src="#{dialog.userSettingsDialog.selectedTab.centerInclude}" />
+				<ui:include
+					src="#{dialog.userSettingsDialog.selectedTab.centerInclude}" />
 			</p:outputPanel>
 		</h:panelGrid>
 	</h:form>

@@ -8,15 +8,17 @@
 	xmlns:p="http://primefaces.org/ui">
 
 	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.userSettings.general']}" />
+		<h:outputLabel
+			value="#{msg['dialog.userSettings.general.favourites']}" />
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannelFull">
 
+		<!-- special css style, because of column width -->
 		<p:dataTable var="favouriteListContainer"
 			sortBy="#{favouriteListContainer.type}" scrollable="true"
 			expandableRowGroups="true" scrollHeight="450"
-			styleClass="defaultHistoDataTable"
+			styleClass="userDialog_FavouriteListTable"
 			value="#{dialog.userSettingsDialog.favouriteListTab.containers}">
 
 			<p:headerRow>
@@ -26,56 +28,49 @@
 				</p:column>
 			</p:headerRow>
 
-			<p:column headerText="Name">
-				<h:outputLabel value="#{favouriteListContainer.favouriteList.name}"></h:outputLabel>
+			<!-- name -->
+			<p:column
+				headerText="#{msg['dialog.userSettings.general.favourites.list.name']}">
+				<h:outputLabel value="#{favouriteListContainer.favouriteList.name}"
+					title="#{favouriteListContainer.favouriteList.name}">
+					<f:converter converterId="org.histo.ui.TruncateConverter" />
+					<f:attribute name="truncateAt" value="40" />
+					<f:attribute name="continuationMark" value="..." />
+				</h:outputLabel>
 			</p:column>
 
-			<p:column headerText="Kommentar">
+			<!-- commentary -->
+			<p:column
+				headerText="#{msg['dialog.userSettings.general.favourites.list.commentary']}">
 				<h:outputLabel
-					value="#{favouriteListContainer.favouriteList.commentary}"></h:outputLabel>
+					value="#{favouriteListContainer.favouriteList.commentary}"
+					title="#{favouriteListContainer.favouriteList.commentary}">
+					<f:converter converterId="org.histo.ui.TruncateConverter" />
+					<f:attribute name="truncateAt" value="40" />
+					<f:attribute name="continuationMark" value="..." />
+				</h:outputLabel>
 			</p:column>
 
-			<p:column headerText="#" style="width:15px">
-				<p:commandLink styleClass="noUnderlineAtLink"
+			<!-- options -->
+			<p:column
+				headerText="#{msg['dialog.userSettings.general.favourites.list.options']}">
+				<p:commandLink
 					title="#{msg['dialog.settings.person.list.options.edit']}"
 					actionListener="#{dialog.favouriteListEditDialog.initAndPrepareBean(favouriteListContainer.favouriteList)}"
 					process="@this" partialSubmit="true">
-					<p:ajax event="dialogReturn" update="@form" />
+					<p:ajax event="dialogReturn" update="@form"
+						listener="#{dialog.userSettingsDialog.favouriteListTab.updateData()}" />
 					<i class="fa fa-fw fa-search" />
 				</p:commandLink>
 			</p:column>
-
-
 
 		</p:dataTable>
 
 	</p:outputPanel>
 
-<!-- 
-
-.userDialog_FavouriteListTable{
-	.dynamicScrollTable (true);
-
-	tr {
-		display: table;
-		td:nth-child(1) {
-		width: auto;
-	}
-		td:nth-child(2) {
-		width: 40%;
-		}
-		td:nth-child(3) {
-		width: 20px !important;
-	}
-	}
-}
-
-
- -->
-
 	<div class="buttonContainer">
 		<h:panelGrid columns="2">
-		
+
 			<h:panelGrid columns="1" styleClass="left">
 				<p:commandButton
 					value="#{msg['dialog.settings.favouriteList.list.button.new']}"
@@ -87,20 +82,10 @@
 				</p:commandButton>
 			</h:panelGrid>
 
-			<h:panelGrid columns="3" styleClass="right">
-
-				<p:commandButton value="#{msg['general.save']}"
-					icon="fa fa-check-circle-o">
-					<f:actionListener
-						binding="#{dialog.userSettingsDialog.saveUserSettings()}" />
-					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
-				</p:commandButton>
-
+			<h:panelGrid columns="1" styleClass="right">
 				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle">
-					<f:actionListener
-						binding="#{dialog.userSettingsDialog.resetUserSettings()}" />
-					<f:actionListener binding="#{dialog.userSettingsDialog.hideDialog()}" />
+					icon="fa fa-times-circle"
+					actionListener="#{dialog.userSettingsDialog.hideDialog()}">
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

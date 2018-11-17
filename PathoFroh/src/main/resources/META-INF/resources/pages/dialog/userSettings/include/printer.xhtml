@@ -23,7 +23,7 @@
 			<p:selectBooleanCheckbox
 				value="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferedPrinter}">
 				<p:ajax event="change" update="@form"
-					listener="#{userHandlerAction.updateSelectedDocumentPrinter()}" />
+					listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}" />
 			</p:selectBooleanCheckbox>
 
 			<h:outputLabel value="#{msg['dialog.userSettings.printer.name']}" />
@@ -38,6 +38,9 @@
 
 					<f:selectItems value="#{printService.cupsPrinter.printer}"
 						var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
+
+					<p:ajax event="change"
+						listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}" />
 				</p:selectOneMenu>
 
 				<!-- testprint -->
@@ -64,7 +67,8 @@
 				value="#{msg['dialog.userSettings.labelPrinter.autoPrint']}" />
 			<p:selectBooleanCheckbox
 				value="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferedLabelPrinter}">
-				<p:ajax event="change" update="@form" />
+				<p:ajax event="change" update="@form"
+					listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}" />
 			</p:selectBooleanCheckbox>
 
 			<!-- selected labelprinter -->
@@ -82,6 +86,9 @@
 
 					<f:selectItems value="#{printService.lablePrinter.printer}"
 						var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
+
+					<p:ajax event="change"
+						listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}" />
 				</p:selectOneMenu>
 
 				<!-- testprint -->
