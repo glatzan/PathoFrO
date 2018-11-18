@@ -35,20 +35,20 @@
 					styleClass="headline"></h:outputLabel>
 
 				<!-- name -->
-				<h:outputLabel value="#{msg['component.personDataMask.name']}:" />
+				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.name']}:" />
 				<h:outputLabel value="#{mergePatientDialog.patient.person.fullName}"></h:outputLabel>
 
 				<!-- birthday -->
-				<p:outputLabel value="#{msg['component.personDataMask.birthday']}:" />
+				<p:outputLabel value="#{msg['component.physicianSettingsGeneral.birthday']}:" />
 				<h:outputLabel value="#{mergePatientDialog.patient.person.birthday}">
 					<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
 				</h:outputLabel>
 
 				<h:outputLabel value="" />
 				<!-- piz -->
-				<h:outputLabel value="#{msg['component.personDataMask.piz']}:" />
+				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.piz']}:" />
 				<h:outputLabel
-					value="#{mergePatientDialog.patient.piz eq '' ? msg['component.personDataMask.piz.none'] : mergePatientDialog.patient.piz}"></h:outputLabel>
+					value="#{mergePatientDialog.patient.piz eq '' ? msg['component.physicianSettingsGeneral.piz.none'] : mergePatientDialog.patient.piz}"></h:outputLabel>
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="defaultHistoTable"
@@ -140,12 +140,12 @@
 					styleClass="headline"></h:outputLabel>
 
 				<!-- name -->
-				<h:outputLabel value="#{msg['component.personDataMask.name']}:" />
+				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.name']}:" />
 				<h:outputLabel
 					value="#{mergePatientDialog.patientToMerge.person.fullName}"></h:outputLabel>
 
 				<!-- birthday -->
-				<p:outputLabel value="#{msg['component.personDataMask.birthday']}:" />
+				<p:outputLabel value="#{msg['component.physicianSettingsGeneral.birthday']}:" />
 				<h:outputLabel
 					value="#{mergePatientDialog.patientToMerge.person.birthday}">
 					<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
@@ -153,9 +153,9 @@
 
 				<h:outputLabel value="" />
 				<!-- piz -->
-				<h:outputLabel value="#{msg['component.personDataMask.piz']}:" />
+				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.piz']}:" />
 				<h:outputLabel
-					value="#{mergePatientDialog.patientToMerge.piz eq '' ? msg['component.personDataMask.piz.none'] : mergePatientDialog.patientToMerge.piz}"></h:outputLabel>
+					value="#{mergePatientDialog.patientToMerge.piz eq '' ? msg['component.physicianSettingsGeneral.piz.none'] : mergePatientDialog.patientToMerge.piz}"></h:outputLabel>
 
 				<h:outputLabel
 					value="#{msg['dialog.mergePatientDialog.patientToMerge.database']}:" />

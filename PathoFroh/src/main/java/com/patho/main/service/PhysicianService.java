@@ -1,5 +1,7 @@
 package com.patho.main.service;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
+import com.patho.main.model.Organization;
 import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.repository.LDAPRepository;
@@ -83,6 +86,21 @@ public class PhysicianService extends AbstractService {
 			return physicianRepository.save(physician,
 					resourceBundle.get("log.settings.physician.patho.ldap.save", physician.getPerson().getFullName()));
 		}
+	}
+
+	/**
+	 * Simple save, sets a default role if no role was set
+	 * 
+	 * @param physician
+	 * @return
+	 */
+	public Physician savePhysican(Physician physician) {
+		if (physician.hasNoAssociateRole())
+			physician.addAssociateRole(ContactRole.OTHER_PHYSICIAN);
+
+		return physicianRepository.save(physician,
+				resourceBundle.get("log.settings.physician.physician.edit", physician.getPerson().getFullName()));
+
 	}
 
 	/**

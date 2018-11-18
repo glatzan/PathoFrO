@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+
+<composite:interface>
+	<composite:attribute name="user" required="true" />
+	<composite:attribute name="valueChangeAction" required="true"
+		method-signature="void changeAction()" />
+	<composite:attribute name="printer" required="true" />
+	<composite:attribute name="labelPrinter" required="true" />
+</composite:interface>
+
+<composite:implementation>
+
+	<!-- seperator -->
+	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+		<p:separator />
+		<h:outputLabel value="#{msg['component.userSettingsPrinter.printer']}" />
+	</h:panelGrid>
+
+	<!-- standard view -->
+	<h:panelGrid columns="2" styleClass="defaultHistoTable"
+		columnClasses="columnWidth150,">
+
+		<!-- pritner select auto view -->
+		<h:outputLabel
+			value="#{msg['component.userSettingsPrinter.printer.autoPrint']}" />
+		<p:selectBooleanCheckbox
+			value="#{cc.attrs.user.settings.autoSelectedPreferedPrinter}">
+			<p:ajax event="change" update="@form"
+				listener="#{cc.attrs.valueChangeAction}" />
+		</p:selectBooleanCheckbox>
+
+		<h:outputLabel
+			value="#{msg['component.userSettingsPrinter.printer.name']}" />
+		<h:panelGrid columns="2" styleClass="listingHistoHiddenTableContainer">
+			<!-- select printer -->
+			<p:selectOneMenu panelStyleClass="searchSelectMenuPanel"
+				converter="#{printService.cupsPrinter.printerTransformer}"
+				disabled="#{cc.attrs.user.settings.autoSelectedPreferedPrinter}"
+				value="#{cc.attrs.printer}" filter="true" filterMatchMode="contains">
+
+				<f:selectItems value="#{printService.cupsPrinter.printer}"
+					var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
+
+				<p:ajax event="change" listener="#{cc.attrs.valueChangeAction}" />
+			</p:selectOneMenu>
+
+			<!-- testprint -->
+			<p:commandLink styleClass="icon-grey" disabled="true"
+				title="#{msg['component.userSettingsPrinter.printer.testPage.hint']}"
+				style="margin-left:10px;"
+				actionListener="#{cc.attrs.printer.printTestPage()}">
+				<i class="fa fa-fw fa-print" />
+			</p:commandLink>
+		</h:panelGrid>
+	</h:panelGrid>
+
+	<!-- seperator -->
+	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+		<p:separator />
+		<h:outputLabel
+			value="#{msg['component.userSettingsPrinter.labelPrinter']}" />
+	</h:panelGrid>
+
+	<!-- label printer -->
+	<h:panelGrid columns="2" styleClass="defaultHistoTable"
+		columnClasses="columnWidth150,">
+		<!-- label printer -->
+		<h:outputLabel
+			value="#{msg['component.userSettingsPrinter.labelPrinter.autoPrint']}" />
+		<p:selectBooleanCheckbox
+			value="#{cc.attrs.user.settings.autoSelectedPreferedLabelPrinter}">
+			<p:ajax event="change" update="@form"
+				listener="#{cc.attrs.valueChangeAction}" />
+		</p:selectBooleanCheckbox>
+
+		<!-- selected labelprinter -->
+		<h:outputLabel
+			value="#{msg['component.userSettingsPrinter.labelPrinter.name']}" />
+		<h:panelGrid columns="2" styleClass="listingHistoHiddenTableContainer">
+			<!-- select printer -->
+			<p:selectOneMenu
+				disabled="#{cc.attrs.user.settings.autoSelectedPreferedLabelPrinter}"
+				converter="#{printService.lablePrinter.printerTransformer}"
+				panelStyleClass="searchSelectMenuPanel"
+				value="#{cc.attrs.labelPrinter}" filter="true"
+				filterMatchMode="contains">
+
+				<f:selectItems value="#{printService.lablePrinter.printer}"
+					var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
+
+				<p:ajax event="change" listener="#{cc.attrs.valueChangeAction}" />
+			</p:selectOneMenu>
+
+			<!-- testprint -->
+			<p:commandLink styleClass="icon-grey" disabled="true"
+				title="#{msg['component.userSettingsPrinter.labelPrinter.testPage.hint']}"
+				style="margin-left:10px;"
+				actionListener="#{cc.attrs.labelPrinter.printTestPage()}">
+				<i class="fa fa-fw fa-print" />
+			</p:commandLink>
+		</h:panelGrid>
+	</h:panelGrid>
+</composite:implementation>
+</html>

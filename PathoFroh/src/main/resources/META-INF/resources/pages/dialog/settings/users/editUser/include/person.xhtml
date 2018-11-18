@@ -10,11 +10,15 @@
 
 
 	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.userSettings.general']}" />
+		<h:outputLabel value="#{msg['dialog.userEdit.tab.personTab']}" />
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannelFull">
-		<histo:physicianEditMask
+		<histo:physicianSettingsGeneral
+			physician="#{dialog.editUserDialog.user.physician}"
+			dialog="#{dialog.editUserDialog.personTab}" />
+
+		<histo:physicianSettingsOrganization
 			physician="#{dialog.editUserDialog.user.physician}"
 			dialog="#{dialog.editUserDialog.personTab}" />
 	</p:outputPanel>

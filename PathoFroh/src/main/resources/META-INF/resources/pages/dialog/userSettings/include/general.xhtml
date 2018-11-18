@@ -5,7 +5,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 
 	<p:outputPanel styleClass="headerPannel">
@@ -13,154 +14,8 @@
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannelFull">
-
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150 ,">
-
-			<!-- standard view -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.defaultView']}" />
-			<p:selectOneMenu
-				title="#{msg['dialog.userSettings.general.defaultView.text']}"
-				value="#{dialog.userSettingsDialog.user.settings.defaultView}">
-
-				<f:selectItems
-					value="#{dialog.userSettingsDialog.generalTab.availableViews}"
-					var="page" itemLabel="#{msg['enum.pages.'.concat(page)]}" />
-
-				<p:ajax event="change"
-					listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-			</p:selectOneMenu>
-
-			<!-- background color of inputfields -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.inputFieldColor']}" />
-			<p:colorPicker
-				value="#{dialog.userSettingsDialog.user.settings.inputFieldColor}">
-				<p:ajax event="change" 
-					listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-			</p:colorPicker>
-
-
-			<!-- font color of inputfields -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.inputFieldFontColor']}" />
-			<p:colorPicker
-				value="#{dialog.userSettingsDialog.user.settings.inputFieldFontColor}">
-				<p:ajax event="change"
-					listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-			</p:colorPicker>
-
-		</h:panelGrid>
-
-		<!-- seperator -->
-		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-			<p:separator />
-			<h:outputLabel value="#{msg['dialog.userSettings.general.worklist']}" />
-		</h:panelGrid>
-
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150 ,">
-			<!-- standard work list -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.defaultWorklist']}" />
-			<p:selectOneMenu
-				title="#{msg['dialog.userSettings.general.defaultWorklist.text']}"
-				value="#{dialog.userSettingsDialog.user.settings.worklistToLoad}">
-
-				<f:selectItems
-					value="#{dialog.userSettingsDialog.generalTab.availableWorklistsToLoad}"
-					var="page"
-					itemLabel="#{msg['enum.worklistSearchOption.'.concat(page)]}" />
-
-				<p:ajax event="change"
-					listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-			</p:selectOneMenu>
-
-			<!-- sorting -->
-			<h:outputLabel value="#{msg['dialog.userSettings.general.sorting']}" />
-			<h:panelGrid columns="2"
-				styleClass="listingHistoHiddenTableContainer">
-				<p:selectOneMenu
-					title="#{msg['dialog.userSettings.general.sorting.text']}"
-					value="#{dialog.userSettingsDialog.user.settings.worklistSortOrder}">
-					<f:selectItem
-						itemLabel="#{msg['dialog.worklistorder.sorting.tasknumber']}"
-						itemValue="TASK_ID" />
-					<f:selectItem
-						itemLabel="#{msg['dialog.worklistorder.sorting.piz']}"
-						itemValue="PIZ" />
-					<f:selectItem
-						itemLabel="#{msg['dialog.worklistorder.sorting.name']}"
-						itemValue="NAME" />
-					<f:selectItem
-						itemLabel="#{msg['dialog.worklistorder.sorting.priority']}"
-						itemValue="PRIORITY" />
-
-					<p:ajax event="change"
-						listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-				</p:selectOneMenu>
-
-				<!-- ascending -->
-				<p:selectBooleanButton
-					value="#{dialog.userSettingsDialog.user.settings.worklistSortOrderAsc}"
-					style="margin-left:15px;"
-					onLabel="#{msg['dialog.userSettings.general.sorting.asc']}"
-					offLabel="#{msg['dialog.userSettings.general.sorting.desc']}">
-					<p:ajax event="change"
-						listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-				</p:selectBooleanButton>
-			</h:panelGrid>
-
-			<!-- hide inactive tasks -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.hideNonActiveTasks']}" />
-			<p:selectBooleanCheckbox
-				value="#{dialog.userSettingsDialog.user.settings.worklistHideNoneActiveTasks}"
-				title="#{msg['dialog.userSettings.general.hideNonActiveTasks.text']}">
-				<p:ajax event="change"
-					listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-			</p:selectBooleanCheckbox>
-
-			<!-- auto update worklist -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.autoUpdate']}" />
-			<p:selectBooleanCheckbox
-				value="#{dialog.userSettingsDialog.user.settings.worklistAutoUpdate}"
-				title="#{msg['dialog.userSettings.general.autoUpdate.text']}">
-				<p:ajax event="change"
-					listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-			</p:selectBooleanCheckbox>
-
-			<!-- auto update worklist -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.alternatePatientAddMode']}" />
-			<p:selectBooleanCheckbox
-				value="#{dialog.userSettingsDialog.user.settings.alternatePatientAddMode}"
-				title="#{msg['dialog.userSettings.general.alternatePatientAddMode.text']}">
-				<p:ajax event="change"
-					listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-			</p:selectBooleanCheckbox>
-
-			<!-- on click add task-->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.alternatePatientAddMode.oneClickAdd']}" />
-			<p:selectBooleanCheckbox
-				value="#{dialog.userSettingsDialog.user.settings.addTaskWithSingelClick}"
-				title="#{msg['dialog.userSettings.general.alternatePatientAddMode.oneClickAdd.text']}">
-				<p:ajax event="change"
-					listener="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
-			</p:selectBooleanCheckbox>
-
-		</h:panelGrid>
-
-		<!-- seperator -->
-		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-			<p:separator />
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.general.miscellaneous']}" />
-		</h:panelGrid>
-
+		<histo:userSettingsGeneral user="#{dialog.userSettingsDialog.user}"
+			valueChangeAction="#{dialog.userSettingsDialog.generalTab.triggerEventOnChange()}" />
 	</p:outputPanel>
 
 

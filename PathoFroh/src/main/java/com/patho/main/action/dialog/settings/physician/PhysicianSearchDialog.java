@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractTabDialog;
+import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -158,28 +159,19 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 			if (getSelectedPhysician() != null) {
 				getSelectedPhysician()
 						.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
-
-				if (getSelectedPhysician().getAssociatedRoles().size() == 0)
-					getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
-
-				setSelectedPhysician(physicianService.addOrMergePhysician(getSelectedPhysician()));
+				setSelectedPhysician(physicianService.savePhysican(getSelectedPhysician()));
 			}
 		}
 	}
 
 	@Getter
 	@Setter
-	public class ExternalPhysician extends AbstractTab {
+	public class ExternalPhysician extends AbstractTab implements OrganizationFunctions {
 
 		/**
 		 * Used for creating new or for editing existing physicians
 		 */
 		private Physician selectedPhysician;
-
-		/**
-		 * Array of roles which the physician should be associated
-		 */
-		private ContactRole[] associatedRoles;
 
 		/**
 		 * all roles
@@ -189,7 +181,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 		/**
 		 * Transformer for selection an organization as contact address
 		 */
-		private DefaultTransformer<Organization> contactOrganizations;
+		private DefaultTransformer<Organization> organizationTransformer;
 
 		public ExternalPhysician() {
 			setTabName("ExternalPhysicianTab");
@@ -203,8 +195,8 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 			// person is not auto update able
 			getSelectedPhysician().getPerson().setAutoUpdate(false);
 			getSelectedPhysician().getPerson().setOrganizsations(new HashSet<Organization>());
-
-			setAssociatedRoles(new ContactRole[] { ContactRole.OTHER_PHYSICIAN });
+			getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN );
+			
 			setAllRoles(Arrays.asList(ContactRole.values()));
 
 			updateData();
@@ -214,24 +206,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			// setting organization for selecting an default notification
-			setContactOrganizations(
-					new DefaultTransformer<Organization>(getSelectedPhysician().getPerson().getOrganizsations()));
-
-			// checking if organization exists within the organization array
-			boolean organizationExsists = false;
-			for (Organization organization : getSelectedPhysician().getPerson().getOrganizsations()) {
-				if (getSelectedPhysician().getPerson().getDefaultAddress() != null
-						&& getSelectedPhysician().getPerson().getDefaultAddress().equals(organization)) {
-					organizationExsists = true;
-					break;
-				}
-			}
-
-			if (!organizationExsists)
-				getSelectedPhysician().getPerson().setDefaultAddress(null);
-
-			super.updateData();
+			updateOrganizationSelection();
 		}
 
 		public void selectAndHide() {
@@ -245,35 +220,12 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 		}
 
 		private void save() {
-			if (getSelectedPhysician() != null) {
-				getSelectedPhysician()
-						.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
-
-				if (getSelectedPhysician().hasNoAssociateRole())
-					getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
-
-				setSelectedPhysician(physicianService.addOrMergePhysician(getSelectedPhysician()));
-			}
+			setSelectedPhysician(physicianService.addOrMergePhysician(getSelectedPhysician()));
 		}
 
-		/**
-		 * Removes an organization from the user and updates the default address
-		 * selection
-		 * 
-		 * @param organization
-		 */
-		public void removeFromOrganization(Organization organization) {
-			getSelectedPhysician().getPerson().getOrganizsations().remove(organization);
-			updateData();
-		}
-
-		public void onDefaultDialogReturn(SelectEvent event) {
-			if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
-				hideDialog();
-			} else if (event.getObject() != null && event.getObject() instanceof OrganizationSelectReturnEvent) {
-				getSelectedPhysician().getPerson()
-						.addOrganization(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
-			}
+		@Override
+		public Person getPerson() {
+			return getSelectedPhysician().getPerson();
 		}
 
 	}

@@ -5,16 +5,25 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:histo="http://java.sun.com/jsf/composite/components"
 	xmlns:p="http://primefaces.org/ui">
 
 
 	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.userSettings.general']}" />
+		<h:outputLabel value="#{msg['dialog.userEdit.tab.settingsTab']}" />
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannelFull">
+		<histo:userSettingsGeneral user="#{dialog.editUserDialog.user}"
+			advanceMode="true"
+			allViews="#{dialog.editUserDialog.settingsTab.allViews}"
+			allWorklistOptions="#{dialog.editUserDialog.settingsTab.allWorklistOptions}"
+			valueChangeAction="#{dialog.editUserDialog.settingsTab.voidAction()}" />
 
-
+		<histo:userSettingsPrinter user="#{dialog.editUserDialog.user}"
+			valueChangeAction="#{dialog.editUserDialog.settingsTab.voidAction()}"
+			printer="#{dialog.editUserDialog.settingsTab.clinicPrinter}"
+			labelPrinter="#{dialog.editUserDialog.settingsTab.labelPrinter}" />
 	</p:outputPanel>
 
 </ui:composition>

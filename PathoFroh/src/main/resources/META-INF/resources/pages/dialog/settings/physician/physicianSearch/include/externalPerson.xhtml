@@ -5,260 +5,28 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 	<p:outputPanel styleClass="headerPannel">
 		<h:outputLabel value="#{msg['dialog.searchPatient.search']}" />
 	</p:outputPanel>
 
 	<h:panelGrid columns="1" styleClass="defaultHistoTable">
-		<h:outputLabel value="#{msg['component.personDataMask.person']}"
+		<h:outputLabel
+			value="#{msg['component.physicianSettingsGeneral.person']}"
 			styleClass="headline" />
 	</h:panelGrid>
 
 	<p:outputPanel styleClass="bodyPannel">
 
-		<h:panelGrid columns="4" styleClass="defaultHistoTable"
-			columnClasses="columnWidth125, , columnWidth125,">
+		<histo:physicianSettingsGeneral
+			physician="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician}"
+			dialog="#{dialog.physicianSearchDialog.externalPhysicianTab}" />
 
-			<!-- Title -->
-			<p:outputLabel value="#{msg['component.personDataMask.title']}" />
-			<p:selectOneMenu style="width:100px" editable="true"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.title}">
-				<f:selectItem itemLabel="" itemValue="" />
-				<f:selectItem
-					itemLabel="#{msg['component.personDataMask.title.dr']}"
-					itemValue="#{msg['component.personDataMask.title.dr']}" />
-				<f:selectItem
-					itemLabel="#{msg['component.personDataMask.title.prof']}"
-					itemValue="#{msg['component.personDataMask.title.prof']}" />
-			</p:selectOneMenu>
-
-			<!-- birthday -->
-			<p:outputLabel value="#{msg['component.personDataMask.birthday']}" />
-			<p:calendar id="birthday" name="bday" autocomplete="bday"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.birthday}"
-				locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true" />
-
-			<!-- Name -->
-			<p:outputLabel value="#{msg['component.personDataMask.lastname']}" />
-			<p:inputText name="lname" autocomplete="family-name" required="true"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.lastName}" />
-
-			<!-- gender -->
-			<p:outputLabel value="#{msg['component.personDataMask.gender']}" />
-			<p:selectOneMenu style="width:100px" name="sex" autocomplete="sex"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.gender}">
-				<f:selectItem
-					itemLabel="#{msg['component.personDataMask.gender.select']}"
-					itemValue="#{null}" />
-				<f:selectItem
-					itemLabel="#{msg['component.personDataMask.gender.unknown']}"
-					itemValue="UNKNOWN" />
-				<f:selectItem
-					itemLabel="#{msg['component.personDataMask.gender.male']}"
-					itemValue="MALE" />
-				<f:selectItem
-					itemLabel="#{msg['component.personDataMask.gender.female']}"
-					itemValue="FEMALE" />
-			</p:selectOneMenu>
-
-			<!-- firstName -->
-			<p:outputLabel value="#{msg['component.personDataMask.firstName']}" />
-			<p:inputText name="fname" autocomplete="given-name" required="true"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.firstName}" />
-
-		</h:panelGrid>
-
-		<!-- Separator -->
-		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-			<p:separator />
-			<h:outputLabel value="#{msg['component.personDataMask.adress']}" />
-		</h:panelGrid>
-
-		<!-- address -->
-		<h:panelGrid columns="4" styleClass="defaultHistoTable"
-			columnClasses="columnWidth125, , columnWidth125,">
-			<!-- street -->
-			<p:outputLabel
-				value="#{msg['component.personDataMask.contact.street']}" />
-			<p:inputText name="street-address" autocomplete="street-address"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.street}" />
-
-			<h:outputText value="" />
-			<h:outputText value="" />
-
-			<!-- address addition one -->
-			<h:outputLabel
-				value="#{msg['component.personDataMask.contact.additionOne']}" />
-			<p:inputText
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.addressadditon}" />
-
-			<!-- address addition two -->
-			<h:outputLabel
-				value="#{msg['component.personDataMask.contact.additionTwo']}" />
-			<p:inputText
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.addressadditon2}" />
-
-			<!-- Postcode -->
-			<p:outputLabel value="#{msg['component.personDataMask.adress.plz']}" />
-			<p:inputText style="width:75px;"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.postcode}"
-				name="postal-code" autocomplete="postal-code" />
-
-			<!-- Town -->
-			<p:outputLabel
-				value="#{msg['component.personDataMask.contact.town']}" />
-			<p:inputText name="city" autocomplete="address-level2"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.town}" />
-
-		</h:panelGrid>
-
-		<!-- Separator -->
-		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-			<p:separator />
-			<h:outputLabel
-				value="#{msg['component.personDataMask.miscellaneous']}" />
-		</h:panelGrid>
-
-		<!-- contact -->
-		<h:panelGrid columns="4" styleClass="defaultHistoTable"
-			columnClasses="columnWidth125, , columnWidth125,">
-			<!-- phone -->
-			<p:outputLabel
-				value="#{msg['component.personDataMask.contact.phone']}" />
-			<p:inputText
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.phone}"
-				name="phone" autocomplete="tel" />
-
-			<!-- fax -->
-			<p:outputLabel
-				value="#{msg['component.personDataMask.miscellaneous.fax']}" />
-			<p:inputText
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.fax}"
-				name="fax" autocomplete="fax" />
-
-			<!-- mobile -->
-			<p:outputLabel
-				value="#{msg['component.personDataMask.miscellaneous.mobile']}" />
-			<p:inputText
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.phone}"
-				name="phone" autocomplete="tel" />
-
-			<!-- mail -->
-			<p:outputLabel
-				value="#{msg['component.personDataMask.miscellaneous.mail']}" />
-			<p:inputText name="mail" autocomplete="mail"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.contact.email}" />
-
-		</h:panelGrid>
-
-		<!-- Separator -->
-		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-			<p:separator />
-			<h:outputLabel value="#{msg['component.personDataMask.function']}" />
-		</h:panelGrid>
-
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth125, ">
-			<!-- role -->
-			<h:outputLabel value="#{msg['component.personDataMask.programRole']}" />
-
-			<p:selectCheckboxMenu updateLabel="true" style="width:90%"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.associatedRoles}"
-				multiple="true">
-				<f:selectItems var="role"
-					value="#{dialog.physicianSearchDialog.externalPhysicianTab.allRoles}"
-					itemValue="#{role}"
-					itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
-
-				<p:ajax partialSubmit="true" process="@this" />
-			</p:selectCheckboxMenu>
-
-		</h:panelGrid>
-
-		<!-- Separator -->
-		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-			<p:separator />
-			<h:outputLabel
-				value="#{msg['component.personDataMask.organization']}" />
-		</h:panelGrid>
-
-		<!-- Organization -->
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth125, ">
-
-			<!-- default notification  -->
-			<h:outputLabel
-				title="#{msg['component.personDataMask.defaultAddress.text']}"
-				value="#{msg['component.personDataMask.defaultAddress']}" />
-
-			<p:selectOneMenu style="margin-top:1px;"
-				title="#{msg['component.personDataMask.defaultAddress.text']}"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.defaultAddress}"
-				converter="#{dialog.physicianSearchDialog.externalPhysicianTab.contactOrganizations}">
-
-				<f:selectItem value="#{null}"
-					itemLabel="#{msg['component.personDataMask.defaultAddress.none']}"></f:selectItem>
-
-				<f:selectItems
-					value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.organizsations}"
-					var="group" itemValue="#{group}" itemLabel="#{group.name}" />
-
-			</p:selectOneMenu>
-
-			<!-- organization -->
-			<h:outputLabel
-				value="#{msg['component.personDataMask.organization']}" />
-
-			<p:dataTable var="organization" style="width:90%;" scrollable="true"
-				id="organizationTab" scrollHeight="75" draggableRows="true"
-				styleClass="defaultHistoDataTable"
-				value="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician.person.organizsations}">
-
-				<p:column
-					headerText="#{msg['component.personDataMask.organization.name']}">
-					<h:outputText value="#{organization.name}" />
-				</p:column>
-
-				<p:column
-					headerText="#{msg['component.personDataMask.organization.note']}">
-					<h:outputLabel value="#{organization.note}">
-						<f:converter converterId="org.histo.ui.TruncateConverter" />
-						<f:attribute name="truncateAt" value="50" />
-						<f:attribute name="continuationMark" value="..." />
-					</h:outputLabel>
-				</p:column>
-
-				<p:column style="width:15px" styleClass="centerChildElements">
-					<ui:fragment rendered="#{organization.intern}">
-						<i class="fa fa-fw fa-check-circle icon-green"
-							title="#{msg['component.personDataMask.organization.clinicIntern']}" />
-					</ui:fragment>
-				</p:column>
-
-				<p:column style="width:30px"
-					styleClass="centerHeaderChildElements centerChildElements">
-					<f:facet name="header">
-						<p:commandLink
-							title="#{msg['component.personDataMask.organization.add']}"
-							process="@this"
-							actionListener="#{dialog.organizationListDialog.initAndPrepareBean().selectMode(true)}">
-							<p:ajax event="dialogReturn" update="@form" process="@form"
-								listener="#{dialog.physicianSearchDialog.externalPhysicianTab.onDefaultDialogReturn}" />
-							<i class="fa fa-plus" />
-						</p:commandLink>
-					</f:facet>
-					<p:commandLink
-						actionListener="#{dialog.physicianSearchDialog.removeOrganization(organization)}"
-						update="@form"
-						title="#{msg['component.personDataMask.organization.remove']}">
-						<i class="fa fa-remove" />
-					</p:commandLink>
-				</p:column>
-
-			</p:dataTable>
-		</h:panelGrid>
+		<histo:physicianSettingsOrganization
+			physician="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician}"
+			dialog="#{dialog.physicianSearchDialog.externalPhysicianTab}" />
 	</p:outputPanel>
 
 	<div class="buttonContainer">

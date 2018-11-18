@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.settings.organization;
 
 import org.primefaces.event.SelectEvent;
 
+import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -9,25 +10,28 @@ import com.patho.main.ui.transformer.DefaultTransformer;
 public interface OrganizationFunctions {
 
 	public Person getPerson();
-	
+
 	public DefaultTransformer<Organization> getOrganizationTransformer();
+
 	public void setOrganizationTransformer(DefaultTransformer<Organization> transformer);
-	
+
 	/**
 	 * Adds an organization to the user and updates the default address selection
 	 * 
 	 * @param event
 	 */
 	public default void onReturnOrganizationDialog(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof Organization
-				&& !getPerson().getOrganizsations().contains((Organization) event.getObject())) {
-			getPerson().getOrganizsations().add((Organization) event.getObject());
+		// ReloadEvent should not be thrown by the select dialog
+		if (event.getObject() != null && event.getObject() instanceof OrganizationSelectReturnEvent) {
+			getPerson().addOrganization(((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
 			updateOrganizationSelection();
 		}
 	}
 
 	/**
-	 * Removes an organization from the user and updates the default address selection
+	 * Removes an organization from the user and updates the default address
+	 * selection
+	 * 
 	 * @param organization
 	 */
 	public default void removeFromOrganization(Organization organization) {
@@ -42,14 +46,12 @@ public interface OrganizationFunctions {
 	 * set to null. (The program will use the personal address of the user)
 	 */
 	public default void updateOrganizationSelection() {
-		setOrganizationTransformer(
-				new DefaultTransformer<Organization>(getPerson().getOrganizsations()));
+		setOrganizationTransformer(new DefaultTransformer<Organization>(getPerson().getOrganizsations()));
 
 		// checking if organization exists within the organization array
 		boolean organizationExsists = false;
 		for (Organization organization : getPerson().getOrganizsations()) {
-			if (getPerson().getDefaultAddress() != null
-					&& getPerson().getDefaultAddress().equals(organization)) {
+			if (getPerson().getDefaultAddress() != null && getPerson().getDefaultAddress().equals(organization)) {
 				organizationExsists = true;
 				break;
 			}

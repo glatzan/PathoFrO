@@ -9,7 +9,7 @@
 
 	<p:outputPanel styleClass="headerPannel">
 		<h:outputLabel
-			value="#{msg['dialog.userSettings.general.favourites']}" />
+			value="#{msg['dialog.userSettings.favourites']}" />
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannelFull">
@@ -30,7 +30,7 @@
 
 			<!-- name -->
 			<p:column
-				headerText="#{msg['dialog.userSettings.general.favourites.list.name']}">
+				headerText="#{msg['dialog.userSettings.favourites.list.name']}">
 				<h:outputLabel value="#{favouriteListContainer.favouriteList.name}"
 					title="#{favouriteListContainer.favouriteList.name}">
 					<f:converter converterId="org.histo.ui.TruncateConverter" />
@@ -41,7 +41,7 @@
 
 			<!-- commentary -->
 			<p:column
-				headerText="#{msg['dialog.userSettings.general.favourites.list.commentary']}">
+				headerText="#{msg['dialog.userSettings.favourites.list.commentary']}">
 				<h:outputLabel
 					value="#{favouriteListContainer.favouriteList.commentary}"
 					title="#{favouriteListContainer.favouriteList.commentary}">
@@ -53,7 +53,7 @@
 
 			<!-- options -->
 			<p:column
-				headerText="#{msg['dialog.userSettings.general.favourites.list.options']}">
+				headerText="#{msg['dialog.userSettings.favourites.list.options']}">
 				<p:commandLink
 					title="#{msg['dialog.settings.person.list.options.edit']}"
 					actionListener="#{dialog.favouriteListEditDialog.initAndPrepareBean(favouriteListContainer.favouriteList)}"

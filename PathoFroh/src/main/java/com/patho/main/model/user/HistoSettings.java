@@ -25,6 +25,8 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import com.patho.main.common.View;
 import com.patho.main.common.WorklistSortOrder;
 import com.patho.main.model.interfaces.ID;
+import com.patho.main.util.printer.ClinicPrinter;
+import com.patho.main.util.printer.LabelPrinter;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.Getter;
@@ -182,5 +184,15 @@ public class HistoSettings implements ID, Cloneable {
 	@Override
 	protected HistoSettings clone() throws CloneNotSupportedException {
 		return (HistoSettings) super.clone();
+	}
+
+	@Transient
+	public void setPrinter(ClinicPrinter printer) {
+		setPreferedPrinter(printer.getId());
+	}
+
+	@Transient
+	public void setLabelPrinter(LabelPrinter printer) {
+		setPreferedLabelPritner(Long.toString(printer.getId()));
 	}
 }

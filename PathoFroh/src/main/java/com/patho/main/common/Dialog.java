@@ -38,9 +38,8 @@ public enum Dialog {
 	SETTINGS_GROUP_LIST("/pages/dialog/settings/groups/groupList", null, 1024, 600, false, false, true), 																	// OK
 	SETTINGS_GROUP_EDIT("/pages/dialog/settings/groups/groupEdit", null, 1024, 600, false, false, true), 																	// OK
 	SETTINGS_USERS_LIST("/pages/dialog/settings/users/usersList", null, 1024, 600, false, false, true), 																	// OK
-	SETTINGS_USERS_EDIT("/pages/dialog/settings/users/editUser/userEdit", null, 1280, 740, false, false, true), //  16:9
-	SETTINGS_USERS_DELETE("/pages/dialog/settings/users/userDelete", null, 480, 272, false, false, true), //  16:9
-	SETTINGS_USERS_DELETE_DISABLE("/pages/dialog/settings/users/userDeleteDisable", null, 480, 272, false, false, true), //  16:9
+	SETTINGS_USERS_EDIT("/pages/dialog/settings/users/editUser/userEdit", null, 1280, 740, false, false, true), 								//  16:9
+	SETTINGS_USERS_DELETE("/pages/dialog/settings/users/userDelete", null, 480, 272, false, false, true), 										//  16:9
 	SETTINGS_ORGANIZATION_EDIT("/pages/dialog/settings/organization/organizationEdit", null, 1280, 720, false, false, true),												// OK
 	SETTINGS_ORGANIZATION_LIST("/pages/dialog/settings/organization/organizationList", null, 858, 484, false, false, true), 												// OK
 	SETTINGS_FAVOURITE_LIST_EDIT("/pages/dialog/settings/favouriteList/favouriteListEdit", null, 1024, 600, false, false, true), 											// OK

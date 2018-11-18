@@ -208,16 +208,6 @@ public class Physician implements Serializable, ArchivAble, ID {
 	 * Interace archive able
 	 ********************************************************/
 	@Override
-	public boolean isArchived() {
-		return archived;
-	}
-
-	@Override
-	public void setArchived(boolean archived) {
-		this.archived = archived;
-	}
-
-	@Override
 	@Transient
 	public String getTextIdentifier() {
 		// TODO Auto-generated method stub

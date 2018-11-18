@@ -155,6 +155,9 @@ public class GroupEditDialog extends AbstractTabDialog {
 
 			return true;
 		}
+
+		public void voidAction() {
+		}
 	}
 
 	@Getter

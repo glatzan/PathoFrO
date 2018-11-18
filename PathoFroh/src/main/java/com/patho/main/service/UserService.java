@@ -82,8 +82,9 @@ public class UserService extends AbstractService {
 	 * 
 	 * @param user
 	 */
-	public void updateUserWithLdapData(HistoUser user) {
-		physicianService.updatePhysicianWithLdapData(user.getPhysician());
+	public HistoUser updateUserWithLdapData(HistoUser user) {
+		user.setPhysician(physicianService.updatePhysicianWithLdapData(user.getPhysician()));
+		return user;
 	}
 
 	/**

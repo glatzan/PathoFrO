@@ -5,6 +5,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:histo="http://java.sun.com/jsf/composite/components"
 	xmlns:p="http://primefaces.org/ui">
 
 
@@ -35,7 +36,18 @@
 				<f:selectItems value="#{dialog.editUserDialog.userTab.groups}"
 					var="group" itemValue="#{group}" itemLabel="#{group.name}" />
 			</p:selectOneMenu>
+
+			<!-- local user -->
+			<h:outputLabel value="#{msg['dialog.userEdit.localUser']}" />
+			<p:selectBooleanCheckbox
+				title="#{msg['dialog.userEdit.localUser.info']}"
+				value="#{dialog.editUserDialog.user.localUser}">
+			</p:selectBooleanCheckbox>
+
 		</h:panelGrid>
+
+		<histo:physicianSettingsClinic
+			physician="#{dialog.editUserDialog.user.physician}" />
 	</p:outputPanel>
 
 </ui:composition>

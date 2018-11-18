@@ -13,18 +13,25 @@ import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
+import com.patho.main.common.View;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
+import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PhysicianService;
+import com.patho.main.service.PrintService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.ReloadEvent;
+import com.patho.main.util.printer.ClinicPrinter;
+import com.patho.main.util.printer.LabelPrinter;
+import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,7 +40,7 @@ import lombok.Setter;
 @Configurable
 @Getter
 @Setter
-public class EditUserDialog extends AbstractTabDialog implements OrganizationFunctions {
+public class EditUserDialog extends AbstractTabDialog {
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -61,17 +68,14 @@ public class EditUserDialog extends AbstractTabDialog implements OrganizationFun
 
 	private HistoUser user;
 
-	private List<ContactRole> allRoles;
-
-
-	private DefaultTransformer<Organization> organizationTransformer;
-
 	private boolean roleChange;
+
+	private AbstractDialog deleteDialog = new AbstractDialog(Dialog.SETTINGS_USERS_DELETE) {
+	};
 
 	/**
 	 * True if userdata where changed, an the dialog needs to be saved.
 	 */
-	private boolean saveAble;
 
 	public EditUserDialog() {
 		setUserTab(new UserTab());
@@ -96,16 +100,6 @@ public class EditUserDialog extends AbstractTabDialog implements OrganizationFun
 
 		setUser(oUser.get());
 
-		setAllRoles(Arrays.asList(ContactRole.values()));
-
-		setSaveAble(false);
-
-	
-
-		// setting organization transformer for selecting default address
-		setOrganizationTransformer(
-				new DefaultTransformer<Organization>(user.getPhysician().getPerson().getOrganizsations()));
-
 		super.initBean(task, Dialog.SETTINGS_USERS_EDIT);
 		return true;
 	}
@@ -114,20 +108,20 @@ public class EditUserDialog extends AbstractTabDialog implements OrganizationFun
 	@Setter
 	@Configurable
 	public class UserTab extends AbstractTab {
-		
+
 		private List<HistoGroup> groups;
 
 		private DefaultTransformer<HistoGroup> groupTransformer;
-		
+
 		private boolean roleChanged;
-		
+
 		public UserTab() {
 			setTabName("UserTab");
 			setName("dialog.userEdit.tab.userTab");
 			setViewID("userTab");
 			setCenterInclude("include/user.xhtml");
 		}
-		
+
 		@Override
 		public boolean initTab() {
 			setGroups(groupRepository.findAll(true));
@@ -135,38 +129,60 @@ public class EditUserDialog extends AbstractTabDialog implements OrganizationFun
 			setRoleChange(false);
 			return true;
 		}
-		
+
 		public void roleChange() {
 			setRoleChange(true);
 		}
-	
+
 	}
 
 	@Getter
 	@Setter
 	@Configurable
 	public class SettingsTab extends AbstractTab {
+
+		@Autowired
+		private PrintService printService;
+
+		private View[] allViews;
+		private SimpleSearchOption[] allWorklistOptions;
+
+		private ClinicPrinter clinicPrinter;
+		private LabelPrinter labelPrinter;
+
 		public SettingsTab() {
 			setTabName("SettingsTab");
 			setName("dialog.userEdit.tab.settingsTab");
 			setViewID("settingsTab");
 			setCenterInclude("include/settings.xhtml");
 		}
+
+		public boolean initTab() {
+			setAllViews(new View[] { View.GUEST, View.WORKLIST_TASKS, View.WORKLIST_PATIENT, View.WORKLIST_DIAGNOSIS,
+					View.WORKLIST_RECEIPTLOG, View.WORKLIST_REPORT });
+
+			setAllWorklistOptions(
+					new SimpleSearchOption[] { SimpleSearchOption.DIAGNOSIS_LIST, SimpleSearchOption.STAINING_LIST,
+							SimpleSearchOption.NOTIFICATION_LIST, SimpleSearchOption.EMPTY_LIST });
+
+			setLabelPrinter(printService.getCurrentLabelPrinter(getUser()));
+			setClinicPrinter(printService.getCurrentPrinter(getUser()));
+
+			return true;
+		}
+
+		public void voidAction() {
+		}
 	}
 
 	@Getter
 	@Setter
 	@Configurable
-	public class PersonTab extends AbstractTab {
+	public class PersonTab extends AbstractTab implements OrganizationFunctions {
 
 		private List<ContactRole> allRoles;
 
-		/**
-		 * Array of roles which the physician should be associated
-		 */
-		private ContactRole[] associatedRoles;
-
-		private DefaultTransformer<Organization> contactOrganizations;
+		private DefaultTransformer<Organization> organizationTransformer;
 
 		public PersonTab() {
 			setTabName("PersonTab");
@@ -178,30 +194,29 @@ public class EditUserDialog extends AbstractTabDialog implements OrganizationFun
 		@Override
 		public boolean initTab() {
 			setAllRoles(Arrays.asList(ContactRole.values()));
-			setAssociatedRoles(getUser().getPhysician().getAssociatedRolesAsArray());
 			return true;
 		}
-		
+
 		@Override
 		public void updateData() {
 			// setting organization for selecting an default notification
-			setContactOrganizations(
-					new DefaultTransformer<Organization>(getUser().getPhysician().getPerson().getOrganizsations()));
+			updateOrganizationSelection();
 			super.updateData();
 		}
 
-		/**
-		 * Removes an organization from the user and updates the default address
-		 * selection
-		 * 
-		 * @param organization
-		 */
-		public void removeFromOrganization(Organization organization) {
-//			getPhysician().getPerson().getOrganizsations().remove(organization);
-//			update();
+		@Override
+		public Person getPerson() {
+			return getUser().getPhysician().getPerson();
 		}
 
-		public void onDefaultDialogReturn(SelectEvent event) {
+		@Override
+		public DefaultTransformer<Organization> getOrganizationTransformer() {
+			return organizationTransformer;
+		}
+
+		@Override
+		public void setOrganizationTransformer(DefaultTransformer<Organization> transformer) {
+			organizationTransformer = transformer;
 		}
 
 	}
@@ -210,6 +225,10 @@ public class EditUserDialog extends AbstractTabDialog implements OrganizationFun
 	 * Saves user data
 	 */
 	public void saveUser() {
+
+		user.getSettings().setPrinter(settingsTab.getClinicPrinter());
+		user.getSettings().setLabelPrinter(settingsTab.getLabelPrinter());
+
 		// changes role settings and saves the user
 		if (roleChange)
 			userService.updateGroupOfUser(user, user.getGroup());
@@ -221,7 +240,18 @@ public class EditUserDialog extends AbstractTabDialog implements OrganizationFun
 	 * Updates the data of the physician with data from the clinic backend
 	 */
 	public void updateDataFromLdap() {
-		userService.updateUserWithLdapData(user);
+		try {
+			HistoUser user = userRepository.findById(getUser().getId()).get();
+			user.getPhysician().getPerson().setAutoUpdate(true);
+			setUser(userService.updateUserWithLdapData(user));
+			getSelectedTab().updateData();
+			MessageHandler.sendGrowlMessagesAsResource("growl.patient.updateLadp.success",
+					"growl.patient.updateLadp.success.info");
+		} catch (IllegalStateException e) {
+			getSelectedTab().updateData();
+			MessageHandler.sendGrowlMessagesAsResource("growl.patient.updateLadp.failed",
+					"growl.patient.updateLadp.failed.info");
+		}
 	}
 
 	/**
@@ -237,23 +267,11 @@ public class EditUserDialog extends AbstractTabDialog implements OrganizationFun
 	}
 
 	/**
-	 * Opens a delete dialog for deleting the user.
-	 */
-	public void prepareDeleteUser() {
-		prepareDialog(Dialog.SETTINGS_USERS_DELETE);
-	}
-
-	/**
 	 * Tries to delete the user, if not deleteable it will show a dialog for
 	 * disabling the user.
 	 */
 	public void deleteUser() {
-		userDao.remove(user);
-		hideDialog(true);
-
-		// } catch (HistoDatabaseConstraintViolationException e) {
 		logger.debug("Delete not possible, change group dialog");
-		prepareDialog(Dialog.SETTINGS_USERS_DELETE_DISABLE);
 	}
 
 	/**
