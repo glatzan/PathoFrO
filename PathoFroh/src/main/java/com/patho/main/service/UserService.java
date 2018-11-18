@@ -7,9 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
+import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoSettings;
@@ -26,9 +28,6 @@ public class UserService extends AbstractService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private PhysicianRepository physicianRepository;
 
 	@Autowired
 	private PhysicianService physicianService;
@@ -99,17 +98,30 @@ public class UserService extends AbstractService {
 		userRepository.save(user, resourceBundle.get("log.user.update", user));
 	}
 
+	@Transactional(propagation = Propagation.NEVER)
+	public boolean deleteOrDisable(HistoUser user) {
+		try {
+			userRepository.delete(user,
+					resourceBundle.get("log.settings.material.deleted", user.getPhysician().getPerson().getFullName()));
+			return true;
+		} catch (Exception e) {
+			diableUser(user);
+			return false;
+		}
+	}
+
 	/**
 	 * Disable User via group
 	 * 
 	 * @param user
 	 */
-	public void diableUser(HistoUser user) {
+	public HistoUser diableUser(HistoUser user) {
 		// do not load settings is done by the updateGroupOfUser methode
 		Optional<HistoGroup> oGroup = groupRepository.findOptionalById(HistoGroup.GROUP_DISABLED, false);
 
 		if (oGroup.isPresent())
-			updateGroupOfUser(user, oGroup.get());
+			return updateGroupOfUser(user, oGroup.get());
+		return user;
 
 	}
 
@@ -142,7 +154,7 @@ public class UserService extends AbstractService {
 	 * @param user
 	 * @param group
 	 */
-	public void updateGroupOfUser(HistoUser user, HistoGroup group) {
+	public HistoUser updateGroupOfUser(HistoUser user, HistoGroup group) {
 		user.setGroup(group);
 
 		if (user.getSettings() == null)
@@ -151,7 +163,7 @@ public class UserService extends AbstractService {
 		GroupService.copyGroupSettings(user, group, false);
 
 		logger.debug("Role of user " + user.getUsername() + " to " + user.getGroup().toString());
-		userRepository.save(user, resourceBundle.get("log.user.role.changed", user.getGroup()));
+		return userRepository.save(user, resourceBundle.get("log.user.role.changed", user.getGroup()));
 	}
 
 }
