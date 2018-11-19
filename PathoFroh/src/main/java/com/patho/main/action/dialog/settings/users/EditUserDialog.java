@@ -13,6 +13,7 @@ import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
+import com.patho.main.action.dialog.settings.users.ConfirmUserDeleteDialog.ConfirmUserDeleteEvent;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -69,9 +70,6 @@ public class EditUserDialog extends AbstractTabDialog {
 	private HistoUser user;
 
 	private boolean roleChange;
-
-	private AbstractDialog deleteDialog = new AbstractDialog(Dialog.SETTINGS_USERS_DELETE) {
-	};
 
 	/**
 	 * True if userdata where changed, an the dialog needs to be saved.
@@ -261,24 +259,15 @@ public class EditUserDialog extends AbstractTabDialog {
 	 * @param event
 	 */
 	public void onDeleteDialogReturn(SelectEvent event) {
-		if (event.getObject() instanceof Boolean && ((Boolean) event.getObject()).booleanValue()) {
+		if (event.getObject() instanceof ConfirmUserDeleteEvent
+				&& ((ConfirmUserDeleteEvent) event.getObject()).isDelete()) {
+			if (userService.deleteOrDisable(getUser()))
+				MessageHandler.sendGrowlMessagesAsResource("growl.user.deleted");
+			else
+				MessageHandler.sendGrowlMessagesAsResource("growl.user.archive");
+
 			hideDialog();
 		}
-	}
-
-	/**
-	 * Tries to delete the user, if not deleteable it will show a dialog for
-	 * disabling the user.
-	 */
-	public void deleteUser() {
-		logger.debug("Delete not possible, change group dialog");
-	}
-
-	/**
-	 * Disables the user via group
-	 */
-	public void disableUser() {
-		userService.diableUser(user);
 	}
 
 	/**

@@ -8,7 +8,8 @@
 	xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 <h:head>
-	<title><h:outputFormat value="#{msg['dialog.userEdit.headline']}">
+	<title><h:outputFormat
+			value="#{msg['dialog.userEdit.headline']}">
 			<f:param
 				value="#{dialog.editUserDialog.user.physician.person.getFullName()}" />
 		</h:outputFormat></title>
@@ -55,8 +56,7 @@
 				</c:forEach>
 			</p:outputPanel>
 			<p:outputPanel id="dialogContent" styleClass="dialogContent">
-				<ui:include
-					src="#{dialog.editUserDialog.selectedTab.centerInclude}" />
+				<ui:include src="#{dialog.editUserDialog.selectedTab.centerInclude}" />
 			</p:outputPanel>
 		</h:panelGrid>
 
@@ -76,9 +76,8 @@
 
 						<!-- Delete -->
 						<p:commandButton immediate="true" id="deleteBtn"
+							actionListener="#{dialog.confirmUserDeleteDialog.initAndPrepareBean(dialog.editUserDialog.user)}"
 							widgetVar="deleteBtn" style="display:none">
-							<f:actionListener
-								binding="#{dialog.editUserDialog.prepareDeleteUser()}"></f:actionListener>
 
 							<p:ajax event="dialogReturn"
 								listener="#{dialog.editUserDialog.onDeleteDialogReturn}"
@@ -87,9 +86,8 @@
 
 						<!-- Refresh -->
 						<p:commandButton id="refreshBtn" style="display:none"
-							update="@form" widgetVar="refreshBtn">
-							<f:actionListener
-								binding="#{dialog.editUserDialog.updateDataFromLdap()}"></f:actionListener>
+							update="@form" widgetVar="refreshBtn"
+							actionListener="#{dialog.editUserDialog.updateDataFromLdap()}">
 						</p:commandButton>
 					</h:panelGroup>
 				</h:panelGrid>
@@ -104,8 +102,8 @@
 
 					<!-- Close button -->
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						update="@form" immediate="true" icon="fa fa-times-circle">
-						<f:actionListener binding="#{dialog.editUserDialog.hideDialog()}"></f:actionListener>
+						update="@form" immediate="true" icon="fa fa-times-circle"
+						actionListener="#{dialog.editUserDialog.hideDialog()}">
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>

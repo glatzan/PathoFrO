@@ -38,6 +38,7 @@ import com.patho.main.action.dialog.settings.organization.OrganizationListDialog
 import com.patho.main.action.dialog.settings.physician.PhysicianEditDialog;
 import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog;
 import com.patho.main.action.dialog.settings.slide.StainingEditDialog;
+import com.patho.main.action.dialog.settings.users.ConfirmUserDeleteDialog;
 import com.patho.main.action.dialog.settings.users.EditUserDialog;
 import com.patho.main.action.dialog.settings.users.UserListDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog;
@@ -102,4 +103,5 @@ public class DialogHandler {
 	private UserListDialog userListDialog = new UserListDialog();
 	private GroupListDialog groupListDialog = new GroupListDialog();
 	private UserSettingsDialog userSettingsDialog = new UserSettingsDialog();
+	private ConfirmUserDeleteDialog confirmUserDeleteDialog = new ConfirmUserDeleteDialog();
 }

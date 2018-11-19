@@ -8,29 +8,30 @@
 
 <h:head>
 	<title><h:outputFormat
-			value="#{msg['dialog.userDelete.headline']}">
+			value="#{msg['dialog.confirmUserDeleteDialog.headline']}">
 			<f:param
-				value="#{dialog.editUserDialog.user.physician.person.fullName}" />
+				value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}" />
 		</h:outputFormat></title>
-	<h:outputStylesheet name="histo.css" value="histo.css" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 
 	<h:form id="dialogContent">
 
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
-				<h:outputFormat value="#{msg['dialog.userDelete.headline']}">
+				styleClass="defaultHistoTable">
+				<h:outputFormat
+					value="#{msg['dialog.confirmUserDeleteDialog.headline']}">
 					<f:param
-						value="#{dialog.editUserDialog.user.physician.person.fullName}" />
+						value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}" />
 				</h:outputFormat>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -38,43 +39,47 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="1" styleClass="newStyleListingTable"
-				columnClasses="columnLongText">
-				<h:outputFormat value="#{msg['dialog.userDelete.text']}">
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+				<h:outputFormat
+					value="#{msg['dialog.confirmUserDeleteDialog.text']}">
 					<f:param
-						value="#{dialog.editUserDialog.user.physician.person.fullName}" />
+						value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}" />
 				</h:outputFormat>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				style="margin-left:10px">
+				<!-- remove from diagnosis list -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.confirmUserDeleteDialog.deletePhysician}"
+					title="#{msg['dialog.confirmUserDeleteDialog.deletePhysician.info']}">
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.confirmUserDeleteDialog.deletePhysician']}" />
 			</h:panelGrid>
 		</div>
 
 		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+			<h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
+				<h:panelGrid columns="1" styleClass="left">
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<h:panelGrid columns="2" styleClass="right">
 					<!-- Delete button -->
-					<p:commandButton value="#{msg['general.delete']}" widgetVar="userDeleteBtn"
-						id="userDeleteBtn" icon="fa fa-fw fa-trash"
+					<p:commandButton value="#{msg['general.delete']}"
+						icon="fa fa-fw fa-trash"
+						actionListener="#{dialog.confirmUserDeleteDialog.deleteAndHide()}"
 						onclick="disableButton(true, 'userDeleteBtn', 'closeBtn')">
-						<f:actionListener
-							binding="#{dialog.editUserDialog.deleteUser()}" />
-
-						<p:ajax event="dialogReturn" 
-							listener="#{dialog.editUserDialog.hideDialog()}"
-							update="@form" />
 					</p:commandButton>
 
 					<!-- abort -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn" widgetVar="closeBtn"
-						icon="fa fa-times-circle"
-						actionListener="#{dialog.editUserDialog.hideDialog()}"></p:commandButton>
+					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+						widgetVar="closeBtn" icon="fa fa-times-circle"
+						actionListener="#{dialog.confirmUserDeleteDialog.hideDialog()}"></p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
-
 	</h:form>
 </h:body>
 </html>

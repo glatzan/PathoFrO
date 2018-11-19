@@ -99,12 +99,18 @@ public class UserService extends AbstractService {
 	}
 
 	@Transactional(propagation = Propagation.NEVER)
-	public boolean deleteOrDisable(HistoUser user) {
+	public boolean deleteOrDisable(HistoUser user, boolean deletePhysician) {
 		try {
+
+			if (!deletePhysician)
+				user.setPhysician(null);
+
 			userRepository.delete(user,
 					resourceBundle.get("log.settings.material.deleted", user.getPhysician().getPerson().getFullName()));
 			return true;
 		} catch (Exception e) {
+			if (deletePhysician)
+				user.setPhysician(physicianService.archive(user.getPhysician(), true));
 			diableUser(user);
 			return false;
 		}
