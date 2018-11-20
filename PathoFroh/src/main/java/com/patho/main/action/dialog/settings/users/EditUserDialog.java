@@ -14,6 +14,7 @@ import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
+import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
 import com.patho.main.action.dialog.settings.users.ConfirmUserDeleteDialog.ConfirmUserDeleteEvent;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
@@ -74,6 +75,8 @@ public class EditUserDialog extends AbstractTabDialog {
 
 	private boolean newUser;
 
+	private boolean selectPerson;
+
 	private boolean roleChange;
 
 	/**
@@ -89,7 +92,7 @@ public class EditUserDialog extends AbstractTabDialog {
 	}
 
 	public EditUserDialog initAndPrepareBean() {
-		if (initBean(new HistoUser()))
+		if (initBean(new HistoUser(new Physician(), new HistoSettings())))
 			prepareDialog();
 
 		return this;
@@ -112,24 +115,24 @@ public class EditUserDialog extends AbstractTabDialog {
 
 			setUser(oUser.get());
 			setNewUser(false);
+			setSelectPerson(false);
 		} else {
 			logger.debug("New User");
 			setNewUser(true);
+			setSelectPerson(true);
 			setUser(user);
 			MessageHandler.executeScript("clickButtonFromBean('dialogContent:selectPhyscianBtn')");
 			getSettingsTab().setDisabled(true);
 			getPersonTab().setDisabled(true);
 		}
 
-		return super.initBean(task, Dialog.SETTINGS_USERS_EDIT);
+		return super.initBean(Dialog.SETTINGS_USERS_EDIT);
 	}
 
 	@Getter
 	@Setter
 	@Configurable
 	public class UserTab extends AbstractTab {
-
-		private String selectPersonCenterInclude;
 
 		private List<HistoGroup> groups;
 
@@ -142,7 +145,6 @@ public class EditUserDialog extends AbstractTabDialog {
 			setName("dialog.userEdit.tab.userTab");
 			setViewID("userTab");
 			setCenterInclude("include/user.xhtml");
-			setSelectPersonCenterInclude("include/selectPerson.xhtml");
 		}
 
 		@Override
@@ -155,7 +157,7 @@ public class EditUserDialog extends AbstractTabDialog {
 
 		@Override
 		public String getCenterInclude() {
-			return isNewUser() && getUser().getPhysician() == null ? selectPersonCenterInclude : centerInclude;
+			return isSelectPerson() ? "include/selectPerson.xhtml" : centerInclude;
 		}
 
 		public void roleChange() {
@@ -186,20 +188,26 @@ public class EditUserDialog extends AbstractTabDialog {
 		}
 
 		public boolean initTab() {
-			setAllViews(new View[] { View.GUEST, View.WORKLIST_TASKS, View.WORKLIST_PATIENT, View.WORKLIST_DIAGNOSIS,
-					View.WORKLIST_RECEIPTLOG, View.WORKLIST_REPORT });
+			if (!selectPerson) {
+				setAllViews(new View[] { View.GUEST, View.WORKLIST_TASKS, View.WORKLIST_PATIENT,
+						View.WORKLIST_DIAGNOSIS, View.WORKLIST_RECEIPTLOG, View.WORKLIST_REPORT });
 
-			setAllWorklistOptions(
-					new SimpleSearchOption[] { SimpleSearchOption.DIAGNOSIS_LIST, SimpleSearchOption.STAINING_LIST,
-							SimpleSearchOption.NOTIFICATION_LIST, SimpleSearchOption.EMPTY_LIST });
+				setAllWorklistOptions(
+						new SimpleSearchOption[] { SimpleSearchOption.DIAGNOSIS_LIST, SimpleSearchOption.STAINING_LIST,
+								SimpleSearchOption.NOTIFICATION_LIST, SimpleSearchOption.EMPTY_LIST });
 
-			setLabelPrinter(printService.getCurrentLabelPrinter(getUser()));
-			setClinicPrinter(printService.getCurrentPrinter(getUser()));
-
+				setLabelPrinter(printService.getCurrentLabelPrinter(getUser()));
+				setClinicPrinter(printService.getCurrentPrinter(getUser()));
+			}
 			return true;
 		}
 
 		public void voidAction() {
+		}
+
+		@Override
+		public String getCenterInclude() {
+			return isSelectPerson() ? "include/empty.xhtml" : centerInclude;
 		}
 	}
 
@@ -221,7 +229,9 @@ public class EditUserDialog extends AbstractTabDialog {
 
 		@Override
 		public boolean initTab() {
-			setAllRoles(Arrays.asList(ContactRole.values()));
+			if (!selectPerson) {
+				setAllRoles(Arrays.asList(ContactRole.values()));
+			}
 			return true;
 		}
 
@@ -247,6 +257,10 @@ public class EditUserDialog extends AbstractTabDialog {
 			organizationTransformer = transformer;
 		}
 
+		@Override
+		public String getCenterInclude() {
+			return isSelectPerson() ? "include/empty.xhtml" : centerInclude;
+		}
 	}
 
 	/**
@@ -298,6 +312,17 @@ public class EditUserDialog extends AbstractTabDialog {
 				MessageHandler.sendGrowlMessagesAsResource("growl.user.archive");
 
 			hideDialog();
+		}
+	}
+
+	public void onSelectPerson(SelectEvent event) {
+		if (event.getObject() instanceof PhysicianReturnEvent) {
+			Physician physician = ((PhysicianReturnEvent) event.getObject()).getPhysician();
+			setUser(new HistoUser(physician, new HistoSettings()));
+			getSettingsTab().setDisabled(false);
+			getPersonTab().setDisabled(false);
+			setSelectPerson(false);
+			super.initBean();
 		}
 	}
 

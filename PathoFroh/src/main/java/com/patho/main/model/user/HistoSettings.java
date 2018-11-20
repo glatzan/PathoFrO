@@ -1,5 +1,6 @@
 package com.patho.main.model.user;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -150,7 +151,7 @@ public class HistoSettings implements ID, Cloneable {
 	@Fetch(value = FetchMode.SUBSELECT)
 	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
 	@OrderColumn(name = "position")
-	private List<View> availableViews;
+	private List<View> availableViews = new ArrayList<View>();
 
 	/**
 	 * List of available standard worklists
@@ -160,7 +161,7 @@ public class HistoSettings implements ID, Cloneable {
 	@Fetch(value = FetchMode.SUBSELECT)
 	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
 	@OrderColumn(name = "position")
-	private List<SimpleSearchOption> availableWorklists;
+	private List<SimpleSearchOption> availableWorklists = new ArrayList<SimpleSearchOption>();
 
 	@Transient
 	public View[] getAvailableViewsAsArray() {

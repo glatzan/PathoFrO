@@ -36,11 +36,18 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right">
-				<!-- Close button -->
+				<!-- save and hide button -->
 				<p:commandButton value="#{msg['general.create']}"
+					rendered="#{!dialog.physicianSearchDialog.selectMode}"
+					actionListener="#{dialog.physicianSearchDialog.externalPhysicianTab.saveAndHide()}"
 					icon="fa fa-check-circle-o" update="@form" process="@form">
-					<f:actionListener
-						binding="#{dialog.physicianSearchDialog.externalPhysicianTab.saveAndHide()}"></f:actionListener>
+				</p:commandButton>
+
+				<!-- select and hide button -->
+				<p:commandButton value="#{msg['general.select']}"
+					rendered="#{dialog.physicianSearchDialog.selectMode}"
+					actionListener="#{dialog.physicianSearchDialog.externalPhysicianTab.selectAndHide()}"
+					icon="fa fa-check-circle-o" update="@form" process="@form">
 				</p:commandButton>
 
 				<!-- Close button -->

@@ -139,8 +139,14 @@ public class OrganizationService extends AbstractService {
 		return result;
 	}
 
-	public void synchronizeOrganizations(Set<Organization> organizations) {
-		synchronizeOrganizations(new ArrayList(organizations));
+	/**
+	 * Checks the database if organizations exist. If organization is present it
+	 * will be replaced in the list, otherwise it will be stored in the database.
+	 * 
+	 * @param organizations
+	 */
+	public List<Organization> synchronizeOrganizations(Set<Organization> organizations) {
+		return synchronizeOrganizations(new ArrayList<Organization>(organizations));
 	}
 
 	/**
@@ -149,9 +155,11 @@ public class OrganizationService extends AbstractService {
 	 * 
 	 * @param organizations
 	 */
-	public void synchronizeOrganizations(List<Organization> organizations) {
+	public List<Organization> synchronizeOrganizations(List<Organization> organizations) {
 		if (organizations == null)
-			return;
+			return null;
+
+		List<Organization> result = new ArrayList<Organization>(organizations.size());
 
 		// saving new organizations
 		for (int i = 0; i < organizations.size(); i++) {
@@ -162,13 +170,14 @@ public class OrganizationService extends AbstractService {
 						.findOptionalByName(organizations.get(i).getName());
 				if (!databaseOrganization.isPresent()) {
 					logger.debug("Organization " + organizations.get(i).getName() + " not found, creating!");
-					addOrUpdate(organizations.get(i));
+					result.add(addOrUpdate(organizations.get(i)));
 				} else {
 					logger.debug("Organization " + organizations.get(i).getName() + " found, replacing in linst!");
-					organizations.remove(i);
-					organizations.add(i, databaseOrganization.get());
+					result.add(databaseOrganization.get());
 				}
 			}
 		}
+
+		return result;
 	}
 }

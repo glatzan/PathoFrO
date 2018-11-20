@@ -19,6 +19,14 @@ public abstract class AbstractTabDialog extends AbstractDialog {
 
 	protected AbstractTabChangeEventHandler eventHandler;
 
+	public boolean initBean() {
+		return initBean(null, getDilaog());
+	}
+
+	public boolean initBean(Dialog dialog) {
+		return initBean(null, dialog);
+	}
+
 	public boolean initBean(Task task, Dialog dialog) {
 		return initBean(task, dialog, null);
 	}
@@ -46,10 +54,6 @@ public abstract class AbstractTabDialog extends AbstractDialog {
 			onTabChange(tabToSelect, true);
 
 		return true;
-	}
-
-	public boolean initBean(Dialog dialog) {
-		return initBean(null, dialog);
 	}
 
 	public void setTabs(AbstractTab... abstractTabs) {

@@ -14,15 +14,6 @@
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannelFull">
-		<div
-			style="height: 80vh; width: 100vw; vertical-align: middle; text-align: center; display: table-cell;">
-			<p:commandButton id="selectPhyscianBtn" value="Person auswählen"
-				widgetVar="selectPhyscianBtn"
-				actionListener="#{dialog.physicianSearchDialog.initAndPrepareBean().externalMode().selectMode()}">
-				<p:ajax event="dialogReturn"
-					listener="#{dialog.editUserDialog.onSelectPerson}" update="@form" />
-			</p:commandButton>
-		</div>
 	</p:outputPanel>
 
 </ui:composition>

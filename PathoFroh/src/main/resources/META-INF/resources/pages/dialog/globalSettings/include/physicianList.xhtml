@@ -159,7 +159,7 @@
 				<p:commandButton
 					value="#{msg['dialog.settings.person.list.button.new']}"
 					icon="fa fa-fw fa-user" process="@this" partialSubmit="true"
-					actionListener="#{dialog.physicianSearchDialog.initAndPrepareBean(true)}">
+					actionListener="#{dialog.physicianSearchDialog.initAndPrepareBean().externalMode()}">
 					<p:ajax event="dialogReturn" update="@form"
 						listener="#{dialog.settingsDialog.physicianSettingsTab.onDefaultDialogReturn}" />
 				</p:commandButton>

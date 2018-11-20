@@ -85,11 +85,19 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right">
-				<!-- select button -->
-				<p:commandButton value="#{msg['general.select']}"
+				<!-- save button -->
+				<p:commandButton value="#{msg['general.create']}"
+					rendered="#{!dialog.physicianSearchDialog.selectMode}"
+					actionListener="#{dialog.physicianSearchDialog.internalPhysicianTab.saveAndHide()}"
 					icon="fa fa-check-circle-o" update="@form" process="@form">
-					<f:actionListener
-						binding="#{dialog.physicianSearchDialog.internalPhysicianTab.saveAndHide()}"></f:actionListener>
+					<f:actionListener binding=""></f:actionListener>
+				</p:commandButton>
+
+				<!-- select and hide button -->
+				<p:commandButton value="#{msg['general.select']}"
+					rendered="#{dialog.physicianSearchDialog.selectMode}"
+					actionListener="#{dialog.physicianSearchDialog.internalPhysicianTab.selectAndHide()}"
+					icon="fa fa-check-circle-o" update="@form" process="@form">
 				</p:commandButton>
 
 				<!-- Close button -->

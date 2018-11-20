@@ -38,7 +38,7 @@
 						value="#{dialog.physicianEditDialog.physician.clinicEmployee ? msg['dialog.physicianEdit.headline.person.clinic'] : msg['dialog.physicianEdit.headline.person.extern'] }" />
 				</h:outputFormat>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					actionListener="#{dialog.physicianSearchDialog.hideDialog()}">
+					actionListener="#{dialog.physicianEditDialog.hideDialog()}">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
 			</h:panelGrid>

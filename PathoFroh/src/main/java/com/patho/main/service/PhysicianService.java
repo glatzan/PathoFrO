@@ -98,6 +98,10 @@ public class PhysicianService extends AbstractService {
 		if (physician.hasNoAssociateRole())
 			physician.addAssociateRole(ContactRole.OTHER_PHYSICIAN);
 
+		// updating organization
+		physician.getPerson().setOrganizsations(new HashSet<Organization>(
+				organizationService.synchronizeOrganizations(physician.getPerson().getOrganizsations())));
+
 		return physicianRepository.save(physician,
 				resourceBundle.get("log.settings.physician.physician.edit", physician.getPerson().getFullName()));
 

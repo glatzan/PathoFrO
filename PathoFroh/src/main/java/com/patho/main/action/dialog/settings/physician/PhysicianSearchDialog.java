@@ -27,6 +27,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Delegate;
 
 @Configurable
 @Getter
@@ -52,6 +53,11 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 	 */
 	private boolean externalMode;
 
+	/**
+	 * If true the physician will not be saved, but returned as a transient entity
+	 */
+	private boolean selectMode;
+
 	public PhysicianSearchDialog() {
 		setInternalPhysicianTab(new InternalPhysician());
 		setExternalPhysicianTab(new ExternalPhysician());
@@ -60,20 +66,25 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 	}
 
 	public PhysicianSearchDialog initAndPrepareBean() {
-		return initAndPrepareBean(false);
-	}
-
-	public PhysicianSearchDialog initAndPrepareBean(boolean externalMode) {
-		if (initBean(externalMode))
+		if (initBean())
 			prepareDialog();
 
 		return this;
 	}
 
-	public boolean initBean(boolean externalMode) {
-		setExternalMode(externalMode);
-
+	public boolean initBean() {
 		return super.initBean(task, Dialog.SETTINGS_PHYSICIAN_SEARCH);
+	}
+
+	public PhysicianSearchDialog externalMode() {
+		setExternalMode(true);
+		externalPhysicianTab.setDisabled(true);
+		return this;
+	}
+
+	public PhysicianSearchDialog selectMode() {
+		setSelectMode(true);
+		return this;
 	}
 
 	@Getter
@@ -147,7 +158,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 
 		public void selectAndHide() {
 			save();
-			hideDialog(new PhysicianReturnEvent(getSelectedPhysician()));
+			hideDialog(new PhysicianReturnEvent(false, getSelectedPhysician()));
 		}
 
 		public void saveAndHide() {
@@ -157,6 +168,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 
 		private void save() {
 			if (getSelectedPhysician() != null) {
+				getSelectedPhysician().setId(0);
 				getSelectedPhysician()
 						.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
 				setSelectedPhysician(physicianService.savePhysican(getSelectedPhysician()));
@@ -195,8 +207,8 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 			// person is not auto update able
 			getSelectedPhysician().getPerson().setAutoUpdate(false);
 			getSelectedPhysician().getPerson().setOrganizsations(new HashSet<Organization>());
-			getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN );
-			
+			getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
+
 			setAllRoles(Arrays.asList(ContactRole.values()));
 
 			updateData();
@@ -211,7 +223,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 
 		public void selectAndHide() {
 			save();
-			hideDialog(new PhysicianReturnEvent(getSelectedPhysician()));
+			hideDialog(new PhysicianReturnEvent(true, getSelectedPhysician()));
 		}
 
 		public void saveAndHide() {
@@ -234,6 +246,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 	@Setter
 	@AllArgsConstructor
 	public static class PhysicianReturnEvent implements DialogReturnEvent {
+		private boolean extern;
 		private Physician physician;
 	}
 
