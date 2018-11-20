@@ -17,14 +17,14 @@
 
 	<!-- Separator -->
 	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable"
-		rendered="#{cc.attrs.physician.clinicEmployee}">
+		rendered="#{cc.attrs.physician.isClinicEmployee()}">
 		<p:separator />
 		<h:outputLabel
 			value="#{msg['component.physicianSettingsClinic']}" />
 	</h:panelGrid>
 
 	<h:panelGrid columns="4" styleClass="defaultHistoTable"
-		rendered="#{cc.attrs.physician.clinicEmployee}"
+		rendered="#{cc.attrs.physician.isClinicEmployee()}"
 		columnClasses="columnWidth125, ,columnWidth125, ">
 
 		<!-- auto update -->

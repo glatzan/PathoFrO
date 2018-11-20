@@ -127,6 +127,7 @@ public class Person implements Serializable, LogAble, ArchivAble, ID, FullName {
 	public Person(String name, Contact contact) {
 		this.lastName = name;
 		this.contact = contact;
+		this.organizsations = new HashSet<Organization>();
 	}
 
 	/**

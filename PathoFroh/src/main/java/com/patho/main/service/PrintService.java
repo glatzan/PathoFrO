@@ -119,7 +119,9 @@ public class PrintService extends AbstractService {
 		 * @return
 		 */
 		public ClinicPrinter findPrinterForUser(HistoUser user) {
-
+			if(user == null)
+				return getPrinter().get(0);
+			
 			if (user.getSettings().isAutoSelectedPreferedPrinter()) {
 				ClinicPrinter printer = getCupsPrinterForRoom();
 				if (printer != null) {
@@ -255,7 +257,9 @@ public class PrintService extends AbstractService {
 		 * @return
 		 */
 		public LabelPrinter findPrinterForUser(HistoUser user) {
-
+			if(user == null)
+				return printer.get(0);
+			
 			// TODO auto select for roon
 			if (user.getSettings().getPreferedLabelPritner() == null) {
 				return printer.get(0);

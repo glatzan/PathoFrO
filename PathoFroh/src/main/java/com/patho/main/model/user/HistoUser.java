@@ -89,6 +89,11 @@ public class HistoUser implements UserDetails, Serializable, LogAble, ID, Archiv
 	 */
 	public HistoUser() {
 	}
+	
+	public HistoUser(Physician physician, HistoSettings settings) {
+		this.physician = physician;
+		this.settings = settings;
+	}
 
 	public HistoUser(String name) {
 		setUsername(name);

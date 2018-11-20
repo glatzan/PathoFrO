@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:histo="http://java.sun.com/jsf/composite/components"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:outputPanel styleClass="headerPannel">
+		<h:outputLabel value="#{msg['dialog.userEdit.user']}" />
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="bodyPannelFull">
+		<h:panelGrid columns="2" styleClass="defaultHistoTable"
+			columnClasses="columnWidth125, ">
+
+			<!-- select physician for new user -->
+			<h:outputLabel value="#{msg['dialog.userEdit.user.name']}" />
+			<p:commandButton id="selectPhyscianBtn" value="Person auswählen"
+				update="@form" widgetVar="selectPhyscianBtn"
+				actionListener="#{dialog.physicianSearchDialog.initAndPrepareBean()}">
+			</p:commandButton>
+		</h:panelGrid>
+
+		<histo:physicianSettingsClinic
+			physician="#{dialog.editUserDialog.user.physician}" />
+	</p:outputPanel>
+
+</ui:composition>

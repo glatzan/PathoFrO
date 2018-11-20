@@ -8,6 +8,7 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.patho.main.action.MainHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
@@ -18,10 +19,12 @@ import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.View;
+import com.patho.main.model.Contact;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoGroup;
+import com.patho.main.model.user.HistoSettings;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.UserRepository;
@@ -69,6 +72,8 @@ public class EditUserDialog extends AbstractTabDialog {
 
 	private HistoUser user;
 
+	private boolean newUser;
+
 	private boolean roleChange;
 
 	/**
@@ -83,6 +88,13 @@ public class EditUserDialog extends AbstractTabDialog {
 		setTabs(getUserTab(), getSettingsTab(), getPersonTab());
 	}
 
+	public EditUserDialog initAndPrepareBean() {
+		if (initBean(new HistoUser()))
+			prepareDialog();
+
+		return this;
+	}
+
 	public EditUserDialog initAndPrepareBean(HistoUser user) {
 		if (initBean(user))
 			prepareDialog();
@@ -91,21 +103,33 @@ public class EditUserDialog extends AbstractTabDialog {
 	}
 
 	public boolean initBean(HistoUser user) {
-		Optional<HistoUser> oUser = userRepository.findById(user.getId());
+		// existing histo user
+		if (user.getId() != 0) {
+			Optional<HistoUser> oUser = userRepository.findById(user.getId());
 
-		if (!oUser.isPresent())
-			return false;
+			if (!oUser.isPresent())
+				return false;
 
-		setUser(oUser.get());
+			setUser(oUser.get());
+			setNewUser(false);
+		} else {
+			logger.debug("New User");
+			setNewUser(true);
+			setUser(user);
+			MessageHandler.executeScript("clickButtonFromBean('dialogContent:selectPhyscianBtn')");
+			getSettingsTab().setDisabled(true);
+			getPersonTab().setDisabled(true);
+		}
 
-		super.initBean(task, Dialog.SETTINGS_USERS_EDIT);
-		return true;
+		return super.initBean(task, Dialog.SETTINGS_USERS_EDIT);
 	}
 
 	@Getter
 	@Setter
 	@Configurable
 	public class UserTab extends AbstractTab {
+
+		private String selectPersonCenterInclude;
 
 		private List<HistoGroup> groups;
 
@@ -118,6 +142,7 @@ public class EditUserDialog extends AbstractTabDialog {
 			setName("dialog.userEdit.tab.userTab");
 			setViewID("userTab");
 			setCenterInclude("include/user.xhtml");
+			setSelectPersonCenterInclude("include/selectPerson.xhtml");
 		}
 
 		@Override
@@ -126,6 +151,11 @@ public class EditUserDialog extends AbstractTabDialog {
 			setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
 			setRoleChange(false);
 			return true;
+		}
+
+		@Override
+		public String getCenterInclude() {
+			return isNewUser() && getUser().getPhysician() == null ? selectPersonCenterInclude : centerInclude;
 		}
 
 		public void roleChange() {
@@ -261,7 +291,8 @@ public class EditUserDialog extends AbstractTabDialog {
 	public void onDeleteDialogReturn(SelectEvent event) {
 		if (event.getObject() instanceof ConfirmUserDeleteEvent
 				&& ((ConfirmUserDeleteEvent) event.getObject()).isDelete()) {
-			if (userService.deleteOrDisable(getUser()))
+			if (userService.deleteOrDisable(getUser(),
+					((ConfirmUserDeleteEvent) event.getObject()).isDeletePhysician()))
 				MessageHandler.sendGrowlMessagesAsResource("growl.user.deleted");
 			else
 				MessageHandler.sendGrowlMessagesAsResource("growl.user.archive");
