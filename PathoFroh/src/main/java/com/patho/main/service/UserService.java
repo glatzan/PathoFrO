@@ -33,7 +33,14 @@ public class UserService extends AbstractService {
 	private PhysicianService physicianService;
 
 	@Autowired
+	private PhysicianRepository physicianRepository;
+
+	@Autowired
 	private GroupRepository groupRepository;
+
+	public HistoUser addOrMergeUser(Physician physician) {
+		return addOrMergeUser(physician, true);
+	}
 
 	/**
 	 * Creates an new user, if a physician with the given username exist they will
@@ -42,22 +49,25 @@ public class UserService extends AbstractService {
 	 * @param physician
 	 * @return
 	 */
-	public boolean addOrMergeUser(Physician physician) {
+	public HistoUser addOrMergeUser(Physician physician, boolean checkPhysican) {
 
 		if (physician == null) {
-			return false;
+			return null;
 		}
 
 		// removing id from the list
 		physician.setId(0);
 
 		// checking if histouser exsists
-		Optional<HistoUser> histoUser = userRepository.findOptionalByUsername(physician.getUid());
+		Optional<HistoUser> histoUser = userRepository.findOptionalByPhysicianUid(physician.getUid());
 
 		if (!histoUser.isPresent()) {
 			logger.info("No User found, creating new HistoUser " + physician.getPerson().getFullName());
 
-			HistoUser newHistoUser = new HistoUser(physician.getUid());
+			if (checkPhysican)
+				physician = physicianService.addOrMergePhysician(physician);
+
+			HistoUser newHistoUser = new HistoUser(physician);
 
 			if (physician.getAssociatedRoles().size() == 0)
 				physician.addAssociateRole(ContactRole.NONE);
@@ -67,13 +77,11 @@ public class UserService extends AbstractService {
 
 			newHistoUser.setPhysician(physician);
 
-			userRepository.save(newHistoUser, resourceBundle.get("log.user.created", histoUser));
+			return userRepository.save(newHistoUser, resourceBundle.get("log.user.created", histoUser));
 		} else {
 			physicianService.mergePhysicians(physician, histoUser.get().getPhysician());
-			userRepository.save(histoUser.get(), resourceBundle.get("log.user.update", histoUser));
+			return userRepository.save(histoUser.get(), resourceBundle.get("log.user.update", histoUser));
 		}
-
-		return true;
 	}
 
 	/**

@@ -317,11 +317,26 @@ public class EditUserDialog extends AbstractTabDialog {
 
 	public void onSelectPerson(SelectEvent event) {
 		if (event.getObject() instanceof PhysicianReturnEvent) {
-			Physician physician = ((PhysicianReturnEvent) event.getObject()).getPhysician();
-			setUser(new HistoUser(physician, new HistoSettings()));
+			PhysicianReturnEvent returnEv = ((PhysicianReturnEvent) event.getObject());
+			
+			if(returnEv.isExtern()) {
+				setUser(new HistoUser(returnEv.getPhysician(), new HistoSettings()));
+			}else {
+				Optional<HistoUser> oPhysician = userRepository.findOptionalByPhysicianUid(returnEv.getPhysician().getUid());
+				
+				if(oPhysician.isPresent()) {
+					setUser(oPhysician.get());
+					setNewUser(false);
+					MessageHandler.sendGrowlMessages("User exsis!", "");
+				}else {
+					setUser(new HistoUser(returnEv.getPhysician(), new HistoSettings()));
+				}
+			}
+			
 			getSettingsTab().setDisabled(false);
 			getPersonTab().setDisabled(false);
 			setSelectPerson(false);
+			
 			super.initBean();
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.service.UserRepositroyCustom;
 
@@ -19,6 +20,14 @@ public interface UserRepository extends BaseRepository<HistoUser, Long>, UserRep
 	 */
 	public Optional<HistoUser> findOptionalByUsername(String name);
 
+	/**
+	 * Returns a user by username
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public Optional<HistoUser> findOptionalByPhysicianUid(String uid);
+	
 	/**
 	 * Lists user of a group
 	 * 

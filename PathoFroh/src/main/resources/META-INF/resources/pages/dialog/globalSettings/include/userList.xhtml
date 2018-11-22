@@ -101,7 +101,7 @@
 					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
 					actionListener="#{dialog.editUserDialog.initAndPrepareBean()}">
 					<p:ajax event="dialogReturn"
-						listener="#{dialog.settingsDialog.histoUserTab.addHistoUser(dialog.physicianSearchDialog.physician)}"
+						listener="#{dialog.settingsDialog.histoUserTab.updateData()}"
 						update="@form" />
 				</p:commandButton>
 

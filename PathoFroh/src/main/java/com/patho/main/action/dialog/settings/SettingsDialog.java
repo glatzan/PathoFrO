@@ -164,7 +164,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		public void addHistoUser(Physician physician) {
 			if (physician != null) {
-				userService.addOrMergeUser(physician);
+				userService.addOrMergeUser();
 				updateData();
 			}
 		}

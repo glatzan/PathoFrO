@@ -52,15 +52,15 @@ public class HistoUser implements UserDetails, Serializable, LogAble, ID, Archiv
 	@Version
 	private long version;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String username;
-	
+//	@Column(columnDefinition = "VARCHAR")
+//	private String username;
+
 	@Column
 	private long lastLogin;
 
 	@Column(columnDefinition = "boolean default false")
 	private boolean archived;
-	
+
 	@Column(columnDefinition = "boolean default false")
 	private boolean localUser;
 
@@ -89,16 +89,22 @@ public class HistoUser implements UserDetails, Serializable, LogAble, ID, Archiv
 	 */
 	public HistoUser() {
 	}
-	
+
+	public HistoUser(Physician physician) {
+		this(physician, null);
+	}
+
 	public HistoUser(Physician physician, HistoSettings settings) {
 		this.physician = physician;
 		this.settings = settings;
 	}
 
-	public HistoUser(String name) {
-		setUsername(name);
-		setPhysician(new Physician());
-		getPhysician().setPerson(new Person(new Contact()));
+	public String getUsername() {
+		return getPhysician().getUid();
+	}
+
+	public void setUsername(String username) {
+		getPhysician().setUid(username);
 	}
 
 	@Transient
@@ -122,7 +128,7 @@ public class HistoUser implements UserDetails, Serializable, LogAble, ID, Archiv
 
 	@Override
 	public String toString() {
-		return "HistoUser [id=" + id + ", username=" + username + "]";
+		return "HistoUser [id=" + id + ", username=" + getUsername() + "]";
 	}
 
 	@Override
