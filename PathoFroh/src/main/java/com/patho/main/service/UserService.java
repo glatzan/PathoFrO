@@ -17,6 +17,7 @@ import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoSettings;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
+import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.UserRepository;
 
@@ -33,11 +34,40 @@ public class UserService extends AbstractService {
 	private PhysicianService physicianService;
 
 	@Autowired
-	private PhysicianRepository physicianRepository;
-
-	@Autowired
 	private GroupRepository groupRepository;
 
+	@Autowired
+	private LDAPRepository ldapRepository;
+
+	/**
+	 * Creats a new user, loads data from ldap and creates the user with the guest
+	 * group
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	public Optional<HistoUser> createUser(String uid) {
+		Optional<Physician> oPhyisican = ldapRepository.findByUid(uid);
+		Optional<HistoGroup> group = groupRepository.findOptionalById(HistoGroup.GROUP_GUEST_ID);
+
+		if (oPhyisican.isPresent() && group.isPresent()) {
+			HistoUser user = addOrMergeUser(oPhyisican.get());
+
+			if (user != null) {
+				user = updateGroupOfUser(user, group.get());
+				return Optional.ofNullable(user);
+			}
+		}
+
+		return Optional.empty();
+	}
+
+	/**
+	 * Adds a histouser and updates the passed physician.
+	 * 
+	 * @param physician
+	 * @return
+	 */
 	public HistoUser addOrMergeUser(Physician physician) {
 		return addOrMergeUser(physician, true);
 	}
@@ -54,9 +84,6 @@ public class UserService extends AbstractService {
 		if (physician == null) {
 			return null;
 		}
-
-		// removing id from the list
-		physician.setId(0);
 
 		// checking if histouser exsists
 		Optional<HistoUser> histoUser = userRepository.findOptionalByPhysicianUid(physician.getUid());
@@ -79,7 +106,7 @@ public class UserService extends AbstractService {
 
 			return userRepository.save(newHistoUser, resourceBundle.get("log.user.created", histoUser));
 		} else {
-			physicianService.mergePhysicians(physician, histoUser.get().getPhysician());
+			histoUser.get().setPhysician(physicianService.mergePhysicians(physician, histoUser.get().getPhysician()));
 			return userRepository.save(histoUser.get(), resourceBundle.get("log.user.update", histoUser));
 		}
 	}
@@ -163,12 +190,35 @@ public class UserService extends AbstractService {
 	}
 
 	/**
+	 * Updates the group of an user
+	 * 
+	 * @param user
+	 * @param group
+	 * @return
+	 */
+	public HistoUser updateGroupOfUser(HistoUser user, HistoGroup group) {
+		return updateGroupOfUser(user, group, true);
+	}
+
+	/**
+	 * Updates the group of an user
+	 * 
+	 * @param user
+	 * @param group
+	 * @return
+	 */
+	public HistoUser updateGroupOfUser(HistoUser user, long groupID, boolean save) {
+		Optional<HistoGroup> group = groupRepository.findOptionalById(groupID, true);
+		return updateGroupOfUser(user, group.orElse(new HistoGroup(new HistoSettings())), save);
+	}
+
+	/**
 	 * Setting the group of the user
 	 * 
 	 * @param user
 	 * @param group
 	 */
-	public HistoUser updateGroupOfUser(HistoUser user, HistoGroup group) {
+	public HistoUser updateGroupOfUser(HistoUser user, HistoGroup group, boolean save) {
 		user.setGroup(group);
 
 		if (user.getSettings() == null)
@@ -177,7 +227,11 @@ public class UserService extends AbstractService {
 		GroupService.copyGroupSettings(user, group, false);
 
 		logger.debug("Role of user " + user.getUsername() + " to " + user.getGroup().toString());
-		return userRepository.save(user, resourceBundle.get("log.user.role.changed", user.getGroup()));
+
+		if (save)
+			return userRepository.save(user, resourceBundle.get("log.user.role.changed", user.getGroup()));
+
+		return user;
 	}
 
 }

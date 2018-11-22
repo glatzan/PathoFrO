@@ -77,10 +77,6 @@ public class PhysicianService extends AbstractService {
 		} else {
 			logger.info("Creating new phyisician " + physician.getPerson().getFullName());
 
-			// removing physicians temp id
-			// TODO crate container object
-			physician.setId(0);
-
 			organizationService.synchronizeOrganizations(physician.getPerson().getOrganizsations());
 
 			return physicianRepository.save(physician,

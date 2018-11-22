@@ -144,6 +144,9 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* remove username from histouser*/
+alter table histouser drop username;
+
 /* new sequence for favourite permissions*/
 create sequence favouritePermission_sequence increment by 50 minvalue 1 MAXVALUE 9223372036854775807 START WITH 100;
 

@@ -11,6 +11,8 @@
 
 <composite:interface>
 	<composite:attribute name="physician" required="true" />
+	<composite:attribute name="displayUsername" required="false"
+		default="true" />
 </composite:interface>
 
 <composite:implementation>
@@ -19,8 +21,7 @@
 	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable"
 		rendered="#{cc.attrs.physician.isClinicEmployee()}">
 		<p:separator />
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsClinic']}" />
+		<h:outputLabel value="#{msg['component.physicianSettingsClinic']}" />
 	</h:panelGrid>
 
 	<h:panelGrid columns="4" styleClass="defaultHistoTable"
@@ -38,12 +39,13 @@
 		<!-- User clinic function -->
 		<h:outputLabel
 			value="#{msg['component.physicianSettingsClinic.clinicFunction']}" />
-		<p:inputText required="true" value="#{cc.attrs.physician.clinicRole}" />
+		<p:inputText value="#{cc.attrs.physician.clinicRole}" />
 
 		<!-- User name -->
-		<h:outputLabel
+		<h:outputLabel rendered="#{cc.attrs.displayUsername}"
 			value="#{msg['component.physicianSettingsClinic.userName']}" />
-		<p:inputText required="true" value="#{cc.attrs.physician.uid}" />
+		<p:inputText value="#{cc.attrs.physician.uid}"
+			rendered="#{cc.attrs.displayUsername}" />
 
 	</h:panelGrid>
 </composite:implementation>

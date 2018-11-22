@@ -18,14 +18,6 @@ public interface UserRepository extends BaseRepository<HistoUser, Long>, UserRep
 	 * @param name
 	 * @return
 	 */
-	public Optional<HistoUser> findOptionalByUsername(String name);
-
-	/**
-	 * Returns a user by username
-	 * 
-	 * @param name
-	 * @return
-	 */
 	public Optional<HistoUser> findOptionalByPhysicianUid(String uid);
 	
 	/**

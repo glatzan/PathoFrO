@@ -47,7 +47,7 @@ public class JWTAuthenticationProvider implements AuthenticationProvider {
 			throw new BadCredentialsException("Invalid Token");
 		}
 
-		Optional<HistoUser> user = userRepository.findOptionalByUsername(username);
+		Optional<HistoUser> user = userRepository.findOptionalByPhysicianUid(username);
 
 		logger.debug("Looking for User " + username);
 

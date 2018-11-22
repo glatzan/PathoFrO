@@ -161,20 +161,6 @@ public class SettingsDialog extends AbstractTabDialog {
 		public void updateData() {
 			setUsers(userRepository.findAllIgnoreArchived(!showArchived));
 		}
-
-		public void addHistoUser(Physician physician) {
-			if (physician != null) {
-				userService.addOrMergeUser();
-				updateData();
-			}
-		}
-
-		public void onAddHistoUser(SelectEvent event) {
-			if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
-				updateData();
-			}
-		}
-
 	}
 
 	@Getter

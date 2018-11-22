@@ -149,7 +149,7 @@ public class EditUserDialog extends AbstractTabDialog {
 
 		@Override
 		public boolean initTab() {
-			setGroups(groupRepository.findAll(true));
+			setGroups(groupRepository.findAll(true, false));
 			setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
 			setRoleChange(false);
 			return true;
@@ -161,7 +161,7 @@ public class EditUserDialog extends AbstractTabDialog {
 		}
 
 		public void roleChange() {
-			setRoleChange(true);
+			userService.updateGroupOfUser(getUser(), getUser().getGroup(), false);
 		}
 
 	}
@@ -318,25 +318,28 @@ public class EditUserDialog extends AbstractTabDialog {
 	public void onSelectPerson(SelectEvent event) {
 		if (event.getObject() instanceof PhysicianReturnEvent) {
 			PhysicianReturnEvent returnEv = ((PhysicianReturnEvent) event.getObject());
-			
-			if(returnEv.isExtern()) {
+
+			if (returnEv.isExtern()) {
 				setUser(new HistoUser(returnEv.getPhysician(), new HistoSettings()));
-			}else {
-				Optional<HistoUser> oPhysician = userRepository.findOptionalByPhysicianUid(returnEv.getPhysician().getUid());
-				
-				if(oPhysician.isPresent()) {
+				userService.updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
+			} else {
+				Optional<HistoUser> oPhysician = userRepository
+						.findOptionalByPhysicianUid(returnEv.getPhysician().getUid());
+
+				if (oPhysician.isPresent()) {
 					setUser(oPhysician.get());
 					setNewUser(false);
 					MessageHandler.sendGrowlMessages("User exsis!", "");
-				}else {
+				} else {
 					setUser(new HistoUser(returnEv.getPhysician(), new HistoSettings()));
+					userService.updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
 				}
 			}
-			
+
 			getSettingsTab().setDisabled(false);
 			getPersonTab().setDisabled(false);
 			setSelectPerson(false);
-			
+
 			super.initBean();
 		}
 	}

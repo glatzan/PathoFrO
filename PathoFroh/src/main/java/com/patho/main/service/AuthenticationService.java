@@ -75,8 +75,8 @@ public class AuthenticationService {
 	 * @return Empty Optional if no user was found or login was incorrect.
 	 * @throws LDAPAuthenticationException
 	 */
-	public Optional<HistoUser> authenticate(String uuid, String password) throws LDAPAuthenticationException {
-		Optional<HistoUser> user = userRepository.findOptionalByUsername(uuid);
+	public Optional<HistoUser> authenticate(String uid, String password) throws LDAPAuthenticationException {
+		Optional<HistoUser> user = userRepository.findOptionalByPhysicianUid(uid);
 
 		if (user.isPresent()) {
 			if (user.get().isLocalUser()) {
@@ -87,7 +87,7 @@ public class AuthenticationService {
 			} else {
 				logger.debug("Pdv user, authentication against ldap");
 				// throws error if authentication was not successful
-				if (authenticateWithLDAP(uuid, password))
+				if (authenticateWithLDAP(uid, password))
 					return user;
 				else
 					throw new LDAPAuthenticationException();

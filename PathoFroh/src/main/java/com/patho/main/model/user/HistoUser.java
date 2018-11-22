@@ -99,10 +99,12 @@ public class HistoUser implements UserDetails, Serializable, LogAble, ID, Archiv
 		this.settings = settings;
 	}
 
+	@Transient
 	public String getUsername() {
 		return getPhysician().getUid();
 	}
 
+	@Transient
 	public void setUsername(String username) {
 		getPhysician().setUid(username);
 	}

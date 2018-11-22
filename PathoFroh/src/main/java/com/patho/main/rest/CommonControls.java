@@ -68,7 +68,7 @@ public class CommonControls {
 	// @Transactional
 	public String test() {
 		System.out.println("calledddasdsdddd");
-		System.out.println(userRepository.findOptionalByUsername("glatza"));
+		System.out.println(userRepository.findOptionalByPhysicianUid("glatza"));
 		System.out.println(userRepository.findByGroupId(2));
 		System.out.println("ttut2s");
 		logger.debug("Test {}", "test");
@@ -86,7 +86,7 @@ public class CommonControls {
 			user.setUsername("testAndiTest7");
 			userRepository.save(user, "");
 
-			Optional<HistoUser> tmp = userRepository.findOptionalByUsername("testAndiTest7");
+			Optional<HistoUser> tmp = userRepository.findOptionalByPhysicianUid("testAndiTest7");
 
 			u = tmp.get();
 			System.out.println(tmp.get().getId());
