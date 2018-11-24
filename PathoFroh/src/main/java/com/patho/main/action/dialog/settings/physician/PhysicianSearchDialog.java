@@ -3,6 +3,8 @@ package com.patho.main.action.dialog.settings.physician;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,12 +147,10 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 				// splitting the whole thing into an array
 				String[] arr = searchString.replaceAll("[ ,]+", " ").split(" ");
 				logger.debug("Hallo " + searchString);
-				setPhysicianList(ldapRepository.findAllByName(arr));
 
-				int i = 0;
-				for (Physician phys : getPhysicianList()) {
-					phys.setId(i++);
-				}
+				AtomicInteger i = new AtomicInteger(0);
+				setPhysicianList(ldapRepository.findAllByName(arr).stream()
+						.map(p -> new PhysicianContainer(i.getAndIncrement(), p)).collect(Collectors.toList()));
 
 				setSelectedPhysician(null);
 			}
@@ -158,7 +158,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 
 		public void selectAndHide() {
 			save();
-			hideDialog(new PhysicianReturnEvent(false, getSelectedPhysician()));
+			hideDialog(new PhysicianReturnEvent(false, ((PhysicianContainer)getSelectedPhysician()).getPhysician()));
 		}
 
 		public void saveAndHide() {
@@ -168,11 +168,19 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 
 		private void save() {
 			if (getSelectedPhysician() != null) {
-				getSelectedPhysician().setId(0);
 				getSelectedPhysician()
 						.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
 				setSelectedPhysician(physicianService.savePhysican(getSelectedPhysician()));
 			}
+		}
+
+		@Getter
+		@Setter
+		@AllArgsConstructor
+		public class PhysicianContainer extends Physician {
+			private int listID;
+			@Delegate
+			private Physician physician;
 		}
 	}
 
