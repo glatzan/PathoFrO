@@ -9,10 +9,12 @@
 
 <h:head>
 	<title><h:outputFormat
+			rendered="#{!dialog.editUserDialog.newUser}"
 			value="#{msg['dialog.userEdit.headline']}">
 			<f:param
 				value="#{dialog.editUserDialog.user.physician.person.getFullName()}" />
-		</h:outputFormat></title>
+		</h:outputFormat><h:outputLabel rendered="#{dialog.editUserDialog.newUser}"
+			value="#{msg['dialog.userEdit.headline.new']}"></h:outputLabel></title>
 	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
 		library="css" />
@@ -28,10 +30,13 @@
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
 				styleClass="defaultHistoTable">
-				<h:outputFormat value="#{msg['dialog.userEdit.headline']}">
+				<h:outputFormat value="#{msg['dialog.userEdit.headline']}"
+					rendered="#{!dialog.editUserDialog.newUser}">
 					<f:param
 						value="#{dialog.editUserDialog.user.physician.person.getFullName()}" />
 				</h:outputFormat>
+				<h:outputLabel rendered="#{dialog.editUserDialog.newUser}"
+					value="#{msg['dialog.userEdit.headline.new']}"></h:outputLabel>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
@@ -65,28 +70,29 @@
 
 				<h:panelGrid columns="1" styleClass="left">
 					<h:panelGroup>
-						<p:splitButton value="#{msg['general.refresh']}"
-							onclick="PF('refreshBtn').jq.click();return false;"
-							icon="fa fa-fw fa-undo">
+
+						<p:commandButton id="menuButton" value="#{msg['general.options']}"
+							type="button" rendered="#{!dialog.editUserDialog.newUser}"
+							icon="fa fa-fw fa-home" />
+
+						<p:menu overlay="true" trigger="menuButton" my="left bottom"
+							at="left top">
 							<p:menuitem value="#{msg['general.delete']}"
 								onclick="PF('deleteBtn').jq.click();return false;"
 								icon="fa fa-fw fa-trash" />
-						</p:splitButton>
+							<p:menuitem value="#{msg['general.refresh']}"
+								disabled="#{!dialog.editUserDialog.refreshAble}" update="@form"
+								actionListener="#{dialog.editUserDialog.updateDataFromLdap()}"
+								icon="fa fa-fw fa-undo" />
+						</p:menu>
 
 						<!-- Delete -->
 						<p:commandButton immediate="true" id="deleteBtn"
 							actionListener="#{dialog.confirmUserDeleteDialog.initAndPrepareBean(dialog.editUserDialog.user)}"
 							widgetVar="deleteBtn" style="display:none">
-
 							<p:ajax event="dialogReturn"
 								listener="#{dialog.editUserDialog.onDeleteDialogReturn}"
 								update="@form" />
-						</p:commandButton>
-
-						<!-- Refresh -->
-						<p:commandButton id="refreshBtn" style="display:none"
-							update="@form" widgetVar="refreshBtn"
-							actionListener="#{dialog.editUserDialog.updateDataFromLdap()}">
 						</p:commandButton>
 					</h:panelGroup>
 				</h:panelGrid>

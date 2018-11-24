@@ -34,6 +34,7 @@ import com.patho.main.service.PrintService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.ReloadEvent;
+import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
@@ -77,7 +78,7 @@ public class EditUserDialog extends AbstractTabDialog {
 
 	private boolean selectPerson;
 
-	private boolean roleChange;
+	private boolean refreshAble;
 
 	/**
 	 * True if userdata where changed, an the dialog needs to be saved.
@@ -116,6 +117,16 @@ public class EditUserDialog extends AbstractTabDialog {
 			setUser(oUser.get());
 			setNewUser(false);
 			setSelectPerson(false);
+			getSettingsTab().setDisabled(false);
+			getPersonTab().setDisabled(false);
+
+			// only refresh if !not local user or uid is not empty
+			if (getUser().isLocalUser() || HistoUtil.isNullOrEmpty(getUser().getUsername())) {
+				setRefreshAble(false);
+			} else {
+				setRefreshAble(true);
+			}
+
 		} else {
 			logger.debug("New User");
 			setNewUser(true);
@@ -151,7 +162,6 @@ public class EditUserDialog extends AbstractTabDialog {
 		public boolean initTab() {
 			setGroups(groupRepository.findAll(true, false));
 			setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
-			setRoleChange(false);
 			return true;
 		}
 
@@ -267,15 +277,9 @@ public class EditUserDialog extends AbstractTabDialog {
 	 * Saves user data
 	 */
 	public void saveUser() {
-
 		user.getSettings().setPrinter(settingsTab.getClinicPrinter());
 		user.getSettings().setLabelPrinter(settingsTab.getLabelPrinter());
-
-		// changes role settings and saves the user
-		if (roleChange)
-			userService.updateGroupOfUser(user, user.getGroup());
-		else
-			userService.saveUser(user);
+		userService.saveUser(user);
 	}
 
 	/**
@@ -321,6 +325,7 @@ public class EditUserDialog extends AbstractTabDialog {
 
 			if (returnEv.isExtern()) {
 				setUser(new HistoUser(returnEv.getPhysician(), new HistoSettings()));
+				getUser().setLocalUser(true);
 				userService.updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
 			} else {
 				Optional<HistoUser> oPhysician = userRepository

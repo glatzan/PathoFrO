@@ -38,7 +38,7 @@
 			<p:commandButton
 				value="#{msg['body.worklist.header.button.searchForOrAddPatient']}"
 				styleClass="searchPatientButton"
-				actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}">
+				actionListener="#{dialog.searchPatientDialog.initAndPrepareBean().externalMode()}">
 				<p:ajax event="dialogReturn"
 					listener="#{globalEditViewHandler.dialogReturnEventHandler.onSearchForPatientReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
@@ -115,7 +115,7 @@
 			<!-- *************** Patient Menu *************** -->
 			<!-- Show Patient Overview -->
 			<p:commandButton id="addPatientButton"
-				actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}">
+				actionListener="#{dialog.searchPatientDialog.initAndPrepareBean().externalMode()}">
 				<p:ajax event="dialogReturn"
 					listener="#{globalEditViewHandler.dialogReturnEventHandler.onSearchForPatientReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"

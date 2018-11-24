@@ -25,6 +25,8 @@ public class PatientLogDialog extends AbstractDialog {
 	@Setter(AccessLevel.NONE)
 	private LogRepository logRepository;
 
+	private Patient patient;
+
 	private List<Log> patientLog;
 
 	public PatientLogDialog initAndPrepareBean(Patient patient) {
@@ -39,6 +41,7 @@ public class PatientLogDialog extends AbstractDialog {
 	 * @param patient
 	 */
 	public boolean initBean(Patient patient) {
+		setPatient(patient);
 		setPatientLog(logRepository.findAllByLogInfoPatientOrderByIdAsc(patient));
 		return super.initBean(null, Dialog.PATIENT_LOG);
 	}

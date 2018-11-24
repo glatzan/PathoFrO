@@ -32,32 +32,46 @@ public abstract class AbstractTabDialog extends AbstractDialog {
 	}
 
 	public boolean initBean(Task task, Dialog dialog, String selectedTabName) {
+		return initBean(task, dialog, false, true, findTabByName(selectedTabName));
+	}
+
+	public boolean initBean(Task task, Dialog dialog, boolean reInitialize, boolean selectTab,
+			AbstractTab selectedTab) {
 		super.initBean(task, dialog);
 
-		AbstractTab tabToSelect = null;
-
+		// initilizing tabs
 		for (int i = 0; i < tabs.length; i++) {
-			tabs[i].initTab();
-			if (selectedTabName != null && tabs[i].getTabName().equals(selectedTabName))
-				tabToSelect = tabs[i];
+			if (!tabs[i].isInitialized() || reInitialize)
+				tabs[i].initTab();
 		}
 
-		if (tabToSelect == null) {
-			// selecting the first not disabled tab
-			for (int i = 0; i < tabs.length; i++) {
-				if (!tabs[i].isDisabled()) {
-					onTabChange(tabs[i], true);
-					break;
+		// selecting tab
+		if (selectTab) {
+			if (selectedTab == null) {
+				// selecting the first not disabled tab
+				for (int i = 0; i < tabs.length; i++) {
+					if (!tabs[i].isDisabled()) {
+						onTabChange(tabs[i], true);
+						break;
+					}
 				}
+			} else {
+				onTabChange(selectedTab, true);
 			}
-		} else
-			onTabChange(tabToSelect, true);
+		}
 
 		return true;
 	}
 
 	public void setTabs(AbstractTab... abstractTabs) {
 		this.tabs = abstractTabs;
+	}
+
+	public void appendTab(AbstractTab... abstractTabs) {
+		AbstractTab[] tmpTabs = this.tabs;
+		tabs = new AbstractTab[tmpTabs.length + abstractTabs.length];
+		System.arraycopy(tmpTabs, 0, tabs, 0, tmpTabs.length);
+		System.arraycopy(abstractTabs, 0, tabs, tmpTabs.length, abstractTabs.length);
 	}
 
 	public void onTabChange(AbstractTab tab) {
@@ -100,6 +114,15 @@ public abstract class AbstractTabDialog extends AbstractDialog {
 				}
 			}
 		}
+	}
+
+	private AbstractTab findTabByName(String name) {
+		for (int i = 0; i < tabs.length; i++) {
+			if (tabs[i].getTabName().equals(name))
+				return tabs[i];
+		}
+
+		return null;
 	}
 
 	@Getter

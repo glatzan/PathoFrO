@@ -13,6 +13,8 @@
 	<composite:attribute name="physician" required="true" />
 	<composite:attribute name="displayUsername" required="false"
 		default="true" />
+	<composite:attribute name="displayAutoupdate" required="false"
+		default="true" />
 </composite:interface>
 
 <composite:implementation>
@@ -29,9 +31,9 @@
 		columnClasses="columnWidth125, ,columnWidth125, ">
 
 		<!-- auto update -->
-		<h:outputLabel
+		<h:outputLabel rendered="#{cc.attrs.displayAutoupdate}"
 			value="#{msg['component.physicianSettingsClinic.autoUpdate']}" />
-		<p:selectBooleanCheckbox
+		<p:selectBooleanCheckbox rendered="#{cc.attrs.displayAutoupdate}"
 			title="#{msg['component.physicianSettingsClinic.autoUpdate.text']}"
 			value="#{cc.attrs.physician.person.autoUpdate}">
 		</p:selectBooleanCheckbox>

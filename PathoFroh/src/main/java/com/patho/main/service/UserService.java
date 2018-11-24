@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
+import com.patho.main.model.Contact;
 import com.patho.main.model.MaterialPreset;
+import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoSettings;
@@ -29,6 +31,9 @@ public class UserService extends AbstractService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private PhysicianService physicianService;
@@ -130,23 +135,44 @@ public class UserService extends AbstractService {
 		if (user.getPhysician().hasNoAssociateRole())
 			user.getPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
 
+		user.setPhysician(physicianService.addOrMergePhysician(user.getPhysician()));
 		userRepository.save(user, resourceBundle.get("log.user.update", user));
 	}
 
 	@Transactional(propagation = Propagation.NEVER)
 	public boolean deleteOrDisable(HistoUser user, boolean deletePhysician) {
+		Physician physician = user.getPhysician();
+
 		try {
+			// setting dummy for deleting user
+			user.setPhysician(new Physician(new Person(new Contact())));
 
-			if (!deletePhysician)
-				user.setPhysician(null);
-
+			logger.debug("Deleting user");
+			// error is only fired by the delete command
+			user = userRepository.save(user);
 			userRepository.delete(user,
-					resourceBundle.get("log.settings.material.deleted", user.getPhysician().getPerson().getFullName()));
+					resourceBundle.get("llog.user.deleted", user.getPhysician().getPerson().getFullName()));
+
+			if (deletePhysician) {
+				logger.debug("deleting physician");
+				physicianService.deleteOrArchive(physician);
+			} else
+				logger.debug("keeping physician");
+
 			return true;
 		} catch (Exception e) {
-			if (deletePhysician)
-				user.setPhysician(physicianService.archive(user.getPhysician(), true));
+			// reverting user disable
+			user.setPhysician(physician);
+			logger.debug("deleting not possible, disable");
 			diableUser(user);
+
+			// only archive
+			if (deletePhysician) {
+				logger.debug("physician is not in use, archive");
+				physicianService.archive(physician, true);
+			} else
+				logger.debug("physician is in use, do nothing");
+
 			return false;
 		}
 	}

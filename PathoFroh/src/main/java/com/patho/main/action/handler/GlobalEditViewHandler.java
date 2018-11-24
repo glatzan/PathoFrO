@@ -450,15 +450,15 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				logger.debug("Search for name, first name");
 				// name, surename; name surename
 				String[] arr = quickSerach.split(", ");
-				dialogHandler.getSearchPatientDialog().initAndPrepareBeanFromExternal(arr[0], arr[1], "", null);
+				dialogHandler.getSearchPatientDialog().initAndPrepareBean().inititalValues(arr[0], arr[1], "", null);
 			} else if (quickSerach.matches("^(.+) (.+)$")) {
 				logger.debug("Search for firstname, name");
 				// name, surename; name surename
 				String[] arr = quickSerach.split(" ");
-				dialogHandler.getSearchPatientDialog().initAndPrepareBeanFromExternal(arr[1], arr[0], "", null);
+				dialogHandler.getSearchPatientDialog().initAndPrepareBean().inititalValues(arr[1], arr[0], "", null);
 			} else if (quickSerach.matches("^[\\p{Alpha}\\-]+")) {
 				logger.debug("Search for name");
-				dialogHandler.getSearchPatientDialog().initAndPrepareBeanFromExternal(quickSerach, "", "", null);
+				dialogHandler.getSearchPatientDialog().initAndPrepareBean().inititalValues(quickSerach, "", "", null);
 			} else {
 				logger.debug("No search match found");
 				MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.notFount.general", "general.blank",

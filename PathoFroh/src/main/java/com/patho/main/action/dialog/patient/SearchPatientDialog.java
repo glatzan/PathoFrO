@@ -59,35 +59,34 @@ public class SearchPatientDialog extends AbstractTabDialog {
 	public SearchPatientDialog() {
 		setClinicSearchTab(new ClinicSearchTab());
 		setExternalPatientTab(new ExternalPatientTab());
-
-		tabs = new AbstractTab[] { clinicSearchTab, externalPatientTab };
 	}
 
-	public void initAndPrepareBean() {
-		initBean("", "", "", null, true);
-		prepareDialog();
+	public SearchPatientDialog initAndPrepareBean() {
+		if (initBean())
+			prepareDialog();
+		return this;
 	}
 
-	public void initAndPrepareBean(boolean showExternPatientTab) {
-		initBean("", "", "", null, showExternPatientTab);
-		prepareDialog();
+	public boolean initBean() {
+		tabs = new AbstractTab[] { clinicSearchTab };
+		this.showExternPatientTab = false;
+		return super.initBean(null, Dialog.PATIENT_ADD);
 	}
 
-	public void initAndPrepareBeanFromExternal(String name, String surename, String piz, Date date) {
-		initBean(name, surename, piz, date, true);
-		clinicSearchTab.searchForClinicPatienes();
-		prepareDialog();
+	public SearchPatientDialog externalMode() {
+		appendTab(externalPatientTab);
+		externalPatientTab.initTab();
+		return this;
 	}
 
-	public void initBean(String name, String surename, String piz, Date date, boolean showExternPatientTab) {
-		this.showExternPatientTab = showExternPatientTab;
-
+	public SearchPatientDialog inititalValues(String name, String surename, String piz, Date date) {
 		clinicSearchTab.setPatientName(name);
 		clinicSearchTab.setPatientSurname(surename);
 		clinicSearchTab.setPatientPiz(piz);
 		clinicSearchTab.setPatientBirthday(date);
-		
-		super.initBean(null, Dialog.PATIENT_ADD);
+		clinicSearchTab.searchForClinicPatienes();
+
+		return this;
 	}
 
 	@Getter
@@ -257,8 +256,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 		}
 
 		public boolean initTab() {
-			setDisabled(!userHandlerAction.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN)
-					|| !showExternPatientTab);
+			setDisabled(!userHandlerAction.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN));
 			setPatient(new Patient(new Person(new Contact())));
 			getPatient().getPerson().setGender(null);
 			return true;

@@ -125,7 +125,7 @@
 				<p:commandButton
 					disabled="#{mergePatientDialog.mergeOption ne 'PATIENT'}"
 					icon="fa fa-fw fa-user"
-					actionListener="#{dialog.searchPatientDialog.initAndPrepareBean(false)}"
+					actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
 					value="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
 					<p:ajax event="dialogReturn" update="@form" process="@form"
 						listener="#{mergePatientDialog.onSelectPatient}"></p:ajax>

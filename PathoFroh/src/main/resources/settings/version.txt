@@ -42,6 +42,7 @@ Tasks:
 -> Programm Version Dialog: Enable emails in this dialog
 
 -> Audited for Settings (DiangosisPreset etc)
+-> Settings-Dialog: Favourite List edit system lists, editable is not correct
 
 Next Changes:
 -> patienten 1502 und 1503 löschen

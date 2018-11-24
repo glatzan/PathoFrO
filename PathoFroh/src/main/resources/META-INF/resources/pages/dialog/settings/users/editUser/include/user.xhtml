@@ -19,7 +19,8 @@
 
 			<!-- User name -->
 			<h:outputLabel value="#{msg['dialog.userEdit.user.name']}" />
-			<p:inputText value="#{dialog.editUserDialog.user.username}" />
+			<p:inputText value="#{dialog.editUserDialog.user.username}"
+				required="true" />
 
 			<!-- User role -->
 			<h:outputLabel value="#{msg['dialog.userEdit.user.role']}" />
@@ -46,6 +47,7 @@
 		</h:panelGrid>
 
 		<histo:physicianSettingsClinic displayUsername="false"
+			displayAutoupdate="#{!dialog.editUserDialog.user.localUser}"
 			physician="#{dialog.editUserDialog.user.physician}" />
 	</p:outputPanel>
 

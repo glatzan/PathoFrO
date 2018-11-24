@@ -63,8 +63,6 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 	public PhysicianSearchDialog() {
 		setInternalPhysicianTab(new InternalPhysician());
 		setExternalPhysicianTab(new ExternalPhysician());
-
-		tabs = new AbstractTab[] { internalPhysicianTab, externalPhysicianTab };
 	}
 
 	public PhysicianSearchDialog initAndPrepareBean() {
@@ -75,12 +73,14 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 	}
 
 	public boolean initBean() {
+		tabs = new AbstractTab[] { internalPhysicianTab };
 		return super.initBean(task, Dialog.SETTINGS_PHYSICIAN_SEARCH);
 	}
 
 	public PhysicianSearchDialog externalMode() {
 		setExternalMode(true);
-		externalPhysicianTab.setDisabled(true);
+		appendTab(externalPhysicianTab);
+		externalPhysicianTab.initTab();
 		return this;
 	}
 
@@ -157,23 +157,31 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 		}
 
 		public void selectAndHide() {
-			save();
-			hideDialog(new PhysicianReturnEvent(false, ((PhysicianContainer)getSelectedPhysician()).getPhysician()));
+			logger.debug("Select and Hide");
+			hideDialog(new PhysicianReturnEvent(false, ((PhysicianContainer) getSelectedPhysician()).getPhysician()));
 		}
 
 		public void saveAndHide() {
+			logger.debug("Save and hide");
 			save();
 			hideDialog(new ReloadEvent());
 		}
 
 		private void save() {
+			System.out.println("saving...");
 			if (getSelectedPhysician() != null) {
-				getSelectedPhysician()
-						.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
-				setSelectedPhysician(physicianService.savePhysican(getSelectedPhysician()));
+				Physician phys = ((PhysicianContainer) getSelectedPhysician()).getPhysician();
+				phys.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
+				((PhysicianContainer) getSelectedPhysician()).setPhysician(physicianService.addOrMergePhysician(phys));
 			}
 		}
 
+		/**
+		 * Container for providing an artifical id
+		 * 
+		 * @author andi
+		 *
+		 */
 		@Getter
 		@Setter
 		@AllArgsConstructor
@@ -230,7 +238,6 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 		}
 
 		public void selectAndHide() {
-			save();
 			hideDialog(new PhysicianReturnEvent(true, getSelectedPhysician()));
 		}
 

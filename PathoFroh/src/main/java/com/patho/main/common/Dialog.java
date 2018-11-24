@@ -16,7 +16,7 @@ public enum Dialog {
 	WORKLIST_SETTINGS("/pages/dialog/worklist/worklistSettings", null,480, 272, false, false, true), 
 	PATIENT_EDIT("/pages/dialog/patient/editPatient", null, 1024, 600, false, false, true), // 16:9
 	PATIENT_REMOVE("/pages/dialog/patient/removePatient", null, 480, 272, false, false, true), // 16:9
-	PATIENT_LOG("/pages/dialog/history/patientLog", null,  1024, 600, false, false, true),// 16:9
+	PATIENT_LOG("/pages/dialog/history/patientLog", null,  1024, 600, false, false, true),																					// OK
 	TASK_CREATE("/pages/dialog/task/createTask", null, 1024, 600, false, false, true), 																						// OK		
 	TASK_DELETE("/pages/dialog/task/delete/deleteTask", null, 480, 272, false, false, true), // 16:9	
 	TASK_CHANGE_ID("/pages/dialog/task/chagneTaskID", null, 480, 272, false, false, true), 																					// OK
@@ -38,8 +38,8 @@ public enum Dialog {
 	SETTINGS_GROUP_LIST("/pages/dialog/settings/groups/groupList", null, 1024, 600, false, false, true), 																	// OK
 	SETTINGS_GROUP_EDIT("/pages/dialog/settings/groups/groupEdit", null, 1024, 600, false, false, true), 																	// OK
 	SETTINGS_USERS_LIST("/pages/dialog/settings/users/usersList", null, 1024, 600, false, false, true), 																	// OK
-	SETTINGS_USERS_EDIT("/pages/dialog/settings/users/editUser/userEdit", null, 1280, 740, false, false, true), 								//  16:9
-	SETTINGS_USERS_DELETE("/pages/dialog/settings/users/userDelete", null, 480, 272, false, false, true), 										//  16:9
+	SETTINGS_USERS_EDIT("/pages/dialog/settings/users/editUser/userEdit", null, 1280, 740, false, false, true), 															// OK
+	SETTINGS_USERS_DELETE("/pages/dialog/settings/users/userDelete", null, 480, 272, false, false, true), 																	// OK
 	SETTINGS_ORGANIZATION_EDIT("/pages/dialog/settings/organization/organizationEdit", null, 1280, 720, false, false, true),												// OK
 	SETTINGS_ORGANIZATION_LIST("/pages/dialog/settings/organization/organizationList", null, 858, 484, false, false, true), 												// OK
 	SETTINGS_FAVOURITE_LIST_EDIT("/pages/dialog/settings/favouriteList/favouriteListEdit", null, 1024, 600, false, false, true), 											// OK

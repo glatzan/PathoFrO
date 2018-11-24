@@ -7,7 +7,7 @@
 
 <h:head>
 	<title><h:outputFormat
-			value="#{msg['dialog.addSlide.Headline']}" /></title>
+			value="#{msg['dialog.patinetLog.headline']}" /></title>
 	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
 		library="css" />
@@ -22,7 +22,10 @@
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
 				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.createTask.Headline']}" />
+				<h:outputFormat value="#{msg['dialog.patinetLog.headline']}">
+					<f:param
+						value="#{dialog.patientLogDialog.patient.person.getFullName()}" />
+				</h:outputFormat>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
@@ -35,16 +38,29 @@
 				scrollable="true" scrollHeight="510"
 				value="#{dialog.patientLogDialog.patientLog}"
 				resizableColumns="false">
-				<p:column headerText="ID" style="width:50px;text-align:center">
+
+				<!-- id -->
+				<p:column headerText="#{msg['dialog.patinetLog.list.id']}"
+					style="width:50px;text-align:center">
 					<h:outputLabel value="#{log.id}"></h:outputLabel>
 				</p:column>
-				<p:column headerText="Datum" style="width:100px;text-align:center">
-					<h:outputLabel value="#{log.timestamp}"></h:outputLabel>
+
+				<!-- date -->
+				<p:column headerText="#{msg['dialog.patinetLog.list.date']}"
+					style="width:100px;text-align:center">
+					<h:outputText value="#{log.timestamp}">
+						<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+					</h:outputText>
 				</p:column>
-				<p:column headerText="Benutzer" style="width:100px;">
+
+				<!-- user -->
+				<p:column headerText="#{msg['dialog.patinetLog.list.user']}"
+					style="width:100px;">
 					<h:outputLabel value="#{log.logInfo.histoUser.username}"></h:outputLabel>
 				</p:column>
-				<p:column headerText="Aktion">
+
+				<!-- action -->
+				<p:column headerText="#{msg['dialog.patinetLog.list.action']}">
 					<h:outputLabel value="#{log.logInfo.logString}"></h:outputLabel>
 				</p:column>
 			</p:dataTable>

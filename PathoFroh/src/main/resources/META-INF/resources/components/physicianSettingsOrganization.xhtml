@@ -81,9 +81,9 @@
 				<f:facet name="header">
 					<p:commandLink
 						title="#{msg['component.physicianSettingsGeneral.organization.add']}"
-						process="@this"
+						process="@form"
 						actionListener="#{dialog.organizationListDialog.initAndPrepareBean().selectMode(true)}">
-						<p:ajax event="dialogReturn" update="@form" process="@form"
+						<p:ajax event="dialogReturn" update="@form"
 							listener="#{cc.attrs.dialog.onReturnOrganizationDialog}" />
 						<i class="fa fa-plus" />
 					</p:commandLink>
@@ -91,7 +91,7 @@
 
 				<p:commandLink
 					actionListener="#{cc.attrs.dialog.removeFromOrganization(organization)}"
-					update="@form"
+					update="@form" process="@form"
 					title="#{msg['component.physicianSettingsGeneral.organization.remove']}">
 					<i class="fa fa-remove" />
 				</p:commandLink>

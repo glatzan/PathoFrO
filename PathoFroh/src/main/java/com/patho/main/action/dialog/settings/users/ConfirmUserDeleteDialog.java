@@ -28,6 +28,7 @@ public class ConfirmUserDeleteDialog extends AbstractDialog {
 
 	public boolean initBean(HistoUser user) {
 		this.user = user;
+		this.deletePhysician = false;
 		return super.initBean(Dialog.SETTINGS_USERS_DELETE);
 	}
 
