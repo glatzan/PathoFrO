@@ -37,7 +37,7 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				style="margin-left:10px">
+				style="margin-left:10px;margin-top:10px;">
 				<!-- notify -->
 				<p:selectBooleanCheckbox
 					value="#{dialog.stainingPhaseExitDialog.data.goToDiagnosisPhase}">
@@ -45,9 +45,6 @@
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
 					value="#{msg['dialog.staingingPhaseExit.checkBox.diagnosisPhase']}" />
-
-				<h:outputLabel value=" " />
-				<h:outputLabel value=" " />
 
 				<!-- remove from staining list -->
 				<p:selectBooleanCheckbox
@@ -62,9 +59,6 @@
 					value="#{dialog.stainingPhaseExitDialog.data.endStainingPhase}" />
 				<h:outputLabel
 					value="#{msg['dialog.staingingPhaseExit.checkBox.endStaining']}" />
-
-				<h:outputLabel value=" " />
-				<h:outputLabel value=" " />
 
 				<!-- remove from worklist -->
 				<p:selectBooleanCheckbox

@@ -121,8 +121,9 @@
 			</h:panelGrid>
 
 			<!-- individual lists -->
-			<h:panelGrid columns="2" styleClass="listingHistoHiddenTableContainer"
-				style="width:100%" columnClasses="columnWidth125,">
+			<h:panelGrid columns="2"
+				styleClass="listingHistoHiddenTableContainer" style="width:100%"
+				columnClasses="columnWidth125,">
 				<h:outputLabel value="#{msg['dialog.worklistsearch.simple.lists']}" />
 
 				<p:selectCheckboxMenu updateLabel="true"
@@ -342,8 +343,7 @@
 					onclick="disableButton(true, 'serachBtn', 'closeBtn')"
 					process="@form">
 					<f:actionListener
-						binding="#{worklistSearchDialog.simpleSearchTab.selectAsWorklist()}" />
-					<f:actionListener binding="#{worklistSearchDialog.hideDialog()}" />
+						binding="#{worklistSearchDialog.simpleSearchTab.hideDialogAndSelectItem()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}" immediate="true"

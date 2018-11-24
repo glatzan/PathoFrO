@@ -22,6 +22,7 @@ import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog.DiagnosisPhaseExitData;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
+import com.patho.main.action.dialog.worklist.WorklistSearchDialog.WorklistSearchReturnEvent;
 import com.patho.main.action.handler.views.GenericView;
 import com.patho.main.action.handler.views.ReceiptLogView;
 import com.patho.main.action.handler.views.ReportView;
@@ -576,6 +577,16 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 			}
 		}
+
+		public void onWorklistSelectReturn(SelectEvent event) {
+			if (event.getObject() != null && event.getObject() instanceof WorklistSearchReturnEvent) {
+				logger.debug("Setting new worklist");
+				worklistViewHandlerAction.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(), true);
+				return;
+			}
+			onDefaultDialogReturn(event);
+		}
+
 	}
 
 	@Getter

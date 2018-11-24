@@ -78,7 +78,7 @@ public class StainingPhaseExitDialog extends AbstractDialog {
 			data.setEndStainingPhase(stainingCompleted);
 		}
 
-		data.setGoToDiagnosisPhase(true);
+		//data.setGoToDiagnosisPhase(true);
 
 		return super.initBean(task, Dialog.STAINING_PHASE_EXIT);
 	}

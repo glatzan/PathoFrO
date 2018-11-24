@@ -70,17 +70,17 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private ListItemRepository listItemRepository;
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private DiagnosisPresetRepository diagnosisPresetRepository;
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private PhysicianRepository physicianRepository;
-	
+
 	private SimpleSearchTab simpleSearchTab;
 	private FavouriteSearchTab favouriteSearchTab;
 	private ExtendedSearchTab extendedSearchTab;
@@ -90,11 +90,6 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		setFavouriteSearchTab(new FavouriteSearchTab());
 		setExtendedSearchTab(new ExtendedSearchTab());
 		tabs = new AbstractTab[] { simpleSearchTab, favouriteSearchTab, extendedSearchTab };
-	}
-
-	public void initAndPrepareBean() {
-		initBean();
-		prepareDialog();
 	}
 
 	public boolean initBean() {
@@ -132,9 +127,9 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 					userHandlerAction.getCurrentUser().getSettings().isWorklistSortOrderAsc());
 			return worklist;
 		}
-		
+
 		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistReturnEvent(getWorklist()));
+			WorklistSearchDialog.this.hideDialog(new WorklistSearchReturnEvent(getWorklist()));
 		}
 	}
 
@@ -179,9 +174,9 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 					userHandlerAction.getCurrentUser().getSettings().isWorklistSortOrderAsc());
 			return worklist;
 		}
-		
+
 		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistReturnEvent(getWorklist()));
+			WorklistSearchDialog.this.hideDialog(new WorklistSearchReturnEvent(getWorklist()));
 		}
 	}
 
@@ -241,13 +236,15 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 			setAllPhysicianTransformer(new DefaultTransformer<>(getAllPhysicians()));
 
 			// case history
-			setCaseHistoryList(listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.CASE_HISTORY,false));
+			setCaseHistoryList(listItemRepository
+					.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.CASE_HISTORY, false));
 
 			// Diagnosis presets
 			setDiagnosisPresets(diagnosisPresetRepository.findAllByOrderByIndexInListAsc());
 
 			// wardlist
-			setWardList(listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.WARDS,false));
+			setWardList(listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.WARDS,
+					false));
 
 			return true;
 		}
@@ -260,11 +257,11 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 					userHandlerAction.getCurrentUser().getSettings().isWorklistSortOrderAsc());
 			return worklist;
 		}
-		
+
 		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistReturnEvent(getWorklist()));
+			WorklistSearchDialog.this.hideDialog(new WorklistSearchReturnEvent(getWorklist()));
 		}
-		
+
 		public void exportWorklist() {
 //			List<Task> tasks = taskDAO.getTaskByCriteria(getWorklistSearch(), true);
 //			exportTasksDialog.initAndPrepareBean(tasks);
@@ -278,7 +275,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 				if (worklistSearch.getStainings() == null)
 					worklistSearch.setStainings(new ArrayList<StainingPrototype>());
 
-				worklistSearch.getStainings().addAll(((SlideSelectResult) event.getObject()).getPrototpyes());
+				//worklistSearch.getStainings().addAll(((SlideSelectResult) event.getObject()).getPrototpyes());
 			}
 		}
 	}
@@ -289,11 +286,11 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		return null;
 	}
-	
+
 	@Getter
 	@Setter
 	@AllArgsConstructor
-	public class WorklistReturnEvent implements DialogReturnEvent{
+	public class WorklistSearchReturnEvent implements DialogReturnEvent {
 		private Worklist worklist;
 	}
 }

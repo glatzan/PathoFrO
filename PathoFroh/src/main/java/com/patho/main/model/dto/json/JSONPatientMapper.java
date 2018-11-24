@@ -32,6 +32,8 @@ public class JSONPatientMapper {
 	private String piz;
 	private String krankenkasse;
 
+	private String error;
+
 	public Patient getPatient() {
 		return getPatient(new Patient(new Person(new Contact())));
 	}
@@ -50,7 +52,7 @@ public class JSONPatientMapper {
 			} catch (ParseException e) {
 				patient.getPerson().setBirthday(new Date());
 			}
-		}else {
+		} else {
 			patient.getPerson().setBirthday(new Date());
 		}
 
@@ -63,7 +65,8 @@ public class JSONPatientMapper {
 		patient.getPerson().getContact().setEmail("");
 		patient.getPerson().getContact().setPhone(getTel());
 
-		//patient.getPerson().setGender(getWeiblich().equals("1") ? Person.Gender.FEMALE : Person.Gender.MALE);
+		// patient.getPerson().setGender(getWeiblich().equals("1") ?
+		// Person.Gender.FEMALE : Person.Gender.MALE);
 
 		return patient;
 	}

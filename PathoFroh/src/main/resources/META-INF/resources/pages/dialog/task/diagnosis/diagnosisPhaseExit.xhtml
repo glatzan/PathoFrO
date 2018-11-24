@@ -59,8 +59,13 @@
 				<h:outputLabel
 					value="#{msg['dialog.diagnosisPhaseExit.checkBox.notificationPhase']}" />
 
-				<h:outputLabel value=" " />
-				<h:outputLabel value=" " />
+				<!-- notify -->
+				<p:selectBooleanCheckbox  disabled="#{dialog.diagnosisPhaseExitDialog.data.goToNotificationPhase}"
+					value="#{dialog.diagnosisPhaseExitDialog.data.goToNotificationPhase}">
+					<p:ajax event="change" update="@form" process="@form" />
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.diagnosisPhaseExit.checkBox.notificationPhase']}" />
 
 				<!-- remove from diagnosis list -->
 				<p:selectBooleanCheckbox
@@ -75,8 +80,6 @@
 					value="#{dialog.diagnosisPhaseExitDialog.data.endDiangosisPhase}" />
 				<h:outputLabel
 					value="#{msg['dialog.diagnosisPhaseExit.checkBox.endDiangosis']}" />
-				<h:outputLabel value=" " />
-				<h:outputLabel value=" " />
 
 				<!-- remove from worklist -->
 				<p:selectBooleanCheckbox

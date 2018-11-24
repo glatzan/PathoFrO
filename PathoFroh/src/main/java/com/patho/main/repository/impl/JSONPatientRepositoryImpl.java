@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
@@ -112,8 +113,13 @@ public class JSONPatientRepositoryImpl implements JSONPatientRepository {
 			TypeReference<List<JSONPatientMapper>> typeRef = new TypeReference<List<JSONPatientMapper>>() {
 			};
 			List<JSONPatientMapper> userMapper = mapper.readValue(new URL(url), typeRef);
+
+			// catching an error, to many entries
+			if (userMapper.size() == 1 && userMapper.get(0).getError() != null)
+				throw new ToManyEntriesException();
+
 			return userMapper.stream().map(p -> p.getPatient()).collect(Collectors.toList());
-		} catch (UnrecognizedPropertyException e) {
+		} catch (UnrecognizedPropertyException | IllegalIdentifierException e) {
 			throw new ToManyEntriesException();
 		} catch (IOException e) {
 			e.printStackTrace();
