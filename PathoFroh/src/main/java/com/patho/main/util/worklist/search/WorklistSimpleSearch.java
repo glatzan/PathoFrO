@@ -108,8 +108,8 @@ public class WorklistSimpleSearch extends AbstractWorklistSearch {
 	 * 
 	 * @return
 	 */
-	public boolean isSearchForLists() {
-		return getSearchIndex().isPredefinedList();
+	public boolean isListOptions() {
+		return getSearchIndex().isListOptions();
 	}
 
 	/**
@@ -144,9 +144,9 @@ public class WorklistSimpleSearch extends AbstractWorklistSearch {
 			System.out.println("--------" + patientRepository);
 			
 			if (getSelectedLists() != null && getSelectedLists().length > 0) {
-				patientRepository.findAllByFavouriteLists(
+				result.addAll(patientRepository.findAllByFavouriteLists(
 						Arrays.asList(getSelectedLists()).stream().map(p -> p.getId()).collect(Collectors.toList()),
-						true);
+						true));
 			}
 
 			break;
@@ -228,27 +228,29 @@ public class WorklistSimpleSearch extends AbstractWorklistSearch {
 	@Getter
 	public enum SimpleSearchOption {
 
-		STAINING_LIST(true, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.StayInStainingList,
+		STAINING_LIST(false,true, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.StayInStainingList,
 				PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.CouncilSendRequestMTA,
-				PredefinedFavouriteList.ScannList), DIAGNOSIS_LIST(false, PredefinedFavouriteList.DiagnosisList,
+				PredefinedFavouriteList.ScannList), 
+		DIAGNOSIS_LIST(false,false, PredefinedFavouriteList.DiagnosisList,
 						PredefinedFavouriteList.ReDiagnosisList, PredefinedFavouriteList.StayInDiagnosisList,
-						PredefinedFavouriteList.CouncilCompleted), NOTIFICATION_LIST(false,
+						PredefinedFavouriteList.CouncilCompleted), 
+		NOTIFICATION_LIST(false,false,
 								PredefinedFavouriteList.NotificationList,
 								PredefinedFavouriteList.StayInNotificationList,
-								PredefinedFavouriteList.CouncilSendRequestSecretary), CUSTOM_LIST, EMPTY_LIST, TODAY, YESTERDAY, CURRENTWEEK, LASTWEEK, CURRENTMONTH, LASTMONTH, DAY, MONTH, TIME,;
+								PredefinedFavouriteList.CouncilSendRequestSecretary), CUSTOM_LIST(false,false), EMPTY_LIST, TODAY, YESTERDAY, CURRENTWEEK, LASTWEEK, CURRENTMONTH, LASTMONTH, DAY, MONTH, TIME,;
 
 		private final PredefinedFavouriteList[] lists;
 		private final boolean newPatient;
-		private final boolean predefinedList;
+		private final boolean listOptions;
 
 		SimpleSearchOption() {
-			this(false);
+			this(false,false);
 		}
 
-		SimpleSearchOption(boolean newPatient, PredefinedFavouriteList... lists) {
+		SimpleSearchOption(boolean listOptions, boolean newPatient, PredefinedFavouriteList... lists) {
 			this.newPatient = newPatient;
 			this.lists = lists;
-			this.predefinedList = lists == null || lists.length == 0 ? false : true;
+			this.listOptions = listOptions;
 		}
 	}
 }

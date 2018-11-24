@@ -66,8 +66,7 @@
 			<p:remoteCommand name="sumbitOnDblSelect">
 				<f:actionListener
 					binding="#{worklistSearchDialog.favouriteSearchTab.selectAsWorklist()}" />
-				<f:actionListener
-					binding="#{worklistSearchDialog.hideDialog()}" />
+				<f:actionListener binding="#{worklistSearchDialog.hideDialog()}" />
 			</p:remoteCommand>
 		</h:panelGrid>
 	</p:outputPanel>
@@ -86,15 +85,12 @@
 					onclick="disableButton(true, 'serachBtn', 'closeBtn')"
 					process="@form">
 					<f:actionListener
-						binding="#{worklistSearchDialog.favouriteSearchTab.selectAsWorklist()}" />
-					<f:actionListener
-						binding="#{worklistSearchDialog.hideDialog()}" />
+						binding="#{worklistSearchDialog.favouriteSearchTab.hideDialogAndSelectItem()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}" immediate="true"
 					widgetVar="closeBtn" icon="fa fa-times-circle">
-					<f:actionListener
-						binding="#{worklistSearchDialog.hideDialog()}" />
+					<f:actionListener binding="#{worklistSearchDialog.hideDialog()}" />
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

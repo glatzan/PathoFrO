@@ -221,6 +221,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 			setName("dialog.worklistsearch.scifi");
 			setViewID("extendedSearch");
 			setCenterInclude("include/extendedSearch.xhtml");
+			setDisabled(true);
 		}
 
 		@Override

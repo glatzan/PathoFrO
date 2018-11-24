@@ -320,10 +320,10 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
 		criteria.select(root);
 
 		EntityGraph<Patient> graph = getSession().createEntityGraph(Patient.class);
-		
+
 //		if (loadTasks)
 //			root.fetch(Patient_.tasks, JoinType.LEFT);
-		
+
 		if (loadTasks)
 			graph.addAttributeNodes("tasks");
 
@@ -335,7 +335,7 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
 
 //		Map<String, Object> hints = new HashMap<String, Object>();
 //		hints.put("javax.persistence.loadgraph", graph);
-		
+
 		criteria.where(getCriteriaBuilder().and(predicates.toArray(new Predicate[predicates.size()])));
 		criteria.distinct(true);
 
@@ -365,7 +365,6 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
 		criteria.distinct(true);
 
 		List<Patient> patients = getSession().createQuery(criteria).getResultList();
-
 		return patients;
 	}
 }
