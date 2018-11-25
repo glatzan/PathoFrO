@@ -20,6 +20,8 @@ import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.notification.ContactSelectDialog;
 import com.patho.main.action.dialog.notification.NotificationDialog;
+import com.patho.main.action.dialog.patient.MergePatientConfimDialog;
+import com.patho.main.action.dialog.patient.MergePatientDialog;
 import com.patho.main.action.dialog.patient.PatientLogDialog;
 import com.patho.main.action.dialog.patient.SearchPatientDialog;
 import com.patho.main.action.dialog.print.CustomAddressDialog;
@@ -50,6 +52,8 @@ import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
 import com.patho.main.action.dialog.task.DeleteTaskEntityDialog;
 import com.patho.main.action.dialog.worklist.WorklistSearchDialog;
+import com.patho.main.action.dialog.worklist.WorklistSettingsDialog;
+import com.patho.main.action.dialog.worklist.WorklistSortDialog;
 
 import lombok.Getter;
 
@@ -106,4 +110,9 @@ public class DialogHandler {
 	private UserSettingsDialog userSettingsDialog = new UserSettingsDialog();
 	private ConfirmUserDeleteDialog confirmUserDeleteDialog = new ConfirmUserDeleteDialog();
 	private WorklistSearchDialog worklistSearchDialog = new WorklistSearchDialog();
+	private WorklistSettingsDialog worklistSettingsDialog = new WorklistSettingsDialog();
+	private WorklistSortDialog worklistSortDialog = new WorklistSortDialog();
+	private MergePatientDialog mergePatientDialog = new MergePatientDialog();
+	private MergePatientConfimDialog mergePatientConfimDialog = new MergePatientConfimDialog();
+	
 }

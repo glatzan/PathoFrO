@@ -39,7 +39,6 @@ public class PatientViewHandlerAction {
 	 * @param event
 	 */
 	public void onEditPatientDataReturn(SelectEvent event) {
-		log.debug("On EditPatient-Dialog return");
 		if (event.getObject() != null && event.getObject() instanceof PatientMergeEvent) {
 			PatientMergeEvent p = (PatientMergeEvent) event.getObject();
 			

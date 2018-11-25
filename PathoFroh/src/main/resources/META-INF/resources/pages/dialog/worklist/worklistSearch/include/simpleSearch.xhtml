@@ -99,6 +99,7 @@
 			<h:panelGrid columns="8"
 				columnClasses="columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto"
 				styleClass="defaultHistoTable">
+
 				<!-- Staining List -->
 				<p:radioButton id="opt1" for="searchIndexRadio" itemIndex="0" />
 				<h:outputLabel for="opt1"
@@ -157,7 +158,7 @@
 			<!-- Separator -->
 
 			<h:panelGrid columns="12" styleClass="defaultHistoTable"
-				columnClasses="columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto">
+				style="width: auto !important;">
 				<!-- Today -->
 				<p:radioButton id="opt3" for="searchIndexRadio" itemIndex="2" />
 				<h:outputLabel for="opt3" style="margin-right:20px;"
@@ -280,43 +281,40 @@
 				itemValue="TaskCompleted" />
 		</p:selectOneRadio>
 
-		<h:panelGrid columns="1" styleClass="defaultHistoTable"
-			cellpadding="5">
+		<h:panelGrid columns="14" styleClass="defaultHistoTable"
+			style="width: auto !important;">
+			<h:outputLabel value="#{msg['dialog.worklistsearch.simple.filter']}"
+				style="margin-right:20px;" />
 
-			<h:panelGrid columns="14" styleClass="newStyleListingTable">
-				<h:outputLabel value="#{msg['dialog.worklistsearch.simple.filter']}"
-					style="margin-right:20px;" />
+			<!-- Task created -->
+			<p:radioButton id="filter1" for="filterIndexRadio" itemIndex="0"
+				disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
+			<h:outputLabel for="filter1" style="margin-right:20px;"
+				value="#{msg['dialog.worklistsearch.simple.filter.task']}" />
 
-				<!-- Task created -->
-				<p:radioButton id="filter1" for="filterIndexRadio" itemIndex="0"
-					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
-				<h:outputLabel for="filter1"
-					value="#{msg['dialog.worklistsearch.simple.filter.task']}" />
+			<!-- Staining -->
+			<p:radioButton id="filter2" for="filterIndexRadio" itemIndex="1"
+				disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
+			<h:outputLabel for="filter2" style="margin-right:20px;"
+				value="#{msg['dialog.worklistsearch.simple.filter.staining']}" />
 
-				<!-- Staining -->
-				<p:radioButton id="filter2" for="filterIndexRadio" itemIndex="1"
-					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
-				<h:outputLabel for="filter2"
-					value="#{msg['dialog.worklistsearch.simple.filter.staining']}" />
+			<!-- Diagnosis -->
+			<p:radioButton id="filter3" for="filterIndexRadio" itemIndex="2"
+				disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
+			<h:outputLabel for="filter3" style="margin-right:20px;"
+				value="#{msg['dialog.worklistsearch.simple.filter.diagnosis']}" />
 
-				<!-- Diagnosis -->
-				<p:radioButton id="filter3" for="filterIndexRadio" itemIndex="2"
-					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
-				<h:outputLabel for="filter3"
-					value="#{msg['dialog.worklistsearch.simple.filter.diagnosis']}" />
+			<!-- Notification -->
+			<p:radioButton id="filter4" for="filterIndexRadio" itemIndex="3"
+				disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
+			<h:outputLabel for="filter4" style="margin-right:20px;"
+				value="#{msg['dialog.worklistsearch.simple.filter.notification']}" />
 
-				<!-- Notification -->
-				<p:radioButton id="filter4" for="filterIndexRadio" itemIndex="3"
-					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
-				<h:outputLabel for="filter4"
-					value="#{msg['dialog.worklistsearch.simple.filter.notification']}" />
-
-				<!-- Finalized -->
-				<p:radioButton id="filter5" for="filterIndexRadio" itemIndex="4"
-					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
-				<h:outputLabel for="filter5"
-					value="#{msg['dialog.worklistsearch.simple.filter.finalized']}" />
-			</h:panelGrid>
+			<!-- Finalized -->
+			<p:radioButton id="filter5" for="filterIndexRadio" itemIndex="4"
+				disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
+			<h:outputLabel for="filter5" style="margin-right:20px;"
+				value="#{msg['dialog.worklistsearch.simple.filter.finalized']}" />
 		</h:panelGrid>
 
 	</p:outputPanel>

@@ -1,5 +1,27 @@
 @import "style.less";
 
+
+// column width for favourite table
+.worklistSearchDilaog_FavouriteListTable{
+	.histoDataTable (true, true);
+
+	tr {
+		display: table;
+		
+		th:nth-child(1), td:nth-child(1) {
+			width: 40%;
+		}
+		
+		th:nth-child(2), td:nth-child(2) {
+			width: auto;
+		}
+		th:nth-child(3), td:nth-child(3) {
+			width: 55px !important;
+		}
+	}
+}
+
+
 // column width for favourite table
 .userDialog_FavouriteListTable{
 	.histoDataTable (true, true);
@@ -7,14 +29,14 @@
 	tr {
 		display: table;
 		
-		td:nth-child(1) {
+		th:nth-child(1), td:nth-child(1) {
 			width: 40%;
 		}
 		
-		td:nth-child(2) {
+		th:nth-child(2), td:nth-child(2) {
 			width: auto;
 		}
-		td:nth-child(3) {
+		th:nth-child(3), td:nth-child(3) {
 			width: 20px !important;
 		}
 	}

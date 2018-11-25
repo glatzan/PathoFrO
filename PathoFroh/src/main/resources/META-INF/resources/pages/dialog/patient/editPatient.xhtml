@@ -187,7 +187,7 @@
 					<p:commandButton value="#{msg['dialog.editPatient.merge']}"
 						process="@form" icon="fa fa-medkit">
 						<f:actionListener
-							binding="#{mergePatientDialog.initAndPrepareBean(dialogHandlerAction.editPatientDialog.patient)}"></f:actionListener>
+							binding="#{dialog.mergePatientDialog.initAndPrepareBean(dialogHandlerAction.editPatientDialog.patient)}"></f:actionListener>
 						<p:ajax event="dialogReturn"
 							listener="#{dialogHandlerAction.editPatientDialog.onMergeReturn}"></p:ajax>
 

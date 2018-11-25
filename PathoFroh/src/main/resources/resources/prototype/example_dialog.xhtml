@@ -78,20 +78,20 @@
 
 				<h:panelGrid columns="2" styleClass="right">
 					<p:commandButton widgetVar="createPatientBtn"
-						disabled="#{mergePatientDialog.patientToMerge eq null}"
+						disabled="#{dialog.mergePatientDialog.patientToMerge eq null}"
 						value="#{msg['dialog.mergePatientDialog.button.merge']}"
 						icon="fa fa-fw fa-medkit">
 						<f:actionListener
-							binding="#{mergePatientDialog.confirmDialog.initAndPrepareBean()}" />
+							binding="#{dialog.mergePatientConfimDialog.initAndPrepareBean()}" />
 
 						<p:ajax event="dialogReturn"
-							listener="#{mergePatientDialog.onMergePatient}"></p:ajax>
+							listener="#{dialog.mergePatientDialog.onMergePatient}"></p:ajax>
 					</p:commandButton>
 
 					<p:commandButton value="#{msg['general.abort']}"
 						widgetVar="closeBtn" partialSubmit="true"
 						icon="fa fa-fw fa-times-circle" id="closeBtn" process="@this"
-						actionListener="#{mergePatientDialog.hideDialog()}"></p:commandButton>
+						actionListener="#{dialog.mergePatientDialog.hideDialog()}"></p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>

@@ -43,6 +43,8 @@ Tasks:
 
 -> Audited for Settings (DiangosisPreset etc)
 -> Settings-Dialog: Favourite List edit system lists, editable is not correct
+-> Worklist LoadDialog Favourite Lists preview
+-> Patient List, fix active tasks 
 
 Next Changes:
 -> patienten 1502 und 1503 löschen
@@ -103,7 +105,6 @@ TODO: log in settings rework
 TODO: Individelle Adressen beim drucken sollten aus personen gespeichert werden?
 TODO: Wenn Aufträge gelöscht werden müssen pdf mit gelöscht werden..
 TODO: Freischaltungs link
-TODO: Gruppendialog-Edit validate form
 TODO: Synchronizie organizations (nicht updaten durch klinik datenbank beachten)
 
 Graphic Changes

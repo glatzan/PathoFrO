@@ -168,7 +168,6 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 		}
 
 		private void save() {
-			System.out.println("saving...");
 			if (getSelectedPhysician() != null) {
 				Physician phys = ((PhysicianContainer) getSelectedPhysician()).getPhysician();
 				phys.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));

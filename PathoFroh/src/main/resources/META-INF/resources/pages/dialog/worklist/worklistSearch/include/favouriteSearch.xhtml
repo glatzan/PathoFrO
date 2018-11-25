@@ -22,7 +22,7 @@
 				expandableRowGroups="true" scrollHeight="450"
 				id="favouriteListTable"
 				rowKey="#{favouriteListContainer.favouriteList.id}"
-				styleClass="worklistSearchDialog_FavouriteSearchTable"
+				styleClass="worklistSearchDilaog_FavouriteListTable"
 				selectionMode="single"
 				selection="#{dialog.worklistSearchDialog.favouriteSearchTab.selectedContainer}"
 				value="#{dialog.worklistSearchDialog.favouriteSearchTab.containers}">
@@ -34,19 +34,22 @@
 					</p:column>
 				</p:headerRow>
 
+				<!-- name -->
 				<p:column
 					headerText="#{msg['dialog.worklistsearch.favouriteList.table.name']}"
 					style="width:30%">
 					<h:outputText value="#{favouriteListContainer.favouriteList.name}"></h:outputText>
 				</p:column>
 
+				<!--  commentary -->
 				<p:column
 					headerText="#{msg['dialog.worklistsearch.favouriteList.table.commentary']}">
 					<h:outputText
 						value="#{favouriteListContainer.favouriteList.commentary}"></h:outputText>
 				</p:column>
 
-				<p:column
+				<!-- options -->
+				<p:column styleClass="centerHeaderChildElements centerChildElements"
 					headerText="#{msg['dialog.worklistsearch.favouriteList.table.options']}">
 					<p:commandLink
 						title="#{msg['dialog.settings.person.list.options.edit']}"
@@ -54,6 +57,14 @@
 						process="@this" partialSubmit="true">
 						<p:ajax event="dialogReturn" update="@form" />
 						<i class="fa fa-fw fa-pencil" />
+					</p:commandLink>
+					<p:commandLink
+						title="#{msg['dialog.settings.person.list.options.view']}">
+						<i class="fa fa-fw  fa-desktop " />
+					</p:commandLink>
+					<p:commandLink
+						title="#{msg['dialog.settings.person.list.options.load']}">
+						<i class="fa fa-fw  fa-download" />
 					</p:commandLink>
 				</p:column>
 
@@ -66,7 +77,8 @@
 			<p:remoteCommand name="sumbitOnDblSelect">
 				<f:actionListener
 					binding="#{dialog.worklistSearchDialog.favouriteSearchTab.selectAsWorklist()}" />
-				<f:actionListener binding="#{dialog.worklistSearchDialog.hideDialog()}" />
+				<f:actionListener
+					binding="#{dialog.worklistSearchDialog.hideDialog()}" />
 			</p:remoteCommand>
 		</h:panelGrid>
 	</p:outputPanel>
@@ -90,7 +102,8 @@
 
 				<p:commandButton value="#{msg['general.close']}" immediate="true"
 					widgetVar="closeBtn" icon="fa fa-times-circle">
-					<f:actionListener binding="#{dialog.worklistSearchDialog.hideDialog()}" />
+					<f:actionListener
+						binding="#{dialog.worklistSearchDialog.hideDialog()}" />
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

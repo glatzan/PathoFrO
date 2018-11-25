@@ -1,21 +1,27 @@
 package com.patho.main.action.dialog.patient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.primefaces.event.SelectEvent;
 import org.primefaces.json.JSONException;
+import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.patho.main.action.DialogHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.excepion.ToManyEntriesException;
+import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.PatientService;
+import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.event.PatientMergeEvent;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
@@ -25,8 +31,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-@Component
-@Scope(value="session")
+@Configurable
 @Getter
 @Setter
 public class MergePatientDialog extends AbstractDialog {
@@ -94,23 +99,50 @@ public class MergePatientDialog extends AbstractDialog {
 	 */
 	private boolean renderErrorPatientNotFound;
 
-	/**
-	 * Local Dialog for confirming the merge
-	 */
-	private ConfirmDialog confirmDialog = new ConfirmDialog();
+	private Patient source;
 
-	public void initAndPrepareBean(Patient patient) {
-		initBean(patient);
-		prepareDialog();
+	private Patient target;
+
+	private DualListModel<Task> taskLists = new DualListModel<Task>();
+
+	public MergePatientDialog initAndPrepareBean() {
+		return initAndPrepareBean((Patient) null);
 	}
 
-	public void initBean(Patient patient) {
-		super.initBean(null, Dialog.PATIENT_MERGE, false);
-		setPatient(patient);
-		setTasksTomerge(patient.getTasks());
-		setMergeOption(MergeOption.PIZ);
-		setPatientToMerge(null);
-		setPiz("");
+	public MergePatientDialog initAndPrepareBean(Patient source) {
+		return initAndPrepareBean(source, null);
+	}
+
+	public MergePatientDialog initAndPrepareBean(Patient source, Patient target) {
+		if (initBean(source, target))
+			prepareDialog();
+		return this;
+	}
+
+	public boolean initBean(Patient source, Patient target) {
+		setSource(source);
+		setTarget(target);
+
+		taskLists.setSource(source == null ? new ArrayList<Task>() : new ArrayList<Task>(source.getTasks()));
+		taskLists.setTarget(target == null ? new ArrayList<Task>() : new ArrayList<Task>(target.getTasks()));
+
+		return super.initBean(null, Dialog.PATIENT_MERGE);
+	}
+
+	public void onReturnSelectSource(SelectEvent event) {
+		if (event.getObject() != null && event.getObject() instanceof PatientReturnEvent) {
+			Patient patient = ((PatientReturnEvent) event.getObject()).getPatien();
+			setSource(patient);
+			taskLists.setSource(source == null ? new ArrayList<Task>() : new ArrayList<Task>(source.getTasks()));
+		}
+	}
+
+	public void onReturnSelectTarget(SelectEvent event) {
+		if (event.getObject() != null && event.getObject() instanceof PatientReturnEvent) {
+			Patient patient = ((PatientReturnEvent) event.getObject()).getPatien();
+			setSource(patient);
+			taskLists.setTarget(target == null ? new ArrayList<Task>() : new ArrayList<Task>(target.getTasks()));
+		}
 	}
 
 	/**
@@ -150,25 +182,21 @@ public class MergePatientDialog extends AbstractDialog {
 	 * @param event
 	 */
 	public void onMergePatient(SelectEvent event) {
-		try {
-			if (event.getObject() != null && event.getObject() instanceof Boolean
-					&& ((Boolean) event.getObject()).booleanValue()) {
-				if (patient != null && patientToMerge != null) {
+		if (event.getObject() != null && event.getObject() instanceof Boolean
+				&& ((Boolean) event.getObject()).booleanValue()) {
+			if (patient != null && patientToMerge != null) {
 
-					if (patientToMerge.getId() == 0)
-						patientService.addPatient(patientToMerge, false);
+				if (patientToMerge.getId() == 0)
+					patientService.addPatient(patientToMerge, false);
 
-					patientService.mergePatient(patient, patientToMerge, tasksTomerge);
+				patientService.mergePatient(patient, patientToMerge, tasksTomerge);
 
-					if (deletePatient && patient.getTasks().isEmpty())
-						patientService.archivePatient(patient);
+				if (deletePatient && patient.getTasks().isEmpty())
+					patientService.archivePatient(patient);
 
-					mainHandlerAction.sendGrowlMessagesAsResource("growl.success", "growl.patient.merge.success");
-					hideDialog(new PatientMergeEvent(patient, patientToMerge));
-				}
+				mainHandlerAction.sendGrowlMessagesAsResource("growl.success", "growl.patient.merge.success");
+				hideDialog(new PatientMergeEvent(patient, patientToMerge));
 			}
-		} catch (Exception e) {
-			onDatabaseVersionConflict();
 		}
 	}
 
@@ -194,20 +222,6 @@ public class MergePatientDialog extends AbstractDialog {
 		if (deletePatientDisabled)
 			deletePatient = false;
 	}
-
-	/**
-	 * Local Dialog for confirming the merge
-	 */
-	public class ConfirmDialog extends AbstractDialog {
-
-		public void initAndPrepareBean() {
-			super.initAndPrepareBean(Dialog.PATIENT_MERGE_CONFIRM);
-		}
-
-		public void confirmAndClose() {
-			hideDialog(new Boolean(true));
-		}
-	};
 
 	/**
 	 * Option for determine the merge target.
