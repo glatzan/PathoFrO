@@ -67,8 +67,7 @@ public class WorklistSimpleSearch extends AbstractWorklistSearch {
 		if (getSearchIndex() == null)
 			setSearchIndex(SimpleSearchOption.STAINING_LIST);
 
-		if (getFilterIndex() == null)
-			setFilterIndex(FindCriterion.TaskCreated);
+		setFilterIndex(FindCriterion.TaskCreated);
 
 		// date for day
 		setDay(new Date(System.currentTimeMillis()));
@@ -103,16 +102,6 @@ public class WorklistSimpleSearch extends AbstractWorklistSearch {
 	}
 
 	/**
-	 * Returns false if any pre configured list is selected. All Filter options will
-	 * be disabled
-	 * 
-	 * @return
-	 */
-	public boolean isListOptions() {
-		return getSearchIndex().isListOptions();
-	}
-
-	/**
 	 * Returns a lists of patients
 	 */
 	@Override
@@ -140,9 +129,6 @@ public class WorklistSimpleSearch extends AbstractWorklistSearch {
 						true, false, true));
 			}
 
-			
-			System.out.println("--------" + patientRepository);
-			
 			if (getSelectedLists() != null && getSelectedLists().length > 0) {
 				result.addAll(patientRepository.findAllByFavouriteLists(
 						Arrays.asList(getSelectedLists()).stream().map(p -> p.getId()).collect(Collectors.toList()),
@@ -228,29 +214,86 @@ public class WorklistSimpleSearch extends AbstractWorklistSearch {
 	@Getter
 	public enum SimpleSearchOption {
 
-		STAINING_LIST(false,true, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.StayInStainingList,
+		/**
+		 * Staining list for laboratory
+		 */
+		STAINING_LIST(1, true, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.StayInStainingList,
 				PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.CouncilSendRequestMTA,
-				PredefinedFavouriteList.ScannList), 
-		DIAGNOSIS_LIST(false,false, PredefinedFavouriteList.DiagnosisList,
-						PredefinedFavouriteList.ReDiagnosisList, PredefinedFavouriteList.StayInDiagnosisList,
-						PredefinedFavouriteList.CouncilCompleted), 
-		NOTIFICATION_LIST(false,false,
-								PredefinedFavouriteList.NotificationList,
-								PredefinedFavouriteList.StayInNotificationList,
-								PredefinedFavouriteList.CouncilSendRequestSecretary), CUSTOM_LIST(false,false), EMPTY_LIST, TODAY, YESTERDAY, CURRENTWEEK, LASTWEEK, CURRENTMONTH, LASTMONTH, DAY, MONTH, TIME,;
+				PredefinedFavouriteList.ScannList),
+		/**
+		 * Diagnosis list for physicians
+		 */
+		DIAGNOSIS_LIST(1, false, PredefinedFavouriteList.DiagnosisList, PredefinedFavouriteList.ReDiagnosisList,
+				PredefinedFavouriteList.StayInDiagnosisList, PredefinedFavouriteList.CouncilCompleted),
+		/**
+		 * Notification list for secretary
+		 */
+		NOTIFICATION_LIST(1, false, PredefinedFavouriteList.NotificationList,
+				PredefinedFavouriteList.StayInNotificationList, PredefinedFavouriteList.CouncilSendRequestSecretary),
+		/**
+		 * Custom list
+		 */
+		CUSTOM_LIST(1, false),
+		/**
+		 * Empty list
+		 */
+		EMPTY_LIST(2),
+		/**
+		 * Search today
+		 */
+		TODAY(2),
+		/**
+		 * Search yesterday
+		 */
+		YESTERDAY(2),
+		/**
+		 * Search current week
+		 */
+		CURRENTWEEK(2),
+		/**
+		 * Search last week
+		 */
+		LASTWEEK(2),
+		/**
+		 * Search current month
+		 */
+		CURRENTMONTH(2),
+		/**
+		 * Search last month
+		 */
+		LASTMONTH(2),
+		/**
+		 * Search specific day
+		 */
+		DAY(2),
+		/**
+		 * Search specific month
+		 */
+		MONTH(2),
+		/**
+		 * Search user defined time
+		 */
+		TIME(2);
 
 		private final PredefinedFavouriteList[] lists;
 		private final boolean newPatient;
-		private final boolean listOptions;
+		/**
+		 * Group for disabling options
+		 */
+		private final int disableGroup;
 
 		SimpleSearchOption() {
-			this(false,false);
+			this(0, false);
 		}
 
-		SimpleSearchOption(boolean listOptions, boolean newPatient, PredefinedFavouriteList... lists) {
+		SimpleSearchOption(int disableGroup) {
+			this(disableGroup, false);
+		}
+
+		SimpleSearchOption(int disableGroup, boolean newPatient, PredefinedFavouriteList... lists) {
 			this.newPatient = newPatient;
 			this.lists = lists;
-			this.listOptions = listOptions;
+			this.disableGroup = disableGroup;
 		}
 	}
 }

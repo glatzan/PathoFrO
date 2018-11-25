@@ -581,7 +581,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		public void onWorklistSelectReturn(SelectEvent event) {
 			if (event.getObject() != null && event.getObject() instanceof WorklistSearchReturnEvent) {
 				logger.debug("Setting new worklist");
-				worklistViewHandlerAction.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(), true);
+				worklistViewHandlerAction.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(), true,true);
 				return;
 			}
 			onDefaultDialogReturn(event);

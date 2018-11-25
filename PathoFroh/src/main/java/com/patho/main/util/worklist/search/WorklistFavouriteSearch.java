@@ -20,13 +20,13 @@ public class WorklistFavouriteSearch extends AbstractWorklistSearch {
 	@Autowired
 	private PatientRepository patientRepository;
 
-	private long favouriteListId;
+	private FavouriteList favouriteList;
 
 	@Override
 	public List<Patient> getPatients() {
 		logger.debug("Searching current worklist");
 
-		List<Patient> patient = patientRepository.findAllByFavouriteList(patientRepository, true);
+		List<Patient> patient = patientRepository.findAllByFavouriteList(favouriteList.getId(), true);
 
 		// setting task within favourite list as active
 		patient.forEach(p -> p.getTasks().forEach(z -> {

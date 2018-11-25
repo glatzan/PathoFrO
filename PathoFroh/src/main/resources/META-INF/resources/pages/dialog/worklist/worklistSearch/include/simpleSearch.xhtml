@@ -15,7 +15,7 @@
 	<p:outputPanel styleClass="bodyPannelFull">
 		<!-- Select -->
 		<p:selectOneRadio id="searchIndexRadio"
-			value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex}"
+			value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex}"
 			layout="custom">
 			<!-- 0 -->
 			<f:selectItem
@@ -83,7 +83,7 @@
 				itemValue="CURRENTMONTH" />
 
 			<p:ajax update="@form"
-				listener="#{worklistSearchDialog.simpleSearchTab.worklistSearch.updateSearchIndex()}"
+				listener="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.updateSearchIndex()}"
 				event="change" />
 		</p:selectOneRadio>
 
@@ -96,7 +96,7 @@
 			</h:panelGrid>
 
 			<!-- predefined lists -->
-			<h:panelGrid columns="8" style="width:auto !important"
+			<h:panelGrid columns="8"
 				columnClasses="columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto,columnWidthMin,columnWidthAuto"
 				styleClass="defaultHistoTable">
 				<!-- Staining List -->
@@ -125,25 +125,27 @@
 				columnClasses="columnWidth150,">
 				<h:outputLabel value="#{msg['dialog.worklistsearch.simple.lists']}" />
 
+				<!-- checkboxes -->
 				<p:selectCheckboxMenu updateLabel="true"
-					disabled="#{worklistSearchDialog.simpleSearchTab.worklistSearch.isListOptions()}"
-					value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.selectedLists}"
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 1}"
+					value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.selectedLists}"
 					multiple="true">
 					<f:selectItems var="list"
-						value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.lists}"
+						value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.lists}"
 						itemLabel="#{msg['enum.predefinedFavouriteList.'.concat(list)]}"
 						itemValue="#{list}" />
 					<p:ajax event="change" process="@this" update="@form"
-						listener="#{worklistSearchDialog.simpleSearchTab.onChangeWorklistSelection()}" />
+						listener="#{dialog.worklistSearchDialog.simpleSearchTab.onChangeWorklistSelection()}" />
 				</p:selectCheckboxMenu>
 
+				<!-- new -->
 				<h:outputLabel
 					value="#{msg['dialog.worklistsearch.simple.staininglist.new']}" />
 				<p:selectBooleanCheckbox
-					disabled="#{worklistSearchDialog.simpleSearchTab.worklistSearch.isListOptions()}"
-					value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.newPatients}">
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 1}"
+					value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.newPatients}">
 					<p:ajax event="change" process="@this" update="@form"
-						listener="#{worklistSearchDialog.simpleSearchTab.onChangeWorklistSelection()}" />
+						listener="#{dialog.worklistSearchDialog.simpleSearchTab.onChangeWorklistSelection()}" />
 				</p:selectBooleanCheckbox>
 			</h:panelGrid>
 
@@ -194,9 +196,9 @@
 				<h:outputLabel for="opt8"
 					value="#{msg['dialog.worklistsearch.simple.date.day']}" />
 				<p:calendar
-					value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.day}"
+					value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.day}"
 					locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true"
-					disabled="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'DAY'}">
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'DAY'}">
 					<p:ajax event="change" process="@this" />
 					<p:ajax event="dateSelect" process="@this" />
 				</p:calendar>
@@ -210,8 +212,8 @@
 					value="#{msg['dialog.worklistsearch.simple.date.month']}" />
 
 				<p:selectOneMenu id="month_pick" style="width:125px"
-					value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchMonth}"
-					disabled="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'MONTH'}">
+					value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchMonth}"
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'MONTH'}">
 
 					<f:selectItems value="#{enumProvider.month}" var="month"
 						itemValue="#{month}"
@@ -220,10 +222,10 @@
 				</p:selectOneMenu>
 
 				<p:selectOneMenu id="year_pick" style="width:125px"
-					value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.year}"
-					disabled="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'MONTH'}">
+					value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.year}"
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'MONTH'}">
 					<f:selectItems
-						value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.years}" />
+						value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.years}" />
 					<p:ajax event="change" process="@this" />
 				</p:selectOneMenu>
 			</h:panelGrid>
@@ -237,8 +239,8 @@
 				<h:outputLabel
 					value="#{msg['dialog.worklistsearch.simple.date.timespan.from']}" />
 				<p:calendar
-					value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchFrom}"
-					disabled="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'TIME'}"
+					value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchFrom}"
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'TIME'}"
 					locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true">
 					<p:ajax event="change" process="@this" />
 					<p:ajax event="dateSelect" process="@this" />
@@ -246,9 +248,9 @@
 				<h:outputLabel
 					value="#{msg['dialog.worklistsearch.simple.date.timespan.to']}" />
 				<p:calendar
-					value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchTo}"
+					value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchTo}"
 					locale="de"
-					disabled="#{worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'TIME'}"
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex != 'TIME'}"
 					navigator="true" pattern="dd.MM.yyyy" mask="true">
 					<p:ajax event="change" process="@this" />
 					<p:ajax event="dateSelect" process="@this" />
@@ -259,7 +261,7 @@
 
 		<!-- Filter -->
 		<p:selectOneRadio id="filterIndexRadio"
-			value="#{worklistSearchDialog.simpleSearchTab.worklistSearch.filterIndex}"
+			value="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.filterIndex}"
 			layout="custom">
 			<f:selectItem
 				itemLabel="#{msg['dialog.worklistsearch.simple.filter.task']}"
@@ -287,31 +289,31 @@
 
 				<!-- Task created -->
 				<p:radioButton id="filter1" for="filterIndexRadio" itemIndex="0"
-					disabled="#{!worklistSearchDialog.simpleSearchTab.worklistSearch.isListOptions()}" />
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
 				<h:outputLabel for="filter1"
 					value="#{msg['dialog.worklistsearch.simple.filter.task']}" />
 
 				<!-- Staining -->
 				<p:radioButton id="filter2" for="filterIndexRadio" itemIndex="1"
-					disabled="#{!worklistSearchDialog.simpleSearchTab.worklistSearch.isListOptions()}" />
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
 				<h:outputLabel for="filter2"
 					value="#{msg['dialog.worklistsearch.simple.filter.staining']}" />
 
 				<!-- Diagnosis -->
 				<p:radioButton id="filter3" for="filterIndexRadio" itemIndex="2"
-					disabled="#{!worklistSearchDialog.simpleSearchTab.worklistSearch.isListOptions()}" />
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
 				<h:outputLabel for="filter3"
 					value="#{msg['dialog.worklistsearch.simple.filter.diagnosis']}" />
 
 				<!-- Notification -->
 				<p:radioButton id="filter4" for="filterIndexRadio" itemIndex="3"
-					disabled="#{!worklistSearchDialog.simpleSearchTab.worklistSearch.isListOptions()}" />
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
 				<h:outputLabel for="filter4"
 					value="#{msg['dialog.worklistsearch.simple.filter.notification']}" />
 
 				<!-- Finalized -->
 				<p:radioButton id="filter5" for="filterIndexRadio" itemIndex="4"
-					disabled="#{!worklistSearchDialog.simpleSearchTab.worklistSearch.isListOptions()}" />
+					disabled="#{dialog.worklistSearchDialog.simpleSearchTab.worklistSearch.searchIndex.disableGroup ne 2}" />
 				<h:outputLabel for="filter5"
 					value="#{msg['dialog.worklistsearch.simple.filter.finalized']}" />
 			</h:panelGrid>
@@ -332,12 +334,13 @@
 					onclick="disableButton(true, 'serachBtn', 'closeBtn')"
 					process="@form">
 					<f:actionListener
-						binding="#{worklistSearchDialog.simpleSearchTab.hideDialogAndSelectItem()}" />
+						binding="#{dialog.worklistSearchDialog.simpleSearchTab.hideDialogAndSelectItem()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}" immediate="true"
 					widgetVar="closeBtn" icon="fa fa-times-circle">
-					<f:actionListener binding="#{worklistSearchDialog.hideDialog()}" />
+					<f:actionListener
+						binding="#{dialog.worklistSearchDialog.hideDialog()}" />
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

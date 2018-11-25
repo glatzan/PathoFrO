@@ -49,6 +49,7 @@ import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
 import com.patho.main.action.dialog.task.DeleteTaskEntityDialog;
+import com.patho.main.action.dialog.worklist.WorklistSearchDialog;
 
 import lombok.Getter;
 
@@ -104,4 +105,5 @@ public class DialogHandler {
 	private GroupListDialog groupListDialog = new GroupListDialog();
 	private UserSettingsDialog userSettingsDialog = new UserSettingsDialog();
 	private ConfirmUserDeleteDialog confirmUserDeleteDialog = new ConfirmUserDeleteDialog();
+	private WorklistSearchDialog worklistSearchDialog = new WorklistSearchDialog();
 }

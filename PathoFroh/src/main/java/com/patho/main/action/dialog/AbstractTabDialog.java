@@ -31,6 +31,10 @@ public abstract class AbstractTabDialog extends AbstractDialog {
 		return initBean(task, dialog, null);
 	}
 
+	public boolean initBean(Dialog dialog, boolean selectFirstTab) {
+		return initBean(task, dialog, true, selectFirstTab, null);
+	}
+
 	public boolean initBean(Task task, Dialog dialog, String selectedTabName) {
 		return initBean(task, dialog, false, true, findTabByName(selectedTabName));
 	}

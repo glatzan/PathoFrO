@@ -18,9 +18,9 @@
 			<p:outputLabel value="Probe" />
 			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
 				filterMatchMode="startsWith"
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.material}">
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.material}">
 				<f:selectItems
-					value="#{worklistSearchDialog.extendedSearchTab.materialList}"
+					value="#{dialog.worklistSearchDialog.extendedSearchTab.materialList}"
 					var="material" itemLabel="#{material.name}"
 					itemValue="#{material.name}" />
 			</p:selectOneMenu>
@@ -29,11 +29,11 @@
 			<p:selectCheckboxMenu id="roleSelectCheckbox" multiple="true"
 				filter="true" filterMatchMode="startsWith" label="Auswhälen"
 				panelStyle="width:250px"
-				converter="#{worklistSearchDialog.extendedSearchTab.allPhysicianTransformer}"
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.surgeons}">
+				converter="#{dialog.worklistSearchDialog.extendedSearchTab.allPhysicianTransformer}"
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.surgeons}">
 
 				<f:selectItems var="physician"
-					value="#{worklistSearchDialog.extendedSearchTab.allPhysicians}"
+					value="#{dialog.worklistSearchDialog.extendedSearchTab.allPhysicians}"
 					itemValue="#{physician}" itemLabel="#{physician.person.fullName}" />
 
 			</p:selectCheckboxMenu>
@@ -42,11 +42,11 @@
 			<p:selectCheckboxMenu multiple="true" filter="true"
 				filterMatchMode="startsWith" label="Auswhälen"
 				panelStyle="width:250px"
-				converter="#{worklistSearchDialog.extendedSearchTab.allPhysicianTransformer}"
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.signature}">
+				converter="#{dialog.worklistSearchDialog.extendedSearchTab.allPhysicianTransformer}"
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.signature}">
 
 				<f:selectItems var="physician"
-					value="#{worklistSearchDialog.extendedSearchTab.allPhysicians}"
+					value="#{dialog.worklistSearchDialog.extendedSearchTab.allPhysicians}"
 					itemValue="#{physician}" itemLabel="#{physician.person.fullName}" />
 
 			</p:selectCheckboxMenu>
@@ -54,23 +54,23 @@
 			<p:outputLabel value="Vorgeschichte" />
 			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
 				filterMatchMode="startsWith"
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.caseHistory}">
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.caseHistory}">
 				<f:selectItems
-					value="#{worklistSearchDialog.extendedSearchTab.caseHistoryList}"
+					value="#{dialog.worklistSearchDialog.extendedSearchTab.caseHistoryList}"
 					var="history" itemLabel="#{history.value}"
 					itemValue="#{history.value}" />
 			</p:selectOneMenu>
 
 			<p:outputLabel value="Befund" />
 			<p:inputText
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.diagnosisText}"></p:inputText>
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.diagnosisText}"></p:inputText>
 
 			<p:outputLabel value="Diagnose" />
 			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
 				filterMatchMode="startsWith"
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.diagnosis}">
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.diagnosis}">
 				<f:selectItems
-					value="#{worklistSearchDialog.extendedSearchTab.diagnosisPresets}"
+					value="#{dialog.worklistSearchDialog.extendedSearchTab.diagnosisPresets}"
 					var="diagnosis" itemLabel="#{diagnosis.diagnosis}"
 					itemValue="#{diagnosis.diagnosis}" />
 			</p:selectOneMenu>
@@ -78,12 +78,12 @@
 			<p:outputLabel value="Malign" />
 
 			<p:triStateCheckbox
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.malign}" />
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.malign}" />
 
 
 			<p:outputLabel value="Auge" />
 			<p:selectOneMenu
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.eye}">
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.eye}">
 				<f:selectItems value="#{enumProvider.eyes}" var="eye"
 					itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}" />
 
@@ -91,10 +91,10 @@
 
 			<p:outputLabel value="Station" />
 			<p:selectOneMenu id="wards"
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.ward}"
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.ward}"
 				editable="true">
 				<f:selectItems
-					value="#{worklistSearchDialog.extendedSearchTab.wardList}"
+					value="#{dialog.worklistSearchDialog.extendedSearchTab.wardList}"
 					itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
 			</p:selectOneMenu>
 
@@ -104,12 +104,12 @@
 					actionListener="#{dialog.addSlidesDialog.initAndPrepareBean()}">
 					<i class="fa fa-fw fa-paint-brush"></i>
 					<p:ajax event="dialogReturn"
-						listener="#{worklistSearchDialog.extendedSearchTab.onSelectStainingDialogReturn}"
+						listener="#{dialog.worklistSearchDialog.extendedSearchTab.onSelectStainingDialogReturn}"
 						update="@form" />
 				</p:commandLink>
 			</h:panelGroup>
 			<p:dataTable var="staining" styleClass="defaultHistoDataTable"
-				value="#{worklistSearchDialog.extendedSearchTab.worklistSearch.stainings}">
+				value="#{dialog.worklistSearchDialog.extendedSearchTab.worklistSearch.stainings}">
 				<f:facet name="header">
 					<h:outputLabel value="Färbung"></h:outputLabel>
 				</f:facet>
@@ -134,9 +134,9 @@
 					onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
 					process="@form">
 					<f:actionListener
-						binding="#{worklistSearchDialog.extendedSearchTab.selectAsWorklist()}" />
+						binding="#{dialog.worklistSearchDialog.extendedSearchTab.selectAsWorklist()}" />
 					<f:actionListener
-						binding="#{worklistSearchDialog.hideDialog()}" />
+						binding="#{dialog.worklistSearchDialog.hideDialog()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.export']}" icon="fa fa-copy"
@@ -144,13 +144,13 @@
 					onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
 					process="@form">
 					<f:actionListener
-						binding="#{worklistSearchDialog.extendedSearchTab.exportWorklist()}" />
+						binding="#{dialog.worklistSearchDialog.extendedSearchTab.exportWorklist()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}" immediate="true"
 					widgetVar="closeBtn" icon="fa fa-times-circle">
 					<f:actionListener
-						binding="#{worklistSearchDialog.hideDialog()}" />
+						binding="#{dialog.worklistSearchDialog.hideDialog()}" />
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

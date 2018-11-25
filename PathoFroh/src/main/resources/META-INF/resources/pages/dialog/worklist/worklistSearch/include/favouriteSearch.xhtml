@@ -24,8 +24,8 @@
 				rowKey="#{favouriteListContainer.favouriteList.id}"
 				styleClass="worklistSearchDialog_FavouriteSearchTable"
 				selectionMode="single"
-				selection="#{worklistSearchDialog.favouriteSearchTab.selectedContainer}"
-				value="#{worklistSearchDialog.favouriteSearchTab.containers}">
+				selection="#{dialog.worklistSearchDialog.favouriteSearchTab.selectedContainer}"
+				value="#{dialog.worklistSearchDialog.favouriteSearchTab.containers}">
 
 				<p:headerRow>
 					<p:column colspan="3">
@@ -65,8 +65,8 @@
 
 			<p:remoteCommand name="sumbitOnDblSelect">
 				<f:actionListener
-					binding="#{worklistSearchDialog.favouriteSearchTab.selectAsWorklist()}" />
-				<f:actionListener binding="#{worklistSearchDialog.hideDialog()}" />
+					binding="#{dialog.worklistSearchDialog.favouriteSearchTab.selectAsWorklist()}" />
+				<f:actionListener binding="#{dialog.worklistSearchDialog.hideDialog()}" />
 			</p:remoteCommand>
 		</h:panelGrid>
 	</p:outputPanel>
@@ -81,16 +81,16 @@
 			<h:panelGrid columns="2" styleClass="newTableContainer right">
 				<p:commandButton value="#{msg['general.select']}"
 					icon="fa fa-search" widgetVar="serachBtn"
-					disabled="#{worklistSearchDialog.favouriteSearchTab.selectedContainer eq null}"
+					disabled="#{dialog.worklistSearchDialog.favouriteSearchTab.selectedContainer eq null}"
 					onclick="disableButton(true, 'serachBtn', 'closeBtn')"
 					process="@form">
 					<f:actionListener
-						binding="#{worklistSearchDialog.favouriteSearchTab.hideDialogAndSelectItem()}" />
+						binding="#{dialog.worklistSearchDialog.favouriteSearchTab.hideDialogAndSelectItem()}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['general.close']}" immediate="true"
 					widgetVar="closeBtn" icon="fa fa-times-circle">
-					<f:actionListener binding="#{worklistSearchDialog.hideDialog()}" />
+					<f:actionListener binding="#{dialog.worklistSearchDialog.hideDialog()}" />
 				</p:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>

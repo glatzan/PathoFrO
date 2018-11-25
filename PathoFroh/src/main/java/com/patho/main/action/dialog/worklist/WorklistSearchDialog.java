@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -40,8 +41,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Component
-@Scope(value = "session")
+@Configurable
 @Getter
 @Setter
 public class WorklistSearchDialog extends AbstractTabDialog {
@@ -54,32 +54,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private ExportTasksDialog exportTasksDialog;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private FavouriteListRepository favouriteListRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private MaterialPresetRepository materialPresetRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private ListItemRepository listItemRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DiagnosisPresetRepository diagnosisPresetRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PhysicianRepository physicianRepository;
 
 	private SimpleSearchTab simpleSearchTab;
 	private FavouriteSearchTab favouriteSearchTab;
@@ -90,10 +65,13 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		setFavouriteSearchTab(new FavouriteSearchTab());
 		setExtendedSearchTab(new ExtendedSearchTab());
 		tabs = new AbstractTab[] { simpleSearchTab, favouriteSearchTab, extendedSearchTab };
+
+		// only setting tab on first dialog display
+		setSelectedTab(simpleSearchTab);
 	}
 
 	public boolean initBean() {
-		return super.initBean(Dialog.WORKLIST_SEARCH);
+		return super.initBean(Dialog.WORKLIST_SEARCH, false);
 	}
 
 	@Getter
@@ -178,11 +156,40 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		public void hideDialogAndSelectItem() {
 			WorklistSearchDialog.this.hideDialog(new WorklistSearchReturnEvent(getWorklist()));
 		}
+
+		public void setSelectedContainer(FavouriteListContainer selectedContainer) {
+			this.selectedContainer = selectedContainer;
+
+			if (selectedContainer != null) {
+				this.worklistSearch.setFavouriteList(selectedContainer.getFavouriteList());
+			}
+		}
 	}
 
+	@Configurable
 	@Getter
 	@Setter
 	public class ExtendedSearchTab extends AbstractTab {
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private MaterialPresetRepository materialPresetRepository;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private ListItemRepository listItemRepository;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private DiagnosisPresetRepository diagnosisPresetRepository;
+
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private PhysicianRepository physicianRepository;
 
 		private WorklistSearchExtended worklistSearch;
 
@@ -276,7 +283,8 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 				if (worklistSearch.getStainings() == null)
 					worklistSearch.setStainings(new ArrayList<StainingPrototype>());
 
-				//worklistSearch.getStainings().addAll(((SlideSelectResult) event.getObject()).getPrototpyes());
+				// worklistSearch.getStainings().addAll(((SlideSelectResult)
+				// event.getObject()).getPrototpyes());
 			}
 		}
 	}

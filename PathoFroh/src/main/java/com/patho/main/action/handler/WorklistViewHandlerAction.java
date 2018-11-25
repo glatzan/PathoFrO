@@ -137,7 +137,9 @@ public class WorklistViewHandlerAction {
 
 			} else {
 				// nothing selected
-
+				
+				System.out.println("test");
+				
 				Task first = globalEditViewHandler.getWorklistData().getWorklist().getFirstActiveTask();
 
 				// select the task
@@ -145,6 +147,7 @@ public class WorklistViewHandlerAction {
 					changeView(view);
 					onSelectTaskAndPatient(first);
 				} else {
+					System.out.println("test test");
 					// change view to blank
 					changeView(view, View.WORKLIST_NOTHING_SELECTED);
 				}
