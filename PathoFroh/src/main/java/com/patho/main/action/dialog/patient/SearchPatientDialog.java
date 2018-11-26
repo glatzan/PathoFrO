@@ -74,8 +74,15 @@ public class SearchPatientDialog extends AbstractTabDialog {
 	}
 
 	public SearchPatientDialog externalMode() {
-		appendTab(externalPatientTab);
-		externalPatientTab.initTab();
+		return externalMode(false);
+	}
+
+	public SearchPatientDialog externalMode(boolean forceExternalMode) {
+		// only enable if forced or user has the permission to add external patients
+		if (forceExternalMode || userHandlerAction.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN)) {
+			appendTab(externalPatientTab);
+			externalPatientTab.initTab();
+		}
 		return this;
 	}
 

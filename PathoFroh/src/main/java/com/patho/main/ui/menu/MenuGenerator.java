@@ -86,7 +86,16 @@ public class MenuGenerator {
 			item.setDisabled(patient == null);
 			patientSubMenu.addElement(item);
 
-			if (patient != null && PATIENT_EDIT) {
+			boolean permissionMerge = userHandlerAction
+					.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_MERGE);
+			boolean permissionEdit = userHandlerAction
+					.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_ALTER_DATA);
+			boolean permissionDelete = userHandlerAction
+					.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_DELETE);
+			boolean permissionPDF = userHandlerAction
+					.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_UPLOAD_DATA);
+
+			if (patient != null && (permissionMerge || permissionEdit || permissionDelete || permissionPDF)) {
 
 				DefaultSubMenu administerSubMenu = new DefaultSubMenu(
 						resourceBundle.get("header.menu.patient.administer"));
@@ -98,6 +107,7 @@ public class MenuGenerator {
 				item.setOnclick(
 						"$('#headerForm\\\\:editPatientData').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
 				item.setIcon("fa fa-pencil-square-o");
+				item.setRendered(permissionEdit);
 				administerSubMenu.addElement(item);
 
 				// remove patient if empty tasks
@@ -105,15 +115,15 @@ public class MenuGenerator {
 				item.setOnclick(
 						"$('#headerForm\\\\:removePatient').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
 				item.setIcon("fa fa-trash");
-				item.setDisabled(!patient.getTasks().isEmpty());
+				item.setRendered(permissionDelete);
 				administerSubMenu.addElement(item);
 
 				// patient merge
-				// TODO introduce right for merging
 				item = new DefaultMenuItem(resourceBundle.get("header.menu.patient.merge"));
 				item.setOnclick(
 						"$('#headerForm\\\\:mergePatientData').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
 				item.setIcon("fa fa-medkit");
+				item.setRendered(permissionMerge);
 				administerSubMenu.addElement(item);
 
 				// patient upload pdf
@@ -121,6 +131,7 @@ public class MenuGenerator {
 				item.setOnclick(
 						"$('#headerForm\\\\:uploadBtn').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
 				item.setIcon("fa fa-cloud-upload");
+				item.setRendered(permissionPDF);
 				patientSubMenu.addElement(item);
 
 			}
@@ -329,8 +340,9 @@ public class MenuGenerator {
 
 				// add to notification phase
 				item = new DefaultMenuItem(resourceBundle.get("header.menu.task.sample.notification.enter"));
-				item.setCommand("#{globalEditViewHandler.addTaskToFavouriteList(globalEditViewHandler.worklistData.worklist.selectedTask, "
-						+ PredefinedFavouriteList.NotificationList.getId() + ")}");
+				item.setCommand(
+						"#{globalEditViewHandler.addTaskToFavouriteList(globalEditViewHandler.worklistData.worklist.selectedTask, "
+								+ PredefinedFavouriteList.NotificationList.getId() + ")}");
 				item.setOncomplete("updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')");
 				item.setUpdate("navigationForm:patientList contentForm headerForm");
 				item.setIcon("fa fa-volume-off");
@@ -405,7 +417,8 @@ public class MenuGenerator {
 										"updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll');",
 										new VaribaleHolder<TaskInitilize>(TaskInitilize.GENERATE_MENU_MODEL, "valu1"),
 										new VaribaleHolder<TaskInitilize>(TaskInitilize.GENERATE_TASK_STATUS, "valu1"),
-										new VaribaleHolder<TaskInitilize>(TaskInitilize.RELOAD_MENU_MODEL_FAVOURITE_LISTS, "valu2")))
+										new VaribaleHolder<TaskInitilize>(
+												TaskInitilize.RELOAD_MENU_MODEL_FAVOURITE_LISTS, "valu2")))
 										.addToParent(taskMenuCommandButtons);
 
 								// onlick active the command button

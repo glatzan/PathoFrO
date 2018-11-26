@@ -146,6 +146,21 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/* setting merge, alter and delete fro admin = 7, moderator = 6, physicain = 5, mta = 4 */
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'PATIENT_EDIT_MERGE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATIENT_EDIT_MERGE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'PATIENT_EDIT_MERGE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'PATIENT_EDIT_MERGE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'PATIENT_EDIT_DELETE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATIENT_EDIT_DELETE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'PATIENT_EDIT_DELETE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'PATIENT_EDIT_DELETE');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'PATIENT_EDIT_ALTER_DATA');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATIENT_EDIT_ALTER_DATA');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'PATIENT_EDIT_ALTER_DATA');
+INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'PATIENT_EDIT_ALTER_DATA');
+
+
 /* remove username from histouser*/
 alter table histouser drop username;
 

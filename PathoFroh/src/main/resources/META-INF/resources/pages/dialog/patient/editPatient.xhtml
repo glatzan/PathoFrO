@@ -9,20 +9,20 @@
 <h:head>
 	<title><h:outputLabel
 			value="#{msg['dialog.editPatient.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="style" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
 </h:head>
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 
 	<h:form enctype="multipart/form-data" id="dialogContent">
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
+				styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.editPatient.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -30,28 +30,31 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="5" styleClass="newStyleListingTable"
+			<h:panelGrid columns="5" styleClass="defaultHistoTable"
 				columnClasses="columnLabelContainer150, , , ,">
 
 				<!-- Person -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.person']}"
+				<h:outputLabel
+					value="#{msg['component.physicianSettingsGeneral.person']}"
 					styleClass="bigFont" />
 
 				<!-- Title -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.title']}" />
+				<h:outputLabel
+					value="#{msg['component.personSettingsGeneral.title']}" />
 				<p:selectOneMenu style="width:100px" editable="true"
 					value="#{dialog.editPatientDialog.patient.person.title}">
 					<f:selectItem itemLabel="" itemValue="" />
 					<f:selectItem
-						itemLabel="#{msg['component.physicianSettingsGeneral.title.dr']}"
-						itemValue="#{msg['component.physicianSettingsGeneral.title.dr']}" />
+						itemLabel="#{msg['component.personSettingsGeneral.title.dr']}"
+						itemValue="#{msg['component.personSettingsGeneral.title.dr']}" />
 					<f:selectItem
-						itemLabel="#{msg['component.physicianSettingsGeneral.title.prof']}"
-						itemValue="#{msg['component.physicianSettingsGeneral.title.prof']}" />
+						itemLabel="#{msg['component.personSettingsGeneral.title.prof']}"
+						itemValue="#{msg['component.personSettingsGeneral.title.prof']}" />
 				</p:selectOneMenu>
 
 				<!-- birthday -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.birthday']}" />
+				<h:outputLabel
+					value="#{msg['component.physicianSettingsGeneral.birthday']}" />
 				<p:calendar id="birthday" name="bday" autocomplete="bday"
 					value="#{dialog.editPatientDialog.patient.person.birthday}"
 					locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true" />
@@ -59,12 +62,14 @@
 				<h:outputLabel value="" />
 
 				<!-- Name -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.lastname']}" />
+				<h:outputLabel
+					value="#{msg['component.physicianSettingsGeneral.lastname']}" />
 				<p:inputText name="lname" autocomplete="family-name" required="true"
 					value="#{dialog.editPatientDialog.patient.person.lastName}" />
 
 				<!-- gender -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.gender']}" />
+				<h:outputLabel
+					value="#{msg['component.physicianSettingsGeneral.gender']}" />
 				<p:selectOneMenu style="width:100px" name="sex" autocomplete="sex"
 					value="#{dialog.editPatientDialog.patient.person.gender}">
 					<f:selectItem
@@ -84,7 +89,8 @@
 				<h:outputLabel value="" />
 
 				<!-- firstName -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.firstName']}" />
+				<h:outputLabel
+					value="#{msg['component.physicianSettingsGeneral.firstName']}" />
 				<p:inputText name="fname" autocomplete="given-name" required="true"
 					value="#{dialog.editPatientDialog.patient.person.firstName}" />
 
@@ -92,7 +98,8 @@
 				<h:outputLabel value="" />
 
 				<!-- address -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.address']}"
+				<h:outputLabel
+					value="#{msg['component.physicianSettingsGeneral.address']}"
 					styleClass="bigFont" />
 
 				<!-- street -->
@@ -121,7 +128,8 @@
 				<h:outputLabel value="" />
 
 				<!-- Postcode -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.address.plz']}" />
+				<h:outputLabel
+					value="#{msg['component.physicianSettingsGeneral.address.plz']}" />
 				<p:inputText style="width:75px;"
 					value="#{dialog.editPatientDialog.patient.person.contact.postcode}"
 					name="postal-code" autocomplete="postal-code" />
@@ -168,7 +176,8 @@
 					value="#{dialog.editPatientDialog.patient.person.contact.email}" />
 
 				<!-- piz -->
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.piz']}"
+				<h:outputLabel
+					value="#{msg['component.physicianSettingsGeneral.piz']}"
 					styleClass="bigFont" />
 
 				<h:outputLabel

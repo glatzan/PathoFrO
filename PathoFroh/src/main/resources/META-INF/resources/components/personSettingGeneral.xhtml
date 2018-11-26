@@ -10,7 +10,7 @@
 
 
 <composite:interface>
-	<composite:attribute name="physician" required="true" />
+	<composite:attribute name="person" required="true" />
 	<composite:attribute name="dialog" required="true" />
 	<!-- ContactRole[] allRoles; -->
 </composite:interface>
@@ -24,7 +24,7 @@
 		<p:outputLabel
 			value="#{msg['component.personSettingsGeneral.title']}" />
 		<p:selectOneMenu style="width:100px" editable="true"
-			value="#{cc.attrs.physician.person.title}">
+			value="#{cc.attrs.person.title}">
 			<f:selectItem itemLabel="" itemValue="" />
 			<f:selectItem
 				itemLabel="#{msg['component.personSettingsGeneral.title.dr']}"
@@ -38,20 +38,20 @@
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.birthday']}" />
 		<p:calendar id="birthday" name="bday" autocomplete="bday"
-			value="#{cc.attrs.physician.person.birthday}" locale="de"
+			value="#{cc.attrs.person.birthday}" locale="de"
 			navigator="true" pattern="dd.MM.yyyy" mask="true" />
 
 		<!-- Name -->
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.lastname']}" />
 		<p:inputText name="lname" autocomplete="family-name" required="true"
-			value="#{cc.attrs.physician.person.lastName}" />
+			value="#{cc.attrs.person.lastName}" />
 
 		<!-- gender -->
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.gender']}" />
 		<p:selectOneMenu style="width:100px" name="sex" autocomplete="sex"
-			value="#{cc.attrs.physician.person.gender}">
+			value="#{cc.attrs.person.gender}">
 			<f:selectItem
 				itemLabel="#{msg['component.physicianSettingsGeneral.gender.select']}"
 				itemValue="#{null}" />
@@ -70,7 +70,7 @@
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.firstName']}" />
 		<p:inputText name="fname" autocomplete="given-name" required="true"
-			value="#{cc.attrs.physician.person.firstName}" />
+			value="#{cc.attrs.person.firstName}" />
 
 	</h:panelGrid>
 
@@ -88,7 +88,7 @@
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.contact.street']}" />
 		<p:inputText name="street-address" autocomplete="street-address"
-			value="#{cc.attrs.physician.person.contact.street}" />
+			value="#{cc.attrs.person.contact.street}" />
 
 		<h:outputText value="" />
 		<h:outputText value="" />
@@ -97,26 +97,26 @@
 		<h:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.contact.additionOne']}" />
 		<p:inputText
-			value="#{cc.attrs.physician.person.contact.addressadditon}" />
+			value="#{cc.attrs.person.contact.addressadditon}" />
 
 		<!-- address addition two -->
 		<h:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.contact.additionTwo']}" />
 		<p:inputText
-			value="#{cc.attrs.physician.person.contact.addressadditon2}" />
+			value="#{cc.attrs.person.contact.addressadditon2}" />
 
 		<!-- Postcode -->
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.address.plz']}" />
 		<p:inputText style="width:75px;"
-			value="#{cc.attrs.physician.person.contact.postcode}"
+			value="#{cc.attrs.person.contact.postcode}"
 			name="postal-code" autocomplete="postal-code" />
 
 		<!-- Town -->
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.contact.town']}" />
 		<p:inputText name="city" autocomplete="address-level2"
-			value="#{cc.attrs.physician.person.contact.town}" />
+			value="#{cc.attrs.person.contact.town}" />
 
 	</h:panelGrid>
 
@@ -133,58 +133,27 @@
 		<!-- phone -->
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.contact.phone']}" />
-		<p:inputText value="#{cc.attrs.physician.person.contact.phone}"
+		<p:inputText value="#{cc.attrs.person.contact.phone}"
 			name="phone" autocomplete="tel" />
 
 		<!-- fax -->
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.miscellaneous.fax']}" />
-		<p:inputText value="#{cc.attrs.physician.person.contact.fax}"
+		<p:inputText value="#{cc.attrs.person.contact.fax}"
 			name="fax" autocomplete="fax" />
 
 		<!-- mobile -->
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.miscellaneous.mobile']}" />
-		<p:inputText value="#{cc.attrs.physician.person.contact.phone}"
+		<p:inputText value="#{cc.attrs.person.contact.phone}"
 			name="phone" autocomplete="tel" />
 
 		<!-- mail -->
 		<p:outputLabel
 			value="#{msg['component.physicianSettingsGeneral.miscellaneous.mail']}" />
 		<p:inputText name="mail" autocomplete="mail"
-			value="#{cc.attrs.physician.person.contact.email}" />
+			value="#{cc.attrs.person.contact.email}" />
 
-	</h:panelGrid>
-
-	<!-- Separator -->
-	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-		<p:separator />
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.function']}" />
-	</h:panelGrid>
-
-	<h:panelGrid columns="2" styleClass="defaultHistoTable"
-		columnClasses="columnWidth125, ">
-
-		<!-- role -->
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.programRole']}" />
-
-		<p:selectCheckboxMenu updateLabel="true" style="width:90%"
-			value="#{cc.attrs.physician.associatedRolesAsArray}" multiple="true">
-			<f:selectItems var="role" value="#{cc.attrs.dialog.allRoles}"
-				itemValue="#{role}"
-				itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
-
-		</p:selectCheckboxMenu>
-
-		<!-- archived -->
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.archived']}" />
-		<p:selectBooleanCheckbox
-			title="#{msg['component.physicianSettingsGeneral.archived']}"
-			value="#{cc.attrs.physician.archived}">
-		</p:selectBooleanCheckbox>
 	</h:panelGrid>
 
 </composite:implementation>

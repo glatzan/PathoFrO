@@ -1,80 +1,105 @@
 package com.patho.main.model.user;
 
 public enum HistoPermissions {
-	PROGRAM_SETTINGS, 
-	PROGRAM_SETTINGS_USER (PROGRAM_SETTINGS),
-	PROGRAM_SETTINGS_GROUP (PROGRAM_SETTINGS), 
-	PROGRAM_SETTINGS_DIAGNOSES (PROGRAM_SETTINGS),
-	PROGRAM_SETTINGS_MATERIAL (PROGRAM_SETTINGS),
-	PROGRAM_SETTINGS_STAINING (PROGRAM_SETTINGS),
-	PROGRAM_SETTINGS_LISTS (PROGRAM_SETTINGS),
-	PROGRAM_SETTINGS_FAVOURITE (PROGRAM_SETTINGS),
-	PROGRAM_SETTINGS_PHYSICIAN (PROGRAM_SETTINGS),
-	PROGRAM_SETTINGS_ORGANIZAZIONS (PROGRAM_SETTINGS),
-	TASK_EDIT,
-	TASK_EDIT_NEW (TASK_EDIT),
-	TASK_EDIT_ID (TASK_EDIT),
-	TASK_EDIT_ARCHIVE (TASK_EDIT),
-	TASK_EDIT_RESTORE (TASK_EDIT),
-	TASK_EDIT_DELETE (TASK_EDIT),
-	TASK_EDIT_DELETE_EDITED (TASK_EDIT),
-	PATIENT_EDIT,
+	PROGRAM_SETTINGS, PROGRAM_SETTINGS_USER(PROGRAM_SETTINGS), PROGRAM_SETTINGS_GROUP(PROGRAM_SETTINGS),
+	PROGRAM_SETTINGS_DIAGNOSES(PROGRAM_SETTINGS), PROGRAM_SETTINGS_MATERIAL(PROGRAM_SETTINGS),
+	PROGRAM_SETTINGS_STAINING(PROGRAM_SETTINGS), PROGRAM_SETTINGS_LISTS(PROGRAM_SETTINGS),
+	PROGRAM_SETTINGS_FAVOURITE(PROGRAM_SETTINGS), PROGRAM_SETTINGS_PHYSICIAN(PROGRAM_SETTINGS),
+	PROGRAM_SETTINGS_ORGANIZAZIONS(PROGRAM_SETTINGS), TASK_EDIT, TASK_EDIT_NEW(TASK_EDIT), TASK_EDIT_ID(TASK_EDIT),
+	TASK_EDIT_ARCHIVE(TASK_EDIT), TASK_EDIT_RESTORE(TASK_EDIT), TASK_EDIT_DELETE(TASK_EDIT),
+	TASK_EDIT_DELETE_EDITED(TASK_EDIT),
+
 	/**
-	 * User can add a patient found in the clinic database to the local database 
-	 * -> Used in AddPatientDialogHandler to only update local, not display clinic patients
-	 * -> Used in GlobalEditViewHandler in quicksearch to search only in local database
+	 * Patient right parent
+	 */
+	PATIENT_EDIT,
+
+	/**
+	 * User can add a patient found in the clinic database to the local database ->
+	 * Used in AddPatientDialogHandler to only update local, not display clinic
+	 * patients <BR>
+	 * -> Used in <BR>
+	 * --> GlobalEditViewHandler in quicksearch to search only in local db <BR>
+	 * --> SearchPatientDialog to search only in local database
+	 * 
 	 */
 	PATIENT_EDIT_ADD_CLINIC(PATIENT_EDIT),
+
 	/**
-	 * User can add new external patients to the local and clinic database, a new piz is therefore created
-	 * -> Used in AddPatientDialogHandler to disable the Tab for creating an external patient.
+	 * User can add new external patients to the local and clinic database, a new
+	 * piz is therefore created -> Used in AddPatientDialogHandler to disable the
+	 * Tab for creating an external patient.
 	 */
 	PATIENT_EDIT_ADD_EXTERN(PATIENT_EDIT),
-	
+
 	/**
-	 * User can upload pdfs for a patient
-	 * -> Used in worklist/patient (patient.xhtml) for hiding the pdf upload button
+	 * User can alter patient data <br>
+	 * -> Used in <br>
+	 * --> MenuGenerator, if set edit dialog button is displayed
+	 */
+	PATIENT_EDIT_ALTER_DATA(PATIENT_EDIT),
+
+	/**
+	 * User can upload pdfs for a patient <br>
+	 * -> Used in <br>
+	 * --> worklist/patient (patient.xhtml) for hiding the pdf upload button <br>
+	 * --> pdfTable.xhtml (component) to display updalog button <br>
+	 * --> MenuGenerator to display or hide dialog button
 	 */
 	PATIENT_EDIT_UPLOAD_DATA(PATIENT_EDIT),
-	
+
 	/**
-	 * Father of USER permissions 
-	 * -> Not used
+	 * User can delete patients <br>
+	 * -> Used in <br>
+	 * --> MenuGenerator, if set the delete dialog button is displayed
+	 */
+	PATIENT_EDIT_DELETE(PATIENT_EDIT),
+
+	/**
+	 * User can merge Patients <br>
+	 * -> Used in <br>
+	 * --> MenuGenerator, if set the merge dialog is set
+	 */
+	PATIENT_EDIT_MERGE(PATIENT_EDIT),
+
+	/**
+	 * Father of USER permissions -> Not used
 	 */
 	USER,
-	
+
 	/**
-	 * User can use worklist/search
-	 * -> Used in worklist/patientlist (patientList.xhtnl) to hide the worklist select dialog button
+	 * User can use worklist/search -> Used in worklist/patientlist
+	 * (patientList.xhtnl) to hide the worklist select dialog button
 	 */
-	USER_WORKLIST (USER),
-	
+	USER_WORKLIST(USER),
+
 	/**
-	 * If set the diagnosis will always be rendered in WORKLIST_REPORT view.
-	 * -> Used in 
+	 * If set the diagnosis will always be rendered in WORKLIST_REPORT view. -> Used
+	 * in
 	 */
 	USER_ALWAYS_SHOW_IN_WORKLIST_REPORT,
-	
+
 	/**
 	 * Parent of all favourite List permission
 	 */
 	FAVOURITE_LIST,
-	
+
 	/**
 	 * If true the user can use favourite lists
 	 */
 	FAVOURITE_LIST_USE(FAVOURITE_LIST),
-	
+
 	/**
 	 * If the use user can create favorite lists which are displayed by an icon
 	 */
 	FAVOURITE_LIST_ICON(FAVOURITE_LIST),
-	
+
 	/**
-	 * If this permission is set, the user can set an icon command for the favourite list.
+	 * If this permission is set, the user can set an icon command for the favourite
+	 * list.
 	 */
 	FAVOURITE_LIST_ICON_COMMAND(FAVOURITE_LIST);
-	
+
 	private HistoPermissions parent;
 
 	HistoPermissions() {
@@ -88,9 +113,9 @@ public enum HistoPermissions {
 	public HistoPermissions getParent() {
 		return parent;
 	}
-	
+
 	public int getLevel() {
-		if(parent != null)
+		if (parent != null)
 			return 1 + parent.getLevel();
 		return 1;
 	}
