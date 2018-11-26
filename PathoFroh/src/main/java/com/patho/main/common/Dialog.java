@@ -12,10 +12,10 @@ public enum Dialog {
 	PATIENT_DATA_CONFIRM("/pages/dialog/patient/confirmExternalPatientData/confirmExternalPatientData", null, 640, 360, false, false, true), 								// OK
 	PATIENT_MERGE("/pages/dialog/patient/merge/mergePatient", null, 1024, 600, false, false, true), // 16:9
 	PATIENT_MERGE_CONFIRM("/pages/dialog/patient/merge/confirmMerge", null, 480, 272, false, false, true), // 16:9
-	WORKLIST_ORDER("/pages/dialog/worklist/worklistOrder", null,480, 272, false, false, true),  																			// OK
-	WORKLIST_SETTINGS("/pages/dialog/worklist/worklistSettings", null,480, 272, false, false, true), 																		// OK
 	PATIENT_EDIT("/pages/dialog/patient/editPatient", null, 1024, 600, false, false, true), // 16:9
 	PATIENT_REMOVE("/pages/dialog/patient/removePatient", null, 480, 272, false, false, true), // 16:9
+	WORKLIST_ORDER("/pages/dialog/worklist/worklistOrder", null,480, 272, false, false, true),  																			// OK
+	WORKLIST_SETTINGS("/pages/dialog/worklist/worklistSettings", null,480, 272, false, false, true), 																		// OK
 	PATIENT_LOG("/pages/dialog/history/patientLog", null,  1024, 600, false, false, true),																					// OK
 	TASK_CREATE("/pages/dialog/task/createTask", null, 1024, 600, false, false, true), 																						// OK		
 	TASK_DELETE("/pages/dialog/task/delete/deleteTask", null, 480, 272, false, false, true), // 16:9	
