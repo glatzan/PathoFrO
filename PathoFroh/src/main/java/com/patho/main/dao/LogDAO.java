@@ -21,7 +21,7 @@ import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.user.HistoUser;
 
-public class LogDAO extends AbstractDAO implements Serializable {
+public class LogDAO {
 
 	private static final long serialVersionUID = -7164924738003274594L;
 

@@ -98,8 +98,6 @@ public class MenuGenerator {
 				item.setOnclick(
 						"$('#headerForm\\\\:editPatientData').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
 				item.setIcon("fa fa-pencil-square-o");
-				item.setDisabled(!patient.isExternalPatient());
-				// TODO comment that patient is not edtiable
 				administerSubMenu.addElement(item);
 
 				// remove patient if empty tasks

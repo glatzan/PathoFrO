@@ -47,11 +47,7 @@ public class EditPatientDialog extends AbstractDialog {
 	}
 
 	public void savePatientData() {
-		try {
-			patientRepository.save(getPatient(), resourceBundle.get("log.patient.edit"));
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
-		}
+		patientRepository.save(getPatient(), resourceBundle.get("log.patient.edit"));
 	}
 
 	/**
@@ -64,10 +60,5 @@ public class EditPatientDialog extends AbstractDialog {
 		if (event.getObject() != null && event.getObject() instanceof PatientMergeEvent) {
 			hideDialog((PatientMergeEvent) event.getObject());
 		}
-	}
-
-	public void onDatabaseVersionConflict() {
-		worklistViewHandlerAction.replacePatientInCurrentWorklist(getTask().getParent());
-		super.onDatabaseVersionConflict();
 	}
 }

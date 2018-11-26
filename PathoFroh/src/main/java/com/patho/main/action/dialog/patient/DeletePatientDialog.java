@@ -1,6 +1,7 @@
 package com.patho.main.action.dialog.patient;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,26 +16,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-@Component
-@Scope(value = "session")
+@Configurable
 @Getter
 @Setter
-public class RemovePatientDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PatientService patientService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private LogDAO logDAO;
+public class DeletePatientDialog extends AbstractDialog {
 
 	private Patient patient;
 
@@ -52,11 +37,7 @@ public class RemovePatientDialog extends AbstractDialog {
 	}
 
 	public void removePatient() {
-		try {
-			logDAO.deletePatientLogs(patient);
-			patientService.removePatient(patient);
-		} catch (Exception e) {
-			onDatabaseVersionConflict();
-		}
+		logDAO.deletePatientLogs(patient);
+		patientService.removePatient(patient);
 	}
 }

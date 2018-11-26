@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.patho.main.action.DialogHandlerAction;
+
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
@@ -20,6 +20,7 @@ import com.patho.main.config.excepion.ToManyEntriesException;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PatientService;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.event.PatientMergeEvent;
@@ -42,17 +43,17 @@ public class MergePatientDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private DialogHandlerAction dialogHandlerAction;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private WorklistViewHandlerAction worklistViewHandlerAction;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private PatientService patientService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PatientRepository patientRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -105,6 +106,16 @@ public class MergePatientDialog extends AbstractDialog {
 
 	private DualListModel<Task> taskLists = new DualListModel<Task>();
 
+	private boolean taskPickerDisabled;
+
+	private boolean sourceDeleteable;
+
+	private boolean targetDeleteable;
+
+	private boolean deleteSource;
+
+	private boolean deleteTarget;
+
 	public MergePatientDialog initAndPrepareBean() {
 		return initAndPrepareBean((Patient) null);
 	}
@@ -132,17 +143,31 @@ public class MergePatientDialog extends AbstractDialog {
 	public void onReturnSelectSource(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof PatientReturnEvent) {
 			Patient patient = ((PatientReturnEvent) event.getObject()).getPatien();
-			setSource(patient);
+			// Reloading patient with tasks
+			setSource(patient.getId() != 0 ? patientRepository.findOptionalById(patient.getId(), true, false).get()
+					: patient);
 			taskLists.setSource(source == null ? new ArrayList<Task>() : new ArrayList<Task>(source.getTasks()));
+
+			updateOnChange();
 		}
 	}
 
 	public void onReturnSelectTarget(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof PatientReturnEvent) {
 			Patient patient = ((PatientReturnEvent) event.getObject()).getPatien();
-			setSource(patient);
+			// Reloading patient with tasks
+			setTarget(patient.getId() != 0 ? patientRepository.findOptionalById(patient.getId(), true, false).get()
+					: patient);
 			taskLists.setTarget(target == null ? new ArrayList<Task>() : new ArrayList<Task>(target.getTasks()));
+
+			updateOnChange();
 		}
+	}
+
+	public void updateOnChange() {
+		setTaskPickerDisabled(source == null || target == null);
+		setSourceDeleteable(source != null && source.getId() != 0 && taskLists.getSource().size() == 0);
+		setTargetDeleteable(target != null && target.getId() != 0 && taskLists.getTarget().size() == 0);
 	}
 
 	/**

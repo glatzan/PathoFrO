@@ -47,21 +47,6 @@
 				<p:outputLabel
 					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.contact.phone}" />
 
-				<!-- extern -->
-				<p:outputLabel value="#{msg['body.worklist.patient.extern']}" />
-
-				<h:panelGroup>
-					<p:outputLabel
-						value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.externalPatient ? msg['general.yes'] : msg['general.no']} &nbsp; " />
-					<p:commandLink
-						rendered="#{globalEditViewHandler.worklistData.worklist.selectedPatient.externalPatient}"
-						actionListener="#{dialogHandlerAction.editPatientDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
-						<p:ajax event="dialogReturn"
-							listener="#{patientViewHandlerAction.onEditPatientDataReturn}"
-							update="navigationForm:patientList  contentForm:contentPanel headerForm" />
-						<i class="fa fa-wrench"></i>
-					</p:commandLink>
-				</h:panelGroup>
 			</h:panelGrid>
 
 			<h:panelGroup />

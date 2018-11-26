@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.patho.main.action.DialogHandlerAction;
+
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
@@ -27,11 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class ReportViewHandlerAction {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DialogHandlerAction dialogHandlerAction;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

@@ -39,12 +39,12 @@
 
 					<!-- name -->
 					<h:outputLabel value="Patient 1" />
-					<p:commandButton icon="fa fa-fw fa-user"
+					<p:commandLink icon="fa fa-fw fa-user"
 						actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
 						value="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
 						<p:ajax event="dialogReturn" update="@form" process="@form"
 							listener="#{dialog.mergePatientDialog.onReturnSelectSource}"></p:ajax>
-					</p:commandButton>
+					</p:commandLink>
 
 					<!-- name -->
 					<h:outputLabel
@@ -64,7 +64,7 @@
 					<h:outputLabel
 						value="#{msg['component.physicianSettingsGeneral.piz']}:" />
 					<h:outputLabel
-						value="#{dialog.mergePatientDialog.source.piz eq '' ? msg['component.physicianSettingsGeneral.piz.none'] : mergePatientDialog.source.piz}"></h:outputLabel>
+						value="#{dialog.mergePatientDialog.source.piz eq '' ? msg['component.physicianSettingsGeneral.piz.none'] : dialog.mergePatientDialog.source.piz}"></h:outputLabel>
 				</h:panelGrid>
 
 				<!-- target -->
@@ -73,12 +73,12 @@
 
 					<!-- name -->
 					<h:outputLabel value="Patient 2" />
-					<p:commandButton icon="fa fa-fw fa-user"
+					<p:commandLink icon="fa fa-fw fa-user"
 						actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
 						value="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
 						<p:ajax event="dialogReturn" update="@form" process="@form"
 							listener="#{dialog.mergePatientDialog.onReturnSelectTarget}"></p:ajax>
-					</p:commandButton>
+					</p:commandLink>
 
 					<!-- name -->
 					<h:outputLabel
@@ -98,16 +98,40 @@
 					<h:outputLabel
 						value="#{msg['component.physicianSettingsGeneral.piz']}:" />
 					<h:outputLabel
-						value="#{dialog.mergePatientDialog.target.piz eq '' ? msg['component.physicianSettingsGeneral.piz.none'] : mergePatientDialog.target.piz}"></h:outputLabel>
+						value="#{dialog.mergePatientDialog.target.piz eq '' ? msg['component.physicianSettingsGeneral.piz.none'] : dialog.mergePatientDialog.target.piz}"></h:outputLabel>
 				</h:panelGrid>
 
 			</h:panelGrid>
 
 
-			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+			<h:panelGrid columns="1" styleClass="defaultHistoTable"
+				style="width:100%">
 				<p:pickList value="#{dialog.mergePatientDialog.taskLists}"
-					disabled="true" var="task" itemLabel="#{task.taskID}"
-					itemValue="#{task}" />
+					style="width:100%"
+					disabled="#{dialog.mergePatientDialog.taskPickerDisabled}"
+					var="task" itemLabel="#{task}" itemValue="#{task}" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2"
+				styleClass="defaultHistoHiddenTableContainer">
+
+				<!-- source -->
+				<h:panelGrid columns="2" styleClass="defaultHistoTable"
+					columnClasses="columnWidth150,">
+					<h:outputLabel value="Patient löschen" />
+					<p:selectBooleanCheckbox
+						value="#{dialog.mergePatientDialog.deleteSource}"
+						disabled="#{!dialog.mergePatientDialog.sourceDeleteable}" />
+				</h:panelGrid>
+
+				<!-- target -->
+				<h:panelGrid columns="2" styleClass="defaultHistoTable"
+					columnClasses="columnWidth150,">
+					<h:outputLabel value="Patient löschen" />
+					<p:selectBooleanCheckbox
+						value="#{dialog.mergePatientDialog.deleteTarget}"
+						disabled="#{!dialog.mergePatientDialog.targetDeleteable}" />
+				</h:panelGrid>
 			</h:panelGrid>
 		</div>
 

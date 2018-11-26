@@ -148,7 +148,7 @@
 
 			<!-- Edit Patient data -->
 			<p:commandButton id="editPatientData"
-				actionListener="#{dialogHandlerAction.editPatientDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
+				actionListener="#{dialog.editPatientDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
 				<p:ajax event="dialogReturn"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm" />
@@ -156,7 +156,7 @@
 
 			<!-- Edit Patient data -->
 			<p:commandButton id="removePatient"
-				actionListener="#{removePatientDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
+				actionListener="#{dialog.deletePatientDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
 				<p:ajax event="dialogReturn"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm" />

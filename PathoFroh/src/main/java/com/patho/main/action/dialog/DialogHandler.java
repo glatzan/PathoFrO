@@ -20,6 +20,8 @@ import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.notification.ContactSelectDialog;
 import com.patho.main.action.dialog.notification.NotificationDialog;
+import com.patho.main.action.dialog.patient.DeletePatientDialog;
+import com.patho.main.action.dialog.patient.EditPatientDialog;
 import com.patho.main.action.dialog.patient.MergePatientConfimDialog;
 import com.patho.main.action.dialog.patient.MergePatientDialog;
 import com.patho.main.action.dialog.patient.PatientLogDialog;
@@ -114,5 +116,6 @@ public class DialogHandler {
 	private WorklistSortDialog worklistSortDialog = new WorklistSortDialog();
 	private MergePatientDialog mergePatientDialog = new MergePatientDialog();
 	private MergePatientConfimDialog mergePatientConfimDialog = new MergePatientConfimDialog();
-	
+	private EditPatientDialog editPatientDialog = new EditPatientDialog();
+	private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
 }
