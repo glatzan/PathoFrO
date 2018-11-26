@@ -160,7 +160,6 @@ INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATI
 INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (5, 'PATIENT_EDIT_ALTER_DATA');
 INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (4, 'PATIENT_EDIT_ALTER_DATA');
 
-
 /* remove username from histouser*/
 alter table histouser drop username;
 

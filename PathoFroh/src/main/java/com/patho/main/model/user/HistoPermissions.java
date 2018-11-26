@@ -52,6 +52,7 @@ public enum HistoPermissions {
 	 * User can delete patients <br>
 	 * -> Used in <br>
 	 * --> MenuGenerator, if set the delete dialog button is displayed
+	 * --> editPatient.xhtml, disables delete dialog button
 	 */
 	PATIENT_EDIT_DELETE(PATIENT_EDIT),
 
@@ -59,6 +60,7 @@ public enum HistoPermissions {
 	 * User can merge Patients <br>
 	 * -> Used in <br>
 	 * --> MenuGenerator, if set the merge dialog is set
+	 * --> editPatient.xhtml, disables merge dialog button
 	 */
 	PATIENT_EDIT_MERGE(PATIENT_EDIT),
 

@@ -50,20 +50,12 @@ public class MainHandlerAction {
 	
 	public static FacesContext test;
 
-	/**
-	 * ID of the global info growl
-	 */
-	private static final String GLOBAL_GROWL_ID = "globalGrowl";
-	
 	@Autowired
 	@Lazy
 	private UserHandlerAction userHandlerAction;
 
 	@Autowired
 	protected ResourceBundle resourceBundle;
-
-	@Autowired
-	private MessageSource messageSource;
 
 	/********************************************************
 	 * Navigation

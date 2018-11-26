@@ -30,199 +30,78 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="5" styleClass="defaultHistoTable"
-				columnClasses="columnLabelContainer150, , , ,">
+			<!-- person mask -->
+			<histo:personSettingGeneral
+				person="#{dialog.editPatientDialog.patient.person}" />
 
-				<!-- Person -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.person']}"
-					styleClass="bigFont" />
-
-				<!-- Title -->
-				<h:outputLabel
-					value="#{msg['component.personSettingsGeneral.title']}" />
-				<p:selectOneMenu style="width:100px" editable="true"
-					value="#{dialog.editPatientDialog.patient.person.title}">
-					<f:selectItem itemLabel="" itemValue="" />
-					<f:selectItem
-						itemLabel="#{msg['component.personSettingsGeneral.title.dr']}"
-						itemValue="#{msg['component.personSettingsGeneral.title.dr']}" />
-					<f:selectItem
-						itemLabel="#{msg['component.personSettingsGeneral.title.prof']}"
-						itemValue="#{msg['component.personSettingsGeneral.title.prof']}" />
-				</p:selectOneMenu>
-
-				<!-- birthday -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.birthday']}" />
-				<p:calendar id="birthday" name="bday" autocomplete="bday"
-					value="#{dialog.editPatientDialog.patient.person.birthday}"
-					locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true" />
-
-				<h:outputLabel value="" />
-
-				<!-- Name -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.lastname']}" />
-				<p:inputText name="lname" autocomplete="family-name" required="true"
-					value="#{dialog.editPatientDialog.patient.person.lastName}" />
-
-				<!-- gender -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.gender']}" />
-				<p:selectOneMenu style="width:100px" name="sex" autocomplete="sex"
-					value="#{dialog.editPatientDialog.patient.person.gender}">
-					<f:selectItem
-						itemLabel="#{msg['component.physicianSettingsGeneral.gender.select']}"
-						itemValue="#{null}" />
-					<f:selectItem
-						itemLabel="#{msg['component.physicianSettingsGeneral.gender.unknown']}"
-						itemValue="UNKNOWN" />
-					<f:selectItem
-						itemLabel="#{msg['component.physicianSettingsGeneral.gender.male']}"
-						itemValue="MALE" />
-					<f:selectItem
-						itemLabel="#{msg['component.physicianSettingsGeneral.gender.female']}"
-						itemValue="FEMALE" />
-				</p:selectOneMenu>
-
-				<h:outputLabel value="" />
-
-				<!-- firstName -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.firstName']}" />
-				<p:inputText name="fname" autocomplete="given-name" required="true"
-					value="#{dialog.editPatientDialog.patient.person.firstName}" />
-
-				<h:outputLabel value="" />
-				<h:outputLabel value="" />
-
-				<!-- address -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.address']}"
-					styleClass="bigFont" />
-
-				<!-- street -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.contact.street']}" />
-				<p:inputText name="street-address" autocomplete="street-address"
-					value="#{dialog.editPatientDialog.patient.person.contact.street}" />
-
-				<h:outputText value="" />
-				<h:outputText value="" />
-
-				<h:outputLabel value="" />
-
-				<!-- address addition one -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.contact.additionOne']}" />
-				<p:inputText
-					value="#{dialog.editPatientDialog.patient.person.contact.addressadditon}" />
-
-				<!-- address addition two -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.contact.additionTwo']}" />
-				<p:inputText
-					value="#{dialog.editPatientDialog.patient.person.contact.addressadditon2}" />
-
-				<h:outputLabel value="" />
-
-				<!-- Postcode -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.address.plz']}" />
-				<p:inputText style="width:75px;"
-					value="#{dialog.editPatientDialog.patient.person.contact.postcode}"
-					name="postal-code" autocomplete="postal-code" />
-
-				<!-- Town -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.contact.town']}" />
-				<p:inputText name="city" autocomplete="address-level2"
-					value="#{dialog.editPatientDialog.patient.person.contact.town}" />
-
-
-				<!-- miscellaneous -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.miscellaneous']}"
-					styleClass="bigFont" />
-
-				<!-- phone -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.contact.phone']}" />
-				<p:inputText
-					value="#{dialog.editPatientDialog.patient.person.contact.phone}"
-					name="phone" autocomplete="tel" />
-
-				<!-- fax -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.miscellaneous.fax']}" />
-				<p:inputText
-					value="#{dialog.editPatientDialog.patient.person.contact.fax}"
-					name="fax" autocomplete="fax" />
-
-				<h:outputLabel value="" />
-
-				<!-- mobile -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.miscellaneous.mobile']}" />
-				<p:inputText
-					value="#{dialog.editPatientDialog.patient.person.contact.phone}"
-					name="phone" autocomplete="tel" />
-
-				<!-- mail -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.miscellaneous.mail']}" />
-				<p:inputText name="mail" autocomplete="mail"
-					value="#{dialog.editPatientDialog.patient.person.contact.email}" />
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				columnClasses="columnWidth150,">
 
 				<!-- piz -->
-				<h:outputLabel
-					value="#{msg['component.physicianSettingsGeneral.piz']}"
-					styleClass="bigFont" />
+				<h:outputLabel value="#{msg['dialog.editPatient.piz']}" />
 
 				<h:outputLabel
-					value="#{dialog.editPatientDialog.patient.piz eq '' ? 'none' : dialog.editPatientDialog.patient.piz}" />
+					value="#{dialog.editPatientDialog.patient.piz eq '' ? msg['dialog.editPatient.piz.none'] : dialog.editPatientDialog.patient.piz}" />
 			</h:panelGrid>
-
 		</div>
 
-
 		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="1" styleClass="left">
+					<h:panelGroup>
+						<p:commandButton id="menuButton" value="#{msg['general.options']}"
+							type="button" icon="fa fa-fw fa-home" />
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
-					<!-- merge button -->
-					<p:commandButton value="#{msg['dialog.editPatient.merge']}"
-						process="@form" icon="fa fa-medkit">
-						<f:actionListener
-							binding="#{dialog.mergePatientDialog.initAndPrepareBean(dialog.editPatientDialog.patient)}"></f:actionListener>
-						<p:ajax event="dialogReturn"
-							listener="#{dialog.editPatientDialog.onMergeReturn}"></p:ajax>
+						<p:menu overlay="true" trigger="menuButton" my="left bottom"
+							style="width:200px;" at="left top">
+							<p:menuitem value="#{msg['dialog.editPatient.merge']}"
+								disabled="#{!userHandlerAction.currentUserHasPermission('PATIENT_EDIT_MERGE')}"
+								onclick="PF('mergeBtn').jq.click();return false;"
+								icon="fa fa-fw fa-medkit" />
+							<p:menuitem value="#{msg['dialog.editPatient.delete']}"
+								disabled="#{!userHandlerAction.currentUserHasPermission('PATIENT_EDIT_DELETE')}"
+								onclick="PF('deleteBtn').jq.click();return false;"
+								icon="fa fa-fw fa-trash" />
+						</p:menu>
 
-					</p:commandButton>
+						<!-- merge dialog -->
+						<p:commandButton id="mergeBtn" widgetVar="mergeBtn"
+							actionListener="#{dialog.mergePatientDialog.initAndPrepareBean(dialog.editPatientDialog.patient)}"
+							style="display:none">
+							<p:ajax event="dialogReturn"
+								listener="#{dialog.editPatientDialog.onMergeReturn}"></p:ajax>
+						</p:commandButton>
+
+						<!-- delete dialog -->
+						<p:commandButton id="deleteBtn" widgetVar="deleteBtn"
+							actionListener="#{dialog.deletePatientDialog.initAndPrepareBean(dialog.editPatientDialog.patient)}"
+							style="display:none">
+							<p:ajax event="dialogReturn"
+								listener="#{dialog.editPatientDialog.onMergeReturn}"></p:ajax>
+						</p:commandButton>
+					</h:panelGroup>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
-					<p:commandButton value="#{msg['dialog.editPatient.edit']}"
-						process="@form" icon="fa fa-fw fa-user-plus">
+				<h:panelGrid columns="2" styleClass="right">
+					<!-- edit -->
+					<p:commandButton value="#{msg['general.save']}" process="@form"
+						icon="fa fa-fw fa-user-plus">
 						<f:actionListener
 							binding="#{dialog.editPatientDialog.savePatientData()}" />
 						<f:actionListener
 							binding="#{dialog.editPatientDialog.hideDialog()}" />
 					</p:commandButton>
 
+					<!-- abort -->
 					<p:commandButton value="#{msg['general.abort']}"
 						icon="fa fa-times-circle"
 						actionListener="#{dialog.editPatientDialog.hideDialog()}">
 						<p:ajax update="@form" resetValues="true"
 							icon="fa fa-fw fa-user-plus" />
 					</p:commandButton>
-
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
-
 	</h:form>
 </h:body>
 </html>
