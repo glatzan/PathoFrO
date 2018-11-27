@@ -28,7 +28,7 @@
 		styleClass="defaultHistoHiddenTableContainer">
 
 		<h:outputLabel
-			value="#{msg['body.receiptlog.taskId']} #{globalEditViewHandler.worklistData.worklist.selectedTask.taskID}"
+			value="#{msg['body.receiptlog.taskId']} #{worklistHandler.current.selectedTask.taskID}"
 			style="font-size:1.5em;"></h:outputLabel>
 
 		<h:panelGrid columns="3" style="margin-top:10px; width:100%"
@@ -43,13 +43,13 @@
 				<p:calendar pattern="dd.MM.yyyy" mask="true" id="receiptDate"
 					style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
 					styleClass="customBackground"
-					disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
-					value="#{globalEditViewHandler.worklistData.worklist.selectedTask.dateOfReceiptAsDate}">
+					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+					value="#{worklistHandler.current.selectedTask.dateOfReceiptAsDate}">
 					<p:ajax event="dateSelect"
-						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',globalEditViewHandler.worklistData.worklist.selectedTask, 'date:'.concat(globalEditViewHandler.worklistData.worklist.selectedTask.dateOfReceipt))}"
+						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask, 'date:'.concat(worklistHandler.current.selectedTask.dateOfReceipt))}"
 						update="receiptDate" />
 					<f:ajax event="change" execute="@this" render="receiptDate"
-						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',globalEditViewHandler.worklistData.worklist.selectedTask,'date:'.concat(globalEditViewHandler.worklistData.worklist.selectedTask.dateOfReceipt))}" />
+						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.dateOfReceipt))}" />
 				</p:calendar>
 
 				<!-- Termin Date -->
@@ -58,39 +58,39 @@
 					styleClass="listingHistoHiddenTableContainer">
 
 					<p:selectBooleanCheckbox style="padding-right:5px;"
-						disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+						disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 						title="#{msg['body.receiptlog.taskDueDate.hint']}"
-						value="#{globalEditViewHandler.worklistData.worklist.selectedTask.dueDateSelected}">
+						value="#{worklistHandler.current.selectedTask.dueDateSelected}">
 						<p:ajax event="change" execute="@this"
 							update="navigationForm:patientList contentForm:contentPanel"
-							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate',globalEditViewHandler.worklistData.worklist.selectedTask, globalEditViewHandler.worklistData.worklist.selectedTask.dueDateSelected)}">
+							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate',worklistHandler.current.selectedTask, worklistHandler.current.selectedTask.dueDateSelected)}">
 						</p:ajax>
 					</p:selectBooleanCheckbox>
 
 					<p:calendar pattern="dd.MM.yyyy" mask="true" id="dueDate"
 						style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor};"
 						styleClass="customBackground"
-						value="#{globalEditViewHandler.worklistData.worklist.selectedTask.dueDateAsDate}"
-						disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.dueDateSelected or !globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
+						value="#{worklistHandler.current.selectedTask.dueDateAsDate}"
+						disabled="#{!worklistHandler.current.selectedTask.dueDateSelected or !worklistHandler.current.selectedTask.taskStatus.editable}">
 						<p:ajax event="dateSelect"
-							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate.date',globalEditViewHandler.worklistData.worklist.selectedTask,'date:'.concat(globalEditViewHandler.worklistData.worklist.selectedTask.dueDate))}"
+							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate.date',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.dueDate))}"
 							update="dueDate" />
 						<f:ajax event="change" execute="@this" render="dueDate"
-							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate.date',globalEditViewHandler.worklistData.worklist.selectedTask, 'date:'.concat(globalEditViewHandler.worklistData.worklist.selectedTask.dueDate))}" />
+							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate.date',worklistHandler.current.selectedTask, 'date:'.concat(worklistHandler.current.selectedTask.dueDate))}" />
 					</p:calendar>
 				</h:panelGrid>
 
 				<!-- ward -->
 				<h:outputLabel value="#{msg['body.diagnosis.ward']}" />
 				<p:selectOneMenu id="wards"
-					value="#{globalEditViewHandler.worklistData.worklist.selectedTask.ward}"
+					value="#{worklistHandler.current.selectedTask.ward}"
 					style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor};"
 					styleClass="customBackground" editable="true"
-					disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
+					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}">
 					<f:selectItems value="#{globalEditViewHandler.genericView.staticData.wardList}"
 						itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
 					<p:ajax event="change" execute="@this"
-						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', globalEditViewHandler.worklistData.worklist.selectedTask, globalEditViewHandler.worklistData.worklist.selectedTask.ward)}" />
+						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', worklistHandler.current.selectedTask, worklistHandler.current.selectedTask.ward)}" />
 				</p:selectOneMenu>
 
 
@@ -99,29 +99,29 @@
 				<p:selectOneMenu
 					style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor};"
 					styleClass="customBackground"
-					value="#{globalEditViewHandler.worklistData.worklist.selectedTask.eye}"
-					disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}">
+					value="#{worklistHandler.current.selectedTask.eye}"
+					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}">
 
 					<f:selectItems value="#{enumProvider.eyes}" var="eye"
 						itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}" />
 
 					<p:ajax event="change" execute="@this"
-						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.eye',globalEditViewHandler.worklistData.worklist.selectedTask,globalEditViewHandler.worklistData.worklist.selectedTask.eye)}" />
+						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.eye',worklistHandler.current.selectedTask,worklistHandler.current.selectedTask.eye)}" />
 				</p:selectOneMenu>
 
 				<!-- History -->
 				<h:outputLabel value="#{msg['body.receiptlog.story']}" />
 				<h:panelGroup>
 					<p:inputTextarea styleClass="customBackground"
-						disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
-						value="#{globalEditViewHandler.worklistData.worklist.selectedTask.caseHistory}"
+						disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+						value="#{worklistHandler.current.selectedTask.caseHistory}"
 						title="#{msg['body.diagnosis.story.watermark']}"
 						id="caseHistoryInput" style="width:90%"
 						onclick="PF('caseHistoryOverlayPanel').show('#{component.clientId}');"
 						onfocus="PF('caseHistoryOverlayPanel').show('#{component.clientId}');"
 						onkeypress="PF('caseHistoryOverlayPanel').hide();">
 						<p:ajax event="change"
-							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',globalEditViewHandler.worklistData.worklist.selectedTask,globalEditViewHandler.worklistData.worklist.selectedTask.caseHistory)}"></p:ajax>
+							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',worklistHandler.current.selectedTask,worklistHandler.current.selectedTask.caseHistory)}"></p:ajax>
 					</p:inputTextarea>
 
 					<p:overlayPanel id="caseHistoryOverlayPanel"
@@ -149,11 +149,11 @@
 				<!-- commentary -->
 				<h:outputLabel value="#{msg['body.receiptlog.commentary']}" />
 				<p:inputTextarea styleClass="customBackground"
-					disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
-					value="#{globalEditViewHandler.worklistData.worklist.selectedTask.commentary}"
+					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+					value="#{worklistHandler.current.selectedTask.commentary}"
 					style="width:90%">
 					<p:ajax event="change"
-						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.commentary',globalEditViewHandler.worklistData.worklist.selectedTask, globalEditViewHandler.worklistData.worklist.selectedTask.commentary)}"></p:ajax>
+						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.commentary',worklistHandler.current.selectedTask, worklistHandler.current.selectedTask.commentary)}"></p:ajax>
 				</p:inputTextarea>
 
 			</h:panelGrid>
@@ -169,7 +169,7 @@
 
 				<!-- material -->
 				<c:forEach
-					items="#{globalEditViewHandler.worklistData.worklist.selectedTask.samples}"
+					items="#{worklistHandler.current.selectedTask.samples}"
 					var="sample" varStatus="loopCount">
 
 					<h:panelGrid columns="2"
@@ -180,7 +180,7 @@
 						<h:panelGroup>
 							<p:inputText value="#{sample.material}"
 								id="materialInput#{loopCount.index}"
-								disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+								disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 								tabindex="1" styleClass="customBackground"
 								onclick="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');)"
 								onfocus="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');"
@@ -229,9 +229,9 @@
 						styleClass="listingHistoHiddenTableContainer">
 						<!-- quickContact surgeon -->
 						<p:commandLink
-							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							title="#{msg['body.receiptlog.notification.surgeon.hint']}"
-							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask, 'SURGEON', 'EXTERNAL_SURGEON')}">
+							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(worklistHandler.current.selectedTask, 'SURGEON', 'EXTERNAL_SURGEON')}">
 							<i class="fa fa-fw fa-scissors" />
 							<p:ajax event="dialogReturn"
 								update="navigationForm:patientList contentForm:contentPanel" />
@@ -239,9 +239,9 @@
 
 						<!-- quickcontact private physician  -->
 						<p:commandLink
-							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
-							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask,'PRIVATE_PHYSICIAN')}">
+							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(worklistHandler.current.selectedTask,'PRIVATE_PHYSICIAN')}">
 							<i class="fa fa-fw fa-eye" />
 							<p:ajax event="dialogReturn"
 								update="navigationForm:patientList contentForm:contentPanel" />
@@ -249,8 +249,8 @@
 
 						<!-- edit contacts -->
 						<p:commandLink title="#{msg['body.receiptlog.notification.hint']}"
-							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
-							actionListener="#{dialog.contactDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask)}">
+							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+							actionListener="#{dialog.contactDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 							<i class="fa fa-fw fa-cog" />
 							<p:ajax event="dialogReturn"
 								update="navigationForm:patientList contentForm:contentPanel" />
@@ -262,7 +262,7 @@
 				<!-- Slides -->
 				<p:dataTable var="contact" scrollable="true" scrollHeight="90"
 					style="width:450px" styleClass="defaultHistoDataTable"
-					value="#{globalEditViewHandler.worklistData.worklist.selectedTask.contacts}">
+					value="#{worklistHandler.current.selectedTask.contacts}">
 
 					<p:column>
 						<f:facet name="header">
@@ -313,19 +313,19 @@
 					styleClass="bigFont"></h:outputLabel>
 				<!-- staining completed -->
 				<h:panelGroup
-					rendered="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.stainingCompleted}">
+					rendered="#{worklistHandler.current.selectedTask.taskStatus.stainingCompleted}">
 					<div class="fa fa-check-circle icon-green"
 						title="#{msg['body.receiptlog.slide.completed']}" />
 				</h:panelGroup>
 				<!-- staining to perform -->
 				<h:panelGroup
-					rendered="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.stainingNeeded}">
+					rendered="#{worklistHandler.current.selectedTask.taskStatus.stainingNeeded}">
 					<div class="fa fa-exclamation-circle icon-orange"
 						title="#{msg['body.receiptlog.slide.staining']}" />
 				</h:panelGroup>
 				<!-- restaining to perform -->
 				<h:panelGroup
-					rendered="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.reStainingNeeded}">
+					rendered="#{worklistHandler.current.selectedTask.taskStatus.reStainingNeeded}">
 					<div class="fa fa-exclamation-circle ic-custom icon-orange"
 						title="#{msg['body.receiptlog.slide.restaining']}" />
 				</h:panelGroup>
@@ -460,7 +460,7 @@
 
 						<p:selectOneMenu style="width: 90%"
 							value="#{stainingRow.entity.commentary}" editable="true"
-							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable or stainingRow.entity.stainingCompleted}">
+							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable or stainingRow.entity.stainingCompleted}">
 
 							<f:selectItems
 								value="#{globalEditViewHandler.genericView.staticData.slideCommentary}"
@@ -468,7 +468,7 @@
 								itemValue="#{commentary.value}" />
 
 							<p:ajax event="change" execute="@this"
-								listener="#{diagnosisViewHandlerAction.onDataChange(stainingRow.entity,'log.settings.staining.update')}" />
+								listener="#{globalEditViewHandler.ct.saveData(stainingRow.entity,'log.settings.staining.update')}" />
 						</p:selectOneMenu>
 
 					</h:panelGroup>
@@ -493,7 +493,7 @@
 					<h:panelGroup rendered="#{stainingRow.sampleType}">
 						<!-- ********** Staining performed ********** -->
 						<h:panelGroup
-							rendered="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.checkIfStainingCompleted(stainingRow.entity)}">
+							rendered="#{worklistHandler.current.selectedTask.taskStatus.checkIfStainingCompleted(stainingRow.entity)}">
 							<i class="fa fa-fw fa-check-circle icon-green"
 								title="#{msg['body.statiningView.status.performed']}" />
 						</h:panelGroup>
@@ -503,7 +503,7 @@
 					<h:panelGroup rendered="#{stainingRow.blockType}">
 						<!-- ********** Staining performed ********** -->
 						<h:panelGroup
-							rendered="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.checkIfStainingCompleted(stainingRow.entity)}">
+							rendered="#{worklistHandler.current.selectedTask.taskStatus.checkIfStainingCompleted(stainingRow.entity)}">
 							<i class="fa fa-fw fa-check-circle icon-green"
 								title="#{msg['body.statiningView.status.performed']}" />
 						</h:panelGroup>
@@ -532,7 +532,7 @@
 						<h:outputLabel
 							value="#{msg['body.receiptlog.slide.headline.options']}"></h:outputLabel>
 						<p:commandLink id="quickTaskSettings"
-							actionListener="#{dialog.slideNamingDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask)}">
+							actionListener="#{dialog.slideNamingDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 							<i class="fa fa-wrench" style="float: right; margin-right: 5px"
 								title="#{msg['body.receiptlog.slide.headline.options.text']}" />
 							<p:ajax event="dialogReturn"
@@ -546,7 +546,7 @@
 						style="float: right">
 						<!-- ********** New Block Button ********** -->
 						<p:commandLink title="#{msg['body.statiningView.newBlock']}"
-							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							update="navigationForm:patientList contentForm:contentPanel headerForm"
 							oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
 							actionListener="#{globalEditViewHandler.ct.createNewBlock(stainingRow.entity)}">
@@ -554,7 +554,7 @@
 						</p:commandLink>
 						<!-- ********** Delete Button ********** -->
 						<p:commandLink title="#{msg['body.statiningView.archiveSample']}"
-							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
 							<i class="fa fa-fw fa-times-circle"></i>
 							<p:ajax event="dialogReturn"
@@ -570,7 +570,7 @@
 						<!-- ********** New Staining Button ********** -->
 						<h:panelGroup>
 							<p:commandLink title="#{msg['body.statiningView.newStaining']}"
-								disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+								disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 								actionListener="#{dialog.addSlidesDialog.initAndPrepareBean(stainingRow.entity)}">
 								<i class="fa fa-fw fa-paint-brush"></i>
 								<p:ajax event="dialogReturn"
@@ -581,7 +581,7 @@
 						</h:panelGroup>
 						<!-- ********** Delete Button ********** -->
 						<p:commandLink
-							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							title="#{msg['body.statiningView.archiveBlock']}"
 							actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
 							<i class="fa fa-fw fa-times-circle"></i>
@@ -621,7 +621,7 @@
 						</p:commandLink>
 						<!-- ********** Delete Button ********** -->
 						<p:commandLink
-							disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							title="#{msg['body.statiningView.archiveStaining']}"
 							actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
 							<i class="fa fa-fw fa-times-circle" />
@@ -691,7 +691,7 @@
 
 				<p:inputText id="idInputPannelInput" widgetVar="idInputPannelInput"
 					onkeypress="return closeOverlayPanelOnReturn(event, 'idInputPannel')"
-					disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 					rendered="#{globalEditViewHandler.receiptLogView.selectedStainingTableChooser ne null}"
 					value="#{globalEditViewHandler.receiptLogView.selectedStainingTableChooser.IDText}">
 					<p:ajax event="change" process="@this"></p:ajax>
@@ -713,8 +713,8 @@
 			<p:commandButton
 				value="#{msg['body.statiningView.stainingPhaseEnd']}"
 				icon="fa fa-fw fa-image"
-				disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
-				actionListener="#{dialog.stainingPhaseExitDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask, true)}">
+				disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+				actionListener="#{dialog.stainingPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, true)}">
 				<p:ajax event="dialogReturn"
 					listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 					update="navigationForm:patientList contentForm:contentPanel headerForm" />
@@ -722,9 +722,9 @@
 
 			<!-- New sample -->
 			<p:commandButton icon="fa fa-fw fa-plus-circle"
-				disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+				disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 				value="#{msg['body.statiningView.newSample']}"
-				actionListener="#{dialog.createSampleDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedTask)}">
+				actionListener="#{dialog.createSampleDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 				<p:ajax event="dialogReturn"
 					listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
@@ -733,7 +733,7 @@
 
 			<!-- select all -->
 			<p:commandButton icon="fa fa-fw fa-check-circle"
-				disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+				disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 				update="contentForm:contentPanel"
 				value="#{msg['body.statiningView.chooseAll']}"
 				actionListener="#{globalEditViewHandler.receiptLogView.setListAsChoosen(globalEditViewHandler.receiptLogView.stainingTableRows,true)}" />
@@ -744,7 +744,7 @@
 			<h:panelGroup>
 				<p:selectOneMenu
 					value="#{globalEditViewHandler.receiptLogView.actionOnMany}"
-					disabled="#{!globalEditViewHandler.worklistData.worklist.selectedTask.taskStatus.editable}"
+					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 					onchange="PF('performOnMay').jq.click();">
 
 					<f:selectItems value="#{enumProvider.stainingListActions}"
@@ -756,7 +756,7 @@
 				<p:commandButton id="changeZone" widgetVar="performOnMay"
 					style="display:none;"
 					update="navigationForm:patientList contentForm:contentPanel headerForm"
-					actionListener="#{globalEditViewHandler.receiptLogView.performActionOnMany(globalEditViewHandler.worklistData.worklist.selectedTask)}">
+					actionListener="#{globalEditViewHandler.receiptLogView.performActionOnMany(worklistHandler.current.selectedTask)}">
 					<p:ajax event="dialogReturn"
 						listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 						oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll', 'contentForm:contentScrollPane')"

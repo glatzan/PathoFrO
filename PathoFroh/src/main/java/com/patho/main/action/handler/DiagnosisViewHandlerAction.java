@@ -1,5 +1,7 @@
 package com.patho.main.action.handler;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -7,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import com.patho.main.action.dialog.diagnosis.CopyHistologicalRecordDialog;
 import com.patho.main.model.Signature;
 import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.TaskService;
+import com.patho.main.template.print.SlideLable;
 import com.patho.main.util.helper.TimeUtil;
 
 import lombok.AccessLevel;
@@ -26,7 +30,7 @@ public class DiagnosisViewHandlerAction {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -45,23 +49,40 @@ public class DiagnosisViewHandlerAction {
 			if (revision.getCompletionDate() == 0) {
 				revision.setSignatureDate(TimeUtil.setDayBeginning(System.currentTimeMillis()));
 
-				if(revision.getSignatureOne() == null)
+				if (revision.getSignatureOne() == null)
 					revision.setSignatureOne(new Signature());
-				
-				if(revision.getSignatureTwo() == null)
+
+				if (revision.getSignatureTwo() == null)
 					revision.setSignatureTwo(new Signature());
-				
+
 				if (revision.getSignatureOne().getPhysician() == null
 						|| revision.getSignatureTwo().getPhysician() == null) {
 					// TODO set if physician to the left, if consultant to the right
 				}
 			}
-
 		}
 	}
 
+	/**
+	 * Prints a lable for the choosen slide.
+	 * 
+	 * @param slide
+	 */
+	public void printLableForSlide(Slide slide) {
 
+		SlideLable slideLabel = DocumentTemplate
+				.getTemplateByID(globalSettings.getDefaultDocuments().getSlideLabelDocument());
 
-	
+		if (slideLabel == null) {
+			log.debug("No template found for printing, returning!");
+			return;
+		}
+
+		slideLabel.initData(slide.getTask(), slide, new Date(System.currentTimeMillis()));
+		slideLabel.fillTemplate();
+
+		userHandlerAction.getSelectedLabelPrinter().print(slideLabel);
+
+	}
 
 }

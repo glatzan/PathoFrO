@@ -74,7 +74,7 @@ public class Task
 
 	@Transient
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Id
 	@GeneratedValue(generator = "task_sequencegenerator")
 	@Column(unique = true, nullable = false)
@@ -203,7 +203,7 @@ public class Task
 	 * Liste aller Personen die �ber die Diangose informiert werden sollen.
 	 */
 	// TODO fetch lazy
-	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER, mappedBy = "task")
+	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, fetch = FetchType.EAGER, mappedBy = "task")
 	@Fetch(value = FetchMode.SUBSELECT)
 	@OrderBy("id ASC")
 	@NotAudited
@@ -275,6 +275,10 @@ public class Task
 	public Task() {
 	}
 
+	public Task(long id) {
+		this.id = id;
+	}
+
 	/**
 	 * Initializes a task with important values.
 	 * 
@@ -318,14 +322,14 @@ public class Task
 	@Transient
 	public AssociatedContact getPrimaryContactAsString(String... contactRole) {
 		ContactRole[] role = new ContactRole[contactRole.length];
-		
+
 		for (int i = 0; i < role.length; i++) {
 			role[i] = ContactRole.valueOf(contactRole[i]);
 		}
-		
+
 		return getPrimaryContact(role);
 	}
-	
+
 	/**
 	 * Returns a associatedContact marked als primary with the given role.
 	 * 

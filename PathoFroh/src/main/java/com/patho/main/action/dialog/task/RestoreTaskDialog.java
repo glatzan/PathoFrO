@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.GlobalEditViewHandler;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
+import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.dao.UtilDAO;
 import com.patho.main.model.ListItem;
@@ -32,7 +32,7 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -43,7 +43,7 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private TaskService taskService;
-	
+
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -53,7 +53,7 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	 * Contains all available attachments
 	 */
 	private List<ListItem> predefinedListItems;
-	
+
 	/**
 	 * commentary for restoring
 	 */
@@ -70,26 +70,15 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	}
 
 	public boolean initBean(Task task) {
-		try {
-			taskDAO.initializeTask(task, false);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			log.debug("Version conflict, updating entity");
-			task = taskDAO.getTaskAndPatientInitialized(task.getId());
-			worklistViewHandlerAction.replaceTaskInCurrentWorklist(task, false);
-		}
 
 		setPredefinedListItems(utilDAO.getAllStaticListItems(ListItem.StaticList.TASK_RESTORE));
-		
+
 		super.initBean(task, Dialog.TASK_RESTORE);
 
 		return true;
 	}
 
 	public void restoreTask() {
-		try {
-			taskService.restoreTask(getTask(), getCommentary());
-		} catch (Exception e) {
-			onDatabaseVersionConflict();
-		}
+		taskService.restoreTask(getTask(), getCommentary());
 	}
 }

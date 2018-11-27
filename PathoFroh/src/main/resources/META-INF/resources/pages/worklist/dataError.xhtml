@@ -12,7 +12,7 @@
 	<!-- navigation -->
 	<h:panelGrid columns="2" styleClass="breadCrumbsNavigation">
 		<h:outputFormat value="#{msg['body.worklist.report.headline']}">
-			<f:param value="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskID}" />
+			<f:param value="#{worklistHandler.current.selectedTask.taskID}" />
 		</h:outputFormat>
 	</h:panelGrid>
 

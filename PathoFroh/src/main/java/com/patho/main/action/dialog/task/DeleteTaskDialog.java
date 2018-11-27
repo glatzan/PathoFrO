@@ -9,7 +9,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
+import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 
@@ -29,7 +29,7 @@ public class DeleteTaskDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

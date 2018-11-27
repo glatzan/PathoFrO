@@ -35,7 +35,7 @@
 				<h:outputLabel value="#{msg['dialog.worklistorder.sorting']}" />
 
 				<p:selectOneRadio
-					value="#{globalEditViewHandler.worklistData.worklist.worklistSortOrder}"
+					value="#{worklistHandler.current.worklistSortOrder}"
 					layout="grid" columns="1">
 					<f:selectItem
 						itemLabel="#{msg['dialog.worklistorder.sorting.tasknumber']}"
@@ -54,7 +54,7 @@
 				<!-- ascending -->
 				<h:outputLabel value="#{msg['dialog.worklistorder.order']}"></h:outputLabel>
 				<p:selectBooleanButton
-					value="#{globalEditViewHandler.worklistData.worklist.sortAscending}"
+					value="#{worklistHandler.current.sortAscending}"
 					onLabel="#{msg['dialog.worklistorder.order.asc']}"
 					offLabel="#{msg['dialog.worklistorder.order.dec']}" />
 			</h:panelGrid>
@@ -71,7 +71,7 @@
 					<p:commandButton value="#{msg['dialog.worklistorder.button.sort']}"
 						icon="fa fa-check-circle-o">
 						<f:actionListener
-							binding="#{globalEditViewHandler.worklistData.worklist.sortWordklist()}" />
+							binding="#{worklistHandler.current.sortWordklist()}" />
 						<f:actionListener
 							binding="#{dialog.worklistSortDialog.hideDialog()}" />
 					</p:commandButton>

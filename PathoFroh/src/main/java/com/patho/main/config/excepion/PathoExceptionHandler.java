@@ -145,16 +145,16 @@ public class PathoExceptionHandler extends ExceptionHandlerWrapper {
 //
 //					if (((HistoDatabaseInconsistentVersionException) cause).getOldVersion() instanceof Patient) {
 //						logger.debug("Version Error, replacing Patient");
-//						worklistViewHandlerAction.replacePatientInCurrentWorklist(
+//						worklistViewHandler.replacePatientInWorklist(
 //								((Patient) ((HistoDatabaseInconsistentVersionException) cause).getOldVersion()));
 //					} else if (((HistoDatabaseInconsistentVersionException) cause).getOldVersion() instanceof Task) {
 //						logger.debug("Version Error, replacing task");
-//						worklistViewHandlerAction.replaceTaskInCurrentWorklist(
+//						worklistViewHandler.replaceTaskInCurrentWorklist(
 //								((Task) ((HistoDatabaseInconsistentVersionException) cause).getOldVersion()));
 //					} else if (((HistoDatabaseInconsistentVersionException) cause)
 //							.getOldVersion() instanceof Parent<?>) {
 //						logger.debug("Version Error, replacing parent -> task");
-//						worklistViewHandlerAction.replaceTaskInCurrentWorklist(
+//						worklistViewHandler.replaceTaskInCurrentWorklist(
 //								((Parent<?>) ((HistoDatabaseInconsistentVersionException) cause).getOldVersion())
 //										.getTask());
 //					} else {

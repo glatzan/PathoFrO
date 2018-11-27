@@ -12,40 +12,40 @@
 	<!-- navigation -->
 	<h:panelGrid columns="2" styleClass="breadCrumbs">
 		<h:panelGroup
-			rendered="#{globalEditViewHandler.worklistData.worklist.selectedPatient ne null}">
+			rendered="#{worklistHandler.current.selectedPatient ne null}">
 
 			<!-- Name -->
 			<h:commandLink
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 				update="navigationForm:patientList contentForm headerForm"
-				actionListener="#{worklistViewHandlerAction.onDeselectTask()}">
+				actionListener="#{worklistViewHandler.onDeselectTask()}">
 				<h:outputFormat value="#{msg['bodyNavigationOverview']}">
 					<f:param
-						value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.lastName}" />
+						value="#{worklistHandler.current.selectedPatient.person.lastName}" />
 					<f:param
-						value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.firstName}" />
-					<f:param value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.piz}" />
+						value="#{worklistHandler.current.selectedPatient.person.firstName}" />
+					<f:param value="#{worklistHandler.current.selectedPatient.piz}" />
 				</h:outputFormat>
 			</h:commandLink>
 
 			<!-- Auftrag -->
 			<h:commandLink
-				rendered="#{globalEditViewHandler.worklistData.worklist.selectedPatient ne null and globalEditViewHandler.worklistData.worklist.selectedTask ne null}"
-				actionListener="#{worklistViewHandlerAction.onDeselectTask()}">
+				rendered="#{worklistHandler.current.selectedPatient ne null and worklistHandler.current.selectedTask ne null}"
+				actionListener="#{worklistViewHandler.onDeselectTask()}">
 				<h:outputFormat value="#{msg['bodyNavigationTask']}">
 					<f:param
-						value="#{mainHandlerAction.date(globalEditViewHandler.worklistData.worklist.selectedTask.dateOfReceiptAsDate)}" />
-					<f:param value="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskID}" />
+						value="#{mainHandlerAction.date(worklistHandler.current.selectedTask.dateOfReceiptAsDate)}" />
+					<f:param value="#{worklistHandler.current.selectedTask.taskID}" />
 				</h:outputFormat>
 			</h:commandLink>
 
 		</h:panelGroup>
 
 		<h:panelGroup style="float: right; margin-right:10px;"
-			rendered="#{globalEditViewHandler.worklistData.worklist.selectedPatient.piz ne null}">
+			rendered="#{worklistHandler.current.selectedPatient.piz ne null}">
 
 			<h:outputLink style="margin-right:10px;" title="#{msg['body.navigation.openExternal.text']}"
-				value="http://augimageserver/Viewer/?#{globalEditViewHandler.worklistData.worklist.selectedPatient.piz}"
+				value="http://augimageserver/Viewer/?#{worklistHandler.current.selectedPatient.piz}"
 				target="_new">
 				<i class="fa fa-stack-overflow"></i>
 			</h:outputLink>
@@ -54,7 +54,7 @@
 				id="btnCopy" icon="fa fa-copy"
 				title="#{msg['body.navigation.pizToClip.text']}"></p:commandLink>
 			<pe:clipboard id="clipCopy" trigger="btnCopy" action="copy"
-				text="#{globalEditViewHandler.worklistData.worklist.selectedPatient.piz}">
+				text="#{worklistHandler.current.selectedPatient.piz}">
 			</pe:clipboard>
 
 

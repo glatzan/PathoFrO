@@ -16,7 +16,7 @@
 		columnClasses="columnWidthMin">
 		<h:outputFormat value="#{msg['body.worklist.report.headline']}">
 			<f:param
-				value="#{globalEditViewHandler.worklistData.worklist.selectedTask.taskID}" />
+				value="#{worklistHandler.current.selectedTask.taskID}" />
 		</h:outputFormat>
 
 		<h:outputFormat value="#{msg['body.worklist.report.headline2']}"

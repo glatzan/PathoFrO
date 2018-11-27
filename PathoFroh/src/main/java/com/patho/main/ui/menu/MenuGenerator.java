@@ -9,11 +9,14 @@ import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSeparator;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.handler.GlobalEditViewHandler.TaskInitilize;
+import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.dto.FavouriteListMenuItem;
@@ -28,9 +31,12 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Configurable
-@Slf4j
 public class MenuGenerator {
 
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -45,14 +51,19 @@ public class MenuGenerator {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private UserHandlerAction userHandlerAction;
-
+	
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private WorklistViewHandler worklistViewHandler;
+	
 	public MenuModel generateEditMenu(Patient patient, Task task, HtmlPanelGroup taskMenuCommandButtons) {
-		log.debug("Generating new MenuModel");
+		logger.debug("Generating new MenuModel");
 
 		MenuModel model = new DefaultMenuModel();
 
 		if (taskMenuCommandButtons == null) {
-			log.error("No button container connected!");
+			logger.error("No button container connected!");
 			return model;
 		} else
 			// clearing command button array
@@ -200,7 +211,7 @@ public class MenuGenerator {
 				// Remove from staining phase
 				item = new DefaultMenuItem(resourceBundle.get("header.menu.task.sample.staining.exitStayInPhase"));
 				item.setCommand(
-						"#{globalEditViewHandler.removeTaskFromFavouriteList(globalEditViewHandler.worklistData.worklist.selectedTask, "
+						"#{globalEditViewHandler.removeTaskFromFavouriteList(worklistViewHandler.worklist.selectedTask, "
 								+ PredefinedFavouriteList.StayInStainingList.getId() + ")}");
 				item.setIcon("fa fa-image");
 				item.setRendered(task.getTaskStatus().isStayInStainingList());
@@ -261,7 +272,7 @@ public class MenuGenerator {
 				item = new DefaultMenuItem(
 						resourceBundle.get("header.menu.task.sample.diagnosisPhase.exitStayInPhase"));
 				item.setCommand(
-						"#{globalEditViewHandler.removeTaskFromFavouriteList(globalEditViewHandler.worklistData.worklist.selectedTask, "
+						"#{globalEditViewHandler.removeTaskFromFavouriteList(worklistViewHandler.worklist.selectedTask, "
 								+ PredefinedFavouriteList.StayInDiagnosisList.getId() + ")}");
 				item.setRendered(task.getTaskStatus().isStayInDiagnosisList());
 				item.setOncomplete("updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')");
@@ -330,7 +341,7 @@ public class MenuGenerator {
 				// exit stay in notification phase
 				item = new DefaultMenuItem(resourceBundle.get("header.menu.task.sample.notification.enter"));
 				item.setCommand(
-						"#{globalEditViewHandler.removeTaskFromFavouriteList(globalEditViewHandler.worklistData.worklist.selectedTask, "
+						"#{globalEditViewHandler.removeTaskFromFavouriteList(worklistViewHandler.worklist.selectedTask, "
 								+ PredefinedFavouriteList.StayInNotificationList.getId() + ")}");
 				item.setOncomplete("updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')");
 				item.setUpdate("navigationForm:patientList contentForm headerForm");
@@ -341,7 +352,7 @@ public class MenuGenerator {
 				// add to notification phase
 				item = new DefaultMenuItem(resourceBundle.get("header.menu.task.sample.notification.enter"));
 				item.setCommand(
-						"#{globalEditViewHandler.addTaskToFavouriteList(globalEditViewHandler.worklistData.worklist.selectedTask, "
+						"#{globalEditViewHandler.addTaskToFavouriteList(worklistViewHandler.worklist.selectedTask, "
 								+ PredefinedFavouriteList.NotificationList.getId() + ")}");
 				item.setOncomplete("updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')");
 				item.setUpdate("navigationForm:patientList contentForm headerForm");
@@ -427,7 +438,7 @@ public class MenuGenerator {
 
 							} else {
 								item.setCommand(
-										"#{globalEditViewHandler.removeTaskFromFavouriteList(globalEditViewHandler.worklistData.worklist.selectedTask, "
+										"#{globalEditViewHandler.removeTaskFromFavouriteList(worklistViewHandler.worklist.selectedTask, "
 												+ favouriteListItem.getId() + ")}");
 								item.setOncomplete(
 										"updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')");
@@ -436,7 +447,7 @@ public class MenuGenerator {
 						} else {
 							item.setIcon("fa fa-circle-o");
 							item.setCommand(
-									"#{globalEditViewHandler.addTaskToFavouriteList(globalEditViewHandler.worklistData.worklist.selectedTask, "
+									"#{globalEditViewHandler.addTaskToFavouriteList(worklistViewHandler.worklist.selectedTask, "
 											+ favouriteListItem.getId() + ")}");
 							item.setOncomplete(
 									"updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')");

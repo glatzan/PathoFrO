@@ -51,7 +51,7 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 //					}
 //					// TODO check if path is allowed!, reanable redirect
 //
-//					// worklistViewHandlerAction.initBean();
+//					// worklistViewHandler.initBean();
 //					// URL url = new URL(savedRequest.getRedirectUrl());
 //					// return url.getFile().substring(request.getContextPath().length());
 //				} catch (Exception e) {

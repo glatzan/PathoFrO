@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.handler.GlobalEditViewHandler;
+import com.patho.main.action.handler.WorklistHandler;
+import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.Task;
 
@@ -27,6 +29,11 @@ public abstract class AbstractTaskView {
 	@Setter(AccessLevel.NONE)
 	protected ResourceBundle resourceBundle;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	protected WorklistHandler worklistHandler;
+
 	private GlobalEditViewHandler globalEditViewHandler;
 
 	public AbstractTaskView(GlobalEditViewHandler globalEditViewHandler) {
@@ -34,11 +41,11 @@ public abstract class AbstractTaskView {
 	}
 
 	public Task getTask() {
-		return globalEditViewHandler.getWorklistData().getWorklist().getSelectedTask();
+		return worklistHandler.getCurrent().getSelectedTask();
 	}
 
 	public void setTask(Task task) {
-		globalEditViewHandler.getWorklistData().getWorklist().setSelectedTask(task);
+		worklistHandler.getCurrent().setSelectedTask(task);
 	}
 
 	public abstract void loadView();

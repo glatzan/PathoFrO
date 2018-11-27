@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.GlobalEditViewHandler;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
+import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.TaskService;
@@ -22,7 +22,7 @@ public class ArchiveTaskDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -73,8 +73,7 @@ public class ArchiveTaskDialog extends AbstractDialog {
 					mainHandlerAction.sendGrowlMessagesAsResource("growl.error",
 							"growl.error.worklist.remove.moreActive");
 				} else {
-					worklistViewHandlerAction.removePatientFromCurrentWorklist(task.getPatient());
-					worklistViewHandlerAction.onDeselectPatient(true);
+					worklistViewHandler.removePatientFromWorklist(task.getPatient());
 				}
 			}
 

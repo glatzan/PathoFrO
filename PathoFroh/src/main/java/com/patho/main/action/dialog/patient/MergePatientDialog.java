@@ -15,7 +15,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.patient.MergePatientConfimDialog.MergePatientConfimDialogReturnEvent;
 import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
 import com.patho.main.action.handler.MessageHandler;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
+import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.excepion.ToManyEntriesException;
 import com.patho.main.model.Physician;
@@ -45,7 +45,7 @@ public class MergePatientDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

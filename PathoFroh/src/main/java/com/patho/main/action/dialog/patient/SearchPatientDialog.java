@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.patient.ConfirmExternalPatientDataDialog.ConfirmExternalPatientReturnEvent;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
+import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.excepion.ToManyEntriesException;
 import com.patho.main.model.Contact;
@@ -38,7 +38,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

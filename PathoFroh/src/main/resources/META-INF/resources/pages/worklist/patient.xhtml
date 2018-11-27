@@ -12,7 +12,7 @@
 
 	<p:panel style="width: 80%"
 		styleClass="defaultHistoHiddenTableContainer"
-		rendered="#{globalEditViewHandler.worklistData.worklist.selectedPatient ne null}">
+		rendered="#{worklistHandler.current.selectedPatient ne null}">
 
 		<h:panelGrid columns="3" styleClass="defaultHistoHiddenTableContainer"
 			columnClasses="columnTop, columnWidth200 ,columnTop">
@@ -24,28 +24,28 @@
 				<!-- piz -->
 				<h:outputLabel value="#{msg['body.worklist.patient.piz']}" />
 				<h:outputLabel
-					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.piz}" />
+					value="#{worklistHandler.current.selectedPatient.piz}" />
 
 				<!-- name -->
 				<h:outputLabel value="#{msg['body.worklist.patient.name']}" />
 				<h:outputLabel
-					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.lastName}#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.title ne '' ? ',' : ''} #{globalEditViewHandler.worklistData.worklist.selectedPatient.person.title}" />
+					value="#{worklistHandler.current.selectedPatient.person.lastName}#{worklistHandler.current.selectedPatient.person.title ne '' ? ',' : ''} #{worklistHandler.current.selectedPatient.person.title}" />
 
 				<!-- street -->
 				<p:outputLabel value="#{msg['body.worklist.patient.street']}" />
 				<p:outputLabel
-					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.contact.street}" />
+					value="#{worklistHandler.current.selectedPatient.person.contact.street}" />
 
 				<!-- postcode -->
 				<p:outputLabel value="#{msg['body.worklist.patient.postcode']}" />
 				<p:outputLabel
-					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.contact.postcode}" />
+					value="#{worklistHandler.current.selectedPatient.person.contact.postcode}" />
 
 				<!-- phone -->
 
 				<p:outputLabel value="#{msg['body.worklist.patient.phone']}" />
 				<p:outputLabel
-					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.contact.phone}" />
+					value="#{worklistHandler.current.selectedPatient.person.contact.phone}" />
 
 			</h:panelGrid>
 
@@ -61,25 +61,25 @@
 				<!-- firstName -->
 				<h:outputLabel value="#{msg['body.worklist.patient.firstName']}" />
 				<h:outputLabel
-					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.firstName}" />
+					value="#{worklistHandler.current.selectedPatient.person.firstName}" />
 
 				<!-- birthday -->
 				<p:outputLabel value="#{msg['body.worklist.patient.birthday']}" />
 				<h:outputLabel
-					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.person.birthday}">
+					value="#{worklistHandler.current.selectedPatient.person.birthday}">
 					<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
 				</h:outputLabel>
 
 				<!-- town -->
 				<p:outputLabel value="#{msg['body.worklist.patient.town']}" />
 				<p:outputLabel
-					value=" #{globalEditViewHandler.worklistData.worklist.selectedPatient.person.contact.town}" />
+					value=" #{worklistHandler.current.selectedPatient.person.contact.town}" />
 
 				<!-- insurance -->
 
 				<p:outputLabel value="#{msg['body.worklist.patient.insurance']}" />
 				<p:outputLabel
-					value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.insurance}" />
+					value="#{worklistHandler.current.selectedPatient.insurance}" />
 			</h:panelGrid>
 		</h:panelGrid>
 
@@ -87,16 +87,16 @@
 		<h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer">
 			<!-- Tasks -->
 			<p:dataTable var="task" style="margin-top:20px;" id="taskList"
-				value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.tasks}"
+				value="#{worklistHandler.current.selectedPatient.tasks}"
 				selectionMode="single" styleClass="defaultHistoDataTable"
-				rendered="#{globalEditViewHandler.worklistData.worklist.selectedPatient != null}"
-				selection="#{globalEditViewHandler.worklistData.worklist.selectedTask}"
+				rendered="#{worklistHandler.current.selectedPatient != null}"
+				selection="#{worklistHandler.current.selectedTask}"
 				rowKey="#{task.id}">
 
 				<p:ajax event="rowSelect"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
 					update="contentForm:contentPanel headerForm navigationForm:patientList"
-					listener="#{worklistViewHandlerAction.onSelectTaskAndPatient(globalEditViewHandler.worklistData.worklist.selectedTask)}" />
+					listener="#{worklistViewHandler.onSelectTaskAndPatient(worklistHandler.current.selectedTask)}" />
 
 				<p:column headerText="#{msg['body.worklist.patient.tasks']}">
 					<h:outputText
@@ -185,7 +185,7 @@
 					<f:facet name="header">
 						<p:commandLink id="taskList"
 							rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
-							actionListener="#{dialog.createTaskDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
+							actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
 							<p:ajax event="dialogReturn"
 								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 								oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
@@ -208,9 +208,9 @@
 			<!-- PDFs -->
 			<p:dataTable var="attachedPdf" style="margin-top:50px;"
 				id="attachedPdfList"
-				value="#{globalEditViewHandler.worklistData.worklist.selectedPatient.attachedPdfs}"
+				value="#{worklistHandler.current.selectedPatient.attachedPdfs}"
 				styleClass="defaultHistoDataTable"
-				rendered="#{globalEditViewHandler.worklistData.worklist.selectedPatient != null}">
+				rendered="#{worklistHandler.current.selectedPatient != null}">
 
 				<p:column style="width:30%">
 					<f:facet name="header">
@@ -246,7 +246,7 @@
 					<f:facet name="header">
 						<p:commandLink id="upload"
 							rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-							actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
+							actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
 							<p:ajax event="dialogReturn"
 								update="navigationForm:patientList contentForm:contentPanel" />
 							<i class="fa fa-plus"></i>
@@ -254,7 +254,7 @@
 					</f:facet>
 					<p:commandLink
 						rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient).setPDFToDisplay(attachedPdf)}">
+						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient).setPDFToDisplay(attachedPdf)}">
 						<p:ajax event="dialogReturn"
 							update="navigationForm:patientList contentForm:contentPanel" />
 						<i class="fa fa-search"></i>
@@ -269,7 +269,7 @@
 					value="#{msg['body.worklist.patient.button.newTask']}"
 					icon="fa fa-plus"
 					rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
-					actionListener="#{dialog.createTaskDialog.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
+					actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
 					<p:ajax event="dialogReturn"
 						listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 						oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
@@ -280,7 +280,7 @@
 					value="#{msg['body.worklist.patient.button.uplaod']}"
 					icon="fa fa-cloud-upload"
 					rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-					actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(globalEditViewHandler.worklistData.worklist.selectedPatient)}">
+					actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
 					<p:ajax event="dialogReturn"
 						listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
 						update="navigationForm:patientList contentForm:contentPanel" />

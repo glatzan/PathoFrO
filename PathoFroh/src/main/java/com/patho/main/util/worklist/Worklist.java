@@ -152,6 +152,34 @@ public class Worklist {
 	}
 
 	/**
+	 * Returns true if the selected task equals the given task
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public boolean isSelected(Task task) {
+		return task != null && task.equals(getSelectedTask());
+	}
+
+	/**
+	 * REturns true if a patient is selected
+	 * 
+	 * @return
+	 */
+	public boolean isPatientSelected() {
+		return getSelectedPatient() != null;
+	}
+
+	/**
+	 * Returns true if a patient and a task is selected
+	 * 
+	 * @return
+	 */
+	public boolean isTaskSelected() {
+		return isPatientSelected() && getSelectedTask() != null;
+	}
+
+	/**
 	 * Adds a patient to the worklist, if already in worklist the patient will be
 	 * replaced. If the patient is set as selected, this will also be updated.
 	 * 
@@ -172,12 +200,13 @@ public class Worklist {
 		if (contains(patient)) {
 			replace(patient);
 			// selecting patient
-			if (select) {
-				selectPatient(patient);
-			}
 		} else {
 			getItems().add(patient);
 			generateTaskStatus(patient);
+		}
+		
+		if (select) {
+			selectPatient(patient);
 		}
 	}
 
@@ -191,6 +220,11 @@ public class Worklist {
 		patients.forEach(p -> add(p));
 	}
 
+	/**
+	 * Sets the selected Patient
+	 * 
+	 * @param patient
+	 */
 	public void selectPatient(Patient patient) {
 		setSelectedPatient(patient);
 		setSelectedTask(null);
@@ -220,19 +254,19 @@ public class Worklist {
 
 	/**
 	 * Removes a patient from the worklist. If the patient is selected, the patient
-	 * will be deseleced.
+	 * will be deseleced. Will return true if the patient was unselected.
 	 * 
 	 * @param toRemovePatient
 	 */
-	public void remove(Patient toRemovePatient) {
+	public boolean remove(Patient toRemovePatient) {
 		for (Patient patient : items) {
 			if (patient.equals(toRemovePatient)) {
 				items.remove(patient);
-				return;
+				break;
 			}
 		}
 
-		deselectPatient(toRemovePatient);
+		return deselectPatient(toRemovePatient);
 	}
 
 	/**
@@ -264,9 +298,9 @@ public class Worklist {
 	/**
 	 * Clears a worklist
 	 */
-	public void clear() {
+	public boolean clear() {
 		getItems().clear();
-		deselectPatient();
+		return deselectPatient();
 	}
 
 	/**
@@ -274,7 +308,7 @@ public class Worklist {
 	 * 
 	 * @param t
 	 */
-	public void setTaskAsSelected(Task t) {
+	public void setSelectedTaskAndPatient(Task t) {
 		logger.debug("Adding task to worklist as selected task {} -> {}",
 				getSelectedTask() == null ? "null" : getSelectedTask().getId(), t.getId());
 
@@ -287,6 +321,30 @@ public class Worklist {
 		// over task realoads
 		if (changed)
 			setSelectedTaskInfo(new TaskInfo(t));
+	}
+
+	/**
+	 * Deselects the task
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public boolean deselectTask() {
+		return deselectTask(null);
+	}
+
+	/**
+	 * Deselects the task
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public boolean deselectTask(Task task) {
+		if ((task != null && task.equals(getSelectedTask())) || task == null) {
+			setSelectedTask(null);
+			return true;
+		}
+		return false;
 	}
 
 	public void updateTaksActiveStatus(Patient old, Patient newPat) {

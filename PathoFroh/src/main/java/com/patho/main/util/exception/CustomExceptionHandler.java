@@ -24,7 +24,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import com.patho.main.action.MainHandlerAction;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.handler.GlobalEditViewHandler;
-import com.patho.main.action.handler.WorklistViewHandlerAction;
+import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.View;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.interfaces.Parent;
@@ -65,7 +65,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 
 	@Autowired
 	@Lazy
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Lazy
@@ -127,16 +127,16 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 
 					if (((HistoDatabaseInconsistentVersionException) cause).getOldVersion() instanceof Patient) {
 						log.debug("Version Error, replacing Patient");
-						worklistViewHandlerAction.replacePatientInCurrentWorklist(
+						worklistViewHandler.replacePatientInWorklist(
 								((Patient) ((HistoDatabaseInconsistentVersionException) cause).getOldVersion()));
 					} else if (((HistoDatabaseInconsistentVersionException) cause).getOldVersion() instanceof Task) {
 						log.debug("Version Error, replacing task");
-						worklistViewHandlerAction.replaceTaskInCurrentWorklist(
+						worklistViewHandler.replaceTaskInCurrentWorklist(
 								((Task) ((HistoDatabaseInconsistentVersionException) cause).getOldVersion()));
 					} else if (((HistoDatabaseInconsistentVersionException) cause)
 							.getOldVersion() instanceof Parent<?>) {
 						log.debug("Version Error, replacing parent -> task");
-						worklistViewHandlerAction.replaceTaskInCurrentWorklist(
+						worklistViewHandler.replaceTaskInCurrentWorklist(
 								((Parent<?>) ((HistoDatabaseInconsistentVersionException) cause).getOldVersion())
 										.getTask());
 					} else {

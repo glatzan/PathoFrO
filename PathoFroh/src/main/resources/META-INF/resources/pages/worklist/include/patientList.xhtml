@@ -9,12 +9,12 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 	<p:poll
-		interval="#{globalEditViewHandler.worklistData.worklist.udpateInterval}"
+		interval="#{worklistHandler.current.udpateInterval}"
 		update=":navigationForm:patientList"
 		oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-		rendered="#{globalEditViewHandler.worklistData.worklist.autoUpdate}"
-		stop="#{!globalEditViewHandler.worklistData.worklist.autoUpdate}"
-		listener="#{worklistViewHandlerAction.currentWokrlistHandler.autoReloadCurrentWorklist()}" />
+		rendered="#{worklistHandler.current.autoUpdate}"
+		stop="#{!worklistHandler.current.autoUpdate}"
+		listener="#{worklistHandler.autoReloadCurrentWorklist()}" />
 
 	<h:outputScript library="scripts" name="updateAndScrollScrollPanel.js" />
 
@@ -82,7 +82,7 @@
 		<h:panelGroup styleClass="buttonContainer">
 			<!-- Button UP -->
 			<p:commandLink title="#{msg['body.worklist.navigation.button.up']}"
-				actionListener="#{worklistViewHandlerAction.selectNextTask()}"
+				actionListener="#{worklistViewHandler.selectNextTask()}"
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
 				update="navigationForm:patientList contentForm headerForm">
 				<i class="fa fa-arrow-circle-up"></i>
@@ -91,7 +91,7 @@
 			<!-- Button Down -->
 			<p:commandLink title="#{msg['body.worklist.navigation.button.down']}"
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
-				actionListener="#{worklistViewHandlerAction.selectPreviouseTask()}"
+				actionListener="#{worklistViewHandler.selectPreviouseTask()}"
 				update="navigationForm:patientList contentForm headerForm">
 				<i class="fa fa-arrow-circle-down"></i>
 			</p:commandLink>
@@ -130,7 +130,7 @@
 			<!-- Worklist clear -->
 			<p:commandLink partialSubmit="true" process="@this"
 				title="#{msg['body.worklist.navigation.button.changelist']}"
-				actionListener="#{worklistViewHandlerAction.clearWorklist(globalEditViewHandler.worklistData.worklist)}"
+				actionListener="#{worklistViewHandler.clearWorklist(globalEditViewHandler.worklistData.worklist)}"
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 				update="navigationForm contentForm headerForm">
 				<i class="fa fa-times-circle-o"></i>
@@ -142,14 +142,14 @@
 	<p:scrollPanel styleClass="patientScrollPanelStyle" mode=""
 		id="patientNavigationScroll">
 		<p:dataTable var="patient" id="patientList"
-			value="#{globalEditViewHandler.worklistData.worklist.items}"
+			value="#{worklistHandler.current.items}"
 			selectionMode="single" rowIndexVar="rowIdx"
-			selection="#{globalEditViewHandler.worklistData.worklist.selectedPatient}"
+			selection="#{worklistHandler.current.selectedPatient}"
 			rowKey="#{patient.id}" styleClass="patientNavigationBody">
 
 			<p:ajax event="rowSelect"
 				update="navigationForm:patientList contentForm headerForm"
-				listener="#{worklistViewHandlerAction.selectPatientAndChangeView(globalEditViewHandler.worklistData.worklist.selectedPatient)}" />
+				listener="#{worklistViewHandler.selectPatientAndChangeView(worklistHandler.current.selectedPatient)}" />
 
 			<p:column>
 				<h:panelGrid styleClass="defaultHistoHiddenTableContainer"
@@ -182,15 +182,15 @@
 
 							<!-- opaque if not active or action pending -->
 							<h:panelGroup
-								rendered="#{task.taskStatus.active or (!globalEditViewHandler.worklistData.worklist.showActiveTasksExplicit and task.taskStatus.actionPending) or globalEditViewHandler.worklistData.worklist.showNoneActiveTasks}"
-								style="#{task.taskStatus.active or (!globalEditViewHandler.worklistData.worklist.showActiveTasksExplicit and task.taskStatus.actionPending) ? '' : ' opacity: 0.3;'}">
+								rendered="#{task.taskStatus.active or (!worklistHandler.current.showActiveTasksExplicit and task.taskStatus.actionPending) or worklistHandler.current.showNoneActiveTasks}"
+								style="#{task.taskStatus.active or (!worklistHandler.current.showActiveTasksExplicit and task.taskStatus.actionPending) ? '' : ' opacity: 0.3;'}">
 								<!-- rendere if something is to do (or active task only) or showNoneActiveTasks -->
 								<p:commandLink partialSubmit="true" process="@this"
-									actionListener="#{worklistViewHandlerAction.onSelectTaskAndPatient(task.id)}"
+									actionListener="#{worklistViewHandler.onSelectTaskAndPatient(task.id)}"
 									update="headerForm contentForm navigationForm:patientList">
 
 									<h:outputLabel value="#{task.taskID}"
-										style="#{globalEditViewHandler.worklistData.worklist.selectedTask eq task ? 'text-decoration: underline;font-weight:bold' : ''};" />
+										style="#{worklistHandler.current.selectedTask eq task ? 'text-decoration: underline;font-weight:bold' : ''};" />
 								</p:commandLink>
 
 								<p:repeat var="favouriteList" value="#{task.favouriteLists}">
@@ -247,7 +247,7 @@
 
 	<p:contextMenu for="patientList">
 		<p:menuitem value="Entfernen" icon="ui-icon-close"
-			actionListener="#{worklistViewHandlerAction.removePatientFromCurrentWorklist(globalEditViewHandler.worklistData.worklist.selectedPatient)}"
+			actionListener="#{worklistViewHandler.removePatientFromWorklist(worklistHandler.current.selectedPatient)}"
 			update="navigationForm:patientList contentForm headerForm" />
 	</p:contextMenu>
 </ui:composition>

@@ -93,7 +93,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandlerAction worklistViewHandlerAction;
+	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -135,6 +135,11 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	@Setter(AccessLevel.NONE)
 	private DiagnosisService diagnosisService;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private WorklistHandler worklistHandler;
+
 	/**
 	 * Navigation Data
 	 */
@@ -159,8 +164,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	 * Data for receipt log view
 	 */
 	private ReceiptLogView receiptLogView = new ReceiptLogView(this);
-
-	private WorklistData worklistData = new WorklistData();
 
 	/**
 	 * Methodes for saving task data
@@ -209,7 +212,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	public void initializeDataForSession() {
 		logger.debug("Loading programm data");
 		logger.debug("1. Loading worklist");
-		System.out.println("asdasd ++++ " + patientRepository);
 		// loading default worklist
 		HistoSettings settings = userHandlerAction.getCurrentUser().getSettings();
 		SimpleSearchOption defaultWorklistToLoad = settings.getWorklistToLoad();
@@ -222,21 +224,23 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		} else
 			worklist = new Worklist("Default", new AbstractWorklistSearch());
 
-		worklistViewHandlerAction.addWorklist(worklist, true);
-
-		logger.debug("2. Loading common data");
-		genericView.loadStaticData();
-
-		logger.debug("3. Loading view data");
-		navigationData.updateData();
-
-		logger.debug("4. Setting navigation data");
+		
+		logger.debug("2. Setting navigation data");
 		// setting start view
-		worklistViewHandlerAction.goToNavigation(userHandlerAction.getCurrentUser().getSettings().getStartView());
+		getNavigationData().setCurrentView(userHandlerAction.getCurrentUser().getSettings().getStartView());
 		// setting default subview
 		getNavigationData().setLastDefaultView(userHandlerAction.getCurrentUser().getSettings().getDefaultView());
+		
+		logger.debug("3. Setting worklist");
+		worklistViewHandler.addWorklist(worklist, true);
 
-		logger.debug("5. Init task data");
+		logger.debug("4. Loading common data");
+		genericView.loadStaticData();
+
+		logger.debug("5. Loading view data");
+		navigationData.updateData();
+
+		logger.debug("6. Init task data");
 
 		// TODO check if problem, this should be allread done by goToNavigation
 //		generateViewData(TaskInitilize.GENERATE_TASK_STATUS, TaskInitilize.GENERATE_MENU_MODEL,
@@ -260,7 +264,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 			for (TaskInitilize taskInitilize : initilizes) {
 				if (taskInitilize == TaskInitilize.RELOAD) {
-					getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+					worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 
 					reload = true;
 					break;
@@ -270,12 +274,12 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			for (TaskInitilize taskInitilize : initilizes) {
 				// updating task status
 				if (taskInitilize == TaskInitilize.GENERATE_TASK_STATUS && !reload) {
-					getWorklistData().getWorklist().getSelectedTask().generateTaskStatus();
+					worklistHandler.getCurrent().getSelectedTask().generateTaskStatus();
 					// updating menu model
 				} else if (taskInitilize == TaskInitilize.GENERATE_MENU_MODEL)
 					setTaskMenuModel(
-							(new MenuGenerator()).generateEditMenu(getWorklistData().getWorklist().getSelectedPatient(),
-									getWorklistData().getWorklist().getSelectedTask(), taskMenuCommandButtons));
+							(new MenuGenerator()).generateEditMenu(worklistHandler.getCurrent().getSelectedPatient(),
+									worklistHandler.getCurrent().getSelectedTask(), taskMenuCommandButtons));
 			}
 
 			if (view == View.WORKLIST_RECEIPTLOG) {
@@ -290,8 +294,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			for (TaskInitilize taskInitilize : initilizes) {
 				if (taskInitilize == TaskInitilize.GENERATE_MENU_MODEL)
 					setTaskMenuModel(
-							(new MenuGenerator()).generateEditMenu(getWorklistData().getWorklist().getSelectedPatient(),
-									getWorklistData().getWorklist().getSelectedTask(), taskMenuCommandButtons));
+							(new MenuGenerator()).generateEditMenu(worklistHandler.getCurrent().getSelectedPatient(),
+									worklistHandler.getCurrent().getSelectedTask(), taskMenuCommandButtons));
 			}
 			break;
 		case WORKLIST_TASKS:
@@ -303,8 +307,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			for (TaskInitilize taskInitilize : initilizes) {
 				if (taskInitilize == TaskInitilize.GENERATE_MENU_MODEL)
 					setTaskMenuModel(
-							(new MenuGenerator()).generateEditMenu(getWorklistData().getWorklist().getSelectedPatient(),
-									getWorklistData().getWorklist().getSelectedTask(), taskMenuCommandButtons));
+							(new MenuGenerator()).generateEditMenu(worklistHandler.getCurrent().getSelectedPatient(),
+									worklistHandler.getCurrent().getSelectedTask(), taskMenuCommandButtons));
 			}
 
 			reportView.loadView();
@@ -319,7 +323,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		genericView.loadStaticData();
 		navigationData.updateData();
 		logger.debug("Reloading worklist");
-		worklistViewHandlerAction.getCurrentWokrlistHandler().reloadCurrentWorklist();
+		worklistHandler.reloadWorklist();
 	}
 
 	public void reloadTask() {
@@ -344,7 +348,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 			updateDataOfTask(true, true, false, false);
 		} catch (HistoDatabaseInconsistentVersionException e) {
-			worklistViewHandlerAction.replacePatientInCurrentWorklist(task.getPatient(), true);
+			worklistViewHandler.replacePatientInWorklist(task.getPatient(), true);
 		}
 	}
 
@@ -357,7 +361,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 					"growl.favouriteList.removed.text", new Object[] { task.getTaskID(), list.getName() });
 			updateDataOfTask(true, true, false, false);
 		} catch (HistoDatabaseInconsistentVersionException e) {
-			worklistViewHandlerAction.replacePatientInCurrentWorklist(task.getPatient(), true);
+			worklistViewHandler.replacePatientInWorklist(task.getPatient(), true);
 		}
 	}
 
@@ -383,7 +387,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 				if (task.isPresent()) {
 					logger.debug("Task found, adding to worklist");
-					worklistViewHandlerAction.addTaskToCurrentWorklist(task.get(), true);
+					worklistViewHandler.addTaskToWorklist(task.get(), true);
 					MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.task",
 							"growl.search.patient.task.text");
 				} else {
@@ -410,7 +414,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				if (patient.isPresent()) {
 					logger.debug("Found patient " + patient + " and adding to currentworklist");
 
-					worklistViewHandlerAction.addPatientToCurrentWorkList(patient.get(), true, true, false);
+					worklistViewHandler.addPatientToWorkList(patient.get(), true);
 					MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.piz",
 							"growl.search.patient.piz.text");
 
@@ -440,7 +444,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 					logger.debug("Slide found");
 					MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.slide",
 							"growl.search.patient.slide");
-					worklistViewHandlerAction.addTaskToCurrentWorklist(task.get(), true);
+					worklistViewHandler.addTaskToWorklist(task.get(), true);
 				} else {
 					// no slide was found
 					logger.debug("No slide with the given id found");
@@ -505,9 +509,9 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				logger.debug("Patient was selected, adding to database and worklist");
 				Patient p = ((PatientReturnEvent) event.getObject()).getPatien();
 
-				patientService.addPatient(p, false);
+				p = patientService.addPatient(p, false);
 				// reload if patient is known to database, and may is associated with tasks
-				worklistViewHandlerAction.addPatientToCurrentWorkList(p, true, true, p.getId() == 0 ? false : true);
+				worklistViewHandler.addPatientToWorkList(p, true);
 			} else {
 				logger.debug("No Patient was selected");
 			}
@@ -524,34 +528,33 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				if (event.getObject() instanceof PatientReturnEvent) {
 					logger.debug("Patient add event reload event.");
 					if (((PatientReturnEvent) event.getObject()).getTask() != null)
-						globalEditViewHandler.getWorklistData().getWorklist()
+						globalEditViewHandler.worklistHandler.getCurrent()
 								.setSelectedTask(((PatientReturnEvent) event.getObject()).getTask());
-					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 					// staining phase reload event
 				} else if (event.getObject() instanceof StainingPhaseUpdateEvent) {
 					logger.debug("Update Stating phase");
 					// reload task
-					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-					workPhase.updateStainingPhase(
-							globalEditViewHandler.getWorklistData().getWorklist().getSelectedTask());
+					workPhase.updateStainingPhase(globalEditViewHandler.worklistHandler.getCurrent().getSelectedTask());
 				} else if (event.getObject() instanceof DiagnosisPhaseUpdateEvent) {
 					logger.debug("Update Diagnosis phase");
 					// reload task
-					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-					workPhase.updateDiagnosisPhase(
-							globalEditViewHandler.getWorklistData().getWorklist().getSelectedTask());
+					workPhase
+							.updateDiagnosisPhase(globalEditViewHandler.worklistHandler.getCurrent().getSelectedTask());
 				} else if (event.getObject() instanceof ReloadTaskEvent || event.getObject() instanceof ReloadEvent) {
 					logger.debug("Task reload event.");
 					if (event.getObject() instanceof ReloadTaskEvent
 							&& ((ReloadTaskEvent) event.getObject()).getTask() != null)
-						globalEditViewHandler.getWorklistData().getWorklist()
+						globalEditViewHandler.worklistHandler.getCurrent()
 								.setSelectedTask(((ReloadTaskEvent) event.getObject()).getTask());
 					else
-						globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+						globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 				} else if (event.getObject() instanceof StainingPhaseExitData) {
 					logger.debug("Staining phase exit dialog return");
@@ -559,7 +562,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 					globalEditViewHandler.getWorkPhase().endStainingPhase(data.getTask(), data.isEndStainingPhase(),
 							data.isRemoveFromStainingList(), data.isGoToDiagnosisPhase(), data.isRemoveFromWorklist());
 
-					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_MENU_MODEL);
 				} else if (event.getObject() instanceof DiagnosisPhaseExitData) {
 					logger.debug("Diagnosis phase exit dialog return");
@@ -569,7 +572,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 							data.isEndDiangosisPhase(), data.isRemoveFromDiangosisList(),
 							data.isGoToNotificationPhase(), data.isRemoveFromWorklist());
 
-					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_MENU_MODEL);
 				} else if (event.getObject() instanceof ReloadUserEvent) {
 					logger.debug("Updating user");
@@ -587,8 +590,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		public void onWorklistSelectReturn(SelectEvent event) {
 			if (event.getObject() != null && event.getObject() instanceof WorklistSearchReturnEvent) {
 				logger.debug("Setting new worklist");
-				worklistViewHandlerAction.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(),
-						true, true);
+				worklistViewHandler.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(),
+						true);
 				return;
 			}
 			onDefaultDialogReturn(event);
@@ -604,46 +607,19 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			if (event.getObject() != null && event.getObject() instanceof PatientMergeEvent) {
 				PatientMergeEvent p = (PatientMergeEvent) event.getObject();
 
-				
-				if(p.getSource().isArchived())
-					worklistViewHandlerAction.removePatientFromCurrentWorklist(p.getSource());
+				if (p.getSource().isArchived())
+					worklistViewHandler.removePatientFromWorklist(p.getSource());
 				else
-					worklistViewHandlerAction.replacePatientInCurrentWorklist(p.getSource());
-				
-				if(p.getTarget().isArchived())
-					worklistViewHandlerAction.removePatientFromCurrentWorklist(p.getTarget());
+					worklistViewHandler.replacePatientInWorklist(p.getSource());
+
+				if (p.getTarget().isArchived())
+					worklistViewHandler.removePatientFromWorklist(p.getTarget());
 				else
-					worklistViewHandlerAction.replacePatientInCurrentWorklist(p.getTarget());
-					
+					worklistViewHandler.replacePatientInWorklist(p.getTarget());
+
 			}
 		}
 
-	}
-
-	@Getter
-	@Setter
-	public static class WorklistData {
-		/**
-		 * Containing all worklists
-		 */
-		private List<Worklist> worklists = new ArrayList<Worklist>();
-
-		/**
-		 * Current worklist
-		 */
-		private Worklist worklist;
-
-		public boolean isSelected(Patient patient) {
-			return getWorklist().getSelectedPatient() != null && getWorklist().getSelectedPatient().equals(patient);
-		}
-
-		public boolean isSelected(Task task) {
-			return getWorklist().getSelectedTask() != null && getWorklist().getSelectedTask().equals(task);
-		}
-
-		public Task getSelectedTask() {
-			return worklist.getSelectedTask();
-		}
 	}
 
 	/**
@@ -741,7 +717,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		}
 
 		private Worklist worklist() {
-			return globalEditViewHandler.getWorklistData().getWorklist();
+			return worklistHandler.getCurrent();
 		}
 
 		private Task getSelectedTask() {
@@ -791,12 +767,12 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		public Task save(Task task, boolean reload, String resourcesKey, Object... arr) {
 			logger.debug("Saving task " + task.getTaskID());
 			task = taskRepository.save(task, resourceBundle.get(resourcesKey, arr), task.getPatient());
-			if (globalEditViewHandler.getWorklistData().isSelected(task)) {
+			if (worklistHandler.isSelected(task)) {
 				if (!reload) {
 					setSelectedTask(task);
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 				} else {
-					globalEditViewHandler.getWorklistData().getWorklist().reloadSelectedPatientAndTask();
+					worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 				}
 			}
@@ -939,7 +915,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		public void beginDiagnosisAmendment(DiagnosisRevision diagnosisRevision) {
 			// workaround for forcing a persist of the task, even if no changes have been
 			// made
-			getWorklistData().getWorklist().getSelectedTaskInfo().admendRevision(diagnosisRevision);
+			worklistHandler.getCurrent().getSelectedTaskInfo().admendRevision(diagnosisRevision);
 			getSelectedTask().getAudit().setUpdatedOn(System.currentTimeMillis());
 			save("log.patient.task.diagnosisRevision.lock", getSelectedTask(), diagnosisRevision);
 		}
@@ -947,7 +923,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		public void endDiagnosisAmendment(DiagnosisRevision diagnosisRevision) {
 			// workaround for forcing a persist of the task, even if no changes have been
 			// made
-			getWorklistData().getWorklist().getSelectedTaskInfo().lockRevision(diagnosisRevision);
+			worklistHandler.getCurrent().getSelectedTaskInfo().lockRevision(diagnosisRevision);
 
 			getSelectedTask().getAudit().setUpdatedOn(System.currentTimeMillis());
 			Task task = diagnosisService.generateDefaultDiagnosisReport(getSelectedTask(), diagnosisRevision);
@@ -985,12 +961,12 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		public void updateStainingPhase(Task task) {
 			// update staing phase
 			if (workPhaseService.updateStainigPhase(task)) {
-				getWorklistData().getWorklist().setSelectedTask(task);
+				worklistHandler.getCurrent().setSelectedTask(task);
 				// open end staining phase dialog
 				MessageHandler.executeScript("clickButtonFromBean('headerForm:stainingPhaseExit')");
 			} else {
 				workPhaseService.startStainingPhase(task);
-				if (getWorklistData().isSelected(task)) {
+				if (worklistHandler.isSelected(task)) {
 					// reload task again, updateStainingPhase changes the task
 					generateViewData(TaskInitilize.RELOAD, TaskInitilize.GENERATE_MENU_MODEL);
 				}
@@ -1026,9 +1002,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				if (task.getParent().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
 				} else {
-					worklistViewHandlerAction.removePatientFromCurrentWorklist(task.getPatient());
-					// updates the view and selects the next active task
-					worklistViewHandlerAction.onDeselectPatient();
+					// view is updated
+					worklistViewHandler.removePatientFromWorklist(task.getPatient());
 				}
 			}
 
@@ -1082,9 +1057,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				if (task.getParent().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
 				} else {
-					worklistViewHandlerAction.removePatientFromCurrentWorklist(task.getPatient());
-					// updates the view and selects the next active task
-					worklistViewHandlerAction.onDeselectPatient();
+					// remove from current worklist, view is updated
+					worklistViewHandler.removePatientFromWorklist(task.getPatient());
 				}
 			}
 		}
