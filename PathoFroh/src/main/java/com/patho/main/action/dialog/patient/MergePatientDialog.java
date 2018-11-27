@@ -11,9 +11,10 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.patient.MergePatientConfimDialog.MergePatientConfimDialogReturnEvent;
 import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.action.handler.WorklistViewHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.excepion.ToManyEntriesException;
@@ -23,12 +24,13 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PatientService;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
-import com.patho.main.util.event.PatientMergeEvent;
+import com.patho.main.util.event.HistoEvent;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -60,46 +62,6 @@ public class MergePatientDialog extends AbstractDialog {
 	@Setter(AccessLevel.NONE)
 	private ConfirmExternalPatientDataDialog confirmPatientData;
 
-	/**
-	 * Patient source for merging
-	 */
-	private Patient patient;
-
-	/**
-	 * Selected tasks for merging
-	 */
-	private List<Task> tasksTomerge;
-
-	/**
-	 * True if an external patient should be deleted
-	 */
-	private boolean deletePatient;
-
-	/**
-	 * True if not all tasks of the source are selected
-	 */
-	private boolean deletePatientDisabled;
-
-	/**
-	 * Merge Option,
-	 */
-	private MergeOption mergeOption;
-
-	/**
-	 * Piz for search a patient for merge target
-	 */
-	private String piz;
-
-	/**
-	 * Patient as merge target
-	 */
-	private Patient patientToMerge;
-
-	/**
-	 * This can be set to true if piz search was performed and no patient was found.
-	 */
-	private boolean renderErrorPatientNotFound;
-
 	private Patient source;
 
 	private Patient target;
@@ -108,9 +70,13 @@ public class MergePatientDialog extends AbstractDialog {
 
 	private boolean taskPickerDisabled;
 
-	private boolean sourceDeleteable;
+	private boolean samePatientForSourceAndTarget;
 
-	private boolean targetDeleteable;
+	private boolean taskWasMoved;
+
+	private boolean sourceDeleteAble;
+
+	private boolean targetDeleteAble;
 
 	private boolean deleteSource;
 
@@ -134,8 +100,7 @@ public class MergePatientDialog extends AbstractDialog {
 		setSource(source);
 		setTarget(target);
 
-		taskLists.setSource(source == null ? new ArrayList<Task>() : new ArrayList<Task>(source.getTasks()));
-		taskLists.setTarget(target == null ? new ArrayList<Task>() : new ArrayList<Task>(target.getTasks()));
+		updateOnChange();
 
 		return super.initBean(null, Dialog.PATIENT_MERGE);
 	}
@@ -146,7 +111,6 @@ public class MergePatientDialog extends AbstractDialog {
 			// Reloading patient with tasks
 			setSource(patient.getId() != 0 ? patientRepository.findOptionalById(patient.getId(), true, false).get()
 					: patient);
-			taskLists.setSource(source == null ? new ArrayList<Task>() : new ArrayList<Task>(source.getTasks()));
 
 			updateOnChange();
 		}
@@ -158,47 +122,27 @@ public class MergePatientDialog extends AbstractDialog {
 			// Reloading patient with tasks
 			setTarget(patient.getId() != 0 ? patientRepository.findOptionalById(patient.getId(), true, false).get()
 					: patient);
-			taskLists.setTarget(target == null ? new ArrayList<Task>() : new ArrayList<Task>(target.getTasks()));
 
 			updateOnChange();
 		}
 	}
 
 	public void updateOnChange() {
-		setTaskPickerDisabled(source == null || target == null);
-		setSourceDeleteable(source != null && source.getId() != 0 && taskLists.getSource().size() == 0);
-		setTargetDeleteable(target != null && target.getId() != 0 && taskLists.getTarget().size() == 0);
-	}
+		taskLists.setSource(source == null ? new ArrayList<Task>() : new ArrayList<Task>(source.getTasks()));
+		taskLists.setTarget(target == null ? new ArrayList<Task>() : new ArrayList<Task>(target.getTasks()));
 
-	/**
-	 * Method is called when the merge option (piz vs patient) is changed.
-	 */
-	public void onChangeMergeOption() {
-		renderErrorPatientNotFound = false;
-		patientToMerge = null;
-		onChangeTasksToMergeSelection();
+		if (getSource() != null && getTarget() != null && getSource().equals(getTarget())) {
+			samePatientForSourceAndTarget = true;
+		} else
+			samePatientForSourceAndTarget = false;
 
-		if (mergeOption == MergeOption.PIZ)
-			onSelectPatientViaPiz();
-	}
+		setTaskWasMoved(false);
 
-	/**
-	 * Searches for a patient via piz if the piz is 8 digits long.
-	 */
-	public void onSelectPatientViaPiz() {
-		// only search if 8 dignis are present
-		if (HistoUtil.isNotNullOrEmpty(piz) && piz.matches("^\\d{8}$")) {
-			try {
-				patientToMerge = patientService.findPatientByPiz(piz, false);
-			} catch (HistoDatabaseInconsistentVersionException | JSONException | ToManyEntriesException
-					| CustomNullPatientExcepetion e) {
-			} finally {
-				if (patientToMerge == null)
-					renderErrorPatientNotFound = true;
-				else
-					renderErrorPatientNotFound = false;
-			}
-		}
+		setSourceDeleteAble(getSource() != null && taskLists.getSource().size() == 0);
+		setTargetDeleteAble(getTarget() != null && taskLists.getTarget().size() == 0);
+
+		setTaskPickerDisabled(source == null || target == null || samePatientForSourceAndTarget);
+
 	}
 
 	/**
@@ -206,55 +150,30 @@ public class MergePatientDialog extends AbstractDialog {
 	 * 
 	 * @param event
 	 */
-	public void onMergePatient(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof Boolean
-				&& ((Boolean) event.getObject()).booleanValue()) {
-			if (patient != null && patientToMerge != null) {
+	public void onMergePatientReturn(SelectEvent event) {
+		if (event.getObject() != null && event.getObject() instanceof MergePatientConfimDialogReturnEvent
+				&& ((MergePatientConfimDialogReturnEvent) event.getObject()).isMergeConfirmed()) {
+			if (source != null && target != null) {
+				patientService.moveTaskBetweenPatients(source, target, taskLists.getSource(), taskLists.getTarget());
 
-				if (patientToMerge.getId() == 0)
-					patientService.addPatient(patientToMerge, false);
+				if (deleteSource)
+					source = patientService.archivePatient(source);
 
-				patientService.mergePatient(patient, patientToMerge, tasksTomerge);
+				if (deleteTarget)
+					target = patientService.archivePatient(target);
 
-				if (deletePatient && patient.getTasks().isEmpty())
-					patientService.archivePatient(patient);
-
-				mainHandlerAction.sendGrowlMessagesAsResource("growl.success", "growl.patient.merge.success");
-				hideDialog(new PatientMergeEvent(patient, patientToMerge));
+				MessageHandler.sendGrowlMessagesAsResource("growl.success", "growl.patient.merge.success");
+				hideDialog(new PatientMergeEvent(source, target));
 			}
 		}
 	}
 
-	/**
-	 * Is called on return of the patient select dialog, if a patient is return it
-	 * will set as the patientToMerge
-	 * 
-	 * @param event
-	 */
-	public void onSelectPatient(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof Patient) {
-			patientToMerge = (Patient) event.getObject();
-		}
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class PatientMergeEvent extends HistoEvent {
+		private Patient source;
+		private Patient target;
 	}
 
-	/**
-	 * Is called if the task selection of the source task was altered. Deletion is
-	 * only possible if all tasks are selected.
-	 */
-	public void onChangeTasksToMergeSelection() {
-		deletePatientDisabled = patient.getTasks().size() != tasksTomerge.size();
-
-		if (deletePatientDisabled)
-			deletePatient = false;
-	}
-
-	/**
-	 * Option for determine the merge target.
-	 * 
-	 * @author andi
-	 *
-	 */
-	public enum MergeOption {
-		PIZ, PATIENT;
-	}
 }

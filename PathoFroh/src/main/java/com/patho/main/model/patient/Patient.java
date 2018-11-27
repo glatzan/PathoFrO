@@ -126,6 +126,10 @@ public class Patient
 	public Patient() {
 	}
 
+	public Patient(long id) {
+		this.id = id;
+	}
+
 	public Patient(Person person) {
 		this.person = person;
 	}

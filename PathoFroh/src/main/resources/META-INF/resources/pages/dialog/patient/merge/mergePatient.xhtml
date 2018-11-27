@@ -30,15 +30,15 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="2"
-				styleClass="defaultHistoHiddenTableContainer">
+			<h:panelGrid columns="2" style="width: 100%"
+				styleClass="listingHistoHiddenTableContainer"
+				columnClasses="columnWidthPercent50,columnWidthPercent50">
 
 				<!-- source -->
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
 					columnClasses="columnWidth150,">
-
 					<!-- name -->
-					<h:outputLabel value="Patient 1" />
+					<h:outputLabel value="#{msg['dialog.mergePatientDialog.source']}" />
 					<p:commandLink icon="fa fa-fw fa-user"
 						actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
 						value="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
@@ -47,32 +47,30 @@
 					</p:commandLink>
 
 					<!-- name -->
-					<h:outputLabel
-						value="#{msg['component.physicianSettingsGeneral.name']}:" />
+					<h:outputLabel value="#{msg['dialog.mergePatientDialog.name']}:" />
 					<h:outputLabel
 						value="#{dialog.mergePatientDialog.source.person.getFullName()}"></h:outputLabel>
 
 					<!-- birthday -->
 					<p:outputLabel
-						value="#{msg['component.personSettingsGeneral.birthday']}:" />
+						value="#{msg['dialog.mergePatientDialog.birthday']}:" />
 					<h:outputLabel
 						value="#{dialog.mergePatientDialog.source.person.birthday}">
 						<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 
 					<!-- piz -->
+					<h:outputLabel value="#{msg['dialog.mergePatientDialog.piz']}:" />
 					<h:outputLabel
-						value="#{msg['component.physicianSettingsGeneral.piz']}:" />
-					<h:outputLabel
-						value="#{dialog.mergePatientDialog.source.piz eq '' ? msg['component.physicianSettingsGeneral.piz.none'] : dialog.mergePatientDialog.source.piz}"></h:outputLabel>
+						value="#{dialog.mergePatientDialog.source.piz eq '' ? msg['dialog.mergePatientDialog.piz.none'] : dialog.mergePatientDialog.source.piz}"></h:outputLabel>
 				</h:panelGrid>
 
 				<!-- target -->
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					columnClasses="columnWidth150,">
+					columnClasses="columnWidth150," style="margin-left:20px;">
 
 					<!-- name -->
-					<h:outputLabel value="Patient 2" />
+					<h:outputLabel value="#{msg['dialog.mergePatientDialog.target']}" />
 					<p:commandLink icon="fa fa-fw fa-user"
 						actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
 						value="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
@@ -81,58 +79,46 @@
 					</p:commandLink>
 
 					<!-- name -->
-					<h:outputLabel
-						value="#{msg['component.physicianSettingsGeneral.name']}:" />
+					<h:outputLabel value="#{msg['dialog.mergePatientDialog.name']}:" />
 					<h:outputLabel
 						value="#{dialog.mergePatientDialog.target.person.getFullName()}"></h:outputLabel>
 
 					<!-- birthday -->
 					<p:outputLabel
-						value="#{msg['component.personSettingsGeneral.birthday']}:" />
+						value="#{msg['dialog.mergePatientDialog.birthday']}:" />
 					<h:outputLabel
 						value="#{dialog.mergePatientDialog.target.person.birthday}">
 						<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 
 					<!-- piz -->
+					<h:outputLabel value="#{msg['dialog.mergePatientDialog.piz']}:" />
 					<h:outputLabel
-						value="#{msg['component.physicianSettingsGeneral.piz']}:" />
-					<h:outputLabel
-						value="#{dialog.mergePatientDialog.target.piz eq '' ? msg['component.physicianSettingsGeneral.piz.none'] : dialog.mergePatientDialog.target.piz}"></h:outputLabel>
+						value="#{dialog.mergePatientDialog.target.piz eq '' ? msg['dialog.mergePatientDialog.piz.none'] : dialog.mergePatientDialog.target.piz}"></h:outputLabel>
 				</h:panelGrid>
-
 			</h:panelGrid>
 
 
 			<h:panelGrid columns="1" styleClass="defaultHistoTable"
-				style="width:100%">
+				style="width:100%; margin-top:20px;">
 				<p:pickList value="#{dialog.mergePatientDialog.taskLists}"
-					style="width:100%"
+					styleClass="mergePatientPicklist"
 					disabled="#{dialog.mergePatientDialog.taskPickerDisabled}"
 					var="task" itemLabel="#{task}" itemValue="#{task}" />
 			</h:panelGrid>
 
-			<h:panelGrid columns="2"
-				styleClass="defaultHistoHiddenTableContainer">
-
-				<!-- source -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					columnClasses="columnWidth150,">
-					<h:outputLabel value="Patient löschen" />
-					<p:selectBooleanCheckbox
-						value="#{dialog.mergePatientDialog.deleteSource}"
-						disabled="#{!dialog.mergePatientDialog.sourceDeleteable}" />
-				</h:panelGrid>
-
-				<!-- target -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					columnClasses="columnWidth150,">
-					<h:outputLabel value="Patient löschen" />
-					<p:selectBooleanCheckbox
-						value="#{dialog.mergePatientDialog.deleteTarget}"
-						disabled="#{!dialog.mergePatientDialog.targetDeleteable}" />
-				</h:panelGrid>
+			<h:panelGrid columns="1" styleClass="defaultHistoTable"
+				style="width:100%; margin-top:20px;">
+				<h:outputLabel value="#{msg['dialog.mergePatientDialog.info']]}" />
 			</h:panelGrid>
+
+			<h:panelGrid columns="1" styleClass="defaultHistoTable"
+				style="width:100%; margin-top:20px;">
+				<h:outputLabel
+					value="#{msg['dialog.mergePatientDialog.sameSourceAndTarget']]}"
+					rendered="#{dialog.mergePatientDialog.samePatientForSourceAndTarget}" />
+			</h:panelGrid>
+
 		</div>
 
 		<div class="buttonContainer">
@@ -142,17 +128,18 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" styleClass="right">
+					<!-- create patient -->
 					<p:commandButton widgetVar="createPatientBtn"
-						disabled="#{dialog.mergePatientDialog.patientToMerge eq null}"
+						disabled="#{dialog.mergePatientDialog.taskPickerDisabled}"
 						value="#{msg['dialog.mergePatientDialog.button.merge']}"
 						icon="fa fa-fw fa-medkit">
 						<f:actionListener
 							binding="#{dialog.mergePatientConfimDialog.initAndPrepareBean()}" />
-
 						<p:ajax event="dialogReturn"
 							listener="#{dialog.mergePatientDialog.onMergePatient}"></p:ajax>
 					</p:commandButton>
 
+					<!-- abort -->
 					<p:commandButton value="#{msg['general.abort']}"
 						widgetVar="closeBtn" partialSubmit="true"
 						icon="fa fa-fw fa-times-circle" id="closeBtn" process="@this"

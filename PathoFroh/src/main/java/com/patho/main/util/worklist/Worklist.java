@@ -131,37 +131,51 @@ public class Worklist {
 		this.items = new ArrayList<Patient>();
 	}
 
-	public void addAsSelected(Patient p) {
-		setSelectedPatient(p);
-		setSelectedTask(null);
-		if (p != null)
-			add(p);
-	}
-
-	public void addAsSelected(Task t) {
-		logger.debug("Adding task to worklist as selected task {} -> {}",
-				getSelectedTask() == null ? "null" : getSelectedTask().getId(), t.getId());
-
-		boolean changed = getSelectedTask() == null || getSelectedTask().getId() != t.getId();
-		
-		addAsSelected(t.getPatient());
-		setSelectedTask(t);
-
-		// only setting new task info if task has changed, this way data ca persists
-		// over task realoads
-		if (changed)
-			setSelectedTaskInfo(new TaskInfo(t));
+	/**
+	 * Returns true if patient is present in the worklist
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public boolean contains(Patient patient) {
+		return getItems().stream().anyMatch(p -> p.equals(patient));
 	}
 
 	/**
-	 * Adds a patient to the worklist, if already present, replaces the patient
+	 * Returns true if the patient is selected
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public boolean isSelected(Patient patient) {
+		return patient != null && patient.equals(getSelectedPatient());
+	}
+
+	/**
+	 * Adds a patient to the worklist, if already in worklist the patient will be
+	 * replaced. If the patient is set as selected, this will also be updated.
 	 * 
 	 * @param patient
 	 */
 	public void add(Patient patient) {
-		if (contains(patient))
+		add(patient, false);
+	}
+
+	/**
+	 * Adds a patient to the worklist, if already present, replaces the patient, If
+	 * select is set or the patient is currently selected, an update will be
+	 * performed.
+	 * 
+	 * @param patient
+	 */
+	public void add(Patient patient, boolean select) {
+		if (contains(patient)) {
 			replace(patient);
-		else {
+			// selecting patient
+			if (select) {
+				selectPatient(patient);
+			}
+		} else {
 			getItems().add(patient);
 			generateTaskStatus(patient);
 		}
@@ -177,8 +191,36 @@ public class Worklist {
 		patients.forEach(p -> add(p));
 	}
 
+	public void selectPatient(Patient patient) {
+		setSelectedPatient(patient);
+		setSelectedTask(null);
+	}
+
 	/**
-	 * Removes a patient from the worklist.
+	 * Deselects the current patient.
+	 */
+	public boolean deselectPatient() {
+		return deselectPatient(null);
+	}
+
+	/**
+	 * Deselects a specific patient, if patient is null the current patient will be
+	 * deselected.
+	 * 
+	 * @param patient
+	 */
+	public boolean deselectPatient(Patient patient) {
+		if ((patient != null && patient.equals(getSelectedPatient())) || patient == null) {
+			setSelectedPatient(null);
+			setSelectedTask(null);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Removes a patient from the worklist. If the patient is selected, the patient
+	 * will be deseleced.
 	 * 
 	 * @param toRemovePatient
 	 */
@@ -189,6 +231,8 @@ public class Worklist {
 				return;
 			}
 		}
+
+		deselectPatient(toRemovePatient);
 	}
 
 	/**
@@ -206,6 +250,11 @@ public class Worklist {
 
 				getItems().remove(pListItem);
 				getItems().add(index, patient);
+
+				// selecting patient
+				if (patient.equals(getSelectedPatient()))
+					selectPatient(patient);
+
 				return true;
 			}
 		}
@@ -213,20 +262,31 @@ public class Worklist {
 	}
 
 	/**
-	 * Returns true if patient is present in the worklist
-	 * 
-	 * @param patient
-	 * @return
-	 */
-	public boolean contains(Patient patient) {
-		return getItems().stream().anyMatch(p -> p.equals(patient));
-	}
-
-	/**
 	 * Clears a worklist
 	 */
 	public void clear() {
 		getItems().clear();
+		deselectPatient();
+	}
+
+	/**
+	 * Sets a Task as selected task, also selects the patient
+	 * 
+	 * @param t
+	 */
+	public void setTaskAsSelected(Task t) {
+		logger.debug("Adding task to worklist as selected task {} -> {}",
+				getSelectedTask() == null ? "null" : getSelectedTask().getId(), t.getId());
+
+		boolean changed = getSelectedTask() == null || getSelectedTask().getId() != t.getId();
+
+		add(t.getPatient(), true);
+		setSelectedTask(t);
+
+		// only setting new task info if task has changed, this way data ca persists
+		// over task realoads
+		if (changed)
+			setSelectedTaskInfo(new TaskInfo(t));
 	}
 
 	public void updateTaksActiveStatus(Patient old, Patient newPat) {

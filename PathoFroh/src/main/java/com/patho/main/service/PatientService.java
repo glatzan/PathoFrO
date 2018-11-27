@@ -2,9 +2,11 @@ package com.patho.main.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.primefaces.json.JSONException;
@@ -117,6 +119,43 @@ public class PatientService extends AbstractService {
 	}
 
 	/**
+	 * Moves tasks within two patients.
+	 * 
+	 * @param source
+	 * @param target
+	 * @param newSourceTasks
+	 * @param newTargetTasks
+	 */
+	public void moveTaskBetweenPatients(Patient source, Patient target, List<Task> newSourceTasks,
+			List<Task> newTargetTasks) {
+
+		StringBuffer moveLog = new StringBuffer();
+		List<Task> saveList = new ArrayList<Task>();
+
+		for (Task task : newSourceTasks) {
+			// checking if task is already associated with source
+			if (!source.getTasks().stream().anyMatch(p -> p.equals(task))) {
+				task.setParent(source);
+				moveLog.append(source.getPerson().getFullName() + " -> " + task);
+				saveList.add(task);
+			}
+		}
+
+		for (Task task : newTargetTasks) {
+			// checking if task is already associated with target
+			if (!target.getTasks().stream().anyMatch(p -> p.equals(task))) {
+				task.setParent(target);
+				moveLog.append(target.getPerson().getFullName() + " -> " + task);
+				saveList.add(task);
+			}
+		}
+
+		taskRepository.saveAll(saveList, resourceBundle.get("log.patient.merge", source.getPerson().getFullName(),
+				target.getPerson().getFullName(), moveLog.toString()));
+
+	}
+
+	/**
 	 * Merges two patients. Copies all tasks from one patient to the other.
 	 * 
 	 * @param from
@@ -134,7 +173,7 @@ public class PatientService extends AbstractService {
 	 * @param to
 	 * @param tasksToMerge
 	 */
-	public Patient mergePatient(Patient source, Patient target, List<Task> tasksToMerge) {
+	public Patient mergePatient(Patient source, Patient target, Set<Task> tasksToMerge) {
 		return mergePatient(source, target, tasksToMerge, false);
 	}
 
@@ -146,8 +185,8 @@ public class PatientService extends AbstractService {
 	 * @param to
 	 * @param tasksToMerge
 	 */
-	public Patient mergePatient(Patient source, Patient target, List<Task> tasksToMerge, boolean copyPatientData) {
-		List<Task> tasksFrom = tasksToMerge == null ? source.getTasks() : tasksToMerge;
+	public Patient mergePatient(Patient source, Patient target, Set<Task> tasksToMerge, boolean copyPatientData) {
+		Set<Task> tasksFrom = tasksToMerge == null ? source.getTasks() : tasksToMerge;
 
 		if (tasksFrom != null && !tasksFrom.isEmpty()) {
 
@@ -157,7 +196,7 @@ public class PatientService extends AbstractService {
 
 			taskRepository.saveAll(tasksFrom,
 					resourceBundle.get("log.patient.merge", source.getPerson().getFullName()));
-			source.setTasks(new ArrayList<Task>());
+			source.setTasks(new HashSet<Task>());
 		}
 
 		if (copyPatientData) {

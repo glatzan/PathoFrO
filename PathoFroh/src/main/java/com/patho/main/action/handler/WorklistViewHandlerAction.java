@@ -86,7 +86,7 @@ public class WorklistViewHandlerAction {
 				// get first patient in worklist, show him
 				Patient first = globalEditViewHandler.getWorklistData().getWorklist().getFirstPatient();
 				if (first != null)
-					goToSelectPatient(first);
+					selectPatientAndChangeView(first);
 				else
 					// change view to blank
 					changeView(View.WORKLIST_PATIENT, View.WORKLIST_NOTHING_SELECTED);
@@ -137,9 +137,9 @@ public class WorklistViewHandlerAction {
 
 			} else {
 				// nothing selected
-				
+
 				System.out.println("test");
-				
+
 				Task first = globalEditViewHandler.getWorklistData().getWorklist().getFirstActiveTask();
 
 				// select the task
@@ -176,21 +176,17 @@ public class WorklistViewHandlerAction {
 		}
 	}
 
-	public void goToSelectPatient(long patientID) {
-		Patient p = new Patient();
-		p.setId(patientID);
-		goToSelectPatient(p, true);
+	public void selectPatientAndChangeView(long patientID) {
+		selectPatientAndChangeView(new Patient(patientID), true);
 	}
 
-	public void goToSelectPatient(Patient patient) {
-		goToSelectPatient(patient, true);
+	public void selectPatientAndChangeView(Patient patient) {
+		selectPatientAndChangeView(patient, true);
 	}
 
-	public void goToSelectPatient(Patient patient, boolean reload) {
-		if (patient != null) {
-			changeView(View.WORKLIST_PATIENT);
-			onSelectPatient(patient, reload);
-		}
+	public void selectPatientAndChangeView(Patient patient, boolean reload) {
+		changeView(View.WORKLIST_PATIENT);
+		onSelectPatient(patient, reload);
 	}
 
 	public void onSelectPatient(Patient patient) {
@@ -203,7 +199,7 @@ public class WorklistViewHandlerAction {
 
 		if (patient == null) {
 			logger.debug("Deselecting patient");
-			globalEditViewHandler.getWorklistData().getWorklist().addAsSelected((Patient)null);
+			globalEditViewHandler.getWorklistData().getWorklist().deselectPatient();
 			changeView(View.WORKLIST_BLANK);
 			return;
 		}
@@ -214,12 +210,14 @@ public class WorklistViewHandlerAction {
 				patient = oPatient.get();
 			else {
 				logger.debug("Could not reload patient, abort!");
+				globalEditViewHandler.getWorklistData().getWorklist().deselectPatient();
+				changeView(View.WORKLIST_BLANK);
 				return;
 			}
 		}
-		
+
 		// replacing patient, generating task status
-		globalEditViewHandler.getWorklistData().getWorklist().addAsSelected(patient);
+		globalEditViewHandler.getWorklistData().getWorklist().add(patient, true);
 
 		logger.debug("Select patient "
 				+ globalEditViewHandler.getWorklistData().getWorklist().getSelectedPatient().getPerson().getFullName());
@@ -234,8 +232,19 @@ public class WorklistViewHandlerAction {
 	}
 
 	public void onDeselectPatient(boolean updateView) {
-		globalEditViewHandler.getWorklistData().getWorklist().addAsSelected((Patient)null);
+		onDeselectPatient(null, updateView);
+	}
 
+	/**
+	 * If a patient is passed it will be checked if the patient is selected. IF so
+	 * the patient will be unselected. If patient is null, the current patient which
+	 * is selected will be unselected.
+	 * 
+	 * @param patient
+	 * @param updateView
+	 */
+	public void onDeselectPatient(Patient patient, boolean updateView) {
+		globalEditViewHandler.getWorklistData().getWorklist().deselectPatient(patient)
 		if (updateView)
 			goToNavigation();
 	}
@@ -400,7 +409,7 @@ public class WorklistViewHandlerAction {
 		addPatientToCurrentWorkList(task.getPatient(), false, false, false);
 
 		task.setActive(true);
-		
+
 		globalEditViewHandler.getWorklistData().getWorklist().addAsSelected(task);
 
 		return task;
@@ -419,7 +428,7 @@ public class WorklistViewHandlerAction {
 
 		// change view to patient
 		if (changeToPatientView)
-			goToSelectPatient(patient, reloadPatient);
+			selectPatientAndChangeView(patient, reloadPatient);
 		// select patient, do not change view
 		else if (asSelectedPatient)
 			onSelectPatient(patient, reloadPatient);
@@ -451,10 +460,8 @@ public class WorklistViewHandlerAction {
 
 		globalEditViewHandler.getWorklistData().getWorklist().remove(patient);
 
-		if (globalEditViewHandler.getWorklistData().getWorklist().getSelectedPatient() != null
-				&& globalEditViewHandler.getWorklistData().getWorklist().getSelectedPatient().equals(patient)) {
+		if (globalEditViewHandler.getWorklistData().getWorklist().isSelected(patient))
 			onDeselectPatient(true);
-		}
 	}
 
 	public void replaceSelectedTask() {
@@ -470,15 +477,15 @@ public class WorklistViewHandlerAction {
 		if (reload)
 			task = taskDAO.getTaskAndPatientInitialized(task.getId());
 
-		// onVersionConflictPatient(task.getParent(), false);
 		onSelectTaskAndPatient(task, false);
 	}
 
 	public void replacePatientInCurrentWorklist(Patient patient) {
+		replacePatientInCurrentWorklist(patient, true);
+	}
+
+	public void replacePatientInCurrentWorklist(Patient patient, boolean reload) {
 		logger.debug("Replacing patient due to external changes!");
-		if (globalEditViewHandler.getWorklistData().getWorklist().getSelectedPatient() != null && globalEditViewHandler
-				.getWorklistData().getWorklist().getSelectedPatient().getId() == patient.getId())
-			globalEditViewHandler.getWorklistData().getWorklist().addAsSelected(patient);
 		globalEditViewHandler.getWorklistData().getWorklist().add(patient);
 	}
 
@@ -529,7 +536,7 @@ public class WorklistViewHandlerAction {
 																.getWorklist().isShowActiveTasksExplicit())
 														.size() - 1));
 					} else {
-						goToSelectPatient(newPatient);
+						selectPatientAndChangeView(newPatient);
 					}
 				}
 			} else {
@@ -545,7 +552,7 @@ public class WorklistViewHandlerAction {
 									.get(newPatient.getActiveTasks(globalEditViewHandler.getWorklistData().getWorklist()
 											.isShowActiveTasksExplicit()).size() - 1));
 				} else {
-					goToSelectPatient(newPatient);
+					selectPatientAndChangeView(newPatient);
 				}
 			}
 		}
@@ -588,7 +595,7 @@ public class WorklistViewHandlerAction {
 								globalEditViewHandler.getWorklistData().getWorklist().isShowActiveTasksExplicit())
 								.get(0));
 					} else {
-						goToSelectPatient(newPatient);
+						selectPatientAndChangeView(newPatient);
 					}
 				}
 			} else {
@@ -601,7 +608,7 @@ public class WorklistViewHandlerAction {
 									globalEditViewHandler.getWorklistData().getWorklist().isShowActiveTasksExplicit())
 							.get(0));
 				} else {
-					goToSelectPatient(newPatient);
+					selectPatientAndChangeView(newPatient);
 				}
 			}
 		}

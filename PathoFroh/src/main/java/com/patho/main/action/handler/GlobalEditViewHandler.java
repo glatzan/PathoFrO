@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog.DiagnosisPhaseExitData;
+import com.patho.main.action.dialog.patient.MergePatientDialog.PatientMergeEvent;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.dialog.worklist.WorklistSearchDialog.WorklistSearchReturnEvent;
 import com.patho.main.action.handler.views.GenericView;
@@ -578,13 +579,43 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			}
 		}
 
+		/**
+		 * Is called on return of a worklist selection via dialog
+		 * 
+		 * @param event
+		 */
 		public void onWorklistSelectReturn(SelectEvent event) {
 			if (event.getObject() != null && event.getObject() instanceof WorklistSearchReturnEvent) {
 				logger.debug("Setting new worklist");
-				worklistViewHandlerAction.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(), true,true);
+				worklistViewHandlerAction.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(),
+						true, true);
 				return;
 			}
 			onDefaultDialogReturn(event);
+		}
+
+		/**
+		 * Is called on return of the patient data edit dialog, if a merge event had
+		 * happened the worklist is updated.
+		 * 
+		 * @param event
+		 */
+		public void onPatientMergeReturn(SelectEvent event) {
+			if (event.getObject() != null && event.getObject() instanceof PatientMergeEvent) {
+				PatientMergeEvent p = (PatientMergeEvent) event.getObject();
+
+				
+				if(p.getSource().isArchived())
+					worklistViewHandlerAction.removePatientFromCurrentWorklist(p.getSource());
+				else
+					worklistViewHandlerAction.replacePatientInCurrentWorklist(p.getSource());
+				
+				if(p.getTarget().isArchived())
+					worklistViewHandlerAction.removePatientFromCurrentWorklist(p.getTarget());
+				else
+					worklistViewHandlerAction.replacePatientInCurrentWorklist(p.getTarget());
+					
+			}
 		}
 
 	}
