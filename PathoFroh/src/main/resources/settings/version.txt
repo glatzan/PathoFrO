@@ -45,22 +45,21 @@ Tasks:
 -> Settings-Dialog: Favourite List edit system lists, editable is not correct
 -> Worklist LoadDialog Favourite Lists preview
 -> Patient List, fix active tasks 
+-> Patiente delete and editDialog make it working
 
 Next Changes:
+-> erstellen von patientin in der pdv
+-> Ärzte aus klinikbackend übernehmen
+
 -> patienten 1502 und 1503 löschen
--> Patient menu aufräumen 
--> recht für patient merge einführen
+-> patienten löschen
 
 -> Diangosen benachrichtigung per brief bei jedem einstellen
 -> wenn konsil aussteht keine archivirung
--> Operateure über liste laden
--> Zählung A 1,2 B 2 = 3 Blöcke (Blockzählung)
 -> anzeige der organisation im eingangsbuch
 
--> patienten löschen
 -> suche mit umlauten -> daniel
 -> suche mit umlauten in quick search regex alpha (erkennt kein ö usw)
--> färbungen auf klick priority umstellen
 
 -> versehendlich ausgeführte benachrichtigungen, markieren, kontakt dialog verbessern
 
@@ -68,15 +67,9 @@ Next Changes:
 
 -> Warnung wenn der Auftrag noch in Arbeitslisten ist
 
--> navigation buttons gehen nicht mehr richtig
--> search physician dialog with return handler
-
 -> beim auswählen des eingangbuches fall auswählen, nicht ersten fall
 
--> Nicht bei jeder Druckoption wird des hinterlegte Drucker angezeigt, evtl. "Globale kleine Schaltfläche" auf Hauptansicht , dann muss es nicht in jedem kleinen Fenster stehen
-
 -> Task archivieren nur wenn befunder angegeben ist 
--> Warnung wenn der Auftrag noch in Arbeitslisten ist
 
 -> Aus Uitl in Selectors kopieren  
 -> Benchrichtigung: Im Service Telefonnummern aktivieren
@@ -87,20 +80,16 @@ Testen:
 -> Test piz range from 6-8 (geht nicht)
  
 Urgent Changes 
-TODO: Methoden in SampleServie in eine Transaction setzten (für loggin logstring per transaction)
 TODO: Biobankeinwilligung beide Seiten (2 pdf-Dateien) auf einmal hochladen
 TODO: Externe Proben: PIZ anlegen?
 TODO: Favouriten-Listen für Benutzer zugänglich machen
 TODO: Erweiterte Suche 
-TODO: Datenbankabfragen in globaleidt handler shiften
 TODO: Benuter müssen sich auf die Benachrichtigungsliste setzten können
 
 Long-term Changes 
 TODO: Beim schließen des Settings-dialoges auch gruppenrichtilinien neu laden
-TODO: Settings-Dialog überarbeiten tabellen und datatables auf neuen style ändern
 TODO: Nach 3 monaten soll dearchiviertung nicht mehr möglich sein
 TODO: object f�r Arbeitsliste muss kopiert werden, wird momentan sofort �bernommen
-TODO: Konsil listenabfragen statisch, zur geschwindikeitsverbesserung
 TODO: log in settings rework
 TODO: Individelle Adressen beim drucken sollten aus personen gespeichert werden?
 TODO: Wenn Aufträge gelöscht werden müssen pdf mit gelöscht werden..
@@ -118,14 +107,6 @@ Graphic Changes
 + = added
 - = removed
 
--> 1.7
--> erstellen von patientin in der pdv
-
--> 1.6
--> Create Task Dialog, Material mit Overlaypannel anpassen, Create Task material auswahl css
--> Ärzte aus klinikbackend übernehmen
--> Felder für ausleih befund (externer befund) im task create menu
-
 https://tex.stackexchange.com/questions/344799/how-can-i-escape-plain-text
 
 SQL:
@@ -137,7 +118,6 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
-
 
 
 +v 2.0.0

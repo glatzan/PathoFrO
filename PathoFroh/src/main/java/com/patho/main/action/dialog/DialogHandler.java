@@ -16,13 +16,13 @@ import com.patho.main.action.dialog.media.EditPDFDialog;
 import com.patho.main.action.dialog.media.PDFOrganizer;
 import com.patho.main.action.dialog.media.UploadDialog;
 import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
+import com.patho.main.action.dialog.miscellaneous.ConfirmDialog;
 import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.notification.ContactSelectDialog;
 import com.patho.main.action.dialog.notification.NotificationDialog;
 import com.patho.main.action.dialog.patient.DeletePatientDialog;
 import com.patho.main.action.dialog.patient.EditPatientDialog;
-import com.patho.main.action.dialog.patient.MergePatientConfimDialog;
 import com.patho.main.action.dialog.patient.MergePatientDialog;
 import com.patho.main.action.dialog.patient.PatientLogDialog;
 import com.patho.main.action.dialog.patient.SearchPatientDialog;
@@ -115,7 +115,7 @@ public class DialogHandler {
 	private WorklistSettingsDialog worklistSettingsDialog = new WorklistSettingsDialog();
 	private WorklistSortDialog worklistSortDialog = new WorklistSortDialog();
 	private MergePatientDialog mergePatientDialog = new MergePatientDialog();
-	private MergePatientConfimDialog mergePatientConfimDialog = new MergePatientConfimDialog();
 	private EditPatientDialog editPatientDialog = new EditPatientDialog();
 	private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
+	private ConfirmDialog confirmDialog = new ConfirmDialog();
 }

@@ -41,9 +41,10 @@
 					<h:outputLabel value="#{msg['dialog.mergePatientDialog.source']}" />
 					<p:commandLink icon="fa fa-fw fa-user"
 						actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
-						value="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
+						title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
 						<p:ajax event="dialogReturn" update="@form" process="@form"
 							listener="#{dialog.mergePatientDialog.onReturnSelectSource}"></p:ajax>
+						<i class="fa fa-fw fa-search" />
 					</p:commandLink>
 
 					<!-- name -->
@@ -71,11 +72,12 @@
 
 					<!-- name -->
 					<h:outputLabel value="#{msg['dialog.mergePatientDialog.target']}" />
-					<p:commandLink icon="fa fa-fw fa-user"
+					<p:commandLink
 						actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
-						value="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
+						title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
 						<p:ajax event="dialogReturn" update="@form" process="@form"
 							listener="#{dialog.mergePatientDialog.onReturnSelectTarget}"></p:ajax>
+						<i class="fa fa-fw fa-search" />
 					</p:commandLink>
 
 					<!-- name -->
@@ -98,18 +100,44 @@
 				</h:panelGrid>
 			</h:panelGrid>
 
-
 			<h:panelGrid columns="1" styleClass="defaultHistoTable"
 				style="width:100%; margin-top:20px;">
 				<p:pickList value="#{dialog.mergePatientDialog.taskLists}"
 					styleClass="mergePatientPicklist"
+					converter="#{dialog.mergePatientDialog.taskTransformer}"
 					disabled="#{dialog.mergePatientDialog.taskPickerDisabled}"
-					var="task" itemLabel="#{task}" itemValue="#{task}" />
+					var="task" itemLabel="#{task}" itemValue="#{task}">
+					<p:ajax event="transfer"
+						listener="#{dialog.mergePatientDialog.onTaskMoved()}"
+						update="@form" />
+				</p:pickList>
 			</h:panelGrid>
 
-			<h:panelGrid columns="1" styleClass="defaultHistoTable"
-				style="width:100%; margin-top:10px; margin-left:10px">
-				<h:outputLabel value="#{msg['dialog.mergePatientDialog.info']}" styleClass="headline"/>
+			<!-- delete -->
+			<h:panelGrid columns="2" style="width: 100%"
+				styleClass="listingHistoHiddenTableContainer"
+				columnClasses="columnWidthPercent50,columnWidthPercent50">
+
+				<!-- source -->
+				<h:panelGrid columns="2" styleClass="defaultHistoTable"
+					columnClasses="columnWidth25,">
+					<p:selectBooleanCheckbox
+						value="#{dialog.mergePatientDialog.deleteSource}"
+						disabled="#{!dialog.mergePatientDialog.sourceDeleteAble}" />
+					<h:outputLabel
+						value="#{msg['dialog.mergePatientDialog.patienten.delete']}" />
+				</h:panelGrid>
+
+				<!-- target -->
+				<h:panelGrid columns="2" styleClass="defaultHistoTable"
+					columnClasses="columnWidth25," style="margin-left:20px;">
+					<p:selectBooleanCheckbox
+						value="#{dialog.mergePatientDialog.deleteTarget}"
+						disabled="#{!dialog.mergePatientDialog.targetDeleteAble}" />
+					<h:outputLabel
+						value="#{msg['dialog.mergePatientDialog.patienten.delete']}" />
+
+				</h:panelGrid>
 			</h:panelGrid>
 
 			<h:panelGrid columns="1" styleClass="defaultHistoTable"
@@ -128,15 +156,14 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" styleClass="right">
-					<!-- create patient -->
+					<!-- merge patient -->
 					<p:commandButton widgetVar="createPatientBtn"
-						disabled="#{dialog.mergePatientDialog.taskPickerDisabled}"
+						disabled="#{!dialog.mergePatientDialog.taskWasMoved}"
 						value="#{msg['dialog.mergePatientDialog.button.merge']}"
+						actionListener="#{dialog.confirmDialog.initAndPrepareBean('dialog.mergePatientDialog.confirm.headline','dialog.mergePatientDialog.confirm.text')}"
 						icon="fa fa-fw fa-medkit">
-						<f:actionListener
-							binding="#{dialog.mergePatientConfimDialog.initAndPrepareBean()}" />
 						<p:ajax event="dialogReturn"
-							listener="#{dialog.mergePatientDialog.onMergePatient}"></p:ajax>
+							listener="#{dialog.mergePatientDialog.onMergePatientReturn}"></p:ajax>
 					</p:commandButton>
 
 					<!-- abort -->
@@ -144,7 +171,6 @@
 						widgetVar="closeBtn" partialSubmit="true"
 						icon="fa fa-fw fa-times-circle" id="closeBtn" process="@this"
 						actionListener="#{dialog.mergePatientDialog.hideDialog()}"></p:commandButton>
-
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>

@@ -1,18 +1,19 @@
 package com.patho.main.action.dialog.patient;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.WorklistViewHandler;
+import com.patho.main.action.dialog.miscellaneous.ConfirmDialog.ConfirmEvent;
 import com.patho.main.common.Dialog;
-import com.patho.main.dao.LogDAO;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.service.PatientService;
+import com.patho.main.util.dialogReturn.DialogReturnEvent;
+import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,6 +42,19 @@ public class DeletePatientDialog extends AbstractDialog {
 
 	public void deleteAndHide() {
 		patientService.deleteOrArchive(patient);
-		hideDialog(returnValue);
+		hideDialog(new PatientDeleteEvent(patient));
+	}
+
+	public void onConfirmDialogReturn(SelectEvent event) {
+		if (event.getObject() != null && event.getObject() instanceof ConfirmEvent) {
+			deleteAndHide();
+		}
+	}
+
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class PatientDeleteEvent implements DialogReturnEvent {
+		private Patient patient;
 	}
 }

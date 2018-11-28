@@ -118,6 +118,7 @@ public class MenuGenerator {
 				item.setOnclick(
 						"$('#headerForm\\\\:editPatientData').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
 				item.setIcon("fa fa-pencil-square-o");
+				item.setDisabled(true);
 				item.setRendered(permissionEdit);
 				administerSubMenu.addElement(item);
 
@@ -126,6 +127,7 @@ public class MenuGenerator {
 				item.setOnclick(
 						"$('#headerForm\\\\:removePatient').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
 				item.setIcon("fa fa-trash");
+				item.setDisabled(true);
 				item.setRendered(permissionDelete);
 				administerSubMenu.addElement(item);
 

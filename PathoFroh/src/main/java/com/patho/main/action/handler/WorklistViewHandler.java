@@ -369,7 +369,7 @@ public class WorklistViewHandler {
 
 		logger.debug("Adding task " + task.getTaskID() + " to worklist");
 
-		worklistHandler.getCurrent().add(task.getPatient(),true);
+		worklistHandler.getCurrent().add(task.getPatient(), true);
 
 		return task;
 	}
@@ -404,6 +404,13 @@ public class WorklistViewHandler {
 	}
 
 	public void replacePatientInWorklist(Patient patient) {
+		replacePatientInWorklist(patient, true);
+	}
+
+	public void replacePatientInWorklist(Patient patient, boolean reload) {
+		if (reload)
+			patient = patientRepository.findOptionalById(patient.getId()).get();
+
 		logger.debug("Replacing patient due to external changes!");
 		worklistHandler.getCurrent().add(patient);
 	}
