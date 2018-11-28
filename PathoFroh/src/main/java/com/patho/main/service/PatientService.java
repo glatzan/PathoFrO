@@ -12,9 +12,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.primefaces.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.config.excepion.ToManyEntriesException;
+import com.patho.main.model.Organization;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.JSONPatientRepository;
@@ -94,6 +96,23 @@ public class PatientService extends AbstractService {
 	}
 
 	/**
+	 * Tries to delete a patient, if that does not work, the patient is archvied.
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.NEVER)
+	public boolean deleteOrArchive(Patient patient) {
+		try {
+			patientRepository.delete(patient, resourceBundle.get("log.patient.remove", patient));
+			return true;
+		} catch (Exception e) {
+			archive(patient, true);
+			return false;
+		}
+	}
+
+	/**
 	 * Removes a patient without tasks from local database. TODO: Remove logs
 	 * 
 	 * @param patient
@@ -109,10 +128,13 @@ public class PatientService extends AbstractService {
 	 * 
 	 * @param patient
 	 */
-	public Patient archivePatient(Patient patient) {
-		if (patient.getTasks().isEmpty()) {
+	public Patient archive(Patient patient, boolean archive) {
+		if (archive && patient.getTasks().isEmpty()) {
 			patient.setArchived(true);
-			return patientRepository.save(patient, resourceBundle.get("log.patient.archived"));
+			return patientRepository.save(patient, resourceBundle.get("log.patient.archived", patient));
+		} else if (!archive && patient.isArchived()) {
+			patient.setArchived(false);
+			return patientRepository.save(patient, resourceBundle.get("log.patient.log.patient.dearchived", patient));
 		}
 
 		return patient;

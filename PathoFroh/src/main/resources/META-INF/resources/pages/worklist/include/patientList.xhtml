@@ -130,7 +130,7 @@
 			<!-- Worklist clear -->
 			<p:commandLink partialSubmit="true" process="@this"
 				title="#{msg['body.worklist.navigation.button.changelist']}"
-				actionListener="#{worklistViewHandler.clearWorklist(globalEditViewHandler.worklistData.worklist)}"
+				actionListener="#{worklistViewHandler.clearWorklist(worklistHandler.current)}"
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 				update="navigationForm contentForm headerForm">
 				<i class="fa fa-times-circle-o"></i>

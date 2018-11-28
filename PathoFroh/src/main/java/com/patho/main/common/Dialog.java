@@ -71,7 +71,8 @@ public enum Dialog {
 	DIAGNOSIS_REVISION_DELETE("/pages/dialog/task/diagnosisRevision/diagnosisRevisionDelete", null, 480, 272, false, false, true), 											// OK
 	DIAGNOSIS_REVISION_ADD("/pages/dialog/task/diagnosisRevision/diagnosisRevisionDialogQuickAdd", null, 480, 272, false, false, true), 									// OK		// TEST OK
 	PRINT_SELECT_PRINTER("/pages/dialog/selectPrinter", null, 640, 360, false, false, true),
-	ACCOUNTING_DATA("/pages/dialog/miscellaneous/accounting", null,  1024, 600, false, false, true);																		// OK
+	ACCOUNTING_DATA("/pages/dialog/miscellaneous/accounting", null,  1024, 600, false, false, true),																		// OK
+	CONFIRM_CHANGE("/pages/dialog/miscellaneous/confirm", null, 480, 272, false, false, true);																				// OK
 	
 	private final String path;
 	private final boolean useOptions;

@@ -21,23 +21,26 @@ import lombok.Setter;
 @Setter
 public class DeletePatientDialog extends AbstractDialog {
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PatientService patientService;
+
 	private Patient patient;
 
-	public void initAndPrepareBean(Patient patient) {
-		initBean(patient);
-		prepareDialog();
+	public DeletePatientDialog initAndPrepareBean(Patient patient) {
+		if (initBean(patient))
+			prepareDialog();
+		return this;
 	}
 
-	public void initBean(Patient patient) {
+	public boolean initBean(Patient patient) {
 		setPatient(patient);
-
-		super.initBean(null, Dialog.PATIENT_REMOVE);
-
-		setPatient(patient);
+		return super.initBean(Dialog.PATIENT_REMOVE);
 	}
 
-	public void removePatient() {
-		logDAO.deletePatientLogs(patient);
-		patientService.removePatient(patient);
+	public void deleteAndHide() {
+		patientService.deleteOrArchive(patient);
+		hideDialog(returnValue);
 	}
 }
