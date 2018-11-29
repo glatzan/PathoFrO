@@ -6,11 +6,11 @@
 ^FO07,20
 ^BY1
 ^BCN,40,N,N,N,A
-^FD$slide.uniqueIDinTask
+^FD $slide.uniqueIDinTask
 ^FS
 ^FO2,70
 ^A0N,30,20
-^FD$slide.task.taskID $slide.slideID
+^FD $slide.task.taskID $slide.slideID
 ^FS
 ^FO02,100
 ^A0N,14,14
@@ -18,6 +18,6 @@
 ^FS
 ^FO02,118
 ^A0N,14,14
-^FD$date.format('dd.MM.yyyy', $date)
+^FD $date.format('dd.MM.yyyy', $date)
 ^FS
 ^XZ
