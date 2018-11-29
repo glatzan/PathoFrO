@@ -204,9 +204,39 @@ public class Worklist {
 			getItems().add(patient);
 			generateTaskStatus(patient);
 		}
-		
+
 		if (select) {
 			selectPatient(patient);
+		}
+	}
+
+	public void add(Task task) {
+		add(task, false);
+	}
+
+	/**
+	 * Sets a Task as selected task, also selects the patient
+	 * 
+	 * @param t
+	 */
+	public void add(Task task, boolean select) {
+		logger.debug("Adding task to worklist {}", task.getId());
+
+		boolean isSelected = isSelected(task);
+		
+		add(task.getPatient(), select);
+
+		// updating if
+		if (select || isSelected) {
+			System.out.println("select tasl" + task);
+			setSelectedTask(task);
+
+			// only setting new task info if task has changed, this way data ca persists
+			// over task realoads
+			if (!isSelected)
+				setSelectedTaskInfo(new TaskInfo(task));
+			else
+				getSelectedTaskInfo().setTask(task);
 		}
 	}
 
@@ -301,26 +331,6 @@ public class Worklist {
 	public boolean clear() {
 		getItems().clear();
 		return deselectPatient();
-	}
-
-	/**
-	 * Sets a Task as selected task, also selects the patient
-	 * 
-	 * @param t
-	 */
-	public void setSelectedTaskAndPatient(Task t) {
-		logger.debug("Adding task to worklist as selected task {} -> {}",
-				getSelectedTask() == null ? "null" : getSelectedTask().getId(), t.getId());
-
-		boolean changed = getSelectedTask() == null || getSelectedTask().getId() != t.getId();
-
-		add(t.getPatient(), true);
-		setSelectedTask(t);
-
-		// only setting new task info if task has changed, this way data ca persists
-		// over task realoads
-		if (changed)
-			setSelectedTaskInfo(new TaskInfo(t));
 	}
 
 	/**

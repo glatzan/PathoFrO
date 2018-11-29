@@ -64,7 +64,6 @@ import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
-import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.worklist.Worklist;

@@ -51,15 +51,12 @@ public class WorkPhaseHandler extends AbstractHandler {
 	public void updateStainingPhase(Task task) {
 		// update staing phase
 		if (workPhaseService.updateStainigPhase(task)) {
-			worklistHandler.getCurrent().setSelectedTask(task);
+			worklistViewHandler.replaceTaskInWorklist(task);
 			// open end staining phase dialog
 			MessageHandler.executeScript("clickButtonFromBean('headerForm:stainingPhaseExit')");
 		} else {
-			workPhaseService.startStainingPhase(task);
-			if (worklistHandler.isSelected(task)) {
-				// reload task again, updateStainingPhase changes the task
-				worklistViewHandler.reloadCurrentTask();
-			}
+			task = workPhaseService.startStainingPhase(task);
+			worklistViewHandler.replaceTaskInWorklist(task);
 		}
 	}
 

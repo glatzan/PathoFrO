@@ -87,12 +87,6 @@ public class DialogReturnHandler extends AbstractHandler {
 
 				globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 				// staining phase reload event
-			} else if (event.getObject() instanceof StainingPhaseUpdateEvent) {
-				logger.debug("Update Stating phase");
-				// reload task
-				worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-				globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-				workPhaseHandler.updateStainingPhase(worklistHandler.getCurrent().getSelectedTask());
 			} else if (event.getObject() instanceof DiagnosisPhaseUpdateEvent) {
 				logger.debug("Update Diagnosis phase");
 				// reload task
@@ -103,20 +97,10 @@ public class DialogReturnHandler extends AbstractHandler {
 				logger.debug("Task reload event.");
 				if (event.getObject() instanceof ReloadTaskEvent
 						&& ((ReloadTaskEvent) event.getObject()).getTask() != null)
-					worklistHandler.getCurrent().setSelectedTask(((ReloadTaskEvent) event.getObject()).getTask());
+					worklistViewHandler.replaceTaskInWorklist(((ReloadTaskEvent) event.getObject()).getTask());
 				else
-					worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-				globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-			} else if (event.getObject() instanceof StainingPhaseUpdateEvent) {
-				logger.debug("Update Stating phase");
-				// reload task
-				worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-				globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-
-				workPhaseHandler.updateStainingPhase(worklistHandler.getCurrent().getSelectedTask());
-			}
-
-			else if (event.getObject() instanceof DiagnosisPhaseExitData) {
+					worklistViewHandler.reloadCurrentTask();
+			}else if (event.getObject() instanceof DiagnosisPhaseExitData) {
 				logger.debug("Diagnosis phase exit dialog return");
 
 				DiagnosisPhaseExitData data = (DiagnosisPhaseExitData) event.getObject();
@@ -190,8 +174,19 @@ public class DialogReturnHandler extends AbstractHandler {
 		if (event.getObject() instanceof ReloadUserEvent) {
 			logger.debug("Updating user");
 			userHandlerAction.updateCurrentUser();
+			return;
 		}
-		
+
+		onDefaultDialogReturn(event);
+	}
+
+	public void onStainingChangeReturn(SelectEvent event) {
+		if (event.getObject() instanceof StainingPhaseUpdateEvent) {
+			logger.debug("Update Stating phase");
+			workPhaseHandler.updateStainingPhase(((StainingPhaseUpdateEvent) event.getObject()).getTask());
+			return;
+		}
+
 		onDefaultDialogReturn(event);
 	}
 }

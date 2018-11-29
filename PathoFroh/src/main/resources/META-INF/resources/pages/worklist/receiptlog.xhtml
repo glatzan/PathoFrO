@@ -575,7 +575,7 @@
 								<i class="fa fa-fw fa-paint-brush"></i>
 								<p:ajax event="dialogReturn"
 									update="navigationForm:patientList contentForm:contentPanel headerForm"
-									listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+									listener="#{dialogReturnHandler.onStainingChangeReturn}"
 									oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane');" />
 							</p:commandLink>
 						</h:panelGroup>
