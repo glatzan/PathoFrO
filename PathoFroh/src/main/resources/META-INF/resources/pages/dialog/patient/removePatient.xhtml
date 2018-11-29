@@ -53,14 +53,15 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" styleClass="right">
+					<!-- delete -->
 					<p:commandButton value="#{msg['dialog.deleteTask.button.detele']}"
-						icon="fa fa-fw fa-trash">
-						<f:actionListener
-							binding="#{dialog.deletePatientDialog.removePatient()}" />
-						<f:actionListener
-							binding="#{dialog.deletePatientDialog.hideDialog()}" />
+						icon="fa fa-fw fa-trash"
+						actionListener="#{dialog.confirmDialog.initAndPrepareBean().header('dialog.removePatient.confirm.headline').ctext('dialog.removePatient.confirm.text',dialog.deletePatientDialog.patient.person.getFullName())}">
+						<p:ajax event="dialogReturn"
+							listener="#{dialog.deletePatientDialog.onConfirmDialogReturn}" />
 					</p:commandButton>
 
+					<!-- close -->
 					<p:commandButton value="#{msg['general.close']}"
 						partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
 						process="@this"

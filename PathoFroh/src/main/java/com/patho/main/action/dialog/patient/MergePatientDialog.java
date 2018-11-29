@@ -1,33 +1,27 @@
 package com.patho.main.action.dialog.patient;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.primefaces.event.SelectEvent;
-import org.primefaces.json.JSONException;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.patient.MergePatientConfimDialog.MergePatientConfimDialogReturnEvent;
-import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
+import com.patho.main.action.dialog.miscellaneous.ConfirmDialog.ConfirmEvent;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
-import com.patho.main.config.excepion.ToManyEntriesException;
-import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PatientService;
+import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.event.HistoEvent;
-import com.patho.main.util.exception.CustomNullPatientExcepetion;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
-import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -67,6 +61,8 @@ public class MergePatientDialog extends AbstractDialog {
 	private Patient target;
 
 	private DualListModel<Task> taskLists = new DualListModel<Task>();
+
+	private DefaultTransformer<Task> taskTransformer;
 
 	private boolean taskPickerDisabled;
 
@@ -131,6 +127,9 @@ public class MergePatientDialog extends AbstractDialog {
 		taskLists.setSource(source == null ? new ArrayList<Task>() : new ArrayList<Task>(source.getTasks()));
 		taskLists.setTarget(target == null ? new ArrayList<Task>() : new ArrayList<Task>(target.getTasks()));
 
+		taskTransformer = new DefaultTransformer<Task>(Stream.of(taskLists.getSource(), taskLists.getTarget())
+				.flatMap(Collection::stream).collect(Collectors.toList()));
+
 		if (getSource() != null && getTarget() != null && getSource().equals(getTarget())) {
 			samePatientForSourceAndTarget = true;
 		} else
@@ -141,8 +140,11 @@ public class MergePatientDialog extends AbstractDialog {
 		setSourceDeleteAble(getSource() != null && taskLists.getSource().size() == 0);
 		setTargetDeleteAble(getTarget() != null && taskLists.getTarget().size() == 0);
 
-		setTaskPickerDisabled(source == null || target == null || samePatientForSourceAndTarget);
+		setTaskPickerDisabled((source == null || target == null || samePatientForSourceAndTarget));
+	}
 
+	public void onTaskMoved() {
+		setTaskWasMoved(true);
 	}
 
 	/**
@@ -151,16 +153,16 @@ public class MergePatientDialog extends AbstractDialog {
 	 * @param event
 	 */
 	public void onMergePatientReturn(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof MergePatientConfimDialogReturnEvent
-				&& ((MergePatientConfimDialogReturnEvent) event.getObject()).isMergeConfirmed()) {
+		if (event.getObject() != null && event.getObject() instanceof ConfirmEvent
+				&& ((ConfirmEvent) event.getObject()).isConfirm()) {
 			if (source != null && target != null) {
 				patientService.moveTaskBetweenPatients(source, target, taskLists.getSource(), taskLists.getTarget());
 
 				if (deleteSource)
-					source = patientService.archivePatient(source);
+					source = patientService.archive(source, true);
 
 				if (deleteTarget)
-					target = patientService.archivePatient(target);
+					target = patientService.archive(target, true);
 
 				MessageHandler.sendGrowlMessagesAsResource("growl.success", "growl.patient.merge.success");
 				hideDialog(new PatientMergeEvent(source, target));

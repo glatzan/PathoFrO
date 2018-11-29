@@ -158,7 +158,7 @@ public class PatientService extends AbstractService {
 			// checking if task is already associated with source
 			if (!source.getTasks().stream().anyMatch(p -> p.equals(task))) {
 				task.setParent(source);
-				moveLog.append(source.getPerson().getFullName() + " -> " + task);
+				moveLog.append(source.getPerson().getFullName() + " -> " + task.toString());
 				saveList.add(task);
 			}
 		}
@@ -167,7 +167,7 @@ public class PatientService extends AbstractService {
 			// checking if task is already associated with target
 			if (!target.getTasks().stream().anyMatch(p -> p.equals(task))) {
 				task.setParent(target);
-				moveLog.append(target.getPerson().getFullName() + " -> " + task);
+				moveLog.append(target.getPerson().getFullName() + " -> " + task.toString());
 				saveList.add(task);
 			}
 		}

@@ -10,8 +10,7 @@ public enum Dialog {
 	WORKLIST_EXPORT("/pages/dialog/export/exportDialog", null, 1024, 600, false, false, true), // 16:9
 	PATIENT_ADD("/pages/dialog/patient/searchPatient/searchPatient", null, 1024, 600, false, false, true), 																	// OK
 	PATIENT_DATA_CONFIRM("/pages/dialog/patient/confirmExternalPatientData/confirmExternalPatientData", null, 640, 360, false, false, true), 								// OK
-	PATIENT_MERGE("/pages/dialog/patient/merge/mergePatient", null, 1024, 600, false, false, true), // 16:9
-	PATIENT_MERGE_CONFIRM("/pages/dialog/patient/merge/confirmMerge", null, 480, 272, false, false, true), // 16:9
+	PATIENT_MERGE("/pages/dialog/patient/merge/mergePatient", null, 858, 484, false, false, true), // 16:9
 	PATIENT_EDIT("/pages/dialog/patient/editPatient", null, 1024, 600, false, false, true), // 16:9
 	PATIENT_REMOVE("/pages/dialog/patient/removePatient", null, 480, 272, false, false, true), // 16:9
 	WORKLIST_ORDER("/pages/dialog/worklist/worklistOrder", null,480, 272, false, false, true),  																			// OK
@@ -72,7 +71,7 @@ public enum Dialog {
 	DIAGNOSIS_REVISION_ADD("/pages/dialog/task/diagnosisRevision/diagnosisRevisionDialogQuickAdd", null, 480, 272, false, false, true), 									// OK		// TEST OK
 	PRINT_SELECT_PRINTER("/pages/dialog/selectPrinter", null, 640, 360, false, false, true),
 	ACCOUNTING_DATA("/pages/dialog/miscellaneous/accounting", null,  1024, 600, false, false, true),																		// OK
-	CONFIRM_CHANGE("/pages/dialog/miscellaneous/confirm", null, 480, 272, false, false, true);																				// OK
+	CONFIRM_CHANGE("/pages/dialog/miscellaneous/confirm", null, 320, 180, false, false, true);																				// OK
 	
 	private final String path;
 	private final boolean useOptions;

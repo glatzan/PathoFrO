@@ -616,7 +616,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 					worklistViewHandler.removePatientFromWorklist(p.getTarget());
 				else
 					worklistViewHandler.replacePatientInWorklist(p.getTarget());
-
 			}
 		}
 

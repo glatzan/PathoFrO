@@ -6,10 +6,8 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.removePatient.headline']}" escape="false">
-			<f:param
-				value="#{dialog.deletePatientDialog.patient.person.getFullName()}" />
+	<title><h:outputFormat value="#{dialog.confirmDialog.headline}"
+			escape="false">
 		</h:outputFormat></title>
 	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
@@ -23,10 +21,8 @@
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
 				styleClass="defaultHistoTable">
-				<h:outputFormat value="#{msg['dialog.removePatient.headline']}"
+				<h:outputFormat value="#{dialog.confirmDialog.headline}"
 					escape="false">
-					<f:param
-						value="#{dialog.deletePatientDialog.patient.person.getFullName()}" />
 				</h:outputFormat>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
@@ -38,11 +34,7 @@
 
 		<div class="dialogContent">
 			<h:panelGrid columns="1" styleClass="defaultHistoTable">
-				<h:outputFormat value="#{msg['dialog.removePatient.text']}"
-					escape="false">
-					<f:param
-						value="#{dialog.deletePatientDialog.patient.person.getFullName()}" />
-				</h:outputFormat>
+				<h:outputLabel value="#{dialog.confirmDialog.text}"></h:outputLabel>
 			</h:panelGrid>
 		</div>
 
@@ -53,18 +45,15 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" styleClass="right">
-					<p:commandButton value="#{msg['dialog.deleteTask.button.detele']}"
-						icon="fa fa-fw fa-trash">
-						<f:actionListener
-							binding="#{dialog.deletePatientDialog.removePatient()}" />
-						<f:actionListener
-							binding="#{dialog.deletePatientDialog.hideDialog()}" />
+					<p:commandButton value="#{msg['general.confirm']}"
+						icon="fa fa-fw fa-check-circle-o"
+						actionListener="#{dialog.confirmDialog.confirmAndHide()}">
 					</p:commandButton>
 
-					<p:commandButton value="#{msg['general.close']}"
+					<p:commandButton value="#{msg['general.abort']}"
 						partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
 						process="@this"
-						actionListener="#{dialog.deletePatientDialog.hideDialog()}"></p:commandButton>
+						actionListener="#{dialog.confirmDialog.hideDialog()}"></p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>

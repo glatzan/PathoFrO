@@ -9,7 +9,6 @@ import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.PatientRepository;
-import com.patho.main.util.event.PatientMergeEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
@@ -57,8 +56,5 @@ public class EditPatientDialog extends AbstractDialog {
 	 * @param event
 	 */
 	public void onMergeReturn(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof PatientMergeEvent) {
-			hideDialog((PatientMergeEvent) event.getObject());
-		}
 	}
 }
