@@ -19,12 +19,14 @@ import com.patho.main.action.handler.WorkPhaseHandler;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.SlideService;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.StainingTableChooser;
+import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -216,7 +218,9 @@ public class ReceiptLogView extends AbstractTaskView {
 		List<String> toPrint = new ArrayList<String>(slides.length);
 
 		for (Slide slide : slides) {
-			printDocument.get().initilize(new InitializeToken("slide", slide), new InitializeToken("date", new Date()));
+			printDocument.get().initilize(new InitializeToken("slide", slide), new InitializeToken("date", new Date()),
+					new InitializeToken("uniqueID", slide.getTask().getTaskID()+""+HistoUtil.fitString(slide.getUniqueIDinTask(), 3, '0')));
+			System.out.println(printDocument.get().getFinalContent());
 			toPrint.add(printDocument.get().getFinalContent());
 		}
 
