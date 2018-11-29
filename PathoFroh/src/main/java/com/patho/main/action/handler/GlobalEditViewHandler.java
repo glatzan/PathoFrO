@@ -64,7 +64,6 @@ import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
-import com.patho.main.util.dialogReturn.ReloadUserEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
@@ -140,6 +139,11 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	@Setter(AccessLevel.NONE)
 	private WorklistHandler worklistHandler;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private WorkPhaseHandler workPhaseHandler;
+	
 	/**
 	 * Navigation Data
 	 */
@@ -169,13 +173,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	 * Methodes for saving task data
 	 */
 	private CurrentTaskFunctions ct = new CurrentTaskFunctions(this);
-
-	/**
-	 * Functions for starting and ending a work phase
-	 */
-	private WorkPhase workPhase = new WorkPhase();
-
-	private DialogReturnEventHandler dialogReturnEventHandler = new DialogReturnEventHandler(this);
 
 	// ************************ Search ************************
 	/**
@@ -224,13 +221,12 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		} else
 			worklist = new Worklist("Default", new AbstractWorklistSearch());
 
-		
 		logger.debug("2. Setting navigation data");
 		// setting start view
 		getNavigationData().setCurrentView(userHandlerAction.getCurrentUser().getSettings().getStartView());
 		// setting default subview
 		getNavigationData().setLastDefaultView(userHandlerAction.getCurrentUser().getSettings().getDefaultView());
-		
+
 		logger.debug("3. Setting worklist");
 		worklistViewHandler.addWorklist(worklist, true);
 
@@ -487,139 +483,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		}
 	}
 
-	@Configurable
-	public class DialogReturnEventHandler {
-
-		protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-		private GlobalEditViewHandler globalEditViewHandler;
-
-		public DialogReturnEventHandler(GlobalEditViewHandler globalEditViewHandler) {
-			this.globalEditViewHandler = globalEditViewHandler;
-		}
-
-		/**
-		 * 
-		 * Patient add dialog return function
-		 * 
-		 * @param event
-		 */
-		public void onSearchForPatientReturn(SelectEvent event) {
-			if (event.getObject() != null && event.getObject() instanceof PatientReturnEvent) {
-				logger.debug("Patient was selected, adding to database and worklist");
-				Patient p = ((PatientReturnEvent) event.getObject()).getPatien();
-
-				p = patientService.addPatient(p, false);
-				// reload if patient is known to database, and may is associated with tasks
-				worklistViewHandler.addPatientToWorkList(p, true);
-			} else {
-				logger.debug("No Patient was selected");
-			}
-		}
-
-		/**
-		 * Dialog return function, reloads the selected task
-		 * 
-		 * @param event
-		 */
-		public void onDefaultDialogReturn(SelectEvent event) {
-			if (event.getObject() != null) {
-				// Patient reload event
-				if (event.getObject() instanceof PatientReturnEvent) {
-					logger.debug("Patient add event reload event.");
-					if (((PatientReturnEvent) event.getObject()).getTask() != null)
-						globalEditViewHandler.worklistHandler.getCurrent()
-								.setSelectedTask(((PatientReturnEvent) event.getObject()).getTask());
-					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-
-					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-					// staining phase reload event
-				} else if (event.getObject() instanceof StainingPhaseUpdateEvent) {
-					logger.debug("Update Stating phase");
-					// reload task
-					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-					workPhase.updateStainingPhase(globalEditViewHandler.worklistHandler.getCurrent().getSelectedTask());
-				} else if (event.getObject() instanceof DiagnosisPhaseUpdateEvent) {
-					logger.debug("Update Diagnosis phase");
-					// reload task
-					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-					workPhase
-							.updateDiagnosisPhase(globalEditViewHandler.worklistHandler.getCurrent().getSelectedTask());
-				} else if (event.getObject() instanceof ReloadTaskEvent || event.getObject() instanceof ReloadEvent) {
-					logger.debug("Task reload event.");
-					if (event.getObject() instanceof ReloadTaskEvent
-							&& ((ReloadTaskEvent) event.getObject()).getTask() != null)
-						globalEditViewHandler.worklistHandler.getCurrent()
-								.setSelectedTask(((ReloadTaskEvent) event.getObject()).getTask());
-					else
-						globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
-				} else if (event.getObject() instanceof StainingPhaseExitData) {
-					logger.debug("Staining phase exit dialog return");
-					StainingPhaseExitData data = (StainingPhaseExitData) event.getObject();
-					globalEditViewHandler.getWorkPhase().endStainingPhase(data.getTask(), data.isEndStainingPhase(),
-							data.isRemoveFromStainingList(), data.isGoToDiagnosisPhase(), data.isRemoveFromWorklist());
-
-					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_MENU_MODEL);
-				} else if (event.getObject() instanceof DiagnosisPhaseExitData) {
-					logger.debug("Diagnosis phase exit dialog return");
-
-					DiagnosisPhaseExitData data = (DiagnosisPhaseExitData) event.getObject();
-					globalEditViewHandler.getWorkPhase().endDiagnosisPhase(data.getTask(), data.getSelectedRevision(),
-							data.isEndDiangosisPhase(), data.isRemoveFromDiangosisList(),
-							data.isGoToNotificationPhase(), data.isRemoveFromWorklist());
-
-					globalEditViewHandler.worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-					globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_MENU_MODEL);
-				} else if (event.getObject() instanceof ReloadUserEvent) {
-					logger.debug("Updating user");
-					userHandlerAction.updateCurrentUser();
-				}
-
-			}
-		}
-
-		/**
-		 * Is called on return of a worklist selection via dialog
-		 * 
-		 * @param event
-		 */
-		public void onWorklistSelectReturn(SelectEvent event) {
-			if (event.getObject() != null && event.getObject() instanceof WorklistSearchReturnEvent) {
-				logger.debug("Setting new worklist");
-				worklistViewHandler.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(),
-						true);
-				return;
-			}
-			onDefaultDialogReturn(event);
-		}
-
-		/**
-		 * Is called on return of the patient data edit dialog, if a merge event had
-		 * happened the worklist is updated.
-		 * 
-		 * @param event
-		 */
-		public void onPatientMergeReturn(SelectEvent event) {
-			if (event.getObject() != null && event.getObject() instanceof PatientMergeEvent) {
-				PatientMergeEvent p = (PatientMergeEvent) event.getObject();
-
-				if (p.getSource().isArchived())
-					worklistViewHandler.removePatientFromWorklist(p.getSource());
-				else
-					worklistViewHandler.replacePatientInWorklist(p.getSource());
-
-				if (p.getTarget().isArchived())
-					worklistViewHandler.removePatientFromWorklist(p.getTarget());
-				else
-					worklistViewHandler.replacePatientInWorklist(p.getTarget());
-			}
-		}
-
-	}
 
 	/**
 	 * Navigation Data
@@ -890,7 +753,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		 * @param sample
 		 */
 		public void createNewBlock(Sample sample) {
-			workPhase.updateStainingPhase(blockService.createBlockAndPersist(sample));
+			workPhaseHandler.updateStainingPhase(blockService.createBlockAndPersist(sample));
 		}
 
 		/**
@@ -899,7 +762,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		 * @param slide
 		 */
 		public void completeSlide(Slide slide, boolean complete) {
-			workPhase.updateStainingPhase(slideService.completedStainingAndPersist(slide, complete));
+			workPhaseHandler.updateStainingPhase(slideService.completedStainingAndPersist(slide, complete));
 		}
 
 		/**
@@ -950,122 +813,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 	public static enum TaskInitilize {
 		GENERATE_TASK_STATUS, GENERATE_MENU_MODEL, RELOAD_MENU_MODEL_FAVOURITE_LISTS, RELOAD;
-	}
-
-	@Configurable
-	public class WorkPhase {
-
-		protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-		public void updateStainingPhase(Task task) {
-			// update staing phase
-			if (workPhaseService.updateStainigPhase(task)) {
-				worklistHandler.getCurrent().setSelectedTask(task);
-				// open end staining phase dialog
-				MessageHandler.executeScript("clickButtonFromBean('headerForm:stainingPhaseExit')");
-			} else {
-				workPhaseService.startStainingPhase(task);
-				if (worklistHandler.isSelected(task)) {
-					// reload task again, updateStainingPhase changes the task
-					generateViewData(TaskInitilize.RELOAD, TaskInitilize.GENERATE_MENU_MODEL);
-				}
-			}
-		}
-
-		public void startStainingPhase(Task task) {
-			workPhaseService.startStainingPhase(task);
-		}
-
-		public Task endStainingPhase(Task task, boolean endPhase, boolean removeFromList, boolean startDiagnosisPhase,
-				boolean removeFromWorklist) {
-
-			if (endPhase && removeFromList) {
-				// ending staining pahse
-				task = workPhaseService.endStainingPhase(task, removeFromList);
-
-				MessageHandler.sendGrowlMessagesAsResource("growl.staining.endAll",
-						startDiagnosisPhase ? "growl.staining.endAll.text.true" : "growl.staining.endAll.text.false");
-			} else {
-				if (removeFromList)
-					task = favouriteListService.removeTaskFromList(task, PredefinedFavouriteList.StainingList,
-							PredefinedFavouriteList.ReStainingList);
-			}
-
-			if (startDiagnosisPhase) {
-				logger.debug("Adding Task to diagnosis list");
-				task = startDiagnosisPhase(task);
-			}
-
-			if (removeFromWorklist) {
-				// only remove from worklist if patient has one active task
-				if (task.getParent().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
-					MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
-				} else {
-					// view is updated
-					worklistViewHandler.removePatientFromWorklist(task.getPatient());
-				}
-			}
-
-			return task;
-		}
-
-		public void updateDiagnosisPhase(Task task) {
-
-			for (DiagnosisRevision revision : task.getDiagnosisRevisions()) {
-				if (revision.getCompletionDate() != 0) {
-					startDiagnosisPhase(task);
-					generateViewData(TaskInitilize.RELOAD, TaskInitilize.GENERATE_MENU_MODEL);
-					break;
-				}
-			}
-		}
-
-		public Task startDiagnosisPhase(Task task) {
-			return favouriteListService.addTaskToList(task, PredefinedFavouriteList.DiagnosisList);
-		}
-
-		public void endDiagnosisPhase(Task task, DiagnosisRevision diagnosisRevision, boolean endPhase,
-				boolean removeFromList, boolean startNotificationPhase, boolean removeFromWorklist) {
-
-			// end diagnosis phase
-			if (endPhase && removeFromList) {
-				task = workPhaseService.endDiagnosisPhase(task, removeFromList);
-
-				MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
-						startNotificationPhase ? "growl.diagnosis.endAll.text.true"
-								: "growl.diagnosis.endAll.text.false");
-			} else {
-				// otherwise approve diangosis
-				task = diagnosisService.approveDiangosis(task, diagnosisRevision, startNotificationPhase);
-
-				MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved",
-						startNotificationPhase ? "growl.diagnosis.endAll.text.true"
-								: "growl.diagnosis.endAll.text.false");
-
-				if (removeFromWorklist)
-					task = favouriteListService.removeTaskFromList(task, PredefinedFavouriteList.DiagnosisList,
-							PredefinedFavouriteList.ReDiagnosisList);
-			}
-
-			// adding to notification phase
-			if (startNotificationPhase)
-				task = startNotificationPhase(task);
-
-			if (removeFromWorklist) {
-				// only remove from worklist if patient has one active task
-				if (task.getParent().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
-					MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
-				} else {
-					// remove from current worklist, view is updated
-					worklistViewHandler.removePatientFromWorklist(task.getPatient());
-				}
-			}
-		}
-
-		public Task startNotificationPhase(Task task) {
-			return favouriteListService.addTaskToList(task, PredefinedFavouriteList.NotificationList);
-		}
-
 	}
 
 }

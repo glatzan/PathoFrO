@@ -504,7 +504,7 @@
 									update="contentForm:contentPanel">
 									<i class="fa fa-copy"></i>
 									<p:ajax event="dialogReturn" update="contentForm:contentPanel"
-										listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}" />
+										listener="#{dialogReturnHandler.onDefaultDialogReturn}" />
 								</p:commandLink>
 							</h:panelGroup>
 							<!-- malign -->
@@ -770,7 +770,7 @@
 							actionListener="#{dialog.diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, revision)}">
 							<p:ajax event="dialogReturn"
 								oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"
-								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								update="navigationForm:patientList contentForm:contentPanel headerForm" />
 						</p:commandButton>
 
@@ -806,7 +806,7 @@
 							style="display:none"
 							actionListener="#{dialog.editDiagnosisRevisionsDialog.initAndPrepareBean(worklistHandler.current.selectedTask,revision)}">
 							<p:ajax event="dialogReturn"
-								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								update="navigationForm:patientList contentForm:contentPanel headerForm"
 								oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')" />
 						</p:commandButton>
@@ -816,7 +816,7 @@
 							style="display:none"
 							actionListener="#{dialog.deleteDiagnosisRevisionDialog.initAndPrepareBean(revision)}">
 							<p:ajax event="dialogReturn"
-								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								update="navigationForm:patientList contentForm:contentPanel headerForm"
 								oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')" />
 						</p:commandButton>
@@ -826,7 +826,7 @@
 							style="display:none"
 							actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 							<p:ajax event="dialogReturn"
-								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								update="navigationForm:patientList contentForm:contentPanel headerForm"
 								oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')" />
 						</p:commandButton>

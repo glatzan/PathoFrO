@@ -122,7 +122,7 @@
 				actionListener="#{dialog.worklistSearchDialog.initAndPrepareBean()}">
 				<i class="fa fa-search"></i>
 				<p:ajax event="dialogReturn"
-					listener="#{globalEditViewHandler.dialogReturnEventHandler.onWorklistSelectReturn}"
+					listener="#{dialogReturnHandler.onWorklistSelectReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm contentForm headerForm" />
 			</p:commandLink>

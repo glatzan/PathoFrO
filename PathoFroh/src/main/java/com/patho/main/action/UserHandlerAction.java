@@ -86,8 +86,7 @@ public class UserHandlerAction implements Serializable {
 	 */
 	@PostConstruct
 	public void init() {
-		setSelectedPrinter(printService.getCurrentPrinter(getCurrentUser()));
-		setSelectedLabelPrinter(printService.getCurrentLabelPrinter(getCurrentUser()));
+		updatePrinter();
 	}
 
 	/**
@@ -122,6 +121,16 @@ public class UserHandlerAction implements Serializable {
 
 		Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, t);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		updatePrinter();
+	}
+
+	/**
+	 * Sets the current printers
+	 */
+	public void updatePrinter() {
+		setSelectedPrinter(printService.getCurrentPrinter(getCurrentUser()));
+		setSelectedLabelPrinter(printService.getCurrentLabelPrinter(getCurrentUser()));
 	}
 
 	/**

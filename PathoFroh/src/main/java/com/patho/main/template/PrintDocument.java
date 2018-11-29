@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
+import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TextToLatexConverter;
 import com.patho.main.util.helper.TimeUtil;
 
@@ -107,6 +108,7 @@ public class PrintDocument extends AbstractTemplate {
 		// default date tool
 		context.put("date", new DateTool());
 		context.put("latexTextConverter", new TextToLatexConverter());
+		context.put("histoUtil", new  HistoUtil());
 
 		/* now render the template into a StringWriter */
 		StringWriter writer = new StringWriter();

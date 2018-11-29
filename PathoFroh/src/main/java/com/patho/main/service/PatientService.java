@@ -46,11 +46,8 @@ public class PatientService extends AbstractService {
 	 * @param patient
 	 * @param update
 	 * @throws JSONException
-	 * @throws ToManyEntriesException
-	 * @throws CustomNullPatientExcepetion
 	 */
-	public Patient addPatient(Patient patient)
-			throws JSONException, ToManyEntriesException, CustomNullPatientExcepetion {
+	public Patient addPatient(Patient patient) throws JSONException {
 		return addPatient(patient, true);
 	}
 

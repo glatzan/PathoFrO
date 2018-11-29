@@ -18,7 +18,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.service.SlideService;
-import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.task.TaskStatus;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
@@ -46,11 +45,6 @@ public class AddSlidesDialog extends AbstractDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private SlideService slideService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorkPhaseService workPhaseService;
 
 	/**
 	 * Current block for which the slides are created

@@ -13,7 +13,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.service.BlockService;
 import com.patho.main.service.SampleService;
 import com.patho.main.service.SlideService;
-import com.patho.main.service.WorkPhaseService;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 
 import lombok.AccessLevel;
@@ -39,11 +38,6 @@ public class DeleteTaskEntityDialog extends AbstractDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private BlockService blockService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorkPhaseService workPhaseService;
 
 	/**
 	 * Temporary save for a task tree entity (sample, slide, block)

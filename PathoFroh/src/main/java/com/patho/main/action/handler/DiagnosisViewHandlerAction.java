@@ -63,26 +63,5 @@ public class DiagnosisViewHandlerAction {
 		}
 	}
 
-	/**
-	 * Prints a lable for the choosen slide.
-	 * 
-	 * @param slide
-	 */
-	public void printLableForSlide(Slide slide) {
-
-		SlideLable slideLabel = DocumentTemplate
-				.getTemplateByID(globalSettings.getDefaultDocuments().getSlideLabelDocument());
-
-		if (slideLabel == null) {
-			log.debug("No template found for printing, returning!");
-			return;
-		}
-
-		slideLabel.initData(slide.getTask(), slide, new Date(System.currentTimeMillis()));
-		slideLabel.fillTemplate();
-
-		userHandlerAction.getSelectedLabelPrinter().print(slideLabel);
-
-	}
 
 }

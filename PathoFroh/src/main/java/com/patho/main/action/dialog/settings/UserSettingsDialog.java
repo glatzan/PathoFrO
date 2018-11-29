@@ -25,13 +25,15 @@ import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PrintService;
 import com.patho.main.ui.FavouriteListContainer;
-import com.patho.main.util.dialogReturn.ReloadUserEvent;
+import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -92,6 +94,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 		getUser().getSettings().setLabelPrinter(getPrintTab().getLabelPrinter());
 		getUser().getSettings().setPrinter(getPrintTab().getClinicPrinter());
 		setUser(userRepository.save(getUser()));
+		System.out.println(getUser().getSettings().getPreferedLabelPritner());
 	}
 
 	public void update() {
@@ -101,7 +104,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	public void saveAndHide() {
 		logger.debug("Saving user Settings");
 		save();
-		super.hideDialog(new ReloadUserEvent());
+		super.hideDialog(new ReloadUserEvent(getUser()));
 	}
 
 	public void hideDialog() {
@@ -193,6 +196,14 @@ public class UserSettingsDialog extends AbstractTabDialog {
 			logger.info("end -> " + (System.currentTimeMillis() - test));
 		}
 
+	}
+
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class ReloadUserEvent implements DialogReturnEvent {
+		private HistoUser user;
 	}
 
 }

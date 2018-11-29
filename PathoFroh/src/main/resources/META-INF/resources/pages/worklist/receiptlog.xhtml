@@ -87,7 +87,8 @@
 					style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor};"
 					styleClass="customBackground" editable="true"
 					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}">
-					<f:selectItems value="#{globalEditViewHandler.genericView.staticData.wardList}"
+					<f:selectItems
+						value="#{globalEditViewHandler.genericView.staticData.wardList}"
 						itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
 					<p:ajax event="change" execute="@this"
 						listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', worklistHandler.current.selectedTask, worklistHandler.current.selectedTask.ward)}" />
@@ -168,8 +169,7 @@
 				</h:panelGrid>
 
 				<!-- material -->
-				<c:forEach
-					items="#{worklistHandler.current.selectedTask.samples}"
+				<c:forEach items="#{worklistHandler.current.selectedTask.samples}"
 					var="sample" varStatus="loopCount">
 
 					<h:panelGrid columns="2"
@@ -536,7 +536,7 @@
 							<i class="fa fa-wrench" style="float: right; margin-right: 5px"
 								title="#{msg['body.receiptlog.slide.headline.options.text']}" />
 							<p:ajax event="dialogReturn"
-								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								update="navigationForm:patientList contentForm:contentPanel" />
 						</p:commandLink>
 					</f:facet>
@@ -558,7 +558,7 @@
 							actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
 							<i class="fa fa-fw fa-times-circle"></i>
 							<p:ajax event="dialogReturn"
-								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
 								update="navigationForm:patientList contentForm:contentPanel headerForm" />
 						</p:commandLink>
@@ -575,7 +575,7 @@
 								<i class="fa fa-fw fa-paint-brush"></i>
 								<p:ajax event="dialogReturn"
 									update="navigationForm:patientList contentForm:contentPanel headerForm"
-									listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+									listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 									oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane');" />
 							</p:commandLink>
 						</h:panelGroup>
@@ -587,7 +587,7 @@
 							<i class="fa fa-fw fa-times-circle"></i>
 							<p:ajax event="dialogReturn"
 								oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
-								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								update="navigationForm:patientList contentForm:contentPanel headerForm" />
 						</p:commandLink>
 					</h:panelGroup>
@@ -597,7 +597,7 @@
 						style="float: right">
 						<!-- ********** Print Button ********** -->
 						<p:commandLink
-							actionListener="#{receiptlogViewHandlerAction.printLableForSlide(stainingRow.entity)}"
+							actionListener="#{globalEditViewHandler.receiptLogView.printLable(stainingRow.entity)}"
 							title="#{msg['body.statiningView.printStaining']}">
 							<i class="fa fa-fw fa-print" />
 							<p:ajax event="dialogReturn"
@@ -627,7 +627,7 @@
 							<i class="fa fa-fw fa-times-circle" />
 							<p:ajax event="dialogReturn"
 								oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
-								listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								update="navigationForm:patientList contentForm:contentPanel headerForm" />
 						</p:commandLink>
 					</h:panelGroup>
@@ -716,8 +716,9 @@
 				disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 				actionListener="#{dialog.stainingPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, true)}">
 				<p:ajax event="dialogReturn"
-					listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
-					update="navigationForm:patientList contentForm:contentPanel headerForm" />
+					listener="#{dialogReturnHandler.onStatingPhaseExitReturn}"
+					update="navigationForm:patientList contentForm:contentPanel headerForm"
+					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')" />
 			</p:commandButton>
 
 			<!-- New sample -->
@@ -726,7 +727,7 @@
 				value="#{msg['body.statiningView.newSample']}"
 				actionListener="#{dialog.createSampleDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 				<p:ajax event="dialogReturn"
-					listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+					listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
 					update="navigationForm:patientList contentForm:contentPanel" />
 			</p:commandButton>
@@ -758,7 +759,7 @@
 					update="navigationForm:patientList contentForm:contentPanel headerForm"
 					actionListener="#{globalEditViewHandler.receiptLogView.performActionOnMany(worklistHandler.current.selectedTask)}">
 					<p:ajax event="dialogReturn"
-						listener="#{globalEditViewHandler.dialogReturnEventHandler.onDefaultDialogReturn}"
+						listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 						oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll', 'contentForm:contentScrollPane')"
 						update="navigationForm:patientList contentForm:contentPanel headerForm" />
 				</p:commandButton>

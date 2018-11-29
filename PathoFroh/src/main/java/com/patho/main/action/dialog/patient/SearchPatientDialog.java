@@ -56,6 +56,8 @@ public class SearchPatientDialog extends AbstractTabDialog {
 
 	private boolean showExternPatientTab;
 
+	private boolean persistPatient;
+
 	public SearchPatientDialog() {
 		setClinicSearchTab(new ClinicSearchTab());
 		setExternalPatientTab(new ExternalPatientTab());
@@ -70,6 +72,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 	public boolean initBean() {
 		tabs = new AbstractTab[] { clinicSearchTab };
 		this.showExternPatientTab = false;
+		this.persistPatient = false;
 		return super.initBean(null, Dialog.PATIENT_ADD);
 	}
 
@@ -83,6 +86,11 @@ public class SearchPatientDialog extends AbstractTabDialog {
 			appendTab(externalPatientTab);
 			externalPatientTab.initTab();
 		}
+		return this;
+	}
+
+	public SearchPatientDialog persistPatient() {
+		this.persistPatient = true;
 		return this;
 	}
 
@@ -222,7 +230,9 @@ public class SearchPatientDialog extends AbstractTabDialog {
 		 * dialog
 		 */
 		public void hideDialogAndSelectItem() {
-			SearchPatientDialog.this.hideDialog(new PatientReturnEvent(getSelectedPatientListItem().getListItem()));
+			SearchPatientDialog.this.hideDialog(new PatientReturnEvent(
+					persistPatient ? patientService.addPatient(getSelectedPatientListItem().getListItem(), false)
+							: getSelectedPatientListItem().getListItem()));
 		}
 
 		/**
@@ -279,8 +289,10 @@ public class SearchPatientDialog extends AbstractTabDialog {
 		 */
 		public void onConfirmExternalPatientDialog(SelectEvent event) {
 			if (event.getObject() != null && event.getObject() instanceof ConfirmExternalPatientReturnEvent) {
-				hideDialog(
-						new PatientReturnEvent(((ConfirmExternalPatientReturnEvent) event.getObject()).getPatient()));
+				SearchPatientDialog.this.hideDialog(new PatientReturnEvent(persistPatient
+						? patientService
+								.addPatient(((ConfirmExternalPatientReturnEvent) event.getObject()).getPatient(), false)
+						: ((ConfirmExternalPatientReturnEvent) event.getObject()).getPatient()));
 			}
 		}
 	}

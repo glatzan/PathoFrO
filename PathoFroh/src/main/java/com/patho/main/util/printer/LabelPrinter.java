@@ -6,21 +6,26 @@ import java.io.InputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.google.gson.annotations.Expose;
-import com.patho.main.template.print.SlideLable;
+import com.patho.main.action.handler.MessageHandler;
+import com.patho.main.config.PathoConfig;
+import com.patho.main.repository.PrintDocumentRepository;
+import com.patho.main.template.PrintDocument;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Zebra AbstractPrinter with ftp printing function. Buffer can be filled
@@ -32,8 +37,17 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Configurable
-@Slf4j
 public class LabelPrinter extends AbstractPrinter {
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PrintDocumentRepository PrintDocumentRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PathoConfig pathoConfig;
 
 	/**
 	 * Default name of the ftp uploaded file. Should contain %counter% in order to
@@ -43,25 +57,26 @@ public class LabelPrinter extends AbstractPrinter {
 	@Expose
 	private int timeout;
 
-	/**
-	 * Default constructor
-	 */
-	public LabelPrinter() {
-		// printBuffer = new HashMap<String, String>();
+	public void print(PrintDocument... tempaltes) throws CustomUserNotificationExcepetion {
+		String[] arr = new String[tempaltes.length];
+
+		for (int i = 0; i < tempaltes.length; i++) {
+			arr[i] = tempaltes[i].getFinalContent();
+		}
+
+		print(arr);
 	}
 
-	public void print(SlideLable tempalte) throws CustomUserNotificationExcepetion {
-		List<SlideLable> toPrint = new ArrayList<SlideLable>();
-		toPrint.add(tempalte);
-		print(toPrint);
+	public void print(List<String> tempaltes) throws CustomUserNotificationExcepetion {
+		String[] array = new String[tempaltes.size()];
+		print(tempaltes.toArray(array));
 	}
 
-	public void print(List<SlideLable> tempaltes) throws CustomUserNotificationExcepetion {
-
+	public void print(String... tempaltes) throws CustomUserNotificationExcepetion {
 		try {
 			FTPClient connection = openConnection();
-			for (SlideLable documentTemplate : tempaltes) {
-				print(connection, documentTemplate.getFileContent(), generateUnqiueName(6));
+			for (String content : tempaltes) {
+				print(connection, content, generateUnqiueName(6));
 			}
 			closeConnection(connection);
 		} catch (SocketTimeoutException e) {
@@ -73,23 +88,18 @@ public class LabelPrinter extends AbstractPrinter {
 
 	public boolean printTestPage() {
 
-		SlideLable label = DocumentTemplate
-				.getTemplateByID(globalSettings.getDefaultDocuments().getSlideLableTestDocument());
+		Optional<PrintDocument> doc = PrintDocumentRepository
+				.findByID(pathoConfig.getDefaultDocuments().getSlideLableTestDocument());
 
-		label.prepareTemplate();
-		
-		String toPrint = label.getFileContent();
-
-		if (toPrint == null)
+		if (!doc.isPresent()) {
+			logger.error("New Task: No TemplateUtil for printing label found");
+			MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate");
 			return false;
-
-		try {
-			FTPClient connection = openConnection();
-			print(connection, toPrint, generateUnqiueName(6));
-			closeConnection(connection);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+
+		doc.get().initilize(new HashMap<String, Object>());
+
+		print(doc.get().getFinalContent());
 
 		return true;
 	}
@@ -106,10 +116,10 @@ public class LabelPrinter extends AbstractPrinter {
 		InputStream stream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
 
 		if (connection.storeFile(file, stream)) {
-			log.debug("Upload " + file + ", ok");
+			logger.debug("Upload " + file + ", ok");
 			return true;
 		} else {
-			log.debug("Upload " + file + ", failed");
+			logger.debug("Upload " + file + ", failed");
 			return false;
 		}
 	}
@@ -123,7 +133,7 @@ public class LabelPrinter extends AbstractPrinter {
 	public FTPClient openConnection() throws SocketException, IOException {
 		FTPClient connection = new FTPClient();
 
-		log.debug("Connecting to label printer ftp://" + address + ":" + port);
+		logger.debug("Connecting to label printer ftp://" + address + ":" + port);
 
 		connection.setConnectTimeout(getTimeout());
 		connection.connect(address, Integer.valueOf(getPort()));

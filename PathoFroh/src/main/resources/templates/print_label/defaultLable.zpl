@@ -6,18 +6,18 @@
 ^FO07,20
 ^BY1
 ^BCN,40,N,N,N,A
-^FD%slideNumber%
+^FD$slide.uniqueIDinTask
 ^FS
 ^FO2,70
 ^A0N,30,20
-^FD%slideName%
+^FD$slide.task.taskID $slide.slideID
 ^FS
 ^FO02,100
 ^A0N,14,14
-^FD%slideText%
+^FD$slide.commentary
 ^FS
 ^FO02,118
 ^A0N,14,14
-^FD%date%
+^FD$date.format('dd.MM.yyyy', $date)
 ^FS
 ^XZ

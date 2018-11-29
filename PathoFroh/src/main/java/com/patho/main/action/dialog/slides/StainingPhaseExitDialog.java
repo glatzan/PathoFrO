@@ -9,7 +9,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.FavouriteListService;
-import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.task.TaskStatus;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
 
@@ -21,11 +20,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StainingPhaseExitDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorkPhaseService workPhaseService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

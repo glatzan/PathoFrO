@@ -257,8 +257,9 @@ public class PrintService extends AbstractService {
 		 * @return
 		 */
 		public LabelPrinter findPrinterForUser(HistoUser user) {
-			if(user == null)
+			if(user == null) {
 				return printer.get(0);
+			}
 			
 			// TODO auto select for roon
 			if (user.getSettings().getPreferedLabelPritner() == null) {

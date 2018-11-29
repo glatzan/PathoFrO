@@ -1,18 +1,29 @@
 package com.patho.main.action.handler.views;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Lazy;
 
+import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.handler.GlobalEditViewHandler;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.action.handler.GlobalEditViewHandler.StainingListAction;
+import com.patho.main.action.handler.WorkPhaseHandler;
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.SlideService;
+import com.patho.main.template.InitializeToken;
+import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.StainingTableChooser;
 
 import lombok.AccessLevel;
@@ -39,6 +50,27 @@ public class ReceiptLogView extends AbstractTaskView {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private TaskRepository taskRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	@Lazy
+	private WorkPhaseHandler workPhaseHandler;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PrintDocumentRepository printDocumentRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PathoConfig pathoConfig;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private UserHandlerAction userHandlerAction;
 
 	/**
 	 * Currently selected task in table form, transient, used for gui
@@ -134,7 +166,7 @@ public class ReceiptLogView extends AbstractTaskView {
 			logger.debug("Setting staining status of selected slides");
 			slides.stream().forEachOrdered(p -> slideService.completedStaining(p,
 					getActionOnMany() == StainingListAction.PERFORMED ? true : false));
-			getGlobalEditViewHandler().getWorkPhase().updateStainingPhase(
+			workPhaseHandler.updateStainingPhase(
 					taskRepository.save(task, resourceBundle.get("log.task.slide.completed", task)));
 			break;
 		case ARCHIVE:
@@ -143,39 +175,14 @@ public class ReceiptLogView extends AbstractTaskView {
 			break;
 		case PRINT:
 
-			// SlideLable slideLabel = DocumentTemplate
-			// .getTemplateByID(globalSettings.getDefaultDocuments().getSlideLabelDocument());
-			//
-			// if (slideLabel == null) {
-			// logger.debug("No template found for printing, returning!");
-			// return;
-			// }
-			//
-			// logger.debug("Printing labes for selected slides");
-			//
-			// List<SlideLable> toPrint = new ArrayList<SlideLable>();
-			//
-			// for (StainingTableChooser<?> stainingTableChooser : list) {
-			// if (stainingTableChooser.isChoosen() &&
-			// stainingTableChooser.isStainingType()) {
-			//
-			// Slide slide = (Slide) stainingTableChooser.getEntity();
-			//
-			// SlideLable tmp = (SlideLable) slideLabel.clone();
-			// tmp.initData(task, slide, new Date(System.currentTimeMillis()));
-			// tmp.fillTemplate();
-			// toPrint.add(tmp);
-			// }
-			// }
-			//
-			// if (toPrint.size() != 0) {
-			// try {
-			// userHandlerAction.getSelectedLabelPrinter().print(toPrint);
-			// } catch (CustomUserNotificationExcepetion e) {
-			// // handling offline error
-			// mainHandlerAction.sendGrowlMessages(e);
-			// }
-			// }
+			List<Slide> selectedSlides = new ArrayList<Slide>();
+
+			for (StainingTableChooser<?> stainingTableChooser : list)
+				if (stainingTableChooser.isChoosen() && stainingTableChooser.isStainingType())
+					selectedSlides.add((Slide) stainingTableChooser.getEntity());
+
+			Slide[] slideArr = new Slide[selectedSlides.size()];
+			printLable(selectedSlides.toArray(slideArr));
 
 			break;
 		default:
@@ -190,6 +197,33 @@ public class ReceiptLogView extends AbstractTaskView {
 	public void loadView() {
 		setActionOnMany(StainingListAction.NONE);
 		setStainingTableRows(StainingTableChooser.factory(getTask(), false));
+	}
+
+	public void printLable(Slide... slides) {
+
+		if (slides == null || slides.length == 0)
+			return;
+
+		Optional<PrintDocument> printDocument = printDocumentRepository
+				.findByID(pathoConfig.getDefaultDocuments().getSlideLabelDocument());
+
+		if (!printDocument.isPresent()) {
+			logger.error("New Task: No TemplateUtil for printing label found");
+			MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate");
+			return;
+		}
+
+		List<String> toPrint = new ArrayList<String>(slides.length);
+
+		for (Slide slide : slides) {
+			printDocument.get().initilize(new InitializeToken("slide", slide), new InitializeToken("date", new Date()));
+			toPrint.add(printDocument.get().getFinalContent());
+		}
+
+		userHandlerAction.getSelectedLabelPrinter().print(toPrint);
+
+		logger.debug("Printing label..");
+
 	}
 
 }

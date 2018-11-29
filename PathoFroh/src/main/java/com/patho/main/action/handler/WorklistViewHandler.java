@@ -415,6 +415,10 @@ public class WorklistViewHandler {
 		worklistHandler.getCurrent().add(patient);
 	}
 
+	public void reloadCurrentTask() {
+		onSelectTaskAndPatient(worklistHandler.getSelectedTask(), true);
+	}
+
 	/**
 	 * Selects the next task in List
 	 */

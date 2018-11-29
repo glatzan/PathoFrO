@@ -11,7 +11,6 @@ import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.service.SampleService;
-import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 
@@ -34,11 +33,6 @@ public class CreateSampleDialog extends AbstractDialog {
 	@Setter(AccessLevel.NONE)
 	private MaterialPresetRepository materialPresetRepository;
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorkPhaseService workPhaseService;
-	
 	private List<MaterialPreset> materials;
 
 	private DefaultTransformer<MaterialPreset> materialTransformer;
