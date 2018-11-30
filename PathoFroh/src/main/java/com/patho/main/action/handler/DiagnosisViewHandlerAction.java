@@ -1,7 +1,5 @@
 package com.patho.main.action.handler;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -9,10 +7,8 @@ import org.springframework.stereotype.Controller;
 import com.patho.main.action.dialog.diagnosis.CopyHistologicalRecordDialog;
 import com.patho.main.model.Signature;
 import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.TaskService;
-import com.patho.main.template.print.SlideLable;
 import com.patho.main.util.helper.TimeUtil;
 
 import lombok.AccessLevel;

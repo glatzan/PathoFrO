@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlPanelGroup;
 
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.menu.MenuModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,16 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog.DiagnosisPhaseExitData;
-import com.patho.main.action.dialog.patient.MergePatientDialog.PatientMergeEvent;
-import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
-import com.patho.main.action.dialog.worklist.WorklistSearchDialog.WorklistSearchReturnEvent;
 import com.patho.main.action.handler.views.GenericView;
 import com.patho.main.action.handler.views.ReceiptLogView;
 import com.patho.main.action.handler.views.ReportView;
 import com.patho.main.action.handler.views.TaskView;
 import com.patho.main.common.ContactRole;
-import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.View;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.AssociatedContact;
@@ -60,10 +54,6 @@ import com.patho.main.service.TaskService;
 import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.ui.menu.MenuGenerator;
-import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
-import com.patho.main.util.dialogReturn.PatientReturnEvent;
-import com.patho.main.util.dialogReturn.ReloadEvent;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.worklist.Worklist;
@@ -226,14 +216,14 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		// setting default subview
 		getNavigationData().setLastDefaultView(userHandlerAction.getCurrentUser().getSettings().getDefaultView());
 
-		logger.debug("3. Setting worklist");
-		worklistViewHandler.addWorklist(worklist, true);
-
-		logger.debug("4. Loading common data");
+		logger.debug("3. Loading common data");
 		genericView.loadStaticData();
 
-		logger.debug("5. Loading view data");
+		logger.debug("4. Loading view data");
 		navigationData.updateData();
+		
+		logger.debug("5. Setting worklist");
+		worklistViewHandler.addWorklist(worklist, true);
 
 		logger.debug("6. Init task data");
 

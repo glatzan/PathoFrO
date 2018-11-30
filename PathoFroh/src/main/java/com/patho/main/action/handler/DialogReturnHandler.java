@@ -7,12 +7,21 @@ import org.springframework.stereotype.Controller;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog.DiagnosisPhaseExitData;
+import com.patho.main.action.dialog.miscellaneous.DeleteDialog.DeleteEvent;
 import com.patho.main.action.dialog.patient.MergePatientDialog.PatientMergeEvent;
 import com.patho.main.action.dialog.settings.UserSettingsDialog.ReloadUserEvent;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.dialog.worklist.WorklistSearchDialog.WorklistSearchReturnEvent;
 import com.patho.main.action.handler.GlobalEditViewHandler.TaskInitilize;
+import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Patient;
+import com.patho.main.model.patient.Sample;
+import com.patho.main.model.patient.Slide;
+import com.patho.main.model.patient.Task;
+import com.patho.main.service.BlockService;
+import com.patho.main.service.SampleService;
+import com.patho.main.service.SlideService;
+import com.patho.main.service.TaskService;
 import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
@@ -25,34 +34,31 @@ import lombok.Setter;
 
 @Controller
 @Scope("session")
-@Getter
-@Setter
 public class DialogReturnHandler extends AbstractHandler {
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private GlobalEditViewHandler globalEditViewHandler;
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private WorklistHandler worklistHandler;
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private WorkPhaseHandler workPhaseHandler;
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private UserHandlerAction userHandlerAction;
+
+	@Autowired
+	private SlideService slideService;
+
+	@Autowired
+	private BlockService blockService;
+
+	@Autowired
+	private SampleService sampleService;
 
 	/**
 	 * 
@@ -100,7 +106,7 @@ public class DialogReturnHandler extends AbstractHandler {
 					worklistViewHandler.replaceTaskInWorklist(((ReloadTaskEvent) event.getObject()).getTask());
 				else
 					worklistViewHandler.reloadCurrentTask();
-			}else if (event.getObject() instanceof DiagnosisPhaseExitData) {
+			} else if (event.getObject() instanceof DiagnosisPhaseExitData) {
 				logger.debug("Diagnosis phase exit dialog return");
 
 				DiagnosisPhaseExitData data = (DiagnosisPhaseExitData) event.getObject();
@@ -184,6 +190,35 @@ public class DialogReturnHandler extends AbstractHandler {
 		if (event.getObject() instanceof StainingPhaseUpdateEvent) {
 			logger.debug("Update Stating phase");
 			workPhaseHandler.updateStainingPhase(((StainingPhaseUpdateEvent) event.getObject()).getTask());
+			return;
+		}
+
+		onDefaultDialogReturn(event);
+	}
+
+	/**
+	 * Called on task entity delete return
+	 * 
+	 * @param event
+	 */
+	public void onDeleteTaskEntityReturn(SelectEvent event) {
+		if (event.getObject() instanceof DeleteEvent) {
+
+			DeleteEvent deleteEvent = (DeleteEvent) event.getObject();
+
+			logger.debug("Deleteing task entity object");
+
+			Task t = null;
+			if (deleteEvent.getObject() instanceof Slide) {
+				t = slideService.deleteSlideAndPersist((Slide) deleteEvent.getObject());
+			} else if (deleteEvent.getObject() instanceof Block) {
+				t = blockService.deleteBlockAndPersist((Block) deleteEvent.getObject());
+			} else if (deleteEvent.getObject() instanceof Sample) {
+				t = sampleService.deleteSampleAndPersist((Sample) deleteEvent.getObject());
+			}
+
+			onStainingChangeReturn(
+					new SelectEvent(event.getComponent(), event.getBehavior(), new StainingPhaseUpdateEvent(t)));
 			return;
 		}
 

@@ -1,8 +1,5 @@
 package com.patho.main.action.dialog.settings.material;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -13,7 +10,6 @@ import com.patho.main.action.dialog.slides.AddSlidesDialog.StainingPrototypeHold
 import com.patho.main.common.Dialog;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototypeDetails;
 import com.patho.main.service.MaterialPresetService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 

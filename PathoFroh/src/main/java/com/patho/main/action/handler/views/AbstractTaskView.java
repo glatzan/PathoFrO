@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.action.handler.WorklistHandler;
-import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.Task;
 

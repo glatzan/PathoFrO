@@ -15,9 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.patho.main.config.security.util.UserAuthorizationToken;
-import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoUser;
-import com.patho.main.repository.LDAPRepository;
 import com.patho.main.service.AuthenticationService;
 import com.patho.main.service.UserService;
 import com.patho.main.util.ldap.LDAPAuthenticationException;

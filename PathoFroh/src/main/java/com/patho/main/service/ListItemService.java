@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.ListItem;
 import com.patho.main.model.ListItem_;
-import com.patho.main.model.Physician;
 import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.repository.ListItemRepository;
 

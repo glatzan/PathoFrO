@@ -1,16 +1,13 @@
 package com.patho.main.action.dialog.settings.physician;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
-import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
-import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -20,7 +17,6 @@ import com.patho.main.model.Physician;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;

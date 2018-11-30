@@ -3,35 +3,27 @@ package com.patho.main.action.dialog.settings.groups;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.View;
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoGroup.AuthRole;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoSettings;
-import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
-import com.patho.main.repository.UserRepository;
 import com.patho.main.service.GroupService;
-import com.patho.main.service.UserService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

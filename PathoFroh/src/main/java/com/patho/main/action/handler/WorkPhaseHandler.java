@@ -1,11 +1,9 @@
 package com.patho.main.action.handler;
 
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.patho.main.action.handler.GlobalEditViewHandler.TaskInitilize;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;

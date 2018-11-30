@@ -259,7 +259,8 @@ public class WorklistViewHandler {
 			}
 		}
 
-		logger.debug("Selecting task " + task.getPatient().getPerson().getFullName() + " " + task.getTaskID());
+		logger.debug("Selecting task {}, {}, patient has {} tasks ", task.getPatient().getPerson().getFullName(),
+				task.getTaskID(), task.getPatient().getTasks().size());
 
 		// replacing patient, generating task status
 		worklistHandler.getCurrent().add(task, true);
@@ -423,14 +424,14 @@ public class WorklistViewHandler {
 	}
 
 	public void replaceTaskInWorklist(Task task, boolean reload) {
-		
+
 		if (reload)
 			task = taskRepository.findOptionalById(task.getId()).get();
-		
+
 		logger.debug("Replacing task due to external changes!");
-		
+
 		worklistHandler.getCurrent().add(task);
-		
+
 		if (worklistHandler.getCurrent().isSelected(task))
 			// generating task data, taskstatus is generated previously
 			globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_MENU_MODEL);

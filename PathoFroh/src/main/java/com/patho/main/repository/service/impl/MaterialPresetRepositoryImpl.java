@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.MaterialPreset_;
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototype_;
-import com.patho.main.model.StainingPrototype.StainingType;
 import com.patho.main.repository.service.MaterialPresetRepositoryCustom;
 
 @Service

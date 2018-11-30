@@ -1,8 +1,5 @@
 package com.patho.main.action.dialog;
 
-import org.omnifaces.el.functions.Arrays;
-
-import com.patho.main.action.dialog.AbstractTabDialog.AbstractTab;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 

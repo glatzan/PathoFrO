@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteListItem;
 import com.patho.main.model.favourites.FavouritePermissions;

@@ -12,10 +12,9 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.Physician_;
 import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototype_;
 import com.patho.main.model.StainingPrototype.StainingType;
+import com.patho.main.model.StainingPrototype_;
 import com.patho.main.repository.service.StainingPrototypeRepositoryCustom;
 
 @Service

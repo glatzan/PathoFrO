@@ -42,13 +42,13 @@ public class CreateSampleDialog extends AbstractDialog {
 	public CreateSampleDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
-		
+
 		return this;
 	}
 
 	public boolean initBean(Task task) {
 		super.initBean(task, Dialog.SAMPLE_CREATE);
-		
+
 		setMaterials(materialPresetRepository.findAll(true));
 
 		if (!getMaterials().isEmpty()) {
@@ -59,7 +59,6 @@ public class CreateSampleDialog extends AbstractDialog {
 	}
 
 	public void createSampleAndHide() {
-		sampleService.createSample(getTask(), getSelectedMaterial());
-		hideDialog(new StainingPhaseUpdateEvent());
+		hideDialog(new StainingPhaseUpdateEvent(sampleService.createSample(getTask(), getSelectedMaterial())));
 	}
 }

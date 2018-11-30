@@ -6,18 +6,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.AbstractTabChangeEventHandler;
 import com.patho.main.action.dialog.AbstractTabDialog;
-import com.patho.main.action.dialog.settings.diagnosis.DiagnosisPresetEditDialog;
-import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.View;
-import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoUser;
@@ -35,7 +30,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Configurable
 @Getter

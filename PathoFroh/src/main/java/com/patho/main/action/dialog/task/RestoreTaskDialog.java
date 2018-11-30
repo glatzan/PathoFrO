@@ -15,7 +15,6 @@ import com.patho.main.model.ListItem;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.TaskService;
 import com.patho.main.ui.interfaces.ListItemsAutoCompete;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 
 import lombok.AccessLevel;
 import lombok.Getter;

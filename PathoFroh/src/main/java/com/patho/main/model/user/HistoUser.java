@@ -22,8 +22,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.patho.main.model.Contact;
-import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.interfaces.ArchivAble;
 import com.patho.main.model.interfaces.ID;

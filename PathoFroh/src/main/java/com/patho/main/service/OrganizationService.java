@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.Contact;
-import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.repository.OrganizationRepository;

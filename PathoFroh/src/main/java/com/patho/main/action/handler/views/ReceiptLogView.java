@@ -1,6 +1,5 @@
 package com.patho.main.action.handler.views;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,13 +12,12 @@ import org.springframework.context.annotation.Lazy;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.handler.GlobalEditViewHandler;
-import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.action.handler.GlobalEditViewHandler.StainingListAction;
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.action.handler.WorkPhaseHandler;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
-import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.SlideService;
@@ -197,6 +195,7 @@ public class ReceiptLogView extends AbstractTaskView {
 
 	@Override
 	public void loadView() {
+		logger.debug("Loading receiptlog view");
 		setActionOnMany(StainingListAction.NONE);
 		setStainingTableRows(StainingTableChooser.factory(getTask(), false));
 	}
@@ -219,13 +218,16 @@ public class ReceiptLogView extends AbstractTaskView {
 
 		for (Slide slide : slides) {
 			printDocument.get().initilize(new InitializeToken("slide", slide), new InitializeToken("date", new Date()),
-					new InitializeToken("uniqueID", slide.getTask().getTaskID()+""+HistoUtil.fitString(slide.getUniqueIDinTask(), 3, '0')));
+					new InitializeToken("uniqueID",
+							slide.getTask().getTaskID() + "" + HistoUtil.fitString(slide.getUniqueIDinTask(), 3, '0')));
 			System.out.println(printDocument.get().getFinalContent());
 			toPrint.add(printDocument.get().getFinalContent());
 		}
 
 		userHandlerAction.getSelectedLabelPrinter().print(toPrint);
 
+		MessageHandler.sendGrowlMessagesAsResource("growl.print", "growl.print.slide.print");
+		
 		logger.debug("Printing label..");
 
 	}

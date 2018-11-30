@@ -55,7 +55,6 @@ public enum Dialog {
 	NOTIFICATION("/pages/dialog/notification/notification", null,  1024, 600, false, false, true),  // 16:9
 	NOTIFICATION_PREVIEW("/pages/dialog/notification/notification_preview", null,  1024, 600, false, false, true), //  16:9
 	INFO("/pages/dialog/info/info", null,  1024, 600, false, false, true),																									// OK
-	DELETE_TASK_ENTITY("/pages/dialog/task/delete/deleteTaskEntity", null,  480, 272, false, false, true), //  16:9
 	PDF_ORGANIZER("/pages/dialog/upload/pdfOrganizer", null,  1280, 720,  false, false, true), 																				// OK
 	PDF_UPLOAD("/pages/dialog/upload/upload", null,  640, 360, false, false, true),																							// OK
 	PDF_EDIT("/pages/dialog/upload/editPDF", null,  640, 360, false, false, true),																							// OK
@@ -71,7 +70,8 @@ public enum Dialog {
 	DIAGNOSIS_REVISION_ADD("/pages/dialog/task/diagnosisRevision/diagnosisRevisionDialogQuickAdd", null, 480, 272, false, false, true), 									// OK		// TEST OK
 	PRINT_SELECT_PRINTER("/pages/dialog/selectPrinter", null, 640, 360, false, false, true),
 	ACCOUNTING_DATA("/pages/dialog/miscellaneous/accounting", null,  1024, 600, false, false, true),																		// OK
-	CONFIRM_CHANGE("/pages/dialog/miscellaneous/confirm", null, 320, 180, false, false, true);																				// OK
+	CONFIRM_CHANGE("/pages/dialog/miscellaneous/confirm", null, 320, 180, false, false, true),																				// OK
+	DELETE_ID_OBJECT("/pages/dialog/miscellaneous/delete", null, 320, 180, false, false, true);																				// OK
 	
 	private final String path;
 	private final boolean useOptions;

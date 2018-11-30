@@ -1,6 +1,5 @@
 package com.patho.main.service;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Physician;
-import com.patho.main.model.user.HistoGroup;
 import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.util.helper.HistoUtil;

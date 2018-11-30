@@ -18,10 +18,8 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 import com.patho.main.model.interfaces.EditAbleEntity;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.model.interfaces.LogAble;
 
 import lombok.Getter;

@@ -31,7 +31,6 @@ import com.patho.main.model.interfaces.ID;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Audited

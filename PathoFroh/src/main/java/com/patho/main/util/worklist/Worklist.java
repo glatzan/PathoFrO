@@ -228,18 +228,18 @@ public class Worklist {
 
 		// updating if
 		if (select || isSelected) {
-			System.out.println("select tasl" + task);
 			setSelectedTask(task);
 
 			// only setting new task info if task has changed, this way data ca persists
 			// over task realoads
-			if (!isSelected)
+			if (!isSelected || getSelectedTaskInfo() == null)
 				setSelectedTaskInfo(new TaskInfo(task));
 			else
 				getSelectedTaskInfo().setTask(task);
 		}
 	}
 
+	
 	/**
 	 * Adds a list of patients to the worklist, if one is already present in the
 	 * worklist, the patient will be replaced
@@ -569,13 +569,10 @@ public class Worklist {
 			logger.debug("Reloading current Task and Patient");
 			Optional<Task> oTask = taskRepository.findOptionalByIdAndInitialize(selectedTask.getId(), true, true, true,
 					true, true);
-			setSelectedTask(oTask.get());
-			setSelectedPatient(oTask.get().getPatient());
-			add(oTask.get().getPatient());
+			add(oTask.get());
 		} else if (selectedPatient != null) {
 			logger.debug("Reloading Patient");
 			Optional<Patient> oPatient = patientRepository.findOptionalById(selectedPatient.getId(), true);
-			setSelectedPatient(oPatient.get());
 			add(oPatient.get());
 		} else {
 			logger.debug("Error not reloading anything, should not happen!");

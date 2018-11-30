@@ -1,24 +1,15 @@
 package com.patho.main.action.dialog.settings.diagnosis;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
-import com.patho.main.action.dialog.slides.AddSlidesDialog.StainingPrototypeHolder;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.DiagnosisPreset;
-import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototypeDetails;
-import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.service.DiagnosisPresetService;
-import com.patho.main.service.MaterialPresetService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;

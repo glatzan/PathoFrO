@@ -17,6 +17,7 @@ import com.patho.main.action.dialog.media.PDFOrganizer;
 import com.patho.main.action.dialog.media.UploadDialog;
 import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
 import com.patho.main.action.dialog.miscellaneous.ConfirmDialog;
+import com.patho.main.action.dialog.miscellaneous.DeleteDialog;
 import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.notification.ContactSelectDialog;
@@ -52,7 +53,6 @@ import com.patho.main.action.dialog.slides.StainingPhaseExitDialog;
 import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
-import com.patho.main.action.dialog.task.DeleteTaskEntityDialog;
 import com.patho.main.action.dialog.worklist.WorklistSearchDialog;
 import com.patho.main.action.dialog.worklist.WorklistSettingsDialog;
 import com.patho.main.action.dialog.worklist.WorklistSortDialog;
@@ -67,7 +67,6 @@ public class DialogHandler {
 	private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
 	private CreateSampleDialog createSampleDialog = new CreateSampleDialog();
 	private SlideNamingDialog slideNamingDialog = new SlideNamingDialog();
-	private DeleteTaskEntityDialog deleteTaskEntityDialog = new DeleteTaskEntityDialog();
 	private StainingPhaseExitDialog stainingPhaseExitDialog = new StainingPhaseExitDialog();
 	private SlideOverviewDialog slideOverviewDialog = new SlideOverviewDialog();
 	private QuickAddDiangosisRevisionDialog quickAddDiangosisRevisionDialog = new QuickAddDiangosisRevisionDialog();
@@ -118,4 +117,5 @@ public class DialogHandler {
 	private EditPatientDialog editPatientDialog = new EditPatientDialog();
 	private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
 	private ConfirmDialog confirmDialog = new ConfirmDialog();
+	private DeleteDialog deleteDialog = new DeleteDialog();
 }

@@ -59,9 +59,8 @@
 				<h:panelGrid columns="2" styleClass="right" id="buttonContainer">
 					<!-- confirm -->
 					<p:commandButton value="#{msg['general.delete']}"
-						icon="fa fa-trash-o">
-						<f:actionListener
-							binding="#{dialog.deleteTaskEntityDialog.deleteAndHide()}" />
+						icon="fa fa-trash-o"
+						actionListener="#{dialog.deleteTaskEntityDialog.deleteAndHide()}">
 					</p:commandButton>
 
 					<!-- Abort button -->

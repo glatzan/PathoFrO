@@ -265,7 +265,7 @@ public class TaskRepositoryImpl extends AbstractRepositoryCustom implements Task
 		Optional<Task> task = Optional.ofNullable(groups.size() > 0 ? groups.get(0) : null);
 
 		if (loadParent && task.isPresent()) {
-			Hibernate.initialize(task.get().getParent().getTask());
+			Hibernate.initialize(task.get().getParent().getTasks());
 			Hibernate.initialize(task.get().getParent().getAttachedPdfs());
 		}
 

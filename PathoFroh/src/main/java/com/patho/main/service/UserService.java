@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.Contact;
-import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoGroup;
@@ -20,7 +19,6 @@ import com.patho.main.model.user.HistoSettings;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.LDAPRepository;
-import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.UserRepository;
 
 @Service

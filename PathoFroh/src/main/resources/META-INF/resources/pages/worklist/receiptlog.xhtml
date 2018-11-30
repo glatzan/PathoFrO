@@ -555,10 +555,10 @@
 						<!-- ********** Delete Button ********** -->
 						<p:commandLink title="#{msg['body.statiningView.archiveSample']}"
 							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-							actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
+							actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.sample.text',stainingRow.entity.sampleID).ctext('dialog.delete.sample.text',stainingRow.entity.sampleID)}">
 							<i class="fa fa-fw fa-times-circle"></i>
 							<p:ajax event="dialogReturn"
-								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDeleteTaskEntityReturn}"
 								oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
 								update="navigationForm:patientList contentForm:contentPanel headerForm" />
 						</p:commandLink>
@@ -583,11 +583,11 @@
 						<p:commandLink
 							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							title="#{msg['body.statiningView.archiveBlock']}"
-							actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
+							actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.block.headline',stainingRow.entity.slideID).ctext('dialog.delete.block.text',stainingRow.entity.slideID)}">
 							<i class="fa fa-fw fa-times-circle"></i>
 							<p:ajax event="dialogReturn"
 								oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
-								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDeleteTaskEntityReturn}"
 								update="navigationForm:patientList contentForm:contentPanel headerForm" />
 						</p:commandLink>
 					</h:panelGroup>
@@ -613,7 +613,8 @@
 							<i class="fa fa-fw fa-check-circle" />
 						</p:commandLink>
 						<!-- ********** Cloud Button ********** -->
-						<p:commandLink title="#{msg['body.statiningView.showStaining']}">
+						<p:commandLink title="#{msg['body.statiningView.showStaining']}"
+							disabled="true">
 							<i class="fa fa-fw fa-file-photo-o" />
 							<p:ajax event="dialogReturn"
 								oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
@@ -623,11 +624,11 @@
 						<p:commandLink
 							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							title="#{msg['body.statiningView.archiveStaining']}"
-							actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
+							actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.slide.headline',stainingRow.entity.slideID).ctext('dialog.delete.slide.text',stainingRow.entity.slideID)}">
 							<i class="fa fa-fw fa-times-circle" />
 							<p:ajax event="dialogReturn"
 								oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
-								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+								listener="#{dialogReturnHandler.onDeleteTaskEntityReturn}"
 								update="navigationForm:patientList contentForm:contentPanel headerForm" />
 						</p:commandLink>
 					</h:panelGroup>
@@ -727,7 +728,7 @@
 				value="#{msg['body.statiningView.newSample']}"
 				actionListener="#{dialog.createSampleDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 				<p:ajax event="dialogReturn"
-					listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+					listener="#{dialogReturnHandler.onStainingChangeReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
 					update="navigationForm:patientList contentForm:contentPanel" />
 			</p:commandButton>

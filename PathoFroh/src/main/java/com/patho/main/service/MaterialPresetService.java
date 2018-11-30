@@ -1,23 +1,14 @@
 package com.patho.main.service;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.Physician;
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototypeDetails;
-import com.patho.main.model.interfaces.ListOrder;
 import com.patho.main.repository.MaterialPresetRepository;
-import com.patho.main.repository.StainingPrototypeDetailsRepository;
-import com.patho.main.repository.StainingPrototypeRepository;
 
 @Service
 @Transactional

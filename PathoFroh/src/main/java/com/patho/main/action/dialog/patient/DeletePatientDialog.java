@@ -10,7 +10,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.service.PatientService;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

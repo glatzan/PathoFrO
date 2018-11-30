@@ -1,4 +1,4 @@
-package com.patho.main.action.dialog.task;
+package com.patho.main.action.dialog.miscellaneous;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -77,4 +77,8 @@ public class DeleteTaskEntityDialog extends AbstractDialog {
 
 		hideDialog(new StainingPhaseUpdateEvent(t));
 	}
+	
+	slideOverview
+	
+	actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
 }
