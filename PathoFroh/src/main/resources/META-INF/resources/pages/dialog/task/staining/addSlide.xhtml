@@ -31,7 +31,7 @@
 
 		<div class="dialogContent">
 			<p:accordionPanel styleClass="contentAccordionPannel"
-				style="height:320px" value="#{dialog.addSlidesDialog.container}"
+				style="height:290px" value="#{dialog.addSlidesDialog.container}"
 				var="container">
 				<p:tab title="#{container.type}">
 					<h:panelGrid columns="2" cellpadding="5">
@@ -40,7 +40,7 @@
 							styleClass="defaultHistoDataTable"
 							rowKey="#{stainingHolder.prototype.id}"
 							selection="#{container.selectedPrototypes}" scrollable="true"
-							scrollHeight="250" value="#{container.prototpyes}">
+							scrollHeight="220" value="#{container.prototpyes}">
 
 							<p:column selectionMode="multiple"
 								style="width:16px;text-align:center" />
@@ -70,19 +70,21 @@
 			</p:accordionPanel>
 
 			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				style="margin-top:10px;"
 				rendered="#{!dialog.addSlidesDialog.selectMode}"
 				columnClasses="columnWidth150," id="commentaryTable">
 				<!-- silde commentary -->
-				<h:outputLabel value="#{msg['dialog.addSlide.commentray']}" />
+				<h:outputLabel value="#{msg['dialog.addSlide.slideLabelText']}" />
 				<p:selectOneMenu style="width: 90%"
-					value="#{dialog.addSlidesDialog.commentary}" editable="true">
+					value="#{dialog.addSlidesDialog.slideLabelText}" editable="true">
 
-					<f:selectItems value="#{dialog.addSlidesDialog.slideCommentary}"
-						var="commentary" itemLabel="#{commentary.value}"
-						itemValue="#{commentary.value}" />
-
+					<f:selectItems value="#{dialog.addSlidesDialog.slideLabelTexts}"
+						var="sText" itemLabel="#{sText.value}" itemValue="#{sText.value}" />
 				</p:selectOneMenu>
+
+				<!-- commentary -->
+				<h:outputLabel value="#{msg['dialog.addSlide.commentray']}"></h:outputLabel>
+				<p:inputTextarea cols="85" rows="3"
+					value="#{dialog.addSlidesDialog.commentary}" />
 
 				<!-- is restaining -->
 				<h:panelGroup>
@@ -94,7 +96,6 @@
 				</h:panelGroup>
 				<p:selectBooleanCheckbox
 					value="#{dialog.addSlidesDialog.restaining}" />
-
 
 				<!-- as completed -->
 				<h:panelGroup>

@@ -24,17 +24,17 @@ public class SlideService extends AbstractService {
 
 	@Autowired
 	private SlideRepository slideRepository;
-	
+
 	@Autowired
 	private StainingPrototypeService stainingPrototypeService;
 
 	public void createSlideAndPersist(StainingPrototype prototype, Block block) {
-		createSlide(prototype, block, null, false, true, false, true);
+		createSlide(prototype, block, null, null, false, true, false, true);
 	}
 
-	public void createSlideAndPersist(StainingPrototype prototype, Block block, String commentary, boolean reStaining,
+	public void createSlideAndPersist(StainingPrototype prototype, Block block, String slideLabelText, boolean reStaining,
 			boolean naming, boolean asCompleted) {
-		createSlide(prototype, block, commentary, reStaining, naming, asCompleted, true);
+		createSlide(prototype, block, slideLabelText, null, reStaining, naming, asCompleted, true);
 	}
 
 	/**
@@ -59,11 +59,11 @@ public class SlideService extends AbstractService {
 	 * @param asCompleted
 	 * @return
 	 */
-	public Task createSlidesAndPersist(List<StainingPrototype> prototypes, Block block, String commentary,
+	public Task createSlidesAndPersist(List<StainingPrototype> prototypes, Block block, String slideLabelText,
 			boolean reStaining, boolean naming, boolean asCompleted) {
 
 		for (StainingPrototype p : prototypes) {
-			createSlide(p, block, commentary, reStaining, naming, asCompleted, false);
+			createSlide(p, block, slideLabelText, null, reStaining, naming, asCompleted, false);
 		}
 
 		return taskRepository.save(block.getTask(), resourceBundle.get("log.task.slide.new", block));
@@ -77,7 +77,7 @@ public class SlideService extends AbstractService {
 	 * @return
 	 */
 	public Task createSlidesXTimesAndPersist(List<StainingPrototypeHolder> prototypeHolders, Block block) {
-		return createSlidesXTimesAndPersist(prototypeHolders, block, null, false, true, false);
+		return createSlidesXTimesAndPersist(prototypeHolders, block, null, null, false, true, false);
 	}
 
 	/**
@@ -92,11 +92,12 @@ public class SlideService extends AbstractService {
 	 * @return
 	 */
 	public Task createSlidesXTimesAndPersist(List<StainingPrototypeHolder> prototypeHolders, Block block,
-			String commentary, boolean reStaining, boolean naming, boolean asCompleted) {
+			String slideLabelText, String commentary, boolean reStaining, boolean naming, boolean asCompleted) {
 
 		for (StainingPrototypeHolder p : prototypeHolders) {
 			for (int i = 0; i < p.getCount(); i++)
-				createSlide(p.getPrototype(), block, commentary, reStaining, naming, asCompleted, false);
+				createSlide(p.getPrototype(), block, slideLabelText, commentary, reStaining, naming, asCompleted,
+						false);
 		}
 
 		return taskRepository.save(block.getTask(), resourceBundle.get("log.task.slide.newxtimes", block));
@@ -109,7 +110,7 @@ public class SlideService extends AbstractService {
 	 * @param block
 	 */
 	public Task createSlide(StainingPrototype prototype, Block block) {
-		return createSlide(prototype, block, null, false, true, false, false);
+		return createSlide(prototype, block, null, null, false, true, false, false);
 	}
 
 	/**
@@ -122,8 +123,8 @@ public class SlideService extends AbstractService {
 	 * @param commentary
 	 * @param patientOfSample
 	 */
-	public Task createSlide(StainingPrototype prototype, Block block, String commentary, boolean reStaining,
-			boolean naming, boolean asCompleted, boolean save) {
+	public Task createSlide(StainingPrototype prototype, Block block, String slideLabelText, String commentary,
+			boolean reStaining, boolean naming, boolean asCompleted, boolean save) {
 
 		logger.debug("Creating new slide " + prototype.getName());
 
@@ -141,6 +142,7 @@ public class SlideService extends AbstractService {
 		if (naming)
 			slide.getParent().updateAllNames(block.getTask().isUseAutoNomenclature(), false);
 
+		slide.setSlideLabelText(slideLabelText);
 		slide.setCommentary(commentary);
 		slide.setReStaining(reStaining);
 

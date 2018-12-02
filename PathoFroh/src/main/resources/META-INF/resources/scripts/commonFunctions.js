@@ -99,7 +99,7 @@ function executeFunctionFromBean(btn) {
  */
 function getAlteredID(str) {
 	// for selection in JQuery the ids with : must be endoded with \\:
-	var primfcid = str.replace(':', '\\:');
+	var primfcid = str.replace(new RegExp(':', 'g'), '\\:');
 	var idDataTbl = '#' + primfcid;
 
 	return idDataTbl;
@@ -170,11 +170,12 @@ function showAndUpdateOverlayPanel(panelID, parentID, resetContentFunction,
 			}
 			
 		} else {
-			data =  focusElementID;
+			data =  getAlteredID(focusElementID);
 		}
 		
-		if(data != null)
+		if(data != null){
 			focusElement(data);
+		}
 		
 		if (submitFunction != null) {
 

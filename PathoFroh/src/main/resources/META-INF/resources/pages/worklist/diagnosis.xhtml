@@ -42,8 +42,7 @@
 					styleClass="defaultHistoHiddenTableContainer">
 
 					<!-- material -->
-					<c:forEach
-						items="#{worklistHandler.current.selectedTask.samples}"
+					<c:forEach items="#{worklistHandler.current.selectedTask.samples}"
 						var="sample" varStatus="loopCount">
 
 						<h:panelGrid columns="2" styleClass="defaultHistoTable"
@@ -130,7 +129,7 @@
 					<h:outputLabel value="#{msg['body.diagnosis.story']}" />
 
 					<h:panelGroup>
-						<p:inputTextarea
+						<p:inputTextarea styleClass="customBackground"
 							value="#{worklistHandler.current.selectedTask.caseHistory}"
 							title="#{msg['body.diagnosis.story.watermark']}"
 							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"

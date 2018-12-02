@@ -57,6 +57,11 @@ public class AddSlidesDialog extends AbstractDialog {
 	private String commentary;
 
 	/**
+	 * Slide lable text
+	 */
+	private String slideLabelText;
+
+	/**
 	 * True if block is null, so only stainings can be selected
 	 */
 	private boolean selectMode;
@@ -79,13 +84,13 @@ public class AddSlidesDialog extends AbstractDialog {
 	/**
 	 * Contains all available case histories
 	 */
-	private List<ListItem> slideCommentary;
+	private List<ListItem> slideLabelTexts;
 
 	/**
 	 * Initializes the dialog for selecting stainings.
 	 */
 	public AddSlidesDialog initAndPrepareBean() {
-		return initAndPrepareBean((Block)null);
+		return initAndPrepareBean((Block) null);
 	}
 
 	/**
@@ -105,7 +110,6 @@ public class AddSlidesDialog extends AbstractDialog {
 	 * @param task
 	 */
 	public boolean initBean(Block block) {
-		super.initBean(null, Dialog.SLIDE_CREATE);
 
 		setBlock(block);
 
@@ -113,7 +117,9 @@ public class AddSlidesDialog extends AbstractDialog {
 
 		setAsCompleted(false);
 
-		setSlideCommentary(
+		setSlideLabelText("");
+		
+		setSlideLabelTexts(
 				listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.SLIDES, false));
 
 		setSelectMode(block == null);
@@ -131,7 +137,7 @@ public class AddSlidesDialog extends AbstractDialog {
 							.map(p -> new StainingPrototypeHolder(p)).collect(Collectors.toList())));
 		}
 
-		return true;
+		return super.initBean(Dialog.SLIDE_CREATE);
 	}
 
 	/**
@@ -162,7 +168,7 @@ public class AddSlidesDialog extends AbstractDialog {
 		List<StainingPrototypeHolder> prototpyes = getSelectedPrototypeHolders();
 
 		if (!prototpyes.isEmpty()) {
-			Task task = slideService.createSlidesXTimesAndPersist(prototpyes, block, commentary, restaining, true,
+			Task task = slideService.createSlidesXTimesAndPersist(prototpyes, block, slideLabelText , commentary, restaining, true,
 					asCompleted);
 			hideDialog(new StainingPhaseUpdateEvent(task));
 		}

@@ -118,8 +118,7 @@
 						value="#{worklistHandler.current.selectedTask.caseHistory}"
 						title="#{msg['body.diagnosis.story.watermark']}"
 						id="caseHistoryInput" style="width:90%"
-						onclick="PF('caseHistoryOverlayPanel').show('#{component.clientId}');"
-						onfocus="PF('caseHistoryOverlayPanel').show('#{component.clientId}');"
+						onclick="showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
 						onkeypress="PF('caseHistoryOverlayPanel').hide();">
 						<p:ajax event="change"
 							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',worklistHandler.current.selectedTask,worklistHandler.current.selectedTask.caseHistory)}"></p:ajax>
@@ -128,23 +127,33 @@
 					<p:overlayPanel id="caseHistoryOverlayPanel"
 						styleClass="histoOverlayPanel" widgetVar="caseHistoryOverlayPanel"
 						hideEffect="fade" style="width:500px" hideEvent="mousedown"
-						showEvent="none">
-						<p:dataTable
+						showEvent="none" onkeypress="return false;">
+						<p:dataTable id="caseHistoryOverlayPanelDataTable"
+							widgetVar="caseHistoryOverlayPanelDataTable" filterDelay="50"
 							value="#{globalEditViewHandler.genericView.staticData.caseHistoryList}"
 							var="item" styleClass="defaultHistoDataTable" scrollable="true"
 							scrollHeight="200" rowKey="#{item.id}"
 							selection="#{globalEditViewHandler.genericView.selectedCaseHistoryItem}"
 							selectionMode="single">
-							<p:column filterBy="#{item.value}" filterMatchMode="contains">
+
+							<p:column filterBy="#{item.value}" filterMatchMode="contains"
+								filterValue="#{globalEditViewHandler.genericView.caseHistoryFilter}"
+								id="valueColumn">
 								<h:outputText value="#{item.value}" />
 							</p:column>
 
 							<p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
-								listener="#{globalEditViewHandler.ct.copyCaseHistory(globalEditViewHandler.genericView.selectedCaseHistoryItem)}"
+								process="contentForm:caseHistoryOverlayPanel"
+								partialSubmit="true"
+								listener="#{globalEditViewHandler.ct.updateCaseHistory(globalEditViewHandler.genericView.selectedCaseHistoryItem)}"
 								oncomplete="PF('caseHistoryOverlayPanel').hide();" />
 						</p:dataTable>
-
 					</p:overlayPanel>
+
+					<p:remoteCommand name="submitNewCustomCaseHistory"
+						update="navigationForm:patientList contentForm:contentPanel headerForm"
+						actionListener="#{globalEditViewHandler.ct.updateCaseHistoryWithName(globalEditViewHandler.genericView.caseHistoryFilter)}"
+						oncomplete="PF('caseHistoryOverlayPanel').hide();" />
 				</h:panelGroup>
 
 				<!-- commentary -->
@@ -182,8 +191,7 @@
 								id="materialInput#{loopCount.index}"
 								disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 								tabindex="1" styleClass="customBackground"
-								onclick="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');)"
-								onfocus="PF('materialOverlayPanel#{loopCount.index}').show('#{component.clientId}');"
+								onclick="showAndUpdateOverlayPanel('materialOverlayPanel#{loopCount.index}', '#{component.clientId}' ,null, 'materialOverlayPanelDataTable#{loopCount.index}', 0, submitUpdateMaterial#{loopCount.index});"
 								style="width:200px;float:right;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}">
 
 								<p:ajax event="change" execute="@this"
@@ -196,22 +204,36 @@
 								widgetVar="materialOverlayPanel#{loopCount.index}"
 								hideEffect="fade" style="width:500px" hideEvent="mousedown"
 								showEvent="none" onkeypress="return false;">
-								<p:dataTable
+								<p:dataTable filterDelay="50"
+									id="materialOverlayPanelDataTable#{loopCount.index}"
+									widgetVar="materialOverlayPanelDataTable#{loopCount.index}"
 									value="#{globalEditViewHandler.genericView.staticData.materialList}"
 									var="preset" styleClass="defaultHistoDataTable"
 									scrollable="true" scrollHeight="200" rowKey="#{preset.id}"
-									selection="#{sample.materialPreset}" selectionMode="single">
-									<p:column filterBy="#{preset.name}" filterMatchMode="contains">
+									selection="#{globalEditViewHandler.genericView.selectedMaterialPresets[loopCount.index]}"
+									selectionMode="single">
+
+									<p:column filterBy="#{preset.name}" filterMatchMode="contains"
+										filterValue="#{globalEditViewHandler.genericView.selectedMaterialPresetFilter[loopCount.index]}"
+										id="presetName">
 										<h:outputText value="#{preset.name}" />
 									</p:column>
 
 									<p:ajax event="rowSelect"
+										process="contentForm:materialOverlayPanel#{loopCount.index}"
+										partialSubmit="true"
 										update="contentForm:materialInput#{loopCount.index}"
-										listener="#{globalEditViewHandler.ct.changeMaterialOfSample(sample, sample.materialPreset)}"
+										listener="#{globalEditViewHandler.ct.updateMaterialOfSample(sample, globalEditViewHandler.genericView.selectedMaterialPresets[loopCount.index])}"
 										oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();" />
 								</p:dataTable>
 
 							</p:overlayPanel>
+
+							<p:remoteCommand name="submitUpdateMaterial#{loopCount.index}"
+								partialSubmit="true"
+								update="navigationForm:patientList contentForm:contentPanel headerForm"
+								actionListener="#{globalEditViewHandler.ct.updateMaterialOfSampleWithName(sample, globalEditViewHandler.genericView.selectedMaterialPresetFilter[loopCount.index])}"
+								oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();" />
 						</h:panelGroup>
 					</h:panelGrid>
 				</c:forEach>
@@ -228,24 +250,143 @@
 					<h:panelGrid columns="3" style="margin-left:20px;"
 						styleClass="listingHistoHiddenTableContainer">
 						<!-- quickContact surgeon -->
-						<p:commandLink
-							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-							title="#{msg['body.receiptlog.notification.surgeon.hint']}"
-							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(worklistHandler.current.selectedTask, 'SURGEON', 'EXTERNAL_SURGEON')}">
-							<i class="fa fa-fw fa-scissors" />
-							<p:ajax event="dialogReturn"
-								update="navigationForm:patientList contentForm:contentPanel" />
-						</p:commandLink>
+						<h:panelGroup>
+							<p:commandLink
+								onclick="showAndUpdateOverlayPanel('surgeonPhysicianOverlayPanel', '#{component.clientId}' , null, 'surgeonPhysicianOverlayPanelDataTable', 0 ,null);"
+								title="#{msg['body.receiptlog.notification.surgeon.hint']}"
+								disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}">
+								<i class="fa fa-fw fa-scissors" />
+							</p:commandLink>
+
+							<!-- surgeon overlay panel -->
+							<p:overlayPanel id="surgeonPhysicianOverlayPanel"
+								styleClass="histoOverlayPanel"
+								widgetVar="surgeonPhysicianOverlayPanel" hideEffect="fade"
+								style="width:500px" hideEvent="mousedown" showEvent="none"
+								onkeypress="return false;">
+
+								<p:dataTable id="surgeonPhysicianOverlayPanelDataTable"
+									widgetVar="surgeonPhysicianOverlayPanelDataTable"
+									disabledSelection="#{physicianSelector.contactOfTask}"
+									selection="#{globalEditViewHandler.genericView.selectedSurgeon}"
+									selectionMode="single"
+									value="#{globalEditViewHandler.genericView.surgeons}"
+									var="physicianSelector" styleClass="defaultHistoDataTable"
+									scrollable="true" scrollHeight="200"
+									rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
+
+									<!-- name -->
+									<p:column id="nameColumn" style="width:auto"
+										filterValue="#{globalEditViewHandler.genericView.selectedSurgeonFilter}"
+										filterBy="#{physicianSelector.physician.person.getFullName()}"
+										filterMatchMode="contains">
+										<h:outputText
+											style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
+											value="#{physicianSelector.physician.person.getFullName()}" />
+									</p:column>
+
+									<!-- role -->
+									<p:column style="width: 30%">
+										<h:outputText
+											style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
+											value="#{physicianSelector.physician.clinicRole}" />
+									</p:column>
+
+									<!-- already selected -->
+									<p:column style="width:5%; text-align:center;">
+										<f:facet name="header">
+											<i class="fa fa-check-square-o"
+												title="#{msg['dialog.selectContact.table.added']}" />
+										</f:facet>
+
+										<ui:fragment rendered="#{physicianSelector.contactOfTask}">
+											<i class="fa fa-check icon-green"
+												title="#{msg['dialog.selectContact.table.added']}" />
+										</ui:fragment>
+
+									</p:column>
+
+
+									<p:ajax event="rowSelect"
+										update="navigationForm:patientList contentForm:contentPanel headerForm"
+										process="contentForm:surgeonPhysicianOverlayPanelDataTable"
+										partialSubmit=""
+										listener="#{globalEditViewHandler.ct.addPhysicianWithRole(globalEditViewHandler.genericView.selectedSurgeon.physician.person, 'SURGEON')}"
+										oncomplete="PF('surgeonPhysicianOverlayPanel#{loopCount.index}').hide();" />
+
+								</p:dataTable>
+							</p:overlayPanel>
+						</h:panelGroup>
+
 
 						<!-- quickcontact private physician  -->
-						<p:commandLink
-							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-							title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
-							actionListener="#{dialog.contactSelectDialog.initAndPrepareBean(worklistHandler.current.selectedTask,'PRIVATE_PHYSICIAN')}">
-							<i class="fa fa-fw fa-eye" />
-							<p:ajax event="dialogReturn"
-								update="navigationForm:patientList contentForm:contentPanel" />
-						</p:commandLink>
+						<h:panelGroup>
+							<p:commandLink
+								onclick="showAndUpdateOverlayPanel('privatePhysicianPhysicianOverlayPanel', '#{component.clientId}' , null, 'privatePhysicianPhysicianOverlayPanelDataTable', 0 ,null);"
+								title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
+								disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}">
+								<i class="fa fa-fw fa-eye" />
+							</p:commandLink>
+
+							<!-- private physician overlay panel -->
+							<p:overlayPanel id="privatePhysicianPhysicianOverlayPanel"
+								styleClass="histoOverlayPanel"
+								widgetVar="privatePhysicianPhysicianOverlayPanel"
+								hideEffect="fade" style="width:500px" hideEvent="mousedown"
+								showEvent="none" onkeypress="return false;">
+
+								<p:dataTable id="privatePhysicianPhysicianOverlayPanelDataTable"
+									widgetVar="privatePhysicianPhysicianOverlayPanelDataTable"
+									disabledSelection="#{physicianSelector.contactOfTask}"
+									selection="#{globalEditViewHandler.genericView.selectedPrivatePhysician}"
+									selectionMode="single"
+									value="#{globalEditViewHandler.genericView.privatePhysicians}"
+									var="physicianSelector" styleClass="defaultHistoDataTable"
+									scrollable="true" scrollHeight="200"
+									rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
+
+									<!-- name -->
+									<p:column id="nameColumn" style="width:auto"
+										filterValue="#{globalEditViewHandler.genericView.selectedPrivatePhysicianFilter}"
+										filterBy="#{physicianSelector.physician.person.getFullName()}"
+										filterMatchMode="contains">
+										<h:outputText
+											style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
+											value="#{physicianSelector.physician.person.getFullName()}" />
+									</p:column>
+
+									<!-- role -->
+									<p:column style="width: 30%">
+										<h:outputText
+											style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
+											value="#{physicianSelector.physician.clinicRole}" />
+									</p:column>
+
+									<!-- already selected -->
+									<p:column style="width:5%; text-align:center;">
+										<f:facet name="header">
+											<i class="fa fa-check-square-o"
+												title="#{msg['dialog.selectContact.table.added']}" />
+										</f:facet>
+
+										<ui:fragment rendered="#{physicianSelector.contactOfTask}">
+											<i class="fa fa-check icon-green"
+												title="#{msg['dialog.selectContact.table.added']}" />
+										</ui:fragment>
+
+									</p:column>
+
+
+									<p:ajax event="rowSelect"
+										update="navigationForm:patientList contentForm:contentPanel headerForm"
+										process="contentForm:privatePhysicianPhysicianOverlayPanel"
+										partialSubmit="true"
+										listener="#{globalEditViewHandler.ct.addPhysicianWithRole(globalEditViewHandler.genericView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
+										oncomplete="PF('privatePhysicianPhysicianOverlayPanel#{loopCount.index}').hide();" />
+
+								</p:dataTable>
+							</p:overlayPanel>
+						</h:panelGroup>
 
 						<!-- edit contacts -->
 						<p:commandLink title="#{msg['body.receiptlog.notification.hint']}"
@@ -253,25 +394,26 @@
 							actionListener="#{dialog.contactDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 							<i class="fa fa-fw fa-cog" />
 							<p:ajax event="dialogReturn"
+								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
 								update="navigationForm:patientList contentForm:contentPanel" />
 						</p:commandLink>
 					</h:panelGrid>
 
 				</h:panelGrid>
 
-				<!-- Slides -->
+				<!-- contacts -->
 				<p:dataTable var="contact" scrollable="true" scrollHeight="90"
 					style="width:450px" styleClass="defaultHistoDataTable"
 					value="#{worklistHandler.current.selectedTask.contacts}">
 
-					<p:column>
+					<p:column style="width:auto">
 						<f:facet name="header">
 							<h:outputLabel value="#{msg['body.receiptlog.contact.name']}" />
 						</f:facet>
 						<h:outputLabel value="#{contact.person.getFullName()}" />
 					</p:column>
 
-					<p:column headerText="">
+					<p:column style="width: 20%;">
 						<f:facet name="header">
 							<h:outputLabel value="#{msg['body.receiptlog.contact.role']}" />
 						</f:facet>
@@ -279,16 +421,22 @@
 							value="#{msg['enum.contactRole.'.concat(contact.role)]}"
 							title="#{msg['enum.contactRole.'.concat(contact.role)]}">
 							<f:converter converterId="org.histo.ui.TruncateConverter" />
-							<f:attribute name="truncateAt" value="15" />
+							<f:attribute name="truncateAt" value="13" />
 							<f:attribute name="continuationMark" value="..." />
 						</h:outputLabel>
 					</p:column>
 
-					<p:column headerText="">
+					<p:column style="width: 20%;">
 						<f:facet name="header">
 							<h:outputLabel value="#{msg['body.receiptlog.contact.location']}" />
 						</f:facet>
-						<h:outputLabel value="Todo Ort" title="">
+
+						<h:outputLabel
+							value="#{contact.person.defaultAddress eq null ? contact.person.contact.town : contact.person.defaultAddress.contact.town}"
+							title="#{contact.person.defaultAddress eq null ? contact.person.contact.town : contact.person.defaultAddress.contact.town}">
+							<f:converter converterId="org.histo.ui.TruncateConverter" />
+							<f:attribute name="truncateAt" value="15" />
+							<f:attribute name="continuationMark" value="..." />
 						</h:outputLabel>
 					</p:column>
 
@@ -346,17 +494,20 @@
 						<h:panelGroup layout="block" style="width: 90%; min-height:20px">
 							<p:commandLink process="@this" update="contentForm:contentPanel"
 								styleClass="updateName_js_Class"
-								oncomplete="showDynamicOverlay('#{component.clientId}')">
+								oncomplete="showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
 
 								<h:outputLabel styleClass="doNotHideOverlay_js_Class"
 									value="#{msg['body.receiptlog.slide.sample']} #{stainingRow.entity.sampleID}" />
+
 								<h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
 									<i class="fa fa-fw fa-chain doNotHideOverlay_js_Class"
 										title="#{msg['body.statiningView.idManuallyAltered']}" />
 								</h:panelGroup>
+
 								<!-- saving if overlay panel is already shown and something was changed -->
 								<f:ajax
 									listener="#{globalEditViewHandler.ct.entityNameChange(globalEditViewHandler.receiptLogView.selectedStainingTableChooser)}" />
+
 								<!-- showing panel with new data -->
 								<f:ajax
 									listener="#{globalEditViewHandler.receiptLogView.setSelectedStainingTableChooser(stainingRow)}" />
@@ -376,7 +527,7 @@
 						<h:panelGroup layout="block" style="width: 90%; min-height:20px">
 							<p:commandLink process="@this" update="contentForm:contentPanel"
 								styleClass="updateName_js_Class"
-								oncomplete="showDynamicOverlay('#{component.clientId}')">
+								oncomplete="showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
 								<h:outputLabel styleClass="doNotHideOverlay_js_Class"
 									value="#{msg['body.receiptlog.slide.block']} #{stainingRow.entity.blockID}" />
 								<h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
@@ -428,7 +579,7 @@
 
 							<p:commandLink process="@this" update="contentForm:contentPanel"
 								styleClass="updateName_js_Class"
-								oncomplete="showDynamicOverlay('#{component.clientId}')">
+								oncomplete="showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
 
 								<h:outputLabel value="#{stainingRow.entity.slideID}"
 									styleClass="doNotHideOverlay_js_Class" />
@@ -451,10 +602,10 @@
 
 				</p:column>
 
-				<!-- staining commentary -->
+				<!-- staining slide text -->
 				<p:column style="width: auto%;"
 					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
-					headerText="#{msg['body.receiptlog.slide.headline.staining.commentary']}">
+					headerText="#{msg['body.receiptlog.slide.headline.staining.slideLabelText']}">
 
 					<h:panelGroup rendered="#{stainingRow.stainingType}">
 
@@ -471,6 +622,17 @@
 								listener="#{globalEditViewHandler.ct.saveData(stainingRow.entity,'log.settings.staining.update')}" />
 						</p:selectOneMenu>
 
+					</h:panelGroup>
+				</p:column>
+
+				<!-- commentary -->
+				<p:column style="width: 4%"
+					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
+					headerText="#{msg['body.receiptlog.slide.headline.staining.commentary']}">
+					<h:panelGroup
+						rendered="#{stainingRow.stainingType and stainingRow.entity.commentary ne ''}">
+						<i class="fa fa-fw fa-exclamation-triangle icon-red"
+							title="#{stainingRow.entity.commentary}" />
 					</h:panelGroup>
 				</p:column>
 
@@ -583,7 +745,7 @@
 						<p:commandLink
 							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 							title="#{msg['body.statiningView.archiveBlock']}"
-							actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.block.headline',stainingRow.entity.slideID).ctext('dialog.delete.block.text',stainingRow.entity.slideID)}">
+							actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.block.headline',stainingRow.entity.blockID).ctext('dialog.delete.block.text',stainingRow.entity.blockID)}">
 							<i class="fa fa-fw fa-times-circle"></i>
 							<p:ajax event="dialogReturn"
 								oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
@@ -676,27 +838,21 @@
 									return;
 
 								});
-
-				function showDynamicOverlay(clintId) {
-
-					// showing the overlay
-					PF('idInputPannel').show(clintId);
-
-					focusElement('idInputPannelInput');
-				}
 			</script>
 
+			<!-- overlaypannel for editing sample/block/slide name -->
 			<p:overlayPanel id="idInputPannel" onHide="saveNameChange()"
 				dismissable="false" styleClass="histoOverlayPanel"
 				widgetVar="idInputPannel" hideEvent="null" showEvent="null">
 
-				<p:inputText id="idInputPannelInput" widgetVar="idInputPannelInput"
+				<p:inputText id="idInputPannelInput" widgetVar="idInputPannelInput" styleClass="doNotHideOverlay_js_Class"
 					onkeypress="return closeOverlayPanelOnReturn(event, 'idInputPannel')"
 					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 					rendered="#{globalEditViewHandler.receiptLogView.selectedStainingTableChooser ne null}"
 					value="#{globalEditViewHandler.receiptLogView.selectedStainingTableChooser.IDText}">
 					<p:ajax event="change" process="@this"></p:ajax>
 				</p:inputText>
+
 			</p:overlayPanel>
 
 			<p:remoteCommand

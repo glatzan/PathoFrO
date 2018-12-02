@@ -68,6 +68,9 @@ public class Slide implements Parent<Block>, LogAble, TaskEntity, PatientRollbac
 	@Column(columnDefinition = "VARCHAR")
 	private String commentary = "";
 
+	@Column(columnDefinition = "VARCHAR")
+	private String slideLabelText = "";
+	
 	@OneToOne
 	@NotAudited
 	private StainingPrototype slidePrototype;

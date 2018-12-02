@@ -126,6 +126,11 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/*adding commentary to slide*/
+alter table slide add column slideLabelText text;
+UPDATE slide set slideLabelText = commentary;
+UPDATE  slide set commentary = '';
+
 /* setting merge, alter and delete fro admin = 7, moderator = 6, physicain = 5, mta = 4 */
 INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (7, 'PATIENT_EDIT_MERGE');
 INSERT INTO histogroup_permissions (histogroup_id, permissions) VALUES (6, 'PATIENT_EDIT_MERGE');

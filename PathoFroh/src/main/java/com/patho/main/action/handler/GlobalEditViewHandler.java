@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.DialogHandler;
+import com.patho.main.action.handler.views.DiagnosisView;
 import com.patho.main.action.handler.views.GenericView;
 import com.patho.main.action.handler.views.ReceiptLogView;
 import com.patho.main.action.handler.views.ReportView;
@@ -159,6 +160,11 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	private ReceiptLogView receiptLogView = new ReceiptLogView(this);
 
 	/**
+	 * Data for diangosis view
+	 */
+	private DiagnosisView diagnosisView = new DiagnosisView(this);
+	
+	/**
 	 * Methodes for saving task data
 	 */
 	private CurrentTaskFunctions ct = new CurrentTaskFunctions(this);
@@ -273,6 +279,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			}
 
 			genericView.loadView();
+			diagnosisView.loadView();
 
 			break;
 		case WORKLIST_PATIENT:

@@ -105,6 +105,7 @@ public class GenericView extends AbstractTaskView {
 
 	public void loadView() {
 		logger.debug("Loading contatcs");
+		// setting important data
 		setSurgeons(PhysicianSelector.factory(getTask(), getStaticData().getSurgeons()));
 		setPrivatePhysicians(PhysicianSelector.factory(getTask(), getStaticData().getPrivatePhysicians()));
 
