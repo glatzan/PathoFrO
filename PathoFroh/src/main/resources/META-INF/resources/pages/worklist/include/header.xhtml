@@ -339,7 +339,7 @@
 				process="@this"
 				actionListener="#{dialog.settingsDialog.initAndPrepareBean()}">
 				<p:ajax event="dialogReturn"
-					listener="#{globalEditViewHandler.reloadGuiData()}"
+					listener="#{globalEditViewHandler.reloadAllData()}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm" />
 			</p:commandButton>

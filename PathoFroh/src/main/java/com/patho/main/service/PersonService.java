@@ -68,8 +68,13 @@ public class PersonService extends AbstractService {
 				change = true;
 				target.setLanguage(source.getLanguage());
 			}
-
+			
 			change |= copyContactData(source.getContact(), target.getContact());
+		}
+		
+		if(source.getDefaultAddress() != target.getDefaultAddress()) {
+			target.setDefaultAddress(source.getDefaultAddress());
+			change = true;
 		}
 
 		return change;
@@ -92,7 +97,17 @@ public class PersonService extends AbstractService {
 			change = true;
 			target.setTown(source.getTown());
 		}
-
+		
+		if (HistoUtil.isStringDifferent(source.getAddressadditon(), target.getAddressadditon())) {
+			change = true;
+			target.setAddressadditon(source.getAddressadditon());
+		}
+		
+		if (HistoUtil.isStringDifferent(source.getAddressadditon2(), target.getAddressadditon2())) {
+			change = true;
+			target.setAddressadditon2(source.getAddressadditon2());
+		}
+		
 		if (HistoUtil.isStringDifferent(source.getPostcode(), target.getPostcode())) {
 			change = true;
 			target.setPostcode(source.getPostcode());
@@ -127,11 +142,12 @@ public class PersonService extends AbstractService {
 			change = true;
 			target.setFax(source.getFax());
 		}
+		
 		if (HistoUtil.isStringDifferent(source.getPager(), target.getPager())) {
 			change = true;
 			target.setPager(source.getPager());
 		}
-
+		
 		return change;
 	}
 

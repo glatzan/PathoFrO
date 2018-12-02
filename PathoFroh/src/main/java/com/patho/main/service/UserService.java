@@ -132,8 +132,10 @@ public class UserService extends AbstractService {
 	public void saveUser(HistoUser user) {
 		if (user.getPhysician().hasNoAssociateRole())
 			user.getPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
-
+		
+		System.out.println(user.getPhysician().getPerson().getContact().getAddressadditon());
 		user.setPhysician(physicianService.addOrMergePhysician(user.getPhysician()));
+		System.out.println(user.getPhysician().getPerson().getContact().getAddressadditon());
 		userRepository.save(user, resourceBundle.get("log.user.update", user));
 	}
 

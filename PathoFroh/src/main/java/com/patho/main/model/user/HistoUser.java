@@ -50,9 +50,6 @@ public class HistoUser implements UserDetails, Serializable, LogAble, ID, Archiv
 	@Version
 	private long version;
 
-//	@Column(columnDefinition = "VARCHAR")
-//	private String username;
-
 	@Column
 	private long lastLogin;
 

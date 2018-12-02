@@ -174,6 +174,8 @@ public class OrganizationService extends AbstractService {
 					logger.debug("Organization " + organizations.get(i).getName() + " found, replacing in linst!");
 					result.add(databaseOrganization.get());
 				}
+			}else {
+				result.add(organizations.get(i));
 			}
 		}
 

@@ -99,9 +99,8 @@
 				<h:panelGrid columns="2" styleClass="right">
 					<!-- Save button -->
 					<p:commandButton value="#{msg['general.save']}" update="@form"
-						icon="fa fa-check-circle-o">
-						<f:actionListener binding="#{dialog.editUserDialog.saveUser()}"></f:actionListener>
-						<f:actionListener binding="#{dialog.editUserDialog.hideDialog()}"></f:actionListener>
+						process="@form" icon="fa fa-check-circle-o"
+						actionListener="#{dialog.editUserDialog.saveAndHide()}">
 					</p:commandButton>
 
 					<!-- Close button -->

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractTabDialog;
+import com.patho.main.action.dialog.settings.UserSettingsDialog.ReloadUserEvent;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
 import com.patho.main.action.dialog.settings.users.ConfirmUserDeleteDialog.ConfirmUserDeleteEvent;
@@ -276,6 +277,12 @@ public class EditUserDialog extends AbstractTabDialog {
 		userService.saveUser(user);
 	}
 
+	public void saveAndHide() {
+		logger.debug("Saving user Settings");
+		saveUser();
+		super.hideDialog(new ReloadUserEvent(getUser()));
+	}
+
 	/**
 	 * Updates the data of the physician with data from the clinic backend
 	 */
@@ -309,7 +316,7 @@ public class EditUserDialog extends AbstractTabDialog {
 			else
 				MessageHandler.sendGrowlMessagesAsResource("growl.user.archive");
 
-			hideDialog();
+			hideDialog(new ReloadUserEvent());
 		}
 	}
 
