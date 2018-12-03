@@ -126,6 +126,19 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++:
 
 SQL:
+/*adding notification_status to diagnosisrevision*/
+alter table diagnosisRevision add column notificationStatus int;
+/* set not approved */
+UPDATE diagnosisRevision as dia set notificationStatus = 0 FROM task AS ta WHERE dia.parent_id = ta.id and dia.notificationPending = false and dia.notificationDate = 0 and ta.finalized = false 
+/* set completed */
+UPDATE diagnosisRevision set notificationStatus = 3 where notificationPending = false and notificationDate != 0;
+/* set pending */
+UPDATE diagnosisRevision set notificationStatus = 1 where notificationPending = true and notificationDate = 0;
+/* set no notification */
+UPDATE diagnosisRevision as dia set notificationStatus = 2 FROM task AS ta WHERE dia.parent_id = ta.id and dia.notificationPending = false and dia.notificationDate = 0 and ta.finalized = true
+/* removing old notification pending*/
+alter table diagnosisRevision drop notificationPending
+	
 /*adding commentary to slide*/
 alter table slide add column slideLabelText text;
 UPDATE slide set slideLabelText = commentary;

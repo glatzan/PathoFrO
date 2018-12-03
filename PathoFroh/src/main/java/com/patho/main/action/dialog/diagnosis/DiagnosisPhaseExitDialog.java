@@ -31,7 +31,6 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
 	 */
 	private DefaultTransformer<DiagnosisRevision> diagnosisRevisionTransformer;
 
-
 	public DiagnosisPhaseExitDialog initAndPrepareBean(Task task) {
 		if (initBean(task, (DiagnosisRevision) null))
 			prepareDialog();
@@ -52,7 +51,11 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
 		setDiagnosisRevisionTransformer(new DefaultTransformer<DiagnosisRevision>(getDiagnosisRevisions()));
 
 		
-		data.setSelectedRevision(selectedRevision);
+		if(selectedRevision != null)
+			data.setSelectedRevision(selectedRevision);
+		else {
+			
+		}
 
 		// if last diangosis in task
 		boolean lastDiagnosis = HistoUtil.getLastElement(task.getDiagnosisRevisions()) == selectedRevision;
@@ -72,7 +75,7 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
 	public void exitPhaseAndClose() {
 		hideDialog(data);
 	}
-	
+
 	@Getter
 	@Setter
 	public static class DiagnosisPhaseExitData implements DialogReturnEvent {
@@ -86,7 +89,7 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
 		 * Diagnosis revision to notify about
 		 */
 		private DiagnosisRevision selectedRevision;
-		
+
 		/**
 		 * If true the task will be removed from worklist
 		 */

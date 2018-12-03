@@ -9,8 +9,9 @@
 
 	<h:form prependId="false">
 		<!--  #{session.maxInactiveInterval * 1000 - 125000}-->
-		<p:idleMonitor timeout="#{session.maxInactiveInterval * 1000 - 125000}" onidle="startIdleMonitor()"
-			onactive="PF('timeoutDialog').hide();" />
+		<p:idleMonitor
+			timeout="#{session.maxInactiveInterval * 1000 - 125000}"
+			onidle="startIdleMonitor()" onactive="PF('timeoutDialog').hide();" />
 
 		<p:dialog id="timeoutSession" header="#{msg['session.expire']}"
 			widgetVar="timeoutDialog" showEffect="fade" hideEffect="fade"
@@ -32,12 +33,11 @@
 
 		<p:commandButton style="display: none" id="keepAlive"
 			widgetVar="keepAlive"
-			actionListener="#{mainHandlerAction.keepSessionAlive()}" />
+			actionListener="#{loginHandler.keepSessionAlive()}" />
 
 		<p:commandButton style="display: none" id="destroySession"
-			widgetVar="destroySession"
-			actionListener="#{mainHandlerAction.destroySession()}" />
-
+			ajax="false" widgetVar="destroySession"
+			action="/logout?faces-redirect=true" />
 
 		<p:commandButton style="display: none" id="refreshContent"
 			widgetVar="refreshContent" update="@all" />

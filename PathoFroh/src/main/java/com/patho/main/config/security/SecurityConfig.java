@@ -105,10 +105,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.antMatchers("/login.xhtml*").permitAll().antMatchers("/**/favicon.ico").permitAll().anyRequest()
 					.authenticated().and().formLogin().loginPage("/login.xhtml").permitAll()
 					.loginProcessingUrl("/perform_login").permitAll().failureUrl("/login.jsf?error=true").and().logout()
-					.logoutSuccessUrl("/login.xhtml").permitAll();
-			
+					.logoutSuccessUrl("/login.xhtml").permitAll().invalidateHttpSession(true)
+					.deleteCookies("JSESSIONID");
+
 			http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-			
+
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
