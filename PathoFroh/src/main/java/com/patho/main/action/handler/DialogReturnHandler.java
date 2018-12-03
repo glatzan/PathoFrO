@@ -21,16 +21,11 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.service.BlockService;
 import com.patho.main.service.SampleService;
 import com.patho.main.service.SlideService;
-import com.patho.main.service.TaskService;
 import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 
 @Controller
 @Scope("session")
@@ -106,18 +101,7 @@ public class DialogReturnHandler extends AbstractHandler {
 					worklistViewHandler.replaceTaskInWorklist(((ReloadTaskEvent) event.getObject()).getTask());
 				else
 					worklistViewHandler.reloadCurrentTask();
-			} else if (event.getObject() instanceof DiagnosisPhaseExitData) {
-				logger.debug("Diagnosis phase exit dialog return");
-
-				DiagnosisPhaseExitData data = (DiagnosisPhaseExitData) event.getObject();
-				workPhaseHandler.endDiagnosisPhase(data.getTask(), data.getSelectedRevision(),
-						data.isEndDiangosisPhase(), data.isRemoveFromDiangosisList(), data.isGoToNotificationPhase(),
-						data.isRemoveFromWorklist());
-
-				worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-				globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_MENU_MODEL);
 			}
-
 		}
 	}
 
@@ -171,6 +155,21 @@ public class DialogReturnHandler extends AbstractHandler {
 
 			worklistViewHandler.reloadCurrentTask();
 
+			return;
+		}
+		onDefaultDialogReturn(event);
+	}
+
+	public void onDiagnosisPhaseExitReutrn(SelectEvent event) {
+		if (event.getObject() instanceof DiagnosisPhaseExitData) {
+			logger.debug("Diagnosis phase exit dialog return");
+
+			DiagnosisPhaseExitData data = (DiagnosisPhaseExitData) event.getObject();
+			workPhaseHandler.endDiagnosisPhase(data.getTask(),
+					data.isAllRevisions() ? null : data.getSelectedRevision(), data.isEndDiangosisPhase(),
+					data.isRemoveFromDiangosisList(), data.isNotification(), data.isRemoveFromWorklist());
+
+			worklistViewHandler.reloadCurrentTask();
 			return;
 		}
 		onDefaultDialogReturn(event);

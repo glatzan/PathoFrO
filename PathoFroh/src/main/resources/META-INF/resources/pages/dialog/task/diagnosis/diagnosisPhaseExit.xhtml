@@ -33,10 +33,23 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				style="margin-left:10px">
+				style="margin-left:10px; margin-top:10px"
+				columnClasses="columnWidth25">
+				<!-- notify -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.diagnosisPhaseExitDialog.data.allRevisions}">
+					<p:ajax event="change" update="@form" process="@form" />
+				</p:selectBooleanCheckbox>
+				<h:outputLabel
+					value="#{msg['dialog.diagnosisPhaseExit.checkBox.endAll']}" />
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
+				style="margin-left:10px" columnClasses="columnWidth50">
 				<h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.notify']}" />
 				<p:selectOneMenu
-					disabled="#{!dialog.diagnosisPhaseExitDialog.data.goToNotificationPhase}"
+					disabled="#{dialog.diagnosisPhaseExitDialog.data.allRevisions}"
 					converter="#{dialog.diagnosisPhaseExitDialog.diagnosisRevisionTransformer}"
 					style="width:80%"
 					value="#{dialog.diagnosisPhaseExitDialog.data.selectedRevision}">
@@ -50,36 +63,39 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				style="margin-left:10px; margin-top:10px">
-				<!-- notify -->
-				<p:selectBooleanCheckbox
-					value="#{dialog.diagnosisPhaseExitDialog.data.goToNotificationPhase}">
-					<p:ajax event="change" update="@form" process="@form" />
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value="#{msg['dialog.diagnosisPhaseExit.checkBox.notificationPhase']}" />
+				style="margin-left:10px; margin-top:5px"
+				columnClasses="columnWidth25">
 
-				<!-- notify -->
-				<p:selectBooleanCheckbox  disabled="#{dialog.diagnosisPhaseExitDialog.data.goToNotificationPhase}"
-					value="#{dialog.diagnosisPhaseExitDialog.data.goToNotificationPhase}">
-					<p:ajax event="change" update="@form" process="@form" />
+				<!-- end phase -->
+				<p:selectBooleanCheckbox
+					value="#{dialog.diagnosisPhaseExitDialog.data.endDiangosisPhase}">
+					<p:ajax update="@form" process="@form" event="change" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
-					value="#{msg['dialog.diagnosisPhaseExit.checkBox.notificationPhase']}" />
+					value="#{msg['dialog.diagnosisPhaseExit.checkBox.endDiangosis']}" />
 
 				<!-- remove from diagnosis list -->
 				<p:selectBooleanCheckbox
+					disabled="#{!dialog.diagnosisPhaseExitDialog.data.endDiangosisPhase}"
 					value="#{dialog.diagnosisPhaseExitDialog.data.removeFromDiangosisList}">
 					<p:ajax update="@form" process="@form" event="change" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
 					value="#{msg['dialog.diagnosisPhaseExit.checkBox.removeFromDiangosisList']}" />
 
-				<!-- end phase -->
+				<!-- notify -->
 				<p:selectBooleanCheckbox
-					value="#{dialog.diagnosisPhaseExitDialog.data.endDiangosisPhase}" />
-				<h:outputLabel
-					value="#{msg['dialog.diagnosisPhaseExit.checkBox.endDiangosis']}" />
+					value="#{dialog.diagnosisPhaseExitDialog.data.notification}">
+					<p:ajax update="@form" process="@form" event="change" />
+				</p:selectBooleanCheckbox>
+				<h:panelGroup>
+					<h:outputLabel
+						rendered="#{dialog.diagnosisPhaseExitDialog.data.notification}"
+						value="#{msg['dialog.diagnosisPhaseExit.checkBox.notificationPhase']}" />
+					<h:outputLabel
+						rendered="#{!dialog.diagnosisPhaseExitDialog.data.notification}"
+						value="#{msg['dialog.diagnosisPhaseExit.checkBox.noNotificationPhase']}" />
+				</h:panelGroup>
 
 				<!-- remove from worklist -->
 				<p:selectBooleanCheckbox

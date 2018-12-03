@@ -1,5 +1,7 @@
 package com.patho.main.action.handler;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.service.DiagnosisService;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.WorkPhaseService;
@@ -111,29 +114,44 @@ public class WorkPhaseHandler extends AbstractHandler {
 		return favouriteListService.addTaskToList(task, PredefinedFavouriteList.DiagnosisList);
 	}
 
+	/**
+	 * Ends the notification pahse, if no diagnosis revision is passed, all
+	 * diangoses will be ended.
+	 * 
+	 * @param task
+	 * @param diagnosisRevision
+	 * @param endPhase
+	 * @param removeFromList
+	 * @param notification
+	 * @param removeFromWorklist
+	 */
 	public void endDiagnosisPhase(Task task, DiagnosisRevision diagnosisRevision, boolean endPhase,
-			boolean removeFromList, boolean startNotificationPhase, boolean removeFromWorklist) {
+			boolean removeFromDiangosisList, boolean notification, boolean removeFromWorklist) {
 
-		// end diagnosis phase
-		if (endPhase && removeFromList) {
-			task = workPhaseService.endDiagnosisPhase(task, removeFromList);
+		// end diagnosis phase, if endPhase is false, removeFromDiangosisList will be
+		// ignored
+		if (endPhase) {
 
-			MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
-					startNotificationPhase ? "growl.diagnosis.endAll.text.true" : "growl.diagnosis.endAll.text.false");
-		} else {
-			// otherwise approve diangosis
-			task = diagnosisService.approveDiangosis(task, diagnosisRevision, startNotificationPhase);
+			if (diagnosisRevision == null) {
+				task = workPhaseService.endDiagnosisPhase(task, removeFromDiangosisList,
+						notification ? NotificationStatus.NOTIFICATION_PENDING : NotificationStatus.NO_NOTFICATION);
+				MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
+						notification ? "growl.diagnosis.endAll.text.true" : "growl.diagnosis.endAll.text.false");
+			} else {
+				task = diagnosisService.approveDiangosis(task, diagnosisRevision,
+						notification ? NotificationStatus.NOTIFICATION_PENDING : NotificationStatus.NO_NOTFICATION);
+				MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved",
+						notification ? "growl.diagnosis.endAll.text.true" : "growl.diagnosis.endAll.text.false");
 
-			MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved",
-					startNotificationPhase ? "growl.diagnosis.endAll.text.true" : "growl.diagnosis.endAll.text.false");
+				if (removeFromDiangosisList)
+					task = favouriteListService.removeTaskFromList(task, PredefinedFavouriteList.DiagnosisList,
+							PredefinedFavouriteList.ReDiagnosisList);
+			}
 
-			if (removeFromWorklist)
-				task = favouriteListService.removeTaskFromList(task, PredefinedFavouriteList.DiagnosisList,
-						PredefinedFavouriteList.ReDiagnosisList);
 		}
 
 		// adding to notification phase
-		if (startNotificationPhase)
+		if (notification)
 			task = startNotificationPhase(task);
 
 		if (removeFromWorklist) {

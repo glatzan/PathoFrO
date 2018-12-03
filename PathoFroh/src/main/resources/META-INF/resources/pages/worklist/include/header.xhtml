@@ -103,7 +103,7 @@
 					<p:menuitem value="#{msg['body.worklist.header.button.info']}"
 						onclick="$('#headerForm\\:infoDialogBtn').click();$('#headerForm\\:tiredMenu').hide();return false;" />
 
-					<!-- notification -->
+					<!-- logou -->
 					<p:menuitem value="#{msg['body.worklist.header.button.logout']}"
 						url="/logout?faces-redirect=true" />
 				</p:tieredMenu>
@@ -225,11 +225,9 @@
 
 			<!-- DiagnosisPhase Exit -->
 			<p:commandButton id="diagnosisPhaseExit"
-				onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock()"
 				actionListener="#{dialog.diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 				<p:ajax event="dialogReturn"
-					listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"
+					listener="#{dialogReturnHandler.onDiagnosisPhaseExitReutrn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm headerForm" />
 			</p:commandButton>

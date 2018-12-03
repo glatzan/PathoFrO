@@ -6,7 +6,10 @@ jsf:
     fontAwesome: true
   bootsfaces:
     getBootstrapFromCdn: false
- 
+server:
+  servlet:
+    session:
+      timeout: 8H
 spring:
   datasource:
     url: jdbc:postgresql://localhost/histo1

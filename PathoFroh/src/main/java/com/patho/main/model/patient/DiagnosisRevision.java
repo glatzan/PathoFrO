@@ -94,10 +94,10 @@ public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, Pat
 	private long completionDate;
 
 	/**
-	 * True if notification should be performed
+	 * Status of the notification, e.g. pending, completed
 	 */
-	@Column
-	private boolean notificationPending;
+	@Enumerated(EnumType.ORDINAL)
+	private NotificationStatus notificationStatus = NotificationStatus.NOT_APPROVED;
 
 	/**
 	 * Date of notification
@@ -247,5 +247,9 @@ public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, Pat
 	@Override
 	public String toSimpleString() {
 		return getName();
+	}
+	
+	public static enum NotificationStatus{
+		NOT_APPROVED, NOTIFICATION_PENDING, NO_NOTFICATION, NOTIFICATION_COMPLETED;
 	}
 }

@@ -42,6 +42,8 @@ public class PathoConfig {
 	
 	public static final String RENDER_ERROR_PDF= "classpath:templates/print/pdfnotfound.pdf";
 	
+	public static final String LOGIN_PAGE = "/login.xhtml"; 
+	
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)

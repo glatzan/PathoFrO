@@ -194,7 +194,7 @@
 						<p:commandLink
 							disabled="#{!dialog.slideOverviewDialog.task.taskStatus.editable}"
 							title="#{msg['body.statiningView.archiveStaining']}"
-							actionListener="#{dialog.deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity.task,stainingRow.entity)}">
+							actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.slide.headline',stainingRow.entity.slideID).ctext('dialog.delete.slide.text',stainingRow.entity.slideID)}">
 							<i class="fa fa-fw fa-times-circle" />
 							<p:ajax event="dialogReturn"
 								listener="#{dialog.slideOverviewDialog.onDefaultDialogReturn}"

@@ -10,11 +10,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog.DiagnosisRevisionContainer;
 import com.patho.main.common.DiagnosisRevisionType;
+import com.patho.main.common.DiagnosisValidationError;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.Signature;
 import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.DiagnosisRepository;
@@ -291,9 +293,11 @@ public class DiagnosisService extends AbstractService {
 	 * @param diagnosisRevision
 	 * @param notificationPending
 	 */
-	public Task approveDiangosis(Task task, DiagnosisRevision diagnosisRevision, boolean notificationPending) {
+	public Task approveDiangosis(Task task, DiagnosisRevision diagnosisRevision,
+			NotificationStatus notificationStatus) {
+		
 		diagnosisRevision.setCompletionDate(System.currentTimeMillis());
-		diagnosisRevision.setNotificationPending(notificationPending);
+		diagnosisRevision.setNotificationStatus(notificationStatus);
 
 		task = taskRepository.save(task,
 				resourceBundle.get("log.patient.task.diagnosisRevision.approved", diagnosisRevision.getName()));
@@ -405,4 +409,29 @@ public class DiagnosisService extends AbstractService {
 
 		return task;
 	}
+
+	/**
+	 * Returns an empty list if the diangosis is valied, if not the errors will be
+	 * liested
+	 * 
+	 * @param diagnosisRevision
+	 * @return
+	 */
+	public List<DiagnosisValidationError> validateDiangosisRevision(DiagnosisRevision diagnosisRevision) {
+		ArrayList<DiagnosisValidationError> result = new ArrayList<DiagnosisValidationError>();
+
+		if (diagnosisRevision.getCompletionDate() == 0) {
+			result.add(DiagnosisValidationError.NO_SIGNATURE_DATE);
+		}
+
+		if ((diagnosisRevision.getSignatureOne() == null || diagnosisRevision.getSignatureOne().getPhysician() == null)
+				&& (diagnosisRevision.getSignatureTwo() == null
+						|| diagnosisRevision.getSignatureTwo().getPhysician() == null)) {
+			result.add(DiagnosisValidationError.NO_SIGANTURE);
+		}
+
+		return result;
+
+	}
+
 }
