@@ -610,13 +610,13 @@
 					<h:panelGroup rendered="#{stainingRow.stainingType}">
 
 						<p:selectOneMenu style="width: 90%"
-							value="#{stainingRow.entity.commentary}" editable="true"
+							value="#{stainingRow.entity.slideLabelText}" editable="true"
 							disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable or stainingRow.entity.stainingCompleted}">
 
 							<f:selectItems
 								value="#{globalEditViewHandler.genericView.staticData.slideCommentary}"
-								var="commentary" itemLabel="#{commentary.value}"
-								itemValue="#{commentary.value}" />
+								var="slideLabelText" itemLabel="#{slideLabelText.value}"
+								itemValue="#{slideLabelText.value}" />
 
 							<p:ajax event="change" execute="@this"
 								listener="#{globalEditViewHandler.ct.saveData(stainingRow.entity,'log.settings.staining.update')}" />

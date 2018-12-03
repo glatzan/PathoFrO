@@ -46,17 +46,20 @@ Tasks:
 -> Worklist LoadDialog Favourite Lists preview
 -> Patient List, fix active tasks 
 -> Patiente delete and editDialog make it working
+-> ReceiptLog View: not alway fire gernericview.loadata
 
 Next Changes:
+-> wenn konsil aussteht keine archivirung
+-> Task archivieren nur wenn befunder angegeben ist
+-> Nach 3 monaten soll dearchiviertung nicht mehr möglich sein 
+
+
 -> erstellen von patientin in der pdv
 -> Ärzte aus klinikbackend übernehmen
 
 -> patienten 1502 und 1503 löschen
--> patienten löschen
 
 -> Diangosen benachrichtigung per brief bei jedem einstellen
--> wenn konsil aussteht keine archivirung
--> anzeige der organisation im eingangsbuch
 
 -> suche mit umlauten -> daniel
 -> suche mit umlauten in quick search regex alpha (erkennt kein ö usw)
@@ -64,12 +67,6 @@ Next Changes:
 -> versehendlich ausgeführte benachrichtigungen, markieren, kontakt dialog verbessern
 
 -> contentForm:contentPanel fest, das jede seite diese hat, udpate im header von contentForm:contentPanel anstelle von contentform
-
--> Warnung wenn der Auftrag noch in Arbeitslisten ist
-
--> beim auswählen des eingangbuches fall auswählen, nicht ersten fall
-
--> Task archivieren nur wenn befunder angegeben ist 
 
 -> Aus Uitl in Selectors kopieren  
 -> Benchrichtigung: Im Service Telefonnummern aktivieren
@@ -81,14 +78,12 @@ Testen:
  
 Urgent Changes 
 TODO: Biobankeinwilligung beide Seiten (2 pdf-Dateien) auf einmal hochladen
-TODO: Externe Proben: PIZ anlegen?
 TODO: Favouriten-Listen für Benutzer zugänglich machen
 TODO: Erweiterte Suche 
 TODO: Benuter müssen sich auf die Benachrichtigungsliste setzten können
 
 Long-term Changes 
 TODO: Beim schließen des Settings-dialoges auch gruppenrichtilinien neu laden
-TODO: Nach 3 monaten soll dearchiviertung nicht mehr möglich sein
 TODO: object f�r Arbeitsliste muss kopiert werden, wird momentan sofort �bernommen
 TODO: log in settings rework
 TODO: Individelle Adressen beim drucken sollten aus personen gespeichert werden?
@@ -99,8 +94,6 @@ TODO: Synchronizie organizations (nicht updaten durch klinik datenbank beachten)
 Graphic Changes
 -> Suchfelder als Solche Kennzeichnen (Lupensymbol) -> (in overlay dialogen, zb. Diagosen view)
 -> PDF Maker als Drucker hinterlegen (zum Testen/Ansehen der Ausdrucke)
--> Zahrand zum kontakt bearbeiten (alle) in diagnosen view
--> Auftrag hinzufügen (man muss Pixelgenau auf das + Clicken, schaltfläche geht nicht)
 
 ! = fix
 * = change

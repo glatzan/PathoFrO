@@ -89,25 +89,37 @@
 					</h:panelGroup>
 				</p:column>
 
-				<!-- staining - commentary -->
+				<!-- staining slide text -->
 				<p:column style="width: auto%;"
 					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
-					headerText="#{msg['body.receiptlog.slide.headline.staining.commentary']}">
+					headerText="#{msg['body.receiptlog.slide.headline.staining.slideLabelText']}">
 					<h:panelGroup rendered="#{stainingRow.stainingType}">
 						<p:selectOneMenu style="width: 90%"
-							value="#{stainingRow.entity.commentary}" editable="true"
+							value="#{stainingRow.entity.slideLabelText}" editable="true"
 							disabled="#{!dialog.slideOverviewDialog.task.taskStatus.editable or stainingRow.entity.stainingCompleted}">
 
 							<f:selectItems
 								value="#{dialog.slideOverviewDialog.slideCommentary}"
-								var="commentary" itemLabel="#{commentary.value}"
-								itemValue="#{commentary.value}" />
+								var="slideLabelText" itemLabel="#{slideLabelText.value}"
+								itemValue="#{slideLabelText.value}" />
 
 							<p:ajax event="change" execute="@this"
-								listener="#{dialog.slideOverviewDialog.save('log.settings.staining.update', dialog.slideOverviewDialog.slideCommentary)}" />
+								listener="#{dialog.slideOverviewDialog.save('log.settings.staining.update', stainingRow.entity.slideLabelText)}" />
 						</p:selectOneMenu>
 					</h:panelGroup>
 				</p:column>
+
+				<!-- commentary -->
+				<p:column style="width: 4%"
+					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
+					headerText="#{msg['body.receiptlog.slide.headline.staining.commentary']}">
+					<h:panelGroup
+						rendered="#{stainingRow.stainingType and stainingRow.entity.commentary ne ''}">
+						<i class="fa fa-fw fa-exclamation-triangle icon-red"
+							title="#{stainingRow.entity.commentary}" />
+					</h:panelGroup>
+				</p:column>
+
 
 				<!-- Staining staining -->
 				<p:column style="width: 8%;"
