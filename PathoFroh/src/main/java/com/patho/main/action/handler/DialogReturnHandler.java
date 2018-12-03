@@ -165,8 +165,9 @@ public class DialogReturnHandler extends AbstractHandler {
 			logger.debug("Diagnosis phase exit dialog return");
 
 			DiagnosisPhaseExitData data = (DiagnosisPhaseExitData) event.getObject();
-			workPhaseHandler.endDiagnosisPhase(data.getTask(), data.getSelectedRevision(), data.isEndDiangosisPhase(),
-					data.isRemoveFromDiangosisList(), data.isGoToNotificationPhase(), data.isRemoveFromWorklist());
+			workPhaseHandler.endDiagnosisPhase(data.getTask(),
+					data.isAllRevisions() ? null : data.getSelectedRevision(), data.isEndDiangosisPhase(),
+					data.isRemoveFromDiangosisList(), data.isNotification(), data.isRemoveFromWorklist());
 
 			worklistViewHandler.reloadCurrentTask();
 			return;

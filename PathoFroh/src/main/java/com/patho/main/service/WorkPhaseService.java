@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.ui.task.TaskStatus;
@@ -126,22 +127,23 @@ public class WorkPhaseService extends AbstractService {
 	 * @param task
 	 * @param updateSignatureDate
 	 */
-	public Task endDiagnosisPhase(Task task, boolean removeFromList) {
+	public Task endDiagnosisPhase(Task task, boolean removeFromList, NotificationStatus status) {
 
+		boolean change = false;
 		// setting diagnosis compleation date if not set jet
-
 		for (int i = 0; i < task.getDiagnosisRevisions().size(); i++) {
-			DiagnosisRevision rev = HistoUtil.getNElement(task.getDiagnosisRevisions(),i);
-			//if (rev.getCompletionDate() == 0)
-				task = diagnosisService.approveDiangosis(task, rev, false);
+			DiagnosisRevision rev = HistoUtil.getNElement(task.getDiagnosisRevisions(), i);
+			if (rev.getCompletionDate() == 0) {
+				task = diagnosisService.approveDiangosis(task, rev, status);
+				change = true;
+			}
 		}
 
-		task.setDiagnosisCompletionDate(System.currentTimeMillis());
-
-		// if (updateSignatureDate)
-		// task.getDiagnosisContainer().setSignatureDate(System.currentTimeMillis());
-		task = taskRepository.save(task, resourceBundle.get("log.phase.diagnosis.end"));
-
+		if (change || task.getDiagnosisCompletionDate() == 0) {
+			task.setDiagnosisCompletionDate(System.currentTimeMillis());
+			task = taskRepository.save(task, resourceBundle.get("log.phase.diagnosis.end"));
+		}
+		
 		if (removeFromList)
 			task = favouriteListService.removeTaskFromList(task, PredefinedFavouriteList.DiagnosisList,
 					PredefinedFavouriteList.ReDiagnosisList);

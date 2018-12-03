@@ -94,12 +94,6 @@ public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, Pat
 	private long completionDate;
 
 	/**
-	 * True if notification should be performed
-	 */
-	@Column
-	private boolean notificationPending;
-
-	/**
 	 * Status of the notification, e.g. pending, completed
 	 */
 	@Enumerated(EnumType.ORDINAL)

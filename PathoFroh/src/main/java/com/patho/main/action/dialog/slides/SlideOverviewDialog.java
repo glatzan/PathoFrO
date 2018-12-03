@@ -9,13 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.action.dialog.miscellaneous.DeleteDialog.DeleteEvent;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.ListItem;
+import com.patho.main.model.patient.Block;
+import com.patho.main.model.patient.Sample;
+import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.service.SlideService;
 import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.ui.task.TaskStatus;
@@ -46,6 +51,11 @@ public class SlideOverviewDialog extends AbstractDialog {
 	@Setter(AccessLevel.NONE)
 	private TaskRepository taskRepository;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private SlideService slideService;
+
 	private ArrayList<StainingTableChooser<?>> flatTaskEntityList;
 
 	/**
@@ -62,7 +72,7 @@ public class SlideOverviewDialog extends AbstractDialog {
 	public SlideOverviewDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
-		
+
 		return this;
 	}
 
@@ -113,6 +123,20 @@ public class SlideOverviewDialog extends AbstractDialog {
 								.executeScript("clickButtonFromBean('dialogContent:addDiagnosisRevisionFromDialog')");
 					}
 				}
+				
+				return;
+				// return of slide dialog 
+			} else if (event.getObject() instanceof DeleteEvent) {
+
+				DeleteEvent deleteEvent = (DeleteEvent) event.getObject();
+
+				logger.debug("Deleteing task entity object");
+
+				Task t = slideService.deleteSlideAndPersist((Slide) deleteEvent.getObject());
+
+				onDefaultDialogReturn(
+						new SelectEvent(event.getComponent(), event.getBehavior(), new StainingPhaseUpdateEvent(t)));
+				return;
 				// reload task event, e.g. after version conflict
 			} else if (event.getObject() instanceof ReloadTaskEvent) {
 				updateData();
@@ -143,5 +167,6 @@ public class SlideOverviewDialog extends AbstractDialog {
 		logger.debug("Saving task " + getTask().getTaskID());
 		setTask(taskRepository.save(getTask(), resourceBundle.get(resourcesKey, arr)));
 		getTask().generateTaskStatus();
+		setFlatTaskEntityList(StainingTableChooser.factory(getTask(), false));
 	}
 }
