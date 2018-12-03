@@ -295,7 +295,7 @@ public class DiagnosisService extends AbstractService {
 	 */
 	public Task approveDiangosis(Task task, DiagnosisRevision diagnosisRevision,
 			NotificationStatus notificationStatus) {
-		
+
 		diagnosisRevision.setCompletionDate(System.currentTimeMillis());
 		diagnosisRevision.setNotificationStatus(notificationStatus);
 
@@ -432,6 +432,40 @@ public class DiagnosisService extends AbstractService {
 
 		return result;
 
+	}
+
+	/**
+	 * Returns the next diagnosisrevision where the completion date is 0, if no
+	 * diagnosis is found null is returned.
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public static DiagnosisRevision getNextRevisionToApprove(Task task) {
+		for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
+			if (diagnosisRevision.getCompletionDate() == 0) {
+				return diagnosisRevision;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Counts diagnoses which are not completed jet,
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public static int countRevisionToApprove(Task task) {
+		int result = 0;
+		for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
+			if (diagnosisRevision.getCompletionDate() == 0) {
+				result++;
+			}
+		}
+
+		return result;
 	}
 
 }

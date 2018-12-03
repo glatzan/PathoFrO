@@ -125,36 +125,39 @@ public class WorkPhaseHandler extends AbstractHandler {
 	 * @param notification
 	 * @param removeFromWorklist
 	 */
-	public void endDiagnosisPhase(Task task, DiagnosisRevision diagnosisRevision, boolean endPhase,
-			boolean removeFromDiangosisList, boolean notification, boolean removeFromWorklist) {
+	public void endDiagnosisPhase(Task task, DiagnosisRevision diagnosisRevision, boolean removeFromDiagnosisList,
+			boolean notification, boolean removeFromCurrentWorklist) {
 
-		// end diagnosis phase, if endPhase is false, removeFromDiangosisList will be
-		// ignored
-		if (endPhase) {
+		// all diagnoses wil be approved
+		if (diagnosisRevision == null) {
+			task = workPhaseService.endDiagnosisPhase(task, removeFromDiagnosisList,
+					notification ? NotificationStatus.NOTIFICATION_PENDING : NotificationStatus.NO_NOTFICATION);
+			MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
+					notification ? "growl.diagnosis.endAll.text.true" : "growl.diagnosis.endAll.text.false");
+		} else {
+			task = diagnosisService.approveDiangosis(task, diagnosisRevision,
+					notification ? NotificationStatus.NOTIFICATION_PENDING : NotificationStatus.NO_NOTFICATION);
 
-			if (diagnosisRevision == null) {
-				task = workPhaseService.endDiagnosisPhase(task, removeFromDiangosisList,
-						notification ? NotificationStatus.NOTIFICATION_PENDING : NotificationStatus.NO_NOTFICATION);
-				MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
-						notification ? "growl.diagnosis.endAll.text.true" : "growl.diagnosis.endAll.text.false");
-			} else {
-				task = diagnosisService.approveDiangosis(task, diagnosisRevision,
-						notification ? NotificationStatus.NOTIFICATION_PENDING : NotificationStatus.NO_NOTFICATION);
-				MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved",
-						notification ? "growl.diagnosis.endAll.text.true" : "growl.diagnosis.endAll.text.false");
+			MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved",
+					notification ? "growl.diagnosis.endAll.text.true" : "growl.diagnosis.endAll.text.false");
 
-				if (removeFromDiangosisList)
-					task = favouriteListService.removeTaskFromList(task, PredefinedFavouriteList.DiagnosisList,
-							PredefinedFavouriteList.ReDiagnosisList);
+			// only remove from list if no diagosis is left
+			if (removeFromDiagnosisList) {
+				if (DiagnosisService.countRevisionToApprove(task) == 0) {
+					task = workPhaseService.endDiagnosisPhase(task, removeFromDiagnosisList,
+							notification ? NotificationStatus.NOTIFICATION_PENDING : NotificationStatus.NO_NOTFICATION);
+				} else {
+					MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.removeFromDiagnosisList.failed",
+							"growl.diagnosis.removeFromDiagnosisList.failed.text");
+				}
 			}
-
 		}
 
 		// adding to notification phase
 		if (notification)
 			task = startNotificationPhase(task);
 
-		if (removeFromWorklist) {
+		if (removeFromCurrentWorklist) {
 			// only remove from worklist if patient has one active task
 			if (task.getParent().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
 				MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");

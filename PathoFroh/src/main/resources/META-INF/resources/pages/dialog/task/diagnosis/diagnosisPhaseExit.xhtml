@@ -38,7 +38,8 @@
 				<!-- notify -->
 				<p:selectBooleanCheckbox
 					value="#{dialog.diagnosisPhaseExitDialog.data.allRevisions}">
-					<p:ajax event="change" update="@form" process="@form" />
+					<p:ajax event="change" update="@form" process="@form"
+						listener="#{dialog.diagnosisPhaseExitDialog.updateDate()}" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
 					value="#{msg['dialog.diagnosisPhaseExit.checkBox.endAll']}" />
@@ -59,6 +60,8 @@
 						var="diagnosis" itemLabel="#{diagnosis.name}"
 						itemValue="#{diagnosis}" />
 
+					<p:ajax event="change" update="@form" process="@form"
+						listener="#{dialog.diagnosisPhaseExitDialog.updateDate()}" />
 				</p:selectOneMenu>
 			</h:panelGrid>
 
@@ -66,17 +69,9 @@
 				style="margin-left:10px; margin-top:5px"
 				columnClasses="columnWidth25">
 
-				<!-- end phase -->
-				<p:selectBooleanCheckbox
-					value="#{dialog.diagnosisPhaseExitDialog.data.endDiangosisPhase}">
-					<p:ajax update="@form" process="@form" event="change" />
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value="#{msg['dialog.diagnosisPhaseExit.checkBox.endDiangosis']}" />
-
 				<!-- remove from diagnosis list -->
 				<p:selectBooleanCheckbox
-					disabled="#{!dialog.diagnosisPhaseExitDialog.data.endDiangosisPhase}"
+					disabled="#{dialog.diagnosisPhaseExitDialog.removeFromDiagnosisListDisabled}"
 					value="#{dialog.diagnosisPhaseExitDialog.data.removeFromDiangosisList}">
 					<p:ajax update="@form" process="@form" event="change" />
 				</p:selectBooleanCheckbox>
@@ -90,7 +85,6 @@
 				</p:selectBooleanCheckbox>
 				<h:panelGroup>
 					<h:outputLabel
-						rendered="#{dialog.diagnosisPhaseExitDialog.data.notification}"
 						value="#{msg['dialog.diagnosisPhaseExit.checkBox.notificationPhase']}" />
 					<h:outputLabel
 						rendered="#{!dialog.diagnosisPhaseExitDialog.data.notification}"
@@ -101,9 +95,15 @@
 				<p:selectBooleanCheckbox
 					value="#{dialog.diagnosisPhaseExitDialog.data.removeFromWorklist}" />
 				<h:outputLabel
-					value="#{msg['dialog.diagnosisPhaseExit.checkBox.removeFromWorklist']}" />
+					value=" #{msg['dialog.diagnosisPhaseExit.checkBox.removeFromWorklist']}" />
 			</h:panelGrid>
 
+			<h:panelGrid columns="1" styleClass="defaultHistoTable"
+				style="margin-left:10px"
+				rendered="#{dialog.diagnosisPhaseExitDialog.reApproveDiagnosis}">
+				<h:outputLabel
+					value="#{msg['dialog.diagnosisPhaseExit.reApproved']}" styleClass="icon-red"></h:outputLabel>
+			</h:panelGrid>
 		</div>
 
 		<div class="buttonContainer">

@@ -845,17 +845,30 @@
 						</h:panelGroup>
 
 						<h:panelGroup id="notificationsCompleted#{varCounterOuter.index}">
-							<i
-								class="fa fa-fw fa-volume-up fa-lg #{revision.notificationDate ne 0 ? 'icon-green' : 'icon-grey'}"
-								title="" />
-							<p:tooltip for="notificationsCompleted#{varCounterOuter.index}">
-								<h:outputLabel
-									value="#{revision.notificationDate ne 0 ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} " />
-								<h:outputText rendered="#{revision.notificationDate ne 0}"
-									value="#{revision.notificationDate}">
-									<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm" />
-								</h:outputText>
-							</p:tooltip>
+							<h:panelGroup
+								rendered="#{revision.notificationStatus != 'NO_NOTFICATION'}">
+								<i
+									class="fa fa-fw fa-volume-up fa-lg #{revision.notificationDate ne 0 ? 'icon-green' : 'icon-grey'}"
+									title="" />
+								<p:tooltip for="notificationsCompleted#{varCounterOuter.index}">
+									<h:outputLabel
+										value="#{revision.notificationDate ne 0 ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} " />
+									<h:outputText rendered="#{revision.notificationDate ne 0}"
+										value="#{revision.notificationDate}">
+										<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm" />
+									</h:outputText>
+								</p:tooltip>
+							</h:panelGroup>
+
+							<!-- no notification necessary -->
+							<h:panelGroup
+								rendered="#{revision.notificationStatus == 'NO_NOTFICATION'}">
+								<i class="fa fa-fw fa-stack-exchange fa-lg icon-orange" />
+								<p:tooltip for="notificationsCompleted#{varCounterOuter.index}">
+									<h:outputLabel value="Keine Benachrichtigung druchgeführt" />
+								</p:tooltip>
+							</h:panelGroup>
+
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGrid>

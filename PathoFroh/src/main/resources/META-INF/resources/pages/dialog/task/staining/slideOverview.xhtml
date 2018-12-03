@@ -111,7 +111,7 @@
 
 				<!-- commentary -->
 				<p:column style="width: 4%"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
+					styleClass="#{stainingRow.even ? 'manual-column-color' : ''} centerChildElements"
 					headerText="#{msg['body.receiptlog.slide.headline.staining.commentary']}">
 					<h:panelGroup
 						rendered="#{stainingRow.stainingType and stainingRow.entity.commentary ne ''}">
@@ -130,8 +130,8 @@
 					</h:panelGroup>
 				</p:column>
 
-				<p:column style="width: 5%;text-align: center;"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}">
+				<p:column style="width: 5%;"
+					styleClass="#{stainingRow.even ? 'manual-column-color' : ''} centerChildElements">
 					<!-- Sample status -->
 					<h:panelGroup rendered="#{stainingRow.sampleType}">
 						<!-- ********** Staining performed ********** -->
