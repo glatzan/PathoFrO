@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.hibernate.validator.internal.metadata.location.GetterConstraintLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Lazy;
@@ -200,6 +201,12 @@ public class ReceiptLogView extends AbstractTaskView {
 		setStainingTableRows(StainingTableChooser.factory(getTask(), false));
 	}
 
+	public void printAllLables() {
+		MessageHandler.sendGrowlMessagesAsResource("growl.print", "growl.print.slide.print.all");
+		printLable(getStainingTableRows().stream().filter(p -> p.isStainingType()).map(p -> (Slide) p.getEntity())
+				.toArray(Slide[]::new));
+	}
+
 	public void printLable(Slide... slides) {
 
 		if (slides == null || slides.length == 0)
@@ -227,7 +234,7 @@ public class ReceiptLogView extends AbstractTaskView {
 		userHandlerAction.getSelectedLabelPrinter().print(toPrint);
 
 		MessageHandler.sendGrowlMessagesAsResource("growl.print", "growl.print.slide.print");
-		
+
 		logger.debug("Printing label..");
 
 	}

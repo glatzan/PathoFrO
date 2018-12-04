@@ -200,7 +200,7 @@
 							</p:inputText>
 
 							<p:overlayPanel id="materialOverlayPanel#{loopCount.index}"
-								styleClass="histoOverlayPanel" 
+								styleClass="histoOverlayPanel"
 								widgetVar="materialOverlayPanel#{loopCount.index}"
 								hideEffect="fade" style="width:500px" hideEvent="mousedown"
 								showEvent="none" onkeypress="return false;">
@@ -845,7 +845,8 @@
 				dismissable="false" styleClass="histoOverlayPanel"
 				widgetVar="idInputPannel" hideEvent="null" showEvent="null">
 
-				<p:inputText id="idInputPannelInput" widgetVar="idInputPannelInput" styleClass="doNotHideOverlay_js_Class"
+				<p:inputText id="idInputPannelInput" widgetVar="idInputPannelInput"
+					styleClass="doNotHideOverlay_js_Class"
 					onkeypress="return closeOverlayPanelOnReturn(event, 'idInputPannel')"
 					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 					rendered="#{globalEditViewHandler.receiptLogView.selectedStainingTableChooser ne null}"
@@ -887,6 +888,12 @@
 					listener="#{dialogReturnHandler.onStainingChangeReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
 					update="navigationForm:patientList contentForm:contentPanel" />
+			</p:commandButton>
+
+			<!-- Print all slides -->
+			<p:commandButton icon="fa fa-fw fa-print"
+				value="#{msg['body.statiningView.printAll']}"
+				actionListener="#{globalEditViewHandler.receiptLogView.printAllLables()}">
 			</p:commandButton>
 
 			<!-- select all -->

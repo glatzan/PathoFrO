@@ -8,8 +8,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-	<p:poll
-		interval="#{worklistHandler.current.udpateInterval}"
+	<p:poll interval="#{worklistHandler.current.udpateInterval}"
 		update=":navigationForm:patientList"
 		oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 		rendered="#{worklistHandler.current.autoUpdate}"
@@ -60,16 +59,29 @@
 				</p:inputText>
 			</h:panelGroup>
 
-			<p:commandButton id="submitQuickSearchBtn"
-				widgetVar="submitQuickSearchBtn"
-				actionListener="#{globalEditViewHandler.quickSearch()}"
-				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
-				update="navigationForm:patientList navigationForm:searchField contentForm headerForm"
-				icon="fa fa-mail-forward">
-				<p:ajax event="dialogReturn"
+			<h:panelGroup>
+				<!-- quick search button -->
+				<p:commandButton id="submitQuickSearchBtn"
+					widgetVar="submitQuickSearchBtn"
+					actionListener="#{globalEditViewHandler.quickSearch()}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
-					update="navigationForm:patientList navigationForm:searchField contentForm headerForm @this" />
-			</p:commandButton>
+					update="navigationForm:patientList navigationForm:searchField contentForm headerForm"
+					icon="fa fa-mail-forward">
+					<p:ajax event="dialogReturn"
+						oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+						update="navigationForm:patientList navigationForm:searchField contentForm headerForm @this" />
+				</p:commandButton>
+
+				<!-- add patient form quick seach hidden button -->
+				<p:commandButton id="searchPatientButtonQuickSeach"
+					style="display: none"
+					actionListener="#{dialog.searchPatientDialog.initAndPrepareBean().inititalValues(globalEditViewHandler.patientAddDialogLaunchData.name, globalEditViewHandler.patientAddDialogLaunchData.surname, globalEditViewHandler.patientAddDialogLaunchData.piz, globalEditViewHandler.patientAddDialogLaunchData.birthday).persistPatient()}">
+					<p:ajax event="dialogReturn"
+						listener="#{dialogReturnHandler.onSearchForPatientReturn}"
+						oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+						update="navigationForm:patientList contentForm headerForm" />
+				</p:commandButton>
+			</h:panelGroup>
 
 		</h:panelGrid>
 	</h:panelGrid>
@@ -142,8 +154,8 @@
 	<p:scrollPanel styleClass="patientScrollPanelStyle" mode=""
 		id="patientNavigationScroll">
 		<p:dataTable var="patient" id="patientList"
-			value="#{worklistHandler.current.items}"
-			selectionMode="single" rowIndexVar="rowIdx"
+			value="#{worklistHandler.current.items}" selectionMode="single"
+			rowIndexVar="rowIdx"
 			selection="#{worklistHandler.current.selectedPatient}"
 			rowKey="#{patient.id}" styleClass="patientNavigationBody">
 

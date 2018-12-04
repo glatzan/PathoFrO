@@ -1,6 +1,7 @@
 package com.patho.main.action.handler;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +64,7 @@ import com.patho.main.util.worklist.search.WorklistSimpleSearch;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -107,11 +109,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private DialogHandler dialogHandler;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private SlideService slideService;
 
 	@Autowired
@@ -133,7 +130,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private WorkPhaseHandler workPhaseHandler;
-	
+
 	/**
 	 * Navigation Data
 	 */
@@ -163,24 +160,26 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	 * Data for diangosis view
 	 */
 	private DiagnosisView diagnosisView = new DiagnosisView(this);
-	
+
 	/**
 	 * Methodes for saving task data
 	 */
 	private CurrentTaskFunctions ct = new CurrentTaskFunctions(this);
 
-	// ************************ Search ************************
 	/**
 	 * Search String for quick search
 	 */
 	private String quickSearch;
 
 	/**
+	 * Launch data for opening a patient add dialog from quick search
+	 */
+	private PatientAddDialogLaunchData patientAddDialogLaunchData;
+
+	/**
 	 * TODO: use
 	 */
 	private boolean searchWorklist;
-
-	// ************************ dynamic lists ************************
 
 	/**
 	 * MenuModel for task editing
@@ -192,7 +191,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 	 */
 	private HtmlPanelGroup taskMenuCommandButtons;
 
-	// ************************ Current Patient/Task ************************
 	/**
 	 * DataTable selection to change a material via overlay panel
 	 */
@@ -227,7 +225,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 		logger.debug("4. Loading view data");
 		navigationData.updateData();
-		
+
 		logger.debug("5. Setting worklist");
 		worklistViewHandler.addWorklist(worklist, true);
 
@@ -406,14 +404,16 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				if (patient.isPresent()) {
 					logger.debug("Found patient " + patient + " and adding to currentworklist");
 
-					worklistViewHandler.addPatientToWorkList(patient.get(), true);
+					worklistViewHandler.addPatientToWorkList(patient.get(), true, true);
 					MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.piz",
 							"growl.search.patient.piz.text");
 
 					// if alternate mode the create Task dialog will be
 					// shown after the patient is added to the worklist
-					if (alternateMode)
-						dialogHandler.getCreateTaskDialog().initAndPrepareBean(patient.get());
+					if (alternateMode) {
+						// starting task button from gui (return handler)
+						MessageHandler.executeScript("clickButtonFromBean('headerForm:newTaskBtn')");
+					}
 
 				} else {
 					// no patient was found for piz
@@ -448,15 +448,19 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				logger.debug("Search for name, first name");
 				// name, surename; name surename
 				String[] arr = quickSerach.split(", ");
-				dialogHandler.getSearchPatientDialog().initAndPrepareBean().inititalValues(arr[0], arr[1], "", null);
+				// setting data for launching dialog via gui element (return handler
+				setPatientAddDialogLaunchData(new PatientAddDialogLaunchData(arr[0], arr[1], "", null));
+				MessageHandler.executeScript("clickButtonFromBean('navigationForm:searchPatientButtonQuickSeach')");
 			} else if (quickSerach.matches("^(.+) (.+)$")) {
 				logger.debug("Search for firstname, name");
 				// name, surename; name surename
 				String[] arr = quickSerach.split(" ");
-				dialogHandler.getSearchPatientDialog().initAndPrepareBean().inititalValues(arr[1], arr[0], "", null);
+				setPatientAddDialogLaunchData(new PatientAddDialogLaunchData(arr[1], arr[0], "", null));
+				MessageHandler.executeScript("clickButtonFromBean('navigationForm:searchPatientButtonQuickSeach')");
 			} else if (quickSerach.matches("^[\\p{Alpha}\\-]+")) {
 				logger.debug("Search for name");
-				dialogHandler.getSearchPatientDialog().initAndPrepareBean().inititalValues(quickSerach, "", "", null);
+				setPatientAddDialogLaunchData(new PatientAddDialogLaunchData(quickSerach, "", "", null));
+				MessageHandler.executeScript("clickButtonFromBean('navigationForm:searchPatientButtonQuickSeach')");
 			} else {
 				logger.debug("No search match found");
 				MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.notFount.general", "general.blank",
@@ -478,7 +482,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			}
 		}
 	}
-
 
 	/**
 	 * Navigation Data
@@ -809,6 +812,16 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 	public static enum TaskInitilize {
 		GENERATE_TASK_STATUS, GENERATE_MENU_MODEL, RELOAD_MENU_MODEL_FAVOURITE_LISTS, RELOAD;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	@Setter
+	public static class PatientAddDialogLaunchData {
+		private String name;
+		private String surname;
+		private String piz;
+		private Date birthday;
 	}
 
 }

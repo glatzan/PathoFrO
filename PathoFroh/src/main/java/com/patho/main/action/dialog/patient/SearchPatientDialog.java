@@ -94,9 +94,9 @@ public class SearchPatientDialog extends AbstractTabDialog {
 		return this;
 	}
 
-	public SearchPatientDialog inititalValues(String name, String surename, String piz, Date date) {
+	public SearchPatientDialog inititalValues(String name, String surname, String piz, Date date) {
 		clinicSearchTab.setPatientName(name);
-		clinicSearchTab.setPatientSurname(surename);
+		clinicSearchTab.setPatientSurname(surname);
 		clinicSearchTab.setPatientPiz(piz);
 		clinicSearchTab.setPatientBirthday(date);
 		clinicSearchTab.searchForClinicPatienes();

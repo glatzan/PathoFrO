@@ -66,7 +66,7 @@ public class DialogReturnHandler extends AbstractHandler {
 			logger.debug("Patient was selected, adding to database and worklist");
 			Patient p = ((PatientReturnEvent) event.getObject()).getPatien();
 			// reload if patient is known to database, and may is associated with tasks
-			worklistViewHandler.addPatientToWorkList(p, true);
+			worklistViewHandler.addPatientToWorkList(p, true,true);
 		} else {
 			logger.debug("No Patient was selected");
 		}

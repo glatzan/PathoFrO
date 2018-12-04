@@ -36,12 +36,10 @@ Tasks:
 -> Task notification once all three month of tasks where samples should be returned
 -> Council dialog, enable the option ot create no council diangosis (!)  
 -> Change Diangosis selechtion to the new overlay display (!)  
--> Button for printing all slide lables (!)  
 -> Task Create Dialog: Add Count of slides (!)  
 -> Task Create Dialog: Check if material is corretly used (!)  
--> Choos patient Dianlog: Selection is not working (!)  
 -> Add Photo Icon for Tasks with photos present (!)  
--> MAke Timestamps uts save 
+-> Make Timestamps uts save 
 
 -> ReportView: FIX  Update for 2 > pdf thubnails Diagnosis-Reports in DiagnosisReport View
 -> JsonHandler: Change to Apache HTTP client 

@@ -384,11 +384,23 @@ public class WorklistViewHandler {
 	 * @param asSelectedPatient
 	 */
 	public void addPatientToWorkList(Patient patient, boolean changeView) {
+		addPatientToWorkList(patient, changeView, false);
+	}
+
+	/**
+	 * Adds a patient to the worklist. If already added it is check if the patient
+	 * should be selected. If so the patient will be selected. The patient isn't
+	 * added twice.
+	 * 
+	 * @param patient
+	 * @param asSelectedPatient
+	 */
+	public void addPatientToWorkList(Patient patient, boolean changeView, boolean reload) {
 		// change view to patient
 		if (changeView)
-			selectPatientAndChangeView(patient, false);
+			selectPatientAndChangeView(patient, reload);
 		else
-			worklistHandler.getCurrent().add(patient, false);
+			replacePatientInWorklist(patient, reload);
 	}
 
 	/**
