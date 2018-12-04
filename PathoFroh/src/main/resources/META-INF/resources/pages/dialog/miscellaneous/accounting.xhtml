@@ -35,9 +35,11 @@
 			<h:panelGrid columns="4" styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.accounting.date.from']}"></h:outputLabel>
 				<p:calendar value="#{dialog.accountingDataDialog.fromDate}"
-					locale="de" navigator="true" pattern="yyyy-MMM-dd">
-					<p:ajax event="dateSelect" update="dialogContent:accountingTable dialogContent:leftBtn"
-						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
+					locale="de" navigator="true" pattern="dd.MM.yyyy">
+					<p:ajax event="dateSelect"
+						update="dialogContent:accountingTable dialogContent:leftBtn"
+						listener="#{dialog.accountingDataDialog.loadAccountingDate()}"
+						execute="@this" />
 					<f:ajax event="change" execute="@this"
 						update="dialogContent:accountingTable dialogContent:leftBtn"
 						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
@@ -45,8 +47,10 @@
 
 				<h:outputLabel value="#{msg['dialog.accounting.date.to']}"></h:outputLabel>
 				<p:calendar value="#{dialog.accountingDataDialog.toDate}"
-					locale="de" navigator="true" pattern="yyyy-MMM-dd">
-					<p:ajax event="dateSelect" update="dialogContent:accountingTable dialogContent:leftBtn"
+					locale="de" navigator="true" pattern="dd.MM.yyyy">
+					<p:ajax event="dateSelect"
+						update="dialogContent:accountingTable dialogContent:leftBtn"
+						execute="@this"
 						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
 					<f:ajax event="change" execute="@this"
 						update="dialogContent:accountingTable dialogContent:leftBtn"
@@ -96,10 +100,11 @@
 
 				<h:panelGrid columns="1" styleClass="left" id="leftBtn">
 					<!-- export -->
-					<p:commandButton value="#{msg['dialog.accounting.button.export']}" icon="fa fa-download"
-						ajax="false">
+					<p:commandButton value="#{msg['dialog.accounting.button.export']}"
+						icon="fa fa-download" ajax="false">
 						<p:dataExporter type="xls" target="accountingDataDataTable"
-							fileName="#{dialog.accountingDataDialog.getExportFileName()}" pageOnly="true" />
+							fileName="#{dialog.accountingDataDialog.getExportFileName()}"
+							pageOnly="true" />
 					</p:commandButton>
 				</h:panelGrid>
 

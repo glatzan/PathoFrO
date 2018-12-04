@@ -22,7 +22,7 @@ import lombok.Setter;
 	    name = "AccountingData.findAllBetweenDates",
 	    query = "With totals as "+ 
 	    		"( "+
-	    			"select  to_timestamp(s.creationdate/1000) as creationdate , piz, get_slide_count(s.slideid) as scount, "+ 
+	    			"select  to_timestamp(tk.dateofreceipt/1000) as creationdate , piz, get_slide_count(s.slideid) as scount, "+ 
 	    				"case when s.slideid ilike '%HE%' then true else false end as he, "+
 	    				"case when s.slideid ilike '%HE%' and (sm.material in ('Bulbi', 'Exenteratio', 'Glaskörperaspirat') or (s.commentary = '') IS false or tk.commentary ilike '%Depigmentierung%' or tk.commentary ilike '%Entkalkung%' or tk.commentary ilike '%Handeinbettung%') then true else false end as he2, "+
 	    				"case when s.slideid not ilike '%HE%' and sp.type not like 'IMMUN' then true else false end as pas, "+
