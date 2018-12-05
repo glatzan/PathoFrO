@@ -189,66 +189,103 @@
 				</h:panelGrid>
 
 				<!-- right column -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					id="sampleTable" columnClasses="columnWidth150 columnHeading">
-					<!-- samples -->
+				<h:panelGrid columns="1"
+					styleClass="defaultHistoHiddenTableContainer">
 
-					<h:outputLabel value="#{msg['dialog.createTask.sampels']}" />
-					<h:panelGroup layout="block" style="width:41%">
-						<!-- remove -->
-						<p:commandLink update="sampleTable"
-							style="float:right;margin-left:5px;"
-							actionListener="#{dialog.createTaskDialog.taskData.removeSample()}">
-							<i class="fa fa-minus-square icon-grey"
-								title="#{msg['dialog.createTask.sampels.add']}" />
-						</p:commandLink>
-						
-						<!-- add -->
-						<p:commandLink update="sampleTable" style="float:right;"
-							actionListener="#{dialog.createTaskDialog.taskData.addSample()}">
-							<i class="fa fa-plus-square icon-grey"
-								title="#{msg['dialog.createTask.sampels.remove']}" />
-						</p:commandLink>
-					</h:panelGroup>
+					<!-- header -->
+					<h:panelGrid columns="2" styleClass="defaultHistoTable"
+						style="width:200px;" columnClasses="columnWidth150 columnHeading">
+						<!-- samples -->
 
-					<c:forEach var="sample" varStatus="sampleIndex"
-						items="#{dialog.createTaskDialog.taskData.samples}">
+						<h:outputLabel value="#{msg['dialog.createTask.sampels']}" />
 
-						<h:outputFormat value="#{msg['dialog.createTask.sample']}">
-							<f:param value="#{sample.sampleID}" />
-						</h:outputFormat>
+						<h:panelGroup layout="block" style="float:right;">
+							<!-- add -->
+							<p:commandLink update="sampleTable" style="margin-left:5px;"
+								actionListener="#{dialog.createTaskDialog.taskData.addSample()}">
+								<i class="fa fa-plus-square icon-grey"
+									title="#{msg['dialog.createTask.sampels.remove']}" />
+							</p:commandLink>
 
-						<h:panelGroup>
-							<!-- material text -->
-							<p:inputText value="#{sample.material}"
-								onkeypress="PF('materialOverlayPanel#{sampleIndex.index}').hide();"
-								onclick="PF('materialOverlayPanel#{sampleIndex.index}').show();"
-								onfocus="PF('materialOverlayPanel#{sampleIndex.index}').show();"
-								id="materialName#{sampleIndex.index}" style="width:40%">
-							</p:inputText>
-
-							<!-- select material -->
-							<p:overlayPanel
-								widgetVar="materialOverlayPanel#{sampleIndex.index}"
-								id="materialOverlayPanel#{sampleIndex.index}"
-								styleClass="histoOverlayPanel"
-								for="materialName#{sampleIndex.index}" hideEffect="fade"
-								hideEvent="none" showEvent="none">
-								<p:dataTable value="#{dialog.createTaskDialog.materialList}"
-									var="item" styleClass="defaultHistoDataTable" scrollable="true"
-									scrollHeight="200" rowKey="#{item.id}"
-									selection="#{sample.materialPreset}" selectionMode="single">
-									<p:column>
-										<h:outputText value="#{item.name}" />
-									</p:column>
-
-									<p:ajax event="rowSelect" update="@form"
-										listener="#{sample.onMaterialPresetChange()}"
-										oncomplete="PF('materialOverlayPanel#{sampleIndex.index}').hide();" />
-								</p:dataTable>
-							</p:overlayPanel>
+							<!-- remove -->
+							<p:commandLink update="sampleTable"
+								actionListener="#{dialog.createTaskDialog.taskData.removeSample()}">
+								<i class="fa fa-minus-square icon-grey"
+									title="#{msg['dialog.createTask.sampels.add']}" />
+							</p:commandLink>
 						</h:panelGroup>
-					</c:forEach>
+					</h:panelGrid>
+
+					<!-- sample loop -->
+					<h:panelGrid columns="2" styleClass="defaultHistoTable"
+						id="sampleTable"
+						columnClasses="columnWidth150 columnHeading columnTop">
+						<c:forEach var="sample" varStatus="sampleIndex"
+							items="#{dialog.createTaskDialog.taskData.samples}">
+
+							<h:outputFormat value="#{msg['dialog.createTask.sample']}">
+								<f:param value="#{sample.sampleID}" />
+							</h:outputFormat>
+
+							<h:panelGrid styleClass="listingHistoHiddenTableContainer"
+								columns="1">
+								<h:panelGroup>
+
+									<!-- material text -->
+									<p:inputText value="#{sample.material}"
+										onkeypress="PF('materialOverlayPanel#{sampleIndex.index}').hide();"
+										onclick="PF('materialOverlayPanel#{sampleIndex.index}').show();"
+										onfocus="PF('materialOverlayPanel#{sampleIndex.index}').show();"
+										id="materialName#{sampleIndex.index}" style="width:200px;">
+									</p:inputText>
+
+									<!-- slide toggle button -->
+									<p:commandLink update="sampleTable"
+										actionListener="#{sample.setShowStainings(!sample.showStainings)}">
+										<i
+											class="fa icon-grey #{sample.showStainings ? 'fa-toggle-up' : 'fa-image'}"
+											title="#{msg['dialog.createTask.sampels.add']}" />
+									</p:commandLink>
+
+									<!-- select material -->
+									<p:overlayPanel
+										widgetVar="materialOverlayPanel#{sampleIndex.index}"
+										id="materialOverlayPanel#{sampleIndex.index}"
+										styleClass="histoOverlayPanel"
+										for="materialName#{sampleIndex.index}" hideEffect="fade"
+										hideEvent="none" showEvent="none">
+										<p:dataTable value="#{dialog.createTaskDialog.materialList}"
+											var="item" styleClass="defaultHistoDataTable"
+											scrollable="true" scrollHeight="200" rowKey="#{item.id}"
+											filterDelay="50" selection="#{sample.materialPreset}"
+											selectionMode="single">
+
+											<p:column filterBy="#{item.name}" filterMatchMode="contains">
+												<h:outputText value="#{item.name}" />
+											</p:column>
+
+											<p:ajax event="rowSelect" update="@form"
+												listener="#{sample.onMaterialPresetChange()}"
+												oncomplete="PF('materialOverlayPanel#{sampleIndex.index}').hide();" />
+										</p:dataTable>
+									</p:overlayPanel>
+								</h:panelGroup>
+								
+								<!-- slide count select -->
+								<h:panelGrid styleClass="defaultHistoTable" columnClasses="columnWidth100, "
+									style="margin-left:10px; margin-top:5px;" columns="2"
+									rendered="#{sample.showStainings}">
+									<c:forEach var="staining" items="#{sample.stainings}">
+										<h:outputText value="#{staining.name}" />
+										<p:spinner value="#{staining.count}" min="0" max="100"
+											size="4">
+											<p:ajax process="@this" />
+										</p:spinner>
+									</c:forEach>
+								</h:panelGrid>
+							</h:panelGrid>
+						</c:forEach>
+					</h:panelGrid>
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
@@ -276,8 +313,7 @@
 					</p:commandButton>
 
 					<!-- select printer -->
-					<p:selectOneMenu 
-						title="#{msg['dialog.print.selectPrinter']}"
+					<p:selectOneMenu title="#{msg['dialog.print.selectPrinter']}"
 						panelStyleClass="searchSelectMenuPanel"
 						converter="#{printService.cupsPrinter.printerTransformer}"
 						value="#{userHandlerAction.selectedPrinter}" filter="true"

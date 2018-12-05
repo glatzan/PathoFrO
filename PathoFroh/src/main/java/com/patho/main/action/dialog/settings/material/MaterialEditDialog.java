@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
-import com.patho.main.action.dialog.slides.AddSlidesDialog.StainingPrototypeHolder;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.service.MaterialPresetService;
+import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
@@ -36,6 +36,7 @@ public class MaterialEditDialog extends AbstractDialog {
 	}
 
 	public MaterialEditDialog initAndPrepareBean(MaterialPreset material) {
+		System.out.println(material);
 		if (initBean(material))
 			prepareDialog();
 		return this;
@@ -44,7 +45,6 @@ public class MaterialEditDialog extends AbstractDialog {
 	public boolean initBean(MaterialPreset material) {
 		setNewMaterial(material.getId() == 0);
 		setMaterialPreset(material);
-
 		return super.initBean(task, Dialog.SETTINGS_MATERIAL_EDIT);
 	}
 

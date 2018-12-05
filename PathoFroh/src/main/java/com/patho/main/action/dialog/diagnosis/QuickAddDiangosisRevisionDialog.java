@@ -22,6 +22,7 @@ import com.patho.main.service.DiagnosisService;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -96,6 +97,17 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog {
 		});
 
 		MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.create.rediagnosis");
-		hideDialog(new ReloadTaskEvent());
+		hideDialog(new QuickDiangosisAddReturn(true));
+	}
+
+	public void hideDialog() {
+		hideDialog(new QuickDiangosisAddReturn(false));
+	}
+
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class QuickDiangosisAddReturn extends ReloadTaskEvent {
+		private boolean created;
 	}
 }

@@ -285,15 +285,7 @@ public class SettingsDialog extends AbstractTabDialog {
 		@Setter(AccessLevel.NONE)
 		private MaterialPresetService materialPresetService;
 
-		private List<MaterialPreset> allMaterials;
-
-		/**
-		 * List for selecting staining, this list contains all stainings. They can be
-		 * choosen and added to the material
-		 */
-		private List<ListChooser<StainingPrototype>> stainingListChooserForMaterial;
-
-		private boolean newMaterial;
+		private List<MaterialPreset> materials;
 
 		/**
 		 * If true archived object will be shown.
@@ -310,7 +302,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setAllMaterials(
+			setMaterials(
 					materialPresetRepository.findAllIgnoreArchivedOrderByPriorityCountDesc(false, !isShowArchived()));
 		}
 

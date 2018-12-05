@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.action.dialog.slides.AddSlidesDialog.StainingPrototypeHolder;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Sample;
@@ -14,6 +13,7 @@ import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.SlideRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.ui.selectors.StainingPrototypeHolder;
 
 @Service
 @Transactional
@@ -32,8 +32,8 @@ public class SlideService extends AbstractService {
 		createSlide(prototype, block, null, null, false, true, false, true);
 	}
 
-	public void createSlideAndPersist(StainingPrototype prototype, Block block, String slideLabelText, boolean reStaining,
-			boolean naming, boolean asCompleted) {
+	public void createSlideAndPersist(StainingPrototype prototype, Block block, String slideLabelText,
+			boolean reStaining, boolean naming, boolean asCompleted) {
 		createSlide(prototype, block, slideLabelText, null, reStaining, naming, asCompleted, true);
 	}
 
@@ -70,7 +70,7 @@ public class SlideService extends AbstractService {
 	}
 
 	/**
-	 * Creates a list of slides
+	 * Creates a list of slides, does persist data
 	 * 
 	 * @param prototypes
 	 * @param block
@@ -81,7 +81,7 @@ public class SlideService extends AbstractService {
 	}
 
 	/**
-	 * Creates a lists of slides
+	 * Creates a lists of slides, does persist data
 	 * 
 	 * @param prototypes
 	 * @param block
@@ -93,6 +93,42 @@ public class SlideService extends AbstractService {
 	 */
 	public Task createSlidesXTimesAndPersist(List<StainingPrototypeHolder> prototypeHolders, Block block,
 			String slideLabelText, String commentary, boolean reStaining, boolean naming, boolean asCompleted) {
+		return createSlidesXTimes(prototypeHolders, block, slideLabelText, commentary, reStaining, naming, asCompleted,
+				true);
+	}
+
+	/**
+	 * Creats a slide x times, does not persist data
+	 * 
+	 * @param prototypeHolders
+	 * @param block
+	 * @param slideLabelText
+	 * @param commentary
+	 * @param reStaining
+	 * @param naming
+	 * @param asCompleted
+	 * @param save
+	 * @return
+	 */
+	public Task createSlidesXTimes(List<StainingPrototypeHolder> prototypeHolders, Block block) {
+		return createSlidesXTimes(prototypeHolders, block, null, null, false, true, false, false);
+	}
+
+	/**
+	 * Creats a slide x times
+	 * 
+	 * @param prototypeHolders
+	 * @param block
+	 * @param slideLabelText
+	 * @param commentary
+	 * @param reStaining
+	 * @param naming
+	 * @param asCompleted
+	 * @param save
+	 * @return
+	 */
+	public Task createSlidesXTimes(List<StainingPrototypeHolder> prototypeHolders, Block block, String slideLabelText,
+			String commentary, boolean reStaining, boolean naming, boolean asCompleted, boolean save) {
 
 		for (StainingPrototypeHolder p : prototypeHolders) {
 			for (int i = 0; i < p.getCount(); i++)
@@ -100,7 +136,9 @@ public class SlideService extends AbstractService {
 						false);
 		}
 
-		return taskRepository.save(block.getTask(), resourceBundle.get("log.task.slide.newxtimes", block));
+		if (save)
+			return taskRepository.save(block.getTask(), resourceBundle.get("log.task.slide.newxtimes", block));
+		return block.getTask();
 	}
 
 	/**
@@ -143,7 +181,7 @@ public class SlideService extends AbstractService {
 			slide.getParent().updateAllNames(block.getTask().isUseAutoNomenclature(), false);
 
 		slide.setSlideLabelText(slideLabelText);
-		slide.setCommentary(commentary);
+		slide.setCommentary(commentary);		
 		slide.setReStaining(reStaining);
 
 		if (asCompleted) {

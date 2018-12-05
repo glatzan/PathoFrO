@@ -1,5 +1,6 @@
 package com.patho.main.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +31,13 @@ import lombok.Setter;
 @Setter
 @SelectBeforeUpdate(true)
 @SequenceGenerator(name = "materialPreset_sequencegenerator", sequenceName = "materialPreset_sequence")
-public class MaterialPreset implements EditAbleEntity<MaterialPreset>, LogAble, ID {
+public class MaterialPreset implements EditAbleEntity<MaterialPreset>, LogAble, ID, Serializable {
+
+	private static final long serialVersionUID = 442137465482608899L;
 
 	@Id
 	@GeneratedValue(generator = "materialPreset_sequencegenerator")
 	@Column(unique = true, nullable = false)
-
 	private long id;
 
 	@Column

@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Lazy;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.DialogHandler;
+import com.patho.main.action.dialog.diagnosis.QuickAddDiangosisRevisionDialog.QuickDiangosisAddReturn;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -400,7 +401,7 @@ public class CouncilDialog extends AbstractDialog {
 	}
 
 	public void onEndRequestState(SelectEvent event) {
-		if (event.getObject() instanceof ReloadTaskEvent) {
+		if (event.getObject() instanceof QuickDiangosisAddReturn) {
 			// reloading
 			logger.debug("Ending request phase");
 			councilService.endCouncilRequest(getTask(), getSelectedCouncil().getCouncil());

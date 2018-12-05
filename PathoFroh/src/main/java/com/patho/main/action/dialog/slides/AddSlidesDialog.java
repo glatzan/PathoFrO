@@ -18,6 +18,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.service.SlideService;
+import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.ui.task.TaskStatus;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
@@ -198,23 +199,6 @@ public class AddSlidesDialog extends AbstractDialog {
 			this.type = type;
 			this.prototpyes = prototypes;
 			this.selectedPrototypes = new ArrayList<StainingPrototypeHolder>();
-		}
-	}
-
-	/**
-	 * Container for a staining prototype
-	 * 
-	 * @author andi
-	 *
-	 */
-	@Getter
-	@Setter
-	public static class StainingPrototypeHolder {
-		private int count = 1;
-		private StainingPrototype prototype;
-
-		public StainingPrototypeHolder(StainingPrototype stainingPrototype) {
-			this.prototype = stainingPrototype;
 		}
 	}
 

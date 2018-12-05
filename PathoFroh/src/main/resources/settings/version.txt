@@ -34,10 +34,7 @@ Tasks:
 -> Add Sending Physicians in surgeon select dialog (!)  
 -> Make organizations choosable als suregons
 -> Task notification once all three month of tasks where samples should be returned
--> Council dialog, enable the option ot create no council diangosis (!)  
 -> Change Diangosis selechtion to the new overlay display (!)  
--> Task Create Dialog: Add Count of slides (!)  
--> Task Create Dialog: Check if material is corretly used (!)  
 -> Add Photo Icon for Tasks with photos present (!)  
 -> Make Timestamps uts save 
 

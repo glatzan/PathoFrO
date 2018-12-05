@@ -15,7 +15,8 @@
 
 		<p:dataTable var="material" style="width:100%;" scrollable="true"
 			scrollHeight="450" styleClass="defaultHistoDataTable"
-			value="#{dialog.settingsDialog.materialTab.allMaterials}">
+			rowKey="#{material.id}"
+			value="#{dialog.settingsDialog.materialTab.materials}">
 
 			<!-- name -->
 			<p:column headerText="#{msg['dialog.settings.material.name']}"
@@ -71,7 +72,8 @@
 				</p:commandLink>
 
 				<!-- delete -->
-				<p:commandLink title="#{msg['dialog.settings.material.option.archive']}"
+				<p:commandLink
+					title="#{msg['dialog.settings.material.option.archive']}"
 					rendered="#{!material.archived}"
 					actionListener="#{dialog.settingsDialog.materialTab.archiveOrDelete(material, true)}"
 					update="@form" process="@this" partialSubmit="true">
@@ -79,7 +81,8 @@
 				</p:commandLink>
 
 				<!-- unarchive -->
-				<p:commandLink title="#{msg['dialog.settings.material.option.dearchive']}"
+				<p:commandLink
+					title="#{msg['dialog.settings.material.option.dearchive']}"
 					rendered="#{material.archived}"
 					actionListener="#{dialog.settingsDialog.materialTab.archiveOrDelete(material, false)}"
 					update="@form" process="@this" partialSubmit="true">

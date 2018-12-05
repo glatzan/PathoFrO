@@ -630,7 +630,7 @@
 					styleClass="#{stainingRow.even ? 'manual-column-color' : ''} centerChildElements"
 					headerText="#{msg['body.receiptlog.slide.headline.staining.commentary']}">
 					<h:panelGroup
-						rendered="#{stainingRow.stainingType and stainingRow.entity.commentary ne ''}">
+						rendered="#{stainingRow.stainingType and not empty stainingRow.entity.commentary}">
 						<i class="fa fa-fw fa-exclamation-triangle icon-red"
 							title="#{stainingRow.entity.commentary}" />
 					</h:panelGroup>

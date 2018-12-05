@@ -34,7 +34,10 @@ import com.patho.main.config.PathoConfig;
 import com.patho.main.model.BioBank;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.PDFContainer;
+import com.patho.main.model.StainingPrototype;
+import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Patient;
+import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.repository.PatientRepository;
@@ -42,15 +45,19 @@ import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.service.BioBankService;
+import com.patho.main.service.BlockService;
 import com.patho.main.service.DiagnosisService;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.SampleService;
+import com.patho.main.service.SlideService;
 import com.patho.main.service.TaskService;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
+import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
+import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TaskUtil;
 import com.patho.main.util.helper.TimeUtil;
 import com.patho.main.util.pdf.PDFGenerator;
@@ -59,6 +66,7 @@ import com.patho.main.util.pdf.PrintOrder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Delegate;
 
 @Configurable
 @Getter
@@ -94,6 +102,16 @@ public class CreateTaskDialog extends AbstractDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private SampleService sampleService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private BlockService blockService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private SlideService slideService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -199,7 +217,15 @@ public class CreateTaskDialog extends AbstractDialog {
 				for (SampleTempData sampleTempData : getTaskData().getSamples()) {
 					logger.debug("Creating sample {}", sampleTempData.getMaterial());
 					sampleService.createSample(task, sampleTempData.getMaterialPreset(), sampleTempData.getMaterial(),
-							true, true, true);
+							false, true, true);
+
+					// creating block manually
+					Sample sample = HistoUtil.getLastElement(task.getSamples());
+					blockService.createBlock(sample, false, true, false);
+
+					Block block = HistoUtil.getLastElement(sample.getBlocks());
+
+					slideService.createSlidesXTimes(sampleTempData.getStainings(), block);
 				}
 
 				// creating standard diagnoses
@@ -256,7 +282,7 @@ public class CreateTaskDialog extends AbstractDialog {
 					return;
 				}
 
-				printDocument.get().initilize(new InitializeToken("task", task));
+				printDocument.get().initilize(new InitializeToken("task", task),new InitializeToken("patient", patient));
 
 				PDFContainer container = generator.getPDF(printDocument.get(),
 						new File(pathoConfig.getFileSettings().getPrintDirectory()), false);
@@ -342,16 +368,29 @@ public class CreateTaskDialog extends AbstractDialog {
 			private String material;
 			private String sampleID;
 
+			private List<StainingPrototypeHolder> stainings = new ArrayList<StainingPrototypeHolder>();
+			private boolean showStainings;
+
 			public SampleTempData(MaterialPreset materialPreset) {
 				this.materialPreset = materialPreset;
-				this.material = materialPreset.getName();
-
 				this.sampleID = "";
+				this.showStainings = false;
+
+				onMaterialPresetChange();
 			}
 
 			public void onMaterialPresetChange() {
 				setMaterial(getMaterialPreset() != null ? getMaterialPreset().getName() : "");
+
+				stainings.clear();
+
+				for (StainingPrototype prototype : getMaterialPreset().getStainingPrototypes()) {
+					System.out.println("adding " + prototype.getName());
+					stainings.add(new StainingPrototypeHolder(prototype));
+				}
+
 			}
+
 		}
 
 		@Getter
