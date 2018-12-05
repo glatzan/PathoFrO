@@ -125,6 +125,9 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 ++++: Umstellung des Systems auf Spring Boot
 ++++:
 
+TODO:
+Create Material and Staining for external samples
+
 SQL:
 /*adding notification_status to diagnosisrevision*/
 alter table diagnosisRevision add column notificationStatus int;
