@@ -46,7 +46,6 @@ public class SendReport extends PrintDocument {
 				attachPdf.stream().map(p -> new LoadedPDFContainer(p)).collect(Collectors.toList()), "Send Report",
 				DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
 
-		Me
 		return null;
 	}
 }
