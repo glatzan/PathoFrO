@@ -9,6 +9,7 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.notification.NotificationContainerList;
 import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.printer.LoadedPDFContainer;
 
 /**
  * patient, task, temporarayNotification(not final) , useMail, mailHolders,
@@ -29,13 +30,6 @@ public class SendReport extends PrintDocument {
 		setAfterPDFCreationHook(true);
 	}
 
-	public void initilize(HashMap<String, Object> content) {
-		super.initilize(content);
-		faxContainerList = (NotificationContainerList) content.get("faxContainer");
-		letterContainerList = (NotificationContainerList) content.get("letterContainer");
-		phoneContainerList = (NotificationContainerList) content.get("phoneContainer");
-	}
-
 	public PDFContainer onAfterPDFCreation(PDFContainer container) {
 		List<PDFContainer> attachPdf = new ArrayList<PDFContainer>();
 
@@ -48,6 +42,11 @@ public class SendReport extends PrintDocument {
 		attachPdf.addAll(phoneContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
 				.map(p -> p.getPdf()).collect(Collectors.toList()));
 
-		return PDFGenerator.mergePdfs(attachPdf, "Send Report", DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
+		LoadedPDFContainer loadedContainer = PDFGenerator.mergePdfs(
+				attachPdf.stream().map(p -> new LoadedPDFContainer(p)).collect(Collectors.toList()), "Send Report",
+				DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
+
+		Me
+		return null;
 	}
 }

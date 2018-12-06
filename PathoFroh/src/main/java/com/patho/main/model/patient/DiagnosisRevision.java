@@ -248,8 +248,23 @@ public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, Pat
 	public String toSimpleString() {
 		return getName();
 	}
-	
-	public static enum NotificationStatus{
-		NOT_APPROVED, NOTIFICATION_PENDING, NO_NOTFICATION, NOTIFICATION_COMPLETED;
+
+	public static enum NotificationStatus {
+		/**
+		 * Not approved yet
+		 */
+		NOT_APPROVED,
+		/**
+		 * Notification is pending
+		 */
+		NOTIFICATION_PENDING,
+		/**
+		 * No Notification should be performed
+		 */
+		NO_NOTFICATION,
+		/**
+		 * Notification was performed
+		 */
+		NOTIFICATION_COMPLETED;
 	}
 }

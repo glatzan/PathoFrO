@@ -223,8 +223,8 @@ public class GenericView extends AbstractTaskView {
 
 			setMaterialList(materialPresetRepository.findAll(true));
 
-			setSurgeons(physicianRepository.findAllByRole(new ContactRole[] { ContactRole.SURGEON }, true,
-					SortOrder.PRIORITY));
+			setSurgeons(physicianRepository.findAllByRole(
+					new ContactRole[] { ContactRole.SURGEON, ContactRole.EXTERNAL_SURGEON }, true, SortOrder.PRIORITY));
 
 			setPrivatePhysicians(physicianRepository.findAllByRole(new ContactRole[] { ContactRole.PRIVATE_PHYSICIAN },
 					true, SortOrder.PRIORITY));

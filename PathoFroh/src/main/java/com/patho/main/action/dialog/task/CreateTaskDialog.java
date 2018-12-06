@@ -187,7 +187,7 @@ public class CreateTaskDialog extends AbstractDialog {
 		setPatient(patient);
 
 		// setting material list
-		setMaterialList(materialPresetRepository.findAll(true));
+		setMaterialList(materialPresetRepository.findAllIgnoreArchivedOrderByPriorityCountDesc(true, true));
 
 		setTaskData(new TaskTempData());
 
@@ -282,7 +282,8 @@ public class CreateTaskDialog extends AbstractDialog {
 					return;
 				}
 
-				printDocument.get().initilize(new InitializeToken("task", task),new InitializeToken("patient", patient));
+				printDocument.get().initilize(new InitializeToken("task", task),
+						new InitializeToken("patient", patient));
 
 				PDFContainer container = generator.getPDF(printDocument.get(),
 						new File(pathoConfig.getFileSettings().getPrintDirectory()), false);

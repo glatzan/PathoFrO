@@ -40,22 +40,33 @@
 				</p:column>
 
 				<!-- pending -->
-				<p:column
-					headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPending']}">
-					<ui:fragment rendered="#{diangosisList.notificationPending}">
+				<p:column style="width:25%" styleClass="centerChildElements"
+					headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus']}">
+					<ui:fragment
+						rendered="#{diangosisList.notificationStatus eq 'NOT_APPROVED'}">
+						<i class="fa fa-fw fa-volume-off icon-red"
+							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOT_APPROVED']}" />
+					</ui:fragment>
+					<ui:fragment
+						rendered="#{diangosisList.notificationStatus eq 'NOTIFICATION_PENDING'}">
+						<i class="fa fa-fw fa-volume-up icon-orange"
+							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_PENDING']}" />
+					</ui:fragment>
+					<ui:fragment
+						rendered="#{diangosisList.notificationStatus eq 'NO_NOTFICATION'}">
+						<i class="fa fa-fw fa-circle icon-red"
+							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NO_NOTFICATION']}" />
+					</ui:fragment>
+					<ui:fragment
+						rendered="#{diangosisList.notificationStatus eq 'NOTIFICATION_COMPLETED'}">
 						<i class="fa fa-fw fa-check-circle icon-green"
-							title="#{msg['dialog.notification.tab.general.diagnosis.table.name']}" />
+							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_COMPLETED']}" />
 					</ui:fragment>
 				</p:column>
 
 				<!-- performed -->
-				<p:column
+				<p:column style="width:20%"
 					headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPerformd']}">
-
-					<ui:fragment rendered="#{diangosisList.notificationDate ne 0}">
-						<i class="fa fa-fw fa-check-circle icon-green"
-							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPerformd.info']}" />
-					</ui:fragment>
 
 					<h:outputText value="#{diangosisList.notificationDate}"
 						rendered="#{diangosisList.notificationDate ne 0}">

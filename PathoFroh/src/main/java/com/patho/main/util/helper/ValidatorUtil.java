@@ -13,14 +13,11 @@ public class ValidatorUtil {
 	private PathoConfig pathoConfig;
 
 	public boolean approveMailAddress(String address) {
-		return (HistoUtil.isNotNullOrEmpty(address) && !EmailValidator.getInstance().isValid(address));
+		return (HistoUtil.isNotNullOrEmpty(address) && EmailValidator.getInstance().isValid(address));
 	}
 
 	public boolean approveFaxAddress(String address) {
-		if (!HistoUtil.isNotNullOrEmpty(address) || !address.matches(pathoConfig.getMiscellaneous().getPhoneRegex()))
-			return false;
-
-		return true;
+		return HistoUtil.isNotNullOrEmpty(address) && address.matches(pathoConfig.getMiscellaneous().getPhoneRegex());
 	}
 
 	public boolean approvePostalAddress(String address) {

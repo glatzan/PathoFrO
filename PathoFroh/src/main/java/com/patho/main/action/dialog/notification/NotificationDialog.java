@@ -24,6 +24,7 @@ import com.patho.main.model.Contact;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Person;
 import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MailRepository;
 import com.patho.main.repository.PrintDocumentRepository;
@@ -138,11 +139,9 @@ public class NotificationDialog extends AbstractTabDialog {
 				sendReportTab };
 
 		disableTabs(false, false, false, false, false, false, true);
-		
+
 		super.initBean(task, Dialog.NOTIFICATION);
 
-		
-		
 //		// disabling tabs if notification was performed
 //		if (task.getNotificationCompletionDate() != 0 && !resend) {
 //			generalTab.setDisabled(true);
@@ -349,7 +348,8 @@ public class NotificationDialog extends AbstractTabDialog {
 			diagnosisRevisions = new ArrayList<DiagnosisRevision>(task.getDiagnosisRevisions());
 
 			selectDiagnosisRevision = diagnosisRevisions.stream()
-					.filter(p -> p.isNotificationPending() && p.getNotificationDate() == 0).findFirst().orElse(null);
+					.filter(p -> p.getNotificationStatus() == NotificationStatus.NOTIFICATION_PENDING).findFirst()
+					.orElse(null);
 
 			useNotification = true;
 
@@ -387,9 +387,9 @@ public class NotificationDialog extends AbstractTabDialog {
 				disableTabs(false, false, false, false, false, false, true);
 			}
 
-			if (!getSelectDiagnosisRevision().isNotificationPending()
-					|| (getSelectDiagnosisRevision().isNotificationPending()
-							&& getSelectDiagnosisRevision().getNotificationDate() == 0)) {
+			if (getSelectDiagnosisRevision().getNotificationStatus() != NotificationStatus.NOTIFICATION_PENDING
+					|| (getSelectDiagnosisRevision().getNotificationStatus() == NotificationStatus.NOTIFICATION_PENDING
+							&& getSelectDiagnosisRevision().getNotificationDate() != 0)) {
 				selectedDiagnosisNotApprovedy = true;
 			} else
 				selectedDiagnosisNotApprovedy = false;
@@ -415,7 +415,7 @@ public class NotificationDialog extends AbstractTabDialog {
 		@Override
 		public boolean initTab() {
 
-			individualAddresses = true;
+			individualAddresses = false;
 
 			templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
 					DocumentType.DIAGNOSIS_REPORT_EXTERN);
@@ -423,7 +423,7 @@ public class NotificationDialog extends AbstractTabDialog {
 			templateListTransformer = new DefaultTransformer<PrintDocument>(templateList);
 
 			selectedTemplate = printDocumentRepository
-					.findByID(pathoConfig.getDefaultDocuments().getNotificationDefaultEmail()).orElse(null);
+					.findByID(pathoConfig.getDefaultDocuments().getNotificationDefaultEmailDocument()).orElse(null);
 
 			mailTemplate = mailRepository.findByID(pathoConfig.getDefaultDocuments().getNotificationDefaultEmail())
 					.orElse(null);
@@ -587,14 +587,14 @@ public class NotificationDialog extends AbstractTabDialog {
 			ValidatorUtil val = new ValidatorUtil();
 			// checking mails
 			mailTab.getContainerToNotify().forEach(p -> {
-				if (val.approveMailAddress(p.getContactAddress()))
+				if (!val.approveMailAddress(p.getContactAddress()))
 					p.setWarning(true, "dialog.notification.sendProcess.mail.error.mailNotValid");
 				else
 					p.clearWarning();
 			});
 
 			faxTab.getContainerToNotify().forEach(p -> {
-				if (val.approveFaxAddress(p.getContactAddress()))
+				if (!val.approveFaxAddress(p.getContactAddress()))
 					p.setWarning(true, "dialog.notification.sendProcess.fax.error.numberNotValid");
 				else
 					p.clearWarning();
@@ -619,6 +619,7 @@ public class NotificationDialog extends AbstractTabDialog {
 				PDFContainer genericReport = null;
 
 				if (generalTab.isUseNotification()) {
+					logger.debug("Printing Gerneic Report");
 					genericReport = notificationService.generatePDF(task, generalTab.getSelectDiagnosisRevision(), "",
 							generalTab.getSelectedTemplate());
 
@@ -629,6 +630,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
 				if (mailTab.isUseNotification()) {
 					PDFContainer mailGenericReport = null;
+					logger.debug("Mail-Notification");
 
 					// generating generic report
 					if (!mailTab.isIndividualAddresses()) {

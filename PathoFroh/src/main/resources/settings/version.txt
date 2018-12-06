@@ -34,7 +34,6 @@ Tasks:
 -> Add Sending Physicians in surgeon select dialog (!)  
 -> Make organizations choosable als suregons
 -> Task notification once all three month of tasks where samples should be returned
--> Change Diangosis selechtion to the new overlay display (!)  
 -> Add Photo Icon for Tasks with photos present (!)  
 -> Make Timestamps uts save 
 
@@ -54,6 +53,7 @@ Tasks:
 -> Patient List, fix active tasks 
 -> Patiente delete and editDialog make it working
 -> ReceiptLog View: not alway fire gernericview.loadata
+-> LDAP UPdate: prevent null udpate if physisican is not working in clinik anymore
 
 Next Changes:
 -> wenn konsil aussteht keine archivirung

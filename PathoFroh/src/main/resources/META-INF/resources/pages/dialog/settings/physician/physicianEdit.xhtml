@@ -66,10 +66,10 @@
 				<h:panelGrid columns="1" styleClass="newTableContainer left">
 					<!-- update physician with ldap data -->
 					<p:commandButton id="refreshBtn" value="#{msg['general.refresh']}"
+						actionListener="#{dialog.physicianEditDialog.updateDataFromLdap()}"
 						rendered="#{dialog.physicianEditDialog.physician.clinicEmployee}"
-						icon="fa fa-fw fa-undo" widgetVar="refreshBtn" update="@form">
-						<f:actionListener
-							binding="#{dialog.physicianEditDialog.updateDataFromLdap()}"></f:actionListener>
+						icon="fa fa-fw fa-undo" widgetVar="refreshBtn" update="@form"
+						process="@this">
 					</p:commandButton>
 				</h:panelGrid>
 

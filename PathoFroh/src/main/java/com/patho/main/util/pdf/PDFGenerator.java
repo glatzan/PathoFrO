@@ -405,6 +405,10 @@ public class PDFGenerator {
 			e.printStackTrace();
 		}
 	}
+	
+	public PDFContainer generatePDFContainerForCachedData(PDFContainer container, byte[] data) {
+		
+	}
 
 	/**
 	 * Returns the amount of pdf Pages

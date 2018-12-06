@@ -523,7 +523,7 @@
 							<!-- diagnosis text -->
 							<p:inputTextarea value="#{diagnosis.diagnosis}"
 								onkeypress="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"
-								onclick="showAndUpdateOverlayPanel('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}', '#{component.clientId}' , null, 'diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}', '#contentForm\\:diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}\\:diagnosisColumn\\:filter',submitNewCustomDiagnosis#{varCounterOuter.index}#{varCounterInner.index});"
+								onclick="showAndUpdateOverlayPanel('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}', '#{component.clientId}' , null, 'diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}', 'contentForm:diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}:diagnosisColumn:filter',submitNewCustomDiagnosis#{varCounterOuter.index}#{varCounterInner.index});"
 								filterDelay="50"
 								id="diagnosisText#{varCounterOuter.index}#{varCounterInner.index}"
 								disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"

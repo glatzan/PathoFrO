@@ -12,10 +12,12 @@ import javax.mail.util.ByteArrayDataSource;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.mail.SimpleEmail;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.patho.main.repository.MediaRepository;
 import com.patho.main.template.MailTemplate;
 
 import lombok.Getter;
@@ -27,6 +29,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MailService {
+
+	@Autowired
+	private MediaRepository mediaRepository;
 
 	private Settings settings;
 
@@ -92,7 +97,7 @@ public class MailService {
 				email.setSubject(mail.getSubject());
 				email.setMsg(mail.getBody());
 
-				InputStream is = new ByteArrayInputStream(mail.getAttachment().getData());
+				InputStream is = new ByteArrayInputStream(mediaRepository.getBytes(mail.getAttachment().getPath()));
 
 				DataSource source = new ByteArrayDataSource(is, "application/pdf");
 

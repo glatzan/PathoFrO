@@ -141,7 +141,7 @@ public class PrintDocument extends AbstractTemplate {
 
 	public String getGeneratedFileName() {
 		return resourceBundle.get("enum.documentType." + getDocumentType()) + "-"
-				+ TimeUtil.formatDate(new Date(), "dd.MM.yyyy") + "pdf.";
+				+ TimeUtil.formatDate(new Date(), "dd.MM.yyyy") + ".pdf";
 	}
 
 	/**

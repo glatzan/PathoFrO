@@ -3,6 +3,7 @@ package com.patho.main.service;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,21 +133,25 @@ public class NotificationService extends AbstractService {
 //
 //		feedback.progressStep();
 //
-//		PDFContainer sendReport = generateSendReport(feedback, task, mailContainerList, faxContainerList,
-//				letterContainerList, phoneContainerList, new Date(), temporaryNotification);
-//
-//		// setting notification als completed
-//		for (DiagnosisRevision revision : printContainerList.getSelectedRevisions()) {
-//			revision.setNotificationPending(false);
-//			revision.setNotificationDate(System.currentTimeMillis());
-//		}
-//
-//		genericDAO.savePatientData(task, "log.patient.task.notification.send");
-//
-//		pdfService.attachPDF(task.getPatient(), task, sendReport);
-//
-//		return emailSendSuccessful && faxSendSuccessful && letterSendSuccessful;
-//	}
+
+	public boolean endNotification(List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters, List<NotificationContainer> phones) {
+		
+		PDFContainer sendReport = generateSendReport(feedback, task, mailContainerList, faxContainerList,
+				letterContainerList, phoneContainerList, new Date(), temporaryNotification);
+
+		// setting notification als completed
+		for (DiagnosisRevision  : printContainerList.getSelectedRevisions()) {
+			revision.setNotificationPending(false);
+			revision.setNotificationDate(System.currentTimeMillis());
+		}
+
+		genericDAO.savePatientData(task, "log.patient.task.notification.send");
+
+		pdfService.attachPDF(task.getPatient(), task, sendReport);
+
+		return emailSendSuccessful && faxSendSuccessful && letterSendSuccessful;
+
+	}
 
 	public boolean emailNotification(NotificationContainer notificationContainer, Task task, MailTemplate template,
 			NotificationFeedback feedback, boolean recreateAfterNotification) {
@@ -196,7 +201,7 @@ public class NotificationService extends AbstractService {
 
 			success = false;
 
-			logger.debug("Sending failed" + notificationContainer.getNotification().getCommentary());
+			logger.debug("Sending failed " + notificationContainer.getNotification().getCommentary());
 		}
 
 		// renew if temporary notification
