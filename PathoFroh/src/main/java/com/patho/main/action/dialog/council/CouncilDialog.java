@@ -438,8 +438,7 @@ public class CouncilDialog extends AbstractDialog {
 		try {
 			logger.debug("Uploadgin to Council: " + getSelectedCouncil().getId());
 			pdfService.createAndAttachPDF(getSelectedCouncil().getCouncil(), file, DocumentType.COUNCIL_REPLY, "", "",
-					true, new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN
-							+ String.valueOf(getTask().getPatient().getId())));
+					true, getTask().getPatient());
 
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.success");
 		} catch (IllegalAccessError e) {

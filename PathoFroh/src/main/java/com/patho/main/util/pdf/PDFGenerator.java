@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -81,6 +82,15 @@ public class PDFGenerator {
 
 	public PDFContainer getPDF(PrintDocument template, File outputDirectory, boolean generateThumbnail) {
 		return getPDF(template, outputDirectory, null, generateThumbnail);
+	}
+
+	public PDFContainer getPDF(PrintDocument template, PDFContainer toUpdateContainer) {
+		return getPDF(template, new File(pathoConfig.getFileSettings().getPrintDirectory()), toUpdateContainer, false);
+	}
+
+	public PDFContainer getPDF(PrintDocument template, PDFContainer toUpdateContainer, boolean generateThumbnail) {
+		return getPDF(template, new File(pathoConfig.getFileSettings().getPrintDirectory()), toUpdateContainer,
+				generateThumbnail);
 	}
 
 	public PDFContainer getPDF(PrintDocument template, File outputDirectory, PDFContainer toUpdateContainer,
@@ -405,9 +415,15 @@ public class PDFGenerator {
 			e.printStackTrace();
 		}
 	}
-	
-	public PDFContainer generatePDFContainerForCachedData(PDFContainer container, byte[] data) {
-		
+
+	public PDFContainer mergePDFs(PDFContainer target, List<LoadedPDFContainer> containers) {
+		LoadedPDFContainer loadedContainer = PDFGenerator.mergePdfs(containers, "", target.getType());
+		mediaRepository.saveBytes(loadedContainer.getPdfData(), target.getPath());
+
+		if (target.getThumbnail() != null)
+			pdfService.createThumbnail(new File(target.getThumbnail()), loadedContainer.getPdfData());
+
+		return target;
 	}
 
 	/**

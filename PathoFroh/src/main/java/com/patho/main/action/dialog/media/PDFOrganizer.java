@@ -270,9 +270,8 @@ public class PDFOrganizer extends AbstractDialog {
 				return;
 			}
 
-			PDFReturn res = pdfService.createAndAttachPDF(uploadList, file, uploadDocumentType, "", "", true,
-					new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(patient.getId())));
-			
+			PDFReturn res = pdfService.createAndAttachPDF(uploadList, file, uploadDocumentType, "", "", true, patient);
+
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.success");
 		} catch (IllegalAccessError e) {
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed", FacesMessage.SEVERITY_ERROR);

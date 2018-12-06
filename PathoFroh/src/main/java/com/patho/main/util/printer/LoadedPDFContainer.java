@@ -50,8 +50,4 @@ public class LoadedPDFContainer extends PDFContainer{
 		if (pdfContainer.getThumbnail() != null)
 			this.thumbnailData = mediaRepository.getBytes(pdfContainer.getThumbnail());
 	}
-	
-	public PDFContainer toNewFile() {
-		PDFGenerator.
-	}
 }

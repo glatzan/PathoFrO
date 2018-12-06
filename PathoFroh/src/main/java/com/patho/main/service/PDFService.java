@@ -80,8 +80,31 @@ public class PDFService extends AbstractService {
 	}
 
 	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
+			String commentaryIntern, Patient patient) {
+		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, false,
+				getPatientDirectory(patient));
+	}
+
+	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
+			String commentaryIntern, boolean createThumbnail, Patient patient) {
+		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, createThumbnail,
+				getPatientDirectory(patient));
+	}
+
+	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
+			String commentaryIntern, boolean createThumbnail, File folder) {
+		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, createThumbnail, folder);
+	}
+
+	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
 			String commentaryIntern, File folder) {
 		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, false, folder);
+	}
+
+	public PDFReturn createAndAttachPDF(DataList dataList, UploadedFile file, DocumentType type, String commentary,
+			String commentaryIntern, boolean createThumbnail, Patient patient) {
+		return createAndAttachPDF(dataList, file, type, commentary, commentaryIntern, createThumbnail,
+				getPatientDirectory(patient));
 	}
 
 	public PDFReturn createAndAttachPDF(DataList dataList, UploadedFile file, DocumentType type, String commentary,
@@ -98,15 +121,7 @@ public class PDFService extends AbstractService {
 		uploadedPDF.setType(type);
 		uploadedPDF.setCommentary(commentary);
 		uploadedPDF.setIntern(commentaryIntern);
-
-		try {
-			File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
-			uploadedPDF.setPath(uniqueFile.getPath());
-			uploadedPDF.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new IllegalAccessError("Could not updaload data");
-		}
+		getUniquePDF(folder, uploadedPDF);
 
 		return createAndAttachPDF(dataLists, uploadedPDF, content, createThumbnail);
 	}
@@ -208,6 +223,10 @@ public class PDFService extends AbstractService {
 		return patient;
 	}
 
+	public File createThumbnail(File output, byte[] pdf) {
+		return createThumbnail(output, pdf, 0, pathoConfig.getFileSettings().getThumbnailDPI());
+	}
+
 	public File createThumbnail(File output, File input, int pageNo, int dpi) {
 		byte[] load = mediaRepository.getBytes(input);
 		return createThumbnail(output, load, pageNo, dpi);
@@ -273,6 +292,24 @@ public class PDFService extends AbstractService {
 		return result;
 	}
 
+	public PDFContainer getUniquePDF(File folder) {
+		return getUniquePDF(folder, new PDFContainer());
+	}
+
+	/**
+	 * Gets a uinique file within the folder
+	 * 
+	 * @param folder
+	 * @param container
+	 * @return
+	 */
+	public PDFContainer getUniquePDF(File folder, PDFContainer container) {
+		File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
+		container.setPath(uniqueFile.getPath());
+		container.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
+		return container;
+	}
+
 	public static DataList getParentOfPDF(List<DataList> dataLists, PDFContainer container) {
 
 		for (DataList dataList : dataLists) {
@@ -300,6 +337,16 @@ public class PDFService extends AbstractService {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns the directory of the given patient
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public static File getPatientDirectory(Patient patient) {
+		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(patient.getId()));
 	}
 
 	@Getter

@@ -17,7 +17,9 @@ import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
+import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
@@ -134,20 +136,22 @@ public class NotificationService extends AbstractService {
 //		feedback.progressStep();
 //
 
-	public boolean endNotification(List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters, List<NotificationContainer> phones) {
+	public boolean endNotification(PrintDocument document, Task task, DiagnosisRevision diagnosisRevision, List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters, List<NotificationContainer> phones) {
 		
-		PDFContainer sendReport = generateSendReport(feedback, task, mailContainerList, faxContainerList,
-				letterContainerList, phoneContainerList, new Date(), temporaryNotification);
+		PDFGenerator generator = new PDFGenerator();
 
-		// setting notification als completed
-		for (DiagnosisRevision  : printContainerList.getSelectedRevisions()) {
-			revision.setNotificationPending(false);
-			revision.setNotificationDate(System.currentTimeMillis());
-		}
+		document.initilize(new InitializeToken("task", task),
+				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
+				new InitializeToken("patient", task.getPatient()));
+
+		PDFReturn pdfReturn = pdfService.createAndAttachPDF(task,document.getDocumentType(), document.getGeneratedFileName(),"","",true,task.getParent());
+		
+		PDFContainer container = generator.getPDF(document, pdfReturn.getContainer());
+
+		diagnosisRevision.setNotificationStatus(NotificationStatus.NOTIFICATION_COMPLETED);
+		diagnosisRevision.setNotificationDate(System.currentTimeMillis());
 
 		genericDAO.savePatientData(task, "log.patient.task.notification.send");
-
-		pdfService.attachPDF(task.getPatient(), task, sendReport);
 
 		return emailSendSuccessful && faxSendSuccessful && letterSendSuccessful;
 

@@ -131,9 +131,9 @@ public class UploadDialog extends AbstractDialog {
 		UploadedFile file = event.getFile();
 		try {
 			logger.debug("Uploadgin to Patient: " + patient.getId());
-			
-			PDFReturn res =pdfService.createAndAttachPDF(selectedDatalist.getDataList(), file, getFileType(), uploadedFileCommentary, "", true,
-					new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(patient.getId())));
+
+			PDFReturn res = pdfService.createAndAttachPDF(selectedDatalist.getDataList(), file, getFileType(),
+					uploadedFileCommentary, "", true, patient);
 
 			getSelectedDatalist().setDataList(res.getDataList());
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.success");

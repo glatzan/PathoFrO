@@ -31,21 +31,19 @@ public class SendReport extends PrintDocument {
 	}
 
 	public PDFContainer onAfterPDFCreation(PDFContainer container) {
-		List<PDFContainer> attachPdf = new ArrayList<PDFContainer>();
+		List<LoadedPDFContainer> attachPdf = new ArrayList<LoadedPDFContainer>();
 
-		attachPdf.add(container);
+		attachPdf.add(new LoadedPDFContainer(container));
 
 		attachPdf.addAll(faxContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
-				.map(p -> p.getPdf()).collect(Collectors.toList()));
+				.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
 		attachPdf.addAll(letterContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
-				.map(p -> p.getPdf()).collect(Collectors.toList()));
+				.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
 		attachPdf.addAll(phoneContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
-				.map(p -> p.getPdf()).collect(Collectors.toList()));
+				.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
 
-		LoadedPDFContainer loadedContainer = PDFGenerator.mergePdfs(
-				attachPdf.stream().map(p -> new LoadedPDFContainer(p)).collect(Collectors.toList()), "Send Report",
-				DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
+		container = new PDFGenerator().mergePDFs(container, attachPdf);
 
-		return null;
+		return container;
 	}
 }

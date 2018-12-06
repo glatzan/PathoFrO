@@ -112,14 +112,9 @@ public class DiagnosisReportUpdater {
 			task = taskRepository.save(task);
 		}
 
-//		taskExecutor.execute(new Thread() {
-//			public void run() {
 		logger.debug("Stargin PDF Generation in new Thread");
 		PDFGenerator generator = new PDFGenerator();
 		generator.getPDFNoneBlocking(printDocument, outputDirectory, container, true, returnHandler);
-//				logger.debug("PDF Generation completed, thread ended");
-//			}
-//		});
 
 		return task;
 	}
