@@ -19,6 +19,7 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.DiagnosisRevisionRepository;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
@@ -26,6 +27,7 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.ValidatorUtil;
 import com.patho.main.util.notification.NotificationContainer;
+import com.patho.main.util.notification.NotificationPerformer;
 import com.patho.main.util.notification.NotificationFeedback;
 import com.patho.main.util.pdf.PDFGenerator;
 
@@ -36,11 +38,6 @@ import lombok.Setter;
 @Service
 @Transactional
 public class NotificationService extends AbstractService {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -66,6 +63,11 @@ public class NotificationService extends AbstractService {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private AssociatedContactService associatedContactService;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private DiagnosisRevisionRepository diagnosisRevisionRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -112,6 +114,36 @@ public class NotificationService extends AbstractService {
 		}
 	}
 
+	public boolean performNotification(NotificationPerformer data) {
+
+		if (data.isUseMail()) {
+			PDFContainer mailGenericReport = null;
+			logger.debug("Mail-Notification");
+
+			// generating generic report
+			if (!data.isIndividualMailAddress()) {
+				// copie generic report if used and is the same as the mail generic report
+				if (data.getGenericReport() != null
+						&& mailTab.getSelectedTemplate() == generalTab.getSelectedTemplate()) {
+					mailGenericReport = genericReport;
+				} else {
+					mailGenericReport = notificationService.generatePDF(task, generalTab.getSelectDiagnosisRevision(),
+							"", mailTab.getSelectedTemplate());
+				}
+			}
+
+			for (NotificationContainer container : mailTab.getContainerToNotify()) {
+				notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
+						mailTab.getSelectedTemplate(), mailTab.isIndividualAddresses(), mailGenericReport, this);
+
+				notificationService.emailNotification(container, task, mailTab.getMailTemplate(), this, false);
+			}
+
+		}
+
+		return true;
+	}
+
 //	public boolean executeNotification(NotificationFeedback feedback, Task task, MailContainerList mailContainerList,
 //			NotificationContainerList faxContainerList, NotificationContainerList letterContainerList,
 //			NotificationContainerList phoneContainerList, NotificationContainerList printContainerList,
@@ -136,25 +168,32 @@ public class NotificationService extends AbstractService {
 //		feedback.progressStep();
 //
 
-	public boolean endNotification(PrintDocument document, Task task, DiagnosisRevision diagnosisRevision, List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters, List<NotificationContainer> phones) {
-		
+	public boolean endNotification(PrintDocument document, Task task, DiagnosisRevision diagnosisRevision,
+			List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters,
+			List<NotificationContainer> phones) {
+
 		PDFGenerator generator = new PDFGenerator();
 
 		document.initilize(new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
-				new InitializeToken("patient", task.getPatient()));
+				new InitializeToken("patient", task.getPatient()), new InitializeToken("useMail", !emails.isEmpty()),
+				new InitializeToken("useMail", !emails.isEmpty()), new InitializeToken("mails", emails),
+				new InitializeToken("useFax", !emails.isEmpty()), new InitializeToken("faxes", emails),
+				new InitializeToken("useLetter", !emails.isEmpty()), new InitializeToken("letters", emails),
+				new InitializeToken("usePhone", !emails.isEmpty()), new InitializeToken("phonenumbers", emails),
+				new InitializeToken("reportDate", new Date()));
 
-		PDFReturn pdfReturn = pdfService.createAndAttachPDF(task,document.getDocumentType(), document.getGeneratedFileName(),"","",true,task.getParent());
-		
+		PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.getDocumentType(),
+				document.getGeneratedFileName(), "", "", true, task.getParent());
+
 		PDFContainer container = generator.getPDF(document, pdfReturn.getContainer());
 
 		diagnosisRevision.setNotificationStatus(NotificationStatus.NOTIFICATION_COMPLETED);
 		diagnosisRevision.setNotificationDate(System.currentTimeMillis());
 
-		genericDAO.savePatientData(task, "log.patient.task.notification.send");
+		diagnosisRevisionRepository.save(diagnosisRevision, "log.patient.task.notification.send", task.getPatient());
 
-		return emailSendSuccessful && faxSendSuccessful && letterSendSuccessful;
-
+		return true;
 	}
 
 	public boolean emailNotification(NotificationContainer notificationContainer, Task task, MailTemplate template,
@@ -362,60 +401,4 @@ public class NotificationService extends AbstractService {
 //		return container;
 //	}
 
-	/**
-	 * Returns a pdf container for an contact. IF the contact has its own container,
-	 * that container is returned. IF individualAddresses is true a new pdf with the
-	 * address of the of the container will be generated. Otherwise a generic pdf
-	 * will be returned.
-	 */
-	public PDFContainer getPDFForContainer(NotificationContainer container, Task task,
-			DiagnosisRevision diagnosisRevision, PrintDocument template, boolean individualAddresses,
-			PDFContainer genericPDF, NotificationFeedback feedback) {
-
-		if (container.getPdf() != null) {
-			// pdf was selected for the individual contact
-			// adding pdf to generated pdf array
-			return container.getPdf();
-		} else if (template != null) {
-			if (!individualAddresses) {
-				// setting generic pdf
-				container.setPdf(genericPDF);
-
-				logger.debug("Returning generic pdf " + genericPDF);
-			} else {
-				// individual address
-				String reportAddressField = AssociatedContactService.generateAddress(container.getContact(),
-						container.getContact().getPerson().getDefaultAddress());
-
-				logger.debug("Generating pdf for " + reportAddressField);
-				feedback.setFeedback("dialog.notification.sendProcess.pdf.generating",
-						container.getContact().getPerson().getFullName());
-
-				container.setPdf(generatePDF(task, diagnosisRevision, reportAddressField, template));
-
-				logger.debug("Returning individual address");
-			}
-
-			return container.getPdf();
-		}
-
-		logger.debug("Returning no pdf");
-
-		return null;
-	}
-
-	public PDFContainer generatePDF(Task task, DiagnosisRevision diagnosisRevision, String address,
-			PrintDocument document) {
-		PDFGenerator generator = new PDFGenerator();
-
-		document.initilize(new InitializeToken("task", task),
-				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
-				new InitializeToken("patient", task.getPatient()), new InitializeToken("address", address),
-				new InitializeToken("subject", ""));
-
-		PDFContainer container = generator.getPDF(document, new File(pathoConfig.getFileSettings().getPrintDirectory()),
-				false);
-
-		return container;
-	}
 }

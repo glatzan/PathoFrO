@@ -12,8 +12,17 @@ import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.printer.LoadedPDFContainer;
 
 /**
- * patient, task, temporarayNotification(not final) , useMail, mailHolders,
- * useFax, faxContainer, useLetter, letterContainer, usePhone,phoneContainer,
+ * patient, <br>
+ * task, <br>
+ * temporarayNotification(not final), <br>
+ * useMail, <br>
+ * mailHolders, <br>
+ * useFax, <br>
+ * faxContainer, <br>
+ * useLetter, <br>
+ * letterContainer, <br>
+ * usePhone,<br>
+ * phoneContainer, <br>
  * reportDate
  * 
  * @author andi

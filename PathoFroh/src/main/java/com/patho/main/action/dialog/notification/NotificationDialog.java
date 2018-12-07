@@ -706,6 +706,8 @@ public class NotificationDialog extends AbstractTabDialog {
 
 				// progressStepText("dialog.notification.sendProcess.success");
 
+				notificationService.endNotification(document, task, getGeneralTab().getSelectDiagnosisRevision(), emails, faxes, letters, phones)
+				
 				logger.debug("Messaging ended");
 
 			} catch (Exception e) {
