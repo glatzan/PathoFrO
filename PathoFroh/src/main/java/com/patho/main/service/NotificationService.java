@@ -30,6 +30,7 @@ import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationPerformer;
 import com.patho.main.util.notification.NotificationFeedback;
 import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PrintOrder;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -168,6 +169,26 @@ public class NotificationService extends AbstractService {
 //		feedback.progressStep();
 //
 
+	public boolean performeNotification(NotificationPerformer performer, NotificationFeedback feedback) {
+
+		if (performer.isPrintDocument()) {
+			feedback.setFeedback("Generating Generic Report");
+			PDFContainer genericReport = performer.getGenericReport();
+			// printing generic report
+			userHandlerAction.getSelectedPrinter()
+					.print(new PrintOrder(genericReport, performer.getPrintCount(), performer.getGenericTemplate()));
+		}
+
+		if (performer.isUseMail()) {
+			for (NotificationContainer mail : performer.getMails()) {
+				emailNotification(mail, performer.getTask(), performer.getMail(), feedback,
+						performer.isReperformNotification());
+			}
+		}
+
+		return true;
+	}
+
 	public boolean endNotification(PrintDocument document, Task task, DiagnosisRevision diagnosisRevision,
 			List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters,
 			List<NotificationContainer> phones) {
@@ -194,6 +215,10 @@ public class NotificationService extends AbstractService {
 		diagnosisRevisionRepository.save(diagnosisRevision, "log.patient.task.notification.send", task.getPatient());
 
 		return true;
+	}
+
+	public boolean printNotification() {
+
 	}
 
 	public boolean emailNotification(NotificationContainer notificationContainer, Task task, MailTemplate template,

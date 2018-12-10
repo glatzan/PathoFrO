@@ -12,6 +12,7 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.template.InitializeToken;
+import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.pdf.PDFGenerator;
 
@@ -33,12 +34,16 @@ public class NotificationPerformer {
 
 	private Task task;
 	private DiagnosisRevision diagnosisRevision;
-
+	private boolean reperformNotification;
+	
+	private boolean printDocument;
+	private int printCount;
 	private PDFContainer genericReport;
 	private PrintDocument genericTemplate;
 
 	private boolean useMail;
 	private boolean individualMailAddress;
+	private MailTemplate mail;
 	private PrintDocument mailTemplate;
 	private PDFContainer mailGenericReport;
 	private List<NotificationContainer> mails;
@@ -61,6 +66,12 @@ public class NotificationPerformer {
 	public NotificationPerformer(Task task, DiagnosisRevision diagnosisRevision) {
 		this.task = task;
 		this.diagnosisRevision = diagnosisRevision;
+	}
+
+	public void printNotification(PrintDocument genericTemplate, int count) {
+		this.genericTemplate = genericTemplate;
+		this.printDocument = genericTemplate != null;
+		this.printCount = count;
 	}
 
 	public void mailNotification(List<NotificationContainer> mails, boolean individualMailAddress,
@@ -109,6 +120,7 @@ public class NotificationPerformer {
 		this.usePhone = letters != null && !letters.isEmpty();
 		this.phonenumbers = phonenumbers;
 	}
+
 	/**
 	 * Returns a pdf container for an contact. IF the contact has its own container,
 	 * that container is returned. IF individualAddresses is true a new pdf with the
@@ -163,5 +175,12 @@ public class NotificationPerformer {
 				false);
 
 		return container;
+	}
+
+	public PDFContainer getGenericReport() {
+		if (isPrintDocument())
+			return getGenericReport() == null ? genericReport
+					: (genericReport = generatePDF(task, diagnosisRevision, "", genericTemplate));
+		return null;
 	}
 }
