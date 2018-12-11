@@ -107,20 +107,24 @@ public class PDFCreator {
 		this.errorDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getErrorDirectory());
 	}
 
-	public PDFContainer createPDF(PrintDocument template, File outputDirectory) {
-		return createPDF(template, outputDirectory, false);
+	public PDFContainer createPDF(PrintDocument template, File relaiveTargetDirectory) {
+		return createPDF(template, relaiveTargetDirectory, false)
 	}
 
-	public PDFContainer createPDF(PrintDocument template, File outputDirectory, boolean generateThumbnail) {
+	public PDFContainer createPDF(PrintDocument template, File relaiveTargetDirectory, boolean generateThumbnail) {
+		this.relaviteTargetDirectory = relaiveTargetDirectory;
+		this.absoluteTargetDirectory = mediaRepository.getWriteFile(relaiveTargetDirectory);
+
 		PDFContainer container = getNewUniquePDF(generateThumbnail);
 		container.setType(template.getDocumentType());
 		container.setName(template.getGeneratedFileName());
 
+		this.absoulteTargetFile = mediaRepository.getWriteFile(container.getPath());
+		this.relativeTargetFile = container.getPath();
+		this.absoluteTargetImg = mediaRepository.getWriteFile(container.getThumbnail());
+		this.relativeTargetImg = container.getThumbnail();
+		
 		return createPDF(template, outputDirectory, null, generateThumbnail);
-	}
-
-	public PDFContainer updateExistingPDF(PrintDocument template, PDFContainer container) {
-		return updateExistingPDF(template, container, false);
 	}
 
 	public PDFContainer updateExistingPDF(PrintDocument template, PDFContainer container, boolean generateThumbnail) {
@@ -132,8 +136,50 @@ public class PDFCreator {
 		this.absoluteTargetImg = mediaRepository.getWriteFile(container.getThumbnail());
 		this.relativeTargetImg = container.getThumbnail();
 
-		return createNewPDF(template, new File(pathoConfig.getFileSettings().getPrintDirectory()), toUpdateContainer,
+		return createNewPDF(template, new File(pathoConfig.getFileSettings().getPrintDirectory()), container,
 				generateThumbnail);
+	}
+
+	public PDFContainer updateExistingPDF(PrintDocument template, PDFContainer container) {
+		return updateExistingPDF(template, container, false);
+	}
+
+	private PDFContainer runPDFCreation(PrintDocument template, boolean createThumbnail) {
+
+		if (!validateEnvironment())
+			return null;
+
+		PDFLatexHelper helper = initlizeTmpFiles(createThumbnail);
+
+		if (!initlizeInputFile(helper, template.getFinalContent()))
+			return null;
+
+		if (!helper.validateInput())
+			return null;
+
+		try {
+			if (!runPDFLatex(helper))
+				return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		if (!helper.validateOutput())
+			return null;
+
+		if (createThumbnail) {
+			if (!generateThumbnail(helper))
+				return null;
+
+			if (!helper.validateInput())
+				return null;
+		}
+		
+		if(!absoluteTargetDirectory.equals(workingDirectory)) {
+			
+		}
+
 	}
 
 	private boolean validateEnvironment() {
@@ -165,7 +211,7 @@ public class PDFCreator {
 		return true;
 	}
 
-	private PDFLatexHelper initlizeRunFiles(boolean thumbanil) {
+	private PDFLatexHelper initlizeTmpFiles(boolean thumbanil) {
 		String createName = mediaRepository.getUniqueName(workingDirectory, ".tex");
 		PDFLatexHelper helper = new PDFLatexHelper();
 		helper.setInputFile(new File(workingDirectory, createName));
@@ -176,7 +222,7 @@ public class PDFCreator {
 		return helper;
 	}
 
-	private boolean createInputFile(PDFLatexHelper helper, String content) {
+	private boolean initlizeInputFile(PDFLatexHelper helper, String content) {
 		if (!mediaRepository.saveString(content, helper.getInputFile())) {
 			throw new IllegalArgumentException(
 					"Could not save pdf to process to " + helper.getInputFile().getAbsolutePath());
@@ -184,11 +230,11 @@ public class PDFCreator {
 		return true;
 	}
 
-	public boolean runPDFLatex(PDFLatexHelper helper) throws IOException {
+	private boolean runPDFLatex(PDFLatexHelper helper) throws IOException {
 		return runPDFLatex(helper, workingDirectory, auxDirectory);
 	}
 
-	public boolean runPDFLatex(PDFLatexHelper helper, File workingDirectory, File auxDirectory) throws IOException {
+	private boolean runPDFLatex(PDFLatexHelper helper, File workingDirectory, File auxDirectory) throws IOException {
 		return runPDFLatex(new File("pdflatex"), helper, workingDirectory, auxDirectory);
 	}
 
@@ -254,12 +300,6 @@ public class PDFCreator {
 		return true;
 	}
 
-	private File getTargetDirectory(PDFContainer container) {
-		if (container.getPath() != null)
-			return mediaRepository.getWriteFile(container.getPath()).getParentFile();
-		return null;
-	}
-
 	private PDFContainer getNewUniquePDF(boolean thumbnail) {
 		String outPutName = mediaRepository.getUniqueName(absoluteTargetDirectory, ".pdf");
 		File outFile = new File(relaviteTargetDirectory, outPutName);
@@ -270,6 +310,10 @@ public class PDFCreator {
 		pdfContainer.setPath(outFile.getPath());
 		pdfContainer.setThumbnail(thumbnail ? outImg.getPath() : null);
 		return pdfContainer;
+	}
+	
+	private boolean moveFileToTargetDestination(File file, File target) {
+		FileUtils.moveDirectory(srcDir, destDir);
 	}
 
 	@Setter
@@ -314,12 +358,19 @@ public class PDFCreator {
 				logger.error("log file not Found! " + logFile.getAbsolutePath());
 			}
 
-			if (!mediaRepository.getWriteFile(generatedOutputFile).isFile()) {
+			if (!outputFile.isFile()) {
 				result = false;
 				logger.error("out file not Found! " + outputFile.getAbsolutePath());
 			}
 
 			return result;
+		}
+
+		public boolean validateThumbnail() {
+			if (outputThumbnail != null && outputThumbnail.isFile()) {
+				return true;
+			}
+			return false;
 		}
 
 		public void printToLog() {
