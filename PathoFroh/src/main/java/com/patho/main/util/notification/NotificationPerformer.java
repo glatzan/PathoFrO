@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.config.PathoConfig;
@@ -15,6 +17,7 @@ import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,34 +33,38 @@ import lombok.Setter;
 @Configurable
 public class NotificationPerformer {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	private PathoConfig pathoConfig;
 
 	private Task task;
 	private DiagnosisRevision diagnosisRevision;
 	private boolean reperformNotification;
-	
+
 	private boolean printDocument;
 	private int printCount;
-	private PDFContainer genericReport;
+	private TemplatePDFContainer genericReport;
 	private PrintDocument genericTemplate;
 
 	private boolean useMail;
 	private boolean individualMailAddress;
 	private MailTemplate mail;
 	private PrintDocument mailTemplate;
-	private PDFContainer mailGenericReport;
+	private TemplatePDFContainer mailGenericReport;
 	private List<NotificationContainer> mails;
 
 	private boolean useFax;
 	private boolean individualFaxAddress;
+	private boolean sendFax;
+	private boolean printFax;
 	private PrintDocument faxTemplate;
-	private PDFContainer faxGenericReport;
+	private TemplatePDFContainer faxGenericReport;
 	private List<NotificationContainer> faxes;
 
 	private boolean useLetter;
 	private boolean individualLetterAddress;
 	private PrintDocument letterTemplate;
-	private PDFContainer letterGenericReport;
+	private TemplatePDFContainer letterGenericReport;
 	private List<NotificationContainer> letters;
 
 	private boolean usePhone;
@@ -90,7 +97,8 @@ public class NotificationPerformer {
 		}
 	}
 
-	public void faxNotification(List<NotificationContainer> faxes) {
+	public void faxNotification(List<NotificationContainer> faxes, boolean individualFaxAddress, boolean sendFax,
+			boolean printFax,PrintDocument faxTemplate) {
 		this.useFax = faxes != null && !faxes.isEmpty();
 		this.faxes = faxes;
 
@@ -101,6 +109,10 @@ public class NotificationPerformer {
 				faxGenericReport = generatePDF(task, diagnosisRevision, "", faxTemplate);
 			}
 		}
+
+		this.sendFax = sendFax;
+		this.printFax = printFax;
+		this.individualFaxAddress = individualFaxAddress;
 	}
 
 	public void letterNotification(List<NotificationContainer> letters) {
@@ -127,17 +139,16 @@ public class NotificationPerformer {
 	 * address of the of the container will be generated. Otherwise a generic pdf
 	 * will be returned.
 	 */
-	public PDFContainer getPDFForContainer(NotificationContainer container) {
-		if (container.getPdf() != null) {
-			// pdf was selected for the individual contact
-			// adding pdf to generated pdf array
-			return container.getPdf();
-		} else {
+	public TemplatePDFContainer getPDFForContainer(NotificationContainer container, PrintDocument template,
+			boolean individualAddresses, TemplatePDFContainer genericPDF) {
+
+		// pdf was selected for the individual contact
+		// adding pdf to generated pdf array
+		if (container.getPdf() == null) {
 			if (template != null) {
 				if (!individualAddresses) {
 					// setting generic pdf
 					container.setPdf(genericPDF);
-
 					logger.debug("Returning generic pdf " + genericPDF);
 				} else {
 					// individual address
@@ -145,24 +156,23 @@ public class NotificationPerformer {
 							container.getContact().getPerson().getDefaultAddress());
 
 					logger.debug("Generating pdf for " + reportAddressField);
-					feedback.setFeedback("dialog.notification.sendProcess.pdf.generating",
-							container.getContact().getPerson().getFullName());
 
 					container.setPdf(generatePDF(task, diagnosisRevision, reportAddressField, template));
 
 					logger.debug("Returning individual address");
 				}
-
-				return container.getPdf();
+			} else {
+				return null;
 			}
 		}
-
 		logger.debug("Returning no pdf");
 
-		return null;
+		return container.getPdf() instanceof TemplatePDFContainer ? (TemplatePDFContainer) container.getPdf()
+				: new TemplatePDFContainer(container.getPdf());
+
 	}
 
-	private PDFContainer generatePDF(Task task, DiagnosisRevision diagnosisRevision, String address,
+	private TemplatePDFContainer generatePDF(Task task, DiagnosisRevision diagnosisRevision, String address,
 			PrintDocument document) {
 		PDFGenerator generator = new PDFGenerator();
 
@@ -171,13 +181,14 @@ public class NotificationPerformer {
 				new InitializeToken("patient", task.getPatient()), new InitializeToken("address", address),
 				new InitializeToken("subject", ""));
 
-		PDFContainer container = generator.getPDF(document, new File(pathoConfig.getFileSettings().getPrintDirectory()),
-				false);
+		TemplatePDFContainer container = new TemplatePDFContainer(
+				generator.getPDF(document, new File(pathoConfig.getFileSettings().getPrintDirectory()), false),
+				document);
 
 		return container;
 	}
 
-	public PDFContainer getGenericReport() {
+	public TemplatePDFContainer getGenericReport() {
 		if (isPrintDocument())
 			return getGenericReport() == null ? genericReport
 					: (genericReport = generatePDF(task, diagnosisRevision, "", genericTemplate));

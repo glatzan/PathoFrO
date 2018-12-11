@@ -1,5 +1,6 @@
 package com.patho.main.model.patient;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import com.patho.main.common.Dialog;
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Person;
 import com.patho.main.model.interfaces.ArchivAble;
@@ -210,13 +212,6 @@ public class Patient
 		return getTasks() != null ? getTasks().stream().anyMatch(p -> !p.isActiveOrActionPending()) : false;
 	}
 
-	/********************************************************
-	 * Transient Methods
-	 ********************************************************/
-
-	/********************************************************
-	 * Interface StainingTreeParent
-	 ********************************************************/
 	@Transient
 	@Override
 	public Patient getPatient() {
@@ -251,7 +246,18 @@ public class Patient
 		return getPerson().getFullName();
 	}
 
+	@Override
+	@Transient
 	public String getLogPath() {
 		return toString();
+	}
+
+	/**
+	 * File Repository Base of the corresponding patient
+	 */
+	@Override
+	@Transient
+	public File getFileRepositoryBase() {
+		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(getId()));
 	}
 }

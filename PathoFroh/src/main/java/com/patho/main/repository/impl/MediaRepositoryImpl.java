@@ -232,7 +232,26 @@ public class MediaRepositoryImpl implements MediaRepository {
 		return getWriteFile(path).isFile();
 	}
 
+	public boolean isDirectory(String path) {
+		return isDirectory(new File(path));
+	}
+
+	public boolean isDirectory(File path) {
+		return getWriteFile(path).isDirectory();
+	}
+
+	public File getParentDirectory(String path) {
+		return getParentDirectory(new File(path));
+	}
+
+	public File getParentDirectory(File path) {
+		return path.getParentFile();
+	}
+
 	public File getWriteFile(String path) {
+		if (path == null)
+			return null;
+
 		return getWriteFile(new File(path));
 	}
 
@@ -258,6 +277,9 @@ public class MediaRepositoryImpl implements MediaRepository {
 	 * @return
 	 */
 	public File getWriteFile(File path) {
+		if (path == null || path.getAbsolutePath().isEmpty())
+			return null;
+
 		if (path.getPath().startsWith("fileRepository:")) {
 			return new File(pathoConfig.getFileSettings().getFileRepository(),
 					path.getPath().replace("fileRepository:", ""));

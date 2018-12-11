@@ -1,5 +1,6 @@
 package com.patho.main.model.interfaces;
 
+import java.io.File;
 import java.util.Set;
 
 import com.patho.main.model.PDFContainer;
@@ -54,4 +55,6 @@ public interface DataList extends ID {
 	public default boolean containsReport(PDFContainer pdfTemplate) {
 		return getAttachedPdfs() != null && getAttachedPdfs().contains(pdfTemplate);
 	}
+
+	public File getFileRepositoryBase();
 }

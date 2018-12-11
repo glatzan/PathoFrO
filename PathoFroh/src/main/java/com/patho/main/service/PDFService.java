@@ -80,15 +80,15 @@ public class PDFService extends AbstractService {
 	}
 
 	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
-			String commentaryIntern, Patient patient) {
+			String commentaryIntern) {
 		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, false,
-				getPatientDirectory(patient));
+				dataList.getFileRepositoryBase());
 	}
 
 	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
-			String commentaryIntern, boolean createThumbnail, Patient patient) {
+			String commentaryIntern, boolean createThumbnail) {
 		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, createThumbnail,
-				getPatientDirectory(patient));
+				dataList.getFileRepositoryBase());
 	}
 
 	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
@@ -102,9 +102,9 @@ public class PDFService extends AbstractService {
 	}
 
 	public PDFReturn createAndAttachPDF(DataList dataList, UploadedFile file, DocumentType type, String commentary,
-			String commentaryIntern, boolean createThumbnail, Patient patient) {
+			String commentaryIntern, boolean createThumbnail) {
 		return createAndAttachPDF(dataList, file, type, commentary, commentaryIntern, createThumbnail,
-				getPatientDirectory(patient));
+				dataList.getFileRepositoryBase());
 	}
 
 	public PDFReturn createAndAttachPDF(DataList dataList, UploadedFile file, DocumentType type, String commentary,
@@ -144,6 +144,35 @@ public class PDFService extends AbstractService {
 			} else {
 				logger.debug("Virtual PDF no content!");
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.debug("Error while saving file, removing file from datalists");
+			dataList = deletePdf(dataList, pdfContainer);
+			throw new IllegalAccessError("Could not updaload data");
+		}
+
+		return new PDFReturn(dataList, pdfContainer);
+	}
+
+	public PDFReturn moveAndAttachPDF(DataList dataList, PDFContainer pdfContainer, boolean createThumbnail,
+			File targetLocation) {
+
+		pdfContainer = pdfRepository.save(pdfContainer);
+
+		dataList = attachPDF(dataList, pdfContainer);
+
+		try {
+			if (mediaRepository.isFile(pdfContainer.getPath()) && mediaRepository.isDirectory(targetLocation))
+				if (pdfContent != null) {
+					logger.debug("Saving filed to disk");
+					mediaRepository.saveBytes(pdfContent, pdfContainer.getPath());
+					if (createThumbnail)
+						mediaRepository.saveImage(
+								gerateThumbnail(pdfContent, 0, pathoConfig.getFileSettings().getThumbnailDPI()),
+								pdfContainer.getThumbnail());
+				} else {
+					logger.debug("Virtual PDF no content!");
+				}
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.debug("Error while saving file, removing file from datalists");

@@ -4,6 +4,7 @@ import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.AssociatedContactNotification;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.service.AssociatedContactService;
+import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +38,7 @@ public class NotificationContainer {
 	/**
 	 * The individual pdf is saved here
 	 */
-	protected PDFContainer pdf;
+	protected TemplatePDFContainer pdf;
 
 	/**
 	 * Address, copied form contact

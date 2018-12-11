@@ -1,5 +1,6 @@
 package com.patho.main.model;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 
 import com.patho.main.common.InformedConsentType;
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.util.audit.Audit;
@@ -92,5 +94,14 @@ public class BioBank implements DataList, AuditAble {
 	@Transient
 	public String getPublicName() {
 		return task.getTaskID();
+	}
+	
+	/**
+	 * File Repository Base of the corresponding patient
+	 */
+	@Override
+	@Transient
+	public File getFileRepositoryBase() {
+		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(task.getParent().getId()));
 	}
 }

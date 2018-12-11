@@ -52,11 +52,19 @@ public interface MediaRepository {
 	
 	public boolean isFile(File path);
 
+	public boolean isDirectory(String path);
+
+	public boolean isDirectory(File path) ;
+	
 	public File[] getFilesOfDirectory(String pattern);
 	
 	public File getWriteFile(String path);
 
 	public File getWriteFile(File path);
+	
+	public File getParentDirectory(String path);
+	
+	public File getParentDirectory(File path);
 
 	public InputStream getInputStream(String path) throws IOException;
 

@@ -3,6 +3,7 @@ package com.patho.main.util.pdf;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.printer.LoadedPDFContainer;
+import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,10 @@ public class PrintOrder {
 
 	public PrintOrder(PDFContainer container, PrintDocument documentTemplate) {
 		this(container, 1, documentTemplate, false);
+	}
+
+	public PrintOrder(TemplatePDFContainer container, int copies) {
+		this(container.getPdfContainer(), copies, container.getPrintDocument(), false);
 	}
 
 	public PrintOrder(PDFContainer container, int copies, PrintDocument documentTemplate) {

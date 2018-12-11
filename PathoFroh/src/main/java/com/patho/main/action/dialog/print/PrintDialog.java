@@ -26,6 +26,7 @@ import com.patho.main.ui.LazyPDFGuiManager;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.pdf.PrintOrder;
+import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -90,6 +91,11 @@ public class PrintDialog extends AbstractDialog {
 	 * if true no print button, but instead a select button will be display
 	 */
 	private boolean selectMode;
+
+	/**
+	 * If True the template will be returned as well
+	 */
+	private boolean selectWithTemplate;
 
 	/**
 	 * If true only on address can be selected
@@ -189,6 +195,10 @@ public class PrintDialog extends AbstractDialog {
 	}
 
 	public PrintDialog selectMode() {
+		return selectMode(false);
+	}
+
+	public PrintDialog selectMode(boolean selectWithTemplate) {
 		setSelectMode(true);
 		return this;
 	}
@@ -268,6 +278,9 @@ public class PrintDialog extends AbstractDialog {
 	 * Returns the rendered pdf if in selectMode
 	 */
 	public void hideAndSelectDialog() {
-		super.hideDialog(guiManager.getPDFContainerToRender());
+		super.hideDialog(selectWithTemplate
+				? new TemplatePDFContainer(guiManager.getPDFContainerToRender(),
+						getSelectedTemplate().getDefaultTemplateConfiguration().getDocumentTemplate())
+				: guiManager.getPDFContainerToRender());
 	}
 }

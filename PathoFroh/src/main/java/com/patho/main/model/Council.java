@@ -1,5 +1,6 @@
 package com.patho.main.model;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Task;
@@ -216,6 +218,15 @@ public class Council implements ID, DataList, AuditAble {
 		if (obj instanceof Council && ((Council) obj).getId() == getId())
 			return true;
 		return super.equals(obj);
+	}
+
+	/**
+	 * File Repository Base of the corresponding patient
+	 */
+	@Override
+	@Transient
+	public File getFileRepositoryBase() {
+		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(task.getParent().getId()));
 	}
 
 	/**

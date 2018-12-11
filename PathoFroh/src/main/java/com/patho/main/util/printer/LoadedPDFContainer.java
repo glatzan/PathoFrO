@@ -19,34 +19,31 @@ import lombok.experimental.Delegate;
  * @author andi
  *
  */
-@Configurable(preConstruction=true)
+@Configurable(preConstruction = true)
 @Getter
 @Setter
-public class LoadedPDFContainer extends PDFContainer{
+public class LoadedPDFContainer extends TemplatePDFContainer {
 
 	@Autowired()
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private MediaRepository mediaRepository;
 
-	@Delegate
-	private PDFContainer pdfContainer;
-	
 	private byte pdfData[];
 	private byte thumbnailData[];
 
 	public LoadedPDFContainer(DocumentType type, String name, byte[] pdfData, byte[] thumbnailData) {
-		this.pdfContainer = new PDFContainer(type);
-		this.pdfContainer.setName(name);
+		super(new PDFContainer());
+		getPdfContainer().setName(name);
 		this.pdfData = pdfData;
 		this.thumbnailData = thumbnailData;
 	}
 
 	public LoadedPDFContainer(PDFContainer pdfContainer) {
-		this.pdfContainer = pdfContainer;
-		
+		setPdfContainer(pdfContainer);
+
 		this.pdfData = mediaRepository.getBytes(pdfContainer.getPath());
-		
+
 		if (pdfContainer.getThumbnail() != null)
 			this.thumbnailData = mediaRepository.getBytes(pdfContainer.getThumbnail());
 	}

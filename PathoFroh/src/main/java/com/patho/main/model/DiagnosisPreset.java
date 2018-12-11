@@ -1,5 +1,6 @@
 package com.patho.main.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +32,9 @@ import lombok.Setter;
 @SequenceGenerator(name = "diagnosisPreset_sequencegenerator", sequenceName = "diagnosisPreset_sequence")
 @Getter
 @Setter
-public class DiagnosisPreset implements LogAble, ListOrder<DiagnosisPreset>, ID {
+public class DiagnosisPreset implements LogAble, ListOrder<DiagnosisPreset>, ID, Serializable {
+
+	private static final long serialVersionUID = 7345658902599657920L;
 
 	@Id
 	@GeneratedValue(generator = "diagnosisPreset_sequencegenerator")

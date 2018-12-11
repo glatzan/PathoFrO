@@ -196,7 +196,7 @@ public class NotificationDialog extends AbstractTabDialog {
 		}
 
 		dialogHandler.getPrintDialog().initAndPrepareBean(getTask(), printDocumentUIs, printDocumentUIs.get(0))
-				.selectMode();
+				.selectMode(true);
 	}
 
 	/**

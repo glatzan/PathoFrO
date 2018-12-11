@@ -1,5 +1,6 @@
 package com.patho.main.model.patient;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -40,6 +41,7 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.common.Eye;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.TaskPriority;
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.Accounting;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Council;
@@ -523,17 +525,6 @@ public class Task
 			setTaskPriority(TaskPriority.NONE);
 	}
 
-	/********************************************************
-	 * Transient Getter/Setter
-	 ********************************************************/
-
-	/********************************************************
-	 * Interface Parent
-	 ********************************************************/
-
-	/**
-	 * �berschreibt Methode aus dem Interface StainingTreeParent
-	 */
 	@Transient
 	@Override
 	public Patient getPatient() {
@@ -549,10 +540,6 @@ public class Task
 		return this;
 	}
 
-	/********************************************************
-	 * Interface Parent
-	 ********************************************************/
-
 	@Override
 	@Transient
 	public String getPublicName() {
@@ -563,5 +550,14 @@ public class Task
 	@Transient
 	public Patient root() {
 		return parent;
+	}
+
+	/**
+	 * File Repository Base of the corresponding patient
+	 */
+	@Override
+	@Transient
+	public File getFileRepositoryBase() {
+		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(getParent().getId()));
 	}
 }

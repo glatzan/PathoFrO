@@ -75,7 +75,7 @@ public class PDFGenerator {
 	private File errorDirectory;
 
 	private boolean generateThumbnail;
-
+	
 	public PDFContainer getPDF(PrintDocument template, File outputDirectory) {
 		return getPDF(template, outputDirectory, false);
 	}

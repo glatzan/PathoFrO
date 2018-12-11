@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.DiagnosisRevisionRepository;
+import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
@@ -31,6 +33,7 @@ import com.patho.main.util.notification.NotificationPerformer;
 import com.patho.main.util.notification.NotificationFeedback;
 import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.pdf.PrintOrder;
+import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -75,6 +78,11 @@ public class NotificationService extends AbstractService {
 	@Setter(AccessLevel.NONE)
 	private UserHandlerAction userHandlerAction;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PrintDocumentRepository printDocumentRepository;
+
 	public void startNotificationPhase(Task task) {
 		try {
 
@@ -115,36 +123,6 @@ public class NotificationService extends AbstractService {
 		}
 	}
 
-	public boolean performNotification(NotificationPerformer data) {
-
-		if (data.isUseMail()) {
-			PDFContainer mailGenericReport = null;
-			logger.debug("Mail-Notification");
-
-			// generating generic report
-			if (!data.isIndividualMailAddress()) {
-				// copie generic report if used and is the same as the mail generic report
-				if (data.getGenericReport() != null
-						&& mailTab.getSelectedTemplate() == generalTab.getSelectedTemplate()) {
-					mailGenericReport = genericReport;
-				} else {
-					mailGenericReport = notificationService.generatePDF(task, generalTab.getSelectDiagnosisRevision(),
-							"", mailTab.getSelectedTemplate());
-				}
-			}
-
-			for (NotificationContainer container : mailTab.getContainerToNotify()) {
-				notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
-						mailTab.getSelectedTemplate(), mailTab.isIndividualAddresses(), mailGenericReport, this);
-
-				notificationService.emailNotification(container, task, mailTab.getMailTemplate(), this, false);
-			}
-
-		}
-
-		return true;
-	}
-
 //	public boolean executeNotification(NotificationFeedback feedback, Task task, MailContainerList mailContainerList,
 //			NotificationContainerList faxContainerList, NotificationContainerList letterContainerList,
 //			NotificationContainerList phoneContainerList, NotificationContainerList printContainerList,
@@ -171,31 +149,78 @@ public class NotificationService extends AbstractService {
 
 	public boolean performeNotification(NotificationPerformer performer, NotificationFeedback feedback) {
 
+		feedback.setFeedback("Generating Generic Report");
+		TemplatePDFContainer genericReport = performer.getGenericReport();
+
 		if (performer.isPrintDocument()) {
-			feedback.setFeedback("Generating Generic Report");
-			PDFContainer genericReport = performer.getGenericReport();
 			// printing generic report
-			userHandlerAction.getSelectedPrinter()
-					.print(new PrintOrder(genericReport, performer.getPrintCount(), performer.getGenericTemplate()));
+			userHandlerAction.getSelectedPrinter().print(new PrintOrder(genericReport, performer.getPrintCount()));
 		}
 
+		boolean success = true;
+		
 		if (performer.isUseMail()) {
 			for (NotificationContainer mail : performer.getMails()) {
-				emailNotification(mail, performer.getTask(), performer.getMail(), feedback,
-						performer.isReperformNotification());
+				feedback.setFeedback("dialog.notification.sendProcess.mail.send", mail.getContactAddress());
+				mail.setPdf(performer.getPDFForContainer(mail, performer.getMailTemplate(),
+						performer.isIndividualMailAddress(), genericReport));
+				feedback.setFeedback("dialog.notification.sendProcess.mail.send", mail.getContactAddress());
+				success &= emailNotification(mail, performer.getTask(), performer.getMail(), performer.isReperformNotification());
+				feedback.progressStep();
 			}
 		}
+
+		if (performer.isUseFax()) {
+			for (NotificationContainer fax : performer.getFaxes()) {
+
+				feedback.setFeedback("dialog.notification.sendProcess.pdf.generating");
+				fax.setPdf(performer.getPDFForContainer(fax, performer.getFaxTemplate(),
+						performer.isIndividualFaxAddress(), genericReport));
+
+				feedback.setFeedback("dialog.notification.sendProcess.fax.send", fax.getContactAddress());
+				success &=  faxNotification(fax, performer.getTask(), performer.isSendFax(), performer.isPrintFax(),
+						performer.isReperformNotification());
+
+				feedback.progressStep();
+			}
+		}
+
+		if (performer.isUseLetter()) {
+			for (NotificationContainer letter : performer.getFaxes()) {
+				feedback.setFeedback("dialog.notification.sendProcess.pdf.print");
+				letter.setPdf(performer.getPDFForContainer(letter, performer.getLetterTemplate(),
+						performer.isIndividualLetterAddress(), genericReport));
+				feedback.setFeedback("dialog.notification.sendProcess.pdf.generating");
+				success &= letterNotification(letter, performer.getTask(), true, performer.isReperformNotification());
+			}
+		}
+		
+		if(performer.isUsePhone()) {
+			for (NotificationContainer phone : performer.getPhonenumbers()) {
+				success &= phoneNotification(phone, performer.getTask(), performer.isReperformNotification());
+			}
+		}
+		
+		endNotification(document, task, diagnosisRevision, emails, faxes, letters, phones)
 
 		return true;
 	}
 
-	public boolean endNotification(PrintDocument document, Task task, DiagnosisRevision diagnosisRevision,
-			List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters,
-			List<NotificationContainer> phones) {
+	public boolean endNotification(Task task, DiagnosisRevision diagnosisRevision, List<NotificationContainer> emails,
+			List<NotificationContainer> faxes, List<NotificationContainer> letters, List<NotificationContainer> phones,
+			boolean success) {
+
+		Optional<PrintDocument> document = printDocumentRepository
+				.findByID(pathoConfig.getDefaultDocuments().getNotificationSendReport());
+
+		if (!document.isPresent()) {
+			logger.debug("Printdocument not found");
+			return false;
+		}
 
 		PDFGenerator generator = new PDFGenerator();
 
-		document.initilize(new InitializeToken("task", task),
+		document.get().initilize(new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
 				new InitializeToken("patient", task.getPatient()), new InitializeToken("useMail", !emails.isEmpty()),
 				new InitializeToken("useMail", !emails.isEmpty()), new InitializeToken("mails", emails),
@@ -204,8 +229,8 @@ public class NotificationService extends AbstractService {
 				new InitializeToken("usePhone", !emails.isEmpty()), new InitializeToken("phonenumbers", emails),
 				new InitializeToken("reportDate", new Date()));
 
-		PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.getDocumentType(),
-				document.getGeneratedFileName(), "", "", true, task.getParent());
+		PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.get().getDocumentType(),
+				document.get().getGeneratedFileName(), "", "", true, task.getParent());
 
 		PDFContainer container = generator.getPDF(document, pdfReturn.getContainer());
 
@@ -217,12 +242,8 @@ public class NotificationService extends AbstractService {
 		return true;
 	}
 
-	public boolean printNotification() {
-
-	}
-
 	public boolean emailNotification(NotificationContainer notificationContainer, Task task, MailTemplate template,
-			NotificationFeedback feedback, boolean recreateAfterNotification) {
+			boolean recreateAfterNotification) {
 		boolean success = true;
 
 		ValidatorUtil val = new ValidatorUtil();
@@ -242,9 +263,6 @@ public class NotificationService extends AbstractService {
 
 			if (!mailService.sendMail(notificationContainer.getContactAddress(), template))
 				throw new IllegalArgumentException("dialog.notification.sendProcess.mail.error.failed");
-
-			feedback.setFeedback("dialog.notification.sendProcess.mail.send",
-					notificationContainer.getContactAddress());
 
 			notificationContainer.getNotification().setPerformed(true);
 			notificationContainer.getNotification().setDateOfAction(new Date());
@@ -277,13 +295,11 @@ public class NotificationService extends AbstractService {
 			associatedContactService.renewNotification(notificationContainer.getContact(),
 					notificationContainer.getNotification(), false);
 
-		feedback.progressStep();
-
 		return success;
 	}
 
-	public boolean faxNotification(NotificationContainer notificationContainer, Task task,
-			NotificationFeedback feedback, boolean print, boolean send, boolean recreateAfterNotification) {
+	public boolean faxNotification(NotificationContainer notificationContainer, Task task, boolean print, boolean send,
+			boolean recreateAfterNotification) {
 
 		boolean success = true;
 		ValidatorUtil val = new ValidatorUtil();
@@ -297,14 +313,11 @@ public class NotificationService extends AbstractService {
 
 			if (print) {
 				// sending feedback
-				feedback.setFeedback("dialog.notification.sendProcess.pdf.print");
-				userHandlerAction.getSelectedPrinter().print(notificationContainer.getPdf());
+				userHandlerAction.getSelectedPrinter().print(new PrintOrder(notificationContainer.getPdf(), 1));
 			}
 
 			if (send) {
 				faxService.sendFax(notificationContainer.getContactAddress(), notificationContainer.getPdf());
-				feedback.setFeedback("dialog.notification.sendProcess.fax.send",
-						notificationContainer.getContactAddress());
 			}
 
 			notificationContainer.getNotification().setPerformed(true);
@@ -339,8 +352,8 @@ public class NotificationService extends AbstractService {
 		return success;
 	}
 
-	public boolean letterNotification(NotificationContainer notificationContainer, Task task,
-			NotificationFeedback feedback, boolean print, boolean recreateAfterNotification) {
+	public boolean letterNotification(NotificationContainer notificationContainer, Task task, boolean print,
+			boolean recreateAfterNotification) {
 
 		boolean success = true;
 		ValidatorUtil val = new ValidatorUtil();
@@ -352,8 +365,7 @@ public class NotificationService extends AbstractService {
 			if (!val.approvePostalAddress(notificationContainer.getContactAddress()))
 				throw new IllegalArgumentException("");
 
-			feedback.setFeedback("dialog.notification.sendProcess.pdf.print");
-			userHandlerAction.getSelectedPrinter().print(notificationContainer.getPdf());
+			userHandlerAction.getSelectedPrinter().print(new PrintOrder(notificationContainer.getPdf(), 1));
 
 			notificationContainer.getNotification().setPerformed(true);
 			notificationContainer.getNotification().setDateOfAction(new Date());
@@ -389,7 +401,7 @@ public class NotificationService extends AbstractService {
 	}
 
 	public boolean phoneNotification(NotificationContainer notificationContainer, Task task,
-			NotificationFeedback feedback, boolean recreateAfterNotification) {
+			boolean recreateAfterNotification) {
 
 		notificationContainer.getNotification().setPerformed(true);
 		notificationContainer.getNotification().setDateOfAction(new Date());

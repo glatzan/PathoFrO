@@ -101,8 +101,7 @@ public class DiagnosisReportUpdater {
 			logger.debug("Creating new PDF for report");
 			PDFReturn res = pdfService.createAndAttachPDF(task, DocumentType.DIAGNOSIS_REPORT_COMPLETED,
 					diagnosisRevision.getName(), "",
-					PDFContainer.MARKER_DIAGNOSIS.replace("$id", String.valueOf(diagnosisRevision.getId())),
-					outputDirectory);
+					PDFContainer.MARKER_DIAGNOSIS.replace("$id", String.valueOf(diagnosisRevision.getId())));
 			task = (Task) res.getDataList();
 			container = res.getContainer();
 		} else {
