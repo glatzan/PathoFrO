@@ -57,6 +57,9 @@ public class PathoConfig {
 	private FileSettings fileSettings;
 	
 	private Miscellaneous miscellaneous;
+	
+	private Schedule schedule;
+	
 	/**
 	 * Container for providing version information
 	 */
@@ -278,6 +281,12 @@ public class PathoConfig {
 	@Getter
 	@Setter
 	public static class Miscellaneous{
-		String phoneRegex;
+		private String phoneRegex;
+	}
+	
+	@Getter
+	@Setter
+	public static class Schedule{
+		private String pdfCleanupCron;
 	}
 }

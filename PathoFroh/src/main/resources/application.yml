@@ -199,6 +199,8 @@ patho:
               LETTER
     miscellaneous:
       phoneRegex: "^\\s*(?:[\\+#]?(\\d{1,3}))?([-. ()/\\\\]*(\\d*))*?\\s*$"
+    schedule:
+      pdfCleanupCron: '* * * * *'
   ####### Print Documents #######
     documents:
       - 

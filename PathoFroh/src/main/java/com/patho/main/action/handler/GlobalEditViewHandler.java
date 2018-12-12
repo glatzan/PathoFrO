@@ -74,8 +74,6 @@ import lombok.Setter;
 @Setter
 public class GlobalEditViewHandler extends AbstractHandler {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)

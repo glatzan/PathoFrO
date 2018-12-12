@@ -418,6 +418,7 @@ public class PDFGenerator {
 
 	public PDFContainer mergePDFs(PDFContainer target, List<LoadedPDFContainer> containers) {
 		LoadedPDFContainer loadedContainer = PDFGenerator.mergePdfs(containers, "", target.getType());
+		
 		mediaRepository.saveBytes(loadedContainer.getPdfData(), target.getPath());
 
 		if (target.getThumbnail() != null)

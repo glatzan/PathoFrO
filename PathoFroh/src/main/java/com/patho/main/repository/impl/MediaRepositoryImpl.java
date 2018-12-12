@@ -3,6 +3,7 @@ package com.patho.main.repository.impl;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -183,11 +184,11 @@ public class MediaRepositoryImpl implements MediaRepository {
 		return result;
 	}
 
-	public String getUniqueName(String path, String suffix) {
+	public String getUniqueName(String path, String suffix) throws FileNotFoundException {
 		return getUniqueName(new File(path), suffix);
 	}
 
-	public String getUniqueName(File path, String suffix) {
+	public String getUniqueName(File path, String suffix) throws FileNotFoundException {
 		logger.debug("test");
 		int i = 0;
 		while (i < 10) {
@@ -202,14 +203,14 @@ public class MediaRepositoryImpl implements MediaRepository {
 			return name;
 		}
 
-		return null;
+		throw new FileNotFoundException("Cannot create File after 10 attempts");
 	}
 
-	public File getUniqueNameAsFile(String path, String suffix) {
+	public File getUniqueNameAsFile(String path, String suffix) throws FileNotFoundException {
 		return new File(path, getUniqueName(path, suffix));
 	}
 
-	public File getUniqueNameAsFile(File path, String suffix) {
+	public File getUniqueNameAsFile(File path, String suffix) throws FileNotFoundException {
 		return new File(path, getUniqueName(path, suffix));
 	}
 
@@ -306,6 +307,31 @@ public class MediaRepositoryImpl implements MediaRepository {
 					path.getPath().replace("fileRepository:", "")));
 		} else
 			return new FileInputStream(path);
+	}
+
+	public boolean moveFile(File srcFile, File destFile) {
+		srcFile = getWriteFile(srcFile);
+		destFile = getWriteFile(destFile);
+		try {
+			FileUtils.moveFile(srcFile, destFile);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean moveFileToDirectory(File srcFile, File destDir) {
+		srcFile = getWriteFile(srcFile);
+		destDir = getWriteFile(destDir);
+
+		try {
+			FileUtils.moveFileToDirectory(srcFile, destDir, true);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

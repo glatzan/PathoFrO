@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.util.pdf.PDFGenerator;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Delegate;
 
 /**
  * Container which loads the pdf data in ram

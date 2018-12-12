@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.notification.NotificationContainerList;
+import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.printer.LoadedPDFContainer;
 
@@ -39,7 +40,7 @@ public class SendReport extends PrintDocument {
 		setAfterPDFCreationHook(true);
 	}
 
-	public PDFContainer onAfterPDFCreation(PDFContainer container) {
+	public PDFContainer onAfterPDFCreation(PDFContainer container, PDFCreator creator) {
 		List<LoadedPDFContainer> attachPdf = new ArrayList<LoadedPDFContainer>();
 
 		attachPdf.add(new LoadedPDFContainer(container));
@@ -51,7 +52,7 @@ public class SendReport extends PrintDocument {
 		attachPdf.addAll(phoneContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
 				.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
 
-		container = new PDFGenerator().mergePDFs(container, attachPdf);
+		container = creator.mergePDFs(container, attachPdf);
 
 		return container;
 	}

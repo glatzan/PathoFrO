@@ -16,6 +16,7 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TextToLatexConverter;
 import com.patho.main.util.helper.TimeUtil;
+import com.patho.main.util.pdf.PDFCreator;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -82,7 +83,7 @@ public class PrintDocument extends AbstractTemplate {
 	 * @param container
 	 * @return
 	 */
-	public PDFContainer onAfterPDFCreation(PDFContainer container) {
+	public PDFContainer onAfterPDFCreation(PDFContainer container, PDFCreator creator) {
 		return container;
 	}
 

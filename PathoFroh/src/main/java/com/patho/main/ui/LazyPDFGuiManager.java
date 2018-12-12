@@ -21,7 +21,7 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.ui.interfaces.PdfStreamProvider;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
-import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PDFCreator;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -108,7 +108,7 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 	}
 
 	public void startRendering(PrintDocument template, File outputPath) {
-		currentTaskUuid = new PDFGenerator().getPDFNoneBlocking(template, outputPath, this);
+		currentTaskUuid = new PDFCreator().createPDFNonBlocking(template, outputPath, this);
 		getStopPoll().set(false);
 		getAutoStartPoll().set(true);
 	}
@@ -125,8 +125,8 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 				logger.debug("Setting PDf for rendering. Path: {}", container);
 				setPDFContainerToRender(container);
 			} else {
-				setPDFContainerToRender(new PDFContainer(DocumentType.PRINT_DOCUMENT,
-						"RenderError.pdf", PathoConfig.RENDER_ERROR_PDF));
+				setPDFContainerToRender(
+						new PDFContainer(DocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.RENDER_ERROR_PDF));
 			}
 
 			getRenderPDF().set(true);
