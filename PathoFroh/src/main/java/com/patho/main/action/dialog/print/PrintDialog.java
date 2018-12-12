@@ -1,6 +1,7 @@
 package com.patho.main.action.dialog.print;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.ui.LazyPDFGuiManager;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
 import com.patho.main.util.printer.TemplatePDFContainer;
 
@@ -216,8 +217,6 @@ public class PrintDialog extends AbstractDialog {
 
 		logger.debug("Printing PDF");
 
-		PDFGenerator generator = new PDFGenerator();
-
 		getSelectedTemplate().beginNextTemplateIteration();
 
 		int printedDocuments = 0;
@@ -226,8 +225,15 @@ public class PrintDialog extends AbstractDialog {
 			AbstractDocumentUi<?, ?>.TemplateConfiguration<?> container = getSelectedTemplate()
 					.getNextTemplateConfiguration();
 
-			PDFContainer pdf = generator.getPDF(container.getDocumentTemplate(),
-					new File(pathoConfig.getFileSettings().getPrintDirectory()));
+			PDFContainer pdf = null;
+
+			try {
+				pdf = new PDFCreator().createPDF(container.getDocumentTemplate());
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.failed.creatingPDF");
+				continue;
+			}
 
 			PrintOrder printOrder = new PrintOrder(pdf, container.getCopies(), isDuplexPrinting(),
 					container.getDocumentTemplate().getAttributes());

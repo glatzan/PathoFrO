@@ -23,6 +23,7 @@ import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
+import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.pdf.PDFUtil;
 
@@ -112,7 +113,7 @@ public class DiagnosisReportUpdater {
 		}
 
 		logger.debug("Stargin PDF Generation in new Thread");
-		PDFGenerator generator = new PDFGenerator();
+		new PDFCreator()
 		generator.getPDFNoneBlocking(printDocument, outputDirectory, container, true, returnHandler);
 
 		return task;

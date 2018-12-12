@@ -1,7 +1,6 @@
 package com.patho.main.template.print;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,7 +8,6 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.notification.NotificationContainerList;
 import com.patho.main.util.pdf.PDFCreator;
-import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.printer.LoadedPDFContainer;
 
 /**

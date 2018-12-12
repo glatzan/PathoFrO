@@ -29,7 +29,9 @@ import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PDFRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.util.pdf.PDFCreator;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -152,6 +154,10 @@ public class PDFService extends AbstractService {
 		}
 
 		return new PDFReturn(dataList, pdfContainer);
+	}
+
+	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, boolean createThumbnail) {
+		new PDFCreator().cre
 	}
 
 	public PDFReturn moveAndAttachPDF(DataList dataList, PDFContainer pdfContainer, boolean createThumbnail,

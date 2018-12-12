@@ -9,13 +9,12 @@ import com.patho.main.action.handler.AbstractHandler;
 import com.patho.main.config.PathoConfig;
 
 @Configuration
-@ConfigurationProperties(prefix = "patho.ldap")
 public class CommonScheduledTasks extends AbstractHandler {
 
 	@Autowired
 	private PathoConfig pathoConfig;
 	
-	@Scheduled(cron = "${patho.settings.schedule.pdfCleanupCron}", initialDelay = 1000)
+	@Scheduled(cron = "${patho.settings.schedule.pdfCleanupCron}")
 	public void pdfCleanup() {
 		logger.debug("Running cleanup");
 	}

@@ -1,6 +1,7 @@
 package com.patho.main.action.dialog.task;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +61,7 @@ import com.patho.main.util.exception.CustomNotUniqueReqest;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TaskUtil;
 import com.patho.main.util.helper.TimeUtil;
-import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
 
 import lombok.AccessLevel;
@@ -271,7 +272,6 @@ public class CreateTaskDialog extends AbstractDialog {
 		taskExecutor.execute(new Thread() {
 			public void run() {
 				logger.debug("Stargin PDF Generation in new Thread");
-				PDFGenerator generator = new PDFGenerator();
 
 				Optional<PrintDocument> printDocument = printDocumentRepository
 						.findByID(pathoConfig.getDefaultDocuments().getTaskCreationDocument());
@@ -285,8 +285,14 @@ public class CreateTaskDialog extends AbstractDialog {
 				printDocument.get().initilize(new InitializeToken("task", task),
 						new InitializeToken("patient", patient));
 
-				PDFContainer container = generator.getPDF(printDocument.get(),
-						new File(pathoConfig.getFileSettings().getPrintDirectory()), false);
+				PDFContainer container = null;
+				try {
+					container = new PDFCreator().createPDF(printDocument.get());
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.failed.creatingPDF");
+					return;
+				}
 
 				userHandlerAction.getSelectedPrinter().print(new PrintOrder(container, 1, printDocument.get()));
 

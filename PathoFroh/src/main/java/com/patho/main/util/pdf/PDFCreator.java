@@ -116,10 +116,19 @@ public class PDFCreator {
 	private String relativeTargetImg;
 
 	public PDFCreator() {
+		this(null);
+	}
+
+	public PDFCreator(File workdirectory) {
+		if (workdirectory == null)
+			workdirectory = new File(pathoConfig.getFileSettings().getPrintDirectory());
+
+		this.relaviteTargetDirectory = workdirectory;
+		this.absoluteTargetDirectory = mediaRepository.getWriteFile(workdirectory);
+
 		this.workingDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getWorkDirectory());
 		this.auxDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getAuxDirectory());
 		this.errorDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getErrorDirectory());
-		this.relaviteTargetDirectory = new File(pathoConfig.getFileSettings().getWorkDirectory());
 	}
 
 	public PDFContainer createPDF(PrintDocument template) throws FileNotFoundException {
@@ -450,15 +459,15 @@ public class PDFCreator {
 						mediaRepository.moveFile(absoluteTargetImg, errorDirectory);
 				}
 			} else {
-					mediaRepository.delete(helper.inputFile);
-					mediaRepository.delete(helper.auxFile);
-					mediaRepository.delete(helper.logFile);
-					mediaRepository.delete(helper.outputFile);
+				mediaRepository.delete(helper.inputFile);
+				mediaRepository.delete(helper.auxFile);
+				mediaRepository.delete(helper.logFile);
+				mediaRepository.delete(helper.outputFile);
 				if (helper.outputThumbnail != null)
 					mediaRepository.delete(helper.outputThumbnail);
 				if (!absoluteTargetDirectory.equals(workingDirectory)) {
-						mediaRepository.delete(absoulteTargetFile);
-					if (absoluteTargetImg != null )
+					mediaRepository.delete(absoulteTargetFile);
+					if (absoluteTargetImg != null)
 						mediaRepository.delete(absoluteTargetImg);
 				}
 			}

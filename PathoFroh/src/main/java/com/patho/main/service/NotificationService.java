@@ -31,7 +31,7 @@ import com.patho.main.util.helper.ValidatorUtil;
 import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationPerformer;
 import com.patho.main.util.notification.NotificationFeedback;
-import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
 import com.patho.main.util.printer.TemplatePDFContainer;
 
@@ -218,8 +218,8 @@ public class NotificationService extends AbstractService {
 			return false;
 		}
 
-		PDFGenerator generator = new PDFGenerator();
 
+		
 		document.get().initilize(new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
 				new InitializeToken("patient", task.getPatient()), new InitializeToken("useMail", !emails.isEmpty()),
@@ -229,6 +229,8 @@ public class NotificationService extends AbstractService {
 				new InitializeToken("usePhone", !emails.isEmpty()), new InitializeToken("phonenumbers", emails),
 				new InitializeToken("reportDate", new Date()));
 
+		new PDFCreator()
+		
 		PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.get().getDocumentType(),
 				document.get().getGeneratedFileName(), "", "", true, task.getParent());
 
