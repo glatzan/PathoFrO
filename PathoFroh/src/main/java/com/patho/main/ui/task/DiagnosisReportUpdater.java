@@ -1,6 +1,7 @@
 package com.patho.main.ui.task;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PDFService;
+import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
@@ -100,21 +102,27 @@ public class DiagnosisReportUpdater {
 		// generating new pdf
 		if (!pdf.isPresent()) {
 			logger.debug("Creating new PDF for report");
-			PDFReturn res = pdfService.createAndAttachPDF(task, DocumentType.DIAGNOSIS_REPORT_COMPLETED,
-					diagnosisRevision.getName(), "",
-					PDFContainer.MARKER_DIAGNOSIS.replace("$id", String.valueOf(diagnosisRevision.getId())));
-			task = (Task) res.getDataList();
-			container = res.getContainer();
+			PDFReturn res;
+			try {
+				res = pdfService
+						.createAndAttachPDF(
+								task, printDocument, new PDFInfo(diagnosisRevision.getName(),
+										DocumentType.DIAGNOSIS_REPORT_COMPLETED, "", PDFContainer.MARKER_DIAGNOSIS
+												.replace("$id", String.valueOf(diagnosisRevision.getId()))),
+								true, true);
+				task = (Task) res.getDataList();
+				container = res.getContainer();
+			} catch (FileNotFoundException e) {
+				// TODO Handle error
+				e.printStackTrace();
+			}
 		} else {
 			logger.debug("Updating pdf for report");
 			container = pdf.get();
 			container.setName(diagnosisRevision.getName());
 			task = taskRepository.save(task);
+			pdfService.updateAttachedPDF(container, printDocument, true, true);
 		}
-
-		logger.debug("Stargin PDF Generation in new Thread");
-		new PDFCreator()
-		generator.getPDFNoneBlocking(printDocument, outputDirectory, container, true, returnHandler);
 
 		return task;
 	}

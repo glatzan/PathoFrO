@@ -1,6 +1,7 @@
 package com.patho.main.action.dialog.council;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,7 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.CouncilService;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.PDFService;
+import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
@@ -437,11 +439,14 @@ public class CouncilDialog extends AbstractDialog {
 		UploadedFile file = event.getFile();
 		try {
 			logger.debug("Uploadgin to Council: " + getSelectedCouncil().getId());
-			pdfService.createAndAttachPDF(getSelectedCouncil().getCouncil(), file, DocumentType.COUNCIL_REPLY, "", "",
-					true, getTask().getPatient());
+
+			pdfService.createAndAttachPDF(getSelectedCouncil().getCouncil(),
+					new PDFInfo(file.getFileName(), DocumentType.COUNCIL_REPLY), file.getContents(), true);
 
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.success");
 		} catch (IllegalAccessError e) {
+			MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed", FacesMessage.SEVERITY_ERROR);
+		} catch (FileNotFoundException e) {
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed", FacesMessage.SEVERITY_ERROR);
 		}
 

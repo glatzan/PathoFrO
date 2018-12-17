@@ -2,6 +2,7 @@ package com.patho.main.service;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,9 @@ import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.util.pdf.LazyPDFReturnHandler;
 import com.patho.main.util.pdf.PDFCreator;
+import com.patho.main.util.pdf.PDFGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,138 +65,215 @@ public class PDFService extends AbstractService {
 	@Autowired
 	private PathoConfig pathoConfig;
 
-	public DataList attachPDF(DataList dataList, PDFContainer pdfContainer) {
-		dataList.getAttachedPdfs().add(pdfContainer);
-
-		if (dataList instanceof Patient) {
-			return patientRepository.save((Patient) dataList,
-					resourceBundle.get("log.pdf.uploaded", pdfContainer.getName()));
-		} else if (dataList instanceof Task) {
-			return taskRepository.save((Task) dataList, resourceBundle.get("log.pdf.uploaded", pdfContainer.getName()));
-		} else if (dataList instanceof BioBank) {
-			return bioBankRepository.save((BioBank) dataList,
-					resourceBundle.get("log.pdf.uploaded", pdfContainer.getName()));
-		} else if (dataList instanceof Council) {
-			return councilRepository.save((Council) dataList,
-					resourceBundle.get("log.pdf.uploaded", pdfContainer.getName()));
-		} else {
-			throw new IllegalArgumentException("List type not supported (" + dataList + ")");
-		}
+	/**
+	 * Creates a new empty pdf with no file on the hard drive. This is a "virtual"
+	 * pdf.
+	 * 
+	 * @param dataList
+	 * @param pdfInfo
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public PDFReturn createAndAttachPDF(DataList dataList, PDFInfo pdfInfo) throws FileNotFoundException {
+		return createAndAttachPDF(dataList, pdfInfo, null, false);
 	}
 
-	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
-			String commentaryIntern) {
-		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, false,
-				dataList.getFileRepositoryBase());
+	/**
+	 * Creates a new pdf and saves the content to the hard drive. If a target folder
+	 * is passed via pdfInfo, the targetFolder will be used, otherwise the dataLists
+	 * targetFolder is used.
+	 * 
+	 * @param dataList
+	 * @param pdfInfo
+	 * @param content
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public PDFReturn createAndAttachPDF(DataList dataList, PDFInfo pdfInfo, byte[] content)
+			throws FileNotFoundException {
+		return createAndAttachPDF(dataList, pdfInfo, content, false);
 	}
 
-	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
-			String commentaryIntern, boolean createThumbnail) {
-		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, createThumbnail,
-				dataList.getFileRepositoryBase());
-	}
+	/**
+	 * Creates a new pdf and saves the content to the hard drive. If a target folder
+	 * is passed via pdfInfo, the targetFolder will be used, otherwise the dataLists
+	 * targetFolder is used.
+	 * 
+	 * @param dataList
+	 * @param pdfInfo
+	 * @param content
+	 * @param createThumbnail
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public PDFReturn createAndAttachPDF(DataList dataList, PDFInfo pdfInfo, byte[] content, boolean createThumbnail)
+			throws FileNotFoundException {
 
-	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
-			String commentaryIntern, boolean createThumbnail, File folder) {
-		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, createThumbnail, folder);
-	}
+		PDFContainer pdf = newPDF(pdfInfo,
+				pdfInfo.getTargetFolder() != null ? pdfInfo.getTargetFolder() : dataList.getFileRepositoryBase());
 
-	public PDFReturn createAndAttachPDF(DataList dataList, DocumentType type, String name, String commentary,
-			String commentaryIntern, File folder) {
-		return createAndAttachPDF(dataList, type, name, commentary, commentaryIntern, null, false, folder);
-	}
-
-	public PDFReturn createAndAttachPDF(DataList dataList, UploadedFile file, DocumentType type, String commentary,
-			String commentaryIntern, boolean createThumbnail) {
-		return createAndAttachPDF(dataList, file, type, commentary, commentaryIntern, createThumbnail,
-				dataList.getFileRepositoryBase());
-	}
-
-	public PDFReturn createAndAttachPDF(DataList dataList, UploadedFile file, DocumentType type, String commentary,
-			String commentaryIntern, boolean createThumbnail, File folder) {
-		return createAndAttachPDF(dataList, type, file.getFileName(), commentary, commentaryIntern, file.getContents(),
-				createThumbnail, folder);
-	}
-
-	public PDFReturn createAndAttachPDF(DataList dataLists, DocumentType type, String name, String commentary,
-			String commentaryIntern, byte[] content, boolean createThumbnail, File folder) {
-
-		PDFContainer uploadedPDF = new PDFContainer();
-		uploadedPDF.setName(name);
-		uploadedPDF.setType(type);
-		uploadedPDF.setCommentary(commentary);
-		uploadedPDF.setIntern(commentaryIntern);
-		getUniquePDF(folder, uploadedPDF);
-
-		return createAndAttachPDF(dataLists, uploadedPDF, content, createThumbnail);
-	}
-
-	public PDFReturn createAndAttachPDF(DataList dataList, PDFContainer pdfContainer, byte[] pdfContent,
-			boolean createThumbnail) {
-
-		pdfContainer = pdfRepository.save(pdfContainer);
-
-		dataList = attachPDF(dataList, pdfContainer);
+		pdf = pdfRepository.save(pdf);
+		dataList = saveORAttachPDF(dataList, pdf);
 
 		try {
-			if (pdfContent != null) {
-				logger.debug("Saving filed to disk");
-				mediaRepository.saveBytes(pdfContent, pdfContainer.getPath());
-				if (createThumbnail)
+			if (content != null) {
+				logger.debug("Saving pdf to disk");
+				mediaRepository.saveBytes(content, pdf.getPath());
+				if (createThumbnail) {
+					logger.debug("Creating thumbnail");
 					mediaRepository.saveImage(
-							gerateThumbnail(pdfContent, 0, pathoConfig.getFileSettings().getThumbnailDPI()),
-							pdfContainer.getThumbnail());
-			} else {
+							gerateThumbnail(content, 0, pathoConfig.getFileSettings().getThumbnailDPI()),
+							pdf.getThumbnail());
+				}
+			} else
 				logger.debug("Virtual PDF no content!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.debug("Error while saving file, removing file from datalists");
+			dataList = deletePdf(dataList, pdf);
+			throw new IllegalAccessError("Could not updaload data");
+		}
+
+		return new PDFReturn(dataList, pdf);
+	}
+
+	/**
+	 * Creates a new PDF Object an runs the PDFCreator in order to create a pdf from
+	 * the printDocument
+	 * 
+	 * @param dataList
+	 * @param printDocument
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument) throws FileNotFoundException {
+		return createAndAttachPDF(dataList, printDocument, new PDFInfo(printDocument.getGeneratedFileName(),
+				printDocument.getDocumentType(), "", "", dataList.getFileRepositoryBase()), false, false);
+	}
+
+	/**
+	 * Creates a new PDF Object an runs the PDFCreator in order to create a pdf from
+	 * the printDocument
+	 * 
+	 * @param dataList
+	 * @param printDocument
+	 * @param createThumbnail
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, boolean createThumbnail)
+			throws FileNotFoundException {
+		return createAndAttachPDF(
+				dataList, printDocument, new PDFInfo(printDocument.getGeneratedFileName(),
+						printDocument.getDocumentType(), "", "", dataList.getFileRepositoryBase()),
+				createThumbnail, false);
+	}
+
+	/**
+	 * Creates a new PDF Object an runs the PDFCreator in order to create a pdf from
+	 * the printDocument. For PDF Object creation data from the pdfInfo objects are
+	 * used.
+	 * 
+	 * @param dataList
+	 * @param printDocument
+	 * @param pdfInfo
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, PDFInfo pdfInfo)
+			throws FileNotFoundException {
+		return createAndAttachPDF(dataList, printDocument, pdfInfo, false, false);
+	}
+
+	/**
+	 * Creates a new PDF Object an runs the PDFCreator in order to create a pdf from
+	 * the printDocument. For PDF Object creation data from the pdfInfo objects are
+	 * used. If nonBlocking is true the new PDf Obejct will be returnd and the pdf
+	 * will be generated in a new Thread.
+	 * 
+	 * @param dataList
+	 * @param printDocument
+	 * @param pdfInfo
+	 * @param createThumbnail
+	 * @param nonBlocking
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, PDFInfo pdfInfo,
+			boolean createThumbnail, boolean nonBlocking) throws FileNotFoundException {
+		PDFContainer pdf = newPDF(pdfInfo,
+				pdfInfo.getTargetFolder() != null ? pdfInfo.getTargetFolder() : dataList.getFileRepositoryBase());
+
+		pdf = pdfRepository.save(pdf);
+		dataList = saveORAttachPDF(dataList, pdf);
+
+		try {
+			if (!nonBlocking)
+				pdf = new PDFCreator().updateExistingPDF(printDocument, pdf, createThumbnail);
+			else {
+				new PDFCreator().updateExistingPDFNonBlocking(printDocument, pdf, createThumbnail,
+						new LazyPDFReturnHandler() {
+							@Override
+							public void returnPDFContent(PDFContainer container, String uuid) {
+							}
+						});
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.debug("Error while saving file, removing file from datalists");
-			dataList = deletePdf(dataList, pdfContainer);
+			// do not delete
+			// TODO handle erro
+			// dataList = deletePdf(dataList, pdf);
 			throw new IllegalAccessError("Could not updaload data");
 		}
 
-		return new PDFReturn(dataList, pdfContainer);
+		return new PDFReturn(dataList, pdf);
 	}
 
-	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, boolean createThumbnail) {
-		new PDFCreator().cre
-	}
-
-	public PDFReturn moveAndAttachPDF(DataList dataList, PDFContainer pdfContainer, boolean createThumbnail,
-			File targetLocation) {
-
-		pdfContainer = pdfRepository.save(pdfContainer);
-
-		dataList = attachPDF(dataList, pdfContainer);
-
-		try {
-			if (mediaRepository.isFile(pdfContainer.getPath()) && mediaRepository.isDirectory(targetLocation))
-				if (pdfContent != null) {
-					logger.debug("Saving filed to disk");
-					mediaRepository.saveBytes(pdfContent, pdfContainer.getPath());
-					if (createThumbnail)
-						mediaRepository.saveImage(
-								gerateThumbnail(pdfContent, 0, pathoConfig.getFileSettings().getThumbnailDPI()),
-								pdfContainer.getThumbnail());
-				} else {
-					logger.debug("Virtual PDF no content!");
-				}
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.debug("Error while saving file, removing file from datalists");
-			dataList = deletePdf(dataList, pdfContainer);
-			throw new IllegalAccessError("Could not updaload data");
+	/**
+	 * Updates a already created PDF Object. If nonBlocking is true, the pdf
+	 * creation will be done in a seperate thread.
+	 * 
+	 * @param pdfContainer
+	 * @param printDocument
+	 * @param nonBlocking
+	 * @return
+	 */
+	public PDFContainer updateAttachedPDF(PDFContainer pdfContainer, PrintDocument printDocument,
+			boolean createThumbnail, boolean nonBlocking) {
+		if (!nonBlocking)
+			pdfContainer = new PDFCreator().updateExistingPDF(printDocument, pdfContainer, createThumbnail);
+		else {
+			new PDFCreator().updateExistingPDFNonBlocking(printDocument, pdfContainer, createThumbnail,
+					new LazyPDFReturnHandler() {
+						@Override
+						public void returnPDFContent(PDFContainer container, String uuid) {
+						}
+					});
 		}
-
-		return new PDFReturn(dataList, pdfContainer);
+		return pdfContainer;
 	}
 
+	/**
+	 * Removes a pdf form the datalist and saves the change.
+	 * 
+	 * @param dataList
+	 * @param pdfContainer
+	 * @return
+	 */
 	public DataList removePdf(DataList dataList, PDFContainer pdfContainer) {
 		dataList.removeReport(pdfContainer);
 		return saveDataList(dataList, resourceBundle.get("log.pdf.removed", pdfContainer.getName()));
 	}
 
+	/**
+	 * Removes a pdf form the datalist and deletes the content from the hard drive.
+	 * Als this method call will save all changes to the database.
+	 * 
+	 * @param dataList
+	 * @param pdfContainer
+	 * @return
+	 */
 	public DataList deletePdf(DataList dataList, PDFContainer pdfContainer) {
 
 		dataList = removePdf(dataList, pdfContainer);
@@ -208,9 +288,17 @@ public class PDFService extends AbstractService {
 		return dataList;
 	}
 
+	/**
+	 * Moves a pdf from one datalist to the target datalist. Notice the pdf storen
+	 * on the hard disk will not be moved if the targetDatalist has an other folder.
+	 * 
+	 * @param from
+	 * @param to
+	 * @param pdfContainer
+	 */
 	public void movePdf(DataList from, DataList to, PDFContainer pdfContainer) {
 		removePdf(from, pdfContainer);
-		attachPDF(to, pdfContainer);
+		saveORAttachPDF(to, pdfContainer);
 	}
 
 	public void movePdf(List<DataList> from, DataList to, PDFContainer pdfContainer) {
@@ -223,13 +311,33 @@ public class PDFService extends AbstractService {
 			}
 		}
 
-		attachPDF(to, pdfContainer);
+		saveORAttachPDF(to, pdfContainer);
 	}
 
 	public void copyPdf() {
 
 	}
 
+	/**
+	 * Adds a pdf to the datalist and saves the datalist depending on the datalists
+	 * type.
+	 * 
+	 * @param dataList
+	 * @param pdfContainer
+	 * @return
+	 */
+	private DataList saveORAttachPDF(DataList dataList, PDFContainer pdfContainer) {
+		dataList.getAttachedPdfs().add(pdfContainer);
+		return saveDataList(dataList, resourceBundle.get("log.pdf.uploaded", pdfContainer.getName()));
+	}
+
+	/**
+	 * Saves the datalist depending on the dtatalists type.
+	 * 
+	 * @param dataList
+	 * @param log
+	 * @return
+	 */
 	public DataList saveDataList(DataList dataList, String log) {
 		if (dataList instanceof Patient) {
 			return patientRepository.save((Patient) dataList, log);
@@ -237,9 +345,46 @@ public class PDFService extends AbstractService {
 			return taskRepository.save((Task) dataList, log);
 		} else if (dataList instanceof BioBank) {
 			return bioBankRepository.save((BioBank) dataList, log);
+		} else if (dataList instanceof Council) {
+			return councilRepository.save((Council) dataList, log);
 		} else {
 			throw new IllegalArgumentException("List type not supported (" + dataList + ")");
 		}
+	}
+
+	/**
+	 * Creates a new PDF Object, does not save PDF Data to database.
+	 * 
+	 * @param pdfInfo
+	 * @param targetFolder
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	private PDFContainer newPDF(PDFInfo pdfInfo, File targetFolder) throws FileNotFoundException {
+		return newPDF(pdfInfo.getName(), pdfInfo.getDocumentType(), pdfInfo.getCommentary(),
+				pdfInfo.getCommentaryIntern(), targetFolder);
+	}
+
+	/**
+	 * Creates a new PDF Object, does not save PDF Data to database.
+	 * 
+	 * @param name
+	 * @param documentType
+	 * @param commentary
+	 * @param commentaryIntern
+	 * @param targetFolder
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	private PDFContainer newPDF(String name, DocumentType documentType, String commentary, String commentaryIntern,
+			File targetFolder) throws FileNotFoundException {
+		PDFContainer pdf = new PDFContainer();
+		pdf.setName(name);
+		pdf.setType(documentType);
+		pdf.setCommentary(commentary);
+		pdf.setIntern(commentaryIntern);
+		getUniquePDF(targetFolder, pdf);
+		return pdf;
 	}
 
 	public Patient initializeDataListTree(Patient patient) {
@@ -327,7 +472,14 @@ public class PDFService extends AbstractService {
 		return result;
 	}
 
-	public PDFContainer getUniquePDF(File folder) {
+	/**
+	 * Gets a uinique file within the folder
+	 * 
+	 * @param folder
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public PDFContainer getUniquePDF(File folder) throws FileNotFoundException {
 		return getUniquePDF(folder, new PDFContainer());
 	}
 
@@ -337,14 +489,22 @@ public class PDFService extends AbstractService {
 	 * @param folder
 	 * @param container
 	 * @return
+	 * @throws FileNotFoundException
 	 */
-	public PDFContainer getUniquePDF(File folder, PDFContainer container) {
+	public PDFContainer getUniquePDF(File folder, PDFContainer container) throws FileNotFoundException {
 		File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
 		container.setPath(uniqueFile.getPath());
 		container.setThumbnail(uniqueFile.getPath().replace(".pdf", ".png"));
 		return container;
 	}
 
+	/**
+	 * Search for the parentdatalist of the given pdf.
+	 * 
+	 * @param dataLists
+	 * @param container
+	 * @return
+	 */
 	public static DataList getParentOfPDF(List<DataList> dataLists, PDFContainer container) {
 
 		for (DataList dataList : dataLists) {
@@ -384,11 +544,54 @@ public class PDFService extends AbstractService {
 		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(patient.getId()));
 	}
 
+	/**
+	 * Return class for returning the new pdf an the datalist
+	 * 
+	 * @author dvk-glatza
+	 *
+	 */
 	@Getter
 	@Setter
 	@AllArgsConstructor
 	public static class PDFReturn {
 		DataList dataList;
 		PDFContainer container;
+	}
+
+	/**
+	 * Helper class for creating or updating pdfs.
+	 * 
+	 * @author dvk-glatza
+	 *
+	 */
+	@Getter
+	@Setter
+	public static class PDFInfo {
+		private String name;
+		private DocumentType documentType;
+		private String commentary;
+		private String commentaryIntern;
+		private File targetFolder;
+
+		public PDFInfo(String name, DocumentType documentType) {
+			this(name, documentType, "", "", null);
+		}
+
+		public PDFInfo(String name, DocumentType documentType, File targetFolder) {
+			this(name, documentType, "", "", targetFolder);
+		}
+
+		public PDFInfo(String name, DocumentType documentType, String commentary, String commentaryIntern) {
+			this(name, documentType, commentary, commentaryIntern, null);
+		}
+
+		public PDFInfo(String name, DocumentType documentType, String commentary, String commentaryIntern,
+				File targetFolder) {
+			this.name = name;
+			this.documentType = documentType;
+			this.commentary = commentary;
+			this.commentaryIntern = commentaryIntern;
+			this.targetFolder = targetFolder;
+		}
 	}
 }

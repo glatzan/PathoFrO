@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -52,20 +55,11 @@ public class MediaRepositoryImpl implements MediaRepository {
 
 	public BufferedImage getImage(File path) {
 		BufferedImage image = null;
-		InputStream stream = null;
-		try {
-			stream = getInputStream(path);
+		try (InputStream stream = getInputStream(path)) {
 			image = ImageIO.read(stream);
 		} catch (IOException e) {
 			e.printStackTrace();
 			logger.error("Cannot read Image");
-		} finally {
-			try {
-				if (stream != null)
-					stream.close();
-			} catch (IOException e) {
-				logger.error("Cannot close stream");
-			}
 		}
 
 		return image;
@@ -125,9 +119,8 @@ public class MediaRepositoryImpl implements MediaRepository {
 
 	public byte[] getBytes(File file) {
 		byte[] bytes = null;
-		InputStream stream = null;
-		try {
-			stream = getInputStream(file);
+
+		try (InputStream stream = getInputStream(file)) {
 			bytes = IOUtils.toByteArray(stream);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -142,20 +135,10 @@ public class MediaRepositoryImpl implements MediaRepository {
 
 	public String getString(File file) {
 		String result = null;
-		InputStream stream = null;
-		try {
-			stream = getInputStream(file);
+		try (InputStream stream = getInputStream(file)) {
 			result = IOUtils.toString(stream, Charset.defaultCharset().name());
-			stream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (stream != null)
-					stream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return result;
 	}
@@ -166,20 +149,11 @@ public class MediaRepositoryImpl implements MediaRepository {
 
 	public List<String> getStrings(File file) {
 		List<String> result = null;
-		InputStream stream = null;
-		try {
-			stream = getInputStream(file);
+		try (InputStream stream = getInputStream(file)) {
 			result = IOUtils.readLines(stream, Charset.defaultCharset().name());
 			stream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (stream != null)
-					stream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return result;
 	}
@@ -313,12 +287,12 @@ public class MediaRepositoryImpl implements MediaRepository {
 		srcFile = getWriteFile(srcFile);
 		destFile = getWriteFile(destFile);
 		try {
-			FileUtils.moveFile(srcFile, destFile);
-			return true;
+			Files.move(srcFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
+		return true;
 	}
 
 	public boolean moveFileToDirectory(File srcFile, File destDir) {

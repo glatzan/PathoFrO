@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.FileSystemException;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
@@ -237,6 +238,10 @@ public class PDFCreator {
 
 		boolean created = run(template.getFinalContent(), generateThumbnail);
 
+		if (!created) {
+			// TODO throw error
+		}
+
 		if (template.isAfterPDFCreationHook())
 			container = template.onAfterPDFCreation(container, this);
 
@@ -249,41 +254,36 @@ public class PDFCreator {
 
 		try {
 			if (!validateEnvironment())
-				return false;
+				throw new IOException("Could not create environment");
 
 			helper = initlizeTmpFiles(createThumbnail);
 
 			if (!initlizeInputFile(helper, content))
-				return false;
+				throw new IOException("Could not create Input files");
 
 			if (!helper.validateInput())
-				return false;
+				throw new IOException("Could not create Input files");
 
-			try {
-				if (!runPDFLatex(helper))
-					return false;
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
+			if (!runPDFLatex(helper))
+				throw new IOException("Could not create PDF");
 
 			if (!helper.validateOutput())
-				return false;
+				throw new IOException("Could not create PDF");
 
 			if (createThumbnail) {
 				if (!generateThumbnail(helper))
-					return false;
+					throw new IOException("Could not create Thumbnail");
 
-				if (!helper.validateInput())
-					return false;
+				if (!helper.validateThumbnail())
+					throw new IOException("Could not create Thumbnail");
 			}
 
 			if (!absoluteTargetDirectory.equals(workingDirectory)) {
 				if (!moveFileToTargetDestination(helper.outputFile, absoulteTargetFile))
-					return false;
+					throw new IOException("Could not move PDF File");
 
 				if (createThumbnail && !moveFileToTargetDestination(helper.outputThumbnail, absoluteTargetImg))
-					return false;
+					throw new IOException("Could not move Thumbnail");
 			}
 
 			if (pathoConfig.getFileSettings().isCleanup()) {
@@ -416,6 +416,7 @@ public class PDFCreator {
 
 		pdfService.createThumbnail(helper.getOutputThumbnail(), helper.getOutputFile(), 0,
 				pathoConfig.getFileSettings().getThumbnailDPI());
+
 		logger.debug("Thumbail created: " + helper.getOutputThumbnail().getPath());
 
 		return true;
@@ -475,6 +476,10 @@ public class PDFCreator {
 	}
 
 	private boolean moveFileToTargetDestination(File srcFile, File destFile) {
+		return moveFileToTargetDestination(srcFile, destFile, true);
+	}
+
+	private boolean moveFileToTargetDestination(File srcFile, File destFile, boolean overwrite) {
 		return mediaRepository.moveFile(srcFile, destFile);
 	}
 

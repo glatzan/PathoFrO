@@ -1,6 +1,7 @@
 package com.patho.main.action.dialog.media;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,7 @@ import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PDFService;
+import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.ui.pdf.PDFStreamContainer;
@@ -270,10 +272,13 @@ public class PDFOrganizer extends AbstractDialog {
 				return;
 			}
 
-			PDFReturn res = pdfService.createAndAttachPDF(uploadList, file, uploadDocumentType, "", "", true, patient);
+			PDFReturn res = pdfService.createAndAttachPDF(uploadList,
+					new PDFInfo(file.getFileName(), uploadDocumentType), file.getContents(), true);
 
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.success");
 		} catch (IllegalAccessError e) {
+			MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed", FacesMessage.SEVERITY_ERROR);
+		} catch (FileNotFoundException e) {
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed", FacesMessage.SEVERITY_ERROR);
 		}
 
