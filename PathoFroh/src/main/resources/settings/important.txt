@@ -10,6 +10,7 @@ ${m2_repo} has to be set under run -> variables
 
 PLV8 Javascript Postgres 
 Postgres 10 -> http://www.postgresonline.com/journal/archives/379-PLV8-binaries-for-PostgreSQL-10-windows-both-32-bit-and-64-bit.html
+Postgres 11 -> https://github.com/plv8/plv8/issues/220#issuecomment-434436117
 Overview -> http://www.postgresonline.com/winextensions.php
 
 PDFLatex
@@ -19,6 +20,9 @@ HotSwap:
 -> https://dzone.com/articles/hot-swap-java-bytecode-on-runtime
 Args -XXaltjvm=dcevm -javaagent:C:/Users/andi/Documents/develop/hotswap-agent-1.3.0.jar=autoHotswap=true
 
+JPA MEtamodel
+-> Projekt Settings -> Java Compiler -> Annotation Processing -> Enable prject specific settings, source direcotry: target\generated-sources\annotations, test source directory target\generated-test-sources\test-annotations
+-> Projekt Settings -> Java Compiler -> Annotation Processing -> Factory Path -> .m2\repository\org\hibernate\hibernate-jpamodelgen\5.2.17.Final
 
 Handel Version Erros in Dialoges 
 -> new ReloadEvent() is fired

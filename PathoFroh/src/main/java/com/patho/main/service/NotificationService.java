@@ -1,6 +1,7 @@
 package com.patho.main.service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -158,14 +159,15 @@ public class NotificationService extends AbstractService {
 		}
 
 		boolean success = true;
-		
+
 		if (performer.isUseMail()) {
 			for (NotificationContainer mail : performer.getMails()) {
 				feedback.setFeedback("dialog.notification.sendProcess.mail.send", mail.getContactAddress());
 				mail.setPdf(performer.getPDFForContainer(mail, performer.getMailTemplate(),
 						performer.isIndividualMailAddress(), genericReport));
 				feedback.setFeedback("dialog.notification.sendProcess.mail.send", mail.getContactAddress());
-				success &= emailNotification(mail, performer.getTask(), performer.getMail(), performer.isReperformNotification());
+				success &= emailNotification(mail, performer.getTask(), performer.getMail(),
+						performer.isReperformNotification());
 				feedback.progressStep();
 			}
 		}
@@ -178,7 +180,7 @@ public class NotificationService extends AbstractService {
 						performer.isIndividualFaxAddress(), genericReport));
 
 				feedback.setFeedback("dialog.notification.sendProcess.fax.send", fax.getContactAddress());
-				success &=  faxNotification(fax, performer.getTask(), performer.isSendFax(), performer.isPrintFax(),
+				success &= faxNotification(fax, performer.getTask(), performer.isSendFax(), performer.isPrintFax(),
 						performer.isReperformNotification());
 
 				feedback.progressStep();
@@ -194,16 +196,15 @@ public class NotificationService extends AbstractService {
 				success &= letterNotification(letter, performer.getTask(), true, performer.isReperformNotification());
 			}
 		}
-		
-		if(performer.isUsePhone()) {
+
+		if (performer.isUsePhone()) {
 			for (NotificationContainer phone : performer.getPhonenumbers()) {
 				success &= phoneNotification(phone, performer.getTask(), performer.isReperformNotification());
 			}
 		}
-		
-		endNotification(document, task, diagnosisRevision, emails, faxes, letters, phones)
 
-		return true;
+		return endNotification(performer.getTask(), performer.getDiagnosisRevision(), performer.getMails(),
+				performer.getFaxes(), performer.getLetters(), performer.getPhonenumbers(), success);
 	}
 
 	public boolean endNotification(Task task, DiagnosisRevision diagnosisRevision, List<NotificationContainer> emails,
@@ -218,8 +219,6 @@ public class NotificationService extends AbstractService {
 			return false;
 		}
 
-
-		
 		document.get().initilize(new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
 				new InitializeToken("patient", task.getPatient()), new InitializeToken("useMail", !emails.isEmpty()),
@@ -229,12 +228,11 @@ public class NotificationService extends AbstractService {
 				new InitializeToken("usePhone", !emails.isEmpty()), new InitializeToken("phonenumbers", emails),
 				new InitializeToken("reportDate", new Date()));
 
-		new PDFCreator()
-		
-		PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.get().getDocumentType(),
-				document.get().getGeneratedFileName(), "", "", true, task.getParent());
-
-		PDFContainer container = generator.getPDF(document, pdfReturn.getContainer());
+		try {
+			PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.get(), true);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
 		diagnosisRevision.setNotificationStatus(NotificationStatus.NOTIFICATION_COMPLETED);
 		diagnosisRevision.setNotificationDate(System.currentTimeMillis());

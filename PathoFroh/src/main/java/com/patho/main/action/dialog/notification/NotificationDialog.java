@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.struts.chain.commands.servlet.PerformForward;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.helper.ValidatorUtil;
 import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationFeedback;
+import com.patho.main.util.notification.NotificationPerformer;
 import com.patho.main.util.pdf.PrintOrder;
 
 import lombok.AccessLevel;
@@ -618,96 +620,39 @@ public class NotificationDialog extends AbstractTabDialog {
 
 				PDFContainer genericReport = null;
 
-				if (generalTab.isUseNotification()) {
-					logger.debug("Printing Gerneic Report");
-					genericReport = notificationService.generatePDF(task, generalTab.getSelectDiagnosisRevision(), "",
-							generalTab.getSelectedTemplate());
+				NotificationPerformer performer = new NotificationPerformer(getTask(),
+						generalTab.getSelectDiagnosisRevision());
 
-					// printing generic report
-					userHandlerAction.getSelectedPrinter().print(new PrintOrder(genericReport,
-							generalTab.getPrintCount(), generalTab.getSelectedTemplate()));
-				}
+				// performer.setReperformNotification(generalTab.is);
+				performer.printNotification(generalTab.isUseNotification(),generalTab.getSelectedTemplate(),generalTab.getPrintCount())
 
-				if (mailTab.isUseNotification()) {
-					PDFContainer mailGenericReport = null;
-					logger.debug("Mail-Notification");
+				performer.setUseMail(mailTab.isUseNotification());
+				performer.setIndividualMailAddress(mailTab.isIndividualAddresses());
+				performer.setMail(mailTab.getMailTemplate());
+				performer.setMailTemplate(mailTab.getSelectedTemplate());
+				performer.setMails(mailTab.getContainerToNotify());
 
-					// generating generic report
-					if (!mailTab.isIndividualAddresses()) {
-						// copie generic report if used and is the same as the mail generic report
-						if (generalTab.isUseNotification()
-								&& mailTab.getSelectedTemplate() == generalTab.getSelectedTemplate()) {
-							mailGenericReport = genericReport;
-						} else {
-							mailGenericReport = notificationService.generatePDF(task,
-									generalTab.getSelectDiagnosisRevision(), "", mailTab.getSelectedTemplate());
-						}
-					}
+				performer.setUseFax(faxTab.isUseNotification());
+				performer.setIndividualFaxAddress(faxTab.isIndividualAddresses());
+				performer.setSendFax(faxTab.isSendFax());
+				performer.setPrintFax(faxTab.isPrintFax());
+				performer.setFaxTemplate(faxTab.getSelectedTemplate());
+				performer.setFaxes(faxTab.getContainerToNotify());
 
-					for (NotificationContainer container : mailTab.getContainerToNotify()) {
-						notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
-								mailTab.getSelectedTemplate(), mailTab.isIndividualAddresses(), mailGenericReport,
-								this);
+				performer.setUseLetter(letterTab.isUseNotification());
+				performer.setIndividualLetterAddress(letterTab.isIndividualAddresses());
+				performer.setLetterTemplate(letterTab.getSelectedTemplate());
+				performer.setLetters(letterTab.getContainerToNotify());
 
-						notificationService.emailNotification(container, task, mailTab.getMailTemplate(), this, false);
-					}
+				performer.setUsePhone(phoneTab.isUseNotification());
+				performer.setPhonenumbers(phoneTab.getContainerToNotify());
 
-				}
-
-				if (faxTab.isUseNotification()) {
-					PDFContainer faxGenericReport = null;
-
-					// generating generic report
-					if (!faxTab.isIndividualAddresses()) {
-						// copie generic report if used and is the same as the mail generic report
-						if (generalTab.isUseNotification()
-								&& faxTab.getSelectedTemplate() == generalTab.getSelectedTemplate()) {
-							faxGenericReport = genericReport;
-						} else {
-							faxGenericReport = notificationService.generatePDF(task,
-									generalTab.getSelectDiagnosisRevision(), "", faxTab.getSelectedTemplate());
-						}
-					}
-
-					for (NotificationContainer container : faxTab.getContainerToNotify()) {
-						notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
-								faxTab.getSelectedTemplate(), faxTab.isIndividualAddresses(), faxGenericReport, this);
-
-						notificationService.faxNotification(container, task, this, faxTab.isPrintFax(),
-								faxTab.isSendFax(), false);
-					}
-				}
-
-				if (letterTab.isUseNotification()) {
-					PDFContainer letterGenericReport = null;
-
-					// generating generic report
-					if (!letterTab.isIndividualAddresses()) {
-						// copie generic report if used and is the same as the mail generic report
-						if (generalTab.isUseNotification()
-								&& letterTab.getSelectedTemplate() == generalTab.getSelectedTemplate()) {
-							letterGenericReport = genericReport;
-						} else {
-							letterGenericReport = notificationService.generatePDF(task,
-									generalTab.getSelectDiagnosisRevision(), "", letterTab.getSelectedTemplate());
-						}
-					}
-
-					for (NotificationContainer container : letterTab.getContainerToNotify()) {
-						notificationService.getPDFForContainer(container, task, generalTab.getSelectDiagnosisRevision(),
-								letterTab.getSelectedTemplate(), letterTab.isIndividualAddresses(), letterGenericReport,
-								this);
-
-						notificationService.letterNotification(container, task, this, letterTab.isPrintLetter(), false);
-					}
-				}
+				notificationService.performeNotification(performer, this);
 
 				setProgressPercent(100);
 
 				// progressStepText("dialog.notification.sendProcess.success");
 
-				notificationService.endNotification(document, task, getGeneralTab().getSelectDiagnosisRevision(), emails, faxes, letters, phones)
-				
 				logger.debug("Messaging ended");
 
 			} catch (Exception e) {

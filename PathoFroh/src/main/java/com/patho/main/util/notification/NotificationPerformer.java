@@ -75,9 +75,9 @@ public class NotificationPerformer {
 		this.diagnosisRevision = diagnosisRevision;
 	}
 
-	public void printNotification(PrintDocument genericTemplate, int count) {
+	public void printNotification(boolean printDocument, PrintDocument genericTemplate, int count) {
 		this.genericTemplate = genericTemplate;
-		this.printDocument = genericTemplate != null;
+		this.printDocument = printDocument;
 		this.printCount = count;
 	}
 
