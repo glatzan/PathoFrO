@@ -96,9 +96,6 @@ public class DiagnosisReportUpdater {
 
 		Optional<PDFContainer> pdf = PDFUtil.getDiagnosisReport(task, diagnosisRevision);
 
-		File outputDirectory = new File(
-				PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(task.getPatient().getId()));
-		PDFContainer container;
 		// generating new pdf
 		if (!pdf.isPresent()) {
 			logger.debug("Creating new PDF for report");
@@ -111,14 +108,13 @@ public class DiagnosisReportUpdater {
 												.replace("$id", String.valueOf(diagnosisRevision.getId()))),
 								true, true);
 				task = (Task) res.getDataList();
-				container = res.getContainer();
 			} catch (FileNotFoundException e) {
 				// TODO Handle error
 				e.printStackTrace();
 			}
 		} else {
 			logger.debug("Updating pdf for report");
-			container = pdf.get();
+			PDFContainer container = pdf.get();
 			container.setName(diagnosisRevision.getName());
 			task = taskRepository.save(task);
 			pdfService.updateAttachedPDF(container, printDocument, true, true);

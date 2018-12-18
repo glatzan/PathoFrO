@@ -81,12 +81,13 @@ public class NotificationPerformer {
 		this.printCount = count;
 	}
 
-	public void mailNotification(List<NotificationContainer> mails, boolean individualMailAddress,
-			PrintDocument mailTemplate) {
-		this.useMail = mails != null && !mails.isEmpty();
-		this.useFax = faxes != null && !faxes.isEmpty();
-		this.individualLetterAddress = individualMailAddress;
+	public void mailNotification(boolean useMail, List<NotificationContainer> mails, boolean individualMailAddress,
+			PrintDocument mailTemplate, MailTemplate mail) {
+		this.useMail = useMail;
+		this.individualMailAddress = individualMailAddress;
 		this.mailTemplate = mailTemplate;
+		this.mails = mails;
+		this.mail = mail;
 
 		if (useMail) {
 			if (!individualMailAddress && mailTemplate == genericTemplate) {
@@ -97,10 +98,11 @@ public class NotificationPerformer {
 		}
 	}
 
-	public void faxNotification(List<NotificationContainer> faxes, boolean individualFaxAddress, boolean sendFax,
-			boolean printFax,PrintDocument faxTemplate) {
-		this.useFax = faxes != null && !faxes.isEmpty();
+	public void faxNotification(boolean useFax, List<NotificationContainer> faxes, boolean individualFaxAddress,
+			boolean sendFax, boolean printFax, PrintDocument faxTemplate) {
+		this.useFax = useFax;
 		this.faxes = faxes;
+		this.faxTemplate = faxTemplate;
 
 		if (useFax) {
 			if (!individualFaxAddress && faxTemplate == genericTemplate) {
@@ -115,9 +117,11 @@ public class NotificationPerformer {
 		this.individualFaxAddress = individualFaxAddress;
 	}
 
-	public void letterNotification(List<NotificationContainer> letters) {
-		this.useLetter = phonenumbers != null && !phonenumbers.isEmpty();
+	public void letterNotification(boolean useLetter, List<NotificationContainer> letters,
+			PrintDocument letterTemplate) {
+		this.useLetter = useLetter;
 		this.letters = letters;
+		this.letterTemplate = letterTemplate;
 
 		if (useLetter) {
 			if (!individualFaxAddress && letterTemplate == genericTemplate) {
@@ -128,8 +132,8 @@ public class NotificationPerformer {
 		}
 	}
 
-	public void phoneNotification(List<NotificationContainer> phonenumbers) {
-		this.usePhone = letters != null && !letters.isEmpty();
+	public void phoneNotification(boolean usePhone, List<NotificationContainer> phonenumbers) {
+		this.usePhone = usePhone;
 		this.phonenumbers = phonenumbers;
 	}
 

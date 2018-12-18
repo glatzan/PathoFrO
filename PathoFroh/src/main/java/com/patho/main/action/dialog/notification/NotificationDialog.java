@@ -46,6 +46,7 @@ import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationFeedback;
 import com.patho.main.util.notification.NotificationPerformer;
 import com.patho.main.util.pdf.PrintOrder;
+import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -215,7 +216,7 @@ public class NotificationDialog extends AbstractTabDialog {
 				&& container instanceof NotificationContainer) {
 			logger.debug("Settign custom pdf for container "
 					+ ((NotificationContainer) container).getContact().getPerson().getFirstName());
-			((NotificationContainer) container).setPdf((PDFContainer) event.getObject());
+			((NotificationContainer) container).setPdf((TemplatePDFContainer) event.getObject());
 		}
 
 	}
@@ -618,34 +619,24 @@ public class NotificationDialog extends AbstractTabDialog {
 
 				setSteps(calculateSteps());
 
-				PDFContainer genericReport = null;
-
 				NotificationPerformer performer = new NotificationPerformer(getTask(),
 						generalTab.getSelectDiagnosisRevision());
 
 				// performer.setReperformNotification(generalTab.is);
-				performer.printNotification(generalTab.isUseNotification(),generalTab.getSelectedTemplate(),generalTab.getPrintCount())
+				performer.printNotification(generalTab.isUseNotification(), generalTab.getSelectedTemplate(),
+						generalTab.getPrintCount());
 
-				performer.setUseMail(mailTab.isUseNotification());
-				performer.setIndividualMailAddress(mailTab.isIndividualAddresses());
-				performer.setMail(mailTab.getMailTemplate());
-				performer.setMailTemplate(mailTab.getSelectedTemplate());
-				performer.setMails(mailTab.getContainerToNotify());
+				performer.mailNotification(mailTab.isUseNotification(), mailTab.getContainerToNotify(),
+						mailTab.isIndividualAddresses(), mailTab.getSelectedTemplate(), mailTab.getMailTemplate());
 
-				performer.setUseFax(faxTab.isUseNotification());
-				performer.setIndividualFaxAddress(faxTab.isIndividualAddresses());
-				performer.setSendFax(faxTab.isSendFax());
-				performer.setPrintFax(faxTab.isPrintFax());
-				performer.setFaxTemplate(faxTab.getSelectedTemplate());
-				performer.setFaxes(faxTab.getContainerToNotify());
+				performer.faxNotification(faxTab.isUseNotification(), faxTab.getContainerToNotify(),
+						faxTab.isIndividualAddresses(), faxTab.isSendFax(), faxTab.isPrintFax(),
+						faxTab.getSelectedTemplate());
 
-				performer.setUseLetter(letterTab.isUseNotification());
-				performer.setIndividualLetterAddress(letterTab.isIndividualAddresses());
-				performer.setLetterTemplate(letterTab.getSelectedTemplate());
-				performer.setLetters(letterTab.getContainerToNotify());
+				performer.letterNotification(letterTab.isUseNotification(), letterTab.getContainerToNotify(),
+						letterTab.getSelectedTemplate());
 
-				performer.setUsePhone(phoneTab.isUseNotification());
-				performer.setPhonenumbers(phoneTab.getContainerToNotify());
+				performer.phoneNotification(phoneTab.isUseNotification(), phoneTab.getContainerToNotify());
 
 				notificationService.performeNotification(performer, this);
 
