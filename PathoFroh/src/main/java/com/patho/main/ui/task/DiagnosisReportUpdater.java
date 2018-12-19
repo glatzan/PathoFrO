@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
@@ -25,8 +24,6 @@ import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
-import com.patho.main.util.pdf.PDFCreator;
-import com.patho.main.util.pdf.PDFGenerator;
 import com.patho.main.util.pdf.PDFUtil;
 
 import lombok.AccessLevel;

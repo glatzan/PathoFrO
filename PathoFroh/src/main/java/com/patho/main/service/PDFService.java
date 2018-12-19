@@ -34,7 +34,6 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
 import com.patho.main.util.pdf.PDFCreator;
-import com.patho.main.util.pdf.PDFGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

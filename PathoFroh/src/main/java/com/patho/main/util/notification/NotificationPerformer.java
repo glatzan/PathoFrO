@@ -1,11 +1,14 @@
 package com.patho.main.util.notification;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.config.PathoConfig;
@@ -16,9 +19,10 @@ import com.patho.main.service.AssociatedContactService;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.printer.TemplatePDFContainer;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +39,9 @@ public class NotificationPerformer {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	private PathoConfig pathoConfig;
 
 	private Task task;
@@ -178,16 +185,23 @@ public class NotificationPerformer {
 
 	private TemplatePDFContainer generatePDF(Task task, DiagnosisRevision diagnosisRevision, String address,
 			PrintDocument document) {
-		PDFGenerator generator = new PDFGenerator();
+		PDFCreator generator = new PDFCreator();
 
 		document.initilize(new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
 				new InitializeToken("patient", task.getPatient()), new InitializeToken("address", address),
 				new InitializeToken("subject", ""));
 
-		TemplatePDFContainer container = new TemplatePDFContainer(
-				generator.getPDF(document, new File(pathoConfig.getFileSettings().getPrintDirectory()), false),
-				document);
+		TemplatePDFContainer container;
+		try {
+			container = new TemplatePDFContainer(
+					new PDFCreator().createPDF(document, new File(pathoConfig.getFileSettings().getPrintDirectory())),
+					document);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+			// TODO handel error
+		}
 
 		return container;
 	}
@@ -198,4 +212,15 @@ public class NotificationPerformer {
 					: (genericReport = generatePDF(task, diagnosisRevision, "", genericTemplate));
 		return null;
 	}
+
+//	public void finishSendProecess(T container, boolean success, String message) {
+//		container.getNotification().setPerformed(true);
+//		container.getNotification().setDateOfAction(new Date(System.currentTimeMillis()));
+//		container.getNotification().setCommentary(message);
+//		// if success = performed, nothing to do = inactive, if failed = active
+//		container.getNotification().setActive(!success);
+//		// if success = !failed = false
+//		container.getNotification().setFailed(!success);
+//	}
+
 }

@@ -26,7 +26,7 @@ import com.patho.main.service.PrintService;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.helper.HistoUtil;
-import com.patho.main.util.pdf.PDFGenerator;
+import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
 
 import lombok.Getter;
@@ -118,10 +118,10 @@ public class ClinicPrinter extends AbstractPrinter {
 		logger.debug("Printing xtimes: " + printOrder.getCopies());
 
 		// adding additional page if duplex print an odd pages are provided
-		if (PDFGenerator.countPDFPages(printOrder.getPdfContainer()) % 2 != 0 && printOrder.isDuplex()) {
+		if (PDFCreator.countPDFPages(printOrder.getPdfContainer()) % 2 != 0 && printOrder.isDuplex()) {
 
 			// Merging with empty page
-			LoadedPDFContainer cont = PDFGenerator.mergePdfs(
+			LoadedPDFContainer cont = PDFCreator.mergePdfs(
 					Arrays.asList(printOrder.getPdfContainer(),
 							new LoadedPDFContainer(new PDFContainer(DocumentType.EMPTY,
 									pathoConfig.getDefaultDocuments().getEmptyPage()))),
