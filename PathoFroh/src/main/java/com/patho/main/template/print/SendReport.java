@@ -1,27 +1,30 @@
 package com.patho.main.template.print;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.patho.main.model.PDFContainer;
+import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.util.notification.NotificationContainerList;
+import com.patho.main.util.helper.HistoUtil;
+import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.printer.LoadedPDFContainer;
 
 /**
  * patient, <br>
  * task, <br>
- * temporarayNotification(not final), <br>
+ * diagnosisRevisions. <br>
  * useMail, <br>
- * mailHolders, <br>
+ * mails, <br>
  * useFax, <br>
- * faxContainer, <br>
+ * faxes, <br>
  * useLetter, <br>
- * letterContainer, <br>
+ * letters, <br>
  * usePhone,<br>
- * phoneContainer, <br>
+ * phonenumbers, <br>
  * reportDate
  * 
  * @author andi
@@ -29,13 +32,62 @@ import com.patho.main.util.printer.LoadedPDFContainer;
  */
 public class SendReport extends PrintDocument {
 
-	private NotificationContainerList faxContainerList;
-	private NotificationContainerList letterContainerList;
-	private NotificationContainerList phoneContainerList;
+	private boolean useMail;
+	private List<NotificationContainer> mails;
+
+	private boolean useFax;
+	private List<NotificationContainer> faxes;
+
+	private boolean useLetters;
+	private List<NotificationContainer> letters;
+
+	private boolean usePhone;
+	private List<NotificationContainer> phonenumbers;
 
 	public SendReport(PrintDocument document) {
 		super(document);
 		setAfterPDFCreationHook(true);
+	}
+
+	public void initilize(InitializeToken... token) {
+
+		for (InitializeToken initializeToken : token) {
+			switch (initializeToken.getKey()) {
+			case "useMail":
+				useMail = (boolean) initializeToken.getValue();
+				break;
+			case "mails":
+				mails = (List<NotificationContainer>) initializeToken.getValue();
+				break;
+			case "useFax":
+				useFax = (boolean) initializeToken.getValue();
+				break;
+			case "faxes":
+				faxes = (List<NotificationContainer>) initializeToken.getValue();
+				break;
+			case "useLetter":
+				useLetters = (boolean) initializeToken.getValue();
+				break;
+			case "letters":
+				letters = (List<NotificationContainer>) initializeToken.getValue();
+				break;
+			case "usePhone":
+				usePhone = (boolean) initializeToken.getValue();
+				break;
+			case "phonenumbers":
+				phonenumbers = (List<NotificationContainer>) initializeToken.getValue();
+				break;
+			default:
+				break;
+			}
+		}
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		for (int i = 0; i < token.length; i++) {
+			map.put(token[i].getKey(), token[i].getValue());
+		}
+		initilize(map);
 	}
 
 	public PDFContainer onAfterPDFCreation(PDFContainer container, PDFCreator creator) {
@@ -43,12 +95,21 @@ public class SendReport extends PrintDocument {
 
 		attachPdf.add(new LoadedPDFContainer(container));
 
-		attachPdf.addAll(faxContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
-				.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
-		attachPdf.addAll(letterContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
-				.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
-		attachPdf.addAll(phoneContainerList.getContainerToNotify().stream().filter(p -> p.getPdf() != null)
-				.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
+		if (useFax && HistoUtil.isNotNullOrEmpty(mails))
+			attachPdf.addAll(mails.stream().filter(p -> p.getPdf() != null).map(p -> new LoadedPDFContainer(p.getPdf()))
+					.collect(Collectors.toList()));
+
+		if (useFax && HistoUtil.isNotNullOrEmpty(faxes))
+			attachPdf.addAll(faxes.stream().filter(p -> p.getPdf() != null).map(p -> new LoadedPDFContainer(p.getPdf()))
+					.collect(Collectors.toList()));
+
+		if (useLetters && HistoUtil.isNotNullOrEmpty(letters))
+			attachPdf.addAll(letters.stream().filter(p -> p.getPdf() != null)
+					.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
+
+		if (usePhone && HistoUtil.isNotNullOrEmpty(phonenumbers))
+			attachPdf.addAll(phonenumbers.stream().filter(p -> p.getPdf() != null)
+					.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
 
 		container = creator.mergePDFs(container, attachPdf);
 

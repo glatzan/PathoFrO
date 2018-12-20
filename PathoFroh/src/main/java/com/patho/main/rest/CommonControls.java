@@ -4,7 +4,9 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
@@ -30,20 +32,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Patient;
+import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PatientRepository;
+import com.patho.main.repository.TaskRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.AuthenticationService;
+import com.patho.main.service.PDFService;
+import com.patho.main.service.PDFService.PDFInfo;
+import com.patho.main.template.PrintDocument;
+import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.util.helper.HistoUtil;
 
 @RestController
 @RequestMapping(value = "/rest")
 public class CommonControls {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	protected ResourceBundle resourceBundle;
 
 	@Autowired
 	private LdapTemplate ldapTemplate;
@@ -55,10 +68,16 @@ public class CommonControls {
 	private PatientRepository patientRepositroy;
 
 	@Autowired
+	private TaskRepository taskRepository;
+
+	@Autowired
 	private AuthenticationService authenticationService;
 
 	@Autowired
 	private LDAPRepository ldapRepository;
+
+	@Autowired
+	private PDFService pdfService;
 
 	public static final String BASE_DN = "dc=ukl,dc=uni-freiburg,dc=de";
 
@@ -127,21 +146,6 @@ public class CommonControls {
 		return LdapNameBuilder.newInstance().add("ou", "people").add("uid", a).build();
 	}
 
-	@RequestMapping(value = "/test2")
-	public String test2() {
-		// getAllPersonNames();
-		authenticationService.authenticateWithLDAP("glatza", "Asus1212?s");
-		return "hallo";
-	}
-
-	// @RequestMapping(value = "/login")
-	// public String login(@RequestBody ) {
-	// if(authenticationService.authenticate(uuid, password))
-	//
-	//
-	// return "hallo";
-	// }
-
 	public List<String> getAllPersonNames() {
 		return ldapTemplate.search(query().where("objectclass").is("person"), new AttributesMapper<String>() {
 			public String mapFromAttributes(Attributes attrs) throws NamingException {
@@ -151,56 +155,91 @@ public class CommonControls {
 		});
 	}
 
+	/**
+	 * Uploads a file to a task or a patient. <br>
+	 * Header requires: Authorization with content Bearer ..... (is obtainable via
+	 * /rest/login) <br>
+	 * Body should contain: <br>
+	 * file, the file as a pdf <br>
+	 * piz (optional), piz of the patient, is ignored if taskID is present<br>
+	 * taskID (optional), taskID of the task <br>
+	 * fileName (optional), name of the file which is uploaded <br>
+	 * documentType (optional), type from enum DocumentType, if not provided UNKNOWN
+	 * is used.
+	 * 
+	 * @param file
+	 * @param piz
+	 * @param taskID
+	 * @param fileName
+	 * @param documentType
+	 * @return
+	 */
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public @ResponseBody String handleFileUpload(@RequestParam("file") MultipartFile file,
-			@RequestParam(value = "piz", required = true) String piz) {
-		String name = "test11";
+			@RequestParam(value = "piz", required = false) String piz,
+			@RequestParam(value = "taskID", required = false) String taskID,
+			@RequestParam(value = "fileName", required = false) String fileName,
+			@RequestParam(value = "documentType", required = false) DocumentType documentType) {
+
+		logger.debug("Calling updloag with piz {}, taskID {}, filename {}, document type {}", piz, taskID, fileName,
+				documentType);
+
 		if (!file.isEmpty()) {
 			try {
-				byte[] bytes = file.getBytes();
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(new File("d:\\" + name + "-uploaded")));
-				stream.write(bytes);
-				stream.close();
-
-				Optional<Patient> p = patientRepositroy.findOptionalByPiz(piz, false, true, true);
-
-				if (p.isPresent()) {
-					logger.error("Rest Upload: no patient was found");
-					return "You failed to upload " + name + " patient not known.";
+				if (HistoUtil.isNullOrEmpty(piz) && HistoUtil.isNullOrEmpty(taskID)) {
+					logger.debug("Error: No Target for uploading the file was provided!");
+					return resourceBundle.get("rest.upload.error.noTarget");
 				}
 
-				PDFContainer test = new PDFContainer();
-				test.setData(bytes);
-				test.setName("TEST");
+				if (HistoUtil.isNotNullOrEmpty(taskID)) {
+					Optional<Task> task = taskRepository.findOptionalByTaskId(taskID, false, false, true, false, false);
 
-				// pdfService.attachPDF(p, p, test);
+					if (!task.isPresent()) {
+						logger.error("Error: Task was not found. (Task ID: {})", taskID);
+						return resourceBundle.get("rest.upload.error.taskNotFound", taskID);
+					}
 
-				return "You successfully uploaded " + name + " into " + name + "-uploaded !";
-			} catch (Exception e) {
-				logger.error("Rest Upload: Failed to upload \" + name + \" because the file was empty.");
-				return "You failed to upload " + name + " => " + e.getMessage();
+					String name = fileName != null ? fileName : new PrintDocument(documentType).getGeneratedFileName();
+
+					pdfService.createAndAttachPDF(task.get(),
+							new PDFInfo(name, documentType == null ? DocumentType.UNKNOWN : documentType),
+							file.getBytes(), true);
+
+					logger.debug("Success: Uploading to task successful. (Task ID: {}, Filename: {})", taskID, name);
+					return resourceBundle.get("rest.upload.success.task", taskID, name);
+				}
+
+				if (HistoUtil.isNotNullOrEmpty(piz)) {
+					Optional<Patient> p = patientRepositroy.findOptionalByPiz(piz, false, true, true);
+
+					if (!p.isPresent()) {
+						logger.error("Error: Patient was not found. (Patient PIZ: {})", piz);
+						return resourceBundle.get("rest.upload.error.patientNotFound", piz);
+					}
+
+					String name = fileName != null ? fileName : new PrintDocument(documentType).getGeneratedFileName();
+
+					pdfService.createAndAttachPDF(p.get(),
+							new PDFInfo(name, documentType == null ? DocumentType.UNKNOWN : documentType),
+							file.getBytes(), true);
+
+					logger.debug("Success: Uploading to patient successful. (Patient PIZ: {}, Filename: {})", piz,
+							name);
+					return resourceBundle.get("rest.upload.success.patient", piz, name);
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error("Error: File could not be saved, try again.");
+				return resourceBundle.get("rest.upload.error.internal");
 			}
-		} else {
-			logger.error("Rest Upload: Failed to upload \" + name + \" because the file was empty.");
-			return "You failed to upload " + name + " because the file was empty.";
-		}
-	}
 
-	// public boolean authenticate(String userDn, String credentials) {
-	// DirContext ctx = null;
-	// try {
-	// ctx = contextSource.getContext(userDn, credentials);
-	// return true;
-	// } catch (Exception e) {
-	// // Context creation failed - authentication did not succeed
-	// logger.error("Login failed", e);
-	// return false;
-	// } finally {
-	// // It is imperative that the created DirContext instance is always closed
-	// LdapUtils.closeContext(ctx);
-	// }
-	// }
+		}
+
+		logger.error("Error: Upload faild, file is empty.");
+		return resourceBundle.get("rest.upload.error.fileEmpty");
+
+	}
 
 	public static final void printAllAttributes(Attributes attrs) {
 		for (NamingEnumeration<?> ae = attrs.getAll(); ae.hasMoreElements();) {

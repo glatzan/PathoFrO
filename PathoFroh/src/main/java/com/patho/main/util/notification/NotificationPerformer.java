@@ -208,7 +208,7 @@ public class NotificationPerformer {
 
 	public TemplatePDFContainer getGenericReport() {
 		if (isPrintDocument())
-			return getGenericReport() == null ? genericReport
+			return genericReport != null ? genericReport
 					: (genericReport = generatePDF(task, diagnosisRevision, "", genericTemplate));
 		return null;
 	}

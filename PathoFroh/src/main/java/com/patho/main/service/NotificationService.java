@@ -221,12 +221,11 @@ public class NotificationService extends AbstractService {
 
 		document.get().initilize(new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
-				new InitializeToken("patient", task.getPatient()), new InitializeToken("useMail", !emails.isEmpty()),
-				new InitializeToken("useMail", !emails.isEmpty()), new InitializeToken("mails", emails),
-				new InitializeToken("useFax", !emails.isEmpty()), new InitializeToken("faxes", emails),
-				new InitializeToken("useLetter", !emails.isEmpty()), new InitializeToken("letters", emails),
-				new InitializeToken("usePhone", !emails.isEmpty()), new InitializeToken("phonenumbers", emails),
-				new InitializeToken("reportDate", new Date()));
+				new InitializeToken("useMail", !emails.isEmpty()), new InitializeToken("useMail", !emails.isEmpty()),
+				new InitializeToken("mails", emails), new InitializeToken("useFax", !emails.isEmpty()),
+				new InitializeToken("faxes", emails), new InitializeToken("useLetter", !emails.isEmpty()),
+				new InitializeToken("letters", emails), new InitializeToken("usePhone", !emails.isEmpty()),
+				new InitializeToken("phonenumbers", emails), new InitializeToken("reportDate", new Date()));
 
 		try {
 			PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.get(), true);

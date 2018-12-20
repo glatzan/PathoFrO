@@ -72,6 +72,11 @@ public class PrintDocument extends AbstractTemplate {
 
 	public PrintDocument() {
 	}
+	
+	public PrintDocument(DocumentType documentType) {
+		setType(documentType.name());
+	}
+
 
 	public PrintDocument(PrintDocument document) {
 		copyIntoDocument(document);
@@ -109,7 +114,7 @@ public class PrintDocument extends AbstractTemplate {
 		// default date tool
 		context.put("date", new DateTool());
 		context.put("latexTextConverter", new TextToLatexConverter());
-		context.put("histoUtil", new  HistoUtil());
+		context.put("histoUtil", new HistoUtil());
 
 		/* now render the template into a StringWriter */
 		StringWriter writer = new StringWriter();
@@ -139,12 +144,12 @@ public class PrintDocument extends AbstractTemplate {
 	public DocumentType getDocumentType() {
 		return DocumentType.fromString(this.type);
 	}
-
+	
 	public String getGeneratedFileName() {
 		return resourceBundle.get("enum.documentType." + getDocumentType()) + "-"
 				+ TimeUtil.formatDate(new Date(), "dd.MM.yyyy") + ".pdf";
 	}
-
+	
 	/**
 	 * U_REPORT = Eingangsbogen print at blank page U_REPORT_EMTY = Eingangsbogen
 	 * print at template, only infill of missing date U_REPORT_COMPLETED = A
@@ -159,11 +164,30 @@ public class PrintDocument extends AbstractTemplate {
 	 */
 	public enum DocumentType {
 		/**
-		 * DIAGNOSIS_REPORT
+		 * Document with unknown type
 		 */
-		U_REPORT, U_REPORT_EMTY, U_REPORT_COMPLETED, DIAGNOSIS_REPORT, DIAGNOSIS_REPORT_COMPLETED,
-		DIAGNOSIS_REPORT_NOT_APPROVED, DIAGNOSIS_REPORT_EXTERN, LABLE, BIOBANK_INFORMED_CONSENT, TEST_LABLE,
-		COUNCIL_REQUEST, COUNCIL_REPLY, OTHER, EMPTY, NOTIFICATION_SEND_REPORT, MEDICAL_FINDINGS_SEND_REPORT_COMPLETED,
+		UNKNOWN,
+
+		/**
+		 * document for printing with patient data an document
+		 */
+		U_REPORT,
+
+		/**
+		 * document for printing with only patient data, no document data
+		 */
+		U_REPORT_EMTY,
+
+		/**
+		 * document with filled out fields, this is uploaded by the user
+		 */
+		U_REPORT_COMPLETED,
+		/**
+		 * 
+		 */
+		DIAGNOSIS_REPORT, DIAGNOSIS_REPORT_COMPLETED, DIAGNOSIS_REPORT_NOT_APPROVED, DIAGNOSIS_REPORT_EXTERN, LABLE,
+		BIOBANK_INFORMED_CONSENT, TEST_LABLE, COUNCIL_REQUEST, COUNCIL_REPLY, OTHER, EMPTY, NOTIFICATION_SEND_REPORT,
+		MEDICAL_FINDINGS_SEND_REPORT_COMPLETED,
 
 		/**
 		 * Document for printing
