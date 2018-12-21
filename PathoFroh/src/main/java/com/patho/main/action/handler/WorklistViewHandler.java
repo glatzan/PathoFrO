@@ -437,6 +437,9 @@ public class WorklistViewHandler {
 
 	public void replaceTaskInWorklist(Task task, boolean reload) {
 
+		if(task == null)
+			return;
+		
 		if (reload)
 			task = taskRepository.findOptionalById(task.getId()).get();
 

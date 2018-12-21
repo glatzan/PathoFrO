@@ -44,7 +44,7 @@ $!patient.person.contact.postcode $!patient.person.contact.town\\
 \X=.35mm        
 \barheight=1cm 
 \code{#if($patient.piz == "") 0 #else $!patient.piz #end}\\
-$!patient.piz\\
+$!patient.piz  Auftrags Nr. $!task.taskID\\
 \end{textblock}
 }
 

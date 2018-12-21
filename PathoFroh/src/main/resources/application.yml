@@ -11,6 +11,10 @@ server:
     session:
       timeout: 8H
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB  
+      max-request-size: 100MB
   datasource:
     url: jdbc:postgresql://localhost/histo1
     username: postgres
