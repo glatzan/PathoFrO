@@ -11,6 +11,7 @@
 \usepackage{helvet}
 \usepackage{setspace}
 \usepackage{wallpaper}
+\usepackage{qrcode}
 
 \usepackage{array}
 
@@ -33,7 +34,7 @@
 
 
 \begin{document}
-\ThisCenterWallPaper{1}{_background.pdf}
+\ThisCenterWallPaper{1}{_U-Schein-neu-Vorlage-1-1.pdf}
  \input{_code128.tex}
  
 \baselineskip10pt
@@ -43,18 +44,25 @@
 \setlength{\TPHorizModule}{1mm}
 \setlength{\TPVertModule}{1mm}
 
+%qrcode
+{
+\begin{textblock}{100}(95, 277) 
+\qrset{height=1.0cm}%
+\qrcode{12345678;123456;01}
+\end{textblock}
+}
 
 % pat block
 {
 \scriptsize
 \begin{textblock}{100}(19, 8) 
-\noindent $patient.person.getFullName()\\
-$patient.person.street\\
-$patient.person.postcode $patient.person.town\\
+\noindent test\\
+tests\\
+sss\\
 \X=.35mm        
 \barheight=1cm 
-\code{#if($patient.piz == "") 0 #else $patient.piz #end}\\
-$patient.piz\\
+\code{1233333}\\
+1233333\\
 \end{textblock}
 }
 
@@ -64,10 +72,10 @@ $patient.piz\\
 \begin{textblock}{100}(22, 50) 
 \setstretch{1.0}
 \noindent 
-\textbf{$subject} \\\\
-$addressee.fullName\\
-$addressee.street\\
-$addressee.postcode $addressee.town\\
+\textbf{11111111111} \\\\
+23233\\
+11111111111111\\
+1111111111111111111111\\
 \end{textblock}
 }
 

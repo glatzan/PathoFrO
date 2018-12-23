@@ -337,6 +337,7 @@ public class PDFCreator {
 	}
 
 	private PDFLatexHelper initlizeTmpFiles(boolean thumbanil) throws FileNotFoundException {
+		logger.debug("Setting up temporary files");
 		String createName = mediaRepository.getUniqueName(workingDirectory, ".tex");
 		PDFLatexHelper helper = new PDFLatexHelper();
 		helper.setInputFile(new File(workingDirectory, createName));

@@ -163,14 +163,14 @@ public class MediaRepositoryImpl implements MediaRepository {
 	}
 
 	public String getUniqueName(File path, String suffix) throws FileNotFoundException {
-		logger.debug("test");
 		int i = 0;
 		while (i < 10) {
 			String name = RandomStringUtils.randomAlphanumeric(8) + suffix;
-			logger.debug("Generating name " + name);
 			File f = new File(getWriteFile(path), name);
+			logger.debug("Generating name: " + f.getAbsolutePath());
 			if (f.exists() && !f.isDirectory()) {
 				i++;
+				logger.debug("File exists, new try");
 				continue;
 			}
 

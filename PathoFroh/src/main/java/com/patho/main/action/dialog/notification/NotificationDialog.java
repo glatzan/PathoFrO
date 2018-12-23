@@ -319,8 +319,6 @@ public class NotificationDialog extends AbstractTabDialog {
 
 		private DiagnosisRevision selectDiagnosisRevision;
 
-		private boolean temporaryNotification;
-
 		private int printCount;
 
 		/**
@@ -622,7 +620,6 @@ public class NotificationDialog extends AbstractTabDialog {
 				NotificationPerformer performer = new NotificationPerformer(getTask(),
 						generalTab.getSelectDiagnosisRevision());
 
-				// performer.setReperformNotification(generalTab.is);
 				performer.printNotification(generalTab.isUseNotification(), generalTab.getSelectedTemplate(),
 						generalTab.getPrintCount());
 

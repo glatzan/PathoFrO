@@ -148,14 +148,24 @@ public class NotificationService extends AbstractService {
 //		feedback.progressStep();
 //
 
+//	public void finishSendProecess(T container, boolean success, String message) {
+//	container.getNotification().setPerformed(true);
+//	container.getNotification().setDateOfAction(new Date(System.currentTimeMillis()));
+//	container.getNotification().setCommentary(message);
+//	// if success = performed, nothing to do = inactive, if failed = active
+//	container.getNotification().setActive(!success);
+//	// if success = !failed = false
+//	container.getNotification().setFailed(!success);
+//}
+
 	public boolean performeNotification(NotificationPerformer performer, NotificationFeedback feedback) {
 
 		feedback.setFeedback("Generating Generic Report");
-		TemplatePDFContainer genericReport = performer.getGenericReport();
 
 		if (performer.isPrintDocument()) {
 			// printing generic report
-			userHandlerAction.getSelectedPrinter().print(new PrintOrder(genericReport, performer.getPrintCount()));
+			userHandlerAction.getSelectedPrinter()
+					.print(new PrintOrder(performer.getGenericReport(), performer.getPrintCount()));
 		}
 
 		boolean success = true;
@@ -164,7 +174,7 @@ public class NotificationService extends AbstractService {
 			for (NotificationContainer mail : performer.getMails()) {
 				feedback.setFeedback("dialog.notification.sendProcess.mail.send", mail.getContactAddress());
 				mail.setPdf(performer.getPDFForContainer(mail, performer.getMailTemplate(),
-						performer.isIndividualMailAddress(), genericReport));
+						performer.isIndividualMailAddress(), performer.getMailGenericReport()));
 				feedback.setFeedback("dialog.notification.sendProcess.mail.send", mail.getContactAddress());
 				success &= emailNotification(mail, performer.getTask(), performer.getMail(),
 						performer.isReperformNotification());
@@ -177,7 +187,7 @@ public class NotificationService extends AbstractService {
 
 				feedback.setFeedback("dialog.notification.sendProcess.pdf.generating");
 				fax.setPdf(performer.getPDFForContainer(fax, performer.getFaxTemplate(),
-						performer.isIndividualFaxAddress(), genericReport));
+						performer.isIndividualFaxAddress(), performer.getFaxGenericReport()));
 
 				feedback.setFeedback("dialog.notification.sendProcess.fax.send", fax.getContactAddress());
 				success &= faxNotification(fax, performer.getTask(), performer.isSendFax(), performer.isPrintFax(),
@@ -191,7 +201,7 @@ public class NotificationService extends AbstractService {
 			for (NotificationContainer letter : performer.getFaxes()) {
 				feedback.setFeedback("dialog.notification.sendProcess.pdf.print");
 				letter.setPdf(performer.getPDFForContainer(letter, performer.getLetterTemplate(),
-						performer.isIndividualLetterAddress(), genericReport));
+						performer.isIndividualLetterAddress(), performer.getLetterGenericReport()));
 				feedback.setFeedback("dialog.notification.sendProcess.pdf.generating");
 				success &= letterNotification(letter, performer.getTask(), true, performer.isReperformNotification());
 			}

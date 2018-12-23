@@ -8,6 +8,7 @@
 \usepackage{everypage}
 \usepackage{helvet}
 \usepackage{setspace}
+\usepackage{qrcode}
 
 \usepackage{wallpaper}
 
@@ -45,6 +46,14 @@ $!patient.person.contact.postcode $!patient.person.contact.town\\
 \barheight=1cm 
 \code{#if($patient.piz == "") 0 #else $!patient.piz #end}\\
 $!patient.piz  Auftrags Nr. $!task.taskID\\
+\end{textblock}
+}
+
+%qrcode
+{
+\begin{textblock}{100}(95, 277) 
+\qrset{height=1.0cm}%
+\qrcode{$!patient.piz;$!task.taskID;01}
 \end{textblock}
 }
 

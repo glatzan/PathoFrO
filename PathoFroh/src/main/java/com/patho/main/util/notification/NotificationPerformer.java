@@ -86,6 +86,15 @@ public class NotificationPerformer {
 		this.genericTemplate = genericTemplate;
 		this.printDocument = printDocument;
 		this.printCount = count;
+
+		if (printDocument) {
+			logger.debug("Searching for gereric report, for printing report");
+			this.genericReport = getGenericReport(genericTemplate);
+			if (genericReport == null) {
+				logger.debug("No template found, generating new pdf");
+				genericReport = generatePDF(task, diagnosisRevision, "", genericTemplate);
+			}
+		}
 	}
 
 	public void mailNotification(boolean useMail, List<NotificationContainer> mails, boolean individualMailAddress,
@@ -97,12 +106,16 @@ public class NotificationPerformer {
 		this.mail = mail;
 
 		if (useMail) {
-			if (!individualMailAddress && mailTemplate == genericTemplate) {
-				mailGenericReport = genericReport;
-			} else {
-				mailGenericReport = generatePDF(task, diagnosisRevision, "", mailTemplate);
+			if (!individualMailAddress) {
+				logger.debug("Searching for gereric report, for mail report");
+				mailGenericReport = getGenericReport(mailTemplate);
+				if (mailGenericReport == null) {
+					logger.debug("No template found, generating new pdf");
+					mailGenericReport = generatePDF(task, diagnosisRevision, "", mailTemplate);
+				}
 			}
 		}
+
 	}
 
 	public void faxNotification(boolean useFax, List<NotificationContainer> faxes, boolean individualFaxAddress,
@@ -112,10 +125,13 @@ public class NotificationPerformer {
 		this.faxTemplate = faxTemplate;
 
 		if (useFax) {
-			if (!individualFaxAddress && faxTemplate == genericTemplate) {
-				faxGenericReport = genericReport;
-			} else {
-				faxGenericReport = generatePDF(task, diagnosisRevision, "", faxTemplate);
+			if (!individualFaxAddress) {
+				logger.debug("Searching for gereric report, for fax report");
+				faxGenericReport = getGenericReport(faxTemplate);
+				if (faxGenericReport == null) {
+					logger.debug("No template found, generating new pdf");
+					faxGenericReport = generatePDF(task, diagnosisRevision, "", faxTemplate);
+				}
 			}
 		}
 
@@ -131,10 +147,13 @@ public class NotificationPerformer {
 		this.letterTemplate = letterTemplate;
 
 		if (useLetter) {
-			if (!individualFaxAddress && letterTemplate == genericTemplate) {
-				letterGenericReport = genericReport;
-			} else {
-				letterGenericReport = generatePDF(task, diagnosisRevision, "", letterTemplate);
+			if (!individualFaxAddress) {
+				logger.debug("Searching for gereric report, for letter report");
+				letterGenericReport = getGenericReport(letterTemplate);
+				if (letterGenericReport == null) {
+					logger.debug("No template found, generating new pdf");
+					letterGenericReport = generatePDF(task, diagnosisRevision, "", letterTemplate);
+				}
 			}
 		}
 	}
@@ -159,24 +178,21 @@ public class NotificationPerformer {
 			if (template != null) {
 				if (!individualAddresses) {
 					// setting generic pdf
-					container.setPdf(genericPDF);
-					logger.debug("Returning generic pdf " + genericPDF);
+					logger.debug("Returning generic pdf {}", genericPDF);
+					return genericPDF;
 				} else {
 					// individual address
 					String reportAddressField = AssociatedContactService.generateAddress(container.getContact(),
 							container.getContact().getPerson().getDefaultAddress());
-
-					logger.debug("Generating pdf for " + reportAddressField);
-
-					container.setPdf(generatePDF(task, diagnosisRevision, reportAddressField, template));
-
-					logger.debug("Returning individual address");
+					logger.debug("Generating pdf for {} (individual adress)", reportAddressField);
+					return generatePDF(task, diagnosisRevision, reportAddressField, template);
 				}
 			} else {
 				return null;
 			}
 		}
-		logger.debug("Returning no pdf");
+
+		logger.debug("Container has own pdf returning...");
 
 		return container.getPdf() instanceof TemplatePDFContainer ? (TemplatePDFContainer) container.getPdf()
 				: new TemplatePDFContainer(container.getPdf());
@@ -185,7 +201,6 @@ public class NotificationPerformer {
 
 	private TemplatePDFContainer generatePDF(Task task, DiagnosisRevision diagnosisRevision, String address,
 			PrintDocument document) {
-		PDFCreator generator = new PDFCreator();
 
 		document.initilize(new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
@@ -206,21 +221,24 @@ public class NotificationPerformer {
 		return container;
 	}
 
-	public TemplatePDFContainer getGenericReport() {
-		if (isPrintDocument())
-			return genericReport != null ? genericReport
-					: (genericReport = generatePDF(task, diagnosisRevision, "", genericTemplate));
+	public TemplatePDFContainer getGenericReport(PrintDocument letterTemplate) {
+
+		if (letterTemplate.equals(genericTemplate)) {
+			return genericReport;
+		}
+
+		if (letterTemplate.equals(mailTemplate)) {
+			return mailGenericReport;
+		}
+
+		if (letterTemplate.equals(faxTemplate)) {
+			return faxGenericReport;
+		}
+
+		if (letterTemplate.equals(letterTemplate)) {
+			return letterGenericReport;
+		}
+
 		return null;
 	}
-
-//	public void finishSendProecess(T container, boolean success, String message) {
-//		container.getNotification().setPerformed(true);
-//		container.getNotification().setDateOfAction(new Date(System.currentTimeMillis()));
-//		container.getNotification().setCommentary(message);
-//		// if success = performed, nothing to do = inactive, if failed = active
-//		container.getNotification().setActive(!success);
-//		// if success = !failed = false
-//		container.getNotification().setFailed(!success);
-//	}
-
 }
