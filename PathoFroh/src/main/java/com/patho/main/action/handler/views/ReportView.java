@@ -22,11 +22,11 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.util.audit.Audit;
 import com.patho.main.repository.MediaRepository;
+import com.patho.main.service.PDFService;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.ui.task.DiagnosisReportUpdater;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
-import com.patho.main.util.pdf.PDFUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -89,7 +89,7 @@ public class ReportView extends AbstractTaskView {
 		for (int i = 0; i < task.getDiagnosisRevisions().size(); i++) {
 			DiagnosisRevision revision = HistoUtil.getNElement(task.getDiagnosisRevisions(), i);
 
-			Optional<PDFContainer> c = PDFUtil.getDiagnosisReport(task, revision);
+			Optional<PDFContainer> c = PDFService.findDiagnosisReport(task, revision);
 
 			if (!c.isPresent() && revision.getCompletionDate() != 0) {
 				logger.debug("No report present, generating new report");
@@ -97,7 +97,7 @@ public class ReportView extends AbstractTaskView {
 				DiagnosisReportData reportData = new DiagnosisReportData(revision, true);
 				task = new DiagnosisReportUpdater().updateDiagnosisReportNoneBlocking(task, revision, reportData);
 				// serach for created pdfcontainer
-				reportData.setPdf(PDFUtil.getDiagnosisReport(task, revision).get());
+				reportData.setPdf(PDFService.findDiagnosisReport(task, revision).get());
 				data.add(reportData);
 				setGeneratingPDFs(true);
 			} else if (revision.getCompletionDate() != 0) {

@@ -3,9 +3,12 @@ package com.patho.main.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.collections.buffer.BlockingBuffer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +24,18 @@ import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.DiagnosisRevisionRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.ui.task.TaskArchivationStatus;
+import com.patho.main.ui.task.TaskStatus;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TimeUtil;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Service
 @Transactional
+@ConfigurationProperties(prefix = "patho.taskservice")
 public class TaskService extends AbstractService {
 
 	@Autowired
@@ -35,8 +44,13 @@ public class TaskService extends AbstractService {
 	@Autowired
 	private TaskRepository taskRepository;
 
+	@Getter
+	@Setter
+	private List<PredefinedFavouriteList> listsBlockingTaskArchivation;
+
 	/**
 	 * Creatse a task
+	 * 
 	 * @param patient
 	 * @param taskID
 	 * @param save
@@ -63,9 +77,9 @@ public class TaskService extends AbstractService {
 		task.setContacts(new LinkedHashSet<AssociatedContact>());
 		task.setAttachedPdfs(new LinkedHashSet<PDFContainer>());
 
-		if(patient.getTasks() == null)
+		if (patient.getTasks() == null)
 			patient.setTasks(new LinkedHashSet<Task>());
-		
+
 		if (save)
 			return task = taskRepository.save(task, resourceBundle.get("log.patient.task.new", task), patient);
 		return task;
@@ -83,6 +97,11 @@ public class TaskService extends AbstractService {
 
 		return taskRepository.save(diagnosis.getTask(),
 				resourceBundle.get("log.patient.task.diagnosisRevision.update", diagnosis.getDiagnosis()));
+	}
+
+	public boolean taskArchiveAble(Task task) {
+
+		return true;
 	}
 
 	public void archiveTask(Task task) {
@@ -112,6 +131,42 @@ public class TaskService extends AbstractService {
 		task.setFinalized(false);
 
 		genericDAO.savePatientData(task, "log.patient.task.phase.restored", task, commentary);
+	}
+
+	public TaskArchivationStatus getTaskArchivationStatus(Task task) {
+		TaskArchivationStatus result = new TaskArchivationStatus(task);
+
+		result.setBlockingLists(findListsBlockingTaskArchivation(task));
+
+		result.setStainingNeeded(!TaskStatus.checkIfStainingCompleted(task));
+		result.setDiangosisNeeded(!TaskStatus.checkIfDiagnosisCompleted(task));
+		result.setNotificationNeeded(!TaskStatus.checkIfNotificationisCompleted(task));
+
+		result.setArchiveAble(!result.isStainingNeeded() && !result.isNotificationNeeded()
+				&& !result.isDiangosisNeeded() && !result.isCouncilNotCompleted()
+				&& (result.getBlockingLists() == null || result.getBlockingLists().size() == 0));
+
+		return result;
+	}
+
+	public List<FavouriteList> findListsBlockingTaskArchivation(Task task) {
+		return findListsBlockingTaskArchivation(task, getListsBlockingTaskArchivation());
+	}
+
+	public List<FavouriteList> findListsBlockingTaskArchivation(Task task,
+			List<PredefinedFavouriteList> blockingLists) {
+		List<FavouriteList> currentlyBlockingLists = new ArrayList<FavouriteList>();
+
+		for (PredefinedFavouriteList predefinedFavouriteList : blockingLists) {
+			for (FavouriteList list : task.getFavouriteLists()) {
+				if (list.getId() == predefinedFavouriteList.getId()) {
+					currentlyBlockingLists.add(list);
+					break;
+				}
+			}
+		}
+
+		return currentlyBlockingLists;
 	}
 
 	/**

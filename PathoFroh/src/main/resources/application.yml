@@ -153,6 +153,23 @@ patho:
           userName: admin
           password: 1234
           timeout: 1000     
+  taskservice:
+    listsBlockingTaskArchivation:
+      - StainingList
+      - DiagnosisList
+      - NotificationList
+      - ReStainingList
+      - ReDiagnosisList
+      - StayInStainingList
+      - StayInDiagnosisList
+      - StayInNotificationList
+      - CouncilSendRequestMTA
+      - CouncilSendRequestSecretary
+      - CouncilRequest
+      - CouncilCompleted
+      - Council
+      - CouncilWaitingForReply
+      - CouncilReplyPresent
   ####### SETTINGS ####### 
   settings:    
     fileSettings:

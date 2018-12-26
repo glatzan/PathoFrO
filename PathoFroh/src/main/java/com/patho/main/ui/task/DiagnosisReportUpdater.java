@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.hibernate.event.internal.DefaultPersistOnFlushEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import com.patho.main.template.InitializeToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
-import com.patho.main.util.pdf.PDFUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -91,7 +91,7 @@ public class DiagnosisReportUpdater {
 				new InitializeToken("patient", diagnosisRevision.getPatient()), new InitializeToken("address", ""),
 				new InitializeToken("subject", ""));
 
-		Optional<PDFContainer> pdf = PDFUtil.getDiagnosisReport(task, diagnosisRevision);
+		Optional<PDFContainer> pdf = PDFService.findDiagnosisReport(task, diagnosisRevision);
 
 		// generating new pdf
 		if (!pdf.isPresent()) {

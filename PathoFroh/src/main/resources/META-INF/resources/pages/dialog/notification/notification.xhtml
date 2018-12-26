@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -26,10 +25,6 @@
 				<h:panelGroup>
 					<!-- notification -->
 					<h:outputLabel value="#{msg['dialog.notification.headline']}" />
-					<h:outputLabel
-						rendered="#{dialog.notificationDialog.generalTab.temporaryNotification}"
-						value=" #{msg['dialog.notification.headline.temporary']}" />
-
 				</h:panelGroup>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					immediate="true">

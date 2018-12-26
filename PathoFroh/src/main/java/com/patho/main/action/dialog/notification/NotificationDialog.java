@@ -28,6 +28,7 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MailRepository;
+import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.service.NotificationService;
@@ -39,6 +40,7 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.DiagnosisReportUi;
+import com.patho.main.ui.pdf.PDFStreamContainer;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.helper.ValidatorUtil;
@@ -97,6 +99,11 @@ public class NotificationDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private MailRepository mailRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private MediaRepository mediaRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -272,7 +279,7 @@ public class NotificationDialog extends AbstractTabDialog {
 		@Override
 		public void updateData() {
 			List<NotificationContainer> newContainers = AssociatedContactService.getNotificationListForType(task,
-					notificationType, false);
+					notificationType, generalTab.isCompleteNotification());
 
 			List<NotificationContainer> foundContainer = new ArrayList<NotificationContainer>();
 
@@ -636,6 +643,8 @@ public class NotificationDialog extends AbstractTabDialog {
 				performer.phoneNotification(phoneTab.isUseNotification(), phoneTab.getContainerToNotify());
 
 				notificationService.performeNotification(performer, this);
+				
+				sendReportTab.setCurrentSendReport(performer.getSendReport());
 
 				setProgressPercent(100);
 
@@ -728,11 +737,13 @@ public class NotificationDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	public class SendReportTab extends NotificationTab {
+	public class SendReportTab extends NotificationTab implements PDFStreamContainer {
 
 		private DefaultTransformer<PDFContainer> sendReportConverter;
 
-		private boolean sendReportAvailable;
+		private List<PDFContainer> sendReportList;
+
+		private PDFContainer currentSendReport;
 
 		public SendReportTab() {
 			setTabName("SendReport");
@@ -745,20 +756,10 @@ public class NotificationDialog extends AbstractTabDialog {
 		public void updateData() {
 			logger.debug("Update Data sendReport");
 			// getting all sendreports
-//			List<PDFContainer> lists = PDFGenerator.getPDFsofType(task.getAttachedPdfs(),
-//					DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
-//
-//			if (lists.size() > 0) {
-//				setSendReportAvailable(true);
-//				// updating mediadialog
-//				dialogHandlerAction.getMediaDialog().initiBeanForExternalView(lists,
-//						PDFGenerator.getLatestPDFofType(lists));
-//
-//				setSendReportConverter(new DefaultTransformer<>(lists));
-//			} else {
-//				setSendReportAvailable(false);
-//			}
+			sendReportList = PDFService.findPDFsByDocumentType(task.getAttachedPdfs(),
+					DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
 
+			setSendReportConverter(new DefaultTransformer<>(sendReportList));
 		}
 
 		public void repeatNotification() {
@@ -771,6 +772,30 @@ public class NotificationDialog extends AbstractTabDialog {
 			if (event.getObject() != null && event.getObject() instanceof Boolean
 					&& ((Boolean) event.getObject()).booleanValue())
 				hideDialog();
+		}
+
+		@Override
+		public void setDisplayPDF(PDFContainer container) {
+			currentSendReport = container;
+		}
+
+		@Override
+		public PDFContainer getDisplayPDF() {
+			return currentSendReport;
+		}
+
+		@Override
+		public void setTooltip(PDFContainer container) {
+		}
+
+		@Override
+		public PDFContainer getTooltip() {
+			return null;
+		}
+
+		@Override
+		public MediaRepository getMediaRepository() {
+			return mediaRepository;
 		}
 	}
 

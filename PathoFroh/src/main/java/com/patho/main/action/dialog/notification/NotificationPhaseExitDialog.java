@@ -113,29 +113,24 @@ public class NotificationPhaseExitDialog extends AbstractDialog {
 	 * the task will be archived.
 	 */
 	public void exitPhase() {
-		try {
 
-			if (endNotificationPhase && removeFromNotificationList) {
-				notificationService.endNotificationPhase(getTask());
-			} else {
-				if (removeFromNotificationList)
-					favouriteListService.removeTaskFromList(task.getId(), PredefinedFavouriteList.NotificationList);
-			}
-
-			if (removeFromWorklist) {
-				// only remove from worklist if patient has one active task
-				if (task.getPatient().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
-					mainHandlerAction.sendGrowlMessagesAsResource("growl.error",
-							"growl.error.worklist.remove.moreActive");
-				} else {
-					worklistViewHandler.removePatientFromWorklist(task.getPatient());
-				}
-			}
-
-			setExitSuccessful(true);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			onDatabaseVersionConflict();
+		if (endNotificationPhase && removeFromNotificationList) {
+			notificationService.endNotificationPhase(getTask());
+		} else {
+			if (removeFromNotificationList)
+				favouriteListService.removeTaskFromList(task.getId(), PredefinedFavouriteList.NotificationList);
 		}
+
+		if (removeFromWorklist) {
+			// only remove from worklist if patient has one active task
+			if (task.getPatient().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
+				mainHandlerAction.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
+			} else {
+				worklistViewHandler.removePatientFromWorklist(task.getPatient());
+			}
+		}
+
+		setExitSuccessful(true);
 	}
 
 	public void hideDialog() {

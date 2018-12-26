@@ -5,8 +5,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
@@ -22,6 +25,7 @@ import com.patho.main.model.BioBank;
 import com.patho.main.model.Council;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.interfaces.DataList;
+import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.BioBankRepository;
@@ -32,6 +36,7 @@ import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
 import com.patho.main.util.pdf.PDFCreator;
 
@@ -534,13 +539,75 @@ public class PDFService extends AbstractService {
 	}
 
 	/**
-	 * Returns the directory of the given patient
+	 * Returns a list of pdfs with the given type.
 	 * 
-	 * @param patient
+	 * @param containers
+	 * @param type
 	 * @return
 	 */
-	public static File getPatientDirectory(Patient patient) {
-		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(patient.getId()));
+	public static List<PDFContainer> findPDFsByDocumentType(Set<PDFContainer> containers, DocumentType type) {
+		return containers.stream().filter(p -> p.getType().equals(type)).collect(Collectors.toList());
+	}
+
+	/**
+	 * Returns the pdf with the most recent creation date.
+	 * 
+	 * @param containers
+	 * @return
+	 */
+	public static PDFContainer findNewestPDF(Set<PDFContainer> containers) {
+		if (containers.size() == 0)
+			return null;
+
+		PDFContainer latest = HistoUtil.getFirstElement(containers);
+
+		for (PDFContainer pdfContainer : containers) {
+			if (latest.getAudit().getCreatedOn() < pdfContainer.getAudit().getCreatedOn())
+				latest = pdfContainer;
+		}
+
+		return latest;
+	}
+
+	/**
+	 * Sorts an set an retuns it as soreted list. (Sorted by creation date)
+	 * 
+	 * @param list
+	 * @param asc
+	 * @return
+	 */
+	public static List<PDFContainer> sortPDFsByDate(Set<PDFContainer> set, boolean asc) {
+		List<PDFContainer> list = new ArrayList<PDFContainer>(set);
+
+		// sorting
+		Collections.sort(list, (PDFContainer p1, PDFContainer p2) -> {
+			if (p1.getAudit().getCreatedOn() == p2.getAudit().getCreatedOn()) {
+				return 0;
+			} else if (p1.getAudit().getCreatedOn() < p2.getAudit().getCreatedOn()) {
+				return asc ? -1 : 1;
+			} else {
+				return asc ? 1 : -1;
+			}
+		});
+
+		return list;
+	}
+
+	/**
+	 * Searches for a matching diagnosis report by internal id.
+	 * 
+	 * @param task
+	 * @param diagnosisRevision
+	 * @return
+	 */
+	public static Optional<PDFContainer> findDiagnosisReport(Task task, DiagnosisRevision diagnosisRevision) {
+		String matcher = PDFContainer.MARKER_DIAGNOSIS.replace("$id", String.valueOf(diagnosisRevision.getId()));
+		for (PDFContainer container : task.getAttachedPdfs()) {
+			if (container.getIntern() != null && container.getIntern().matches(matcher)) {
+				return Optional.ofNullable(container);
+			}
+		}
+		return Optional.empty();
 	}
 
 	/**

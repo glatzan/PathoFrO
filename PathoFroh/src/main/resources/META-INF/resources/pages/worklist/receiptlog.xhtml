@@ -461,7 +461,7 @@
 					styleClass="bigFont"></h:outputLabel>
 				<!-- staining completed -->
 				<h:panelGroup
-					rendered="#{worklistHandler.current.selectedTask.taskStatus.stainingCompleted}">
+					rendered="#{!worklistHandler.current.selectedTask.taskStatus.stainingNeeded and !worklistHandler.current.selectedTask.taskStatus.reStainingNeeded}">
 					<div class="fa fa-check-circle icon-green"
 						title="#{msg['body.receiptlog.slide.completed']}" />
 				</h:panelGroup>

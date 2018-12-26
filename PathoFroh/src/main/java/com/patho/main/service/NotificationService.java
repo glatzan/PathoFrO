@@ -21,8 +21,10 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.DiagnosisRevisionRepository;
 import com.patho.main.repository.PrintDocumentRepository;
+import com.patho.main.service.AssociatedContactService.NotificationReturn;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
@@ -73,6 +75,11 @@ public class NotificationService extends AbstractService {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private DiagnosisRevisionRepository diagnosisRevisionRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private AssociatedContactRepository associatedContactRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -171,15 +178,28 @@ public class NotificationService extends AbstractService {
 		boolean success = true;
 
 		if (performer.isUseMail()) {
+
 			for (NotificationContainer mail : performer.getMails()) {
 				feedback.setFeedback("dialog.notification.sendProcess.mail.send", mail.getContactAddress());
+
+				// recreating notification which are already performed
+				if (mail.isRecreateBeforeUsage()) {
+					NotificationReturn returnResult = associatedContactService.renewNotification(mail.getContact(),
+							mail.getNotification());
+					mail.update(returnResult.getAssociatedContact(), returnResult.getAssociatedContactNotification());
+				}
+
 				mail.setPdf(performer.getPDFForContainer(mail, performer.getMailTemplate(),
 						performer.isIndividualMailAddress(), performer.getMailGenericReport()));
+
 				feedback.setFeedback("dialog.notification.sendProcess.mail.send", mail.getContactAddress());
+
 				success &= emailNotification(mail, performer.getTask(), performer.getMail(),
 						performer.isReperformNotification());
+
 				feedback.progressStep();
 			}
+
 		}
 
 		if (performer.isUseFax()) {
@@ -213,13 +233,13 @@ public class NotificationService extends AbstractService {
 			}
 		}
 
-		return endNotification(performer.getTask(), performer.getDiagnosisRevision(), performer.getMails(),
+		return endNotification(performer, performer.getTask(), performer.getDiagnosisRevision(), performer.getMails(),
 				performer.getFaxes(), performer.getLetters(), performer.getPhonenumbers(), success);
 	}
 
-	public boolean endNotification(Task task, DiagnosisRevision diagnosisRevision, List<NotificationContainer> emails,
-			List<NotificationContainer> faxes, List<NotificationContainer> letters, List<NotificationContainer> phones,
-			boolean success) {
+	public boolean endNotification(NotificationPerformer performer, Task task, DiagnosisRevision diagnosisRevision,
+			List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters,
+			List<NotificationContainer> phones, boolean success) {
 
 		Optional<PrintDocument> document = printDocumentRepository
 				.findByID(pathoConfig.getDefaultDocuments().getNotificationSendReport());
@@ -231,16 +251,18 @@ public class NotificationService extends AbstractService {
 
 		document.get().initilize(new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
-				new InitializeToken("useMail", !emails.isEmpty()), new InitializeToken("useMail", !emails.isEmpty()),
-				new InitializeToken("mails", emails), new InitializeToken("useFax", !emails.isEmpty()),
-				new InitializeToken("faxes", emails), new InitializeToken("useLetter", !emails.isEmpty()),
-				new InitializeToken("letters", emails), new InitializeToken("usePhone", !emails.isEmpty()),
-				new InitializeToken("phonenumbers", emails), new InitializeToken("reportDate", new Date()));
+				new InitializeToken("useMail", !emails.isEmpty()), new InitializeToken("mails", emails),
+				new InitializeToken("useFax", !faxes.isEmpty()), new InitializeToken("faxes", faxes),
+				new InitializeToken("useLetter", !letters.isEmpty()), new InitializeToken("letters", letters),
+				new InitializeToken("usePhone", !phones.isEmpty()), new InitializeToken("phonenumbers", phones),
+				new InitializeToken("reportDate", new Date()));
 
 		try {
 			PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.get(), true);
+			performer.setSendReport(pdfReturn.getContainer());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			performer.setSendReport(null);
 		}
 
 		diagnosisRevision.setNotificationStatus(NotificationStatus.NOTIFICATION_COMPLETED);
@@ -256,7 +278,6 @@ public class NotificationService extends AbstractService {
 		boolean success = true;
 
 		ValidatorUtil val = new ValidatorUtil();
-
 		try {
 
 			// copy contact address before sending -> save before error
@@ -303,6 +324,9 @@ public class NotificationService extends AbstractService {
 		if (recreateAfterNotification)
 			associatedContactService.renewNotification(notificationContainer.getContact(),
 					notificationContainer.getNotification(), false);
+		else {
+			associatedContactRepository.save(notificationContainer.getContact());
+		}
 
 		return success;
 	}

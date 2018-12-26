@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.Block;
+import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
@@ -80,7 +82,8 @@ public class TaskStatus {
 		this.stayInNotificationList = task.isListedInFavouriteList(PredefinedFavouriteList.StayInNotificationList);
 
 		this.councilLendingMTA = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilSendRequestMTA);
-		this.councilLendingSecretary = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilSendRequestSecretary);
+		this.councilLendingSecretary = task
+				.isListedInFavouriteList(PredefinedFavouriteList.CouncilSendRequestSecretary);
 		this.councilPending = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilRequest);
 		this.councilCompleted = task.isListedInFavouriteList(PredefinedFavouriteList.CouncilCompleted);
 
@@ -98,10 +101,6 @@ public class TaskStatus {
 				|| this.diagnosisNeeded || this.reDiagnosisNeeded || this.stayInDiagnosisList || this.notificationNeeded
 				|| this.stayInNotificationList || task.isFinalized());
 
-	}
-
-	public boolean isStainingCompleted() {
-		return !(this.stainingNeeded || this.reDiagnosisNeeded);
 	}
 
 	public boolean isTaksEditable() {
@@ -125,18 +124,42 @@ public class TaskStatus {
 		return true;
 	}
 
+	/**
+	 * Checks if stating is completed by stating flag.
+	 * 
+	 * @param patient
+	 * @return
+	 */
 	public static boolean checkIfStainingCompleted(Patient patient) {
 		return patient.getTasks().stream().allMatch(p -> checkIfStainingCompleted(p));
 	}
 
+	/**
+	 * Checks if stating is completed by stating flag.
+	 * 
+	 * @param patient
+	 * @return
+	 */
 	public static boolean checkIfStainingCompleted(Task task) {
 		return task.getSamples().stream().allMatch(p -> checkIfStainingCompleted(p));
 	}
 
+	/**
+	 * Checks if stating is completed by stating flag.
+	 * 
+	 * @param patient
+	 * @return
+	 */
 	public static boolean checkIfStainingCompleted(Sample sample) {
 		return sample.getBlocks().stream().allMatch(p -> checkIfStainingCompleted(p));
 	}
 
+	/**
+	 * Checks if stating is completed by stating flag.
+	 * 
+	 * @param patient
+	 * @return
+	 */
 	public static boolean checkIfStainingCompleted(Block block) {
 		return block.getSlides().stream().allMatch(p -> p.isStainingCompleted());
 	}
@@ -155,6 +178,67 @@ public class TaskStatus {
 
 	public static boolean checkIfReStainingFlag(Block block) {
 		return block.getSlides().stream().anyMatch(p -> p.isReStaining());
+	}
+
+	/**
+	 * Checks if diagnoses are completed.
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public static boolean checkIfDiagnosisCompleted(Patient patient) {
+		return patient.getTasks().stream().anyMatch(p -> checkIfDiagnosisCompleted(p));
+	}
+
+	/**
+	 * Checks if diagnoses are completed.
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public static boolean checkIfDiagnosisCompleted(Task task) {
+		return task.getDiagnosisRevisions().stream().anyMatch(p -> checkIfDiagnosisCompleted(p));
+	}
+
+	/**
+	 * Checks if diagnoses are completed.
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public static boolean checkIfDiagnosisCompleted(DiagnosisRevision revision) {
+		return revision.getCompletionDate() != 0;
+	}
+
+	/**
+	 * Checks if a notification status is pending
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public static boolean checkIfNotificationisCompleted(Patient patient) {
+		return patient.getTasks().stream().anyMatch(p -> checkIfNotificationisCompleted(p));
+	}
+
+	/**
+	 * Checks if a notification status is pending
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public static boolean checkIfNotificationisCompleted(Task task) {
+		return task.getDiagnosisRevisions().stream().anyMatch(p -> checkIfNotificationisCompleted(p));
+
+	}
+
+	/**
+	 * Checks if a notification status is pending
+	 * 
+	 * @param patient
+	 * @return
+	 */
+	public static boolean checkIfNotificationisCompleted(DiagnosisRevision revision) {
+		return revision.getNotificationStatus() == NotificationStatus.NOTIFICATION_PENDING;
 	}
 
 }

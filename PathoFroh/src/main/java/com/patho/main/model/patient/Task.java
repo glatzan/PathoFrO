@@ -358,12 +358,14 @@ public class Task
 	 */
 
 	@Transient
-	public void generateTaskStatus() {
+	public TaskStatus generateTaskStatus() {
 		logger.debug("Generating taskstatus for " + getTaskID() + " " + hashCode());
 		if (getTaskStatus() == null)
 			setTaskStatus(new TaskStatus(this));
 		else
 			getTaskStatus().updateStatus();
+		
+		return taskStatus;
 	}
 
 	@Transient

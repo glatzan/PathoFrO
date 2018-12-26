@@ -9,6 +9,7 @@ import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.TaskService;
+import com.patho.main.ui.task.TaskArchivationStatus;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,17 +23,9 @@ public class ArchiveTaskDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandler worklistViewHandler;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GlobalEditViewHandler globalEditViewHandler;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private TaskService taskService;
+
+	private TaskArchivationStatus archivationStatus;
 
 	/**
 	 * If true the task will be removed from worklist
@@ -49,39 +42,35 @@ public class ArchiveTaskDialog extends AbstractDialog {
 	 */
 	private boolean archiveSuccessful;
 
-	public void initAndPrepareBean(Task task) {
+	public ArchiveTaskDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
+		return this;
 	}
 
 	public boolean initBean(Task task) {
 		this.removeFromWorklist = true;
 
-		super.initBean(task, Dialog.TASK_ARCHIVE);
+		this.archivationStatus = taskService.getTaskArchivationStatus(task);
 
-		return true;
+		return super.initBean(task, Dialog.TASK_ARCHIVE);
 	}
 
 	public void archiveTask() {
-		try {
 
-			taskService.archiveTask(getTask());
+		taskService.archiveTask(getTask());
 
-			if (removeFromWorklist) {
-				// only remove from worklist if patient has one active task
-				if (task.getPatient().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
-					mainHandlerAction.sendGrowlMessagesAsResource("growl.error",
-							"growl.error.worklist.remove.moreActive");
-				} else {
-					worklistViewHandler.removePatientFromWorklist(task.getPatient());
-				}
-			}
-
-			mainHandlerAction.sendGrowlMessagesAsResource("growl.task.archived", "growl.task.archived.text");
-			setArchiveSuccessful(true);
-		} catch (Exception e) {
-			onDatabaseVersionConflict();
-		}
+//		if (removeFromWorklist) {
+//			// only remove from worklist if patient has one active task
+//			if (task.getPatient().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
+//				mainHandlerAction.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
+//			} else {
+//				worklistViewHandler.removePatientFromWorklist(task.getPatient());
+//			}
+//		}
+//
+//		mainHandlerAction.sendGrowlMessagesAsResource("growl.task.archived", "growl.task.archived.text");
+		setArchiveSuccessful(true);
 	}
 
 	public void hideDialog() {

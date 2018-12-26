@@ -26,6 +26,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactNotificationRepository;
 import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.PhysicianRepository;
+import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.notification.NotificationContainer;
 
 import lombok.Getter;
@@ -286,6 +287,10 @@ public class AssociatedContactService extends AbstractService {
 									associatedContact, notificationTyp.toString()),
 							associatedContact.getTask().getPatient());
 
+		// getting last element, this will be the newNotification because savestructure
+		// is a list
+		newNotification = HistoUtil.getLastElement(associatedContact.getNotifications());
+
 		return new NotificationReturn(associatedContact.getTask(), associatedContact, newNotification);
 	}
 
@@ -532,13 +537,15 @@ public class AssociatedContactService extends AbstractService {
 					containers.add(new NotificationContainer(associatedContact, res.get()));
 				} else if (ignoreActiveState) {
 
-					// sorting after date, getting the last notification of that type
-					notification = notification.stream()
-							.sorted((p1, p2) -> p1.getDateOfAction().compareTo(p2.getDateOfAction()))
-							.collect(Collectors.toList());
+					if (notification.size() > 1)
+						// sorting after date, getting the last notification of that type
+						notification = notification.stream()
+								.sorted((p1, p2) -> p1.getDateOfAction().compareTo(p2.getDateOfAction()))
+								.collect(Collectors.toList());
 
-					containers.add(
-							new NotificationContainer(associatedContact, notification.get(notification.size() - 1)));
+					// container has to be recreated bevore using it
+					containers.add(new NotificationContainer(associatedContact,
+							notification.get(notification.size() - 1), true));
 				}
 			}
 		}

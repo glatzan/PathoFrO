@@ -77,6 +77,8 @@ public class NotificationPerformer {
 	private boolean usePhone;
 	private List<NotificationContainer> phonenumbers;
 
+	private PDFContainer sendReport;
+
 	public NotificationPerformer(Task task, DiagnosisRevision diagnosisRevision) {
 		this.task = task;
 		this.diagnosisRevision = diagnosisRevision;

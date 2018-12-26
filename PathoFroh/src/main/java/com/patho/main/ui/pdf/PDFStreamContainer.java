@@ -11,34 +11,46 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.MediaRepository;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+/**
+ * Container Interface for streaming pdf content. The tooltip pdfContainer might
+ * be the same as the displayPDF. It is used to provide a thumbnail.
+ * 
+ * @author Andreas
+ *
+ */
+public interface PDFStreamContainer {
 
-@Configurable
-@Getter
-@Setter
-public class PDFStreamContainer {
+	public void setDisplayPDF(PDFContainer container);
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private MediaRepository mediaRepository;
+	public PDFContainer getDisplayPDF();
 
-	protected PDFContainer displayPDF;
+	public void setTooltip(PDFContainer container);
 
-	protected PDFContainer tooltip;
+	public PDFContainer getTooltip();
 
-	public void reset() {
-		this.displayPDF = null;
-		this.tooltip = null;
+	public MediaRepository getMediaRepository();
+
+	/**
+	 * Clears pdf and thumbnail
+	 */
+	public default void reset() {
+		setDisplayPDF(null);
+		setTooltip(null);
+	}
+
+	/**
+	 * Sets the pdf as display an thumbnail
+	 * 
+	 * @param container
+	 */
+	public default void renderPDF(PDFContainer container) {
+		setDisplayPDF(container);
+		setTooltip(container);
 	}
 
 	/**
@@ -46,9 +58,9 @@ public class PDFStreamContainer {
 	 * 
 	 * @return
 	 */
-	public StreamedContent getThumbnail() {
+	public default StreamedContent getThumbnail() {
 		FacesContext context = FacesContext.getCurrentInstance();
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE || tooltip == null) {
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE || getTooltip() == null) {
 			// So, we're rendering the HTML. Return a stub StreamedContent so
 			// that it will generate right URL.
 			return new DefaultStreamedContent();
@@ -56,10 +68,10 @@ public class PDFStreamContainer {
 
 			byte[] img;
 
-			if (tooltip != null && mediaRepository.isFile(tooltip.getThumbnail()))
-				img = mediaRepository.getBytes(tooltip.getThumbnail());
+			if (getTooltip() != null && getMediaRepository().isFile(getTooltip().getThumbnail()))
+				img = getMediaRepository().getBytes(getTooltip().getThumbnail());
 			else
-				img = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_IMG);
+				img = getMediaRepository().getBytes(PathoConfig.PDF_NOT_FOUND_IMG);
 
 			return new DefaultStreamedContent(new ByteArrayInputStream(img), "image/png");
 		}
@@ -70,7 +82,7 @@ public class PDFStreamContainer {
 	 * 
 	 * @return
 	 */
-	public StreamedContent getPDF() {
+	public default StreamedContent getPDF() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE || getDisplayPDF() == null) {
 			// So, we're rendering the HTML. Return a stub StreamedContent so
@@ -79,24 +91,29 @@ public class PDFStreamContainer {
 		} else {
 			byte[] file;
 
-			if (getDisplayPDF() != null && mediaRepository.isFile(getDisplayPDF().getPath()))
-				file = mediaRepository.getBytes(getDisplayPDF().getPath());
+			if (getDisplayPDF() != null && getMediaRepository().isFile(getDisplayPDF().getPath()))
+				file = getMediaRepository().getBytes(getDisplayPDF().getPath());
 			else
-				file = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
+				file = getMediaRepository().getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
 
 			return new DefaultStreamedContent(new ByteArrayInputStream(file), "application/pdf",
 					getDisplayPDF().getName());
 		}
 	}
 
-	public boolean renderPDF() {
+	/**
+	 * Returns true if pdf is set
+	 * 
+	 * @return
+	 */
+	public default boolean renderPDF() {
 		return getDisplayPDF() != null;
 	}
 
 	/**
 	 * Opens a pdf in an new window
 	 */
-	public void openPDFinNewWindow() throws IOException {
+	public default void openPDFinNewWindow() throws IOException {
 
 		// Prepare.
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -108,10 +125,10 @@ public class PDFStreamContainer {
 		try {
 			byte[] file;
 
-			if (getDisplayPDF() != null && mediaRepository.isFile(getDisplayPDF().getPath()))
-				file = mediaRepository.getBytes(getDisplayPDF().getPath());
+			if (getDisplayPDF() != null && getMediaRepository().isFile(getDisplayPDF().getPath()))
+				file = getMediaRepository().getBytes(getDisplayPDF().getPath());
 			else
-				file = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
+				file = getMediaRepository().getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
 
 			// Init servlet response.
 			response.reset();

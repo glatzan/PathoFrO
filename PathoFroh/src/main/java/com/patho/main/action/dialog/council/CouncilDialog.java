@@ -45,7 +45,7 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.CouncilReportUi;
-import com.patho.main.ui.pdf.PDFStreamContainer;
+import com.patho.main.ui.pdf.PDFStreamContainerImpl;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
@@ -160,7 +160,7 @@ public class CouncilDialog extends AbstractDialog {
 	/**
 	 * Container for PDF display
 	 */
-	private PDFStreamContainer streamContainer;
+	private PDFStreamContainerImpl streamContainer;
 
 	/**
 	 * True if editable
@@ -188,7 +188,7 @@ public class CouncilDialog extends AbstractDialog {
 
 		super.initBean(task, Dialog.COUNCIL);
 
-		setStreamContainer(new PDFStreamContainer());
+		setStreamContainer(new PDFStreamContainerImpl());
 
 		setSelectedNode(null);
 		setSelectedCouncil(null);

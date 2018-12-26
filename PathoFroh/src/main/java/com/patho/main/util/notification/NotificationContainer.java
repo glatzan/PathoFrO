@@ -60,17 +60,31 @@ public class NotificationContainer {
 	 */
 	protected String warningInfo;
 
-	public NotificationContainer(AssociatedContact contact, AssociatedContactNotification notification) {
-		this.contact = contact;
-		this.notification = notification;
-		this.faildPreviously = notification.isFailed();
-		this.perform = true;
+	/**
+	 * If true this is an already performed notification which should be resend.
+	 */
+	protected boolean recreateBeforeUsage;
 
+	public NotificationContainer(AssociatedContact contact, AssociatedContactNotification notification) {
+		this(contact, notification, false);
+	}
+
+	public NotificationContainer(AssociatedContact contact, AssociatedContactNotification notification,
+			boolean recreateBeforeUsage) {
+		update(contact, notification);
+		this.recreateBeforeUsage = recreateBeforeUsage;
 		initAddressForNotificationType();
 	}
 
 	public long getId() {
 		return getNotification().getId();
+	}
+
+	public void update(AssociatedContact contact, AssociatedContactNotification notification) {
+		this.contact = contact;
+		this.notification = notification;
+		this.faildPreviously = notification.isFailed();
+		this.perform = true;
 	}
 
 	/**

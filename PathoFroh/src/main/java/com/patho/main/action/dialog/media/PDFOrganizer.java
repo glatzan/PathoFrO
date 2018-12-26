@@ -36,7 +36,7 @@ import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.ui.pdf.PDFStreamContainer;
+import com.patho.main.ui.pdf.PDFStreamContainerImpl;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
@@ -88,7 +88,7 @@ public class PDFOrganizer extends AbstractDialog {
 
 	private TreeNode selectedNode;
 
-	private PDFStreamContainer streamContainer;
+	private PDFStreamContainerImpl streamContainer;
 
 	private List<DataList> dataLists;
 
@@ -111,7 +111,7 @@ public class PDFOrganizer extends AbstractDialog {
 	public boolean initBean(Patient patient) {
 		setPatient(patient);
 
-		setStreamContainer(new PDFStreamContainer());
+		setStreamContainer(new PDFStreamContainerImpl());
 
 		setSelectedNode(null);
 		setDataLists(new ArrayList<DataList>());
