@@ -32,10 +32,11 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="4" styleClass="defaultHistoTable">
+			<h:panelGrid columns="6" styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.accounting.date.from']}"></h:outputLabel>
 				<p:calendar value="#{dialog.accountingDataDialog.fromDate}"
-					locale="de" navigator="true" pattern="dd.MM.yyyy">
+					autocomplete="off" locale="de" navigator="true"
+					pattern="dd.MM.yyyy">
 					<p:ajax event="dateSelect"
 						update="dialogContent:accountingTable dialogContent:leftBtn"
 						listener="#{dialog.accountingDataDialog.loadAccountingDate()}"
@@ -47,7 +48,8 @@
 
 				<h:outputLabel value="#{msg['dialog.accounting.date.to']}"></h:outputLabel>
 				<p:calendar value="#{dialog.accountingDataDialog.toDate}"
-					locale="de" navigator="true" pattern="dd.MM.yyyy">
+					autocomplete="off" locale="de" navigator="true"
+					pattern="dd.MM.yyyy">
 					<p:ajax event="dateSelect"
 						update="dialogContent:accountingTable dialogContent:leftBtn"
 						execute="@this"
@@ -57,6 +59,12 @@
 						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
 				</p:calendar>
 
+				<h:outputLabel value="Erweiterte Daten"></h:outputLabel>
+				<p:selectBooleanCheckbox
+					value="#{dialog.accountingDataDialog.advancedData}">
+					<p:ajax event="change" update="@form">
+					</p:ajax>
+				</p:selectBooleanCheckbox>
 			</h:panelGrid>
 
 			<h:panelGrid columns="1" styleClass="defaultHistoTable"
@@ -89,6 +97,21 @@
 
 					<p:column headerText="#{msg['dialog.accounting.table._4815Imu']}">
 						<h:outputText value="#{accountingData._4815Imu}" />
+					</p:column>
+
+					<p:column headerText="Proben anz."
+						rendered="#{dialog.accountingDataDialog.advancedData}">
+						<h:outputText value="#{accountingData.sampleCount}" />
+					</p:column>
+
+					<p:column headerText="Block anz."
+						rendered="#{dialog.accountingDataDialog.advancedData}">
+						<h:outputText value="#{accountingData.blockCount}" />
+					</p:column>
+
+					<p:column headerText="Objektt. anz."
+						rendered="#{dialog.accountingDataDialog.advancedData}">
+						<h:outputText value="#{accountingData.slideCount}" />
 					</p:column>
 
 				</p:dataTable>

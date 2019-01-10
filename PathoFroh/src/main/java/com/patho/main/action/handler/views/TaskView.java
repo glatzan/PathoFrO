@@ -74,12 +74,17 @@ public class TaskView extends AbstractTaskView {
 
 	public void onChangeSelectionCriteria() {
 
+		if(tasksPerPage == 0) {
+			logger.error("Configuration error, default task per page is not configured, setting 50");
+			tasksPerPage = 50;
+		}
+		
 		// updating page count
 		long maxPages = taskOverviewRepository.count();
 
 		int pagesCount = (int) Math.ceil((double) maxPages / tasksPerPage);
 
-		logger.debug("Count of pages " + pagesCount);
+		logger.debug("Found max {}, Page per page {}, Count of pages {}", maxPages, tasksPerPage, pagesCount);
 
 		setPages(new ArrayList<Integer>(pagesCount));
 

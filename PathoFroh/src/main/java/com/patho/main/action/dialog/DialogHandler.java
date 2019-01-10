@@ -54,6 +54,7 @@ import com.patho.main.action.dialog.task.ArchiveTaskDialog;
 import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
+import com.patho.main.action.dialog.task.RestoreTaskDialog;
 import com.patho.main.action.dialog.worklist.WorklistSearchDialog;
 import com.patho.main.action.dialog.worklist.WorklistSettingsDialog;
 import com.patho.main.action.dialog.worklist.WorklistSortDialog;
@@ -120,4 +121,5 @@ public class DialogHandler {
 	private ConfirmDialog confirmDialog = new ConfirmDialog();
 	private DeleteDialog deleteDialog = new DeleteDialog();
 	private ArchiveTaskDialog archiveTaskDialog = new ArchiveTaskDialog();
+	private RestoreTaskDialog restoreTaskDialog = new RestoreTaskDialog();
 }

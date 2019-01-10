@@ -10,7 +10,6 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
-import com.patho.main.dao.UtilDAO;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.TaskService;
@@ -25,29 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 @Scope(value = "session")
 @Getter
 @Setter
-@Slf4j
 public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCompete {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorklistViewHandler worklistViewHandler;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GlobalEditViewHandler globalEditViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private TaskService taskService;
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UtilDAO utilDAO;
-
+	private static
 	/**
 	 * Contains all available attachments
 	 */
@@ -63,9 +47,11 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	 */
 	private boolean archiveSuccessful;
 
-	public void initAndPrepareBean(Task task) {
+	public RestoreTaskDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
+		
+		return this;
 	}
 
 	public boolean initBean(Task task) {

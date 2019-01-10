@@ -35,9 +35,13 @@ public class AccountingDataDialog extends AbstractDialog {
 
 	private List<AccountingData> accountingData;
 
+	private boolean advancedData;
+
 	public AccountingDataDialog initAndPrepareBean() {
 		if (initBean())
 			prepareDialog();
+
+		this.advancedData = false;
 
 		return this;
 	}

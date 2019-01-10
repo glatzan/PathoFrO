@@ -140,7 +140,7 @@
 			<p:commandButton id="mergePatientData"
 				actionListener="#{dialog.mergePatientDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
 				<p:ajax event="dialogReturn"
-					listener="#{patientViewHandlerAction.onEditPatientDataReturn}"
+					listener="#{dialogReturnHandler.onPatientMergeReturn}"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					update="navigationForm:patientList contentForm headerForm" />
 			</p:commandButton>

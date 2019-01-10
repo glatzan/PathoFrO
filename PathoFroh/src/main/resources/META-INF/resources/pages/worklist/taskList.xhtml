@@ -16,38 +16,6 @@
 	<p:panel style="width: 80%"
 		styleClass="defaultHistoHiddenTableContainer">
 
-		<h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer"
-			style="width:100%;margin-top:10px;">
-			<h:panelGrid columns="4" style="float:right; width:auto !important"
-				styleClass="defaultHistoTable">
-
-				<!-- task per page -->
-				<h:outputLabel value="#{msg['body.taskList.perPage']}" />
-				<p:selectOneMenu
-					value="#{globalEditViewHandler.taskView.tasksPerPage}">
-					<f:selectItems
-						value="#{globalEditViewHandler.taskView.tasksPerPageOptions}"
-						var="entry" itemValue="#{entry}" itemLabel="#{entry}" />
-
-					<p:ajax event="change" process="@this"
-						update="contentForm:contentPanel"
-						oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
-						listener="#{globalEditViewHandler.taskView.onChangeSelectionCriteria()}"></p:ajax>
-				</p:selectOneMenu>
-
-				<!-- pages -->
-				<h:outputLabel value="#{msg['body.taskList.page']}" />
-				<p:selectOneMenu
-					value="#{globalEditViewHandler.taskView.page}">
-					<f:selectItems value="#{globalEditViewHandler.taskView.pages}" />
-					<p:ajax event="change" process="@this"
-						update="contentForm:contentPanel"
-						oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
-						listener="#{globalEditViewHandler.taskView.onChangeSelectionCriteria()}"></p:ajax>
-				</p:selectOneMenu>
-			</h:panelGrid>
-		</h:panelGrid>
-
 		<p:dataTable var="taskOverview"
 			value="#{globalEditViewHandler.taskView.taskList}"
 			style="margin-top:10px;" styleClass="bigHistoDataTable"
@@ -162,7 +130,7 @@
 		<h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer"
 			style="width:100%;margin-top:10px;">
 			<h:panelGrid columns="4" style="float:right; width:auto !important"
-				styleClass="defaultHistoTable">
+				id="subtmitTwo" styleClass="defaultHistoTable">
 
 				<!-- task per page -->
 				<h:outputLabel value="#{msg['body.taskList.perPage']}" />
@@ -172,19 +140,18 @@
 						value="#{globalEditViewHandler.taskView.tasksPerPageOptions}"
 						var="entry" itemValue="#{entry}" itemLabel="#{entry}" />
 
-					<p:ajax event="change" process="@this"
-						update="contentForm:contentPanel"
+					<p:ajax event="change" update="contentForm:contentPanel"
+						process="contentForm:subtmitTwo"
 						oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
 						listener="#{globalEditViewHandler.taskView.onChangeSelectionCriteria()}"></p:ajax>
 				</p:selectOneMenu>
 
 				<!-- pages -->
 				<h:outputLabel value="#{msg['body.taskList.page']}" />
-				<p:selectOneMenu 
-					value="#{globalEditViewHandler.taskView.page}">
+				<p:selectOneMenu value="#{globalEditViewHandler.taskView.page}">
 					<f:selectItems value="#{globalEditViewHandler.taskView.pages}" />
-					<p:ajax event="change" process="@this"
-						update="contentForm:contentPanel"
+					<p:ajax event="change" update="contentForm:contentPanel"
+						process="contentForm:subtmitTwo"
 						oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
 						listener="#{globalEditViewHandler.taskView.onChangeSelectionCriteria()}"></p:ajax>
 				</p:selectOneMenu>
