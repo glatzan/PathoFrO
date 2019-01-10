@@ -8,20 +8,20 @@
 <h:head>
 	<title><h:outputFormat
 			value="#{msg['dialog.restoreTask.headline']}" /></title>
-	<h:outputStylesheet name="histo.css" value="histo.css" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+	<h:outputStylesheet name="style.css" value="style.css" library="css" />
+	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+		library="css" />
 	<h:outputScript library="scripts" name="commonFunctions.js" />
 </h:head>
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 	<h:form id="dialogContent">
 
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
+				styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.restoreTask.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
 				</p:commandLink>
@@ -29,46 +29,40 @@
 		</div>
 
 		<div class="dialogContent">
-			<h:panelGrid columns="1" styleClass="newStyleListingTable"
-				columnClasses="columnLongText">
+			<h:panelGrid columns="1" styleClass="defaultHistoTable">
 				<h:outputLabel value="#{msg['dialog.restoreTask.text']}" />
 			</h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newStyleListingTable"
+			<h:panelGrid columns="2" styleClass="defaultHistoTable"
 				style="margin-left:10px">
 				<h:outputLabel value="#{msg['dialog.restoreTask.reason']}"></h:outputLabel>
-				<p:inputTextarea rows="7" cols="50" 
-					completeMethod="#{restoreTaskDialog.getListsuggestions}"
-					queryDelay="300" minQueryLength="1" />
+				<p:inputTextarea rows="7" cols="50" queryDelay="300"
+					minQueryLength="1">
+					<p:ajax event="change" update="@form"></p:ajax>
+				</p:inputTextarea>
 			</h:panelGrid>
 		</div>
 
 		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+			<h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
+				<h:panelGrid columns="1" styleClass="left">
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
+				<h:panelGrid columns="2" styleClass="right">
 					<!-- Save button -->
 					<p:commandButton
 						value="#{msg['dialog.restoreTask.button.restore']}"
-						icon="fa fa-archive">
-						<f:actionListener binding="#{restoreTaskDialog.restoreTask()}"></f:actionListener>
-						<f:actionListener binding="#{restoreTaskDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
+						icon="fa fa-archive"
+						actionListener="#{dialog.restoreTaskDialog.hideAndRestore()}" />
 
 					<!-- Close button -->
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						icon="fa fa-times-circle">
-						<f:actionListener binding="#{restoreTaskDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
+						actionListener="#{dialog.restoreTaskDialog.hideDialog()}"
+						icon="fa fa-times-circle" />
 				</h:panelGrid>
 			</h:panelGrid>
 		</div>
-
-
 	</h:form>
 </h:body>
 </html>

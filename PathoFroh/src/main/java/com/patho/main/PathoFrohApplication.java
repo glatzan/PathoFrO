@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.patho.kotlin.test.Was;
 import com.patho.main.config.DatabaseConfig;
 import com.patho.main.config.LdapConfig;
 import com.patho.main.config.MessageConfig;
@@ -19,6 +20,7 @@ import com.patho.main.config.MessageConfig;
 public class PathoFrohApplication {
 
 	public static void main(String[] args) {
+		new Was().test();
 		SpringApplication.run(PathoFrohApplication.class, args);
 	}
 }

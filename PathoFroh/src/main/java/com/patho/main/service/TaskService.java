@@ -125,12 +125,13 @@ public class TaskService extends AbstractService {
 
 	}
 
-	public void restoreTask(Task task, String commentary) {
+	public Task restoreTask(Task task, String commentary) {
 		// finalizing task
 		task.setFinalizationDate(0);
 		task.setFinalized(false);
 
-		genericDAO.savePatientData(task, "log.patient.task.phase.restored", task, commentary);
+		return taskRepository.save(task,
+				resourceBundle.get("log.patient.task.phase.restored", task, commentary == null ? "" : commentary));
 	}
 
 	public TaskArchivationStatus getTaskArchivationStatus(Task task) {

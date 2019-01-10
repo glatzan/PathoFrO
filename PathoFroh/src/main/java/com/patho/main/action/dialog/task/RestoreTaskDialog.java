@@ -3,25 +3,22 @@ package com.patho.main.action.dialog.task;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.GlobalEditViewHandler;
-import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.patient.Task;
+import com.patho.main.repository.ListItemRepository;
 import com.patho.main.service.TaskService;
 import com.patho.main.ui.interfaces.ListItemsAutoCompete;
+import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Scope(value = "session")
+@Configurable
 @Getter
 @Setter
 public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCompete {
@@ -31,7 +28,11 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	@Setter(AccessLevel.NONE)
 	private TaskService taskService;
 
-	private static
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private ListItemRepository listItemRepository;
+
 	/**
 	 * Contains all available attachments
 	 */
@@ -50,20 +51,24 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	public RestoreTaskDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
-		
+
 		return this;
 	}
 
 	public boolean initBean(Task task) {
 
-		setPredefinedListItems(utilDAO.getAllStaticListItems(ListItem.StaticList.TASK_RESTORE));
+		setPredefinedListItems(listItemRepository
+				.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.TASK_RESTORE, false));
 
-		super.initBean(task, Dialog.TASK_RESTORE);
-
-		return true;
+		return super.initBean(task, Dialog.TASK_RESTORE);
 	}
 
-	public void restoreTask() {
+	public void hideAndRestore() {
 		taskService.restoreTask(getTask(), getCommentary());
+		hideDialog(new ReloadTaskEvent());
+	}
+
+	public boolean isSubmitable() {
+		return getCommentary() != null && getCommentary().length() > 5;
 	}
 }
