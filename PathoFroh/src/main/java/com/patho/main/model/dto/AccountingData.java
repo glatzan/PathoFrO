@@ -26,7 +26,7 @@ import lombok.Setter;
 	    				"bl.id as blockid, " + 
 	    				"sm.id as sampleid, " +	
 	    				"case when s.slideid ilike '%HE%' then true else false end as he, "+
-	    				"case when s.slideid ilike '%HE%' and (sm.material in ('Bulbi', 'Exenteratio', 'Glaskörperaspirat') or (s.commentary = '') IS false or tk.commentary ilike '%Depigmentierung%' or tk.commentary ilike '%Entkalkung%' or tk.commentary ilike '%Handeinbettung%') then true else false end as he2, "+
+	    				"case when s.slideid ilike '%HE%' and (sm.material in ('Bulbi', 'Exenteratio', 'Glaskörperaspirat') or (s.slidelabeltext = '') IS false or tk.commentary ilike '%Depigmentierung%' or tk.commentary ilike '%Entkalkung%' or tk.commentary ilike '%Handeinbettung%') then true else false end as he2, "+
 	    				"case when s.slideid not ilike '%HE%' and sp.type not like 'IMMUN' then true else false end as pas, "+
 	    				"case when sp.type like 'IMMUN' then true else false end as imu "+
 	    				"FROM slide s "+
@@ -37,7 +37,7 @@ import lombok.Setter;
 	    					"left join patient pt on tk.parent_id = pt.id "+
 	    		") "+    		             
 	    		"SELECT row_number() OVER () AS id, date_trunc( 'day' ,creationdate)\\:\\:date date, piz, sum(scount) as slidecount, " +
-	    			"count( distinct(blockid)) as blockcount, " + 
+	    			"count(distinct(blockid)) as blockcount, " + 
 	    			"count(distinct(sampleid)) as samplecount,"+
 					"sum(case when he and not he2 then scount else 0 end) as \"4800\" , "+
 					"sum(case when he2 then scount else 0 end)  \"4802\", "+

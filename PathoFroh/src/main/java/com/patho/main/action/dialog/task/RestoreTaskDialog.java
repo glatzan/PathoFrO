@@ -31,7 +31,6 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	@Setter(AccessLevel.NONE)
 	private TaskService taskService;
 
-	private static
 	/**
 	 * Contains all available attachments
 	 */
