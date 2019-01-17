@@ -294,7 +294,7 @@
 
 			<!-- restore Task -->
 			<p:commandButton id="restoreTaskBtn"
-				actionListener="#{restoreTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+				actionListener="#{dialog.restoreTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 				<p:ajax event="dialogReturn"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"

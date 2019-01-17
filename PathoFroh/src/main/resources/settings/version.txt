@@ -14,6 +14,14 @@ helper getPrinterForIP => sub { my ($self, $ip)=@_;
     return sprintf("Amb-U%02d", $1) if $room =~/U([0-9]+)$/oi;
 };
 
+select task.taskID, array_agg(distinct (sample.material)) as material, array_agg(distinct (perso.lastname)) filter (where asso.role != 'PATIENT')from task as task
+	left join associatedcontact as asso on task.id = asso.task_id  
+	left join person as perso on asso.person_id = perso.id
+	left join sample as sample on sample.parent_id = task.id
+	where ward like 'auswärtig' 
+	group by 1
+	order by task.taskID asc
+	
 select flist.id, flist.name, coalesce(bool_or(fitem.task_id = 1),false) As containsTask from favouritelist flist 
 left join favouritepermissionsgroup fgroup on fgroup.favouritelist_id = flist.id  
 left join favouritepermissionsuser fuser on fuser.favouritelist_id = flist.id
