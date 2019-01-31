@@ -1,5 +1,6 @@
 package com.patho.main.ui.task;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.patho.main.model.favourites.FavouriteList;
@@ -11,6 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TaskArchivationStatus {
+
+	private HashMap<TaskCheck, Boolean> checks;
 
 	private boolean archiveAble;
 
@@ -26,5 +29,9 @@ public class TaskArchivationStatus {
 
 	public TaskArchivationStatus(Task task) {
 		this.task = task;
+	}
+	
+	public static enum TaskCheck{
+		
 	}
 }

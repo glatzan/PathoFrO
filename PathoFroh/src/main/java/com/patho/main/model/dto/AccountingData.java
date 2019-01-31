@@ -79,10 +79,10 @@ public class AccountingData {
 	private int year;
 	private int month;
 	private String piz;
-	private int _4800;
-	private int _4802;
-	private int _4015;
-	private int _4815Imu;
+	private int v4800;
+	private int v4802;
+	private int v4015;
+	private int v4815Imu;
 	
 	/**
 	 * Sample count
@@ -99,7 +99,7 @@ public class AccountingData {
 	 */
 	private int slideCount;
 	
-	public AccountingData(long id, String date, String piz, int slideCount, int _4800, int _4802, int _4015, int _4815Imu, int blockcount, int samplecount) {
+	public AccountingData(long id, String date, String piz, int slideCount, int v4800, int v4802, int v4015, int v4815Imu, int blockcount, int samplecount) {
 		this.id = id;
 		try {
 			this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
@@ -111,10 +111,10 @@ public class AccountingData {
 		}
 		
 		this.piz = piz;
-		this._4800 = _4800;
-		this._4802 = _4802;
-		this._4015 = _4015;
-		this._4815Imu = _4815Imu;
+		this.v4800 = v4800;
+		this.v4802 = v4802;
+		this.v4015 = v4015;
+		this.v4815Imu = v4815Imu;
 		this.blockCount = blockcount;
 		this.sampleCount = samplecount;
 		this.slideCount = slideCount;

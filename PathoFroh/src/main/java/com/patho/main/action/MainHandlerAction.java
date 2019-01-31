@@ -19,23 +19,18 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import com.patho.main.common.DateFormat;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.PDFRepository;
-import com.patho.main.util.DataBaseConverter;
 import com.patho.main.util.FileMakerImporter;
 import com.patho.main.util.helper.TimeUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import test.testClass;
 
 @Component
 @Scope(value = "session")
-@Slf4j
 public class MainHandlerAction {
 
 	@Autowired
