@@ -152,7 +152,7 @@ public class PDFService extends AbstractService {
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument) throws FileNotFoundException {
 		return createAndAttachPDF(dataList, printDocument, new PDFInfo(printDocument.getGeneratedFileName(),
-				printDocument.getDocumentType(), "", "", dataList.getFileRepositoryBase()), false, false);
+				printDocument.getDocumentType(), "", "", dataList.getFileRepositoryBase()), false, false, null);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class PDFService extends AbstractService {
 		return createAndAttachPDF(
 				dataList, printDocument, new PDFInfo(printDocument.getGeneratedFileName(),
 						printDocument.getDocumentType(), "", "", dataList.getFileRepositoryBase()),
-				createThumbnail, false);
+				createThumbnail, false, null);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class PDFService extends AbstractService {
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, PDFInfo pdfInfo)
 			throws FileNotFoundException {
-		return createAndAttachPDF(dataList, printDocument, pdfInfo, false, false);
+		return createAndAttachPDF(dataList, printDocument, pdfInfo, false, false, null);
 	}
 
 	/**
@@ -204,7 +204,8 @@ public class PDFService extends AbstractService {
 	 * @throws FileNotFoundException
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, PDFInfo pdfInfo,
-			boolean createThumbnail, boolean nonBlocking) throws FileNotFoundException {
+			boolean createThumbnail, boolean nonBlocking, LazyPDFReturnHandler returnHandler)
+			throws FileNotFoundException {
 		PDFContainer pdf = newPDF(pdfInfo,
 				pdfInfo.getTargetFolder() != null ? pdfInfo.getTargetFolder() : dataList.getFileRepositoryBase());
 
@@ -216,9 +217,10 @@ public class PDFService extends AbstractService {
 				pdf = new PDFCreator().updateExistingPDF(printDocument, pdf, createThumbnail);
 			else {
 				new PDFCreator().updateExistingPDFNonBlocking(printDocument, pdf, createThumbnail,
-						new LazyPDFReturnHandler() {
+						returnHandler != null ? returnHandler : new LazyPDFReturnHandler() {
 							@Override
 							public void returnPDFContent(PDFContainer container, String uuid) {
+								logger.debug("Returning PDF Creation withou result");
 							}
 						});
 			}

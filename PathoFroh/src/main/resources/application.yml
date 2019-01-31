@@ -16,7 +16,7 @@ spring:
       max-file-size: 50MB  
       max-request-size: 100MB
   datasource:
-    url: jdbc:postgresql://localhost/histo3
+    url: jdbc:postgresql://localhost/histo2
     username: postgres
     password: postgres
   jpa:

@@ -98,12 +98,11 @@ public class DiagnosisReportUpdater {
 			logger.debug("Creating new PDF for report");
 			PDFReturn res;
 			try {
-				res = pdfService
-						.createAndAttachPDF(
-								task, printDocument, new PDFInfo(diagnosisRevision.getName(),
-										DocumentType.DIAGNOSIS_REPORT_COMPLETED, "", PDFContainer.MARKER_DIAGNOSIS
-												.replace("$id", String.valueOf(diagnosisRevision.getId()))),
-								true, true);
+				res = pdfService.createAndAttachPDF(
+						task, printDocument, new PDFInfo(diagnosisRevision.getName(),
+								DocumentType.DIAGNOSIS_REPORT_COMPLETED, "", PDFContainer.MARKER_DIAGNOSIS
+										.replace("$id", String.valueOf(diagnosisRevision.getId()))),
+						true, true, returnHandler);
 				task = (Task) res.getDataList();
 			} catch (FileNotFoundException e) {
 				// TODO Handle error
