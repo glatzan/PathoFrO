@@ -16,6 +16,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.patho.main.model.patient.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,20 +29,10 @@ import com.patho.main.model.Signature;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteList_;
-import com.patho.main.model.patient.Block;
-import com.patho.main.model.patient.Diagnosis;
-import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Patient_;
-import com.patho.main.model.patient.Slide;
-import com.patho.main.model.patient.Task;
-import com.patho.main.model.patient.Task_;
 import com.patho.main.model.util.audit.Audit_;
 import com.patho.main.repository.service.PatientRepositoryCustom;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.worklist.search.WorklistSearchExtended;
-
-import javassist.tools.reflect.Sample;
 
 @Service
 @Transactional

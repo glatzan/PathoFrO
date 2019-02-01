@@ -13,7 +13,6 @@ import com.patho.main.config.MessageConfig;
 
 @SpringBootApplication
 @EnableSpringConfigured
-@ComponentScan
 @EnableScheduling
 @Import({ MessageConfig.class, DatabaseConfig.class, LdapConfig.class })
 public class PathoFrohApplication {

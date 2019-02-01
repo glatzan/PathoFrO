@@ -1,9 +1,10 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
 <aspectj>
-	<weaver options="-Xset:weaveJavaxPackages=true -verbose -showWeaveInfo">
+	<weaver options="-Xset:weaveJavaxPackages=true">
 		<include within="com.patho.main..*" />
 		<exclude within="com.patho.main.repository..*" />
 		<exclude within="*..*CGLIB*" />
 		<exclude within="*..*javassist*" />
 	</weaver>
 </aspectj>
+<!-- -verbose -showWeaveInfo-->

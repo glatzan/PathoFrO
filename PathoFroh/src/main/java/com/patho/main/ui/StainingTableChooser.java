@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
-@Slf4j
 public class StainingTableChooser<T extends IdManuallyAltered & PatientRollbackAble<?>> {
 
 	private boolean choosen;
@@ -60,12 +59,9 @@ public class StainingTableChooser<T extends IdManuallyAltered & PatientRollbackA
 		if (text == null)
 			text = "";
 
-		log.debug("Updating text to " + text);
-
 		if (isSampleType()) {
 			if (!text.equals(((Sample) entity).getSampleID())) {
 				setIdChanged(true);
-				log.debug("Text chagned");
 			}
 
 			((Sample) entity).setSampleID(text);
@@ -75,7 +71,6 @@ public class StainingTableChooser<T extends IdManuallyAltered & PatientRollbackA
 		if (isBlockType()) {
 			if (!text.equals(((Block) entity).getBlockID())) {
 				setIdChanged(true);
-				log.debug("Text chagned");
 			}
 			((Block) entity).setBlockID(text);
 			return;
@@ -84,7 +79,6 @@ public class StainingTableChooser<T extends IdManuallyAltered & PatientRollbackA
 		if (isStainingType()) {
 			if (!text.equals(((Slide) entity).getSlideID())) {
 				setIdChanged(true);
-				log.debug("Text chagned");
 			}
 			((Slide) entity).setSlideID(text);
 			return;
@@ -111,7 +105,6 @@ public class StainingTableChooser<T extends IdManuallyAltered & PatientRollbackA
 	 * @param showArchived
 	 */
 	public static ArrayList<StainingTableChooser<?>> factory(Task task, boolean showArchived) {
-		log.debug("Generating new List for receiptlog");
 
 		ArrayList<StainingTableChooser<?>> result = new ArrayList<StainingTableChooser<?>>();
 

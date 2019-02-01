@@ -92,43 +92,43 @@ public class NotificationService extends AbstractService {
 	private PrintDocumentRepository printDocumentRepository;
 
 	public void startNotificationPhase(Task task) {
-		try {
-
-			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-				public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-
-					task.setNotificationCompletionDate(0);
-
-					genericDAO.savePatientData(task, "log.patient.task.phase.notification.enter");
-
-					if (!task.isListedInFavouriteList(PredefinedFavouriteList.NotificationList)) {
-						favouriteListDAO.addReattachedTaskToList(task, PredefinedFavouriteList.NotificationList);
-					}
-				}
-			});
-		} catch (Exception e) {
-			throw new HistoDatabaseInconsistentVersionException(task);
-		}
+//		try {
+//
+//			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+//
+//				public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+//
+//					task.setNotificationCompletionDate(0);
+//
+//					genericDAO.savePatientData(task, "log.patient.task.phase.notification.enter");
+//
+//					if (!task.isListedInFavouriteList(PredefinedFavouriteList.NotificationList)) {
+//						favouriteListDAO.addReattachedTaskToList(task, PredefinedFavouriteList.NotificationList);
+//					}
+//				}
+//			});
+//		} catch (Exception e) {
+//			throw new HistoDatabaseInconsistentVersionException(task);
+//		}
 	}
 
 	public void endNotificationPhase(Task task) {
-		try {
-
-			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-				public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-
-					task.setNotificationCompletionDate(System.currentTimeMillis());
-
-					genericDAO.savePatientData(task, "log.patient.task.phase.notification.end");
-
-					favouriteListDAO.removeReattachedTaskFromList(task, PredefinedFavouriteList.NotificationList);
-				}
-			});
-		} catch (Exception e) {
-			throw new HistoDatabaseInconsistentVersionException(task);
-		}
+//		try {
+//
+//			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+//
+//				public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+//
+//					task.setNotificationCompletionDate(System.currentTimeMillis());
+//
+//					genericDAO.savePatientData(task, "log.patient.task.phase.notification.end");
+//
+//					favouriteListDAO.removeReattachedTaskFromList(task, PredefinedFavouriteList.NotificationList);
+//				}
+//			});
+//		} catch (Exception e) {
+//			throw new HistoDatabaseInconsistentVersionException(task);
+//		}
 	}
 
 //	public boolean executeNotification(NotificationFeedback feedback, Task task, MailContainerList mailContainerList,

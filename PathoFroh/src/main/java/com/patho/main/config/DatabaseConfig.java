@@ -23,7 +23,7 @@ import com.patho.main.repository.impl.BaseRepositoryImpl;
         repositoryBaseClass = BaseRepositoryImpl.class
 )
 class PersistenceContext {
-     
+
 }
 public class DatabaseConfig {
 

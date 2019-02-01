@@ -42,7 +42,7 @@ import lombok.Setter;
 
 @Entity
 @Audited
-@SelectBeforeUpdate(true)
+@SelectBeforeUpdate
 @SequenceGenerator(name = "bioBank_sequencegenerator", sequenceName = "bioBank_sequence")
 @Getter
 @Setter
@@ -102,6 +102,6 @@ public class BioBank implements DataList, AuditAble {
 	@Override
 	@Transient
 	public File getFileRepositoryBase() {
-		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(task.getParent().getId()));
+		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + task.getParent().getId());
 	}
 }

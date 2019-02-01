@@ -105,23 +105,23 @@ public class TaskService extends AbstractService {
 	}
 
 	public void archiveTask(Task task) {
-		// remove from all system lists
-		favouriteListDAO.removeReattachedTaskFromList(task, PredefinedFavouriteList.values());
-
-		// finalizing task
-		task.setFinalizationDate(System.currentTimeMillis());
-		task.setFinalized(true);
-
-		if (task.getStainingCompletionDate() == 0)
-			task.setStainingCompletionDate(System.currentTimeMillis());
-
-		if (task.getDiagnosisCompletionDate() == 0)
-			task.setDiagnosisCompletionDate(System.currentTimeMillis());
-
-		if (task.getNotificationCompletionDate() == 0)
-			task.setNotificationCompletionDate(System.currentTimeMillis());
-
-		genericDAO.savePatientData(task, "log.patient.task.phase.archive", task);
+//		// remove from all system lists
+//		favouriteListDAO.removeReattachedTaskFromList(task, PredefinedFavouriteList.values());
+//
+//		// finalizing task
+//		task.setFinalizationDate(System.currentTimeMillis());
+//		task.setFinalized(true);
+//
+//		if (task.getStainingCompletionDate() == 0)
+//			task.setStainingCompletionDate(System.currentTimeMillis());
+//
+//		if (task.getDiagnosisCompletionDate() == 0)
+//			task.setDiagnosisCompletionDate(System.currentTimeMillis());
+//
+//		if (task.getNotificationCompletionDate() == 0)
+//			task.setNotificationCompletionDate(System.currentTimeMillis());
+//
+//		genericDAO.savePatientData(task, "log.patient.task.phase.archive", task);
 
 	}
 

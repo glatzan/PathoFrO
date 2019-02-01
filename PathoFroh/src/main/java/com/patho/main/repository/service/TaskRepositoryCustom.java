@@ -32,8 +32,4 @@ public interface TaskRepositoryCustom {
 	public Optional<Task> find(CriteriaQuery<Task> criteria, Root<Task> root, List<Predicate> predicates, boolean loadCouncils,
 			boolean loadDiangoses, boolean loadPDFs, boolean loadContacts, boolean loadParent);
 
-	public int countTasksOfCurrentYear();
-
-	public int countTasksOfYear(int year);
-
 }

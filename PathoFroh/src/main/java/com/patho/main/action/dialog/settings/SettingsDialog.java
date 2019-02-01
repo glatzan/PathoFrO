@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.patho.main.model.log.Log_;
 import org.primefaces.event.ReorderEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -434,7 +435,6 @@ public class SettingsDialog extends AbstractTabDialog {
 		/**
 		 * Archvies or dearchvies ListItem depending on the given parameters.
 		 *
-		 * @param physician
 		 * @param archive
 		 */
 		public void archiveOrDelete(ListItem item, boolean archive) {
@@ -541,7 +541,6 @@ public class SettingsDialog extends AbstractTabDialog {
 		/**
 		 * Archvies or dearchvies physicians depending on the given parameters.
 		 *
-		 * @param physician
 		 * @param archive
 		 */
 		public void archiveOrDelete(Physician p, boolean archive) {
@@ -599,7 +598,6 @@ public class SettingsDialog extends AbstractTabDialog {
 		/**
 		 * Archvies or dearchvies organization depending on the given parameters.
 		 *
-		 * @param physician
 		 * @param archive
 		 */
 		public void archiveOrDelete(Organization organization, boolean archive) {

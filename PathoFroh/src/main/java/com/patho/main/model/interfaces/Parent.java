@@ -17,9 +17,7 @@ public interface Parent<T extends Parent<?>> {
 		return getParent().getPatient();
 	}
 
-	public default Task getTask() {
-		return null;
-	}
+	public Task getTask();
 
 	public T getParent();
 

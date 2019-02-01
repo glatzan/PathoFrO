@@ -218,6 +218,12 @@ public class Patient
 		return this;
 	}
 
+	@Override
+	@Transient
+	public Task getTask() {
+		return null;
+	}
+
 	@Transient
 	@Override
 	public String getTextIdentifier() {

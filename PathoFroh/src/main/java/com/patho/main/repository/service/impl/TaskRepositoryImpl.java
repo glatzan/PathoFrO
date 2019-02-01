@@ -16,6 +16,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.patho.main.model.patient.*;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,19 +28,11 @@ import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Signature;
 import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.patient.Block;
-import com.patho.main.model.patient.Diagnosis;
-import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Slide;
-import com.patho.main.model.patient.Task;
-import com.patho.main.model.patient.Task_;
 import com.patho.main.model.util.audit.Audit_;
 import com.patho.main.repository.service.TaskRepositoryCustom;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TimeUtil;
 import com.patho.main.util.worklist.search.WorklistSearchExtended;
-
-import javassist.tools.reflect.Sample;
 
 @Service
 @Transactional
@@ -270,26 +263,5 @@ public class TaskRepositoryImpl extends AbstractRepositoryCustom implements Task
 		}
 
 		return task;
-	}
-
-	public int countTasksOfCurrentYear() {
-		return countTasksOfYear(TimeUtil.getCurrentYear());
-	}
-
-	public int countTasksOfYear(int year) {
-		CriteriaBuilder qb = getCriteriaBuilder();
-		CriteriaQuery<Long> criteria = qb.createQuery(Long.class);
-		Root<Task> root = criteria.from(Task.class);
-
-		criteria.where(qb.and(qb.ge(root.get(taskQuery.get(Task_.audit).get(Audit_.createdOn)), TimeUtil.getDateInUnixTimestamp(year, 0, 0, 0, 0, 0)),
-				qb.le(root.get(taskQuery.get(Task_.audit).get(Audit_.createdOn)), TimeUtil.getDateInUnixTimestamp(year, 12, 31, 23, 59, 59))));
-
-		criteria.distinct(true);
-
-		criteria.select(qb.count(root));
-
-		Long rs = getSession().createQuery(criteria).getSingleResult();
-
-		return rs.intValue();
 	}
 }

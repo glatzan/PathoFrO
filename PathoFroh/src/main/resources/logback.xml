@@ -67,5 +67,7 @@
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="MAIL" />
 	</root>
+
+
 </configuration>
 
