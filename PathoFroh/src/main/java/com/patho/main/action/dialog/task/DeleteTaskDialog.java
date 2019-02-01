@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @Configurable
 @Getter
 @Setter
-@Slf4j
 public class DeleteTaskDialog extends AbstractDialog {
 
 	public static final int maxRevisionToDelete = 1;
@@ -38,48 +37,43 @@ public class DeleteTaskDialog extends AbstractDialog {
 
 	private boolean deleteAble;
 
-	public void initAndPrepareBean(Task task) {
-		initBean(task);
-		prepareDialog();
+	public DeleteTaskDialog initAndPrepareBean(Task task) {
+		if (initBean(task))
+			prepareDialog();
+		return this;
 	}
 
-	public void initBean(Task task) {
-		super.initBean(task, Dialog.TASK_DELETE, false);
+	public boolean initBean(Task task) {
 		setDeleteAble(!taskWasAltered());
+		return super.initBean(task, Dialog.TASK_DELETE, false);
 	}
 
 	public boolean taskWasAltered() {
-		List<Task> revisions = taskDAO.getTasksRevisions(task.getId());
-
-		log.debug(revisions.size() + " Revsions available");
-
-		if (revisions.size() > maxRevisionToDelete) {
-			return true;
-		}
-
+//		List<Task> revisions = taskDAO.getTasksRevisions(task.getId());
+//
+//		log.debug(revisions.size() + " Revsions available");
+//
+//		if (revisions.size() > maxRevisionToDelete) {
+//			return true;
+//		}
+//
 		return false;
 	}
 
 	public void deleteTask() {
-		try {
-
-			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-				public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-					genericDAO.reattach(getTask());
-					genericDAO.reattach(getTask().getPatient());
-					favouriteListDAO.removeTaskFromAllLists(getTask());
-					bioBankDAO.removeAssociatedBioBank(getTask());
-					genericDAO.deletePatientData(task, "log.patient.task.remove", task.toString());
-					task.getPatient().getTasks().remove(task);
-				}
-			});
-
-			taskDAO.lock(getTask().getParent());
-
-		} catch (Exception e) {
-			onDatabaseVersionConflict();
-		}
+//		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+//
+//			public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+//				genericDAO.reattach(getTask());
+//				genericDAO.reattach(getTask().getPatient());
+//				favouriteListDAO.removeTaskFromAllLists(getTask());
+//				bioBankDAO.removeAssociatedBioBank(getTask());
+//				genericDAO.deletePatientData(task, "log.patient.task.remove", task.toString());
+//				task.getPatient().getTasks().remove(task);
+//			}
+//		});
+//
+//		taskDAO.lock(getTask().getParent());
 	}
 
 }

@@ -163,15 +163,15 @@ public class UserHandlerAction implements Serializable {
 	 * Sends an unlock Request to admins
 	 */
 	public void requestUnlock() {
-		HistoUser currentUser = getCurrentUser();
-
-		RequestUnlockMail mail = MailHandler.getDefaultTemplate(RequestUnlockMail.class);
-		mail.prepareTemplate(currentUser);
-		mail.fillTemplate();
-
-		globalSettings.getMailHandler().sendAdminMail(mail);
-
-		setUnlockRequestSend(true);
+//		HistoUser currentUser = getCurrentUser();
+//
+//		RequestUnlockMail mail = MailHandler.getDefaultTemplate(RequestUnlockMail.class);
+//		mail.prepareTemplate(currentUser);
+//		mail.fillTemplate();
+//
+//		globalSettings.getMailHandler().sendAdminMail(mail);
+//
+//		setUnlockRequestSend(true);
 	}
 
 }

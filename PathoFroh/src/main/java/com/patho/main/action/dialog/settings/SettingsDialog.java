@@ -24,7 +24,6 @@ import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototype.StainingType;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.log.Log;
-import com.patho.main.model.log.Log_;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.DiagnosisPresetRepository;

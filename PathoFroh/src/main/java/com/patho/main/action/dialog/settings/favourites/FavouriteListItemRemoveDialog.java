@@ -99,17 +99,17 @@ public class FavouriteListItemRemoveDialog extends AbstractDialog {
 
 	@Transactional
 	public void removeTaskFromList() {
-		favouriteListService.removeTaskFromList(task.getId(), favouriteList.getId());
-		mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.removed", "growl.favouriteList.removed.text",
-				new Object[] { task.getTaskID(), favouriteList.getName() });
+//		favouriteListService.removeTaskFromList(task.getId(), favouriteList.getId());
+//		mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.removed", "growl.favouriteList.removed.text",
+//				new Object[] { task.getTaskID(), favouriteList.getName() });
 	}
 
 	@Transactional
 	public void moveTaskToList() {
-		// is combien in removeList (removes to dumplist per default)
-		favouriteListService.moveTaskToList(favouriteList.getId(), favouriteList.getDumpList().getId(), task.getId(), getCommentary());
-		mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.move", "growl.favouriteList.move.text",
-				new Object[] { task.getTaskID(), favouriteList.getDumpList().getName() });
+//		// is combien in removeList (removes to dumplist per default)
+//		favouriteListService.moveTaskToList(favouriteList.getId(), favouriteList.getDumpList().getId(), task.getId(), getCommentary());
+//		mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.move", "growl.favouriteList.move.text",
+//				new Object[] { task.getTaskID(), favouriteList.getDumpList().getName() });
 	}
 
 }

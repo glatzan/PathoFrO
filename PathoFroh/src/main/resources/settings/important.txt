@@ -29,3 +29,17 @@ Handel Version Erros in Dialoges
 -> if nested dialog, parent should catch ReloadEvent() 
 
 
+UserHandlerAction
+-> requestUnlock()
+
+GlobalEditViewHanderl
+-> addTaskToFavouriteList
+-> removeTaskFromFavouriteList
+
+NotificationPhaseExitDialog
+DeleteTaskDialog
+FavouriteListItemRemoveDialog
+DataBaseConverter
+
+WorklistSearchExtended
+-> getPatients

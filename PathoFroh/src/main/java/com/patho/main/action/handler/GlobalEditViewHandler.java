@@ -328,29 +328,29 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 	@Transactional
 	public void addTaskToFavouriteList(Task task, long favouriteListID) {
-		try {
-			favouriteListDAO.addReattachedTaskToList(task, favouriteListID);
-			FavouriteList list = favouriteListDAO.getFavouriteList(favouriteListID, false, false, false);
-			mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.added", "growl.favouriteList.added.text",
-					new Object[] { task.getTaskID(), list.getName() });
-
-			updateDataOfTask(true, true, false, false);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			worklistViewHandler.replacePatientInWorklist(task.getPatient(), true);
-		}
+//		try {
+//			favouriteListDAO.addReattachedTaskToList(task, favouriteListID);
+//			FavouriteList list = favouriteListDAO.getFavouriteList(favouriteListID, false, false, false);
+//			mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.added", "growl.favouriteList.added.text",
+//					new Object[] { task.getTaskID(), list.getName() });
+//
+//			updateDataOfTask(true, true, false, false);
+//		} catch (HistoDatabaseInconsistentVersionException e) {
+//			worklistViewHandler.replacePatientInWorklist(task.getPatient(), true);
+//		}
 	}
 
 	@Transactional
 	public void removeTaskFromFavouriteList(Task task, Long favouriteListID) {
-		try {
-			favouriteListDAO.removeReattachedTaskFromList(task, favouriteListID);
-			FavouriteList list = favouriteListDAO.getFavouriteList(favouriteListID, false, false, false);
-			mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.removed",
-					"growl.favouriteList.removed.text", new Object[] { task.getTaskID(), list.getName() });
-			updateDataOfTask(true, true, false, false);
-		} catch (HistoDatabaseInconsistentVersionException e) {
-			worklistViewHandler.replacePatientInWorklist(task.getPatient(), true);
-		}
+//		try {
+//			favouriteListDAO.removeReattachedTaskFromList(task, favouriteListID);
+//			FavouriteList list = favouriteListDAO.getFavouriteList(favouriteListID, false, false, false);
+//			mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.removed",
+//					"growl.favouriteList.removed.text", new Object[] { task.getTaskID(), list.getName() });
+//			updateDataOfTask(true, true, false, false);
+//		} catch (HistoDatabaseInconsistentVersionException e) {
+//			worklistViewHandler.replacePatientInWorklist(task.getPatient(), true);
+//		}
 	}
 
 	public void quickSearch() {
@@ -569,6 +569,11 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		@Setter(AccessLevel.NONE)
 		private AssociatedContactService associatedContactService;
 
+		@Autowired
+		@Getter(AccessLevel.NONE)
+		@Setter(AccessLevel.NONE)
+		private DialogHandler dialogHandler;
+		
 		private GlobalEditViewHandler globalEditViewHandler;
 
 		public CurrentTaskFunctions(GlobalEditViewHandler globalEditViewHandler) {

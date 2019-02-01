@@ -71,23 +71,24 @@ public class WorklistSearchExtended extends AbstractWorklistSearch {
 	@Override
 	public List<Patient> getPatients() {
 
-		List<Task> tasks = taskDAO.getTaskByCriteria(this, true);
-
-		List<Patient> patients = patientDao.findComplex(this, true, false, true);
-
-		for (Task task : tasks) {
-
-			for (Patient patient : patients) {
-				if (task.getParent().getId() == patient.getId()) {
-					for (Task pTask : patient.getTasks()) {
-						if (pTask.getId() == task.getId())
-							pTask.setActive(true);
-					}
-				}
-			}
-		}
-
-		return patients;
+//		List<Task> tasks = taskDAO.getTaskByCriteria(this, true);
+//
+//		List<Patient> patients = patientDao.findComplex(this, true, false, true);
+//
+//		for (Task task : tasks) {
+//
+//			for (Patient patient : patients) {
+//				if (task.getParent().getId() == patient.getId()) {
+//					for (Task pTask : patient.getTasks()) {
+//						if (pTask.getId() == task.getId())
+//							pTask.setActive(true);
+//					}
+//				}
+//			}
+//		}
+//
+//		return patients;
+		return null;
 	}
 
 }
