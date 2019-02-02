@@ -52,7 +52,7 @@
 
 				<!-- remove from worklist -->
 				<p:selectBooleanCheckbox
-					value="#{dialog.archiveTaskDialog.removeFromWorklist}" />
+					value="#{archiveTaskDialog.removeFromWorklist}" />
 				<h:outputLabel
 					value="#{msg['dialog.archiveTask.checkBox.removeFromWorklist']}" />
 			</h:panelGrid>
@@ -70,16 +70,16 @@
 						value="#{msg['dialog.archiveTask.button.archive']}"
 						icon="fa fa-archive">
 						<f:actionListener
-							binding="#{dialog.archiveTaskDialog.archiveTask()}"></f:actionListener>
+							binding="#{archiveTaskDialog.archiveTask()}"></f:actionListener>
 						<f:actionListener
-							binding="#{dialog.archiveTaskDialog.hideDialog()}"></f:actionListener>
+							binding="#{archiveTaskDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 
 					<!-- Close button -->
 					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
 						icon="fa fa-times-circle">
 						<f:actionListener
-							binding="#{dialog.archiveTaskDialog.hideDialog()}"></f:actionListener>
+							binding="#{archiveTaskDialog.hideDialog()}"></f:actionListener>
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>

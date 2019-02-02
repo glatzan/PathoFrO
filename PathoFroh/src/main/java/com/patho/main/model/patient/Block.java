@@ -24,7 +24,7 @@ import org.hibernate.envers.Audited;
 
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.IdManuallyAltered;
-import com.patho.main.model.interfaces.LogAble;
+
 import com.patho.main.model.interfaces.Parent;
 import com.patho.main.model.interfaces.PatientRollbackAble;
 import com.patho.main.model.interfaces.TaskEntity;
@@ -41,7 +41,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Block
-		implements LogAble, TaskEntity, Parent<Sample>, PatientRollbackAble<Sample>, IdManuallyAltered, ID {
+		implements  TaskEntity, Parent<Sample>, PatientRollbackAble<Sample>, IdManuallyAltered, ID {
 
 	@Id
 	@GeneratedValue(generator = "block_sequencegenerator")

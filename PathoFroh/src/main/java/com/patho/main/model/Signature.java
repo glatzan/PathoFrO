@@ -12,14 +12,14 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 
-import com.patho.main.model.interfaces.LogAble;
+
 
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "signature_sequencegenerator", sequenceName = "signature_sequence")
-public class Signature implements LogAble {
+public class Signature{
 
 	private long id;
 

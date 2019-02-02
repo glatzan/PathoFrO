@@ -18,7 +18,7 @@ import javax.persistence.SequenceGenerator;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.LogAble;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +28,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "stainingPrototype_sequencegenerator", sequenceName = "stainingPrototype_sequence")
 @Getter
 @Setter
-public class StainingPrototype implements LogAble, ID {
+public class StainingPrototype implements ID {
 
 	public static final int TYPE_NORMAL = 0;
 	public static final int TYPE_IMMUN = 1;

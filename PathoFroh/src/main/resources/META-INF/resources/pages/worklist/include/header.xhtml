@@ -285,7 +285,7 @@
 
 			<!-- Archive Task -->
 			<p:commandButton id="archiveTaskBtn"
-				actionListener="#{dialog.archiveTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+				actionListener="#{archiveTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
 				<p:ajax event="dialogReturn"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 					listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"

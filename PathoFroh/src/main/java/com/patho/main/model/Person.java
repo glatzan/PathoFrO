@@ -39,7 +39,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.interfaces.ArchivAble;
 import com.patho.main.model.interfaces.FullName;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.LogAble;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +52,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "person_sequencegenerator", sequenceName = "person_sequence")
 @Getter
 @Setter
-public class Person implements Serializable, LogAble, ArchivAble, ID, FullName {
+public class Person implements Serializable,  ArchivAble, ID, FullName {
 
 	private static final long serialVersionUID = 2533238775751991883L;
 

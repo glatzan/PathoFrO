@@ -18,7 +18,7 @@ import org.hibernate.envers.NotAudited;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.interfaces.GsonAble;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.LogAble;
+
 import com.patho.main.model.interfaces.Parent;
 import com.patho.main.model.interfaces.PatientRollbackAble;
 import com.patho.main.model.interfaces.TaskEntity;
@@ -39,7 +39,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "diagnosis_sequencegenerator", sequenceName = "diagnosis_sequence")
 @Getter
 @Setter
-public class Diagnosis implements Parent<DiagnosisRevision>, GsonAble, LogAble, TaskEntity, PatientRollbackAble<DiagnosisRevision>, ID {
+public class Diagnosis implements Parent<DiagnosisRevision>, GsonAble,  TaskEntity, PatientRollbackAble<DiagnosisRevision>, ID {
 
 	@Id
 	@GeneratedValue(generator = "diagnosis_sequencegenerator")

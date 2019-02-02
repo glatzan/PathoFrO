@@ -137,6 +137,10 @@ TODO:
 Create Material and Staining for external samples
 
 SQL:
+/* deleting accounting table*/
+alter table task drop constraint fk668fdat9n9qrjbohxo1kj1ujs ;
+DROP TABLE accounting;
+
 /*adding notification_status to diagnosisrevision*/
 alter table diagnosisRevision add column notificationStatus int;
 /* set not approved */

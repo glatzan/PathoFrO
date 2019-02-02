@@ -236,25 +236,30 @@
             <artifactId>poi</artifactId>
             <version>4.0.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
             <version>2.4.0-b180830.0438</version>
         </dependency>
+
         <dependency>
             <groupId>com.univocity</groupId>
             <artifactId>univocity-parsers</artifactId>
             <version>2.7.6</version>
         </dependency>
+
         <dependency>
             <groupId>org.hotswapagent</groupId>
             <artifactId>hotswap-agent-core</artifactId>
             <version>1.3.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -273,6 +278,13 @@
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!-- Kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>1.1.51</version>
         </dependency>
     </dependencies>
 
@@ -448,4 +460,4 @@
         </plugins>
     </build>
 
-</project> 
+</project>

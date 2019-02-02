@@ -56,7 +56,7 @@ public class SlideNamingDialog extends AbstractDialog {
 
 	public void renameAndHide(boolean ignoreManuallyChangedEntities) {
 		hideDialog(
-				new ReloadTaskEvent(taskService.updateNamesOfTaskEnities(task, ignoreManuallyChangedEntities, true)));
+				new ReloadTaskEvent(taskService.updateNamesOfTaskEntities(task, ignoreManuallyChangedEntities, true)));
 		MessageHandler.sendGrowlMessagesAsResource("growl.task.updateNaming", "growl.task.updateNaming.text");
 	}
 }

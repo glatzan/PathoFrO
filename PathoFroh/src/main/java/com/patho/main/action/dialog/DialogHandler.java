@@ -50,7 +50,6 @@ import com.patho.main.action.dialog.slides.AddSlidesDialog;
 import com.patho.main.action.dialog.slides.SlideNamingDialog;
 import com.patho.main.action.dialog.slides.SlideOverviewDialog;
 import com.patho.main.action.dialog.slides.StainingPhaseExitDialog;
-import com.patho.main.action.dialog.task.ArchiveTaskDialog;
 import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
@@ -120,6 +119,5 @@ public class DialogHandler {
 	private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
 	private ConfirmDialog confirmDialog = new ConfirmDialog();
 	private DeleteDialog deleteDialog = new DeleteDialog();
-	private ArchiveTaskDialog archiveTaskDialog = new ArchiveTaskDialog();
 	private RestoreTaskDialog restoreTaskDialog = new RestoreTaskDialog();
 }

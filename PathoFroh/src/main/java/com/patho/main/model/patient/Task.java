@@ -1,78 +1,44 @@
 package com.patho.main.model.patient;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
-import javax.persistence.Version;
-
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.SelectBeforeUpdate;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Eye;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.common.TaskPriority;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.model.Accounting;
 import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Council;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Person;
 import com.patho.main.model.favourites.FavouriteList;
-import com.patho.main.model.interfaces.DataList;
-import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.LogAble;
 import com.patho.main.model.interfaces.Parent;
-import com.patho.main.model.interfaces.PatientRollbackAble;
+import com.patho.main.model.interfaces.*;
 import com.patho.main.model.util.audit.Audit;
 import com.patho.main.model.util.audit.AuditAble;
 import com.patho.main.model.util.audit.AuditListener;
 import com.patho.main.ui.task.TaskStatus;
 import com.patho.main.util.helper.TimeUtil;
 import com.patho.main.util.hibernate.RootAware;
+import org.hibernate.annotations.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OrderBy;
+import javax.persistence.*;
+import java.io.File;
+import java.util.*;
 
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "task_sequencegenerator", sequenceName = "task_sequence")
-@Getter
-@Setter
 @EntityListeners(AuditListener.class)
 public class Task
-		implements Parent<Patient>, LogAble, PatientRollbackAble<Patient>, DataList, ID, RootAware<Patient>, AuditAble {
+		implements Parent<Patient>,  PatientRollbackAble<Patient>, DataList, ID, RootAware<Patient>, AuditAble {
 
 	@Transient
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -251,9 +217,6 @@ public class Task
 	@NotAudited
 	private List<FavouriteList> favouriteLists;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	private Accounting accounting;
-
 	/********************************************************
 	 * Transient Variables
 	 ********************************************************/
@@ -416,7 +379,6 @@ public class Task
 	 * Returns true if the task is marked as active or an action is pending. If
 	 * activeOnly is true only the active attribute of the task will be evaluated.
 	 * 
-	 * @param task
 	 * @return
 	 */
 	@Transient
@@ -561,5 +523,249 @@ public class Task
 	@Transient
 	public File getFileRepositoryBase() {
 		return new File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + String.valueOf(getParent().getId()));
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setVersion(long version) {
+		this.version = version;
+	}
+
+	public void setTaskID(String taskID) {
+		this.taskID = taskID;
+	}
+
+	public void setParent(Patient parent) {
+		this.parent = parent;
+	}
+
+	public void setUseAutoNomenclature(boolean useAutoNomenclature) {
+		this.useAutoNomenclature = useAutoNomenclature;
+	}
+
+	public void setAudit(Audit audit) {
+		this.audit = audit;
+	}
+
+	public void setDateOfSugery(long dateOfSugery) {
+		this.dateOfSugery = dateOfSugery;
+	}
+
+	public void setDateOfReceipt(long dateOfReceipt) {
+		this.dateOfReceipt = dateOfReceipt;
+	}
+
+	public void setTaskPriority(TaskPriority taskPriority) {
+		this.taskPriority = taskPriority;
+	}
+
+	public void setDueDate(long dueDate) {
+		this.dueDate = dueDate;
+	}
+
+	public void setTypeOfOperation(byte typeOfOperation) {
+		this.typeOfOperation = typeOfOperation;
+	}
+
+	public void setCaseHistory(String caseHistory) {
+		this.caseHistory = caseHistory;
+	}
+
+	public void setCommentary(String commentary) {
+		this.commentary = commentary;
+	}
+
+	public void setInsurance(String insurance) {
+		this.insurance = insurance;
+	}
+
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+
+	public void setEye(Eye eye) {
+		this.eye = eye;
+	}
+
+	public void setStainingCompletionDate(long stainingCompletionDate) {
+		this.stainingCompletionDate = stainingCompletionDate;
+	}
+
+	public void setDiagnosisCompletionDate(long diagnosisCompletionDate) {
+		this.diagnosisCompletionDate = diagnosisCompletionDate;
+	}
+
+	public void setNotificationCompletionDate(long notificationCompletionDate) {
+		this.notificationCompletionDate = notificationCompletionDate;
+	}
+
+	public void setFinalizationDate(long finalizationDate) {
+		this.finalizationDate = finalizationDate;
+	}
+
+	public void setFinalized(boolean finalized) {
+		this.finalized = finalized;
+	}
+
+	public void setSlideCounter(int slideCounter) {
+		this.slideCounter = slideCounter;
+	}
+
+	public void setContacts(Set<AssociatedContact> contacts) {
+		this.contacts = contacts;
+	}
+
+	public void setSamples(List<Sample> samples) {
+		this.samples = samples;
+	}
+
+	public void setDiagnosisRevisions(Set<DiagnosisRevision> diagnosisRevisions) {
+		this.diagnosisRevisions = diagnosisRevisions;
+	}
+
+	public void setAttachedPdfs(Set<PDFContainer> attachedPdfs) {
+		this.attachedPdfs = attachedPdfs;
+	}
+
+	public void setCouncils(Set<Council> councils) {
+		this.councils = councils;
+	}
+
+	public void setFavouriteLists(List<FavouriteList> favouriteLists) {
+		this.favouriteLists = favouriteLists;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public void setTaskStatus(TaskStatus taskStatus) {
+		this.taskStatus = taskStatus;
+	}
+
+	public Logger getLogger() {
+		return this.logger;
+	}
+
+	public long getId() {
+		return this.id;
+	}
+
+	public long getVersion() {
+		return this.version;
+	}
+
+	public String getTaskID() {
+		return this.taskID;
+	}
+
+	public Patient getParent() {
+		return this.parent;
+	}
+
+	public boolean isUseAutoNomenclature() {
+		return this.useAutoNomenclature;
+	}
+
+	public Audit getAudit() {
+		return this.audit;
+	}
+
+	public long getDateOfSugery() {
+		return this.dateOfSugery;
+	}
+
+	public long getDateOfReceipt() {
+		return this.dateOfReceipt;
+	}
+
+	public TaskPriority getTaskPriority() {
+		return this.taskPriority;
+	}
+
+	public long getDueDate() {
+		return this.dueDate;
+	}
+
+	public byte getTypeOfOperation() {
+		return this.typeOfOperation;
+	}
+
+	public String getCaseHistory() {
+		return this.caseHistory;
+	}
+
+	public String getCommentary() {
+		return this.commentary;
+	}
+
+	public String getInsurance() {
+		return this.insurance;
+	}
+
+	public String getWard() {
+		return this.ward;
+	}
+
+	public Eye getEye() {
+		return this.eye;
+	}
+
+	public long getStainingCompletionDate() {
+		return this.stainingCompletionDate;
+	}
+
+	public long getDiagnosisCompletionDate() {
+		return this.diagnosisCompletionDate;
+	}
+
+	public long getNotificationCompletionDate() {
+		return this.notificationCompletionDate;
+	}
+
+	public long getFinalizationDate() {
+		return this.finalizationDate;
+	}
+
+	public boolean isFinalized() {
+		return this.finalized;
+	}
+
+	public int getSlideCounter() {
+		return this.slideCounter;
+	}
+
+	public Set<AssociatedContact> getContacts() {
+		return this.contacts;
+	}
+
+	public List<Sample> getSamples() {
+		return this.samples;
+	}
+
+	public Set<DiagnosisRevision> getDiagnosisRevisions() {
+		return this.diagnosisRevisions;
+	}
+
+	public Set<PDFContainer> getAttachedPdfs() {
+		return this.attachedPdfs;
+	}
+
+	public Set<Council> getCouncils() {
+		return this.councils;
+	}
+
+	public List<FavouriteList> getFavouriteLists() {
+		return this.favouriteLists;
+	}
+
+	public boolean isActive() {
+		return this.active;
+	}
+
+	public TaskStatus getTaskStatus() {
+		return this.taskStatus;
 	}
 }

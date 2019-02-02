@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.diagnosis;
 
+import com.patho.main.service.DiagnosisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -21,7 +22,7 @@ public class CopyHistologicalRecordDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private TaskService taskService;
+	private DiagnosisService diagnosisService;
 
 	private Diagnosis diagnosis;
 
@@ -39,7 +40,7 @@ public class CopyHistologicalRecordDialog extends AbstractDialog {
 	}
 
 	public void copyHistologicalRecord(boolean overwrite) {
-		taskService.copyHistologicalRecord(getDiagnosis(), overwrite);
+		diagnosisService.copyHistologicalRecord(getDiagnosis(), overwrite);
 	}
 
 	public void hideDialog() {

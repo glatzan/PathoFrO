@@ -30,7 +30,7 @@ import org.hibernate.envers.Audited;
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.LogAble;
+
 import com.patho.main.model.patient.Task;
 
 import lombok.Getter;
@@ -43,7 +43,7 @@ import lombok.Setter;
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
-public class AssociatedContact implements LogAble, ID {
+public class AssociatedContact implements ID {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Task task;

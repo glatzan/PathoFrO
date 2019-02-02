@@ -18,7 +18,7 @@ import org.hibernate.envers.NotAudited;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.IdManuallyAltered;
-import com.patho.main.model.interfaces.LogAble;
+
 import com.patho.main.model.interfaces.Parent;
 import com.patho.main.model.interfaces.PatientRollbackAble;
 import com.patho.main.model.interfaces.TaskEntity;
@@ -34,7 +34,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "slide_sequencegenerator", sequenceName = "slide_sequence")
 @Getter
 @Setter
-public class Slide implements Parent<Block>, LogAble, TaskEntity, PatientRollbackAble<Block>, IdManuallyAltered, ID {
+public class Slide implements Parent<Block>,  TaskEntity, PatientRollbackAble<Block>, IdManuallyAltered, ID {
 
 	@Id
 	@GeneratedValue(generator = "slide_sequencegenerator")

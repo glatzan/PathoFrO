@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.patho.main.model.interfaces.EditAbleEntity;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.LogAble;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +31,7 @@ import lombok.Setter;
 @Setter
 @SelectBeforeUpdate(true)
 @SequenceGenerator(name = "materialPreset_sequencegenerator", sequenceName = "materialPreset_sequence")
-public class MaterialPreset implements EditAbleEntity<MaterialPreset>, LogAble, ID, Serializable {
+public class MaterialPreset implements EditAbleEntity<MaterialPreset>, ID, Serializable {
 
 	private static final long serialVersionUID = 442137465482608899L;
 

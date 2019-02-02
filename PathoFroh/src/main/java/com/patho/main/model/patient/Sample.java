@@ -27,7 +27,7 @@ import org.hibernate.envers.NotAudited;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.IdManuallyAltered;
-import com.patho.main.model.interfaces.LogAble;
+
 import com.patho.main.model.interfaces.Parent;
 import com.patho.main.model.interfaces.PatientRollbackAble;
 import com.patho.main.model.interfaces.TaskEntity;
@@ -43,7 +43,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "sample_sequencegenerator", sequenceName = "sample_sequence")
 @Getter
 @Setter
-public class Sample implements Parent<Task>, LogAble, TaskEntity, PatientRollbackAble<Task>, IdManuallyAltered, ID {
+public class Sample implements Parent<Task>,  TaskEntity, PatientRollbackAble<Task>, IdManuallyAltered, ID {
 
 	@Id
 	@GeneratedValue(generator = "sample_sequencegenerator")

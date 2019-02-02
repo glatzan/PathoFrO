@@ -665,7 +665,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			if ((diagnosis.getParent().getText() == null || diagnosis.getParent().getText().isEmpty())
 					&& diagnosis.getDiagnosisPrototype() != null) {
 				logger.debug("No extended diagnosistext found, text copied");
-				setSelectedTask(taskService.copyHistologicalRecord(diagnosis, true));
+				setSelectedTask(diagnosisService.copyHistologicalRecord(diagnosis, true));
 				globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
 
 				return;

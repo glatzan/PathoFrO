@@ -40,7 +40,7 @@ public class DatabaseConfig {
 		factory.setJpaVendorAdapter(vendorAdapter);
 		factory.setPackagesToScan("com.patho.main");
 		factory.setDataSource(dataSource);
-		
+
 		return factory;
 	}
 

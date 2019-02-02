@@ -65,7 +65,7 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 	}
 
 	public void hideAndRestore() {
-		taskService.restoreTask(getTask(), getCommentary());
+		//taskService.restoreTask(getTask(), getCommentary());
 		hideDialog(new ReloadTaskEvent());
 	}
 

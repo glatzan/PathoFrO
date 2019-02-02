@@ -30,7 +30,7 @@ import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Signature;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.LogAble;
+
 import com.patho.main.model.interfaces.Parent;
 import com.patho.main.model.interfaces.PatientRollbackAble;
 import com.patho.main.model.interfaces.TaskEntity;
@@ -45,7 +45,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "diagnosisRevision_sequencegenerator", sequenceName = "diagnosisRevision_sequence")
 @Getter
 @Setter
-public class DiagnosisRevision implements Parent<Task>, TaskEntity, LogAble, PatientRollbackAble<Task>, ID {
+public class DiagnosisRevision implements Parent<Task>, TaskEntity,  PatientRollbackAble<Task>, ID {
 
 	/**
 	 * Internal marker for a diagnosis

@@ -23,7 +23,7 @@ import org.hibernate.annotations.FetchMode;
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.ListOrder;
-import com.patho.main.model.interfaces.LogAble;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +32,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "diagnosisPreset_sequencegenerator", sequenceName = "diagnosisPreset_sequence")
 @Getter
 @Setter
-public class DiagnosisPreset implements LogAble, ListOrder<DiagnosisPreset>, ID, Serializable {
+public class DiagnosisPreset implements ListOrder<DiagnosisPreset>, ID, Serializable {
 
 	private static final long serialVersionUID = 7345658902599657920L;
 

@@ -125,7 +125,7 @@
 					</p:splitButton>
 
 					<p:commandButton id="archiveTaskDialog" style="display:none"
-						actionListener="#{dialog.archiveTaskDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
+						actionListener="#{archiveTaskDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
 						<p:ajax event="dialogReturn"
 							listener="#{dialog.notificationDialog.sendReportTab.onReturnDialog}" />
 					</p:commandButton>

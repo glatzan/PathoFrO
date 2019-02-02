@@ -28,31 +28,34 @@ import com.patho.main.util.helper.TimeUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import test.testClass;
 
 @Component
 @Scope(value = "session")
 public class MainHandlerAction {
 
-	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private ThreadPoolTaskExecutor taskExecutor;
+	private final ThreadPoolTaskExecutor taskExecutor;
 
-	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private PDFRepository pdfRepository;
+	private final PDFRepository pdfRepository;
+
+	@Lazy
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private final UserHandlerAction userHandlerAction;
+
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	protected final ResourceBundle resourceBundle;
 
 	@Getter
 	@Setter
 	private String number;
 
-	@Autowired
-	@Lazy
-	private UserHandlerAction userHandlerAction;
 
-	@Autowired
-	protected ResourceBundle resourceBundle;
 
 	/********************************************************
 	 * Navigation
@@ -62,11 +65,19 @@ public class MainHandlerAction {
 	@Setter
 	private List<FacesMessage> queueGrowlMessages = new ArrayList<FacesMessage>();
 
+	@Autowired
+	public MainHandlerAction(ThreadPoolTaskExecutor taskExecutor, PDFRepository pdfRepository, UserHandlerAction userHandlerAction, ResourceBundle resourceBundle) {
+		this.taskExecutor = taskExecutor;
+		this.pdfRepository = pdfRepository;
+		this.userHandlerAction = userHandlerAction;
+		this.resourceBundle = resourceBundle;
+	}
+
 
 	public void test() {
 //		DataBaseConverter b = new DataBaseConverter();
 //		b.start();
-
+		new testClass().test();
 		try {
 			System.out.println(getBaseURL(FacesContext.getCurrentInstance()));
 		} catch (MalformedURLException e) {
@@ -74,10 +85,6 @@ public class MainHandlerAction {
 			e.printStackTrace();
 		}
 	}
-
-	/********************************************************
-	 * Date
-	 ********************************************************/
 
 	/**
 	 * Takes a long timestamp and returns a formatted date in standard format.
