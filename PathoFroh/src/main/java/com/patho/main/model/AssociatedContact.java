@@ -85,7 +85,7 @@ public class AssociatedContact implements ID {
 	@Transient
 	public boolean isNotificationPerformed() {
 		if (getNotifications() != null && getNotifications().size() > 0) {
-			if (getNotifications().stream().anyMatch(p -> p.isPerformed()))
+			if (getNotifications().stream().anyMatch(p -> p.getPerformed()))
 				return true;
 		}
 		return false;
@@ -98,7 +98,7 @@ public class AssociatedContact implements ID {
 
 	@Transient
 	public List<AssociatedContactNotification> getNotificationTypAsList(NotificationTyp type, boolean active) {
-		return getNotifications().stream().filter(p -> p.getNotificationTyp().equals(type) && p.isActive() == active)
+		return getNotifications().stream().filter(p -> p.getNotificationTyp().equals(type) && p.getActive() == active)
 				.collect(Collectors.toList());
 	}
 

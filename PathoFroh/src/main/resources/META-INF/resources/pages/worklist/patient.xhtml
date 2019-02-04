@@ -105,25 +105,25 @@
 					<!-- staining needed -->
 					<h:panelGroup>
 						<!-- staining needed = green -->
-						<ui:fragment rendered="#{task.taskStatus.stainingNeeded}">
+						<ui:fragment rendered="#{task.taskStatus.listStatus.inListStaining}">
 							<h:outputText value=" ("></h:outputText>
 							<h:outputText
-								value="#{msg['body.worklist.patient.stainingPhase.stainingNeeded']}"
+								value="#{msg['body.worklist.patient.stainingPhase.listStatus.inListStaining']}"
 								style="color:green;" />
 							<h:outputText value=") "></h:outputText>
 						</ui:fragment>
 
 						<!-- re-staining needed = orange -->
-						<ui:fragment rendered="#{task.taskStatus.reStainingNeeded}">
+						<ui:fragment rendered="#{task.taskStatus.listStatus.inListReStaining}">
 							<h:outputText value=" ("></h:outputText>
 							<h:outputText
-								value="#{msg['body.worklist.patient.stainingPhase.reStainingNeeded']}"
+								value="#{msg['body.worklist.patient.stainingPhase.listStatus.inListReStaining']}"
 								style="color:orange;" />
 							<h:outputText value=") "></h:outputText>
 						</ui:fragment>
 
 						<!--  no staining needed = purple -->
-						<ui:fragment rendered="#{task.taskStatus.stayInStainingList}">
+						<ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInStaining}">
 							<h:outputText value=" ("></h:outputText>
 							<h:outputText
 								value="#{msg['body.worklist.patient.stainingPhase.inList']}"
@@ -133,25 +133,25 @@
 
 						<!-- diagnosis needed -->
 						<!-- diagnosis needed = green -->
-						<ui:fragment rendered="#{task.taskStatus.diagnosisNeeded}">
+						<ui:fragment rendered="#{task.taskStatus.listStatus.inListDiagnosis}">
 							<h:outputText value=" ("></h:outputText>
 							<h:outputText
-								value="#{msg['body.worklist.patient.diagnosisPhase.diagnosisNeeded']}"
+								value="#{msg['body.worklist.patient.diagnosisPhase.listStatus.inListDiagnosis']}"
 								style="color:green;" />
 							<h:outputText value=") "></h:outputText>
 						</ui:fragment>
 
 						<!-- re-diagnosis needed = orange -->
-						<ui:fragment rendered="#{task.taskStatus.reDiagnosisNeeded}">
+						<ui:fragment rendered="#{task.taskStatus.relistStatus.inListDiagnosis}">
 							<h:outputText value=" ("></h:outputText>
 							<h:outputText
-								value="#{msg['body.worklist.patient.diagnosisPhase.reDiagnosisNeeded']}"
+								value="#{msg['body.worklist.patient.diagnosisPhase.relistStatus.inListDiagnosis']}"
 								style="color:orange;" />
 							<h:outputText value=") "></h:outputText>
 						</ui:fragment>
 
 						<!-- no diagnosis needed = purple -->
-						<ui:fragment rendered="#{task.taskStatus.stayInDiagnosisList}">
+						<ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInDiagnosis}">
 							<h:outputText value=" ("></h:outputText>
 							<h:outputText
 								value="#{msg['body.worklist.patient.diagnosisPhase.inList']}"
@@ -161,16 +161,16 @@
 
 						<!-- notification needed -->
 						<!-- notification need = green -->
-						<ui:fragment rendered="#{task.taskStatus.notificationNeeded}">
+						<ui:fragment rendered="#{task.taskStatus.listStatus.inListNotification}">
 							<h:outputText value=" ("></h:outputText>
 							<h:outputText
-								value="#{msg['body.worklist.patient.notificationPhase.notificationNeeded']}"
+								value="#{msg['body.worklist.patient.notificationPhase.listStatus.inListNotification']}"
 								style="color:green;" />
 							<h:outputText value=") "></h:outputText>
 						</ui:fragment>
 
 						<!-- stay in phase = purple -->
-						<ui:fragment rendered="#{task.taskStatus.stayInNotificationList}">
+						<ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInNotification}">
 							<h:outputText value=" ("></h:outputText>
 							<h:outputText
 								value="#{msg['body.worklist.patient.notificationPhase.inList']}"

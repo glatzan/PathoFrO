@@ -154,6 +154,10 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 		return result;
 	}
 
+	@Override
+	public void setId(long l) {
+	}
+
 	/**
 	 * Return container for generated template
 	 * 

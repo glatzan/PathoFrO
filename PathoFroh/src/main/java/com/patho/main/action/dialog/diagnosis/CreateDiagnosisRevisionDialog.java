@@ -143,7 +143,6 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 	/**
 	 * Copies the original name as the new name
 	 * 
-	 * @param diagnosisRevision
 	 */
 	public void copyOldNameFromDiagnosisRevision(DiagnosisRevisionContainer diagnosisRevisionContainer) {
 		diagnosisRevisionContainer.setNewName(diagnosisRevisionContainer.getName());

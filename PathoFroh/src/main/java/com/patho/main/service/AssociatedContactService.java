@@ -116,7 +116,6 @@ public class AssociatedContactService extends AbstractService {
 	 * (depending on the selected diagnosis)
 	 * 
 	 * @param task
-	 * @param diagnosisRevision
 	 */
 	public Task updateNotificationsForPhysicalDiagnosisReport(Task task) {
 		for (AssociatedContact associatedContact : task.getContacts()) {
@@ -142,7 +141,6 @@ public class AssociatedContactService extends AbstractService {
 	/**
 	 * removes a notification
 	 * 
-	 * @param task
 	 * @param associatedContact
 	 * @param notification
 	 */
@@ -195,7 +193,6 @@ public class AssociatedContactService extends AbstractService {
 	 * Adds an associated contact
 	 * 
 	 * @param task
-	 * @param associatedContact
 	 * @return
 	 */
 	public ContactReturn addAssociatedContact(Task task, Person person, ContactRole role) {
@@ -229,7 +226,6 @@ public class AssociatedContactService extends AbstractService {
 	/**
 	 * Adds a new notification with the given type
 	 * 
-	 * @param task
 	 * @param associatedContact
 	 * @param notificationTyp
 	 * @return
@@ -250,7 +246,6 @@ public class AssociatedContactService extends AbstractService {
 	/**
 	 * Adds a new notification with the given type
 	 * 
-	 * @param task
 	 * @param associatedContact
 	 * @param notificationTyp
 	 * @param active
@@ -298,7 +293,6 @@ public class AssociatedContactService extends AbstractService {
 	 * Sets all notifications of the given type to inactive, and creats a new
 	 * notification of the given type
 	 * 
-	 * @param task
 	 * @param associatedContact
 	 * @param notificationTyp
 	 * @return
@@ -318,7 +312,6 @@ public class AssociatedContactService extends AbstractService {
 	 * Sets the given notification as inactive an adds a new notification of the
 	 * same type (active)
 	 * 
-	 * @param task
 	 * @param associatedContact
 	 * @param notification
 	 */
@@ -339,7 +332,6 @@ public class AssociatedContactService extends AbstractService {
 	/**
 	 * Sets all notifications with the given type to the given active status
 	 * 
-	 * @param task
 	 * @param associatedContact
 	 * @param notificationTyp
 	 * @param active
@@ -348,7 +340,7 @@ public class AssociatedContactService extends AbstractService {
 			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active) {
 
 		for (AssociatedContactNotification notification : associatedContact.getNotifications()) {
-			if (notification.getNotificationTyp().equals(notificationTyp) && notification.isActive()) {
+			if (notification.getNotificationTyp().equals(notificationTyp) && notification.getActive()) {
 				notification.setActive(active);
 				associatedContact = associatedContactRepository.save(associatedContact,
 						resourceBundle.get("log.contact.notification.inactive", associatedContact.getTask(),
@@ -364,7 +356,6 @@ public class AssociatedContactService extends AbstractService {
 	/**
 	 * Updates a notification when the notification was performed
 	 * 
-	 * @param task
 	 * @param associatedContact
 	 * @param notification
 	 * @param message
@@ -530,7 +521,7 @@ public class AssociatedContactService extends AbstractService {
 
 			if (notification.size() > 0) {
 
-				Optional<AssociatedContactNotification> res = notification.stream().filter(p -> p.isActive())
+				Optional<AssociatedContactNotification> res = notification.stream().filter(p -> p.getActive())
 						.findFirst();
 
 				if (res.isPresent()) {

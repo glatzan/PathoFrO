@@ -98,6 +98,11 @@ public class ContactSelector extends AbstractSelector implements ID {
 		logger.trace("Custom Address is: " + getCustomAddress());
 	}
 
+	@Override
+	public void setId(long l) {
+
+	}
+
 	@Getter
 	@Setter
 	public class OrganizationChooser {

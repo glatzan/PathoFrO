@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @DynamicUpdate(true)
 @SequenceGenerator(name = "patient_sequencegenerator", sequenceName = "patient_sequence")
 public class Patient
-        implements Parent<Patient>, CreationDate, ArchivAble, PatientRollbackAble<Patient>, DataList, ID {
+        implements Parent<Patient>, CreationDate, ArchivAble, DataList, ID {
 
     @Id
     @GeneratedValue(generator = "patient_sequencegenerator")
@@ -224,12 +224,6 @@ public class Patient
     @Transient
     public String getPublicName() {
         return getPerson().getFullName();
-    }
-
-    @Override
-    @Transient
-    public String getLogPath() {
-        return toString();
     }
 
     /**

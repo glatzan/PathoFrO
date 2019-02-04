@@ -137,6 +137,13 @@ TODO:
 Create Material and Staining for external samples
 
 SQL:
+/* converting timestamps to date*/
+alter table task add column tmp date;
+update task set tmp = TO_TIMESTAMP(duedate/1000)::date;
+
+/* old unused filed*/
+alter table sample drop ReStainingPhase;
+
 /* deleting accounting table*/
 alter table task drop constraint fk668fdat9n9qrjbohxo1kj1ujs ;
 DROP TABLE accounting;

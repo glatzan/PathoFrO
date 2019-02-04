@@ -716,7 +716,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		 * Updates a diagnosis without a preset. (Removes the previously set preset)
 		 */
 		public void updateDiagnosisPrototype(Diagnosis diagnosis, String diagnosisAsText) {
-			updateDiagnosisPrototype(diagnosis, diagnosisAsText, "", diagnosis.isMalign(), "");
+			updateDiagnosisPrototype(diagnosis, diagnosisAsText, "", diagnosis.getMalign(), "");
 		}
 
 		/**

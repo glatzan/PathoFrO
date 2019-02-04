@@ -7,7 +7,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.miscellaneous.ConfirmDialog.ConfirmEvent;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.TaskEntity;
+
 import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Slide;

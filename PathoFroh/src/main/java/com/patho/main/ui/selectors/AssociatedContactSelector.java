@@ -20,7 +20,7 @@ public class AssociatedContactSelector extends AbstractSelector {
 		this.contact = contact;
 		// deletion only possible if no notification was performed
 		setDeleteAble(
-				contact.getNotifications() != null ? !contact.getNotifications().stream().anyMatch(p -> p.isPerformed())
+				contact.getNotifications() != null ? !contact.getNotifications().stream().anyMatch(p -> p.getPerformed())
 						: true);
 	}
 

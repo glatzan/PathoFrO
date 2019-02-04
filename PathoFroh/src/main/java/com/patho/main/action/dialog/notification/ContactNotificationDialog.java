@@ -112,7 +112,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 				for (AssociatedContactNotification associatedContactNotification : getAssociatedContact()
 						.getNotifications()) {
 					if (associatedContactNotification.getNotificationTyp().equals(typeArr[i])
-							&& associatedContactNotification.isActive() && !associatedContactNotification.isFailed()) {
+							&& associatedContactNotification.getActive() && !associatedContactNotification.getFailed()) {
 						disabled = true;
 						break;
 					}

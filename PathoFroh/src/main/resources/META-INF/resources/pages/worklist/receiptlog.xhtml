@@ -461,19 +461,19 @@
 					styleClass="bigFont"></h:outputLabel>
 				<!-- staining completed -->
 				<h:panelGroup
-					rendered="#{!worklistHandler.current.selectedTask.taskStatus.stainingNeeded and !worklistHandler.current.selectedTask.taskStatus.reStainingNeeded}">
+					rendered="#{!worklistHandler.current.selectedTask.taskStatus.listStatus.inListStaining and !worklistHandler.current.selectedTask.taskStatus.listStatus.inListReStaining}">
 					<div class="fa fa-check-circle icon-green"
 						title="#{msg['body.receiptlog.slide.completed']}" />
 				</h:panelGroup>
 				<!-- staining to perform -->
 				<h:panelGroup
-					rendered="#{worklistHandler.current.selectedTask.taskStatus.stainingNeeded}">
+					rendered="#{worklistHandler.current.selectedTask.taskStatus.listStatus.inListStaining}">
 					<div class="fa fa-exclamation-circle icon-orange"
 						title="#{msg['body.receiptlog.slide.staining']}" />
 				</h:panelGroup>
 				<!-- restaining to perform -->
 				<h:panelGroup
-					rendered="#{worklistHandler.current.selectedTask.taskStatus.reStainingNeeded}">
+					rendered="#{worklistHandler.current.selectedTask.taskStatus.listStatus.inListReStaining}">
 					<div class="fa fa-exclamation-circle ic-custom icon-orange"
 						title="#{msg['body.receiptlog.slide.restaining']}" />
 				</h:panelGroup>

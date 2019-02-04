@@ -141,13 +141,13 @@
 
 										<!-- not finalized -->
 										<ui:fragment
-											rendered="#{node.councilRequestCompleted and node.replyReceived and !node.councilCompleted}">
+											rendered="#{node.councilRequestCompleted and node.replyReceived and !node.listStatus.inListCouncilCompleted}">
 											<i class="fa fa-exclamation-circle icon-red"
 												title="#{msg['dialog.council.tree.finalize.pending.info']}" />
 										</ui:fragment>
 
 										<!-- finalized -->
-										<ui:fragment rendered="#{node.councilCompleted}">
+										<ui:fragment rendered="#{node.listStatus.inListCouncilCompleted}">
 											<i class="fa fa-check-circle icon-green"
 												title="#{msg['dialog.council.tree.finalize.completed.info']}" />
 										</ui:fragment>

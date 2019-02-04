@@ -86,7 +86,7 @@
 				<!-- end council -->
 				<p:commandButton value="#{msg['dialog.council.button.endCouncil']}"
 					style="margin-right:30px !important;" update="@form"
-					rendered="#{!dialog.councilDialog.selectedCouncil.councilCompleted}"
+					rendered="#{!dialog.councilDialog.selectedCouncil.listStatus.inListCouncilCompleted}"
 					disabled="#{!(dialog.councilDialog.selectedCouncil.replyReceived and dialog.councilDialog.selectedCouncil.sampleShipped and dialog.councilDialog.selectedCouncil.councilRequestCompleted)}"
 					icon="fa fa-check-circle-o">
 					<f:actionListener
