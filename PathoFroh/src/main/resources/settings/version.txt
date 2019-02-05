@@ -140,7 +140,61 @@ SQL:
 /* converting timestamps to date*/
 alter table task add column tmp date;
 update task set tmp = TO_TIMESTAMP(duedate/1000)::date;
+alter table task drop column duedate;
+alter table task add column duedate date;
+update task set duedate = tmp;
 
+drop view taskoverview;
+update task set tmp = TO_TIMESTAMP(dateOfReceipt/1000)::date;
+alter table task drop column dateOfReceipt;
+alter table task add column dateOfReceipt date;
+update task set dateOfReceipt = tmp;
+
+update task set tmp = TO_TIMESTAMP(dateOfSugery/1000)::date;
+alter table task drop column dateOfSugery;
+alter table task add column dateOfSugery date;
+update task set dateOfSugery = tmp;
+alter table task drop column tmp;
+
+alter table task add column tmp timestamp;
+update task set tmp = TO_TIMESTAMP(finalizationDate/1000);
+alter table task drop column finalizationDate;
+alter table task add column finalizationDate timestamp;
+update task set finalizationDate = tmp;
+
+update task set tmp = TO_TIMESTAMP(notificationCompletionDate/1000);
+alter table task drop column notificationCompletionDate;
+alter table task add column notificationCompletionDate timestamp;
+update task set notificationCompletionDate = tmp;
+
+update task set tmp = TO_TIMESTAMP(diagnosisCompletionDate/1000);
+alter table task drop column diagnosisCompletionDate;
+alter table task add column diagnosisCompletionDate timestamp;
+update task set diagnosisCompletionDate = tmp;
+
+update task set tmp = TO_TIMESTAMP(stainingCompletionDate/1000);
+alter table task drop column stainingCompletionDate;
+alter table task add column stainingCompletionDate timestamp;
+update task set stainingCompletionDate = tmp;
+
+/* View For task display*/
+CREATE OR REPLACE VIEW taskoverview AS
+Select
+	task.id,
+	task.taskId,
+	task.dateofreceipt,
+	case when task.stainingcompletiondate != null then true else false end as stainingcompleted,
+	case when task.diagnosiscompletiondate != null then true else false end as diagnosiscompleted,
+	case when task.notificationcompletiondate != null then true else false end as notificationcompleted,
+	task.finalized,
+	task.taskpriority,
+	pers.title,
+	pers.firstname,
+	pers.lastname,
+	pers.birthday
+	from task as task
+		left join patient pat on pat.id = task.parent_id
+		left join person as pers on pers.id = pat.person_id;
 /* old unused filed*/
 alter table sample drop ReStainingPhase;
 

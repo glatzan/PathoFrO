@@ -32,7 +32,7 @@ import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.util.audit.Audit;
-import com.patho.main.model.util.audit.AuditAble;
+import com.patho.main.model.audit.AuditAble;
 import com.patho.main.model.util.audit.AuditListener;
 import com.patho.main.util.helper.TextToLatexConverter;
 

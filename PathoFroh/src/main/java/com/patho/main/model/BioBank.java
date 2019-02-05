@@ -34,7 +34,7 @@ import com.patho.main.config.PathoConfig;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.util.audit.Audit;
-import com.patho.main.model.util.audit.AuditAble;
+import com.patho.main.model.audit.AuditAble;
 import com.patho.main.model.util.audit.AuditListener;
 
 import lombok.Getter;

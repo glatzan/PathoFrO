@@ -16,7 +16,7 @@ import org.hibernate.envers.Audited;
 
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.util.audit.Audit;
-import com.patho.main.model.util.audit.AuditAble;
+import com.patho.main.model.audit.AuditAble;
 import com.patho.main.model.util.audit.AuditListener;
 import com.patho.main.template.PrintDocument.DocumentType;
 

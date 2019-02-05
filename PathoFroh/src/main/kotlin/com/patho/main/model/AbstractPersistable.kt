@@ -1,5 +1,6 @@
 package com.patho.main.model
 
+import org.slf4j.LoggerFactory
 import org.springframework.data.util.ProxyUtils
 import javax.persistence.MappedSuperclass
 
@@ -9,7 +10,9 @@ import javax.persistence.MappedSuperclass
 @MappedSuperclass
 abstract class AbstractPersistable {
 
-    open abstract var id: Long
+    protected open val logger = LoggerFactory.getLogger(this.javaClass)
+
+    abstract var id: Long
 
     open override fun equals(other: Any?): Boolean {
         other ?: return false
@@ -20,7 +23,7 @@ abstract class AbstractPersistable {
 
         other as AbstractPersistable
 
-        return if (null == this.id) false else this.id == other.id
+        return if (this.id == null) false else this.id == other.id
     }
 
     open override fun hashCode(): Int {

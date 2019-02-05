@@ -108,14 +108,16 @@ class TaskStatus(task: Task) {
         simpleStatus()
     }
 
-    fun simpleStatus() {
+    fun simpleStatus(): TaskStatus {
         listStatus = ListStatus(task)
-        finalized = task.isFinalized
-        actionPending = task.isActiveOrActionPending
-        active = task.isActive
+        finalized = task.finalized
+        actionPending = task.isActiveOrActionPending()
+        active = task.active
         editable = isTaskEditable
 
         println(SpringContextBridge.services().userHandlerAction)
+
+        return this
     }
 
 
@@ -183,7 +185,7 @@ class TaskStatus(task: Task) {
          */
         @JvmStatic
         fun hasFavouriteLists(task: Task, vararg idArr: Long): Boolean {
-            return idArr.any { p -> task.favouriteLists.any { f -> f.id == p } }
+            return idArr.any { p -> task.favouriteLists?.any { f -> f.id == p } ?: false }
         }
 
         /**
@@ -215,7 +217,7 @@ class TaskStatus(task: Task) {
          */
         @JvmStatic
         fun checkIfStainingCompleted(block: Block): Boolean {
-            return block.slides.all { p -> p.isStainingCompleted }
+            return block.slides.all { p -> p.stainingCompleted }
         }
 
         /**
@@ -247,7 +249,7 @@ class TaskStatus(task: Task) {
          */
         @JvmStatic
         fun checkIfReStainingFlag(block: Block): Boolean {
-            return block.slides.all { p -> p.isReStaining }
+            return block.slides.all { p -> p.reStaining }
         }
 
         /**
@@ -263,7 +265,7 @@ class TaskStatus(task: Task) {
          */
         @JvmStatic
         fun checkIfDiagnosisCompleted(task: Task): Boolean {
-            return task.diagnosisRevisions.all { p -> checkIfDiagnosisCompleted(p) }
+            return task.diagnosisRevisions?.all { p -> checkIfDiagnosisCompleted(p) } ?: true
         }
 
         /**
@@ -287,7 +289,7 @@ class TaskStatus(task: Task) {
          */
         @JvmStatic
         fun checkIfNotificationIsCompleted(task: Task): Boolean {
-            return task.diagnosisRevisions.all { p -> checkIfNotificationIsCompleted(p) }
+            return task.diagnosisRevisions?.all { p -> checkIfNotificationIsCompleted(p) } ?: true
 
         }
 

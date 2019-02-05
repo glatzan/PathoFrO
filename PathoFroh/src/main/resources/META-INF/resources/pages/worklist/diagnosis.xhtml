@@ -204,11 +204,11 @@
 
 					<!-- date of surgery -->
 					<h:outputLabel value="#{msg['body.diagnosis.surgeryDate']}" />
-					<p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="2"
+					<p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="2" converter="localDateConverter"
 						style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
 						styleClass="customBackground"
 						disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-						value="#{worklistHandler.current.selectedTask.dateOfSugeryAsDate}">
+						value="#{worklistHandler.current.selectedTask.dateOfSugery}">
 						<p:ajax event="dateSelect"
 							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dateOfSurgery',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.dateOfSugery))}" />
 						<f:ajax event="change" execute="@this"
@@ -217,11 +217,11 @@
 
 					<!-- date of receipt -->
 					<h:outputLabel value="#{msg['body.diagnosis.taskEDate']}" />
-					<p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="3"
+					<p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="3" converter="localDateConverter"
 						disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 						style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
 						styleClass="customBackground"
-						value="#{worklistHandler.current.selectedTask.dateOfReceiptAsDate}">
+						value="#{worklistHandler.current.selectedTask.dateOfReceipt}">
 						<p:ajax event="dateSelect"
 							listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.dateOfReceipt))}" />
 						<f:ajax event="change" execute="@this"

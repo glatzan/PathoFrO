@@ -1,29 +1,36 @@
 package com.patho.main.util.task
 
+import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
+import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.util.helper.TaskUtil
-import javax.persistence.Transient
 
 class TaskTreeTools {
     companion object {
 
         @JvmStatic
-        fun updateNamesInTree(task: Task, useAutoNomenclature: Boolean = task.isUseAutoNomenclature, ignoreManuallyNamedItems: Boolean = false) {
-            task.samples.forEach { p -> TaskStatus.Companion.updateAllNames(p, useAutoNomenclature, ignoreManuallyNamedItems) }
+        fun updateNamesInTree(task: Task, useAutoNomenclature: Boolean = task.useAutoNomenclature, ignoreManuallyNamedItems: Boolean = false) {
+            task.samples.forEach { p -> TaskTreeTools.updateNamesInTree(p, useAutoNomenclature, ignoreManuallyNamedItems) }
         }
 
         @JvmStatic
-        fun updateName(sample: Sample, useAutoNomenclature: Boolean = sample?.task?.isUseAutoNomenclature
-                ?: false, ignoreManuallyNamedItems: Boolean = false): Boolean {
-            if (!sample.isIdManuallyAltered() || ignoreManuallyNamedItems && sample.isIdManuallyAltered()) {
+        fun updateNamesInTree(sample: Sample, useAutoNomenclature: Boolean = sample.parent?.useAutoNomenclature
+                ?: false, ignoreManuallyNamedItems: Boolean = false) {
+            TaskTreeTools.updateName(sample, useAutoNomenclature, ignoreManuallyNamedItems)
+            sample.blocks.forEach { p -> TaskTreeTools.updateNamesInTree(p, useAutoNomenclature, ignoreManuallyNamedItems) }
+        }
 
-                val name = TaskUtil.getSampleName(sample.task?.getSamples().size,
-                        this.getParent()!!.getSamples().indexOf(this) + 1, useAutoNomenclature)
+        @JvmStatic
+        fun updateName(sample: Sample, useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean): Boolean {
+            if (!sample.idManuallyAltered || ignoreManuallyNamedItems && sample.idManuallyAltered) {
 
-                if (getSampleID() == null || getSampleID() != name) {
-                    setSampleID(name)
-                    setIdManuallyAltered(false)
+                val name = TaskUtil.getSampleName(sample.task?.samples?.size ?: 1,
+                        (sample.parent?.samples?.indexOf(sample) ?: 0) + 1, useAutoNomenclature)
+
+                if (sample.sampleID == null || sample.sampleID != name) {
+                    sample.sampleID = name
+                    sample.idManuallyAltered = false
                     return true
                 }
             }
@@ -31,111 +38,101 @@ class TaskTreeTools {
             return false
         }
 
-
-        fun updateNamesInTree(sample: Sample, useAutoNomenclature: Boolean = sample.getTask().isUseAutoNomenclature, ignoreManuallyNamedItems: Boolean = false) {
-            updateNameOfSample(useAutoNomenclature, ignoreManuallyNamedItems)
-            getBlocks().stream().forEach { p -> p.updateAllNames(useAutoNomenclature, ignoreManuallyNamedItems) }
+        /**
+         * Changes the name of all blocks
+         */
+        @JvmStatic
+        fun updateNamesInTree(block: Block, useAutoNomenclature: Boolean = block.parent?.parent?.useAutoNomenclature
+                ?: false, ignoreManuallyNamedItems: Boolean = false) {
+            updateName(block, useAutoNomenclature, ignoreManuallyNamedItems)
+            block.slides.forEach { p -> TaskTreeTools.updateNamesInTree(p, useAutoNomenclature, ignoreManuallyNamedItems) }
         }
+
+        /**
+         * Changes the name of a block
+         */
+        @JvmStatic
+        fun updateName(block: Block, useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean): Boolean {
+            if (!block.idManuallyAltered || block.idManuallyAltered && ignoreManuallyNamedItems) {
+                if (useAutoNomenclature) {
+                    var name: String
+
+                    if (block.parent?.blocks?.size ?: 0 > 1) {
+                        name = TaskUtil.getCharNumber(block.parent?.blocks?.indexOf(block) ?: 1)
+                        if (block.parent?.parent?.samples?.size == 1)
+                            name = name.toUpperCase()
+                    } else {
+                        // no block name
+                        name = ""
+                    }
+
+                    if (block.blockID == null || block.blockID != name) {
+                        block.blockID = name
+                        block.idManuallyAltered = false
+                        return true
+                    }
+                }
+            }
+
+            return false
+        }
+
+        /**
+         * Changes the name of a slide
+         */
+        @JvmStatic
+        fun updateNamesInTree(slide: Slide, useAutoNomenclature: Boolean = slide.parent?.parent?.parent?.useAutoNomenclature
+                ?: false, ignoreManuallyNamedItems: Boolean = false) {
+            updateName(slide, useAutoNomenclature, ignoreManuallyNamedItems)
+        }
+
+        /**
+         * Changes the name of a slide
+         */
+        @JvmStatic
+        fun updateName(slide: Slide, useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean): Boolean {
+            if (!slide.idManuallyAltered || slide.idManuallyAltered && ignoreManuallyNamedItems) {
+                var name = StringBuilder()
+
+                if (useAutoNomenclature) {
+
+                    // generating block id
+                    name.append(slide.parent?.parent?.sampleID ?: "")
+                    name.append(slide.parent?.blockID ?: "")
+                    if (name.isNotEmpty())
+                        name.append(" ")
+
+                    name.append(slide.slidePrototype?.name ?: "")
+
+                    var stainingsInBlock = TaskUtil.getNumerOfSameStainings(slide)
+
+                    if (stainingsInBlock > 1)
+                        name.append(stainingsInBlock.toString())
+
+                    if (slide.slideID == null || slide.slideID != name.toString()) {
+                        slide.slideID = name.toString()
+                        slide.idManuallyAltered = false
+                        return true
+                    }
+                } else if (slide.slideID == null || slide.slideID.isEmpty()) {
+                    // only setting the staining and the number of the stating
+                    name.append(slide.slidePrototype?.name ?: "")
+
+                    var stainingsInBlock = TaskUtil.getNumerOfSameStainings(slide)
+
+                    if (stainingsInBlock > 1)
+                        name.append(stainingsInBlock.toString())
+
+                    slide.slideID = name.toString()
+                    slide.idManuallyAltered = false
+                    return true
+                }
+            }
+
+            return false
+        }
+
     }
 }
 
-/**
- * Updates the name of all block children
- *
- * @param useAutoNomenclature
- */
-@Transient
-override fun updateAllNames(useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean) {
-    updateNameOfSample(useAutoNomenclature, ignoreManuallyNamedItems)
-    blocks.stream().forEach { p -> p.updateAllNames(useAutoNomenclature, ignoreManuallyNamedItems) }
-}
 
-@Transient
-fun updateAllNames() {
-    updateNameOfSlide(getTask()!!.isUseAutoNomenclature, false)
-}
-
-@Transient
-fun updateAllNames(useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean) {
-    updateNameOfSlide(useAutoNomenclature, ignoreManuallyNamedItems)
-}
-
-@Transient
-fun updateNameOfSlide(useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean): Boolean {
-    if (!isIdManuallyAltered() || isIdManuallyAltered() && ignoreManuallyNamedItems) {
-        var name = StringBuilder()
-
-        if (useAutoNomenclature) {
-
-            // generating block id
-            name.append(parent!!.getParent()!!.sampleID)
-            name.append(parent!!.getBlockID())
-            if (name.length > 0)
-                name.append(" ")
-
-            name.append(slidePrototype!!.name)
-
-            var stainingsInBlock = TaskUtil.getNumerOfSameStainings(this)
-
-            if (stainingsInBlock > 1)
-                name.append(stainingsInBlock.toString())
-
-            if (getSlideID() == null || getSlideID() != name.toString()) {
-                setSlideID(name.toString())
-                setIdManuallyAltered(false)
-                return true
-            }
-        } else if (getSlideID() == null || getSlideID().isEmpty()) {
-            // only setting the staining and the number of the stating
-            name.append(slidePrototype!!.name)
-
-            var stainingsInBlock = TaskUtil.getNumerOfSameStainings(this)
-
-            if (stainingsInBlock > 1)
-                name.append(stainingsInBlock.toString())
-
-            setSlideID(name.toString())
-            setIdManuallyAltered(false)
-            return true
-        }
-    }
-
-    return false
-}
-
-@Transient
-fun updateNameOfBlock(useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean): Boolean {
-    if (!isIdManuallyAltered || ignoreManuallyNamedItems && isIdManuallyAltered) {
-        if (useAutoNomenclature) {
-            var name: String
-
-            if (this.parent!!.blocks.size > 1) {
-                name = TaskUtil.getCharNumber(parent!!.blocks.indexOf(this))
-                if (task!!.samples.size == 1)
-                    name = name.toUpperCase()
-            } else {
-                // no block name
-                name = ""
-            }
-
-            if (blockID == null || blockID != name) {
-                blockID = name
-                isIdManuallyAltered = false
-                return true
-            }
-        }
-    }
-
-    return false
-}
-
-@Transient
-fun updateAllNames() {
-    updateAllNames(task!!.isUseAutoNomenclature, false)
-}
-
-@Transient
-override fun updateAllNames(useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean) {
-    updateNameOfBlock(useAutoNomenclature, ignoreManuallyNamedItems)
-    slides.stream().forEach { p -> p.updateNameOfSlide(useAutoNomenclature, ignoreManuallyNamedItems) }
-}

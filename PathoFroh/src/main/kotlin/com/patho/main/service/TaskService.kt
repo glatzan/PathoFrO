@@ -9,6 +9,7 @@ import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.helper.TimeUtil
 import com.patho.main.util.task.TaskArchiveStatus
 import com.patho.main.util.task.TaskStatus
+import com.patho.main.util.task.TaskTreeTools
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -132,7 +133,8 @@ public open class TaskService : AbstractService() {
         logger.debug("Updating names, ignore manually altered: {}", ignoreManuallyChangedEntities)
 
         for (sample in task.samples) {
-            sample.updateAllNames(true, ignoreManuallyChangedEntities)
+            TaskTreeTools.updateNamesInTree(sample, sample.task?.useAutoNomenclature
+                    ?: false, ignoreManuallyChangedEntities)
         }
 
         return if (save)
@@ -147,15 +149,15 @@ public open class TaskService : AbstractService() {
     open fun getTaskArchiveStatus(task: Task): TaskArchiveStatus {
         var taskArchiveStatus = TaskArchiveStatus(task);
 
-        taskArchiveStatus.stainingPhaseCompleted = task.stainingCompletionDate.equals(0)
+        taskArchiveStatus.stainingPhaseCompleted = task.stainingCompletionDate != null
         taskArchiveStatus.stainingCompleted = TaskStatus.checkIfStainingCompleted(task)
 
 
         taskArchiveStatus.diagnosisPhaseCompleted = TaskStatus.checkIfDiagnosisCompleted(task)
         taskArchiveStatus.notificationPhaseCompleted = TaskStatus.checkIfNotificationIsCompleted(task)
         // searching for blocking lists
-        taskArchiveStatus.blockingFavouriteLists =
-                task.favouriteLists.stream().filter { p -> serviceSettings.taskArchiveRules.blockingFavouriteLists.stream().anyMatch { c -> c.id == p.id } }.collect(Collectors.toList())
+//        taskArchiveStatus.blockingFavouriteLists =
+//                task.favouriteLists?.filter { p -> serviceSettings.taskArchiveRules.blockingFavouriteLists.stream().anyMatch { c -> c.id == p.id } }) ?
 
         return taskArchiveStatus
     }

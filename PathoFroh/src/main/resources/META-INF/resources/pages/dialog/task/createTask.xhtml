@@ -53,7 +53,7 @@
 
 					<!-- Task Date -->
 					<h:outputLabel value="#{msg['dialog.createTask.taskEDate']}"></h:outputLabel>
-					<p:calendar pattern="dd.MM.yyyy" mask="true" id="dueDate"
+					<p:calendar pattern="dd.MM.yyyy" mask="true" id="dueDate" converter="localDateConverter"
 						value="#{dialog.createTaskDialog.taskData.dateOfReceipt}">
 					</p:calendar>
 

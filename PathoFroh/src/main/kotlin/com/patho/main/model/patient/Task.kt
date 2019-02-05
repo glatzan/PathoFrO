@@ -5,16 +5,18 @@ import com.patho.main.common.Eye
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.common.TaskPriority
 import com.patho.main.model.*
+import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
-import com.patho.main.util.helper.TimeUtil
 import com.patho.main.util.task.TaskStatus
 import org.hibernate.annotations.*
 import org.hibernate.envers.Audited
 import org.hibernate.envers.NotAudited
+import java.time.Instant
+import java.time.LocalDate
 import java.util.*
 import javax.persistence.*
 import javax.persistence.CascadeType
@@ -27,12 +29,12 @@ import javax.persistence.OrderBy
 @DynamicUpdate(true)
 @SequenceGenerator(name = "task_sequencegenerator", sequenceName = "task_sequence")
 @EntityListeners(AuditListener::class)
-class Task : AbstractPersistable(), ID, Parent<Patient> {
+open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble {
 
     @Id
     @GeneratedValue(generator = "task_sequencegenerator")
     @Column(unique = true, nullable = false)
-    open var id: Long = 0
+    override open var id: Long = 0
 
     @Version
     open var version: Long = 0
@@ -56,31 +58,31 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
     open var useAutoNomenclature: Boolean = false
 
     @Embedded
-    open var audit: Audit? = null
+    open override var audit: Audit? = null
 
     /**
      * The date of the sugery
      */
     @Column
-    open var dateOfSugery: Long = 0
+    open var dateOfSugery: LocalDate = LocalDate.now()
 
     /**
      * Date of reception of the first material
      */
     @Column
-    open var dateOfReceipt: Long = 0
+    open var dateOfReceipt: LocalDate = LocalDate.now()
+
+    /**
+     * The dueDate
+     */
+    @Column
+    open var dueDate: LocalDate = LocalDate.now()
 
     /**
      * Priority of the task
      */
     @Enumerated(EnumType.ORDINAL)
     open var taskPriority: TaskPriority? = null
-
-    /**
-     * The dueDate
-     */
-    @Column
-    open var dueDate: Long = 0
 
     /**
      * Station�r/ambulant/Extern
@@ -122,25 +124,25 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
      * date of staining completion
      */
     @Column
-    open var stainingCompletionDate: Long = 0
+    open var stainingCompletionDate: Instant? = null
 
     /**
      * Date of diagnosis finalization
      */
     @Column
-    open var diagnosisCompletionDate: Long = 0
+    open var diagnosisCompletionDate: Instant? = null
 
     /**
      * The date of the completion of the notificaiton.
      */
     @Column
-    open var notificationCompletionDate: Long = 0
+    open var notificationCompletionDate: Instant? = null
 
     /**
      * The date of the finalization.
      */
     @Column
-    open var finalizationDate: Long = 0
+    open var finalizationDate: Instant? = null
 
     /**
      * True if the task can't is completed
@@ -169,7 +171,7 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
     @OneToMany(mappedBy = "parent", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("id ASC")
-    open var samples: List<Sample> = ArrayList()
+    open var samples: List<Sample> = ArrayList<Sample>()
 
     /**
      * All diangnoses
@@ -203,9 +205,6 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
     @NotAudited
     open var favouriteLists: List<FavouriteList>? = null
 
-    /********************************************************
-     * Transient Variables
-     ********************************************************/
     /**
      * If set to true, this task is shown in the navigation column on the left hand
      * side, however there are actions to perform or not.
@@ -217,47 +216,23 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
      * Contains static list entries for the gui, improves reload speed
      */
     @Transient
-    open var taskStatus: TaskStatus? = null
+    open var taskStatus: TaskStatus = TaskStatus(this)
 
-    constructor(){}
+    constructor() {}
 
-    constructor(id : Long){
+    constructor(id: Long) {
         this.id = id
     }
 
-    constructor(patient : Patient){
-
+    constructor(patient: Patient) {
+        this.parent = patient
     }
 
-
-    /**
-     * Initializes a task with important values.
-     *
-     * @param parent
-     */
-    fun Task(parent: Patient): ??? {
-
-        val currentDay = TimeUtil.setDayBeginning(System.currentTimeMillis())
-        setDateOfReceipt(currentDay)
-        setDueDate(currentDay)
-        setDateOfSugery(currentDay)
-
-        // 20xx -2000 = tasknumber
-        setParent(parent)
-    }
-
-    /********************************************************
-     * Transient
-     */
-
-    @Transient
-    fun updateAllNames() {
-        updateAllNames(useAutoNomenclature, false)
-    }
-
-    @Transient
-    fun updateAllNames(useAutoNomenclature: Boolean, ignoreManuallyNamedItems: Boolean) {
-        getSamples().stream().forEach { p -> p.updateAllNames(useAutoNomenclature, ignoreManuallyNamedItems) }
+    fun Task(parent: Patient) {
+        dateOfReceipt = LocalDate.now()
+        dueDate = LocalDate.now()
+        dateOfSugery = LocalDate.now()
+        this.parent = patient
     }
 
     @Transient
@@ -272,13 +247,7 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
 
     @Transient
     fun getPrimaryContactAsString(vararg contactRole: String): AssociatedContact? {
-        val role = arrayOfNulls<ContactRole>(contactRole.size)
-
-        for (i in role.indices) {
-            role[i] = ContactRole.valueOf(contactRole[i])
-        }
-
-        return getPrimaryContact(*role)
+        return getPrimaryContact(*contactRole.map { p -> ContactRole.valueOf(p) }.toTypedArray())
     }
 
     /**
@@ -295,7 +264,6 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
                     return associatedContact
             }
         }
-
         return null
     }
 
@@ -307,19 +275,9 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
      */
 
     @Transient
-    fun generateTaskStatus(): TaskStatus? {
-        logger.debug("Generating taskstatus for " + getTaskID() + " " + hashCode())
-        if (getTaskStatus() == null)
-            setTaskStatus(TaskStatus(this))
-        else
-            getTaskStatus().simpleStatus()
-
-        return taskStatus
-    }
-
-    @Transient
-    override fun toString(): String {
-        return "Task: " + getTaskID() + if (getId() != 0L) ", ID: " + getId() else ""
+    fun generateTaskStatus(): TaskStatus {
+        logger.debug("Generating taskstatus for " + taskID + " " + hashCode())
+        return taskStatus.simpleStatus()
     }
 
     @Transient
@@ -336,9 +294,9 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
     @Transient
     fun isActiveOrActionPending(activeOnly: Boolean): Boolean {
         if (activeOnly)
-            return isActive()
+            return active
 
-        if (isActive())
+        if (active)
             return true
 
         return if (TaskStatus.hasFavouriteLists(this, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.ReStainingList,
@@ -349,24 +307,32 @@ class Task : AbstractPersistable(), ID, Parent<Patient> {
     }
 
     @Transient
-    override fun equals(obj: Any?): Boolean {
-
-        return if (obj is Task && obj.getId() == getId()) true else super.equals(obj)
-
-    }
-
-    @Transient
     fun containsContact(person: Person): Boolean {
-        return if (getContacts() != null) getContacts().stream().anyMatch({ p -> p.getPerson() == person }) else false
+        return if (contacts != null) contacts.stream().anyMatch({ p -> p.getPerson() == person }) else false
     }
 
     @Transient
     fun containsContact(associatedContact: AssociatedContact): Boolean {
-        return if (getContacts() != null) getContacts().stream().anyMatch({ p -> p == associatedContact }) else false
+        return if (contacts != null) contacts.stream().anyMatch({ p -> p == associatedContact }) else false
     }
 
     @Transient
     fun getNextSlideNumber(): Int {
         return ++slideCounter
     }
+
+    /**
+     * Returns task
+     */
+    open override val task: Task?
+        @Transient
+        get() = this
+
+
+    /**
+     * Return parent
+     */
+    open override val patient: Patient?
+        @Transient
+        get() = parent?.patient
 }
