@@ -133,7 +133,7 @@ public class Patient
     }
 
     public List<Task> getTasksOfPatient(boolean activeOnly) {
-        return getTasks() != null ? getTasks().stream().filter(p -> (activeOnly && p.isActive()) || !activeOnly)
+        return getTasks() != null ? getTasks().stream().filter(p -> (activeOnly && p.getActive()) || !activeOnly)
                 .collect(Collectors.toList()) : null;
     }
 

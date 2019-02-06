@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.patho.main.util.task.TaskStatus;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -23,7 +24,6 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.SlideService;
 import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.StainingTableChooser;
-import com.patho.main.ui.task.TaskStatus;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 

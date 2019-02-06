@@ -1,45 +1,24 @@
 package com.patho.main.model;
 
-import static javax.persistence.CascadeType.ALL;
-import static org.hibernate.annotations.LazyCollectionOption.FALSE;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderColumn;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
-
+import com.patho.main.common.ContactRole;
+import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
+import com.patho.main.model.interfaces.ID;
+import com.patho.main.model.patient.Task;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 
-import com.patho.main.common.ContactRole;
-import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
-import com.patho.main.model.interfaces.ID;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.patho.main.model.patient.Task;
-
-import lombok.Getter;
-import lombok.Setter;
+import static javax.persistence.CascadeType.ALL;
+import static org.hibernate.annotations.LazyCollectionOption.FALSE;
 
 @Entity
 @SequenceGenerator(name = "associatedcontact_sequencegenerator", sequenceName = "associatedcontact_sequence")
-@Getter
-@Setter
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
@@ -122,5 +101,45 @@ public class AssociatedContact implements ID {
 		}
 
 		return super.equals(obj);
+	}
+
+	public Task getTask() {
+		return this.task;
+	}
+
+	public long getId() {
+		return this.id;
+	}
+
+	public Person getPerson() {
+		return this.person;
+	}
+
+	public ContactRole getRole() {
+		return this.role;
+	}
+
+	public List<AssociatedContactNotification> getNotifications() {
+		return this.notifications;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+
+	public void setRole(ContactRole role) {
+		this.role = role;
+	}
+
+	public void setNotifications(List<AssociatedContactNotification> notifications) {
+		this.notifications = notifications;
 	}
 }

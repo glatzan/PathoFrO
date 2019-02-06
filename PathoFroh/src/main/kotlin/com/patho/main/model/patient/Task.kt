@@ -7,6 +7,7 @@ import com.patho.main.common.TaskPriority
 import com.patho.main.model.*
 import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.favourites.FavouriteList
+import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.util.audit.Audit
@@ -29,7 +30,7 @@ import javax.persistence.OrderBy
 @DynamicUpdate(true)
 @SequenceGenerator(name = "task_sequencegenerator", sequenceName = "task_sequence")
 @EntityListeners(AuditListener::class)
-open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble {
+open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble , DataList {
 
     @Id
     @GeneratedValue(generator = "task_sequencegenerator")
@@ -187,7 +188,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble {
     @LazyCollection(LazyCollectionOption.TRUE)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("audit.createdOn DESC")
-    open var attachedPdfs: Set<PDFContainer> = HashSet()
+    open override var attachedPdfs: MutableSet<PDFContainer>? = HashSet()
 
     /**
      * List of all councils of this task, lazy
@@ -320,6 +321,10 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble {
     fun getNextSlideNumber(): Int {
         return ++slideCounter
     }
+
+    override val publicName: String
+        @Transient
+        get() = taskID
 
     /**
      * Returns task

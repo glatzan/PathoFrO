@@ -1,33 +1,15 @@
 package com.patho.main.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
-import javax.persistence.SequenceGenerator;
-
+import com.patho.main.model.interfaces.ID;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
-import com.patho.main.model.interfaces.ID;
-
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @SelectBeforeUpdate(true)
 @SequenceGenerator(name = "stainingPrototype_sequencegenerator", sequenceName = "stainingPrototype_sequence")
-@Getter
-@Setter
 public class StainingPrototype implements ID {
 
 	public static final int TYPE_NORMAL = 0;
@@ -67,6 +49,62 @@ public class StainingPrototype implements ID {
 		if (obj instanceof StainingPrototype && ((StainingPrototype) obj).getId() == getId())
 			return true;
 		return super.equals(obj);
+	}
+
+	public long getId() {
+		return this.id;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getCommentary() {
+		return this.commentary;
+	}
+
+	public StainingType getType() {
+		return this.type;
+	}
+
+	public boolean isArchived() {
+		return this.archived;
+	}
+
+	public int getPriorityCount() {
+		return this.priorityCount;
+	}
+
+	public List<StainingPrototypeDetails> getBatchDetails() {
+		return this.batchDetails;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setCommentary(String commentary) {
+		this.commentary = commentary;
+	}
+
+	public void setType(StainingType type) {
+		this.type = type;
+	}
+
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
+
+	public void setPriorityCount(int priorityCount) {
+		this.priorityCount = priorityCount;
+	}
+
+	public void setBatchDetails(List<StainingPrototypeDetails> batchDetails) {
+		this.batchDetails = batchDetails;
 	}
 
 	public static enum StainingType {

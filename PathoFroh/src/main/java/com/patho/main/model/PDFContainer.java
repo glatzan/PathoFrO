@@ -1,34 +1,20 @@
 package com.patho.main.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
+import com.patho.main.model.audit.AuditAble;
+import com.patho.main.model.interfaces.ID;
+import com.patho.main.model.util.audit.Audit;
+import com.patho.main.model.util.audit.AuditListener;
+import com.patho.main.template.PrintDocument.DocumentType;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
 
-import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.util.audit.Audit;
-import com.patho.main.model.audit.AuditAble;
-import com.patho.main.model.util.audit.AuditListener;
-import com.patho.main.template.PrintDocument.DocumentType;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
 
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
 @SequenceGenerator(name = "pdfs_sequencegenerator", sequenceName = "pdfs_sequence")
-@Getter
-@Setter
 @EntityListeners(AuditListener.class)
 public class PDFContainer implements ID, AuditAble {
 
@@ -115,5 +101,93 @@ public class PDFContainer implements ID, AuditAble {
 	@Override
 	public int hashCode() {
 		return getName() == null ? 0 : getName().hashCode() + (int) getId();
+	}
+
+	public long getId() {
+		return this.id;
+	}
+
+	public byte[] getData() {
+		return this.data;
+	}
+
+	public DocumentType getType() {
+		return this.type;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public Audit getAudit() {
+		return this.audit;
+	}
+
+	public boolean isFinalDocument() {
+		return this.finalDocument;
+	}
+
+	public String getCommentary() {
+		return this.commentary;
+	}
+
+	public String getIntern() {
+		return this.intern;
+	}
+
+	public String getPath() {
+		return this.path;
+	}
+
+	public String getThumbnail() {
+		return this.thumbnail;
+	}
+
+	public boolean isRestricted() {
+		return this.restricted;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setData(byte[] data) {
+		this.data = data;
+	}
+
+	public void setType(DocumentType type) {
+		this.type = type;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setAudit(Audit audit) {
+		this.audit = audit;
+	}
+
+	public void setFinalDocument(boolean finalDocument) {
+		this.finalDocument = finalDocument;
+	}
+
+	public void setCommentary(String commentary) {
+		this.commentary = commentary;
+	}
+
+	public void setIntern(String intern) {
+		this.intern = intern;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
+	public void setRestricted(boolean restricted) {
+		this.restricted = restricted;
 	}
 }
