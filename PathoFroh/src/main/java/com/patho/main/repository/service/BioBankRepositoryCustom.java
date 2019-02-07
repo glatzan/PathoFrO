@@ -2,8 +2,8 @@ package com.patho.main.repository.service;
 
 import java.util.Optional;
 
-import com.patho.main.model.BioBank;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.patient.miscellaneous.BioBank;
 
 public interface BioBankRepositoryCustom {
 

@@ -216,8 +216,7 @@ public class Worklist {
 
 	/**
 	 * Sets a Task as selected task, also selects the patient
-	 * 
-	 * @param t
+	 *
 	 */
 	public void add(Task task, boolean select) {
 		logger.debug("Adding task to worklist {}", task.getId());
@@ -336,7 +335,6 @@ public class Worklist {
 	/**
 	 * Deselects the task
 	 * 
-	 * @param task
 	 * @return
 	 */
 	public boolean deselectTask() {
@@ -361,7 +359,7 @@ public class Worklist {
 		for (Task newTask : newPat.getTasks()) {
 			for (Task oldTask : old.getTasks()) {
 				if (newTask.equals(oldTask)) {
-					newTask.setActive(oldTask.isActive());
+					newTask.setActive(oldTask.getActive());
 				}
 				break;
 			}
@@ -411,7 +409,6 @@ public class Worklist {
 	/**
 	 * Sorts a list with patients either by task id or name of the patient
 	 * 
-	 * @param patiens
 	 * @param order
 	 */
 	public void sortWordklist(WorklistSortOrder order, boolean asc) {

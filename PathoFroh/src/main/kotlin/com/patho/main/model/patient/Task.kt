@@ -10,6 +10,7 @@ import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
+import com.patho.main.model.patient.miscellaneous.Council
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
 import com.patho.main.util.task.TaskStatus
@@ -30,7 +31,7 @@ import javax.persistence.OrderBy
 @DynamicUpdate(true)
 @SequenceGenerator(name = "task_sequencegenerator", sequenceName = "task_sequence")
 @EntityListeners(AuditListener::class)
-open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble , DataList {
+open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList {
 
     @Id
     @GeneratedValue(generator = "task_sequencegenerator")
@@ -107,7 +108,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble , DataList
      * Insurance of the patient
      */
     @Column(columnDefinition = "VARCHAR")
-    open var insurance: String? = null
+    open var insurance: String = ""
 
     /**
      * Ward of the patient
@@ -188,7 +189,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble , DataList
     @LazyCollection(LazyCollectionOption.TRUE)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("audit.createdOn DESC")
-    open override var attachedPdfs: MutableSet<PDFContainer>? = HashSet()
+    open override var attachedPdfs: MutableSet<PDFContainer> = HashSet()
 
     /**
      * List of all councils of this task, lazy

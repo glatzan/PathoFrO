@@ -43,7 +43,7 @@ public class SlideNamingDialog extends AbstractDialog {
 
 	public boolean initBean(Task task) {
 		super.initBean(task, Dialog.SLIDE_NAMING);
-		setUseAutoNomeclature(task.isUseAutoNomenclature());
+		setUseAutoNomeclature(task.getUseAutoNomenclature());
 		setDataChanged(false);
 		return true;
 	}

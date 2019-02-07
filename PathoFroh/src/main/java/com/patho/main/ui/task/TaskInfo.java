@@ -45,7 +45,7 @@ public class TaskInfo {
 		}
 
 		// finalized
-		if (task.isFinalized()) {
+		if (task.getFinalized()) {
 			return false;
 		}
 

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 
+import com.patho.main.model.patient.miscellaneous.Council;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -26,8 +27,6 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.SortOrder;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.model.Council;
-import com.patho.main.model.Council.CouncilNotificationMethod;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;
@@ -208,7 +207,7 @@ public class CouncilDialog extends AbstractDialog {
 			selectNode(getCouncilList().get(0), 0);
 		}
 
-		setEditable(task.getTaskStatus().isEditable());
+		setEditable(task.getTaskStatus().getEditable());
 
 		return true;
 	}
@@ -216,7 +215,6 @@ public class CouncilDialog extends AbstractDialog {
 	/**
 	 * Updates the tree menu und reloads the patient's data
 	 * 
-	 * @param reloadPatient
 	 */
 	private void update(boolean reloadTask) {
 
@@ -465,14 +463,14 @@ public class CouncilDialog extends AbstractDialog {
 	 * Sets the current date if the sample ship check box was selected
 	 */
 	public void onShipSample() {
-		if (getSelectedCouncil().isSampleShipped()) {
+		if (getSelectedCouncil().getSampleShipped()) {
 			// setting date
 			if (getSelectedCouncil().getSampleShippedDate() == null)
 				getSelectedCouncil().setSampleShippedDate(new Date());
 
 			// setting no sample shipped if secreatary is selected
 			if (HistoUtil.isNullOrEmpty(getSelectedCouncil().getSampleShippedCommentary())
-					&& getSelectedCouncil().getNotificationMethod() == CouncilNotificationMethod.SECRETARY) {
+					&& getSelectedCouncil().getNotificationMethod() == Council.CouncilNotificationMethod.SECRETARY) {
 				getSelectedCouncil()
 						.setSampleShippedCommentary(resourceBundle.get("dialog.council.sampleShipped.option.noSample"));
 			}
@@ -480,7 +478,7 @@ public class CouncilDialog extends AbstractDialog {
 
 		saveSelectedCouncil();
 
-		if (getSelectedCouncil().isSampleShipped()) {
+		if (getSelectedCouncil().getSampleShipped()) {
 			councilService.endSampleShiped(getTask(), getSelectedCouncil().getCouncil());
 		} else {
 			councilService.beginSampleShiped(getTask(), getSelectedCouncil().getCouncil());
@@ -493,20 +491,20 @@ public class CouncilDialog extends AbstractDialog {
 	 * Sets the current date if the sample returned check box was selected
 	 */
 	public void onReturnSample() {
-		if (getSelectedCouncil().isSampleReturned() && getSelectedCouncil().getSampleReturnedDate() == null) {
+		if (getSelectedCouncil().getSampleReturned() && getSelectedCouncil().getSampleReturnedDate() == null) {
 			getSelectedCouncil().setSampleReturnedDate(new Date());
 		}
 		saveSelectedCouncil();
 	}
 
 	public void onReplyReceived() {
-		if (getSelectedCouncil().isReplyReceived() && getSelectedCouncil().getReplyReceivedDate() == null) {
+		if (getSelectedCouncil().getReplyReceived() && getSelectedCouncil().getReplyReceivedDate() == null) {
 			getSelectedCouncil().setReplyReceivedDate(new Date());
 		}
 
 		saveSelectedCouncil();
 
-		if (getSelectedCouncil().isReplyReceived()) {
+		if (getSelectedCouncil().getReplyReceived()) {
 			councilService.endReplyReceived(getTask(), getSelectedCouncil().getCouncil());
 		} else {
 			councilService.beginReplyReceived(getTask(), getSelectedCouncil().getCouncil());

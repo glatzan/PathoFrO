@@ -1,34 +1,9 @@
 package com.patho.main.util;
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.hibernate.boot.model.naming.IllegalIdentifierException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.common.Eye;
 import com.patho.main.common.TaskPriority;
-import com.patho.main.model.BioBank;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Signature;
@@ -36,31 +11,41 @@ import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.patient.miscellaneous.BioBank;
 import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.AssociatedContactService;
-import com.patho.main.service.BioBankService;
-import com.patho.main.service.DiagnosisService;
-import com.patho.main.service.FileService;
-import com.patho.main.service.PatientService;
-import com.patho.main.service.SampleService;
-import com.patho.main.service.TaskService;
+import com.patho.main.service.*;
 import com.patho.main.util.helper.HistoUtil;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
+import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Configurable
 @Getter
 @Setter
 public class FileMakerImporter {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 // ok	# 0
 //	- Name 1
@@ -89,376 +74,379 @@ public class FileMakerImporter {
 //	-> gs trennt diangosen
 //	
 
-	private final int index_taskid = 0;
-	private final int index_name = 1;
-	private final int index_plz = 2;
-	private final int index_edate = 4;
-	private final int index_ward = 5;
-	private final int index_dueDate = 6;
-	private final int index_gdate = 7;
-	private final int index_piz = 8;
-	private final int index_material = 9;
-	private final int index_surgeon = 10;
-	private final int index_eye = 11;
-	private final int index_history = 12;
-	private final int index_malign = 13;
-	private final int index_diagnosis = 14;
-	private final int index_date = 15;
-	private final int index_rediagnosis = 16;
-	private final int index_council = 17;
-	private final int index_long_diagnosis = 18;
-	private final int index_assi = 19;
-	private final int index_oa = 20;
-	private final int index_notified = 21;
-	private final int index_external = 22;
-	private final int index_diagnosisRevision = 23;
-
-	@Autowired
-	private TaskService taskService;
-
-	@Autowired
-	private PatientService patientService;
-
-	@Autowired
-	private TaskRepository taskRepository;
+    private final int index_taskid = 0;
+    private final int index_name = 1;
+    private final int index_plz = 2;
+    private final int index_edate = 4;
+    private final int index_ward = 5;
+    private final int index_dueDate = 6;
+    private final int index_gdate = 7;
+    private final int index_piz = 8;
+    private final int index_material = 9;
+    private final int index_surgeon = 10;
+    private final int index_eye = 11;
+    private final int index_history = 12;
+    private final int index_malign = 13;
+    private final int index_diagnosis = 14;
+    private final int index_date = 15;
+    private final int index_rediagnosis = 16;
+    private final int index_council = 17;
+    private final int index_long_diagnosis = 18;
+    private final int index_assi = 19;
+    private final int index_oa = 20;
+    private final int index_notified = 21;
+    private final int index_external = 22;
+    private final int index_diagnosisRevision = 23;
 
-	@Autowired
-	private SampleService sampleService;
+    @Autowired
+    private TaskService taskService;
 
-	@Autowired
-	private DiagnosisService diagnosisService;
+    @Autowired
+    private PatientService patientService;
 
-	@Autowired
-	private AssociatedContactService associatedContactService;
+    @Autowired
+    private TaskRepository taskRepository;
 
-	@Autowired
-	private BioBankService bioBankService;
+    @Autowired
+    private SampleService sampleService;
 
-	@Autowired
-	private FileService fileService;
+    @Autowired
+    private DiagnosisService diagnosisService;
 
-	@Autowired
-	private MaterialPresetRepository materialPresetRepository;
+    @Autowired
+    private AssociatedContactService associatedContactService;
 
-	@Autowired
-	private PhysicianRepository physicianRepository;
+    @Autowired
+    private BioBankService bioBankService;
 
-	private HashMap<String, String> redirect = new HashMap<String, String>();
-	{
-		redirect.put("Neß", "Ness");
-		redirect.put("MVH", "Mittelviefhaus");
-		redirect.put("A.H.", "Auw-Hädrich");
-		redirect.put("A.H.", "Auw-Hädrich");
-		redirect.put("Bü.", "Bühler");
-		redirect.put("Bie.", "Biermann");
+    @Autowired
+    private FileService fileService;
 
-	}
+    @Autowired
+    private MaterialPresetRepository materialPresetRepository;
 
-	public Physician findPhysician(String name) {
+    @Autowired
+    private PhysicianRepository physicianRepository;
 
-		name = redirect.get(name) == null ? name : redirect.get(name);
+    private HashMap<String, String> redirect = new HashMap<String, String>();
 
-		String[] spl = name.split("[. ]");
+    {
+        redirect.put("Neß", "Ness");
+        redirect.put("MVH", "Mittelviefhaus");
+        redirect.put("A.H.", "Auw-Hädrich");
+        redirect.put("A.H.", "Auw-Hädrich");
+        redirect.put("Bü.", "Bühler");
+        redirect.put("Bie.", "Biermann");
 
-		if (spl.length > 0) {
-			String name1 = redirect.get(spl[spl.length - 1]) == null ? spl[spl.length - 1]
-					: redirect.get(spl[spl.length - 1]);
+    }
 
-			List<Physician> physician = physicianRepository.findAllByPersonLastName(name1);
+    public Physician findPhysician(String name) {
 
-			return physician.size() > 0 ? physician.get(0) : null;
+        name = redirect.get(name) == null ? name : redirect.get(name);
 
-		}
+        String[] spl = name.split("[. ]");
 
-		return null;
-	}
+        if (spl.length > 0) {
+            String name1 = redirect.get(spl[spl.length - 1]) == null ? spl[spl.length - 1]
+                    : redirect.get(spl[spl.length - 1]);
 
-	public Date getDate(String str) {
-		if (str == null)
-			return null;
+            List<Physician> physician = physicianRepository.findAllByPersonLastName(name1);
 
-		str = str.replaceAll("[\\.]{1,}", ".");
-		
-		Pattern pattern = Pattern.compile("([0-9]{2}.[0-9]{2}.[0-9]{2})");
-		Matcher matcher = pattern.matcher(str);
-		if (matcher.find()) {
+            return physician.size() > 0 ? physician.get(0) : null;
 
-			SimpleDateFormat datep = new SimpleDateFormat("dd.MM.yy");
-			try {
-				return datep.parse(matcher.group(1));
-			} catch (ParseException e) {
-				return null;
-			}
-		}
+        }
 
-		pattern = Pattern.compile("([0-9]{2}.[0-9]{2}.[0-9]{4})");
-		matcher = pattern.matcher(str);
-		if (matcher.find()) {
+        return null;
+    }
 
-			SimpleDateFormat datep = new SimpleDateFormat("dd.MM.yyyy");
-			try {
-				return datep.parse(matcher.group(1));
-			} catch (ParseException e) {
-				return null;
-			}
-		}
+    public Date getDate(String str) {
+        if (str == null)
+            return null;
 
-		return null;
+        str = str.replaceAll("[\\.]{1,}", ".");
 
-	}
+        Pattern pattern = Pattern.compile("([0-9]{2}.[0-9]{2}.[0-9]{2})");
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.find()) {
 
-	public void importFilemaker(String number) throws IOException {
+            SimpleDateFormat datep = new SimpleDateFormat("dd.MM.yy");
+            try {
+                return datep.parse(matcher.group(1));
+            } catch (ParseException e) {
+                return null;
+            }
+        }
 
-		CsvParserSettings settings = new CsvParserSettings(); // many options here, check the documentation
-		CsvParser parser = new CsvParser(settings);
-		parser.beginParsing(new InputStreamReader(new FileInputStream("d:/import.csv"), "Cp1252"));
+        pattern = Pattern.compile("([0-9]{2}.[0-9]{2}.[0-9]{4})");
+        matcher = pattern.matcher(str);
+        if (matcher.find()) {
 
-		FileWriter fw = new FileWriter("d:/importLog.log", true);
-		BufferedWriter bw = new BufferedWriter(fw);
+            SimpleDateFormat datep = new SimpleDateFormat("dd.MM.yyyy");
+            try {
+                return datep.parse(matcher.group(1));
+            } catch (ParseException e) {
+                return null;
+            }
+        }
 
-		ArrayList<Object[]> notProcessed = new ArrayList<>();
+        return null;
 
-		StringBuilder inserLog = new StringBuilder();
+    }
 
-		int rowCount = 0;
+    public void importFilemaker(String number) throws IOException {
 
-		HashSet<String> wuu = new HashSet<>();
+        CsvParserSettings settings = new CsvParserSettings(); // many options here, check the documentation
+        CsvParser parser = new CsvParser(settings);
+        parser.beginParsing(new InputStreamReader(new FileInputStream("d:/import.csv"), "Cp1252"));
 
-		String[] row;
-		while ((row = parser.parseNext()) != null) {
-			rowCount++;
+        FileWriter fw = new FileWriter("d:/importLog.log", true);
+        BufferedWriter bw = new BufferedWriter(fw);
 
-			if (number == null && rowCount % 100 != 0)
-				continue;
+        ArrayList<Object[]> notProcessed = new ArrayList<>();
 
-			if (number == null) {
-				inserLog.append("-------------------------------\r\n");
-				inserLog.append(Arrays.toString(row) + "\r\n\\r\\n");
-			}
+        StringBuilder inserLog = new StringBuilder();
 
-			if (HistoUtil.isNotNullOrEmpty(row[index_piz])) {
-				Optional<Patient> p;
-				try {
+        int rowCount = 0;
 
-					// piz
-					String strPit = row[index_piz].replaceAll("[^\\d.]", "");
-					// taskid
-					String taskid = row[index_taskid] != null ? row[index_taskid].replaceAll("[^\\d.]", "") : null;
+        HashSet<String> wuu = new HashSet<>();
 
-					if (taskid == null) {
-						inserLog.append("Empty task id abort");
-						continue;
-					}
+        String[] row;
+        while ((row = parser.parseNext()) != null) {
+            rowCount++;
 
-					if (!taskid.matches(number)) {
-						continue;
-					}
+            if (number == null && rowCount % 100 != 0)
+                continue;
 
-					inserLog.append("-------------------------------\r\n");
-					inserLog.append(Arrays.toString(row) + "\r\n\\r\\n");
+            if (number == null) {
+                inserLog.append("-------------------------------\r\n");
+                inserLog.append(Arrays.toString(row) + "\r\n\\r\\n");
+            }
 
-					inserLog.append("TaskID: " + taskid + "\r\n");
+            if (HistoUtil.isNotNullOrEmpty(row[index_piz])) {
+                Optional<Patient> p;
+                try {
 
-					logger.debug("Creating");
-					logger.debug("-> " + Arrays.toString(row));
+                    // piz
+                    String strPit = row[index_piz].replaceAll("[^\\d.]", "");
+                    // taskid
+                    String taskid = row[index_taskid] != null ? row[index_taskid].replaceAll("[^\\d.]", "") : null;
 
-					boolean malign = row[index_malign] != null ? row[index_malign].equals("X") : false;
+                    if (taskid == null) {
+                        inserLog.append("Empty task id abort");
+                        continue;
+                    }
 
-					String taskPrioArr[] = row[index_dueDate] != null
-							? row[index_dueDate].split(Character.toString((char) 11))
-							: new String[] { "" };
+                    if (!taskid.matches(number)) {
+                        continue;
+                    }
 
-					boolean taskPrio = false;
-					Date taskPrioDate = new Date();
+                    inserLog.append("-------------------------------\r\n");
+                    inserLog.append(Arrays.toString(row) + "\r\n\\r\\n");
 
-					Date sigantureDate = getDate(row[index_notified]);
+                    inserLog.append("TaskID: " + taskid + "\r\n");
 
-					Date edate = getDate(row[index_edate]);
+                    logger.debug("Creating");
+                    logger.debug("-> " + Arrays.toString(row));
 
-					if (edate == null) {
-						inserLog.append("Leeres EDatum");
-						logger.debug("Leeres EDatum");
-						throw new IllegalIdentifierException("Empty");
-					}
+                    boolean malign = row[index_malign] != null ? row[index_malign].equals("X") : false;
 
-					if (taskPrioArr.length == 2) {
-						taskPrioDate = getDate(taskPrioArr[0]);
-						taskPrio = taskPrioArr[1].equals("X");
-					}
+                    String taskPrioArr[] = row[index_dueDate] != null
+                            ? row[index_dueDate].split(Character.toString((char) 11))
+                            : new String[]{""};
 
-					String oa = row[index_oa];
-					String assi = row[index_assi];
-					String surgeon = row[index_surgeon];
-					String diagnosisRevision1 = row[index_diagnosisRevision];
+                    boolean taskPrio = false;
+                    Date taskPrioDate = new Date();
 
-					Physician oaPhys = null;
-					Physician assiPhys = null;
-					Physician surgeonPhys = null;
-					Physician diagnosisRevisionPhys = null;
+                    Date sigantureDate = getDate(row[index_notified]);
 
-					if (HistoUtil.isNotNullOrEmpty(oa)) {
-						Physician py = findPhysician(oa.trim());
+                    Date edate = getDate(row[index_edate]);
 
-						if (py == null) {
+                    Instant edateInstant = new Date().toInstant();
 
-							inserLog.append("OA not found: " + oa);
-							throw new IllegalIdentifierException("Empty");
-						}
+                    if (edate == null) {
+                        inserLog.append("Leeres EDatum");
+                        logger.debug("Leeres EDatum");
+                        throw new IllegalIdentifierException("Empty");
+                    }
 
-						oaPhys = py;
-					}
+                    if (taskPrioArr.length == 2) {
+                        taskPrioDate = getDate(taskPrioArr[0]);
+                        taskPrio = taskPrioArr[1].equals("X");
+                    }
 
-					if (HistoUtil.isNotNullOrEmpty(assi)) {
-						Physician py = findPhysician(assi.trim());
+                    String oa = row[index_oa];
+                    String assi = row[index_assi];
+                    String surgeon = row[index_surgeon];
+                    String diagnosisRevision1 = row[index_diagnosisRevision];
 
-						if (py == null) {
+                    Physician oaPhys = null;
+                    Physician assiPhys = null;
+                    Physician surgeonPhys = null;
+                    Physician diagnosisRevisionPhys = null;
 
-							inserLog.append("Assi not found" + assi);
-							throw new IllegalIdentifierException("Empty");
-						}
+                    if (HistoUtil.isNotNullOrEmpty(oa)) {
+                        Physician py = findPhysician(oa.trim());
 
-						assiPhys = py;
-					}
+                        if (py == null) {
 
-					if (HistoUtil.isNotNullOrEmpty(surgeon)) {
-						Physician py = findPhysician(surgeon.trim());
+                            inserLog.append("OA not found: " + oa);
+                            throw new IllegalIdentifierException("Empty");
+                        }
 
-						if (py == null) {
+                        oaPhys = py;
+                    }
 
-							inserLog.append("Assi not found" + surgeon);
-							throw new IllegalIdentifierException("Empty");
-						}
+                    if (HistoUtil.isNotNullOrEmpty(assi)) {
+                        Physician py = findPhysician(assi.trim());
 
-						surgeonPhys = py;
-					}
+                        if (py == null) {
 
-					if (HistoUtil.isNotNullOrEmpty(diagnosisRevision1)) {
-						Physician py = findPhysician(diagnosisRevision1.trim());
+                            inserLog.append("Assi not found" + assi);
+                            throw new IllegalIdentifierException("Empty");
+                        }
 
-						if (py == null) {
+                        assiPhys = py;
+                    }
 
-							inserLog.append("Revision phys not found" + diagnosisRevision1);
-							throw new IllegalIdentifierException("Empty");
-						}
+                    if (HistoUtil.isNotNullOrEmpty(surgeon)) {
+                        Physician py = findPhysician(surgeon.trim());
 
-						diagnosisRevisionPhys = py;
-					}
+                        if (py == null) {
 
-					logger.debug("Creating patient {}", strPit);
-					p = patientService.findPatientByPizInDatabaseAndPDV(strPit, false);
+                            inserLog.append("Assi not found" + surgeon);
+                            throw new IllegalIdentifierException("Empty");
+                        }
 
-					if (!p.isPresent()) {
-						inserLog.append("Patient not found abort");
-						throw new IllegalIdentifierException("Empty");
-					}
+                        surgeonPhys = py;
+                    }
 
-					if (sigantureDate == null) {
-						inserLog.append("Signature Date empty");
-						throw new IllegalIdentifierException("Signature Date empty");
-					}
+                    if (HistoUtil.isNotNullOrEmpty(diagnosisRevision1)) {
+                        Physician py = findPhysician(diagnosisRevision1.trim());
 
-					Patient pait = patientService.addPatient(p.get(), false);
-					inserLog.append("Patient found: " + pait.getPerson().getFullName());
+                        if (py == null) {
 
-					if (taskService.isTaskIDAvailable(taskid)) {
-						Task task = taskService.createTask(pait, taskid, true);
+                            inserLog.append("Revision phys not found" + diagnosisRevision1);
+                            throw new IllegalIdentifierException("Empty");
+                        }
 
-						// eye
-						Eye eyes;
-						if (HistoUtil.isNotNullOrEmpty(row[index_eye])) {
-							if (row[index_eye].equals("RA"))
-								eyes = Eye.RIGHT;
-							else if (row[index_eye].equals("LA"))
-								eyes = Eye.LEFT;
-							else
-								eyes = Eye.UNKNOWN;
-						} else
-							eyes = Eye.UNKNOWN;
-						task.setEye(eyes);
+                        diagnosisRevisionPhys = py;
+                    }
 
-						// ward
-						task.setWard(row[index_ward]);
+                    logger.debug("Creating patient {}", strPit);
+                    p = patientService.findPatientByPizInDatabaseAndPDV(strPit, false);
 
-						// edate
-						task.setDateOfReceipt(edate.getTime());
-						task.setDateOfSugery(edate.getTime());
-						task.setCaseHistory(HistoUtil.isNotNullOrEmpty(row[index_history])
-								? row[index_history].replaceAll(Character.toString((char) 11), "\r\n")
-								: "");
-						task.setInsurance("");
-						task.getAudit().setCreatedOn(edate.getTime());
-						task.setTaskPriority(taskPrio ? TaskPriority.TIME : TaskPriority.NONE);
-						if (taskPrio)
-							task.setDueDate(taskPrioDate != null ? taskPrioDate.getTime() : edate.getTime());
+                    if (!p.isPresent()) {
+                        inserLog.append("Patient not found abort");
+                        throw new IllegalIdentifierException("Empty");
+                    }
 
-						task = taskRepository.save(task);
+                    if (sigantureDate == null) {
+                        inserLog.append("Signature Date empty");
+                        throw new IllegalIdentifierException("Signature Date empty");
+                    }
 
-						String[] diagnosis = row[index_diagnosis] != null
-								? row[index_diagnosis].split(Character.toString((char) 29))
-								: new String[] { "" };
+                    Patient pait = patientService.addPatient(p.get(), false);
+                    inserLog.append("Patient found: " + pait.getPerson().getFullName());
 
-						String[] materialArr = row[index_material] != null
-								? row[index_material].split(Character.toString((char) 29))
-								: new String[] { "" };
+                    if (taskService.isTaskIDAvailable(taskid)) {
+                        Task task = taskService.createTask(pait, taskid, true);
 
-						for (int i = 0; i < materialArr.length; i++) {
-							List<MaterialPreset> preset = materialPresetRepository.findAllByName(materialArr[i], true);
+                        // eye
+                        Eye eyes;
+                        if (HistoUtil.isNotNullOrEmpty(row[index_eye])) {
+                            if (row[index_eye].equals("RA"))
+                                eyes = Eye.RIGHT;
+                            else if (row[index_eye].equals("LA"))
+                                eyes = Eye.LEFT;
+                            else
+                                eyes = Eye.UNKNOWN;
+                        } else
+                            eyes = Eye.UNKNOWN;
+                        task.setEye(eyes);
 
-							task = sampleService.createSample(task, preset.size() > 0 ? preset.get(0) : null,
-									materialArr[i], true, true, true, true);
-						}
+                        // ward
+                        task.setWard(row[index_ward]);
 
-						// creating standard diagnoses
-						task = diagnosisService.createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
+                        // edate
+                        task.setDateOfReceipt(LocalDate.ofInstant(edateInstant, ZoneId.systemDefault()));
+                        task.setDateOfSugery(LocalDate.ofInstant(edateInstant, ZoneId.systemDefault()));
+                        task.setCaseHistory(HistoUtil.isNotNullOrEmpty(row[index_history])
+                                ? row[index_history].replaceAll(Character.toString((char) 11), "\r\n")
+                                : "");
+                        task.setInsurance("");
+                        task.getAudit().setCreatedOn(edate.getTime());
+                        task.setTaskPriority(taskPrio ? TaskPriority.TIME : TaskPriority.NONE);
+                        if (taskPrio)
+                            task.setDueDate(LocalDate.ofInstant(taskPrioDate != null ? taskPrioDate.toInstant() : edate.toInstant(), ZoneId.systemDefault()));
 
-						DiagnosisRevision rev = task.getDiagnosisRevisions().iterator().next();
+                        task = taskRepository.save(task);
 
-						int i = 0;
-						for (Diagnosis diagnosisD : rev.getDiagnoses()) {
-							diagnosisD.setDiagnosis(diagnosis[i]);
-							diagnosisD.setMalign(malign);
-							i++;
-						}
+                        String[] diagnosis = row[index_diagnosis] != null
+                                ? row[index_diagnosis].split(Character.toString((char) 29))
+                                : new String[]{""};
 
-						rev.setSignatureDate(sigantureDate.getTime());
-						rev.setText(row[index_long_diagnosis] != null
-								? row[index_long_diagnosis].replaceAll(Character.toString((char) 11), "\r\n")
-								: "");
-						rev.setCreationDate(edate.getTime());
-						rev.setNotificationDate(sigantureDate.getTime());
+                        String[] materialArr = row[index_material] != null
+                                ? row[index_material].split(Character.toString((char) 29))
+                                : new String[]{""};
 
-						rev.setSignatureOne(new Signature(assiPhys));
-						rev.setSignatureTwo(new Signature(oaPhys));
-						rev.setCompletionDate(sigantureDate.getTime());
+                        for (int i = 0; i < materialArr.length; i++) {
+                            List<MaterialPreset> preset = materialPresetRepository.findAllByName(materialArr[i], true);
 
-						task.setFinalized(true);
-						task.setFinalizationDate(sigantureDate.getTime());
+                            task = sampleService.createSample(task, preset.size() > 0 ? preset.get(0) : null,
+                                    materialArr[i], true, true, true, true);
+                        }
 
-						task = taskRepository.save(task);
+                        // creating standard diagnoses
+                        task = diagnosisService.createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
 
-						if (diagnosisRevisionPhys != null) {
-							task = diagnosisService.createDiagnosisRevision(task,
-									DiagnosisRevisionType.DIAGNOSIS_REVISION);
-							Iterator<DiagnosisRevision> iter = task.getDiagnosisRevisions().iterator();
-							iter.next();
-							DiagnosisRevision re = iter.next();
+                        DiagnosisRevision rev = task.getDiagnosisRevisions().iterator().next();
 
-							Date revdate = getDate(row[index_date]);
+                        int i = 0;
+                        for (Diagnosis diagnosisD : rev.getDiagnoses()) {
+                            diagnosisD.setDiagnosis(diagnosis[i]);
+                            diagnosisD.setMalign(malign);
+                            i++;
+                        }
 
-							re.setSignatureTwo(new Signature(diagnosisRevisionPhys));
+                        rev.setSignatureDate(sigantureDate.getTime());
+                        rev.setText(row[index_long_diagnosis] != null
+                                ? row[index_long_diagnosis].replaceAll(Character.toString((char) 11), "\r\n")
+                                : "");
+                        rev.setCreationDate(edate.getTime());
+                        rev.setNotificationDate(sigantureDate.getTime());
 
-							if (revdate != null) {
-								re.setCreationDate(revdate.getTime());
-								re.setText(row[index_rediagnosis]);
-								re.setSignatureDate(revdate.getTime());
-							}
+                        rev.setSignatureOne(new Signature(assiPhys));
+                        rev.setSignatureTwo(new Signature(oaPhys));
+                        rev.setCompletionDate(sigantureDate.getTime());
 
-							re.setCompletionDate(sigantureDate.getTime());
-							re.setNotificationDate(sigantureDate.getTime());
-						}
+                        task.setFinalized(true);
+                        task.setFinalizationDate(sigantureDate.toInstant());
 
-						task = associatedContactService
-								.addAssociatedContact(task, surgeonPhys.getPerson(), ContactRole.SURGEON).getTask();
+                        task = taskRepository.save(task);
+
+                        if (diagnosisRevisionPhys != null) {
+                            task = diagnosisService.createDiagnosisRevision(task,
+                                    DiagnosisRevisionType.DIAGNOSIS_REVISION);
+                            Iterator<DiagnosisRevision> iter = task.getDiagnosisRevisions().iterator();
+                            iter.next();
+                            DiagnosisRevision re = iter.next();
+
+                            Date revdate = getDate(row[index_date]);
+
+                            re.setSignatureTwo(new Signature(diagnosisRevisionPhys));
+
+                            if (revdate != null) {
+                                re.setCreationDate(revdate.getTime());
+                                re.setText(row[index_rediagnosis]);
+                                re.setSignatureDate(revdate.getTime());
+                            }
+
+                            re.setCompletionDate(sigantureDate.getTime());
+                            re.setNotificationDate(sigantureDate.getTime());
+                        }
+
+                        task = associatedContactService
+                                .addAssociatedContact(task, surgeonPhys.getPerson(), ContactRole.SURGEON).getTask();
 //
 //									logger.debug("Searching for material... {}", material);
 //									List<MaterialPreset> m = materialPresetRepository.findAllByName(material, false);
@@ -466,38 +454,38 @@ public class FileMakerImporter {
 //										logger.debug("Found material {}", materialPreset.getName());
 //									}
 
-						task = associatedContactService
-								.addAssociatedContact(task, pait.getPerson(), ContactRole.PATIENT).getTask();
+                        task = associatedContactService
+                                .addAssociatedContact(task, pait.getPerson(), ContactRole.PATIENT).getTask();
 
-						BioBank bioBank = bioBankService.createBioBank(task);
-					}
+                        BioBank bioBank = bioBankService.createBioBank(task);
+                    }
 
-				} catch (Exception e) {
-					e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
 
-					logger.debug("Error for patient {}", row[index_piz]);
-					notProcessed.add(row);
+                    logger.debug("Error for patient {}", row[index_piz]);
+                    notProcessed.add(row);
 
-					bw.write(inserLog.toString());
-					bw.newLine();
-				}
+                    bw.write(inserLog.toString());
+                    bw.newLine();
+                }
 
-				inserLog.setLength(0);
-			}
+                inserLog.setLength(0);
+            }
 
-		}
+        }
 
-		for (String string : wuu) {
-			System.out.println(string);
-		}
+        for (String string : wuu) {
+            System.out.println(string);
+        }
 
-		bw.close();
+        bw.close();
 
-		CsvWriter writer = new CsvWriter(new BufferedWriter(new FileWriter("d:/output.csv")), new CsvWriterSettings());
-		// Write the record headers of this file
-		writer.writeHeaders("rsult");
-		writer.writeRowsAndClose(notProcessed);
-	}
+        CsvWriter writer = new CsvWriter(new BufferedWriter(new FileWriter("d:/output.csv")), new CsvWriterSettings());
+        // Write the record headers of this file
+        writer.writeHeaders("rsult");
+        writer.writeRowsAndClose(notProcessed);
+    }
 }
 
 //180171,"LA","Descemet bei Fuchs DMEK","","Descemet","Dr. Lapp","26837251","","31.01.18","","stationär","29.06.42"	

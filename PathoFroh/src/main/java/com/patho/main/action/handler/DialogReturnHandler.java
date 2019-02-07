@@ -129,12 +129,12 @@ public class DialogReturnHandler extends AbstractHandler {
 		if (event.getObject() != null && event.getObject() instanceof PatientMergeEvent) {
 			PatientMergeEvent p = (PatientMergeEvent) event.getObject();
 
-			if (p.getSource().isArchived())
+			if (p.getSource().getArchived())
 				worklistViewHandler.removePatientFromWorklist(p.getSource());
 			else
 				worklistViewHandler.replacePatientInWorklist(p.getSource());
 
-			if (p.getTarget().isArchived())
+			if (p.getTarget().getArchived())
 				worklistViewHandler.removePatientFromWorklist(p.getTarget());
 			else
 				worklistViewHandler.replacePatientInWorklist(p.getTarget());

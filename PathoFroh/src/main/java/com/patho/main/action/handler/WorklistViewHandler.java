@@ -108,7 +108,7 @@ public class WorklistViewHandler {
 
 				// searching for the first not finalized task
 				for (Task task : tasks) {
-					if (!task.isFinalized()) {
+					if (!task.getFinalized()) {
 						changeView(view);
 						onSelectTaskAndPatient(task);
 						found = true;
@@ -281,9 +281,6 @@ public class WorklistViewHandler {
 
 	/**
 	 * Deselects a task an show the worklist patient view.
-	 * 
-	 * @param patient
-	 * @return
 	 */
 	public void onDeselectTask() {
 		if (worklistHandler.getCurrent().deselectTask())
@@ -381,7 +378,6 @@ public class WorklistViewHandler {
 	 * added twice.
 	 * 
 	 * @param patient
-	 * @param asSelectedPatient
 	 */
 	public void addPatientToWorkList(Patient patient, boolean changeView) {
 		addPatientToWorkList(patient, changeView, false);
@@ -393,7 +389,6 @@ public class WorklistViewHandler {
 	 * added twice.
 	 * 
 	 * @param patient
-	 * @param asSelectedPatient
 	 */
 	public void addPatientToWorkList(Patient patient, boolean changeView, boolean reload) {
 		// change view to patient

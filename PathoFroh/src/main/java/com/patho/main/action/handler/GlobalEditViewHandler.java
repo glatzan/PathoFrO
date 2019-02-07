@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlPanelGroup;
 
+import com.patho.main.util.task.TaskTreeTools;
 import org.primefaces.model.menu.MenuModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -599,10 +600,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		/**
 		 * Saves dynamically changed data of the views. Error-handling is done via
 		 * global error Handler.
-		 * 
-		 * @param toSave
-		 * @param resourcesKey
-		 * @param arr
 		 */
 		public Task save(String resourcesKey, Object... arr) {
 			return save(false, resourcesKey, arr);
@@ -611,10 +608,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		/**
 		 * Saves dynamically changed data of the views. Error-handling is done via
 		 * global error Handler.
-		 * 
-		 * @param toSave
-		 * @param resourcesKey
-		 * @param arr
 		 */
 		public Task save(boolean reload, String resourcesKey, Object... arr) {
 			return save(getSelectedTask(), reload, resourcesKey, arr);
@@ -623,9 +616,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		/**
 		 * Saves dynamically changed data of the views. Error-handling is done via
 		 * global error Handler.
-		 * 
-		 * @param toSave
-		 * @param resourcesKey
 		 * @param arr
 		 */
 		public Task save(Task task, boolean reload, String resourcesKey, Object... arr) {
@@ -742,7 +732,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				logger.debug("Text changed and saved: " + chooser.getIDText());
 
 				chooser.getEntity().setIdManuallyAltered(true);
-				chooser.getEntity().updateAllNames(chooser.getEntity().getTask().isUseAutoNomenclature(), false);
+				TaskTreeTools.updateNamesInTree(chooser.getEntity(),chooser.getEntity().getTask(), false);
 				chooser.setIdChanged(false);
 
 				save("log.patient.task.idManuallyAltered", chooser.getEntity().toString());
@@ -769,8 +759,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
 		/**
 		 * Updates the signatures role
-		 * 
-		 * @param physician
 		 */
 		public void changePhysiciansSignature(Signature signature) {
 			signature.setRole(signature.getPhysician() != null ? signature.getPhysician().getClinicRole() : "");

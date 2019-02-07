@@ -88,7 +88,7 @@ public class WorkPhaseHandler extends AbstractHandler {
 
 		if (removeFromWorklist) {
 			// only remove from worklist if patient has one active task
-			if (task.getParent().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
+			if (task.getParent().getTasks().stream().filter(p -> !p.getFinalized()).count() > 1) {
 				MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
 			} else {
 				// view is updated
@@ -120,10 +120,7 @@ public class WorkPhaseHandler extends AbstractHandler {
 	 * 
 	 * @param task
 	 * @param diagnosisRevision
-	 * @param endPhase
-	 * @param removeFromList
 	 * @param notification
-	 * @param removeFromWorklist
 	 */
 	public void endDiagnosisPhase(Task task, DiagnosisRevision diagnosisRevision, boolean removeFromDiagnosisList,
 			boolean notification, boolean removeFromCurrentWorklist) {
@@ -159,7 +156,7 @@ public class WorkPhaseHandler extends AbstractHandler {
 
 		if (removeFromCurrentWorklist) {
 			// only remove from worklist if patient has one active task
-			if (task.getParent().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
+			if (task.getParent().getTasks().stream().filter(p -> !p.getFinalized()).count() > 1) {
 				MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
 			} else {
 				// remove from current worklist, view is updated

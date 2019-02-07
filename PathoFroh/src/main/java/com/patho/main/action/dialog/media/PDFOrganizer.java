@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.faces.application.FacesMessage;
 
+import com.patho.main.model.patient.miscellaneous.BioBank;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
@@ -23,7 +24,6 @@ import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.model.BioBank;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.patient.Patient;

@@ -2,11 +2,11 @@ package com.patho.main.service;
 
 import java.util.LinkedHashSet;
 
+import com.patho.main.model.patient.miscellaneous.BioBank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.BioBank;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.BioBankRepository;

@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashSet;
 
+import com.patho.main.model.patient.miscellaneous.Council;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.model.Council;
-import com.patho.main.model.Council.CouncilNotificationMethod;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.CouncilRepository;
@@ -49,7 +48,7 @@ public class CouncilService extends AbstractService {
 		council.setDateOfRequest(DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH));
 		council.setName(generateCouncilName(council));
 		council.setAttachedPdfs(new HashSet<PDFContainer>());
-		council.setNotificationMethod(CouncilNotificationMethod.MTA);
+		council.setNotificationMethod(Council.CouncilNotificationMethod.MTA);
 		council.setTask(task);
 
 		task.getCouncils().add(council);
@@ -100,7 +99,7 @@ public class CouncilService extends AbstractService {
 		council.setCouncilRequestCompleted(true);
 		council.setCouncilRequestCompletedDate(new Date());
 
-		if (council.getNotificationMethod() == CouncilNotificationMethod.SECRETARY)
+		if (council.getNotificationMethod() == Council.CouncilNotificationMethod.SECRETARY)
 			council.setSampleShippedCommentary(resourceBundle.get("dialog.council.sampleShipped.option.noSample"));
 
 		council = councilRepository.save(council,
@@ -110,9 +109,9 @@ public class CouncilService extends AbstractService {
 		task = favouriteListService.removeTaskFromList(council.getTask(), PredefinedFavouriteList.CouncilRequest);
 		task = favouriteListService.addTaskToList(council.getTask(), PredefinedFavouriteList.CouncilWaitingForReply);
 
-		if (council.getNotificationMethod() != CouncilNotificationMethod.NONE) {
+		if (council.getNotificationMethod() != Council.CouncilNotificationMethod.NONE) {
 			task = favouriteListService.addTaskToList(task,
-					council.getNotificationMethod() == CouncilNotificationMethod.MTA
+					council.getNotificationMethod() == Council.CouncilNotificationMethod.MTA
 							? PredefinedFavouriteList.CouncilSendRequestMTA
 							: PredefinedFavouriteList.CouncilSendRequestSecretary);
 
@@ -145,9 +144,9 @@ public class CouncilService extends AbstractService {
 	}
 
 	public CouncilReturn beginSampleShiped(Task task, Council council) {
-		if (council.getNotificationMethod() != CouncilNotificationMethod.NONE)
+		if (council.getNotificationMethod() != Council.CouncilNotificationMethod.NONE)
 			task = favouriteListService.addTaskToList(council.getTask(),
-					council.getNotificationMethod() == CouncilNotificationMethod.MTA
+					council.getNotificationMethod() == Council.CouncilNotificationMethod.MTA
 							? PredefinedFavouriteList.CouncilSendRequestMTA
 							: PredefinedFavouriteList.CouncilSendRequestSecretary);
 		return new CouncilReturn(task, council);

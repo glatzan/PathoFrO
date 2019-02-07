@@ -3,6 +3,7 @@ package com.patho.main.template.print.ui.document.report;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.patho.main.model.patient.miscellaneous.Council;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -11,7 +12,6 @@ import com.patho.main.action.dialog.print.CustomAddressDialog.CustomAddressRetur
 import com.patho.main.common.ContactRole;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.Contact;
-import com.patho.main.model.Council;
 import com.patho.main.model.Person;
 import com.patho.main.model.patient.Task;
 import com.patho.main.template.InitializeToken;

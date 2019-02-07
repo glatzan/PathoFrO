@@ -41,9 +41,6 @@ public class PatientService extends AbstractService {
 	/**
 	 * Adds a patient to the database, if the patient is not new, the patient is
 	 * saved. Compares and updates patient data with the clinic backed.
-	 * 
-	 * @param patient
-	 * @param update
 	 * @throws JSONException
 	 */
 	public Patient addPatient(Patient patient) throws JSONException {
@@ -82,7 +79,7 @@ public class PatientService extends AbstractService {
 			// setting external patient if piz is null
 			patient.setExternalPatient(HistoUtil.isNullOrEmpty(patient.getPiz()));
 			patient = patientRepository.save(patient, resourceBundle
-					.get(patient.isExternalPatient() ? "log.patient.extern.new" : "log.patient.search.new"));
+					.get(patient.getExternalPatient() ? "log.patient.extern.new" : "log.patient.search.new"));
 		} else {
 			logger.debug("Patient (" + patient.getPiz() + ") in database, updating and saving");
 			patient = patientRepository.save(patient, resourceBundle.get("log.patient.search.update"));
@@ -128,7 +125,7 @@ public class PatientService extends AbstractService {
 		if (archive && patient.getTasks().isEmpty()) {
 			patient.setArchived(true);
 			return patientRepository.save(patient, resourceBundle.get("log.patient.archived", patient));
-		} else if (!archive && patient.isArchived()) {
+		} else if (!archive && patient.getArchived()) {
 			patient.setArchived(false);
 			return patientRepository.save(patient, resourceBundle.get("log.patient.log.patient.dearchived", patient));
 		}
@@ -186,10 +183,6 @@ public class PatientService extends AbstractService {
 	/**
 	 * Merges two patients. Copies all tasks from one patient to the other. Tasks a
 	 * lists of tasks to merge.
-	 * 
-	 * @param from
-	 * @param to
-	 * @param tasksToMerge
 	 */
 	public Patient mergePatient(Patient source, Patient target, Set<Task> tasksToMerge) {
 		return mergePatient(source, target, tasksToMerge, false);
@@ -198,10 +191,6 @@ public class PatientService extends AbstractService {
 	/**
 	 * Merges two patients. Copies all tasks from one patient to the other. Tasks a
 	 * lists of tasks to merge.
-	 * 
-	 * @param from
-	 * @param to
-	 * @param tasksToMerge
 	 */
 	public Patient mergePatient(Patient source, Patient target, Set<Task> tasksToMerge, boolean copyPatientData) {
 		Set<Task> tasksFrom = tasksToMerge == null ? source.getTasks() : tasksToMerge;
