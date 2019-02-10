@@ -104,9 +104,9 @@ class TaskStatus(task: Task) {
             return true
         }
 
-    init {
-        simpleStatus()
-    }
+//    init {
+//        simpleStatus()
+//    }
 
     fun simpleStatus(): TaskStatus {
         listStatus = ListStatus(task)

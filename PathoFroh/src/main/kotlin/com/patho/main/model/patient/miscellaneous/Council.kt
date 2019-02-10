@@ -175,12 +175,12 @@ open class Council : ID, DataList, AuditAble {
     }
 
     @Transient
-    fun getCouncilTextAsLatex(): String {
+    open fun getCouncilTextAsLatex(): String {
         return TextToLatexConverter().convertToTex(councilText)
     }
 
     @Transient
-    fun isShippentExpected(): Boolean {
+    open fun isShippentExpected(): Boolean {
         return notificationMethod != CouncilNotificationMethod.NONE
     }
 

@@ -724,7 +724,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		 * Saves the manually altered flag, if the sample/block/ or slide id was
 		 * manually altered.
 		 * 
-		 * @param idManuallyAltered
 		 */
 		public void entityNameChange(StainingTableChooser<?> chooser) {
 			// checking if something was altered, if not do nothing
@@ -732,7 +731,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 				logger.debug("Text changed and saved: " + chooser.getIDText());
 
 				chooser.getEntity().setIdManuallyAltered(true);
-				TaskTreeTools.updateNamesInTree(chooser.getEntity(),chooser.getEntity().getTask(), false);
+				//TaskTreeTools.updateNamesInTree(chooser.getEntity(),chooser.getEntity().getTask(), false);
 				chooser.setIdChanged(false);
 
 				save("log.patient.task.idManuallyAltered", chooser.getEntity().toString());

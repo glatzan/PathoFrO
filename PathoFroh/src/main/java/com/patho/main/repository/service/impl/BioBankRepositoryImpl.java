@@ -9,10 +9,10 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
 import com.patho.main.model.patient.miscellaneous.BioBank;
+import com.patho.main.model.patient.miscellaneous.BioBank_;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.BioBank_;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.service.BioBankRepositoryCustom;
 

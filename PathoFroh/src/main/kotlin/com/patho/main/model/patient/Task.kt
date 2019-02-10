@@ -19,7 +19,6 @@ import org.hibernate.envers.Audited
 import org.hibernate.envers.NotAudited
 import java.time.Instant
 import java.time.LocalDate
-import java.util.*
 import javax.persistence.*
 import javax.persistence.CascadeType
 import javax.persistence.Entity
@@ -66,18 +65,25 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
      * The date of the sugery
      */
     @Column
+    @Convert(converter = LocalDateConverter::class)
     open var dateOfSugery: LocalDate = LocalDate.now()
 
     /**
      * Date of reception of the first material
      */
     @Column
+    @Convert(converter = LocalDateConverter::class)
     open var dateOfReceipt: LocalDate = LocalDate.now()
+
+    @Column
+    @Convert(converter = LocalDateConverter::class)
+    open var test123: LocalDate = LocalDate.now()
 
     /**
      * The dueDate
      */
     @Column
+    @Convert(converter = LocalDateConverter::class)
     open var dueDate: LocalDate = LocalDate.now()
 
     /**
@@ -165,7 +171,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("id ASC")
     @NotAudited
-    open var contacts: Set<AssociatedContact> = HashSet()
+    open var contacts = mutableSetOf<AssociatedContact>()
 
     /**
      * List with all samples
@@ -173,14 +179,14 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @OneToMany(mappedBy = "parent", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("id ASC")
-    open var samples: List<Sample> = ArrayList<Sample>()
+    open var samples = mutableListOf<Sample>()
 
     /**
      * All diangnoses
      */
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @OrderBy("id ASC")
-    open var diagnosisRevisions: Set<DiagnosisRevision>? = null
+    open var diagnosisRevisions = mutableSetOf<DiagnosisRevision>()
 
     /**
      * Generated PDFs of this task, lazy
@@ -189,14 +195,14 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @LazyCollection(LazyCollectionOption.TRUE)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("audit.createdOn DESC")
-    open override var attachedPdfs: MutableSet<PDFContainer> = HashSet()
+    open override var attachedPdfs = mutableSetOf<PDFContainer>()
 
     /**
      * List of all councils of this task, lazy
      */
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, mappedBy = "task")
     @OrderBy("dateOfRequest DESC")
-    open var councils: Set<Council> = HashSet()
+    open var councils = mutableSetOf<Council>()
 
     /**
      * List of all favorite Lists in which the task is listed
@@ -205,7 +211,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("id ASC")
     @NotAudited
-    open var favouriteLists: List<FavouriteList>? = null
+    open var favouriteLists = mutableListOf<FavouriteList>()
 
     /**
      * If set to true, this task is shown in the navigation column on the left hand
@@ -226,11 +232,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
         this.id = id
     }
 
-    constructor(patient: Patient) {
-        this.parent = patient
-    }
-
-    fun Task(parent: Patient) {
+    constructor(parent: Patient) {
         dateOfReceipt = LocalDate.now()
         dueDate = LocalDate.now()
         dateOfSugery = LocalDate.now()

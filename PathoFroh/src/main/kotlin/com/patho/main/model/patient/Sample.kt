@@ -62,7 +62,7 @@ open class Sample : AbstractPersistable(), ID, Parent<Task>, IdManuallyAltered {
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("blockID ASC")
-    open var blocks: List<Block> = ArrayList()
+    open var blocks = mutableListOf<Block>()
 
     /**
      * Material name is first initialized with the name of the typeOfMaterial. Can

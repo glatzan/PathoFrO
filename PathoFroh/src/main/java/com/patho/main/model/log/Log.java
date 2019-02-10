@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@SequenceGenerator(name = "log_sequencegenerator", sequenceName = "log_sequence", initialValue=1, allocationSize = 1)
+@SequenceGenerator(name = "log_sequencegenerator", sequenceName = "log_sequence", initialValue=1, allocationSize = 50)
 @RevisionEntity(LogListener.class)
 @Getter
 @Setter

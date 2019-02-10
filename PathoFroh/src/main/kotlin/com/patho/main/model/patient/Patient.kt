@@ -8,7 +8,6 @@ import com.patho.main.model.interfaces.ID
 import org.hibernate.annotations.*
 import org.hibernate.envers.Audited
 import org.hibernate.envers.NotAudited
-import java.util.*
 import javax.persistence.*
 import javax.persistence.CascadeType
 import javax.persistence.Entity
@@ -61,7 +60,7 @@ open class Patient : AbstractPersistable, ID, DataList {
     @LazyCollection(LazyCollectionOption.TRUE)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("taskid DESC")
-    open var tasks: Set<Task> = HashSet()
+    open var tasks = mutableSetOf<Task>()
 
     /**
      * True if patient was added as an external patient.
@@ -76,7 +75,7 @@ open class Patient : AbstractPersistable, ID, DataList {
     @LazyCollection(LazyCollectionOption.TRUE)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("audit.createdOn DESC")
-    override var attachedPdfs: MutableSet<PDFContainer> = HashSet()
+    override var attachedPdfs = mutableSetOf<PDFContainer>()
 
     /**
      * If true the patient is archived. Thus he won't be displayed.

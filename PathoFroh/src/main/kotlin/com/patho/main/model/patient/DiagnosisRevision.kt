@@ -91,7 +91,7 @@ open class DiagnosisRevision : ID, Parent<Task> {
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("sample.id ASC")
-    open var diagnoses : List<Diagnosis> = ArrayList<Diagnosis>()
+    open var diagnoses = mutableListOf<Diagnosis>()
 
     /**
      * Text containing the histological record for all samples.

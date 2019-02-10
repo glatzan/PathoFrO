@@ -9,7 +9,6 @@ import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
-import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -37,7 +36,7 @@ open class Block : AbstractPersistable(), ID, Parent<Sample>, IdManuallyAltered 
      * ID in block
      */
     @Column
-    open var blockID: String? = ""
+    open var blockID: String = ""
 
     /**
      * True if the user has manually altered the sample ID
@@ -51,7 +50,7 @@ open class Block : AbstractPersistable(), ID, Parent<Sample>, IdManuallyAltered 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "parent")
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("creationDate ASC, id ASC")
-    open var slides = ArrayList<Slide>()
+    open var slides= mutableListOf<Slide>()
 
     /**
      * Date of sample creation
