@@ -42,7 +42,7 @@
 				<h:outputLabel value="#{msg['body.receiptlog.taskEDate']}" />
 				<p:calendar pattern="dd.MM.yyyy" mask="true" id="receiptDate"
 					style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
-					styleClass="customBackground"
+					styleClass="customBackground" timeZone="Europe/Berlin"
 					disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
 					value="#{worklistHandler.current.selectedTask.dateOfReceiptAsDate}">
 					<p:ajax event="dateSelect"

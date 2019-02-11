@@ -77,13 +77,14 @@ public class MainHandlerAction {
 	public void test() {
 //		DataBaseConverter b = new DataBaseConverter();
 //		b.start();
-		new testClass().test();
-		try {
-			System.out.println(getBaseURL(FacesContext.getCurrentInstance()));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		new testClass().test();
+//		try {
+//			System.out.println(getBaseURL(FacesContext.getCurrentInstance()));
+//		} catch (MalformedURLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		System.out.println(FacesContext.class.getPackage().getImplementationVersion());
 	}
 
 	/**

@@ -1,291 +1,294 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+>
 
-	<ui:include src="include/navigationBar.xhtml"></ui:include>
+    <ui:include src="include/navigationBar.xhtml"></ui:include>
 
-	<p:panel style="width: 80%"
-		styleClass="defaultHistoHiddenTableContainer"
-		rendered="#{worklistHandler.current.selectedPatient ne null}">
+    <p:panel style="width: 80%"
+             styleClass="defaultHistoHiddenTableContainer"
+             rendered="#{worklistHandler.current.selectedPatient ne null}">
 
-		<h:panelGrid columns="3" styleClass="defaultHistoHiddenTableContainer"
-			columnClasses="columnTop, columnWidth200 ,columnTop">
+        <h:panelGrid columns="3" styleClass="defaultHistoHiddenTableContainer"
+                     columnClasses="columnTop, columnWidth200 ,columnTop">
 
-			<!-- left column -->
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				columnClasses="columnWidth150">
+            <!-- left column -->
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth150">
 
-				<!-- piz -->
-				<h:outputLabel value="#{msg['body.worklist.patient.piz']}" />
-				<h:outputLabel
-					value="#{worklistHandler.current.selectedPatient.piz}" />
+                <!-- piz -->
+                <h:outputLabel value="#{msg['body.worklist.patient.piz']}"/>
+                <h:outputLabel
+                        value="#{worklistHandler.current.selectedPatient.piz}"/>
 
-				<!-- name -->
-				<h:outputLabel value="#{msg['body.worklist.patient.name']}" />
-				<h:outputLabel
-					value="#{worklistHandler.current.selectedPatient.person.lastName}#{worklistHandler.current.selectedPatient.person.title ne '' ? ',' : ''} #{worklistHandler.current.selectedPatient.person.title}" />
+                <!-- name -->
+                <h:outputLabel value="#{msg['body.worklist.patient.name']}"/>
+                <h:outputLabel
+                        value="#{worklistHandler.current.selectedPatient.person.lastName}#{worklistHandler.current.selectedPatient.person.title ne '' ? ',' : ''} #{worklistHandler.current.selectedPatient.person.title}"/>
 
-				<!-- street -->
-				<p:outputLabel value="#{msg['body.worklist.patient.street']}" />
-				<p:outputLabel
-					value="#{worklistHandler.current.selectedPatient.person.contact.street}" />
+                <!-- street -->
+                <p:outputLabel value="#{msg['body.worklist.patient.street']}"/>
+                <p:outputLabel
+                        value="#{worklistHandler.current.selectedPatient.person.contact.street}"/>
 
-				<!-- postcode -->
-				<p:outputLabel value="#{msg['body.worklist.patient.postcode']}" />
-				<p:outputLabel
-					value="#{worklistHandler.current.selectedPatient.person.contact.postcode}" />
+                <!-- postcode -->
+                <p:outputLabel value="#{msg['body.worklist.patient.postcode']}"/>
+                <p:outputLabel
+                        value="#{worklistHandler.current.selectedPatient.person.contact.postcode}"/>
 
-				<!-- phone -->
+                <!-- phone -->
 
-				<p:outputLabel value="#{msg['body.worklist.patient.phone']}" />
-				<p:outputLabel
-					value="#{worklistHandler.current.selectedPatient.person.contact.phone}" />
+                <p:outputLabel value="#{msg['body.worklist.patient.phone']}"/>
+                <p:outputLabel
+                        value="#{worklistHandler.current.selectedPatient.person.contact.phone}"/>
 
-			</h:panelGrid>
+            </h:panelGrid>
 
-			<h:panelGroup />
+            <h:panelGroup/>
 
-			<!-- right column -->
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				columnClasses="columnWidth150">
+            <!-- right column -->
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth150">
 
-				<h:outputLabel value="" />
-				<h:outputLabel value="" />
+                <h:outputLabel value=""/>
+                <h:outputLabel value=""/>
 
-				<!-- firstName -->
-				<h:outputLabel value="#{msg['body.worklist.patient.firstName']}" />
-				<h:outputLabel
-					value="#{worklistHandler.current.selectedPatient.person.firstName}" />
+                <!-- firstName -->
+                <h:outputLabel value="#{msg['body.worklist.patient.firstName']}"/>
+                <h:outputLabel
+                        value="#{worklistHandler.current.selectedPatient.person.firstName}"/>
 
-				<!-- birthday -->
-				<p:outputLabel value="#{msg['body.worklist.patient.birthday']}" />
-				<h:outputLabel
-					value="#{worklistHandler.current.selectedPatient.person.birthday}">
-					<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
-				</h:outputLabel>
+                <!-- birthday -->
+                <p:outputLabel value="#{msg['body.worklist.patient.birthday']}"/>
+                <h:outputLabel
+                        value="#{worklistHandler.current.selectedPatient.person.birthday}">
+                    <f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
+                </h:outputLabel>
 
-				<!-- town -->
-				<p:outputLabel value="#{msg['body.worklist.patient.town']}" />
-				<p:outputLabel
-					value=" #{worklistHandler.current.selectedPatient.person.contact.town}" />
+                <!-- town -->
+                <p:outputLabel value="#{msg['body.worklist.patient.town']}"/>
+                <p:outputLabel
+                        value=" #{worklistHandler.current.selectedPatient.person.contact.town}"/>
 
-				<!-- insurance -->
+                <!-- insurance -->
 
-				<p:outputLabel value="#{msg['body.worklist.patient.insurance']}" />
-				<p:outputLabel
-					value="#{worklistHandler.current.selectedPatient.insurance}" />
-			</h:panelGrid>
-		</h:panelGrid>
+                <p:outputLabel value="#{msg['body.worklist.patient.insurance']}"/>
+                <p:outputLabel
+                        value="#{worklistHandler.current.selectedPatient.insurance}"/>
+            </h:panelGrid>
+        </h:panelGrid>
 
 
-		<h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer">
-			<!-- Tasks -->
-			<p:dataTable var="task" style="margin-top:20px;" id="taskList"
-				value="#{worklistHandler.current.selectedPatient.tasks}"
-				selectionMode="single" styleClass="defaultHistoDataTable"
-				rendered="#{worklistHandler.current.selectedPatient != null}"
-				selection="#{worklistHandler.current.selectedTask}"
-				rowKey="#{task.id}">
+        <h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer">
+            <!-- Tasks -->
+            <p:dataTable var="task" style="margin-top:20px;" id="taskList"
+                         value="#{worklistHandler.current.selectedPatient.tasks}"
+                         selectionMode="single" styleClass="defaultHistoDataTable"
+                         rendered="#{worklistHandler.current.selectedPatient != null}"
+                         selection="#{worklistHandler.current.selectedTask}"
+                         rowKey="#{task.id}">
 
-				<p:ajax event="rowSelect"
-					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
-					update="contentForm:contentPanel headerForm navigationForm:patientList"
-					listener="#{worklistViewHandler.onSelectTaskAndPatient(worklistHandler.current.selectedTask)}" />
+                <p:ajax event="rowSelect"
+                        oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+                        update="contentForm:contentPanel headerForm navigationForm:patientList"
+                        listener="#{worklistViewHandler.onSelectTaskAndPatient(worklistHandler.current.selectedTask)}"/>
 
-				<p:column headerText="#{msg['body.worklist.patient.tasks']}">
-					<h:outputText
-						value="#{task.taskID} - #{mainHandlerAction.date(task.dateOfReceiptAsDate)}" />
+                <p:column headerText="#{msg['body.worklist.patient.tasks']}">
+                    <h:outputText
+                            value="#{task.taskID} - "/>
+                    <h:outputText value="#{task.task.dateOfReceipt}">
+                        <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
+                    </h:outputText>
 
-					<!-- staining needed -->
-					<h:panelGroup>
-						<!-- staining needed = green -->
-						<ui:fragment rendered="#{task.taskStatus.listStatus.inListStaining}">
-							<h:outputText value=" ("></h:outputText>
-							<h:outputText
-								value="#{msg['body.worklist.patient.stainingPhase.listStatus.inListStaining']}"
-								style="color:green;" />
-							<h:outputText value=") "></h:outputText>
-						</ui:fragment>
+                    <!-- staining needed -->
+                    <h:panelGroup>
+                        <!-- staining needed = green -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListStaining}">
+                            <h:outputText value=" ("></h:outputText>
+                            <h:outputText
+                                    value="#{msg['body.worklist.patient.stainingPhase.listStatus.inListStaining']}"
+                                    style="color:green;"/>
+                            <h:outputText value=") "></h:outputText>
+                        </ui:fragment>
 
-						<!-- re-staining needed = orange -->
-						<ui:fragment rendered="#{task.taskStatus.listStatus.inListReStaining}">
-							<h:outputText value=" ("></h:outputText>
-							<h:outputText
-								value="#{msg['body.worklist.patient.stainingPhase.listStatus.inListReStaining']}"
-								style="color:orange;" />
-							<h:outputText value=") "></h:outputText>
-						</ui:fragment>
+                        <!-- re-staining needed = orange -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListReStaining}">
+                            <h:outputText value=" ("></h:outputText>
+                            <h:outputText
+                                    value="#{msg['body.worklist.patient.stainingPhase.listStatus.inListReStaining']}"
+                                    style="color:orange;"/>
+                            <h:outputText value=") "></h:outputText>
+                        </ui:fragment>
 
-						<!--  no staining needed = purple -->
-						<ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInStaining}">
-							<h:outputText value=" ("></h:outputText>
-							<h:outputText
-								value="#{msg['body.worklist.patient.stainingPhase.inList']}"
-								style="color:purple;" />
-							<h:outputText value=") "></h:outputText>
-						</ui:fragment>
+                        <!--  no staining needed = purple -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInStaining}">
+                            <h:outputText value=" ("></h:outputText>
+                            <h:outputText
+                                    value="#{msg['body.worklist.patient.stainingPhase.inList']}"
+                                    style="color:purple;"/>
+                            <h:outputText value=") "></h:outputText>
+                        </ui:fragment>
 
-						<!-- diagnosis needed -->
-						<!-- diagnosis needed = green -->
-						<ui:fragment rendered="#{task.taskStatus.listStatus.inListDiagnosis}">
-							<h:outputText value=" ("></h:outputText>
-							<h:outputText
-								value="#{msg['body.worklist.patient.diagnosisPhase.listStatus.inListDiagnosis']}"
-								style="color:green;" />
-							<h:outputText value=") "></h:outputText>
-						</ui:fragment>
+                        <!-- diagnosis needed -->
+                        <!-- diagnosis needed = green -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListDiagnosis}">
+                            <h:outputText value=" ("></h:outputText>
+                            <h:outputText
+                                    value="#{msg['body.worklist.patient.diagnosisPhase.listStatus.inListDiagnosis']}"
+                                    style="color:green;"/>
+                            <h:outputText value=") "></h:outputText>
+                        </ui:fragment>
 
-						<!-- re-diagnosis needed = orange -->
-						<ui:fragment rendered="#{task.taskStatus.relistStatus.inListDiagnosis}">
-							<h:outputText value=" ("></h:outputText>
-							<h:outputText
-								value="#{msg['body.worklist.patient.diagnosisPhase.relistStatus.inListDiagnosis']}"
-								style="color:orange;" />
-							<h:outputText value=") "></h:outputText>
-						</ui:fragment>
+                        <!-- re-diagnosis needed = orange -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListDiagnosis}">
+                            <h:outputText value=" ("></h:outputText>
+                            <h:outputText
+                                    value="#{msg['body.worklist.patient.diagnosisPhase.relistStatus.inListDiagnosis']}"
+                                    style="color:orange;"/>
+                            <h:outputText value=") "></h:outputText>
+                        </ui:fragment>
 
-						<!-- no diagnosis needed = purple -->
-						<ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInDiagnosis}">
-							<h:outputText value=" ("></h:outputText>
-							<h:outputText
-								value="#{msg['body.worklist.patient.diagnosisPhase.inList']}"
-								style="color:purple;" />
-							<h:outputText value=") "></h:outputText>
-						</ui:fragment>
+                        <!-- no diagnosis needed = purple -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInDiagnosis}">
+                            <h:outputText value=" ("></h:outputText>
+                            <h:outputText
+                                    value="#{msg['body.worklist.patient.diagnosisPhase.inList']}"
+                                    style="color:purple;"/>
+                            <h:outputText value=") "></h:outputText>
+                        </ui:fragment>
 
-						<!-- notification needed -->
-						<!-- notification need = green -->
-						<ui:fragment rendered="#{task.taskStatus.listStatus.inListNotification}">
-							<h:outputText value=" ("></h:outputText>
-							<h:outputText
-								value="#{msg['body.worklist.patient.notificationPhase.listStatus.inListNotification']}"
-								style="color:green;" />
-							<h:outputText value=") "></h:outputText>
-						</ui:fragment>
+                        <!-- notification needed -->
+                        <!-- notification need = green -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListNotification}">
+                            <h:outputText value=" ("></h:outputText>
+                            <h:outputText
+                                    value="#{msg['body.worklist.patient.notificationPhase.listStatus.inListNotification']}"
+                                    style="color:green;"/>
+                            <h:outputText value=") "></h:outputText>
+                        </ui:fragment>
 
-						<!-- stay in phase = purple -->
-						<ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInNotification}">
-							<h:outputText value=" ("></h:outputText>
-							<h:outputText
-								value="#{msg['body.worklist.patient.notificationPhase.inList']}"
-								style="color:purple;" />
-							<h:outputText value=") "></h:outputText>
-						</ui:fragment>
-					</h:panelGroup>
+                        <!-- stay in phase = purple -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInNotification}">
+                            <h:outputText value=" ("></h:outputText>
+                            <h:outputText
+                                    value="#{msg['body.worklist.patient.notificationPhase.inList']}"
+                                    style="color:purple;"/>
+                            <h:outputText value=") "></h:outputText>
+                        </ui:fragment>
+                    </h:panelGroup>
 
-				</p:column>
+                </p:column>
 
-				<p:column style="width:15px">
-					<f:facet name="header">
-						<p:commandLink id="taskList"
-							rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
-							actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
-							<p:ajax event="dialogReturn"
-								listener="#{dialogReturnHandler.onDefaultDialogReturn}"
-								oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
-								update="navigationForm:patientList contentForm:contentPanel headerForm" />
-							<i class="fa fa-plus" />
-						</p:commandLink>
-					</f:facet>
-					<p:commandLink
-						rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_DELETE', 'TASK_EDIT_DELETE_EDITED')}"
-						actionListener="#{dialogHandlerAction.deleteTaskDialog.initAndPrepareBean(task)}">
-						<p:ajax event="dialogReturn"
-							oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
-							update="navigationForm:patientList contentForm:contentPanel" />
-						<i class="fa fa-times-circle" />
-					</p:commandLink>
-				</p:column>
+                <p:column style="width:15px">
+                    <f:facet name="header">
+                        <p:commandLink id="taskList"
+                                       rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
+                                       actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                            <p:ajax event="dialogReturn"
+                                    listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+                                    update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                            <i class="fa fa-plus"/>
+                        </p:commandLink>
+                    </f:facet>
+                    <p:commandLink
+                            rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_DELETE', 'TASK_EDIT_DELETE_EDITED')}"
+                            actionListener="#{dialogHandlerAction.deleteTaskDialog.initAndPrepareBean(task)}">
+                        <p:ajax event="dialogReturn"
+                                oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+                                update="navigationForm:patientList contentForm:contentPanel"/>
+                        <i class="fa fa-times-circle"/>
+                    </p:commandLink>
+                </p:column>
 
-			</p:dataTable>
+            </p:dataTable>
 
-			<!-- PDFs -->
-			<p:dataTable var="attachedPdf" style="margin-top:50px;"
-				id="attachedPdfList"
-				value="#{worklistHandler.current.selectedPatient.attachedPdfs}"
-				styleClass="defaultHistoDataTable"
-				rendered="#{worklistHandler.current.selectedPatient != null}">
+            <!-- PDFs -->
+            <p:dataTable var="attachedPdf" style="margin-top:50px;"
+                         id="attachedPdfList"
+                         value="#{worklistHandler.current.selectedPatient.attachedPdfs}"
+                         styleClass="defaultHistoDataTable"
+                         rendered="#{worklistHandler.current.selectedPatient != null}">
 
-				<p:column style="width:30%">
-					<f:facet name="header">
-						<h:outputLabel value="#{msg['body.worklist.patient.pdfs.name']}"></h:outputLabel>
-					</f:facet>
+                <p:column style="width:30%">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.name']}"></h:outputLabel>
+                    </f:facet>
 
-					<h:outputLabel value="#{attachedPdf.name}"></h:outputLabel>
-				</p:column>
+                    <h:outputLabel value="#{attachedPdf.name}"></h:outputLabel>
+                </p:column>
 
-				<p:column style="width:18%">
-					<f:facet name="header">
-						<h:outputLabel value="#{msg['body.worklist.patient.pdfs.date']}"></h:outputLabel>
-					</f:facet>
-					<h:outputText value="#{attachedPdf.audit.createdOn}">
-						<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
-					</h:outputText>
-				</p:column>
-				<p:column style="width:10%">
-					<f:facet name="header">
-						<h:outputLabel value="#{msg['body.worklist.patient.pdfs.type']}"></h:outputLabel>
-					</f:facet>
-					<h:outputLabel
-						value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"></h:outputLabel>
-				</p:column>
-				<p:column style="auto">
-					<f:facet name="header">
-						<h:outputLabel
-							value="#{msg['body.worklist.patient.pdfs.commentary']}"></h:outputLabel>
-					</f:facet>
-					<h:outputLabel value="#{attachedPdf.commentary}"></h:outputLabel>
-				</p:column>
-				<p:column style="width:15px">
-					<f:facet name="header">
-						<p:commandLink id="upload"
-							rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-							actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
-							<p:ajax event="dialogReturn"
-								update="navigationForm:patientList contentForm:contentPanel" />
-							<i class="fa fa-plus"></i>
-						</p:commandLink>
-					</f:facet>
-					<p:commandLink
-						rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient).setPDFToDisplay(attachedPdf)}">
-						<p:ajax event="dialogReturn"
-							update="navigationForm:patientList contentForm:contentPanel" />
-						<i class="fa fa-search"></i>
-					</p:commandLink>
-				</p:column>
-			</p:dataTable>
+                <p:column style="width:18%">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.date']}"></h:outputLabel>
+                    </f:facet>
+                    <h:outputText value="#{attachedPdf.audit.createdOn}">
+                        <f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.type']}"></h:outputLabel>
+                    </f:facet>
+                    <h:outputLabel
+                            value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"></h:outputLabel>
+                </p:column>
+                <p:column style="auto">
+                    <f:facet name="header">
+                        <h:outputLabel
+                                value="#{msg['body.worklist.patient.pdfs.commentary']}"></h:outputLabel>
+                    </f:facet>
+                    <h:outputLabel value="#{attachedPdf.commentary}"></h:outputLabel>
+                </p:column>
+                <p:column style="width:15px">
+                    <f:facet name="header">
+                        <p:commandLink id="upload"
+                                       rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+                                       actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                            <p:ajax event="dialogReturn"
+                                    update="navigationForm:patientList contentForm:contentPanel"/>
+                            <i class="fa fa-plus"></i>
+                        </p:commandLink>
+                    </f:facet>
+                    <p:commandLink
+                            rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+                            actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient).setPDFToDisplay(attachedPdf)}">
+                        <p:ajax event="dialogReturn"
+                                update="navigationForm:patientList contentForm:contentPanel"/>
+                        <i class="fa fa-search"></i>
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
 
-			<!-- Buttons -->
-			<h:panelGrid columns="2" style="margin-top: 10px;"
-				styleClass="listingHistoHiddenTableContainer">
-				<p:commandButton
-					value="#{msg['body.worklist.patient.button.newTask']}"
-					icon="fa fa-plus"
-					rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
-					actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
-					<p:ajax event="dialogReturn"
-						listener="#{dialogReturnHandler.onDefaultDialogReturn}"
-						oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-						update="navigationForm:patientList contentForm:contentPanel headerForm" />
-				</p:commandButton>
+            <!-- Buttons -->
+            <h:panelGrid columns="2" style="margin-top: 10px;"
+                         styleClass="listingHistoHiddenTableContainer">
+                <p:commandButton
+                        value="#{msg['body.worklist.patient.button.newTask']}"
+                        icon="fa fa-plus"
+                        rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
+                        actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                            oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+                            update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                </p:commandButton>
 
-				<p:commandButton
-					value="#{msg['body.worklist.patient.button.uplaod']}"
-					icon="fa fa-cloud-upload"
-					rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-					actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
-					<p:ajax event="dialogReturn"
-						listener="#{dialogReturnHandler.onDefaultDialogReturn}"
-						update="navigationForm:patientList contentForm:contentPanel" />
-				</p:commandButton>
-			</h:panelGrid>
-		</h:panelGrid>
-	</p:panel>
+                <p:commandButton
+                        value="#{msg['body.worklist.patient.button.uplaod']}"
+                        icon="fa fa-cloud-upload"
+                        rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+                        actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                            update="navigationForm:patientList contentForm:contentPanel"/>
+                </p:commandButton>
+            </h:panelGrid>
+        </h:panelGrid>
+    </p:panel>
 </ui:composition>

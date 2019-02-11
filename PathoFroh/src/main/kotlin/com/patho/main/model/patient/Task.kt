@@ -65,25 +65,21 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
      * The date of the sugery
      */
     @Column
-    @Convert(converter = LocalDateConverter::class)
     open var dateOfSugery: LocalDate = LocalDate.now()
 
     /**
      * Date of reception of the first material
      */
     @Column
-    @Convert(converter = LocalDateConverter::class)
     open var dateOfReceipt: LocalDate = LocalDate.now()
 
     @Column
-    @Convert(converter = LocalDateConverter::class)
     open var test123: LocalDate = LocalDate.now()
 
     /**
      * The dueDate
      */
     @Column
-    @Convert(converter = LocalDateConverter::class)
     open var dueDate: LocalDate = LocalDate.now()
 
     /**

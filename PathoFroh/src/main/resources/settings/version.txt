@@ -179,41 +179,40 @@ update task set stainingCompletionDate = tmp;
 
 alter table task drop column tmp;
 
- alter table task_aud add column tmp date;
- update task_aud set tmp = TO_TIMESTAMP(duedate/1000)::date;
- alter table task_aud drop column duedate;
- alter table task_aud add column duedate date;
- update task_aud set duedate = tmp;
+alter table task_aud add column tmp date;
+update task_aud set tmp = TO_TIMESTAMP(duedate/1000)::date;
+alter table task_aud drop column duedate;
+alter table task_aud add column duedate date;
+update task_aud set duedate = tmp;
 
- update task_aud set tmp = TO_TIMESTAMP(dateOfSugery/1000)::date;
- alter table task_aud drop column dateOfSugery;
- alter table task_aud add column dateOfSugery date;
- update task_aud set dateOfSugery = tmp;
- alter table task_aud drop column tmp;
-
- alter table task_aud add column tmp timestamp;
- update task_aud set tmp = TO_TIMESTAMP(finalizationDate/1000);
- alter table task_aud drop column finalizationDate;
- alter table task_aud add column finalizationDate timestamp;
- update task_aud set finalizationDate = tmp;
-
- update task_aud set tmp = TO_TIMESTAMP(notificationCompletionDate/1000);
- alter table task_aud drop column notificationCompletionDate;
- alter table task_aud add column notificationCompletionDate timestamp;
- update task_aud set notificationCompletionDate = tmp;
-
- update task_aud set tmp = TO_TIMESTAMP(diagnosisCompletionDate/1000);
- alter table task_aud drop column diagnosisCompletionDate;
- alter table task_aud add column diagnosisCompletionDate timestamp;
- update task_aud set diagnosisCompletionDate = tmp;
-
- update task_aud set tmp = TO_TIMESTAMP(stainingCompletionDate/1000);
- alter table task_aud drop column stainingCompletionDate;
- alter table task_aud add column stainingCompletionDate timestamp;
- update task_aud set stainingCompletionDate = tmp;
-
+update task_aud set tmp = TO_TIMESTAMP(dateOfSugery/1000)::date;
+alter table task_aud drop column dateOfSugery;
+alter table task_aud add column dateOfSugery date;
+update task_aud set dateOfSugery = tmp;
 alter table task_aud drop column tmp;
 
+alter table task_aud add column tmp timestamp;
+update task_aud set tmp = TO_TIMESTAMP(finalizationDate/1000);
+alter table task_aud drop column finalizationDate;
+alter table task_aud add column finalizationDate timestamp;
+update task_aud set finalizationDate = tmp;
+
+update task_aud set tmp = TO_TIMESTAMP(notificationCompletionDate/1000);
+alter table task_aud drop column notificationCompletionDate;
+alter table task_aud add column notificationCompletionDate timestamp;
+update task_aud set notificationCompletionDate = tmp;
+
+update task_aud set tmp = TO_TIMESTAMP(diagnosisCompletionDate/1000);
+alter table task_aud drop column diagnosisCompletionDate;
+alter table task_aud add column diagnosisCompletionDate timestamp;
+update task_aud set diagnosisCompletionDate = tmp;
+
+update task_aud set tmp = TO_TIMESTAMP(stainingCompletionDate/1000);
+alter table task_aud drop column stainingCompletionDate;
+alter table task_aud add column stainingCompletionDate timestamp;
+update task_aud set stainingCompletionDate = tmp;
+
+alter table task_aud drop column tmp;
 
 /* View For task display*/
 CREATE OR REPLACE VIEW taskoverview AS
@@ -233,6 +232,7 @@ Select
 	from task as task
 		left join patient pat on pat.id = task.parent_id
 		left join person as pers on pers.id = pat.person_id;
+
 /* old unused filed*/
 alter table sample drop ReStainingPhase;
 

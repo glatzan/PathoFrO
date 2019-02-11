@@ -5,8 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
->
+                xmlns:p="http://primefaces.org/ui">
 
     <!-- navigation -->
     <h:panelGrid columns="1" styleClass="breadCrumbs">
@@ -15,7 +14,6 @@
 
     <p:panel style="width: 80%"
              styleClass="defaultHistoHiddenTableContainer">
-
         <p:dataTable var="taskOverview"
                      value="#{globalEditViewHandler.taskView.taskList}"
                      style="margin-top:10px;" styleClass="bigHistoDataTable"

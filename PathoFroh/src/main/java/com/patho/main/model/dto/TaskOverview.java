@@ -2,6 +2,7 @@ package com.patho.main.model.dto;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.ColumnResult;
@@ -28,9 +29,9 @@ import lombok.Setter;
 	    	"task.id, "+ 
 	    	"task.taskId, "+ 
 	    	"task.dateofreceipt, "+ 
-	    	"case when task.stainingcompletiondate != 0 then true else false end as stainingcompleted, "+ 
-			"case when task.diagnosiscompletiondate != 0 then true else false end as diagnosiscompleted, "+
-			"case when task.notificationcompletiondate != 0 then true else false end as notificationcompleted, "+ 
+	    	"case when task.stainingcompletiondate != null then true else false end as stainingcompleted, "+
+			"case when task.diagnosiscompletiondate != null then true else false end as diagnosiscompleted, "+
+			"case when task.notificationcompletiondate != null then true else false end as notificationcompleted, "+
 			"task.finalized, "+ 
 			"task.taskpriority, "+
 			"pers.title, "+ 
@@ -51,7 +52,7 @@ import lombok.Setter;
 	        columns = {
 	            @ColumnResult(name = "id", type=Long.class),
 	            @ColumnResult(name = "taskid", type=String.class ),
-	            @ColumnResult(name = "dateofreceipt", type=Long.class),
+	            @ColumnResult(name = "dateofreceipt", type=LocalDate.class),
 	            @ColumnResult(name = "stainingcompleted", type=Boolean.class),
 	            @ColumnResult(name = "diagnosiscompleted", type=Boolean.class),
 	            @ColumnResult(name = "notificationcompleted", type=Boolean.class),
@@ -74,7 +75,7 @@ public class TaskOverview implements FullName {
 	@Id
 	private long id;
 	private String taskID;
-	private long dateOfReceipt = 0;
+	private LocalDate dateOfReceipt;
 	private boolean stainingCompleted;
 	private boolean diagnosisCompleted;
 	private boolean notificationCompleted;
@@ -87,9 +88,9 @@ public class TaskOverview implements FullName {
 	private TaskPriority taskPriority;
 	private boolean userContact;
 	
-	public TaskOverview(long id, String taskID, long dateOfReceipt, boolean stainingCompleted,
-			boolean diagnosisCompleted, boolean notificationCompleted, boolean finalized, String title, String lastName,
-			String firstName, String birthday, int taskPriority, boolean userContact) {
+	public TaskOverview(long id, String taskID, LocalDate dateOfReceipt, boolean stainingCompleted,
+						boolean diagnosisCompleted, boolean notificationCompleted, boolean finalized, String title, String lastName,
+						String firstName, String birthday, int taskPriority, boolean userContact) {
 		super();
 		this.id = id;
 		this.taskID = taskID;

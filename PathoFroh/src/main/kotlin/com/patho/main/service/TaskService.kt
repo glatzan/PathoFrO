@@ -14,34 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import java.util.stream.Collectors
 
 @Service()
-@Transactional
-public open class TaskService : AbstractService() {
+public open class TaskService @Autowired constructor(
+        private val diagnosisRevisionRepository: DiagnosisRevisionRepository,
+        private val taskRepository: TaskRepository,
+        private val serviceSettings: ServiceSettings) : AbstractService() {
 
-    /**
-     * DiagnosisRevisionRepository
-     */
-    @Autowired
-    private lateinit var diagnosisRevisionRepository: DiagnosisRevisionRepository
-
-    /**
-     * TaskRepository
-     */
-    @Autowired
-    private lateinit var taskRepository: TaskRepository
-
-    /**
-     * Settings bean for services
-     */
-    @Autowired
-    private lateinit var serviceSettings: ServiceSettings
 
     /**
      * Creates a new task and returns it
      */
-    fun createTask(patient: Patient, taskID: String, save: Boolean): Task {
+    @Transactional
+    open fun createTask(patient: Patient, taskID: String, save: Boolean): Task {
         var task = Task()
         task.parent = patient
         task.caseHistory = ""
@@ -72,7 +57,8 @@ public open class TaskService : AbstractService() {
      * Sets the taskID of a task if it was changed. IMPORTANT: Validation of task id has to be done
      * manually
      */
-    fun changeTaskID(task: Task, newTaskID: String): Task {
+    @Transactional
+    open fun changeTaskID(task: Task, newTaskID: String): Task {
         if (newTaskID != task.id.toString()) {
             val oldId = task.taskID
             task.taskID = newTaskID
@@ -84,7 +70,8 @@ public open class TaskService : AbstractService() {
     /**
      * Checks if taskID is a valid taskID, also checks if already present in database
      */
-    fun validateTaskID(taskID: String): TaskIDValidity {
+    @Transactional
+    open fun validateTaskID(taskID: String): TaskIDValidity {
         if (HistoUtil.isNullOrEmpty(taskID) || taskID.length != 6) {
             return TaskIDValidity.SHORT
         } else if (!taskID.matches("[0-9]{6}".toRegex())) {
@@ -99,7 +86,8 @@ public open class TaskService : AbstractService() {
     /**
      * Checks if taskID is used, if not true is returned
      */
-    fun isTaskIDAvailable(taskID: String): Boolean {
+    @Transactional
+    open fun isTaskIDAvailable(taskID: String): Boolean {
         return !taskRepository.findOptionalByTaskId(taskID).isPresent();
     }
 
@@ -107,7 +95,8 @@ public open class TaskService : AbstractService() {
      * Returns the next id for a task, if the year changes a new task id will be
      * generated
      */
-    fun getNextTaskID(): String {
+    @Transactional
+    open fun getNextTaskID(): String {
         // generating new task id
         val task = taskRepository.findOptinalByLastID(Calendar.getInstance(), false, false, false, false,
                 false)
@@ -129,7 +118,8 @@ public open class TaskService : AbstractService() {
      * Renames task entities, if ignoreManuallyChangedEntities is false, manual
      * changes will not be renamed.
      */
-    fun updateNamesOfTaskEntities(task: Task, ignoreManuallyChangedEntities: Boolean, save: Boolean): Task {
+    @Transactional
+    open fun updateNamesOfTaskEntities(task: Task, ignoreManuallyChangedEntities: Boolean, save: Boolean): Task {
         logger.debug("Updating names, ignore manually altered: {}", ignoreManuallyChangedEntities)
 
         for (sample in task.samples) {
@@ -146,6 +136,7 @@ public open class TaskService : AbstractService() {
     /**
      * Checks if task can be archived
      */
+    @Transactional
     open fun getTaskArchiveStatus(task: Task): TaskArchiveStatus {
         var taskArchiveStatus = TaskArchiveStatus(task);
 

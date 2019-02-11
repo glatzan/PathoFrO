@@ -26,7 +26,7 @@
 
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <joinfaces.version>3.2.3</joinfaces.version>
+        <joinfaces.version>4.0.2</joinfaces.version>
 
         <jsonwebtoken.version>0.9.0</jsonwebtoken.version>
 
@@ -343,6 +343,12 @@
             <groupId>com.sun.xml.fastinfoset</groupId>
             <artifactId>FastInfoset</artifactId>
             <version>1.2.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.2.10</version>
         </dependency>
 
     </dependencies>
