@@ -207,7 +207,6 @@
                     <p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="2" converter="localDateConverter"
                                 style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
                                 styleClass="customBackground"
-                                timeZone="Europe/Berlin"
                                 disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
                                 value="#{worklistHandler.current.selectedTask.dateOfSugery}">
                         <p:ajax event="dateSelect"
@@ -222,7 +221,6 @@
                                 disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
                                 style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
                                 styleClass="customBackground"
-                                timeZone="Europe/Berlin"
                                 value="#{worklistHandler.current.selectedTask.dateOfReceipt}">
                         <p:ajax event="dateSelect"
                                 listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.dateOfReceipt))}"/>

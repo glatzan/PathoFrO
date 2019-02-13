@@ -19,6 +19,7 @@ import org.hibernate.envers.Audited
 import org.hibernate.envers.NotAudited
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import javax.persistence.*
 import javax.persistence.CascadeType
 import javax.persistence.Entity
@@ -72,9 +73,6 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
      */
     @Column
     open var dateOfReceipt: LocalDate = LocalDate.now()
-
-    @Column
-    open var test123: LocalDate = LocalDate.now()
 
     /**
      * The dueDate
@@ -229,9 +227,9 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     }
 
     constructor(parent: Patient) {
-        dateOfReceipt = LocalDate.now()
-        dueDate = LocalDate.now()
-        dateOfSugery = LocalDate.now()
+        dateOfReceipt = LocalDate.now(ZoneId.of("UTC"))
+        dueDate = LocalDate.now(ZoneId.of("UTC"))
+        dateOfSugery = LocalDate.now(ZoneId.of("UTC"))
         this.parent = patient
     }
 

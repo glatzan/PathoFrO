@@ -77,7 +77,7 @@ public class SlideService extends AbstractService {
      * Creats a slide x times, does not persist data
      */
     public Task createSlidesXTimes(List<StainingPrototypeHolder> prototypeHolders, Block block) {
-        return createSlidesXTimes(prototypeHolders, block, null, null, false, true, false, false);
+        return createSlidesXTimes(prototypeHolders, block, "", "", false, true, false, false);
     }
 
     /**

@@ -3,6 +3,8 @@ package com.patho.main.action;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,8 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import com.patho.main.model.Question;
+import com.patho.main.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
@@ -55,8 +59,10 @@ public class MainHandlerAction {
 	@Setter
 	private String number;
 
-
-
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	@Autowired
+	protected QuestionRepository questionRepository;
 	/********************************************************
 	 * Navigation
 	 ********************************************************/
@@ -85,6 +91,11 @@ public class MainHandlerAction {
 //			e.printStackTrace();
 //		}
 		System.out.println(FacesContext.class.getPackage().getImplementationVersion());
+		Question q = new Question();
+		q.setIdate(Instant.now());
+		q.setTitle("asdd");
+		q.setDdate(LocalDate.now());
+		questionRepository.save(q);
 	}
 
 	/**

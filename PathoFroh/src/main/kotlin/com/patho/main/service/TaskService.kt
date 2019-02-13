@@ -27,11 +27,11 @@ public open class TaskService @Autowired constructor(
      */
     @Transactional
     open fun createTask(patient: Patient, taskID: String, save: Boolean): Task {
-        var task = Task()
-        task.parent = patient
+        var task = Task(patient)
         task.caseHistory = ""
         task.ward = ""
         task.insurance = patient.insurance
+
 
         if (HistoUtil.isNotNullOrEmpty(taskID)) {
             if (isTaskIDAvailable(taskID))
@@ -46,9 +46,6 @@ public open class TaskService @Autowired constructor(
         task.diagnosisRevisions = LinkedHashSet()
         task.contacts = LinkedHashSet()
         task.attachedPdfs = LinkedHashSet()
-
-        if (patient.tasks == null)
-            patient.tasks = LinkedHashSet()
 
         return if (save) taskRepository.save(task, resourceBundle.get("log.patient.task.new", task), patient) else task
     }

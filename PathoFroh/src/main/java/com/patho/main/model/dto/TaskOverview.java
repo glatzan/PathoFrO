@@ -29,9 +29,9 @@ import lombok.Setter;
 	    	"task.id, "+ 
 	    	"task.taskId, "+ 
 	    	"task.dateofreceipt, "+ 
-	    	"case when task.stainingcompletiondate != null then true else false end as stainingcompleted, "+
-			"case when task.diagnosiscompletiondate != null then true else false end as diagnosiscompleted, "+
-			"case when task.notificationcompletiondate != null then true else false end as notificationcompleted, "+
+	    	"case when task.stainingcompletiondate is not null then true else false end as stainingcompleted, "+
+			"case when task.diagnosiscompletiondate is not null then true else false end as diagnosiscompleted, "+
+			"case when task.notificationcompletiondate is not null then true else false end as notificationcompleted, "+
 			"task.finalized, "+ 
 			"task.taskpriority, "+
 			"pers.title, "+ 

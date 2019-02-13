@@ -138,41 +138,42 @@ Create Material and Staining for external samples
 
 SQL:
 /* converting timestamps to date*/
+drop view taskoverview;
+
 alter table task add column tmp date;
-update task set tmp = TO_TIMESTAMP(duedate/1000)::date;
+update task set tmp = case when duedate != 0 then  TO_TIMESTAMP(duedate/1000)::date else null end;
 alter table task drop column duedate;
 alter table task add column duedate date;
 update task set duedate = tmp;
 
-drop view taskoverview;
-update task set tmp = TO_TIMESTAMP(dateOfReceipt/1000)::date;
+update task set tmp = case when dateOfReceipt != 0 then TO_TIMESTAMP(dateOfReceipt/1000)::date else null end;
 alter table task drop column dateOfReceipt;
 alter table task add column dateOfReceipt date;
 update task set dateOfReceipt = tmp;
 
-update task set tmp = TO_TIMESTAMP(dateOfSugery/1000)::date;
+update task set tmp = case when dateOfSugery != 0 then TO_TIMESTAMP(dateOfSugery/1000)::date else null end;
 alter table task drop column dateOfSugery;
 alter table task add column dateOfSugery date;
 update task set dateOfSugery = tmp;
 alter table task drop column tmp;
 
 alter table task add column tmp timestamp;
-update task set tmp = TO_TIMESTAMP(finalizationDate/1000);
+update task set tmp = case when finalizationDate != 0 then TO_TIMESTAMP(finalizationDate/1000) else null end;
 alter table task drop column finalizationDate;
 alter table task add column finalizationDate timestamp;
 update task set finalizationDate = tmp;
 
-update task set tmp = TO_TIMESTAMP(notificationCompletionDate/1000);
+update task set tmp = case when notificationCompletionDate != 0 then TO_TIMESTAMP(notificationCompletionDate/1000) else null end;
 alter table task drop column notificationCompletionDate;
 alter table task add column notificationCompletionDate timestamp;
 update task set notificationCompletionDate = tmp;
 
-update task set tmp = TO_TIMESTAMP(diagnosisCompletionDate/1000);
+update task set tmp = case when diagnosisCompletionDate != 0 then TO_TIMESTAMP(diagnosisCompletionDate/1000) else null end;
 alter table task drop column diagnosisCompletionDate;
 alter table task add column diagnosisCompletionDate timestamp;
 update task set diagnosisCompletionDate = tmp;
 
-update task set tmp = TO_TIMESTAMP(stainingCompletionDate/1000);
+update task set tmp = case when stainingCompletionDate != 0 then TO_TIMESTAMP(stainingCompletionDate/1000) else null end;
 alter table task drop column stainingCompletionDate;
 alter table task add column stainingCompletionDate timestamp;
 update task set stainingCompletionDate = tmp;
@@ -180,34 +181,34 @@ update task set stainingCompletionDate = tmp;
 alter table task drop column tmp;
 
 alter table task_aud add column tmp date;
-update task_aud set tmp = TO_TIMESTAMP(duedate/1000)::date;
+update task_aud set tmp = case when duedate != 0 then TO_TIMESTAMP(duedate/1000)::date else null end;
 alter table task_aud drop column duedate;
 alter table task_aud add column duedate date;
 update task_aud set duedate = tmp;
 
-update task_aud set tmp = TO_TIMESTAMP(dateOfSugery/1000)::date;
+update task_aud set tmp = case when dateOfSugery != 0 then TO_TIMESTAMP(dateOfSugery/1000)::date else null end;
 alter table task_aud drop column dateOfSugery;
 alter table task_aud add column dateOfSugery date;
 update task_aud set dateOfSugery = tmp;
 alter table task_aud drop column tmp;
 
 alter table task_aud add column tmp timestamp;
-update task_aud set tmp = TO_TIMESTAMP(finalizationDate/1000);
+update task_aud set tmp = case when finalizationDate != 0 then TO_TIMESTAMP(finalizationDate/1000) else null end;
 alter table task_aud drop column finalizationDate;
 alter table task_aud add column finalizationDate timestamp;
 update task_aud set finalizationDate = tmp;
 
-update task_aud set tmp = TO_TIMESTAMP(notificationCompletionDate/1000);
+update task_aud set tmp = case when notificationCompletionDate != 0 then TO_TIMESTAMP(notificationCompletionDate/1000) else null end;
 alter table task_aud drop column notificationCompletionDate;
 alter table task_aud add column notificationCompletionDate timestamp;
 update task_aud set notificationCompletionDate = tmp;
 
-update task_aud set tmp = TO_TIMESTAMP(diagnosisCompletionDate/1000);
+update task_aud set tmp = case when diagnosisCompletionDate != 0 then TO_TIMESTAMP(diagnosisCompletionDate/1000) else null end;
 alter table task_aud drop column diagnosisCompletionDate;
 alter table task_aud add column diagnosisCompletionDate timestamp;
 update task_aud set diagnosisCompletionDate = tmp;
 
-update task_aud set tmp = TO_TIMESTAMP(stainingCompletionDate/1000);
+update task_aud set tmp = case when stainingCompletionDate != 0 then TO_TIMESTAMP(stainingCompletionDate/1000) else null end;
 alter table task_aud drop column stainingCompletionDate;
 alter table task_aud add column stainingCompletionDate timestamp;
 update task_aud set stainingCompletionDate = tmp;
@@ -220,9 +221,9 @@ Select
 	task.id,
 	task.taskId,
 	task.dateofreceipt,
-	case when task.stainingcompletiondate != null then true else false end as stainingcompleted,
-	case when task.diagnosiscompletiondate != null then true else false end as diagnosiscompleted,
-	case when task.notificationcompletiondate != null then true else false end as notificationcompleted,
+	case when task.stainingcompletiondate  is not null then true else false end as stainingcompleted,
+	case when task.diagnosiscompletiondate is not null then true else false end as diagnosiscompleted,
+	case when task.notificationcompletiondate is not null then true else false end as notificationcompleted,
 	task.finalized,
 	task.taskpriority,
 	pers.title,

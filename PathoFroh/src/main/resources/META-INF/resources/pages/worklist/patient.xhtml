@@ -101,6 +101,7 @@
                 <p:column headerText="#{msg['body.worklist.patient.tasks']}">
                     <h:outputText
                             value="#{task.taskID} - "/>
+
                     <h:outputText value="#{task.task.dateOfReceipt}">
                         <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
                     </h:outputText>
@@ -109,76 +110,60 @@
                     <h:panelGroup>
                         <!-- staining needed = green -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListStaining}">
-                            <h:outputText value=" ("></h:outputText>
-                            <h:outputText
-                                    value="#{msg['body.worklist.patient.stainingPhase.listStatus.inListStaining']}"
-                                    style="color:green;"/>
-                            <h:outputText value=") "></h:outputText>
+                            <h:outputFormat value=" ({0})" style="color:green;">
+                                <f:param value="#{msg['body.worklist.patient.stainingPhase.stainingNeeded']}"/>
+                            </h:outputFormat>
                         </ui:fragment>
 
                         <!-- re-staining needed = orange -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListReStaining}">
-                            <h:outputText value=" ("></h:outputText>
-                            <h:outputText
-                                    value="#{msg['body.worklist.patient.stainingPhase.listStatus.inListReStaining']}"
-                                    style="color:orange;"/>
-                            <h:outputText value=") "></h:outputText>
+                            <h:outputFormat value=" ({0})" style="color:orange;">
+                                <f:param value="#{msg['body.worklist.patient.stainingPhase.reStainingNeeded']}"/>
+                            </h:outputFormat>
                         </ui:fragment>
 
                         <!--  no staining needed = purple -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInStaining}">
-                            <h:outputText value=" ("></h:outputText>
-                            <h:outputText
-                                    value="#{msg['body.worklist.patient.stainingPhase.inList']}"
-                                    style="color:purple;"/>
-                            <h:outputText value=") "></h:outputText>
+                            <h:outputFormat value=" ({0})" style="color:purple;">
+                                <f:param value="#{msg['body.worklist.patient.stainingPhase.inList']}"/>
+                            </h:outputFormat>
                         </ui:fragment>
 
                         <!-- diagnosis needed -->
                         <!-- diagnosis needed = green -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListDiagnosis}">
-                            <h:outputText value=" ("></h:outputText>
-                            <h:outputText
-                                    value="#{msg['body.worklist.patient.diagnosisPhase.listStatus.inListDiagnosis']}"
-                                    style="color:green;"/>
-                            <h:outputText value=") "></h:outputText>
+                            <h:outputFormat value=" ({0})" style="color:green;">
+                                <f:param value="#{msg['body.worklist.patient.diagnosisPhase.diagnosisNeeded']}"/>
+                            </h:outputFormat>
                         </ui:fragment>
 
                         <!-- re-diagnosis needed = orange -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListDiagnosis}">
-                            <h:outputText value=" ("></h:outputText>
-                            <h:outputText
-                                    value="#{msg['body.worklist.patient.diagnosisPhase.relistStatus.inListDiagnosis']}"
-                                    style="color:orange;"/>
-                            <h:outputText value=") "></h:outputText>
+                            <h:outputFormat value=" ({0})" style="color:orange;">
+                                <f:param value="#{msg['body.worklist.patient.diagnosisPhase.reDiagnosisNeeded']}"/>
+                            </h:outputFormat>
                         </ui:fragment>
 
                         <!-- no diagnosis needed = purple -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInDiagnosis}">
-                            <h:outputText value=" ("></h:outputText>
-                            <h:outputText
-                                    value="#{msg['body.worklist.patient.diagnosisPhase.inList']}"
-                                    style="color:purple;"/>
-                            <h:outputText value=") "></h:outputText>
+                            <h:outputFormat value=" ({0})" style="color:purple;">
+                                <f:param value="#{msg['body.worklist.patient.diagnosisPhase.inList']}"/>
+                            </h:outputFormat>
                         </ui:fragment>
 
                         <!-- notification needed -->
                         <!-- notification need = green -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListNotification}">
-                            <h:outputText value=" ("></h:outputText>
-                            <h:outputText
-                                    value="#{msg['body.worklist.patient.notificationPhase.listStatus.inListNotification']}"
-                                    style="color:green;"/>
-                            <h:outputText value=") "></h:outputText>
+                            <h:outputFormat value=" ({0})" style="color:green;">
+                                <f:param value="#{msg['body.worklist.patient.notificationPhase.notificationNeeded']}"/>
+                            </h:outputFormat>
                         </ui:fragment>
 
                         <!-- stay in phase = purple -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInNotification}">
-                            <h:outputText value=" ("></h:outputText>
-                            <h:outputText
-                                    value="#{msg['body.worklist.patient.notificationPhase.inList']}"
-                                    style="color:purple;"/>
-                            <h:outputText value=") "></h:outputText>
+                            <h:outputFormat value=" ({0})" style="color:purple;">
+                                <f:param value="#{msg['body.worklist.patient.notificationPhase.inList']}"/>
+                            </h:outputFormat>
                         </ui:fragment>
                     </h:panelGroup>
 
@@ -186,9 +171,9 @@
 
                 <p:column style="width:15px">
                     <f:facet name="header">
-                        <p:commandLink id="taskList"
-                                       rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
-                                       actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                        <p:commandLink
+                                rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
+                                actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultDialogReturn}"
                                     oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
@@ -217,15 +202,15 @@
 
                 <p:column style="width:30%">
                     <f:facet name="header">
-                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.name']}"></h:outputLabel>
+                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.name']}"/>
                     </f:facet>
 
-                    <h:outputLabel value="#{attachedPdf.name}"></h:outputLabel>
+                    <h:outputLabel value="#{attachedPdf.name}"/>
                 </p:column>
 
                 <p:column style="width:18%">
                     <f:facet name="header">
-                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.date']}"></h:outputLabel>
+                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.date']}"/>
                     </f:facet>
                     <h:outputText value="#{attachedPdf.audit.createdOn}">
                         <f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
@@ -233,17 +218,17 @@
                 </p:column>
                 <p:column style="width:10%">
                     <f:facet name="header">
-                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.type']}"></h:outputLabel>
+                        <h:outputLabel value="#{msg['body.worklist.patient.pdfs.type']}"/>
                     </f:facet>
                     <h:outputLabel
-                            value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"></h:outputLabel>
+                            value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"/>
                 </p:column>
                 <p:column style="auto">
                     <f:facet name="header">
                         <h:outputLabel
-                                value="#{msg['body.worklist.patient.pdfs.commentary']}"></h:outputLabel>
+                                value="#{msg['body.worklist.patient.pdfs.commentary']}"/>
                     </f:facet>
-                    <h:outputLabel value="#{attachedPdf.commentary}"></h:outputLabel>
+                    <h:outputLabel value="#{attachedPdf.commentary}"/>
                 </p:column>
                 <p:column style="width:15px">
                     <f:facet name="header">
@@ -260,7 +245,7 @@
                             actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient).setPDFToDisplay(attachedPdf)}">
                         <p:ajax event="dialogReturn"
                                 update="navigationForm:patientList contentForm:contentPanel"/>
-                        <i class="fa fa-search"></i>
+                        <i class="fa fa-search"/>
                     </p:commandLink>
                 </p:column>
             </p:dataTable>

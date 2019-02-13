@@ -27,13 +27,13 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate.id.new_generator_mappings: true
       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
       hibernate.jdbc.time_zone: UTC
       hibernate.jdbc.lob.non_contextual_creation: true
-   output:
+  output:
     ansi:
       enabled: always
   aop:

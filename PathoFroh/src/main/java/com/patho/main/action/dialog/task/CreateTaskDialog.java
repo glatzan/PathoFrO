@@ -192,8 +192,8 @@ public class CreateTaskDialog extends AbstractDialog {
                 logger.debug("Creating new Task");
 
                 Task task = taskService.createTask(getPatient(), getTaskData().getTaskID(), true);
-                task.setDateOfReceipt(getTaskData().getDateOfReceipt());
-                task.setDueDate(getTaskData().getDueDate());
+//                task.setDateOfReceipt(getTaskData().getDateOfReceipt());
+//                task.setDueDate(getTaskData().getDueDate());
                 task.setTaskPriority(getTaskData().getTaskPriority());
                 task.setUseAutoNomenclature(getTaskData().isUseAutoNomenclature());
 
