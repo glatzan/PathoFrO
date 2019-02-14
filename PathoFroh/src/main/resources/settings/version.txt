@@ -148,8 +148,8 @@ update task set duedate = tmp;
 
 update task set tmp = case when dateOfReceipt != 0 then TO_TIMESTAMP(dateOfReceipt/1000)::date else null end;
 alter table task drop column dateOfReceipt;
-alter table task add column dateOfReceipt date;
-update task set dateOfReceipt = tmp;
+alter table task add column receiptDate date;
+update task set receiptDate = tmp;
 
 update task set tmp = case when dateOfSugery != 0 then TO_TIMESTAMP(dateOfSugery/1000)::date else null end;
 alter table task drop column dateOfSugery;
@@ -220,7 +220,7 @@ CREATE OR REPLACE VIEW taskoverview AS
 Select
 	task.id,
 	task.taskId,
-	task.dateofreceipt,
+	task.receiptDate,
 	case when task.stainingcompletiondate  is not null then true else false end as stainingcompleted,
 	case when task.diagnosiscompletiondate is not null then true else false end as diagnosiscompleted,
 	case when task.notificationcompletiondate is not null then true else false end as notificationcompleted,
@@ -447,7 +447,7 @@ CREATE OR REPLACE VIEW taskoverview AS
 Select 
 	task.id, 
 	task.taskId, 
-	task.dateofreceipt, 
+	task.dateofreceipt,
 	case when task.stainingcompletiondate != 0 then true else false end as stainingcompleted, 
 	case when task.diagnosiscompletiondate != 0 then true else false end as diagnosiscompleted, 
 	case when task.notificationcompletiondate != 0 then true else false end as notificationcompleted, 

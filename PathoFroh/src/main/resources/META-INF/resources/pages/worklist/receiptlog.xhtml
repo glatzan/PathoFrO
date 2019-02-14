@@ -44,12 +44,12 @@
                             style="width: 80%;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
                             styleClass="customBackground"
                             disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-                            value="#{worklistHandler.current.selectedTask.dateOfReceipt}">
+                            value="#{worklistHandler.current.selectedTask.receiptDate}">
                     <p:ajax event="dateSelect"
-                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask, 'date:'.concat(worklistHandler.current.selectedTask.dateOfReceipt))}"
+                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask, 'date:'.concat(worklistHandler.current.selectedTask.receiptDate))}"
                             update="receiptDate"/>
                     <f:ajax event="change" execute="@this" render="receiptDate"
-                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.dateOfReceipt))}"/>
+                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.receiptDate))}"/>
                 </p:calendar>
 
                 <!-- Termin Date -->

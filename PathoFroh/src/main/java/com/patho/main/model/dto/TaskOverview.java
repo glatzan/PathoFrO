@@ -28,7 +28,7 @@ import lombok.Setter;
 	    "Select "+
 	    	"task.id, "+ 
 	    	"task.taskId, "+ 
-	    	"task.dateofreceipt, "+ 
+	    	"task.receiptDate, "+
 	    	"case when task.stainingcompletiondate is not null then true else false end as stainingcompleted, "+
 			"case when task.diagnosiscompletiondate is not null then true else false end as diagnosiscompleted, "+
 			"case when task.notificationcompletiondate is not null then true else false end as notificationcompleted, "+
@@ -52,7 +52,7 @@ import lombok.Setter;
 	        columns = {
 	            @ColumnResult(name = "id", type=Long.class),
 	            @ColumnResult(name = "taskid", type=String.class ),
-	            @ColumnResult(name = "dateofreceipt", type=LocalDate.class),
+	            @ColumnResult(name = "receiptDate", type=LocalDate.class),
 	            @ColumnResult(name = "stainingcompleted", type=Boolean.class),
 	            @ColumnResult(name = "diagnosiscompleted", type=Boolean.class),
 	            @ColumnResult(name = "notificationcompleted", type=Boolean.class),
@@ -75,7 +75,7 @@ public class TaskOverview implements FullName {
 	@Id
 	private long id;
 	private String taskID;
-	private LocalDate dateOfReceipt;
+	private LocalDate receiptDate;
 	private boolean stainingCompleted;
 	private boolean diagnosisCompleted;
 	private boolean notificationCompleted;
@@ -88,13 +88,13 @@ public class TaskOverview implements FullName {
 	private TaskPriority taskPriority;
 	private boolean userContact;
 	
-	public TaskOverview(long id, String taskID, LocalDate dateOfReceipt, boolean stainingCompleted,
+	public TaskOverview(long id, String taskID, LocalDate receiptDate, boolean stainingCompleted,
 						boolean diagnosisCompleted, boolean notificationCompleted, boolean finalized, String title, String lastName,
 						String firstName, String birthday, int taskPriority, boolean userContact) {
 		super();
 		this.id = id;
 		this.taskID = taskID;
-		this.dateOfReceipt = dateOfReceipt;
+		this.receiptDate = receiptDate;
 		this.stainingCompleted = stainingCompleted;
 		this.diagnosisCompleted = diagnosisCompleted;
 		this.notificationCompleted = notificationCompleted;
@@ -104,7 +104,7 @@ public class TaskOverview implements FullName {
 		this.firstName = firstName;
 		try {
 			this.birthday = new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 		}
 		this.taskPriority = TaskPriority.values()[taskPriority];
 		this.userContact = userContact;

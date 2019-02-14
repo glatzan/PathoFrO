@@ -22,7 +22,7 @@ import lombok.Setter;
 	    name = "AccountingData.findAllBetweenDates",
 	    query = "With totals as "+ 
 	    		"( "+
-	    			"select  to_timestamp(tk.dateofreceipt/1000) as creationdate , piz, get_slide_count(s.slideid) as scount, "+ 
+	    			"select  to_timestamp(tk.receiptDate/1000) as creationdate , piz, get_slide_count(s.slideid) as scount, "+
 	    				"bl.id as blockid, " + 
 	    				"sm.id as sampleid, " +	
 	    				"case when s.slideid ilike '%HE%' then true else false end as he, "+

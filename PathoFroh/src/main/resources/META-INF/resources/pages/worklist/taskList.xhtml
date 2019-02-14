@@ -30,7 +30,7 @@
                       style="width:180px">
                 <h:outputText
                         value="#{taskOverview.taskID}"/>
-                <h:outputText value="#{taskOverview.dateOfReceipt}">
+                <h:outputText value="#{taskOverview.receiptDate}">
                     <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" timeZone="Europe/Berlin"/>
                 </h:outputText>
             </p:column>
@@ -158,6 +158,11 @@
                 </p:selectOneMenu>
             </h:panelGrid>
         </h:panelGrid>
+
+
+        <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
+                    value="#{mainHandlerAction.localDate}">
+        </p:calendar>
 
         <p:commandButton value="Expor" icon="fa fa-plus"
                          actionListener="#{mainHandlerAction.test()}">

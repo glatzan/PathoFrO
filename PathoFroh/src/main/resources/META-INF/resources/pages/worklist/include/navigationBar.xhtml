@@ -34,7 +34,7 @@
 				actionListener="#{worklistViewHandler.onDeselectTask()}">
 				<h:outputFormat value="#{msg['bodyNavigationTask']}">
 					<f:param
-						value="#{worklistHandler.current.selectedTask.dateOfReceipt}" />
+						value="#{worklistHandler.current.selectedTask.receiptDate}" />
 					<f:param value="#{worklistHandler.current.selectedTask.taskID}" />
 				</h:outputFormat>
 			</h:commandLink>

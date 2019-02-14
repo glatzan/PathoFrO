@@ -32,7 +32,6 @@ public open class TaskService @Autowired constructor(
         task.ward = ""
         task.insurance = patient.insurance
 
-
         if (HistoUtil.isNotNullOrEmpty(taskID)) {
             if (isTaskIDAvailable(taskID))
                 task.taskID = taskID
@@ -40,12 +39,6 @@ public open class TaskService @Autowired constructor(
                 throw IllegalArgumentException("Task ID taken")
         } else
             task.taskID = getNextTaskID()
-
-        task.councils = LinkedHashSet()
-        task.favouriteLists = ArrayList()
-        task.diagnosisRevisions = LinkedHashSet()
-        task.contacts = LinkedHashSet()
-        task.attachedPdfs = LinkedHashSet()
 
         return if (save) taskRepository.save(task, resourceBundle.get("log.patient.task.new", task), patient) else task
     }

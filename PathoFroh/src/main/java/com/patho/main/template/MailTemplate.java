@@ -4,9 +4,9 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.patho.main.util.DateTool;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.tools.generic.DateTool;
 
 import com.patho.main.model.PDFContainer;
 import com.patho.main.util.helper.TextToLatexConverter;

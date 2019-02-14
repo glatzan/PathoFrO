@@ -192,8 +192,9 @@ public class CreateTaskDialog extends AbstractDialog {
                 logger.debug("Creating new Task");
 
                 Task task = taskService.createTask(getPatient(), getTaskData().getTaskID(), true);
-//                task.setDateOfReceipt(getTaskData().getDateOfReceipt());
-//                task.setDueDate(getTaskData().getDueDate());
+                task.setReceiptDate(getTaskData().getReceiptDate());
+                task.setDueDate(getTaskData().getDueDate());
+                task.setDateOfSugery(getTaskData().getReceiptDate());
                 task.setTaskPriority(getTaskData().getTaskPriority());
                 task.setUseAutoNomenclature(getTaskData().isUseAutoNomenclature());
 
@@ -306,7 +307,7 @@ public class CreateTaskDialog extends AbstractDialog {
     @Setter
     public class TaskTempData {
         private String taskID;
-        private LocalDate dateOfReceipt;
+        private LocalDate receiptDate;
         private LocalDate dueDate;
         private boolean useAutoNomenclature;
         private TaskPriority taskPriority;
@@ -320,7 +321,7 @@ public class CreateTaskDialog extends AbstractDialog {
 
         public TaskTempData() {
             this.taskID = taskService.getNextTaskID();
-            this.dateOfReceipt = LocalDate.now();
+            this.receiptDate = LocalDate.now();
             this.dueDate = LocalDate.now();
             this.useAutoNomenclature = true;
             this.taskPriority = TaskPriority.NONE;

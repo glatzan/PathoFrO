@@ -15,7 +15,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.patho.main.model.Question;
+import com.patho.main.model.patient.Task;
 import com.patho.main.repository.QuestionRepository;
+import com.patho.main.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
@@ -63,6 +65,11 @@ public class MainHandlerAction {
 	@Setter(AccessLevel.NONE)
 	@Autowired
 	protected QuestionRepository questionRepository;
+
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	@Autowired
+	private TaskRepository taskRepository;
 	/********************************************************
 	 * Navigation
 	 ********************************************************/
@@ -70,6 +77,10 @@ public class MainHandlerAction {
 	@Getter
 	@Setter
 	private List<FacesMessage> queueGrowlMessages = new ArrayList<FacesMessage>();
+
+	@Getter
+	@Setter
+	private LocalDate localDate = LocalDate.now();
 
 	@Autowired
 	public MainHandlerAction(ThreadPoolTaskExecutor taskExecutor, PDFRepository pdfRepository, UserHandlerAction userHandlerAction, ResourceBundle resourceBundle) {
@@ -94,9 +105,16 @@ public class MainHandlerAction {
 		Question q = new Question();
 		q.setIdate(Instant.now());
 		q.setTitle("asdd");
-		q.setDdate(LocalDate.now());
+		q.setDdate(localDate);
 		questionRepository.save(q);
-	}
+
+		Task task = new Task();
+		task.setDateOfSugery(LocalDate.now().minusDays(10));
+	task.setReceiptDate(LocalDate.now().minusDays(5));
+	task.setDueDate(LocalDate.now().minusDays(3));
+
+		taskRepository.save(task);
+}
 
 	/**
 	 * Takes a long timestamp and returns a formatted date in standard format.

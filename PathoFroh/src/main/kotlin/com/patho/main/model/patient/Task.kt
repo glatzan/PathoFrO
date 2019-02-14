@@ -4,7 +4,10 @@ import com.patho.main.common.ContactRole
 import com.patho.main.common.Eye
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.common.TaskPriority
-import com.patho.main.model.*
+import com.patho.main.model.AbstractPersistable
+import com.patho.main.model.AssociatedContact
+import com.patho.main.model.PDFContainer
+import com.patho.main.model.Person
 import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.interfaces.DataList
@@ -19,7 +22,6 @@ import org.hibernate.envers.Audited
 import org.hibernate.envers.NotAudited
 import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 import javax.persistence.*
 import javax.persistence.CascadeType
 import javax.persistence.Entity
@@ -29,12 +31,12 @@ import javax.persistence.OrderBy
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
-@SequenceGenerator(name = "task_sequencegenerator", sequenceName = "task_sequence")
 @EntityListeners(AuditListener::class)
 open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList {
 
     @Id
     @GeneratedValue(generator = "task_sequencegenerator")
+    @SequenceGenerator(name = "task_sequencegenerator", sequenceName = "task_sequence")
     @Column(unique = true, nullable = false)
     override open var id: Long = 0
 
@@ -50,7 +52,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     /**
      * The Patient of the task;
      */
-    @ManyToOne(targetEntity = Patient::class)
+    @ManyToOne
     open override var parent: Patient? = null
 
     /**
@@ -72,7 +74,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
      * Date of reception of the first material
      */
     @Column
-    open var dateOfReceipt: LocalDate = LocalDate.now()
+    open var receiptDate: LocalDate = LocalDate.now()
 
     /**
      * The dueDate
@@ -84,10 +86,9 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
      * Priority of the task
      */
     @Enumerated(EnumType.ORDINAL)
-    open var taskPriority: TaskPriority? = null
+    open var taskPriority: TaskPriority = TaskPriority.NONE
 
     /**
-     * Station�r/ambulant/Extern
      */
     @Column
     open var typeOfOperation: Byte = 0
@@ -96,13 +97,13 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
      * Details of the case
      */
     @Column(columnDefinition = "VARCHAR")
-    open var caseHistory = ""
+    open var caseHistory: String = ""
 
     /**
      * Details of the case
      */
     @Column(columnDefinition = "VARCHAR")
-    open var commentary = ""
+    open var commentary: String = ""
 
     /**
      * Insurance of the patient
@@ -114,7 +115,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
      * Ward of the patient
      */
     @Column
-    open var ward = ""
+    open var ward: String = ""
 
     /**
      * Ey of the samples right/left/both
@@ -220,6 +221,13 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @Transient
     open var taskStatus: TaskStatus = TaskStatus(this)
 
+    /**
+     * Returns true if priority is set to TaskPriority.Time
+     */
+    open val dueDateSelected: Boolean
+        @Transient
+        get() = taskPriority == TaskPriority.TIME
+
     constructor() {}
 
     constructor(id: Long) {
@@ -227,10 +235,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     }
 
     constructor(parent: Patient) {
-        dateOfReceipt = LocalDate.now(ZoneId.of("UTC"))
-        dueDate = LocalDate.now(ZoneId.of("UTC"))
-        dateOfSugery = LocalDate.now(ZoneId.of("UTC"))
-        this.parent = patient
+        this.parent = parent
     }
 
     @Transient
