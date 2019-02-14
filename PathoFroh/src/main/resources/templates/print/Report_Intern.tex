@@ -132,7 +132,7 @@ $!latexTextConverter.convertToTex($address) \\
 			\renewcommand{\arraystretch}{1}
 			\begin{tabular}[t]{p{0.38\linewidth}p{0.62\linewidth-8\tabcolsep}}
 
-				Eingangsdatum &  $date.format('dd.MM.yyyy', $!task.dateOfReceipt) \\
+				Eingangsdatum &  $date.format('dd.MM.yyyy', $!task.receiptDate) \\
 				Eingangsnummer & \textbf{$!task.taskID} \\
 				~ & 
 					\X=.30mm        % The width of code will be greater

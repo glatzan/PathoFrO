@@ -137,6 +137,14 @@ TODO:
 Create Material and Staining for external samples
 
 SQL:
+
+alter table DiagnosisRevision add column tmp date;
+update DiagnosisRevision set tmp = case when signatureDate != 0 then TO_TIMESTAMP(signatureDate/1000)::date else null end;
+alter table task drop column signatureDate;
+alter table task add column signatureDate date;
+update task set signatureDate = tmp;
+alter table task drop column tmp;
+
 /* converting timestamps to date*/
 drop view taskoverview;
 

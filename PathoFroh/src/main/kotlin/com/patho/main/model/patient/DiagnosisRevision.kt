@@ -9,6 +9,7 @@ import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
+import java.time.LocalDate
 import java.util.*
 import javax.persistence.*
 
@@ -115,7 +116,7 @@ open class DiagnosisRevision : ID, Parent<Task> {
      * Date of the signature
      */
     @Column
-    open var signatureDate: Long = 0
+    open var signatureDate: LocalDate = LocalDate.now()
 
     constructor() {
     }
@@ -133,13 +134,6 @@ open class DiagnosisRevision : ID, Parent<Task> {
     open val isMalign: Boolean
         @Transient
         get() = diagnoses.any { p -> p.malign }
-
-    open var signatureDateAsDate: Date
-        @Transient
-        get() = Date(signatureDate)
-        set(value) {
-            signatureDate = value.time
-        }
 
     open override val patient: Patient?
         @Transient
