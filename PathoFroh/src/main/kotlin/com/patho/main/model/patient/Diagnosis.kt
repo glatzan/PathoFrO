@@ -1,5 +1,6 @@
 package com.patho.main.model.patient
 
+import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.DiagnosisPreset
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
@@ -14,7 +15,7 @@ import javax.persistence.*
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "diagnosis_sequencegenerator", sequenceName = "diagnosis_sequence")
-open class Diagnosis : ID, Parent<DiagnosisRevision> {
+open class Diagnosis :  AbstractPersistable, ID, Parent<DiagnosisRevision> {
 
     @Id
     @GeneratedValue(generator = "diagnosis_sequencegenerator")
@@ -66,6 +67,8 @@ open class Diagnosis : ID, Parent<DiagnosisRevision> {
      */
     @OneToOne
     open var sample: Sample? = null
+
+    constructor() {}
 
     open override val patient: Patient?
         @Transient

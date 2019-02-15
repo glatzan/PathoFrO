@@ -30,7 +30,6 @@ import javax.persistence.OrderBy
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-@DynamicUpdate(true)
 @EntityListeners(AuditListener::class)
 open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList {
 
@@ -61,6 +60,9 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @Column
     open var useAutoNomenclature: Boolean = false
 
+    /**
+     * Audit Data
+     */
     @Embedded
     open override var audit: Audit? = null
 

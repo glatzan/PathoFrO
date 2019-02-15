@@ -1,24 +1,27 @@
 package com.patho.main.model.patient
 
 import com.patho.main.common.DiagnosisRevisionType
+import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.Signature
+import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
-import org.hibernate.annotations.DynamicUpdate
+import com.patho.main.model.util.audit.Audit
+import com.patho.main.model.util.audit.AuditListener
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
+import java.time.Instant
 import java.time.LocalDate
-import java.util.*
 import javax.persistence.*
 
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-@DynamicUpdate(true)
-@SequenceGenerator(name = "diagnosisRevision_sequencegenerator", sequenceName = "diagnosisRevision_sequence")
-open class DiagnosisRevision : ID, Parent<Task> {
+@EntityListeners(AuditListener::class)
+
+open class DiagnosisRevision : AbstractPersistable, ID, AuditAble, Parent<Task> {
 
     /**
      * Internal marker for a diagnosis
@@ -29,6 +32,7 @@ open class DiagnosisRevision : ID, Parent<Task> {
 
     @Id
     @GeneratedValue(generator = "diagnosisRevision_sequencegenerator")
+    @SequenceGenerator(name = "diagnosisRevision_sequencegenerator", sequenceName = "diagnosisRevision_sequence")
     @Column(unique = true, nullable = false)
     open override var id: Long = 0
 
@@ -57,16 +61,16 @@ open class DiagnosisRevision : ID, Parent<Task> {
     open var type: DiagnosisRevisionType? = null
 
     /**
-     * Date of diagnosis creation.
+     * Audit Data
      */
-    @Column
-    open var creationDate: Long = 0
+    @Embedded
+    open override var audit: Audit? = null
 
     /**
      * Date of diagnosis finalization.
      */
     @Column
-    open var completionDate: Long = 0
+    open var completionDate: Instant? = null
 
     /**
      * Status of the notification, e.g. pending, completed
@@ -78,7 +82,13 @@ open class DiagnosisRevision : ID, Parent<Task> {
      * Date of notification
      */
     @Column
-    open var notificationDate: Long = 0
+    open var notificationDate: Instant? = null
+
+    /**
+     * Date of the signature
+     */
+    @Column
+    open var signatureDate: LocalDate = LocalDate.now()
 
     /**
      * Internal references, e.g. to a council
@@ -112,12 +122,6 @@ open class DiagnosisRevision : ID, Parent<Task> {
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     open var signatureTwo: Signature? = null
 
-    /**
-     * Date of the signature
-     */
-    @Column
-    open var signatureDate: LocalDate = LocalDate.now()
-
     constructor() {
     }
 
@@ -142,14 +146,6 @@ open class DiagnosisRevision : ID, Parent<Task> {
     open override val task: Task?
         @Transient
         get() = parent?.task
-
-    open override fun toString(): String {
-        return "Diagnosis-Revision: $name, ID: $id"
-    }
-
-    open override fun equals(obj: Any?): Boolean {
-        return if (obj is DiagnosisRevision && obj.id == id) true else super.equals(obj)
-    }
 
     enum class NotificationStatus {
         /**

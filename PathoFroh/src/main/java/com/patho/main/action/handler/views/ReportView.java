@@ -91,7 +91,7 @@ public class ReportView extends AbstractTaskView {
 
 			Optional<PDFContainer> c = PDFService.findDiagnosisReport(task, revision);
 
-			if (!c.isPresent() && revision.getCompletionDate() != 0) {
+			if (!c.isPresent() && revision.getCompletionDate() != null) {
 				logger.debug("No report present, generating new report");
 				
 				DiagnosisReportData reportData = new DiagnosisReportData(revision, true);
@@ -100,14 +100,14 @@ public class ReportView extends AbstractTaskView {
 				reportData.setPdf(PDFService.findDiagnosisReport(task, revision).get());
 				data.add(reportData);
 				setGeneratingPDFs(true);
-			} else if (revision.getCompletionDate() != 0) {
+			} else if (revision.getCompletionDate() != null) {
 				data.add(new DiagnosisReportData(revision, c.get(), false));
 			} else {
 				PDFContainer container = new PDFContainer(DocumentType.DIAGNOSIS_REPORT_NOT_APPROVED,
 						revision.getName(), PathoConfig.REPORT_NOT_APPROVED_PDF, PathoConfig.REPORT_NOT_APPROVED_IMG);
 
 				container.setAudit(new Audit());
-				container.getAudit().setCreatedOn(revision.getCreationDate());
+				container.getAudit().setCreatedOn(revision.getAudit().getCreatedOn());
 
 				data.add(new DiagnosisReportData(revision, container, false));
 			}

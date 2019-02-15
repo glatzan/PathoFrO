@@ -69,9 +69,8 @@
 					headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPerformd']}">
 
 					<h:outputText value="#{diangosisList.notificationDate}"
-						rendered="#{diangosisList.notificationDate ne 0}">
-						<f:convertDateTime type="
-						date"
+						rendered="#{diangosisList.notificationDate ne null}">
+						<f:convertDateTime type="localDateTime"
 							pattern="dd.MM.yyyy HH:mm:ss" />
 					</h:outputText>
 				</p:column>

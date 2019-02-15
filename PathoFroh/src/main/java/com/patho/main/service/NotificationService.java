@@ -2,6 +2,7 @@ package com.patho.main.service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -266,7 +267,7 @@ public class NotificationService extends AbstractService {
 		}
 
 		diagnosisRevision.setNotificationStatus(NotificationStatus.NOTIFICATION_COMPLETED);
-		diagnosisRevision.setNotificationDate(System.currentTimeMillis());
+		diagnosisRevision.setNotificationDate(Instant.now());
 
 		diagnosisRevisionRepository.save(diagnosisRevision, "log.patient.task.notification.send", task.getPatient());
 

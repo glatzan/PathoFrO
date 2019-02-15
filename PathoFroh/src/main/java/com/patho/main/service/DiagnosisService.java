@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,10 +188,6 @@ public class DiagnosisService extends AbstractService {
     /**
      * Creates a diagnosisRevision, adds it to the given task and creates also all
      * needed diagnoses
-     *
-     * @param parent
-     * @param type
-     * @return
      */
     public Task createDiagnosisRevision(Task task, DiagnosisRevisionType type) {
         return createDiagnosisRevision(task, type, null);
@@ -199,10 +196,6 @@ public class DiagnosisService extends AbstractService {
     /**
      * Creates a diagnosisRevision, adds it to the given task and creates also all
      * needed diagnoses
-     *
-     * @param parent
-     * @param type
-     * @return
      */
     public Task createDiagnosisRevision(Task task, DiagnosisRevisionType type, String interalReference) {
         return createDiagnosisRevision(task, type,
@@ -213,10 +206,6 @@ public class DiagnosisService extends AbstractService {
     /**
      * Creates a diagnosisRevision, adds it to the given task and creates also all
      * needed diagnoses
-     *
-     * @param parent
-     * @param type
-     * @return
      */
     public Task createDiagnosisRevision(Task task, DiagnosisRevisionType type, String name, String interalReference) {
         logger.info("Creating new diagnosisRevision");
@@ -225,7 +214,6 @@ public class DiagnosisService extends AbstractService {
         diagnosisRevision.setType(type);
         diagnosisRevision.setSignatureOne(new Signature());
         diagnosisRevision.setSignatureTwo(new Signature());
-        diagnosisRevision.setCreationDate(System.currentTimeMillis());
         diagnosisRevision.setName(name);
 
         return addDiagnosisRevision(task, diagnosisRevision);
@@ -233,9 +221,6 @@ public class DiagnosisService extends AbstractService {
 
     /**
      * Adds an diagnosis revision to the task
-     *
-     * @param parent
-     * @param diagnosisRevision
      */
     @Transactional
     public Task addDiagnosisRevision(Task task, DiagnosisRevision diagnosisRevision) {
@@ -285,14 +270,11 @@ public class DiagnosisService extends AbstractService {
 
     /**
      * Sets a diangosis as completed
-     *
-     * @param diagnosisRevision
-     * @param notificationPending
      */
     public Task approveDiangosis(Task task, DiagnosisRevision diagnosisRevision,
                                  NotificationStatus notificationStatus) {
 
-        diagnosisRevision.setCompletionDate(System.currentTimeMillis());
+        diagnosisRevision.setCompletionDate(Instant.now());
         diagnosisRevision.setNotificationStatus(notificationStatus);
 
         task = taskRepository.save(task,
@@ -416,7 +398,7 @@ public class DiagnosisService extends AbstractService {
     public List<DiagnosisValidationError> validateDiangosisRevision(DiagnosisRevision diagnosisRevision) {
         ArrayList<DiagnosisValidationError> result = new ArrayList<DiagnosisValidationError>();
 
-        if (diagnosisRevision.getCompletionDate() == 0) {
+        if (diagnosisRevision.getCompletionDate() == null) {
             result.add(DiagnosisValidationError.NO_SIGNATURE_DATE);
         }
 
@@ -459,7 +441,7 @@ public class DiagnosisService extends AbstractService {
      */
     public static DiagnosisRevision getNextRevisionToApprove(Task task) {
         for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
-            if (diagnosisRevision.getCompletionDate() == 0) {
+            if (diagnosisRevision.getCompletionDate() == null) {
                 return diagnosisRevision;
             }
         }
@@ -476,7 +458,7 @@ public class DiagnosisService extends AbstractService {
     public static int countRevisionToApprove(Task task) {
         int result = 0;
         for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
-            if (diagnosisRevision.getCompletionDate() == 0) {
+            if (diagnosisRevision.getCompletionDate() == null) {
                 result++;
             }
         }

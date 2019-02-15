@@ -1,5 +1,6 @@
 package com.patho.main.action.handler.views;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,8 @@ public class DiagnosisView extends AbstractTaskView {
 		logger.debug("Loading diangosis data");
 
 		for (DiagnosisRevision revision : getTask().getDiagnosisRevisions()) {
-			if (revision.getCompletionDate() == 0) {
-				revision.setSignatureDate(TimeUtil.setDayBeginning(System.currentTimeMillis()));
+			if (revision.getCompletionDate() == null) {
+				revision.setSignatureDate(LocalDate.now());
 
 				if (revision.getSignatureOne() == null)
 					revision.setSignatureOne(new Signature());

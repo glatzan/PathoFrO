@@ -408,16 +408,15 @@ public class FileMakerImporter {
                             i++;
                         }
 
-                        rev.setSignatureDate(sigantureDate.getTime());
+                        rev.setSignatureDate(sigantureDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                         rev.setText(row[index_long_diagnosis] != null
                                 ? row[index_long_diagnosis].replaceAll(Character.toString((char) 11), "\r\n")
                                 : "");
-                        rev.setCreationDate(edate.getTime());
-                        rev.setNotificationDate(sigantureDate.getTime());
+                        rev.setNotificationDate(sigantureDate.toInstant());
 
                         rev.setSignatureOne(new Signature(assiPhys));
                         rev.setSignatureTwo(new Signature(oaPhys));
-                        rev.setCompletionDate(sigantureDate.getTime());
+                        rev.setCompletionDate(sigantureDate.toInstant());
 
                         task.setFinalized(true);
                         task.setFinalizationDate(sigantureDate.toInstant());
@@ -436,13 +435,12 @@ public class FileMakerImporter {
                             re.setSignatureTwo(new Signature(diagnosisRevisionPhys));
 
                             if (revdate != null) {
-                                re.setCreationDate(revdate.getTime());
                                 re.setText(row[index_rediagnosis]);
-                                re.setSignatureDate(revdate.getTime());
+                                re.setSignatureDate(revdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                             }
 
-                            re.setCompletionDate(sigantureDate.getTime());
-                            re.setNotificationDate(sigantureDate.getTime());
+                            re.setCompletionDate(sigantureDate.toInstant());
+                            re.setNotificationDate(sigantureDate.toInstant());
                         }
 
                         task = associatedContactService

@@ -1,7 +1,7 @@
 package com.patho.main.model.patient.miscellaneous
 
 import com.patho.main.common.InformedConsentType
-import com.patho.main.config.PathoConfig
+import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.interfaces.DataList
@@ -12,7 +12,6 @@ import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
 import org.hibernate.annotations.*
 import org.hibernate.envers.Audited
-import java.io.File
 import java.util.*
 import javax.persistence.*
 import javax.persistence.Entity
@@ -23,7 +22,7 @@ import javax.persistence.OrderBy
 @SelectBeforeUpdate
 @SequenceGenerator(name = "bioBank_sequencegenerator", sequenceName = "bioBank_sequence")
 @EntityListeners(AuditListener::class)
-open class BioBank : ID, DataList, AuditAble {
+open class BioBank : AbstractPersistable, ID, DataList, AuditAble {
 
     @Id
     @GeneratedValue(generator = "bioBank_sequencegenerator")
@@ -65,6 +64,8 @@ open class BioBank : ID, DataList, AuditAble {
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("audit.createdOn DESC")
     open override var attachedPdfs: MutableSet<PDFContainer> = HashSet<PDFContainer>()
+
+    constructor() {}
 
     override val publicName: String
         @Transient

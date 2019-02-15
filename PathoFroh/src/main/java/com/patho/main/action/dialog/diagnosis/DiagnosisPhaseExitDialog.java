@@ -106,7 +106,7 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
         } else {
 
             // last diagnoses
-            if (data.selectedRevision.getCompletionDate() == 0 && countDiagnosesToApprove == 1) {
+            if (data.selectedRevision.getCompletionDate() == null && countDiagnosesToApprove == 1) {
                 // only notify if not a council diagnoses
                 data.setNotification(data.selectedRevision.getType() != DiagnosisRevisionType.DIAGNOSIS_COUNCIL);
                 data.setRemoveFromDiangosisList(true);
@@ -120,7 +120,7 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
                 data.setRemoveFromDiangosisList(false);
                 data.setRemoveFromWorklist(false);
                 // reapprove if not approved jet
-                setReApproveDiagnosis(data.selectedRevision.getCompletionDate() != 0);
+                setReApproveDiagnosis(data.selectedRevision.getCompletionDate() != null);
                 setRemoveFromDiagnosisListDisabled(true);
                 // only in list with all diangoses approved
             } else if (countDiagnosesToApprove == 0) {

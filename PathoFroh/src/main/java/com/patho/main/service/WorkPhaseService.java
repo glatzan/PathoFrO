@@ -124,9 +124,6 @@ public class WorkPhaseService extends AbstractService {
     /**
      * Ends the diagnosis phase, removes from diagnosis list and sets the diagnosis
      * time of completion.
-     *
-     * @param task
-     * @param updateSignatureDate
      */
     public Task endDiagnosisPhase(Task task, boolean removeFromList, NotificationStatus status) {
 
@@ -134,7 +131,7 @@ public class WorkPhaseService extends AbstractService {
         // setting diagnosis compleation date if not set jet
         for (int i = 0; i < task.getDiagnosisRevisions().size(); i++) {
             DiagnosisRevision rev = HistoUtil.getNElement(task.getDiagnosisRevisions(), i);
-            if (rev.getCompletionDate() == 0) {
+            if (rev.getCompletionDate() == null) {
                 task = diagnosisService.approveDiangosis(task, rev, status);
                 change = true;
             }

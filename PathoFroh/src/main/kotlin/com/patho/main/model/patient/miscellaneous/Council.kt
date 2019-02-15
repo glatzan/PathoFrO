@@ -1,6 +1,6 @@
 package com.patho.main.model.patient.miscellaneous
 
-import com.patho.main.config.PathoConfig
+import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.Physician
 import com.patho.main.model.audit.AuditAble
@@ -11,10 +11,8 @@ import com.patho.main.model.patient.Task
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
 import com.patho.main.util.helper.TextToLatexConverter
-import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
-import java.io.File
 import java.util.*
 import javax.persistence.*
 import kotlin.collections.HashSet
@@ -22,10 +20,9 @@ import kotlin.collections.HashSet
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-@DynamicUpdate(true)
 @SequenceGenerator(name = "council_sequencegenerator", sequenceName = "council_sequence")
 @EntityListeners(AuditListener::class)
-open class Council : ID, DataList, AuditAble {
+open class Council : AbstractPersistable, ID, DataList, AuditAble {
 
     @Id
     @GeneratedValue(generator = "council_sequencegenerator")
@@ -170,7 +167,7 @@ open class Council : ID, DataList, AuditAble {
 
     constructor()
 
-    constructor(task: Task){
+    constructor(task: Task) {
         this.task = task
     }
 

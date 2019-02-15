@@ -165,7 +165,7 @@ $address \\
 \RaggedRight
 \begin{tabular}{p{0.15\linewidth}p{0.05\linewidth}p{0.35\linewidth}p{0.45\linewidth}}
 	\multicolumn{4}{l}{Mit freundlichen Grüßen} \\\\
-	Freiburg den \linebreak $date.format('dd.MM.yyyy', $!diagnosisRevision.signatureDateAsDate) & & $!diagnosisRevision.signatureOne.physician.person.fullName #if($!diagnosisRevision.signatureOne.physician.person.fullName) \linebreak #end $!diagnosisRevision.signatureOne.role & $!diagnosisRevision.signatureTwo.physician.person.fullName #if($!diagnosisRevision.signatureTwo.physician.person.fullName) \linebreak #end $!diagnosisRevision.signatureTwo.role \\
+	Freiburg den \linebreak $date.format('dd.MM.yyyy', $!diagnosisRevision.signatureDate) & & $!diagnosisRevision.signatureOne.physician.person.fullName #if($!diagnosisRevision.signatureOne.physician.person.fullName) \linebreak #end $!diagnosisRevision.signatureOne.role & $!diagnosisRevision.signatureTwo.physician.person.fullName #if($!diagnosisRevision.signatureTwo.physician.person.fullName) \linebreak #end $!diagnosisRevision.signatureTwo.role \\
 
 \end{tabular}
 \end{center}

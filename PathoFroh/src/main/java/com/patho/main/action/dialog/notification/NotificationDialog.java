@@ -397,7 +397,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
 			if (getSelectDiagnosisRevision().getNotificationStatus() != NotificationStatus.NOTIFICATION_PENDING
 					|| (getSelectDiagnosisRevision().getNotificationStatus() == NotificationStatus.NOTIFICATION_PENDING
-							&& getSelectDiagnosisRevision().getNotificationDate() != 0)) {
+							&& getSelectDiagnosisRevision().getNotificationDate() != null)) {
 				selectedDiagnosisNotApprovedy = true;
 			} else
 				selectedDiagnosisNotApprovedy = false;

@@ -125,7 +125,7 @@ class TaskStatus(task: Task) {
      * Status for diagnoses
      */
     public class DiagnosisRevisionStatus(diagnosisRevision: DiagnosisRevision) {
-        var completed: Boolean = diagnosisRevision.completionDate != 0L
+        var completed: Boolean = diagnosisRevision.completionDate != null
         var signature: Boolean = diagnosisRevision.signatureOne != null || diagnosisRevision.signatureTwo != null
         var ignore: Boolean = false
     }
@@ -273,7 +273,7 @@ class TaskStatus(task: Task) {
          */
         @JvmStatic
         fun checkIfDiagnosisCompleted(revision: DiagnosisRevision): Boolean {
-            return revision.completionDate != 0L
+            return revision.completionDate != null
         }
 
         /**
