@@ -27,9 +27,14 @@
 
             <!-- task id -->
             <p:column headerText="#{msg['body.taskList.table.task']}"
-                      style="width:180px">
+                      style="width:60px">
                 <h:outputText
                         value="#{taskOverview.taskID}"/>
+            </p:column>
+
+            <!-- date -->
+            <p:column headerText="#{msg['body.taskList.table.date']}"
+                      style="width:90px">
                 <h:outputText value="#{taskOverview.receiptDate}">
                     <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" timeZone="Europe/Berlin"/>
                 </h:outputText>

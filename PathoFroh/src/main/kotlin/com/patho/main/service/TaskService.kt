@@ -130,7 +130,7 @@ public open class TaskService @Autowired constructor(
     open fun getTaskArchiveStatus(task: Task): TaskArchiveStatus {
         var taskArchiveStatus = TaskArchiveStatus(task);
 
-        taskArchiveStatus.stainingPhaseCompleted = task.stainingCompletionDate != null
+        taskArchiveStatus.stainingPhaseCompleted = task.stainingCompleted
         taskArchiveStatus.stainingCompleted = TaskStatus.checkIfStainingCompleted(task)
 
 

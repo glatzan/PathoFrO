@@ -4,6 +4,7 @@ import com.patho.main.common.Dialog
 import com.patho.main.config.settings.ServiceSettings
 import com.patho.main.model.patient.Task
 import com.patho.main.service.TaskService
+import com.patho.main.util.task.AdvancedTaskStatus
 import com.patho.main.util.task.TaskArchiveStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -19,7 +20,7 @@ class ArchiveTaskDialog : AbstractTaskDialog() {
     @Autowired
     lateinit var serviceSettings: ServiceSettings
 
-    var taskArchivationStatus: TaskArchiveStatus? = null
+    var taskStatus: AdvancedTaskStatus? = null
 
     var commentary: String = ""
 
@@ -31,7 +32,9 @@ class ArchiveTaskDialog : AbstractTaskDialog() {
         println(serviceSettings.taskArchiveRules.blockingFavouriteLists)
 
         this.task = task
-        this.taskArchivationStatus = taskService.getTaskArchiveStatus(task)
+        this.taskStatus = AdvancedTaskStatus(task)
+
+        task.taskStatus
 
         return super.initBean(task, Dialog.TASK_ARCHIVE)
     }

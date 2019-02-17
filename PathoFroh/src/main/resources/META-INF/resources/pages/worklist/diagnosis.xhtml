@@ -728,7 +728,7 @@
 
                     <h:panelGroup>
                         <p:splitButton
-                                rendered="#{revision.completionDate ne 0 and !worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(revision)}"
+                                rendered="#{revision.completed and !worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(revision)}"
                                 value="#{msg['body.diagnosis.diagnosis.amendment']}"
                                 disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
                                 onclick="$('#contentForm\\:admendDiagnosisRevision#{varCounterOuter.index}').click();"
@@ -764,7 +764,7 @@
                         <p:commandButton value="#{msg['body.diagnosis.diagnosis.end']}"
                                          icon="fa fa-eye-slash"
                                          id="endDiagnosisRevision#{varCounterOuter.index}"
-                                         style="#{(revision.completionDate ne 0) ? 'display:none' : ''}"
+                                         style="#{(revision.completed) ? 'display:none' : ''}"
                                          disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
                                          actionListener="#{dialog.diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, revision)}">
                             <p:ajax event="dialogReturn"
@@ -831,31 +831,32 @@
                         </p:commandButton>
 
                         <h:panelGroup id="diagnosisCompleted#{varCounterOuter.index}">
-                            <i
-                                    class="fa fa-fw fa-rss-square fa-lg #{revision.completionDate ne 0 ? 'icon-green' : 'icon-grey'}"
-                                    title=""/>
+                            <i class="fa fa-fw fa-rss-square fa-lg #{revision.completed ? 'icon-green' : 'icon-grey'}"
+                               title=""/>
                             <p:tooltip for="diagnosisCompleted#{varCounterOuter.index}">
                                 <h:outputLabel
-                                        value="#{revision.completionDate ne 0 ? msg['body.diagnosis.diagnosis.approved'] : msg['body.diagnosis.diagnosis.approved.not']} "/>
-                                <h:outputText rendered="#{revision.completionDate ne 0}"
+                                        value="#{revision.completed ? msg['body.diagnosis.diagnosis.approved'] : msg['body.diagnosis.diagnosis.approved.not']} "/>
+                                <h:outputText rendered="#{revision.completed}"
                                               value="#{revision.completionDate}">
-                                    <f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm"/>
+                                    <f:converter converterId="instantDateTimeConverter"/>
+                                    <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>
                                 </h:outputText>
                             </p:tooltip>
                         </h:panelGroup>
 
+                        <!-- nofitication complete date -->
                         <h:panelGroup id="notificationsCompleted#{varCounterOuter.index}">
                             <h:panelGroup
                                     rendered="#{revision.notificationStatus != 'NO_NOTFICATION'}">
-                                <i
-                                        class="fa fa-fw fa-volume-up fa-lg #{revision.notificationDate ne null ? 'icon-green' : 'icon-grey'}"
-                                        title=""/>
+                                <i class="fa fa-fw fa-volume-up fa-lg #{revision.notificated ? 'icon-green' : 'icon-grey'}"
+                                   title=""/>
                                 <p:tooltip for="notificationsCompleted#{varCounterOuter.index}">
                                     <h:outputLabel
-                                            value="#{revision.notificationDate ne null ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} "/>
-                                    <h:outputText rendered="#{revision.notificationDate ne null}"
+                                            value="#{revision.notificated ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} "/>
+                                    <h:outputText rendered="#{revision.notificated}"
                                                   value="#{revision.notificationDate}">
-                                        <f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:converter converterId="instantDateTimeConverter"/>
+                                        <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>
                                     </h:outputText>
                                 </p:tooltip>
                             </h:panelGroup>

@@ -1,91 +1,93 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.archiveTask.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.archiveTask.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.archiveTask.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.archiveTask.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
-			<h:panelGrid columns="1" styleClass="newStyleListingTable"
-				columnClasses="columnLongText">
-				<h:outputLabel value="#{msg['dialog.archiveTask.text']}" />
-			</h:panelGrid>
+        <div class="dialogContent">
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.archiveTask.text']}"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newStyleListingTable"
-				style="margin-left:10px">
-				<i class="fa fa-check icon-green" />
-				<h:outputLabel value="#{msg['dialog.archiveTask.status.worklists']}"></h:outputLabel>
+            <!-- staining -->
+            <h:panelGrid columns="1" styleClass="defaultHistoTable" style="margin-left: 10px;">
 
-				<i class="fa fa-check icon-green" />
-				<h:outputLabel value="#{msg['dialog.archiveTask.status.approved']}"></h:outputLabel>
+                <h:panelGroup >
+                    <h:outputLabel value="#{msg['dialog.archiveTask.status.staining']} "/>
 
-				<i class="fa fa-check icon-green" />
-				<h:outputLabel
-					value="#{msg['dialog.archiveTask.status.notifications']}"></h:outputLabel>
+                    <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.completed']}"
+                                   rendered="#{archiveTaskDialog.taskStatus.stainingCompleted}"
+                                   styleClass="icon-green"/>
+                    <h:outputLabel value=" #{msg['dialog.archiveTask.status.staining.missing']}"
+                                   rendered="#{!archiveTaskDialog.taskStatus.stainingCompleted}"
+                                   styleClass="icon-red"/>
+                </h:panelGroup>
 
-				<h:outputLabel value=" " />
-				<h:outputLabel value=" " />
+                <p:repeat value="#{archiveTaskDialog.taskStatus.stainingsToComplete}" var="slide">
+                    <h:outputText value="#{slide.slideID}" />
+                </p:repeat>
+            </h:panelGrid>
 
-				<!-- remove from worklist -->
-				<p:selectBooleanCheckbox
-					value="#{archiveTaskDialog.removeFromWorklist}" />
-				<h:outputLabel
-					value="#{msg['dialog.archiveTask.checkBox.removeFromWorklist']}" />
-			</h:panelGrid>
-		</div>
+            <h:panelGrid columns="1" styleClass="newStyleListingTable"
+                         columnClasses="columnLongText">
+                <h:outputLabel value="#{msg['dialog.archiveTask.text']}"/>
+            </h:panelGrid>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        </div>
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- Save button -->
-					<p:commandButton
-						value="#{msg['dialog.archiveTask.button.archive']}"
-						icon="fa fa-archive">
-						<f:actionListener
-							binding="#{archiveTaskDialog.archiveTask()}"></f:actionListener>
-						<f:actionListener
-							binding="#{archiveTaskDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						icon="fa fa-times-circle">
-						<f:actionListener
-							binding="#{archiveTaskDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Save button -->
+                    <p:commandButton
+                            value="#{msg['dialog.archiveTask.button.archive']}"
+                            icon="fa fa-archive">
+                        <f:actionListener
+                                binding="#{archiveTaskDialog.archiveTask()}"></f:actionListener>
+                        <f:actionListener
+                                binding="#{archiveTaskDialog.hideDialog()}"></f:actionListener>
+                    </p:commandButton>
+
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     icon="fa fa-times-circle">
+                        <f:actionListener
+                                binding="#{archiveTaskDialog.hideDialog()}"></f:actionListener>
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
 
 
-	</h:form>
+    </h:form>
 </h:body>
 </html>

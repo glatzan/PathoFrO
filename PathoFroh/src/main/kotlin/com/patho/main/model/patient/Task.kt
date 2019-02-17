@@ -132,16 +132,37 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     open var stainingCompletionDate: Instant? = null
 
     /**
+     * True if stating completion date is not null
+     */
+    open val stainingCompleted: Boolean
+        @Transient
+        get() = stainingCompletionDate != null
+
+    /**
      * Date of diagnosis finalization
      */
     @Column
     open var diagnosisCompletionDate: Instant? = null
 
     /**
-     * The date of the completion of the notificaiton.
+     * Returns true if diagnosis completion date is set
+     */
+    open val diagnosisCompleted: Boolean
+        @Transient
+        get() = diagnosisCompletionDate != null
+
+    /**
+     * The date of the completion of the notification.
      */
     @Column
     open var notificationCompletionDate: Instant? = null
+
+    /**
+     * Returns true if notification completion date is set
+     */
+    open val notificationCompleted: Boolean
+        @Transient
+        get () = notificationCompletionDate != null
 
     /**
      * The date of the finalization.
@@ -223,13 +244,6 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @Transient
     open var taskStatus: TaskStatus = TaskStatus(this)
 
-    /**
-     * Returns true if priority is set to TaskPriority.Time
-     */
-    open val dueDateSelected: Boolean
-        @Transient
-        get() = taskPriority == TaskPriority.TIME
-
     constructor() {}
 
     constructor(id: Long) {
@@ -238,6 +252,22 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
 
     constructor(parent: Patient) {
         this.parent = parent
+    }
+
+    /**
+     * Sets the due date as selected
+     */
+    @Transient
+    open fun setDueDateSelected(dueDate: Boolean) {
+        taskPriority = if (dueDate) TaskPriority.TIME else TaskPriority.NONE
+    }
+
+    /**
+     * Returns true if priority is set to TaskPriority.Time
+     */
+    @Transient
+    open fun getDueDateSelected(): Boolean {
+        return taskPriority == TaskPriority.TIME
     }
 
     @Transient
@@ -282,7 +312,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @Transient
     fun generateTaskStatus(): TaskStatus {
         logger.debug("Generating taskstatus for " + taskID + " " + hashCode())
-        return taskStatus.simpleStatus()
+        return taskStatus.generateStatus()
     }
 
     @Transient

@@ -14,9 +14,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import com.patho.main.model.Question;
 import com.patho.main.model.patient.Task;
-import com.patho.main.repository.QuestionRepository;
 import com.patho.main.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -64,11 +62,6 @@ public class MainHandlerAction {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@Autowired
-	protected QuestionRepository questionRepository;
-
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	@Autowired
 	private TaskRepository taskRepository;
 	/********************************************************
 	 * Navigation
@@ -101,12 +94,6 @@ public class MainHandlerAction {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		System.out.println(FacesContext.class.getPackage().getImplementationVersion());
-		Question q = new Question();
-		q.setIdate(Instant.now());
-		q.setTitle("asdd");
-		q.setDdate(localDate);
-		questionRepository.save(q);
 
 		Task task = new Task();
 		task.setDateOfSugery(LocalDate.now().minusDays(10));

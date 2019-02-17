@@ -181,15 +181,18 @@ Alter table DiagnosisRevision add createdOn bigint;
 Alter table DiagnosisRevision add createdBy character varying(10);
 Alter table DiagnosisRevision add updatedOn bigint;
 Alter table DiagnosisRevision add updatedBy character varying(10);
-Alter table DiagnosisRevision add createdOn bigint;
-Alter table DiagnosisRevision add createdBy character varying(10);
-Alter table DiagnosisRevision add updatedOn bigint;
-Alter table DiagnosisRevision add updatedBy character varying(10);
 UPDATE DiagnosisRevision SET createdOn = creationDate;
-UPDATE DiagnosisRevision SET createdOn = 0;
 update DiagnosisRevision set updatedOn = 0;
-update DiagnosisRevision set updatedOn = 0;
+alter table DiagnosisRevision drop column creationDate;
 
+/* audit for DiagnosisRevision_aud */
+Alter table DiagnosisRevision_aud add createdOn bigint;
+Alter table DiagnosisRevision_aud add createdBy character varying(10);
+Alter table DiagnosisRevision_aud add updatedOn bigint;
+Alter table DiagnosisRevision_aud add updatedBy character varying(10);
+UPDATE DiagnosisRevision_aud SET createdOn = creationDate;
+update DiagnosisRevision_aud set updatedOn = 0;
+alter table DiagnosisRevision_aud drop column creationDate;
 
 /* converting timestamps to date*/
 drop view taskoverview;

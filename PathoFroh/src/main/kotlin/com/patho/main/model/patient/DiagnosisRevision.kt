@@ -73,6 +73,13 @@ open class DiagnosisRevision : AbstractPersistable, ID, AuditAble, Parent<Task> 
     open var completionDate: Instant? = null
 
     /**
+     * Returns true if completion date is set
+     */
+    open val completed: Boolean
+        @Transient
+        get() = completionDate != null
+
+    /**
      * Status of the notification, e.g. pending, completed
      */
     @Enumerated(EnumType.ORDINAL)
@@ -83,6 +90,14 @@ open class DiagnosisRevision : AbstractPersistable, ID, AuditAble, Parent<Task> 
      */
     @Column
     open var notificationDate: Instant? = null
+
+    /**
+     * Returns true if notification date is set
+     */
+    open val notificated: Boolean
+        @Transient
+        get() = notificationDate != null
+
 
     /**
      * Date of the signature

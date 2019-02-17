@@ -1,172 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+>
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel
-			value="#{msg['dialog.notification.tab.general.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel
+                value="#{msg['dialog.notification.tab.general.headline']}"/>
+    </p:outputPanel>
 
 
-	<p:outputPanel styleClass="bodyPannel">
+    <p:outputPanel styleClass="bodyPannel">
 
-		<!-- diagnoses -->
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150 columnTop,">
+        <!-- diagnoses -->
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth150 columnTop,">
 
-			<!-- Notifications -->
-			<h:outputLabel
-				value="#{msg['dialog.notification.tab.general.diagnosis']}"
-				styleClass="bigFont" />
+            <!-- Notifications -->
+            <h:outputLabel
+                    value="#{msg['dialog.notification.tab.general.diagnosis']}"
+                    styleClass="bigFont"/>
 
-			<p:dataTable var="diangosisList" id="diangosisList"
-				scrollHeight="100" styleClass="defaultHistoDataTable"
-				scrollable="true" selectionMode="single"
-				rowKey="#{diangosisList.id}"
-				selection="#{dialog.notificationDialog.generalTab.selectDiagnosisRevision}"
-				value="#{dialog.notificationDialog.generalTab.diagnosisRevisions}">
+            <p:dataTable var="diangosisList" id="diangosisList"
+                         scrollHeight="100" styleClass="defaultHistoDataTable"
+                         scrollable="true" selectionMode="single"
+                         rowKey="#{diangosisList.id}"
+                         selection="#{dialog.notificationDialog.generalTab.selectDiagnosisRevision}"
+                         value="#{dialog.notificationDialog.generalTab.diagnosisRevisions}">
 
-				<!-- Name -->
-				<p:column
-					headerText="#{msg['dialog.notification.tab.general.diagnosis.table.name']}"
-					style="width:auto">
-					<h:outputText value="#{diangosisList.name}" />
-				</p:column>
+                <!-- Name -->
+                <p:column
+                        headerText="#{msg['dialog.notification.tab.general.diagnosis.table.name']}"
+                        style="width:auto">
+                    <h:outputText value="#{diangosisList.name}"/>
+                </p:column>
 
-				<!-- pending -->
-				<p:column style="width:25%" styleClass="centerChildElements"
-					headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus']}">
-					<ui:fragment
-						rendered="#{diangosisList.notificationStatus eq 'NOT_APPROVED'}">
-						<i class="fa fa-fw fa-volume-off icon-red"
-							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOT_APPROVED']}" />
-					</ui:fragment>
-					<ui:fragment
-						rendered="#{diangosisList.notificationStatus eq 'NOTIFICATION_PENDING'}">
-						<i class="fa fa-fw fa-volume-up icon-orange"
-							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_PENDING']}" />
-					</ui:fragment>
-					<ui:fragment
-						rendered="#{diangosisList.notificationStatus eq 'NO_NOTFICATION'}">
-						<i class="fa fa-fw fa-circle icon-red"
-							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NO_NOTFICATION']}" />
-					</ui:fragment>
-					<ui:fragment
-						rendered="#{diangosisList.notificationStatus eq 'NOTIFICATION_COMPLETED'}">
-						<i class="fa fa-fw fa-check-circle icon-green"
-							title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_COMPLETED']}" />
-					</ui:fragment>
-				</p:column>
+                <!-- pending -->
+                <p:column style="width:25%" styleClass="centerChildElements"
+                          headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus']}">
+                    <ui:fragment
+                            rendered="#{diangosisList.notificationStatus eq 'NOT_APPROVED'}">
+                        <i class="fa fa-fw fa-volume-off icon-red"
+                           title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOT_APPROVED']}"/>
+                    </ui:fragment>
+                    <ui:fragment
+                            rendered="#{diangosisList.notificationStatus eq 'NOTIFICATION_PENDING'}">
+                        <i class="fa fa-fw fa-volume-up icon-orange"
+                           title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_PENDING']}"/>
+                    </ui:fragment>
+                    <ui:fragment
+                            rendered="#{diangosisList.notificationStatus eq 'NO_NOTFICATION'}">
+                        <i class="fa fa-fw fa-circle icon-red"
+                           title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NO_NOTFICATION']}"/>
+                    </ui:fragment>
+                    <ui:fragment
+                            rendered="#{diangosisList.notificationStatus eq 'NOTIFICATION_COMPLETED'}">
+                        <i class="fa fa-fw fa-check-circle icon-green"
+                           title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_COMPLETED']}"/>
+                    </ui:fragment>
+                </p:column>
 
-				<!-- performed -->
-				<p:column style="width:20%"
-					headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPerformd']}">
+                <!-- performed -->
+                <p:column style="width:20%"
+                          headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPerformd']}">
 
-					<h:outputText value="#{diangosisList.notificationDate}"
-						rendered="#{diangosisList.notificationDate ne null}">
-						<f:convertDateTime type="localDateTime"
-							pattern="dd.MM.yyyy HH:mm:ss" />
-					</h:outputText>
-				</p:column>
+                    <h:outputText value="#{diangosisList.notificationDate}"
+                                  rendered="#{diangosisList.notificated}">
+                        <f:converter converterId="instantDateTimeConverter"/>
+                        <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
+                    </h:outputText>
+                </p:column>
 
-				<p:ajax event="rowSelect" process="@form" update="@form"
-					listener="#{dialog.notificationDialog.generalTab.onDiangosisSelect()}" />
-			</p:dataTable>
+                <p:ajax event="rowSelect" process="@form" update="@form"
+                        listener="#{dialog.notificationDialog.generalTab.onDiangosisSelect()}"/>
+            </p:dataTable>
 
-			<h:outputLabel value=" " />
-			<h:panelGroup>
-				<!-- diagnosis not approved warning -->
-				<h:outputLabel styleClass="icon-red bigFont"
-					value="#{msg['dialog.notification.tab.general.diagnosis.notApproved']}"
-					rendered="#{dialog.notificationDialog.generalTab.selectedDiagnosisNotApprovedy}" />
-				<!-- diagnosis select manually -->
-				<h:outputLabel styleClass="icon-red bigFont"
-					value="#{msg['dialog.notification.tab.general.diagnosis.selectManually']}"
-					rendered="#{dialog.notificationDialog.generalTab.selectDiagnosisManually}" />
-			</h:panelGroup>
+            <h:outputLabel value=" "/>
+            <h:panelGroup>
+                <!-- diagnosis not approved warning -->
+                <h:outputLabel styleClass="icon-red bigFont"
+                               value="#{msg['dialog.notification.tab.general.diagnosis.notApproved']}"
+                               rendered="#{dialog.notificationDialog.generalTab.selectedDiagnosisNotApprovedy}"/>
+                <!-- diagnosis select manually -->
+                <h:outputLabel styleClass="icon-red bigFont"
+                               value="#{msg['dialog.notification.tab.general.diagnosis.selectManually']}"
+                               rendered="#{dialog.notificationDialog.generalTab.selectDiagnosisManually}"/>
+            </h:panelGroup>
 
-			<h:outputLabel
-				value="#{msg['dialog.notification.tab.general.completeNotification']}" />
-			<p:selectBooleanCheckbox
-				value="#{dialog.notificationDialog.generalTab.completeNotification}"
-				title="#{msg['dialog.notification.tab.general.completeNotification.tex']}">
-				<p:ajax event="change" process="@this" />
-			</p:selectBooleanCheckbox>
-		</h:panelGrid>
+            <h:outputLabel
+                    value="#{msg['dialog.notification.tab.general.completeNotification']}"/>
+            <p:selectBooleanCheckbox
+                    value="#{dialog.notificationDialog.generalTab.completeNotification}"
+                    title="#{msg['dialog.notification.tab.general.completeNotification.tex']}">
+                <p:ajax event="change" process="@this"/>
+            </p:selectBooleanCheckbox>
+        </h:panelGrid>
 
-		<!-- Separator -->
-		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-			<p:separator />
-			<h:outputLabel
-				value="#{msg['dialog.notification.tab.general.notification']}" />
-		</h:panelGrid>
+        <!-- Separator -->
+        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+            <p:separator/>
+            <h:outputLabel
+                    value="#{msg['dialog.notification.tab.general.notification']}"/>
+        </h:panelGrid>
 
-		<!-- additional prints -->
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150,">
-			<!-- Use additional prints-->
-			<h:outputLabel value="#{msg['dialog.notification.tab.general.use']}"
-				styleClass="bigFont" />
-			<p:selectBooleanCheckbox
-				value="#{dialog.notificationDialog.generalTab.useNotification}"
-				title="#{msg['dialog.notification.tab.general.use.text']}">
-				<p:ajax event="change" process="@form" update="@form" />
-			</p:selectBooleanCheckbox>
+        <!-- additional prints -->
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth150,">
+            <!-- Use additional prints-->
+            <h:outputLabel value="#{msg['dialog.notification.tab.general.use']}"
+                           styleClass="bigFont"/>
+            <p:selectBooleanCheckbox
+                    value="#{dialog.notificationDialog.generalTab.useNotification}"
+                    title="#{msg['dialog.notification.tab.general.use.text']}">
+                <p:ajax event="change" process="@form" update="@form"/>
+            </p:selectBooleanCheckbox>
 
-			<!-- additional prints -->
-			<h:outputLabel styleClass="bigFont"
-				value="#{msg['dialog.notification.tab.general.additionalPrints.tempalte']}" />
-			<p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
-				disabled="#{!dialog.notificationDialog.generalTab.useNotification}"
-				value="#{dialog.notificationDialog.generalTab.selectedTemplate}"
-				converter="#{dialog.notificationDialog.generalTab.templateListTransformer}">
+            <!-- additional prints -->
+            <h:outputLabel styleClass="bigFont"
+                           value="#{msg['dialog.notification.tab.general.additionalPrints.tempalte']}"/>
+            <p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
+                             disabled="#{!dialog.notificationDialog.generalTab.useNotification}"
+                             value="#{dialog.notificationDialog.generalTab.selectedTemplate}"
+                             converter="#{dialog.notificationDialog.generalTab.templateListTransformer}">
 
-				<f:selectItem itemValue="#{null}"
-					itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}"></f:selectItem>
+                <f:selectItem itemValue="#{null}"
+                              itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}"></f:selectItem>
 
-				<f:selectItems
-					value="#{dialog.notificationDialog.generalTab.templateList}"
-					var="template" itemLabel="#{template.name}" itemValue="#{template}" />
+                <f:selectItems
+                        value="#{dialog.notificationDialog.generalTab.templateList}"
+                        var="template" itemLabel="#{template.name}" itemValue="#{template}"/>
 
-				<p:ajax update="@this" event="change" process="@this"
-					partialSubmit="true" />
-			</p:selectOneMenu>
+                <p:ajax update="@this" event="change" process="@this"
+                        partialSubmit="true"/>
+            </p:selectOneMenu>
 
-			<!-- print -->
-			<h:outputLabel styleClass="bigFont"
-				value="#{msg['dialog.notification.tab.general.additionalPrints.count']} "
-				title="#{msg['dialog.notification.tab.send.count']}" />
-			<p:spinner
-				disabled="#{!dialog.notificationDialog.generalTab.useNotification}"
-				value="#{dialog.notificationDialog.generalTab.printCount}"
-				styleClass="oneNumberSpinner" min="0" max="9" />
-		</h:panelGrid>
-	</p:outputPanel>
+            <!-- print -->
+            <h:outputLabel styleClass="bigFont"
+                           value="#{msg['dialog.notification.tab.general.additionalPrints.count']} "
+                           title="#{msg['dialog.notification.tab.send.count']}"/>
+            <p:spinner
+                    disabled="#{!dialog.notificationDialog.generalTab.useNotification}"
+                    value="#{dialog.notificationDialog.generalTab.printCount}"
+                    styleClass="oneNumberSpinner" min="0" max="9"/>
+        </h:panelGrid>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
-			<h:panelGrid columns="1" styleClass="left" id="toManyMatches">
-			</h:panelGrid>
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
+            <h:panelGrid columns="1" styleClass="left" id="toManyMatches">
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right" id="buttonContainer">
-				<!-- next -->
-				<p:commandButton value="#{msg['general.next']}"
-					icon="fa fa-fw fa-arrow-right"
-					disabled="#{dialog.notificationDialog.generalTab.selectDiagnosisManually}"
-					actionListener="#{dialog.notificationDialog.nextTab()}"
-					process="@form" update="@form" />
+            <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
+                <!-- next -->
+                <p:commandButton value="#{msg['general.next']}"
+                                 icon="fa fa-fw fa-arrow-right"
+                                 disabled="#{dialog.notificationDialog.generalTab.selectDiagnosisManually}"
+                                 actionListener="#{dialog.notificationDialog.nextTab()}"
+                                 process="@form" update="@form"/>
 
-				<!-- close -->
-				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle"
-					actionListener="#{dialog.notificationDialog.hideDialog()}" />
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- close -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 icon="fa fa-times-circle"
+                                 actionListener="#{dialog.notificationDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 </ui:composition>

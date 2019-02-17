@@ -102,7 +102,7 @@ public class WorkPhaseHandler extends AbstractHandler {
 	public void updateDiagnosisPhase(Task task) {
 
 		for (DiagnosisRevision revision : task.getDiagnosisRevisions()) {
-			if (revision.getCompletionDate() != null) {
+			if (revision.getCompleted()) {
 				startDiagnosisPhase(task);
 				worklistViewHandler.reloadCurrentTask();
 				break;

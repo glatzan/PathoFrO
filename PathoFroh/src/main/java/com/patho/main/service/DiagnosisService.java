@@ -398,7 +398,7 @@ public class DiagnosisService extends AbstractService {
     public List<DiagnosisValidationError> validateDiangosisRevision(DiagnosisRevision diagnosisRevision) {
         ArrayList<DiagnosisValidationError> result = new ArrayList<DiagnosisValidationError>();
 
-        if (diagnosisRevision.getCompletionDate() == null) {
+        if (!diagnosisRevision.getCompleted()) {
             result.add(DiagnosisValidationError.NO_SIGNATURE_DATE);
         }
 
@@ -441,7 +441,7 @@ public class DiagnosisService extends AbstractService {
      */
     public static DiagnosisRevision getNextRevisionToApprove(Task task) {
         for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
-            if (diagnosisRevision.getCompletionDate() == null) {
+            if (!diagnosisRevision.getCompleted()) {
                 return diagnosisRevision;
             }
         }
@@ -458,7 +458,7 @@ public class DiagnosisService extends AbstractService {
     public static int countRevisionToApprove(Task task) {
         int result = 0;
         for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
-            if (diagnosisRevision.getCompletionDate() == null) {
+            if (!diagnosisRevision.getCompleted()) {
                 result++;
             }
         }

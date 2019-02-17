@@ -46,7 +46,7 @@ public class DiagnosisView extends AbstractTaskView {
 		logger.debug("Loading diangosis data");
 
 		for (DiagnosisRevision revision : getTask().getDiagnosisRevisions()) {
-			if (revision.getCompletionDate() == null) {
+			if (revision.getCompleted()) {
 				revision.setSignatureDate(LocalDate.now());
 
 				if (revision.getSignatureOne() == null)

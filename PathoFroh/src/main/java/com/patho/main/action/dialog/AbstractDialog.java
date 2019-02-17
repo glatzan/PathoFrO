@@ -118,10 +118,10 @@ public abstract class AbstractDialog {
 		} else
 			options.put("height", "auto");
 
-		if (dialog.isUseOptions()) {
-			options.put("resizable", dialog.isResizeable());
-			options.put("draggable", dialog.isDraggable());
-			options.put("modal", dialog.isModal());
+		if (dialog.getUseOptions()) {
+			options.put("resizable", dialog.getResizeable());
+			options.put("draggable", dialog.getDraggable());
+			options.put("modal", dialog.getModal());
 		}
 
 		options.put("closable", false);

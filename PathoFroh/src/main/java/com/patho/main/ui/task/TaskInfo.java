@@ -59,7 +59,7 @@ public class TaskInfo {
 		if (!isTaksEditable())
 			return false;
 
-		if (diagnosisRevision.getCompletionDate() != null && !isDiagnosisRevisionInEditAmendmentMode(diagnosisRevision))
+		if (diagnosisRevision.getCompleted() && !isDiagnosisRevisionInEditAmendmentMode(diagnosisRevision))
 			return false;
 
 		return true;

@@ -1,12 +1,15 @@
 package com.patho.main.util.task
 
 import com.patho.main.common.PredefinedFavouriteList
-import com.patho.main.model.AssociatedContact
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.*
+import com.patho.main.model.user.HistoPermissions
 import com.patho.main.service.impl.SpringContextBridge
+import org.slf4j.LoggerFactory
 
-class TaskStatus(task: Task) {
+open class TaskStatus(task: Task) {
+
+    protected val logger = LoggerFactory.getLogger(this.javaClass)
 
     /**
      * Task
@@ -19,74 +22,18 @@ class TaskStatus(task: Task) {
     var listStatus: ListStatus = ListStatus(task)
 
     /**
-     * True if Task.stainingCompleted is a valid timestamp
-     */
-    var stainingPhaseCompleted: Boolean = false
-
-    /**
-     * True if all slides are marked as completed
-     */
-    val stainingCompleted: Boolean
-        get() = stainingsToComplete.isEmpty()
-
-    /**
-     * List of slides that are not completed yet
-     */
-    var stainingsToComplete: List<Slide> = ArrayList<Slide>()
-
-    /**
-     * True if Task.diagnosisPhaseCompleted is a valid timestamp
-     */
-    var diagnosisPhaseCompleted: Boolean = false
-
-    /**
-     * Checks if diagnoses are completed and signed or if the ignore flag is set
-     */
-    val diagnosesCompleted: Boolean
-        get() = diagnosesStatus.any { p -> (p.completed && p.signature) || p.ignore }
-
-    /**
-     * List of diagnoses and their status
-     */
-    var diagnosesStatus: List<DiagnosisRevisionStatus> = ArrayList<DiagnosisRevisionStatus>()
-
-    /**
-     * True if task.notificationCompleted is a valid timestamp
-     */
-    var notificationPhaseCompleted: Boolean = false
-
-    /**
-     * Checks if a notification was performed for all diagnoses
-     */
-    val notificationCompleted: Boolean
-        get() = notificationsOfDiagnoses.any { p -> p.completed || p.ignore }
-    /**
-     * Status of the single diagnoses
-     */
-    var notificationsOfDiagnoses: List<DiagnosisRevisionStatus> = ArrayList<DiagnosisRevisionStatus>()
-
-    /**
-     * Status of the contacts
-     */
-    var notificationsStatus: List<NotificationStatus> = ArrayList<NotificationStatus>()
-
-    /**
-     * Contains all favourite list of the task
-     */
-    var favouriteListOfTask: List<FavouriteList> = ArrayList<FavouriteList>()
-
-    /**
-     * Contains all favourite lists of a task which are blocking the archive process
-     */
-    var blockingFavouriteListsOfTask: List<FavouriteList> = ArrayList<FavouriteList>()
-
-    /**
      * Returns true if task is finalized
      */
     var finalized: Boolean = false
 
+    /**
+     * True if task is finalizeable
+     */
     var finalizeable: Boolean = false
 
+    /**
+     * True if task is editable
+     */
     var editable: Boolean = false
 
     /**
@@ -101,42 +48,35 @@ class TaskStatus(task: Task) {
 
     val isTaskEditable: Boolean
         get() {
+            // task is editable
+            // users and guest can't edit anything
+            if (!SpringContextBridge.services().userHandlerAction.currentUserHasPermission(HistoPermissions.TASK_EDIT)) {
+                return false
+            }
+            // finalized
+            if (task.finalized) {
+                return false;
+            }
+
+            // if (isDiagnosisCompleted(task) && isStainingCompleted(task))
+            // return false;
+
+            // Blocked
+            // TODO: Blocking
+
             return true
         }
 
-//    init {
-//        simpleStatus()
-//    }
+    open fun generateStatus(): TaskStatus {
+        logger.debug("Generating simple Taskstatus for {}", task.taskID)
 
-    fun simpleStatus(): TaskStatus {
         listStatus = ListStatus(task)
         finalized = task.finalized
         actionPending = task.isActiveOrActionPending()
         active = task.active
         editable = isTaskEditable
 
-        println(SpringContextBridge.services().userHandlerAction)
-
         return this
-    }
-
-
-    /**
-     * Status for diagnoses
-     */
-    public class DiagnosisRevisionStatus(diagnosisRevision: DiagnosisRevision) {
-        var completed: Boolean = diagnosisRevision.completionDate != null
-        var signature: Boolean = diagnosisRevision.signatureOne != null || diagnosisRevision.signatureTwo != null
-        var ignore: Boolean = false
-    }
-
-    public class DiagnosisNotificationStatus(diagnosisRevision: DiagnosisRevision) {
-        val perfomed: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_COMPLETED;
-        val igonre: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NO_NOTFICATION;
-    }
-
-    public class NotificationStatus(associatedContact: AssociatedContact) {
-        var completed: Boolean = associatedContact.isNotificationPerformed
     }
 
     public class ListStatus(task: Task) {
@@ -273,7 +213,7 @@ class TaskStatus(task: Task) {
          */
         @JvmStatic
         fun checkIfDiagnosisCompleted(revision: DiagnosisRevision): Boolean {
-            return revision.completionDate != null
+            return revision.completed
         }
 
         /**

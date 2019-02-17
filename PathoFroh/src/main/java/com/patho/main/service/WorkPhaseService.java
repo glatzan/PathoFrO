@@ -62,7 +62,7 @@ public class WorkPhaseService extends AbstractService {
     @Transactional
     public Task startStainingPhase(Task task) {
 
-        if (task.getStainingCompletionDate() != null) {
+        if (task.getStainingCompleted()) {
             task.setStainingCompletionDate(null);
             task = taskRepository.save(task, resourceBundle.get("log.phase.staining.enter"));
         }
@@ -131,13 +131,13 @@ public class WorkPhaseService extends AbstractService {
         // setting diagnosis compleation date if not set jet
         for (int i = 0; i < task.getDiagnosisRevisions().size(); i++) {
             DiagnosisRevision rev = HistoUtil.getNElement(task.getDiagnosisRevisions(), i);
-            if (rev.getCompletionDate() == null) {
+            if (!rev.getCompleted()) {
                 task = diagnosisService.approveDiangosis(task, rev, status);
                 change = true;
             }
         }
 
-        if (change || task.getDiagnosisCompletionDate() == null) {
+        if (change || !task.getDiagnosisCompleted()) {
             task.setDiagnosisCompletionDate(Instant.now());
             task = taskRepository.save(task, resourceBundle.get("log.phase.diagnosis.end"));
         }
