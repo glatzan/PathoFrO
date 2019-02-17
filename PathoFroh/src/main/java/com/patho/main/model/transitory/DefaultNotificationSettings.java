@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.patho.main.common.ContactRole;
-import com.patho.main.model.AssociatedContactNotification;
+import com.patho.main.model.patient.notification.AssociatedContactNotification;
 import com.patho.main.util.helper.StreamUtils;
 
 import lombok.Getter;

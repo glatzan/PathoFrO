@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 import com.patho.main.common.ContactRole;
-import com.patho.main.model.AssociatedContactNotification;
+import com.patho.main.model.patient.notification.AssociatedContactNotification;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.util.helper.StreamUtils;
 import com.patho.main.util.version.Version;

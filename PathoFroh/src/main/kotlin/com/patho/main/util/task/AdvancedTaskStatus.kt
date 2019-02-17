@@ -39,7 +39,7 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
      * Checks if diagnoses are completed and signed or if the ignore flag is set
      */
     val diagnosesCompleted: Boolean
-        get() = diagnosesStatus.any { p -> (p.completed && p.signature) || p.ignore }
+        get() = diagnosesStatus.any { p -> (p.completed && p.signature) || p.notificationStatus.ignore }
 
     /**
      * List of diagnoses and their status
@@ -47,15 +47,9 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
     var diagnosesStatus: List<DiagnosisRevisionStatus> = ArrayList<DiagnosisRevisionStatus>()
 
     /**
-     * Checks if a notification was performed for all diagnoses
+     *  True if notification phase has ended
      */
-    val notificationCompleted: Boolean
-        get() = notificationsOfDiagnoses.any { p -> p.completed || p.ignore }
-
-    /**
-     * Status of the single diagnoses
-     */
-    var notificationsOfDiagnoses: List<DiagnosisRevisionStatus> = ArrayList<DiagnosisRevisionStatus>()
+    var notificationPhaseCompleted: Boolean = false
 
     /**
      * Status of the contacts
@@ -95,6 +89,10 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
         diagnosesStatus = task.diagnosisRevisions.map { p -> DiagnosisRevisionStatus(p) }
 
+        notificationPhaseCompleted = task.notificationCompleted
+
+        notificationsStatus = task.contacts.map { p -> NotificationStatus(p) }
+
         return this
     }
 
@@ -113,15 +111,15 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
         val name = diagnosisRevision.name
         val completed: Boolean = diagnosisRevision.completed
         val signature: Boolean = diagnosisRevision.signatureOne != null || diagnosisRevision.signatureTwo != null
-        val ignore: Boolean = false
 
         val notificationStatus: DiagnosisNotificationStatus = DiagnosisNotificationStatus(diagnosisRevision)
+
+        public class DiagnosisNotificationStatus(diagnosisRevision: DiagnosisRevision) {
+            val performed: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_COMPLETED;
+            val ignore: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NO_NOTFICATION;
+        }
     }
 
-    public class DiagnosisNotificationStatus(diagnosisRevision: DiagnosisRevision) {
-        val perfomed: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_COMPLETED;
-        val igonre: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NO_NOTFICATION;
-    }
 
     public class NotificationStatus(associatedContact: AssociatedContact) {
         var completed: Boolean = associatedContact.isNotificationPerformed

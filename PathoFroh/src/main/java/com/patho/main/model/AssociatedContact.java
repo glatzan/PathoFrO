@@ -1,7 +1,8 @@
 package com.patho.main.model;
 
 import com.patho.main.common.ContactRole;
-import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.AssociatedContactNotification;
+import com.patho.main.model.patient.notification.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Task;
 import org.hibernate.annotations.DynamicUpdate;

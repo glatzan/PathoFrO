@@ -1,6 +1,5 @@
 package com.patho.main.action.dialog.print;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +13,7 @@ import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MediaRepository;

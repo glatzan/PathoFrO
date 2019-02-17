@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.struts.chain.commands.servlet.PerformForward;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.AssociatedContact;
-import com.patho.main.model.AssociatedContactNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.Contact;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Person;
@@ -47,7 +46,6 @@ import com.patho.main.util.helper.ValidatorUtil;
 import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationFeedback;
 import com.patho.main.util.notification.NotificationPerformer;
-import com.patho.main.util.pdf.PrintOrder;
 import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.AccessLevel;

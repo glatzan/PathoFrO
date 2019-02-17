@@ -1,7 +1,8 @@
-package com.patho.main.model
+package com.patho.main.model.patient.notification
 
+import com.patho.main.model.AbstractPersistable
+import com.patho.main.model.AssociatedContact
 import com.patho.main.model.interfaces.ID
-import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
 import java.util.*
@@ -14,8 +15,7 @@ import javax.persistence.*
 @SequenceGenerator(name = "associatedcontactnotification_sequencegenerator", sequenceName = "associatedcontactnotification_sequence")
 @Audited
 @SelectBeforeUpdate(true)
-@DynamicUpdate(true)
-class AssociatedContactNotification : ID {
+open class AssociatedContactNotification : AbstractPersistable(), ID {
 
     @Id
     @GeneratedValue(generator = "associatedcontactnotification_sequencegenerator")
@@ -23,38 +23,34 @@ class AssociatedContactNotification : ID {
     override var id: Long = 0
 
     @ManyToOne(targetEntity = AssociatedContact::class, fetch = FetchType.LAZY)
-    var contact: AssociatedContact? = null
+    open var contact: AssociatedContact? = null
 
     @Enumerated(EnumType.STRING)
-    var notificationTyp: NotificationTyp? = null
+    open var notificationTyp: NotificationTyp? = null
 
     @Column
-    var active: Boolean = false
+    open var active: Boolean = false
 
     @Column
-    var performed: Boolean = false
+    open var performed: Boolean = false
 
     @Column
-    var failed: Boolean = false
+    open var failed: Boolean = false
 
     @Column
-    var renewed: Boolean = false
+    open var renewed: Boolean = false
 
     @Column(columnDefinition = "VARCHAR")
-    var commentary: String? = null
+    open var commentary: String? = null
 
     @Temporal(TemporalType.DATE)
-    var dateOfAction: Date? = null
+    open var dateOfAction: Date? = null
 
     @Column
-    var manuallyAdded: Boolean = false
+    open var manuallyAdded: Boolean = false
 
     @Column(columnDefinition = "VARCHAR")
-    var contactAddress: String? = null
-
-    override fun equals(obj: Any?): Boolean {
-        return if (obj is AssociatedContactNotification && obj.id == id) true else super.equals(obj)
-    }
+    open var contactAddress: String? = null
 
     enum class NotificationTyp {
         EMAIL, FAX, PHONE, LETTER, PRINT
