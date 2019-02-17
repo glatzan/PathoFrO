@@ -32,7 +32,7 @@ class ArchiveTaskDialog : AbstractTaskDialog() {
         println(serviceSettings.taskArchiveRules.blockingFavouriteLists)
 
         this.task = task
-        this.taskStatus = AdvancedTaskStatus(task)
+        this.taskStatus = AdvancedTaskStatus(task).generateStatus()
 
         task.taskStatus
 

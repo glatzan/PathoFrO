@@ -8,17 +8,32 @@ import com.patho.main.model.patient.Task
 
 open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
+    /**
+     *  True if staining phase has ended
+     */
+    var stainingPhaseCompleted: Boolean = false
 
     /**
      * True if all slides are marked as completed
      */
     val stainingCompleted: Boolean
-        get() = stainingsToComplete.isEmpty()
+        get() = stainingsToComplete.any { p -> p.completed }
+
+    /**
+     * The index of the opened panel
+     */
+    var stainingAccordionIndex: Int = 0
+        get() = if (stainingCompleted) 1 else 0
 
     /**
      * List of slides that are not completed yet
      */
-    var stainingsToComplete: List<Slide> = ArrayList<Slide>()
+    var stainingsToComplete: List<SlideStatus> = ArrayList<SlideStatus>()
+
+    /**
+     * True if diagnosis phase has ended
+     */
+    var diagnosisPhaseCompleted: Boolean = false
 
     /**
      * Checks if diagnoses are completed and signed or if the ignore flag is set
@@ -58,21 +73,25 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
     var blockingFavouriteListsOfTask: List<FavouriteList> = ArrayList<FavouriteList>()
 
 
-    override fun generateStatus(): TaskStatus {
+    override fun generateStatus(): AdvancedTaskStatus {
         logger.debug("Generating simple Taskstatus for {}", task.taskID)
         super.generateStatus()
 
-        val stainingsToComplete = ArrayList<Slide>();
+        stainingPhaseCompleted = task.stainingCompleted
+
+        val stainingsToComplete = ArrayList<SlideStatus>();
 
         task.samples.forEach {
             it.blocks.forEach {
                 it.slides.forEach {
-                    if (!it.stainingCompleted) stainingsToComplete.add(it)
+                    stainingsToComplete.add(SlideStatus(it))
                 }
             }
         }
 
         this.stainingsToComplete = stainingsToComplete
+
+        diagnosisPhaseCompleted = task.diagnosisCompleted
 
         diagnosesStatus = task.diagnosisRevisions.map { p -> DiagnosisRevisionStatus(p) }
 
@@ -80,9 +99,18 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
     }
 
     /**
+     * Class for displaying staining status
+     */
+    public class SlideStatus(slide: Slide) {
+        val completed: Boolean = slide.stainingCompleted
+        val name: String = slide.slideID
+    }
+
+    /**
      * Status for diagnoses
      */
     public class DiagnosisRevisionStatus(diagnosisRevision: DiagnosisRevision) {
+        val name = diagnosisRevision.name
         val completed: Boolean = diagnosisRevision.completed
         val signature: Boolean = diagnosisRevision.signatureOne != null || diagnosisRevision.signatureTwo != null
         val ignore: Boolean = false
