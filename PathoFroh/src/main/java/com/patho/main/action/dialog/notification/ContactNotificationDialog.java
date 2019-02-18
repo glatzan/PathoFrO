@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.notification;
 
 import java.util.HashMap;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.patient.notification.AssociatedContactNotification;
 import com.patho.main.model.patient.notification.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.patient.Task;

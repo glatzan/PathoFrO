@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.patient.Task;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;

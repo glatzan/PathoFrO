@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.patho.main.common.ContactRole;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.interfaces.ID;

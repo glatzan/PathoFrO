@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.notification;
 
 import java.util.List;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -14,7 +15,6 @@ import com.patho.main.action.dialog.notification.ContactSelectDialog.SelectPhysi
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;

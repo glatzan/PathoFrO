@@ -3,12 +3,12 @@ package com.patho.main.action.dialog.print;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Organization;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;

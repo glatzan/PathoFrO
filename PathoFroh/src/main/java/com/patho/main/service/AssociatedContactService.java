@@ -8,13 +8,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.patient.notification.AssociatedContactNotification;
 import com.patho.main.model.patient.notification.AssociatedContactNotification.NotificationTyp;
 import com.patho.main.model.Organization;

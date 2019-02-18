@@ -7,10 +7,10 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Contact;
 import com.patho.main.model.Person;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import lombok.Getter;
 import lombok.Setter;
 

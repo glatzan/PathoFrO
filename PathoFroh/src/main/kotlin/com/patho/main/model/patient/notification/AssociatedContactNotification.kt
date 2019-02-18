@@ -1,7 +1,6 @@
 package com.patho.main.model.patient.notification
 
 import com.patho.main.model.AbstractPersistable
-import com.patho.main.model.AssociatedContact
 import com.patho.main.model.interfaces.ID
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited

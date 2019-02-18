@@ -1,10 +1,10 @@
 package com.patho.main.util.task
 
-import com.patho.main.model.AssociatedContact
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
+import com.patho.main.model.patient.notification.AssociatedContact
 
 open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
@@ -17,13 +17,13 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
      * True if all slides are marked as completed
      */
     val stainingCompleted: Boolean
-        get() = stainingsToComplete.any { p -> p.completed }
+        get() = stainingsToComplete.all { p -> p.completed }
 
     /**
      * The index of the opened panel
      */
     var stainingAccordionIndex: Int = 0
-        get() = if (stainingCompleted) 1 else 0
+        get() = if (stainingCompleted) -1 else 0
 
     /**
      * List of slides that are not completed yet
@@ -39,7 +39,13 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
      * Checks if diagnoses are completed and signed or if the ignore flag is set
      */
     val diagnosesCompleted: Boolean
-        get() = diagnosesStatus.any { p -> (p.completed && p.signature) || p.notificationStatus.ignore }
+        get() = diagnosesStatus.all { p -> (p.completed && p.signature) || p.notificationStatus.ignore }
+
+    /**
+     * The index of the opened panel
+     */
+    var diagnosisAccordionIndex: Int = 0
+        get() = if (diagnosesCompleted) -1 else 0
 
     /**
      * List of diagnoses and their status
@@ -122,6 +128,6 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
 
     public class NotificationStatus(associatedContact: AssociatedContact) {
-        var completed: Boolean = associatedContact.isNotificationPerformed
+        var completed: Boolean = associatedContact.isNotificationPerformed()
     }
 }

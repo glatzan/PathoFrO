@@ -1,6 +1,6 @@
 package com.patho.main.util.notification;
 
-import com.patho.main.model.AssociatedContact;
+import com.patho.main.model.patient.notification.AssociatedContact;
 import com.patho.main.model.patient.notification.AssociatedContactNotification;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.util.printer.TemplatePDFContainer;

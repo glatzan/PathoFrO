@@ -4,10 +4,10 @@ import java.io.StringWriter;
 
 import javax.persistence.Transient;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.template.MailTemplate;

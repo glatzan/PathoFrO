@@ -3,9 +3,9 @@ package com.patho.main.ui.selectors;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.patient.Task;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import lombok.Getter;
 import lombok.Setter;
 

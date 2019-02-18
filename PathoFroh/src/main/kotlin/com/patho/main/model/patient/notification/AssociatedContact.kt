@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
+import org.springframework.data.util.ProxyUtils
 import javax.persistence.*
 
 @Entity
@@ -36,13 +37,6 @@ open class AssociatedContact : AbstractPersistable, ID {
     @OneToMany(mappedBy = "contact", cascade = [CascadeType.ALL])
     open var notifications = mutableListOf<AssociatedContactNotification>()
 
-    /**
-     * Returns true if a notification was performed
-     */
-    open val notificationPerformed: Boolean
-        @Transient
-        get() = notifications.any { p -> p.performed }
-
     constructor()
 
     constructor(task: Task, person: Person, contactRole: ContactRole = ContactRole.NONE) {
@@ -51,37 +45,57 @@ open class AssociatedContact : AbstractPersistable, ID {
         this.role = contactRole
     }
 
-    open fun findByNotificationTypAndPerformed(type: AssociatedContactNotification.NotificationTyp, performed: Boolean): List<AssociatedContactNotification> {
-        return notifications.filter { p -> type == p.notificationTyp && performed == p.performed }
+    /**
+     * Returns a list of the requested notification type
+     */
+    @Transient
+    open fun findByNotificationTyp(type: AssociatedContactNotification.NotificationTyp): List<AssociatedContactNotification> {
+        return notifications.filter { p -> p.notificationTyp == type }
     }
 
-    open fun findByNotificationTypAndActive(type: AssociatedContactNotification.NotificationTyp, active: Boolean): List<AssociatedContactNotification> {
-        return notifications.filter { p -> type == p.notificationTyp && active == p.active }
+    /**
+     * Checks if all notifications are performed
+     */
+    @Transient
+    open fun isNotificationPerformed(): Boolean {
+        return notifications.all { p -> p.performed }
     }
 
+    /**
+     * Returns true if the notification type is performed
+     */
+    @Transient
+    open fun isNotificationPerformed(type: AssociatedContactNotification.NotificationTyp): Boolean {
+        return findByNotificationTyp(type).all { p -> p.performed }
+    }
+
+    /**
+     * Returns true if the notification type is active
+     */
+    @Transient
+    open fun isNotificationActive(type: AssociatedContactNotification.NotificationTyp): Boolean {
+        return findByNotificationTyp(type).any { p -> p.active }
+    }
+
+    /**
+     * Custom equals, checks if person and role is the same
+     */
     override fun equals(other: Any?): Boolean {
+        other ?: return false
+
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-        if (!super.equals(other)) return false
+        if (javaClass != ProxyUtils.getUserClass(other)) return false
 
         other as AssociatedContact
 
-        if (id != other.id) return false
-        if (task != other.task) return false
-        if (person != other.person) return false
-        if (role != other.role) return false
-        if (notifications != other.notifications) return false
+        if (id == other.id) return true
 
-        return true
+        // same person with the same role, same object
+        if (person == other.person && role == other.role)
+            return true
 
-        if (obj instanceof AssociatedContact) {
-            if (((AssociatedContact) obj).getId() == getId())
-                return true;
-            // same person with the same role, same object
-            if (((AssociatedContact) obj).getPerson().equals(getPerson())
-                    && ((AssociatedContact) obj).getRole().equals(getRole()))
-                return true;
-        }
+        return false
 
     }
+
 }

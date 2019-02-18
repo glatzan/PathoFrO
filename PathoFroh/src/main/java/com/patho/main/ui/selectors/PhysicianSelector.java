@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.patho.main.common.ContactRole;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Task;
 
+import com.patho.main.model.patient.notification.AssociatedContact;
 import lombok.Getter;
 import lombok.Setter;
 

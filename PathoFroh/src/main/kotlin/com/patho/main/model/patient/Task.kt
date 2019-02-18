@@ -5,7 +5,6 @@ import com.patho.main.common.Eye
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.common.TaskPriority
 import com.patho.main.model.AbstractPersistable
-import com.patho.main.model.AssociatedContact
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.Person
 import com.patho.main.model.audit.AuditAble
@@ -14,6 +13,7 @@ import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.patient.miscellaneous.Council
+import com.patho.main.model.patient.notification.AssociatedContact
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
 import com.patho.main.util.task.TaskStatus
@@ -271,16 +271,6 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     }
 
     @Transient
-    fun getPrimarySurgeon(): AssociatedContact? {
-        return getPrimaryContact(ContactRole.SURGEON, ContactRole.EXTERNAL_SURGEON)
-    }
-
-    @Transient
-    fun getPrimaryPrivatePhysician(): AssociatedContact? {
-        return getPrimaryContact(ContactRole.PRIVATE_PHYSICIAN)
-    }
-
-    @Transient
     fun getPrimaryContactAsString(vararg contactRole: String): AssociatedContact? {
         return getPrimaryContact(*contactRole.map { p -> ContactRole.valueOf(p) }.toTypedArray())
     }
@@ -343,7 +333,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
 
     @Transient
     fun containsContact(person: Person): Boolean {
-        return if (contacts != null) contacts.stream().anyMatch({ p -> p.getPerson() == person }) else false
+        return if (contacts != null) contacts.stream().anyMatch({ p -> p.person == person }) else false
     }
 
     @Transient

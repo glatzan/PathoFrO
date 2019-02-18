@@ -17,18 +17,17 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import com.patho.main.model.patient.*;
+import com.patho.main.model.patient.notification.AssociatedContact;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Eye;
-import com.patho.main.model.AssociatedContact;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Signature;
 import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.util.audit.Audit_;
 import com.patho.main.repository.service.TaskRepositoryCustom;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TimeUtil;
