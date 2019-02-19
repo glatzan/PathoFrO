@@ -10,7 +10,7 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Task;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
+import com.patho.main.model.patient.notification.ReportTransmitter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -65,12 +65,12 @@ public class PhysicianSelector implements Serializable {
 		loop: for (PhysicianSelector physicianSelector : resultList) {
 			// adds the role to the PhysicianSelector to display that the physician is
 			// already added
-			for (AssociatedContact associatedContact : task.getContacts()) {
-				if (associatedContact.getPerson().equals(physicianSelector.getPhysician().getPerson())) {
-					physicianSelector.addAssociatedRole(associatedContact.getRole());
+			for (ReportTransmitter reportTransmitter : task.getContacts()) {
+				if (reportTransmitter.getPerson().equals(physicianSelector.getPhysician().getPerson())) {
+					physicianSelector.addAssociatedRole(reportTransmitter.getRole());
 					// checking if physician can be removed (removing only possible if no
 					// notification was perfomred)
-					physicianSelector.setContactSelector(new AssociatedContactSelector(associatedContact));
+					physicianSelector.setContactSelector(new AssociatedContactSelector(reportTransmitter));
 					physicianSelector.setContactOfTask(true);
 					continue loop;
 				}

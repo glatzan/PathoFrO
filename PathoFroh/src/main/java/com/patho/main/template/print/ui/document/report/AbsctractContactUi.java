@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
+import com.patho.main.model.patient.notification.ReportTransmitter;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.model.patient.Task;
@@ -117,7 +117,7 @@ public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractCont
 	/**
 	 * Returns the first selected contact
 	 */
-	public AssociatedContact getFirstSelectedContact() {
+	public ReportTransmitter getFirstSelectedContact() {
 		Optional<ContactSelector> res = getSharedData().getContactList().stream().filter(p -> p.isSelected())
 				.findFirst();
 		if (res.isPresent()) {

@@ -2,7 +2,7 @@ package com.patho.main.action.dialog.notification;
 
 import java.util.HashMap;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
+import com.patho.main.model.patient.notification.ReportTransmitter;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.patient.notification.AssociatedContactNotification;
-import com.patho.main.model.patient.notification.AssociatedContactNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.ReportTransmitterNotification;
+import com.patho.main.model.patient.notification.ReportTransmitterNotification.NotificationTyp;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.TaskRepository;
@@ -44,7 +44,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 	@Setter(AccessLevel.NONE)
 	private TaskRepository taskRepository;
 
-	private AssociatedContact associatedContact;
+	private ReportTransmitter associatedContact;
 
 	private MenuModel model;
 
@@ -62,18 +62,18 @@ public class ContactNotificationDialog extends AbstractDialog {
 		}
 	};
 
-	public ContactNotificationDialog initAndPrepareBean(Task task, AssociatedContact associatedContact) {
-		if (initBean(task, associatedContact))
+	public ContactNotificationDialog initAndPrepareBean(Task task, ReportTransmitter reportTransmitter) {
+		if (initBean(task, reportTransmitter))
 			prepareDialog();
 
 		return this;
 	}
 
-	public boolean initBean(Task task, AssociatedContact associatedContact) {
+	public boolean initBean(Task task, ReportTransmitter reportTransmitter) {
 
 		super.initBean(task, Dialog.CONTACTS_NOTIFICATION);
 
-		setAssociatedContact(associatedContact);
+		setAssociatedContact(reportTransmitter);
 
 		update(false);
 
@@ -88,7 +88,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 	public void update(boolean reload) {
 		if (reload) {
 			setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), false, false, false, true, true).get());
-			for (AssociatedContact contact : task.getContacts()) {
+			for (ReportTransmitter contact : task.getContacts()) {
 				if (contact.equals(getAssociatedContact())) {
 					setAssociatedContact(contact);
 					break;
@@ -100,7 +100,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 	}
 
 	public void generatedMenuModel() {
-		AssociatedContactNotification.NotificationTyp[] typeArr = { NotificationTyp.EMAIL, NotificationTyp.FAX,
+		ReportTransmitterNotification.NotificationTyp[] typeArr = { NotificationTyp.EMAIL, NotificationTyp.FAX,
 				NotificationTyp.LETTER, NotificationTyp.PHONE };
 
 		model = new DefaultMenuModel();
@@ -109,10 +109,10 @@ public class ContactNotificationDialog extends AbstractDialog {
 			boolean disabled = false;
 
 			if (getAssociatedContact().getNotifications() != null)
-				for (AssociatedContactNotification associatedContactNotification : getAssociatedContact()
+				for (ReportTransmitterNotification reportTransmitterNotification : getAssociatedContact()
 						.getNotifications()) {
-					if (associatedContactNotification.getNotificationTyp().equals(typeArr[i])
-							&& associatedContactNotification.getActive() && !associatedContactNotification.getFailed()) {
+					if (reportTransmitterNotification.getNotificationTyp().equals(typeArr[i])
+							&& reportTransmitterNotification.getActive() && !reportTransmitterNotification.getFailed()) {
 						disabled = true;
 						break;
 					}
@@ -128,21 +128,21 @@ public class ContactNotificationDialog extends AbstractDialog {
 		}
 	}
 
-	public void removeNotification(AssociatedContactNotification associatedContactNotification) {
-		associatedContactService.removeNotification(associatedContact, associatedContactNotification)
-				.getAssociatedContact();
+	public void removeNotification(ReportTransmitterNotification reportTransmitterNotification) {
+		associatedContactService.removeNotification(associatedContact, reportTransmitterNotification)
+				.getReportTransmitter();
 		update(true);
 	}
 
-	public void addNotification(AssociatedContactNotification.NotificationTyp notification) {
+	public void addNotification(ReportTransmitterNotification.NotificationTyp notification) {
 		associatedContactService.addNotificationByTypeAndDisableOld(associatedContact, notification)
-				.getAssociatedContact();
+				.getReportTransmitter();
 		update(true);
 	}
 
-	public void notificationAsPerformed(AssociatedContactNotification associatedContactNotification) {
-		associatedContactService.performNotification(associatedContact, associatedContactNotification,
-				resourceBundle.get("log.contact.notification.performed.manual"), true).getAssociatedContact();
+	public void notificationAsPerformed(ReportTransmitterNotification reportTransmitterNotification) {
+		associatedContactService.performNotification(associatedContact, reportTransmitterNotification,
+				resourceBundle.get("log.contact.notification.performed.manual"), true).getReportTransmitter();
 		update(true);
 	}
 

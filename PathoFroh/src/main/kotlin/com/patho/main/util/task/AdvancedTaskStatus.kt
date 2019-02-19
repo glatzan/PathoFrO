@@ -4,7 +4,6 @@ import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
-import com.patho.main.model.patient.notification.AssociatedContact
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.notification.NotificationStatus
 
@@ -99,7 +98,7 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
         notificationPhaseCompleted = task.notificationCompleted
 
-        notificationsStatus = SpringContextBridge.services().associatedContactNotificationService.getNotificationTypeStatus(task)
+        notificationsStatus = SpringContextBridge.services().reportTransmitterService.getNotificationTypeStatus(task)
 
         return this
     }

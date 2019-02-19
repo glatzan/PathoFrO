@@ -3,30 +3,32 @@ package com.patho.main.model.patient.notification
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.interfaces.ID
 import org.hibernate.annotations.SelectBeforeUpdate
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
 import org.hibernate.envers.Audited
 import java.time.Instant
-import java.util.*
 import javax.persistence.*
 
 /**
  *  Class representing the status of a singe notification.
  */
 @Entity
-@SequenceGenerator(name = "associatedcontactnotification_sequencegenerator", sequenceName = "associatedcontactnotification_sequence")
 @Audited
 @SelectBeforeUpdate(true)
-open class AssociatedContactNotification : AbstractPersistable(), ID {
+@TypeDef(name = "ReportTransmitterNotificationDataJson", typeClass = ReportTransmitterNotificationDataJson::class)
+open class ReportTransmitterNotification : AbstractPersistable(), ID {
 
     @Id
-    @GeneratedValue(generator = "associatedcontactnotification_sequencegenerator")
+    @GeneratedValue(generator = "reporttransmitternotification_sequencegenerator")
+    @SequenceGenerator(name = "reporttransmitternotification_sequencegenerator", sequenceName = "reporttransmitternotification_sequence")
     @Column(unique = true, nullable = false)
     override var id: Long = 0
 
     /**
      * Parent Contact
      */
-    @ManyToOne(targetEntity = AssociatedContact::class, fetch = FetchType.LAZY)
-    open var contact: AssociatedContact? = null
+    @ManyToOne(targetEntity = ReportTransmitter::class, fetch = FetchType.LAZY)
+    open var contact: ReportTransmitter? = null
 
     /**
      * Notification type, e.g. mail
@@ -77,6 +79,13 @@ open class AssociatedContactNotification : AbstractPersistable(), ID {
      */
     @Column(columnDefinition = "VARCHAR")
     open var contactAddress: String? = null
+
+    /**
+     * Additional data as json
+     */
+    @Type(type = "ReportTransmitterNotificationDataJson")
+    @Column
+    open var additionalData: ReportTransmitterNotificationDataJson? = ReportTransmitterNotificationDataJson()
 
     /**
      * Type of the notification process

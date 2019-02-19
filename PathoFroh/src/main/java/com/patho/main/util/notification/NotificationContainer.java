@@ -1,7 +1,7 @@
 package com.patho.main.util.notification;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
-import com.patho.main.model.patient.notification.AssociatedContactNotification;
+import com.patho.main.model.patient.notification.ReportTransmitter;
+import com.patho.main.model.patient.notification.ReportTransmitterNotification;
 import com.patho.main.service.AssociatedContactService;
 import com.patho.main.util.printer.TemplatePDFContainer;
 import lombok.Getter;
@@ -25,12 +25,12 @@ public class NotificationContainer {
     /**
      * contact
      */
-    protected AssociatedContact contact;
+    protected ReportTransmitter contact;
 
     /**
      * Notification
      */
-    protected AssociatedContactNotification notification;
+    protected ReportTransmitterNotification notification;
 
     /**
      * The individual pdf is saved here
@@ -62,11 +62,11 @@ public class NotificationContainer {
      */
     protected boolean recreateBeforeUsage;
 
-    public NotificationContainer(AssociatedContact contact, AssociatedContactNotification notification) {
+    public NotificationContainer(ReportTransmitter contact, ReportTransmitterNotification notification) {
         this(contact, notification, false);
     }
 
-    public NotificationContainer(AssociatedContact contact, AssociatedContactNotification notification,
+    public NotificationContainer(ReportTransmitter contact, ReportTransmitterNotification notification,
                                  boolean recreateBeforeUsage) {
         update(contact, notification);
         this.recreateBeforeUsage = recreateBeforeUsage;
@@ -77,7 +77,7 @@ public class NotificationContainer {
         return getNotification().getId();
     }
 
-    public void update(AssociatedContact contact, AssociatedContactNotification notification) {
+    public void update(ReportTransmitter contact, ReportTransmitterNotification notification) {
         this.contact = contact;
         this.notification = notification;
         this.faildPreviously = notification.getFailed();

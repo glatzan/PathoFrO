@@ -471,7 +471,7 @@ alter table DiagnosisRevision_aud drop column creationDate;
 
 /* converting timestamps to date*/
 /* drop view taskoverview; */
-drop table taskoverview;
+/* drop table taskoverview; */
 
 /* dates of task*/
 alter table task add column tmp date;
@@ -592,7 +592,20 @@ alter table AssociatedContactNotification_aud add column dateOfAction timestamp;
 update AssociatedContactNotification_aud set dateOfAction = tmp;
 alter table AssociatedContactNotification_aud drop column tmp;
 
-							
+/* rename associatedcontact */
+ALTER TABLE associatedcontactnotification RENAME TO ReportTransmitternotification;
+ALTER TABLE associatedcontactnotification_aud RENAME TO ReportTransmitternotification_aud;
+
+ALTER TABLE associatedContact RENAME TO ReportTransmitter;
+ALTER TABLE associatedContact_aud RENAME TO ReportTransmitter_aud;
+
+ALTER SEQUENCE associatedcontact_sequence RENAME TO reporttransmitter_sequence;
+ALTER SEQUENCE associatedcontactnotification_sequence RENAME TO reporttransmitternotification_sequence;
+
+/* adding new  json field*/
+alter table ReportTransmitternotification add column additionalData jsonb;
+alter table ReportTransmitternotification_aud add column additionalData jsonb;
+
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien
 

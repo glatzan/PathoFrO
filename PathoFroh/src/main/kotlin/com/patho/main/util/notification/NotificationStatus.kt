@@ -1,23 +1,23 @@
 package com.patho.main.util.notification
 
-import com.patho.main.model.patient.notification.AssociatedContact
-import com.patho.main.model.patient.notification.AssociatedContactNotification
+import com.patho.main.model.patient.notification.ReportTransmitter
+import com.patho.main.model.patient.notification.ReportTransmitterNotification
 
 /**
  * Status of the AssociatedContat notifications
  */
-open class NotificationStatus(contact: AssociatedContact) {
+open class NotificationStatus(contact: ReportTransmitter) {
 
     /**
      * All notifications are completed
      */
     val performed = contact.isNotificationPerformed()
 
-    val emailNotification = NotificationBearer(contact, AssociatedContactNotification.NotificationTyp.EMAIL)
-    val faxNotification = NotificationBearer(contact, AssociatedContactNotification.NotificationTyp.FAX)
-    val phoneNotification = NotificationBearer(contact, AssociatedContactNotification.NotificationTyp.PHONE)
-    val letterNotification = NotificationBearer(contact, AssociatedContactNotification.NotificationTyp.LETTER)
-    val printNotification = NotificationBearer(contact, AssociatedContactNotification.NotificationTyp.PRINT)
+    val emailNotification = NotificationBearer(contact, ReportTransmitterNotification.NotificationTyp.EMAIL)
+    val faxNotification = NotificationBearer(contact, ReportTransmitterNotification.NotificationTyp.FAX)
+    val phoneNotification = NotificationBearer(contact, ReportTransmitterNotification.NotificationTyp.PHONE)
+    val letterNotification = NotificationBearer(contact, ReportTransmitterNotification.NotificationTyp.LETTER)
+    val printNotification = NotificationBearer(contact, ReportTransmitterNotification.NotificationTyp.PRINT)
 
     /**
      * Contact
@@ -41,18 +41,18 @@ open class NotificationStatus(contact: AssociatedContact) {
     /**
      * Bearer for a single notification type
      */
-    open class NotificationBearer(contact: AssociatedContact, type: AssociatedContactNotification.NotificationTyp) {
+    open class NotificationBearer(contact: ReportTransmitter, type: ReportTransmitterNotification.NotificationTyp) {
 
-        val type: AssociatedContactNotification.NotificationTyp = type
+        val type: ReportTransmitterNotification.NotificationTyp = type
 
-        val notifications: List<AssociatedContactNotification> = contact.findByNotificationTyp(type)
+        val notifications: List<ReportTransmitterNotification> = contact.findByNotificationTyp(type)
 
         val totalAttempts: Int = notifications.count { p -> p.performed }
         val successfulAttempts: Int = notifications.count { p -> p.performed && !p.failed }
         val failedAttempts: Int = notifications.count { p -> p.performed && p.failed }
 
         val active: Boolean = notifications.any { p -> p.active }
-        val activeNotification: AssociatedContactNotification? = notifications.firstOrNull { p -> p.active }
+        val activeNotification: ReportTransmitterNotification? = notifications.firstOrNull { p -> p.active }
 
         val empty = notifications.isEmpty()
     }

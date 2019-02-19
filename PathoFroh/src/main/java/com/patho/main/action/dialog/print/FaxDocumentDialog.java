@@ -3,7 +3,7 @@ package com.patho.main.action.dialog.print;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
+import com.patho.main.model.patient.notification.ReportTransmitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -44,7 +44,7 @@ public class FaxDocumentDialog extends AbstractDialog {
 
 	private PDFContainer pdf;
 
-	private AssociatedContact contact;
+	private ReportTransmitter contact;
 
 	private List<FaxNumberContainer> numbers;
 
@@ -52,13 +52,13 @@ public class FaxDocumentDialog extends AbstractDialog {
 
 	private boolean faxButtonDisabled;
 
-	public FaxDocumentDialog initAndPrepareBean(Task task, AssociatedContact contact, PDFContainer pdf) {
+	public FaxDocumentDialog initAndPrepareBean(Task task, ReportTransmitter contact, PDFContainer pdf) {
 		if (initBean(task, contact, pdf))
 			prepareDialog();
 		return this;
 	}
 
-	public boolean initBean(Task task, AssociatedContact contact, PDFContainer pdf) {
+	public boolean initBean(Task task, ReportTransmitter contact, PDFContainer pdf) {
 		this.contact = contact;
 		this.pdf = pdf;
 

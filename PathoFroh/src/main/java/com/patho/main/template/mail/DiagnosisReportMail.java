@@ -4,7 +4,7 @@ import java.io.StringWriter;
 
 import javax.persistence.Transient;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
+import com.patho.main.model.patient.notification.ReportTransmitter;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
@@ -27,9 +27,9 @@ public class DiagnosisReportMail extends MailTemplate {
 	private Task task;
 
 	@Transient
-	private AssociatedContact contact;
+	private ReportTransmitter contact;
 
-	public void prepareTemplate(Patient patient, Task task, AssociatedContact contact) {
+	public void prepareTemplate(Patient patient, Task task, ReportTransmitter contact) {
 		prepareTemplate();
 
 		this.patient = patient;

@@ -2,7 +2,7 @@ package com.patho.main.service.impl
 
 import com.patho.main.action.UserHandlerAction
 import com.patho.main.config.util.ApplicationContextProvider
-import com.patho.main.service.AssociatedContactNotificationService
+import com.patho.main.service.ReportTransmitterService
 import com.patho.main.service.SpringContextBridgedServices
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 @Component
 class SpringContextBridge : SpringContextBridgedServices {
     @Autowired
-    override lateinit var associatedContactNotificationService: AssociatedContactNotificationService
+    override lateinit var reportTransmitterService: ReportTransmitterService
 
     @Autowired
     override lateinit var userHandlerAction: UserHandlerAction

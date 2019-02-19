@@ -9,15 +9,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
+import com.patho.main.model.patient.notification.ReportTransmitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.model.patient.notification.AssociatedContactNotification;
-import com.patho.main.model.patient.notification.AssociatedContactNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.ReportTransmitterNotification;
+import com.patho.main.model.patient.notification.ReportTransmitterNotification.NotificationTyp;
 import com.patho.main.model.Organization;
 import com.patho.main.model.Person;
 import com.patho.main.model.Physician;
@@ -54,24 +54,24 @@ public class AssociatedContactService extends AbstractService {
 	 * them on the contact.
 	 * 
 	 * @param task
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 */
-	public ContactReturn updateNotificationsOnRoleChange(Task task, AssociatedContact associatedContact) {
+	public ContactReturn updateNotificationsOnRoleChange(Task task, ReportTransmitter reportTransmitter) {
 		logger.debug("Updating Notifications");
 
 		// do nothing if there are some notifications
-		if (associatedContact.getNotifications() != null && associatedContact.getNotifications().size() != 0) {
-			return new ContactReturn(associatedContact.getTask(), associatedContact);
+		if (reportTransmitter.getNotifications() != null && reportTransmitter.getNotifications().size() != 0) {
+			return new ContactReturn(reportTransmitter.getTask(), reportTransmitter);
 		}
 
-		List<AssociatedContactNotification.NotificationTyp> types = pathoConfig.getDefaultNotification()
-				.getDefaultNotificationForRole(associatedContact.getRole());
+		List<ReportTransmitterNotification.NotificationTyp> types = pathoConfig.getDefaultNotification()
+				.getDefaultNotificationForRole(reportTransmitter.getRole());
 
-		for (AssociatedContactNotification.NotificationTyp notificationTyp : types) {
-			associatedContact = addNotificationByType(associatedContact, notificationTyp).getAssociatedContact();
+		for (ReportTransmitterNotification.NotificationTyp notificationTyp : types) {
+			reportTransmitter = addNotificationByType(reportTransmitter, notificationTyp).getReportTransmitter();
 		}
 
-		return updateNotificationWithDiagnosisPresets(associatedContact.getTask(), associatedContact);
+		return updateNotificationWithDiagnosisPresets(reportTransmitter.getTask(), reportTransmitter);
 	}
 
 	/**
@@ -79,16 +79,16 @@ public class AssociatedContactService extends AbstractService {
 	 * contact is a affected. If so the contact will be marked.
 	 * 
 	 * @param task
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 */
-	public ContactReturn updateNotificationWithDiagnosisPresets(Task task, AssociatedContact associatedContact) {
+	public ContactReturn updateNotificationWithDiagnosisPresets(Task task, ReportTransmitter reportTransmitter) {
 		Set<ContactRole> sendLetterTo = new HashSet<ContactRole>();
 
 		// checking if a already a report should be send physically, if so do
 		// nothing and return
-		if (associatedContact.getNotifications() != null && associatedContact.getNotifications().stream()
-				.anyMatch(p -> p.getNotificationTyp().equals(AssociatedContactNotification.NotificationTyp.LETTER)))
-			return new ContactReturn(task, associatedContact);
+		if (reportTransmitter.getNotifications() != null && reportTransmitter.getNotifications().stream()
+				.anyMatch(p -> p.getNotificationTyp().equals(ReportTransmitterNotification.NotificationTyp.LETTER)))
+			return new ContactReturn(task, reportTransmitter);
 
 		// collecting roles for which a report should be send by letter
 		for (DiagnosisRevision diagnosisRevision : task.getDiagnosisRevisions()) {
@@ -100,16 +100,16 @@ public class AssociatedContactService extends AbstractService {
 
 		// checking if contact is within the send letter to roles
 		for (ContactRole contactRole : sendLetterTo) {
-			if (associatedContact.getRole().equals(contactRole)) {
+			if (reportTransmitter.getRole().equals(contactRole)) {
 				// adding notification and return;
 				return new ContactReturn(
-						addNotificationByType(associatedContact, AssociatedContactNotification.NotificationTyp.LETTER)
+						addNotificationByType(reportTransmitter, ReportTransmitterNotification.NotificationTyp.LETTER)
 								.getTask(),
-						associatedContact);
+						reportTransmitter);
 			}
 		}
 
-		return new ContactReturn(task, associatedContact);
+		return new ContactReturn(task, reportTransmitter);
 	}
 
 	/**
@@ -119,8 +119,8 @@ public class AssociatedContactService extends AbstractService {
 	 * @param task
 	 */
 	public Task updateNotificationsForPhysicalDiagnosisReport(Task task) {
-		for (AssociatedContact associatedContact : task.getContacts()) {
-			task = updateNotificationWithDiagnosisPresets(task, associatedContact).getTask();
+		for (ReportTransmitter reportTransmitter : task.getContacts()) {
+			task = updateNotificationWithDiagnosisPresets(task, reportTransmitter).getTask();
 		}
 		return task;
 	}
@@ -129,39 +129,39 @@ public class AssociatedContactService extends AbstractService {
 	 * removes a contact
 	 * 
 	 * @param task
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 */
-	public void removeAssociatedContact(Task task, AssociatedContact associatedContact) {
-		task.getContacts().remove(associatedContact);
+	public void removeAssociatedContact(Task task, ReportTransmitter reportTransmitter) {
+		task.getContacts().remove(reportTransmitter);
 		// only associatedContact has to be removed, is the mapping enity
-		associatedContactRepository.delete(associatedContact,
-				resourceBundle.get("log.contact.remove", task, associatedContact),
-				associatedContact.getTask().getPatient());
+		associatedContactRepository.delete(reportTransmitter,
+				resourceBundle.get("log.contact.remove", task, reportTransmitter),
+				reportTransmitter.getTask().getPatient());
 	}
 
 	/**
 	 * removes a notification
 	 * 
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 * @param notification
 	 */
-	public ContactReturn removeNotification(AssociatedContact associatedContact,
-			AssociatedContactNotification notification) {
+	public ContactReturn removeNotification(ReportTransmitter reportTransmitter,
+                                            ReportTransmitterNotification notification) {
 
-		if (associatedContact.getNotifications() != null) {
-			associatedContact.getNotifications().remove(notification);
+		if (reportTransmitter.getNotifications() != null) {
+			reportTransmitter.getNotifications().remove(notification);
 
-			associatedContact = associatedContactRepository.save(associatedContact,
-					resourceBundle.get("log.contact.notification.removed", associatedContact.getTask(),
-							associatedContact.toString(), notification.getNotificationTyp().toString()),
-					associatedContact.getTask().getPatient());
+			reportTransmitter = associatedContactRepository.save(reportTransmitter,
+					resourceBundle.get("log.contact.notification.removed", reportTransmitter.getTask(),
+							reportTransmitter.toString(), notification.getNotificationTyp().toString()),
+					reportTransmitter.getTask().getPatient());
 
 			// only remove from array, and deleting the entity only (no saving
 			// of contact necessary because mapped within notification)
 			associatedContactNotificationRepository.delete(notification);
 		}
 
-		return new ContactReturn(associatedContact.getTask(), associatedContact);
+		return new ContactReturn(reportTransmitter.getTask(), reportTransmitter);
 	}
 
 	/**
@@ -169,183 +169,183 @@ public class AssociatedContactService extends AbstractService {
 	 * added because of a specific diagnosis
 	 * 
 	 * @param task
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 * @return
 	 */
 	public ContactReturn addAssociatedContactAndAddDefaultNotifications(Task task,
-			AssociatedContact associatedContact) {
+																		ReportTransmitter reportTransmitter) {
 
-		for (AssociatedContact contact : task.getContacts()) {
-			if (contact.getPerson().equals(associatedContact.getPerson()))
+		for (ReportTransmitter contact : task.getContacts()) {
+			if (contact.getPerson().equals(reportTransmitter.getPerson()))
 				throw new IllegalArgumentException("Already in list");
 		}
 
-		task.getContacts().add(associatedContact);
-		associatedContact.setTask(task);
+		task.getContacts().add(reportTransmitter);
+		reportTransmitter.setTask(task);
 
-		associatedContact = associatedContactRepository.save(associatedContact,
-				resourceBundle.get("log.contact.add", task, associatedContact),
-				associatedContact.getTask().getPatient());
+		reportTransmitter = associatedContactRepository.save(reportTransmitter,
+				resourceBundle.get("log.contact.add", task, reportTransmitter),
+				reportTransmitter.getTask().getPatient());
 
-		return updateNotificationsOnRoleChange(associatedContact.getTask(), associatedContact);
+		return updateNotificationsOnRoleChange(reportTransmitter.getTask(), reportTransmitter);
 	}
 
 	/**
 	 * Adds an associated contact
 	 */
 	public ContactReturn addAssociatedContact(Task task, Person person, ContactRole role) {
-		return addAssociatedContact(task, new AssociatedContact(task, person, role));
+		return addAssociatedContact(task, new ReportTransmitter(task, person, role));
 	}
 
 	/**
 	 * Adds an associated contact
 	 */
-	public ContactReturn addAssociatedContact(Task task, AssociatedContact associatedContact) {
+	public ContactReturn addAssociatedContact(Task task, ReportTransmitter reportTransmitter) {
 
-		for (AssociatedContact contact : task.getContacts()) {
-			if (contact.getPerson().equals(associatedContact.getPerson()))
+		for (ReportTransmitter contact : task.getContacts()) {
+			if (contact.getPerson().equals(reportTransmitter.getPerson()))
 				throw new IllegalArgumentException("Already in list");
 		}
 
-		task.getContacts().add(associatedContact);
-		associatedContact.setTask(task);
+		task.getContacts().add(reportTransmitter);
+		reportTransmitter.setTask(task);
 
-		associatedContact = associatedContactRepository.save(associatedContact,
-				resourceBundle.get("log.contact.add", task, associatedContact),
-				associatedContact.getTask().getPatient());
+		reportTransmitter = associatedContactRepository.save(reportTransmitter,
+				resourceBundle.get("log.contact.add", task, reportTransmitter),
+				reportTransmitter.getTask().getPatient());
 
-		return new ContactReturn(associatedContact.getTask(), associatedContact);
+		return new ContactReturn(reportTransmitter.getTask(), reportTransmitter);
 	}
 
 	/**
 	 * Adds a new notification with the given type
 	 */
-	public NotificationReturn addNotificationByType(AssociatedContact associatedContact,
-			AssociatedContactNotification.NotificationTyp notificationTyp) {
-		return addNotificationByType(associatedContact, notificationTyp, true, false, false, null, null, false);
+	public NotificationReturn addNotificationByType(ReportTransmitter reportTransmitter,
+                                                    ReportTransmitterNotification.NotificationTyp notificationTyp) {
+		return addNotificationByType(reportTransmitter, notificationTyp, true, false, false, null, null, false);
 
 	}
 
-	public NotificationReturn addNotificationByType(AssociatedContact associatedContact,
-			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
-			boolean failed, Instant dateOfAction, String customAddress, boolean renewed) {
-		return addNotificationByType(associatedContact, notificationTyp, active, performed, failed, dateOfAction,
+	public NotificationReturn addNotificationByType(ReportTransmitter reportTransmitter,
+                                                    ReportTransmitterNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
+                                                    boolean failed, Instant dateOfAction, String customAddress, boolean renewed) {
+		return addNotificationByType(reportTransmitter, notificationTyp, active, performed, failed, dateOfAction,
 				customAddress, renewed, true);
 	}
 
 	/**
 	 * Adds a new notification with the given type
 	 */
-	public NotificationReturn addNotificationByType(AssociatedContact associatedContact,
-			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
-			boolean failed, Instant dateOfAction, String customAddress, boolean renewed, boolean save) {
+	public NotificationReturn addNotificationByType(ReportTransmitter reportTransmitter,
+                                                    ReportTransmitterNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
+                                                    boolean failed, Instant dateOfAction, String customAddress, boolean renewed, boolean save) {
 
 		logger.debug("Adding notification of type " + notificationTyp);
 
-		AssociatedContactNotification newNotification = new AssociatedContactNotification();
+		ReportTransmitterNotification newNotification = new ReportTransmitterNotification();
 		newNotification.setActive(active);
 		newNotification.setPerformed(performed);
 		newNotification.setDateOfAction(dateOfAction);
 		newNotification.setFailed(failed);
 		newNotification.setNotificationTyp(notificationTyp);
-		newNotification.setContact(associatedContact);
+		newNotification.setContact(reportTransmitter);
 		newNotification.setContactAddress(customAddress);
 		newNotification.setRenewed(renewed);
 
-		if (associatedContact.getNotifications() == null)
-			associatedContact.setNotifications(new ArrayList<AssociatedContactNotification>());
+		if (reportTransmitter.getNotifications() == null)
+			reportTransmitter.setNotifications(new ArrayList<ReportTransmitterNotification>());
 
-		associatedContact.getNotifications().add(newNotification);
+		reportTransmitter.getNotifications().add(newNotification);
 
 		if (save)
-			associatedContact = associatedContactRepository
-					.save(associatedContact,
-							resourceBundle.get("log.contact.notification.added", associatedContact.getTask(),
-									associatedContact, notificationTyp.toString()),
-							associatedContact.getTask().getPatient());
+			reportTransmitter = associatedContactRepository
+					.save(reportTransmitter,
+							resourceBundle.get("log.contact.notification.added", reportTransmitter.getTask(),
+									reportTransmitter, notificationTyp.toString()),
+							reportTransmitter.getTask().getPatient());
 
 		// getting last element, this will be the newNotification because savestructure
 		// is a list
-		newNotification = HistoUtil.getLastElement(associatedContact.getNotifications());
+		newNotification = HistoUtil.getLastElement(reportTransmitter.getNotifications());
 
-		return new NotificationReturn(associatedContact.getTask(), associatedContact, newNotification);
+		return new NotificationReturn(reportTransmitter.getTask(), reportTransmitter, newNotification);
 	}
 
 	/**
 	 * Sets all notifications of the given type to inactive, and creats a new
 	 * notification of the given type
 	 * 
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 * @param notificationTyp
 	 * @return
 	 */
-	public NotificationReturn addNotificationByTypeAndDisableOld(AssociatedContact associatedContact,
-			AssociatedContactNotification.NotificationTyp notificationTyp) {
-		associatedContact = markNotificationsAsActive(associatedContact, notificationTyp, false).getAssociatedContact();
-		return addNotificationByType(associatedContact, notificationTyp);
+	public NotificationReturn addNotificationByTypeAndDisableOld(ReportTransmitter reportTransmitter,
+                                                                 ReportTransmitterNotification.NotificationTyp notificationTyp) {
+		reportTransmitter = markNotificationsAsActive(reportTransmitter, notificationTyp, false).getReportTransmitter();
+		return addNotificationByType(reportTransmitter, notificationTyp);
 	}
 
-	public NotificationReturn renewNotification(AssociatedContact associatedContact,
-			AssociatedContactNotification notification) {
-		return renewNotification(associatedContact, notification, true);
+	public NotificationReturn renewNotification(ReportTransmitter reportTransmitter,
+                                                ReportTransmitterNotification notification) {
+		return renewNotification(reportTransmitter, notification, true);
 	}
 
 	/**
 	 * Sets the given notification as inactive an adds a new notification of the
 	 * same type (active)
 	 * 
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 * @param notification
 	 */
-	public NotificationReturn renewNotification(AssociatedContact associatedContact,
-			AssociatedContactNotification notification, boolean saven) {
+	public NotificationReturn renewNotification(ReportTransmitter reportTransmitter,
+                                                ReportTransmitterNotification notification, boolean saven) {
 
 		notification.setActive(false);
 		if (saven)
-			associatedContact = associatedContactRepository.save(associatedContact,
-					resourceBundle.get("log.contact.notification.inactive", associatedContact.getTask(),
-							associatedContact, notification.getNotificationTyp().toString(), "inactive"),
-					associatedContact.getTask().getPatient());
+			reportTransmitter = associatedContactRepository.save(reportTransmitter,
+					resourceBundle.get("log.contact.notification.inactive", reportTransmitter.getTask(),
+							reportTransmitter, notification.getNotificationTyp().toString(), "inactive"),
+					reportTransmitter.getTask().getPatient());
 
-		return addNotificationByType(associatedContact, notification.getNotificationTyp(), true, false, false, null,
+		return addNotificationByType(reportTransmitter, notification.getNotificationTyp(), true, false, false, null,
 				notification.getContactAddress(), true, saven);
 	}
 
 	/**
 	 * Sets all notifications with the given type to the given active status
 	 * 
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 * @param notificationTyp
 	 * @param active
 	 */
-	public ContactReturn markNotificationsAsActive(AssociatedContact associatedContact,
-			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active) {
+	public ContactReturn markNotificationsAsActive(ReportTransmitter reportTransmitter,
+                                                   ReportTransmitterNotification.NotificationTyp notificationTyp, boolean active) {
 
-		for (AssociatedContactNotification notification : associatedContact.getNotifications()) {
+		for (ReportTransmitterNotification notification : reportTransmitter.getNotifications()) {
 			if (notification.getNotificationTyp().equals(notificationTyp) && notification.getActive()) {
 				notification.setActive(active);
-				associatedContact = associatedContactRepository.save(associatedContact,
-						resourceBundle.get("log.contact.notification.inactive", associatedContact.getTask(),
-								associatedContact, notification.getNotificationTyp().toString(),
+				reportTransmitter = associatedContactRepository.save(reportTransmitter,
+						resourceBundle.get("log.contact.notification.inactive", reportTransmitter.getTask(),
+								reportTransmitter, notification.getNotificationTyp().toString(),
 								active ? "active" : "inactive"),
-						associatedContact.getTask().getPatient());
+						reportTransmitter.getTask().getPatient());
 			}
 		}
 
-		return new ContactReturn(associatedContact.getTask(), associatedContact);
+		return new ContactReturn(reportTransmitter.getTask(), reportTransmitter);
 	}
 
 	/**
 	 * Updates a notification when the notification was performed
 	 * 
-	 * @param associatedContact
+	 * @param reportTransmitter
 	 * @param notification
 	 * @param message
 	 * @param success
 	 * @return
 	 */
-	public NotificationReturn performNotification(AssociatedContact associatedContact,
-			AssociatedContactNotification notification, String message, boolean success) {
+	public NotificationReturn performNotification(ReportTransmitter reportTransmitter,
+                                                  ReportTransmitterNotification notification, String message, boolean success) {
 		notification.setActive(false);
 
 		notification.setPerformed(true);
@@ -359,7 +359,7 @@ public class AssociatedContactService extends AbstractService {
 		notification = associatedContactNotificationRepository.save(notification,
 				resourceBundle.get("log.contact.notification.performed", notification.getContact().getTask(),
 						notification.getContact(), notification.getNotificationTyp().toString(), success, message),
-				associatedContact.getTask().getPatient());
+				reportTransmitter.getTask().getPatient());
 
 		return new NotificationReturn(null, notification.getContact(), notification);
 	}
@@ -416,33 +416,33 @@ public class AssociatedContactService extends AbstractService {
 	@Setter
 	public static class ContactReturn {
 		protected Task task;
-		protected AssociatedContact associatedContact;
+		protected ReportTransmitter reportTransmitter;
 
-		public ContactReturn(Task task, AssociatedContact associatedContact) {
+		public ContactReturn(Task task, ReportTransmitter reportTransmitter) {
 			this.task = task;
-			this.associatedContact = associatedContact;
+			this.reportTransmitter = reportTransmitter;
 		}
 	}
 
 	@Getter
 	@Setter
 	public static class NotificationReturn extends ContactReturn {
-		private AssociatedContactNotification associatedContactNotification;
+		private ReportTransmitterNotification reportTransmitterNotification;
 
-		public NotificationReturn(Task task, AssociatedContact associatedContact,
-				AssociatedContactNotification associatedContactNotification) {
+		public NotificationReturn(Task task, ReportTransmitter associatedContact,
+                                  ReportTransmitterNotification reportTransmitterNotification) {
 			super(task, associatedContact);
-			this.associatedContactNotification = associatedContactNotification;
+			this.reportTransmitterNotification = reportTransmitterNotification;
 		}
 	}
 
-	public static String generateAddress(AssociatedContact associatedContact) {
-		return generateAddress(associatedContact, null);
+	public static String generateAddress(ReportTransmitter reportTransmitter) {
+		return generateAddress(reportTransmitter, null);
 	}
 
-	public static String generateAddress(AssociatedContact associatedContact, Organization organization) {
+	public static String generateAddress(ReportTransmitter reportTransmitter, Organization organization) {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(associatedContact.getPerson().getFullName() + "\r\n");
+		buffer.append(reportTransmitter.getPerson().getFullName() + "\r\n");
 
 		Optional<String> addition1;
 		Optional<String> addition2;
@@ -461,14 +461,14 @@ public class AssociatedContactService extends AbstractService {
 		} else {
 			// no organization is selected or present, so add the data of the
 			// user
-			street = Optional.ofNullable(associatedContact.getPerson().getContact().getStreet())
+			street = Optional.ofNullable(reportTransmitter.getPerson().getContact().getStreet())
 					.filter(s -> !s.isEmpty());
-			postcode = Optional.ofNullable(associatedContact.getPerson().getContact().getPostcode())
+			postcode = Optional.ofNullable(reportTransmitter.getPerson().getContact().getPostcode())
 					.filter(s -> !s.isEmpty());
-			town = Optional.ofNullable(associatedContact.getPerson().getContact().getTown()).filter(s -> !s.isEmpty());
-			addition1 = Optional.ofNullable(associatedContact.getPerson().getContact().getAddressadditon())
+			town = Optional.ofNullable(reportTransmitter.getPerson().getContact().getTown()).filter(s -> !s.isEmpty());
+			addition1 = Optional.ofNullable(reportTransmitter.getPerson().getContact().getAddressadditon())
 					.filter(s -> !s.isEmpty());
-			addition2 = Optional.ofNullable(associatedContact.getPerson().getContact().getAddressadditon2())
+			addition2 = Optional.ofNullable(reportTransmitter.getPerson().getContact().getAddressadditon2())
 					.filter(s -> !s.isEmpty());
 		}
 
@@ -496,18 +496,18 @@ public class AssociatedContactService extends AbstractService {
 
 		List<NotificationContainer> containers = new ArrayList<NotificationContainer>();
 
-		for (AssociatedContact associatedContact : task.getContacts()) {
+		for (ReportTransmitter reportTransmitter : task.getContacts()) {
 			// getting all notifications of this type
-			List<AssociatedContactNotification> notification = associatedContact.getNotifications().stream()
+			List<ReportTransmitterNotification> notification = reportTransmitter.getNotifications().stream()
 					.filter(p -> p.getNotificationTyp() == type).collect(Collectors.toList());
 
 			if (notification.size() > 0) {
 
-				Optional<AssociatedContactNotification> res = notification.stream().filter(p -> p.getActive())
+				Optional<ReportTransmitterNotification> res = notification.stream().filter(p -> p.getActive())
 						.findFirst();
 
 				if (res.isPresent()) {
-					containers.add(new NotificationContainer(associatedContact, res.get()));
+					containers.add(new NotificationContainer(reportTransmitter, res.get()));
 				} else if (ignoreActiveState) {
 
 					if (notification.size() > 1)
@@ -517,7 +517,7 @@ public class AssociatedContactService extends AbstractService {
 								.collect(Collectors.toList());
 
 					// container has to be recreated bevore using it
-					containers.add(new NotificationContainer(associatedContact,
+					containers.add(new NotificationContainer(reportTransmitter,
 							notification.get(notification.size() - 1), true));
 				}
 			}

@@ -15,11 +15,11 @@ import javax.persistence.*
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-open class AssociatedContact : AbstractPersistable, ID {
+open class ReportTransmitter : AbstractPersistable, ID {
 
     @Id
-    @GeneratedValue(generator = "associatedcontact_sequencegenerator")
-    @SequenceGenerator(name = "associatedcontact_sequencegenerator", sequenceName = "associatedcontact_sequence")
+    @GeneratedValue(generator = "reporttransmitter_sequencegenerator")
+    @SequenceGenerator(name = "reporttransmitter_sequencegenerator", sequenceName = "reporttransmitter_sequence")
     @Column(unique = true, nullable = false)
     override var id: Long = 0
 
@@ -35,7 +35,7 @@ open class AssociatedContact : AbstractPersistable, ID {
     @OrderColumn(name = "position")
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "contact", cascade = [CascadeType.ALL])
-    open var notifications = mutableListOf<AssociatedContactNotification>()
+    open var notifications = mutableListOf<ReportTransmitterNotification>()
 
     constructor()
 
@@ -49,7 +49,7 @@ open class AssociatedContact : AbstractPersistable, ID {
      * Returns a list of the requested notification type
      */
     @Transient
-    open fun findByNotificationTyp(type: AssociatedContactNotification.NotificationTyp): List<AssociatedContactNotification> {
+    open fun findByNotificationTyp(type: ReportTransmitterNotification.NotificationTyp): List<ReportTransmitterNotification> {
         return notifications.filter { p -> p.notificationTyp == type }
     }
 
@@ -65,7 +65,7 @@ open class AssociatedContact : AbstractPersistable, ID {
      * Returns true if the notification type is performed
      */
     @Transient
-    open fun isNotificationPerformed(type: AssociatedContactNotification.NotificationTyp): Boolean {
+    open fun isNotificationPerformed(type: ReportTransmitterNotification.NotificationTyp): Boolean {
         return findByNotificationTyp(type).all { p -> p.performed }
     }
 
@@ -81,7 +81,7 @@ open class AssociatedContact : AbstractPersistable, ID {
      * Returns true if the notification type is active
      */
     @Transient
-    open fun isNotificationActive(type: AssociatedContactNotification.NotificationTyp): Boolean {
+    open fun isNotificationActive(type: ReportTransmitterNotification.NotificationTyp): Boolean {
         return findByNotificationTyp(type).any { p -> p.active }
     }
 
@@ -94,7 +94,7 @@ open class AssociatedContact : AbstractPersistable, ID {
         if (this === other) return true
         if (javaClass != ProxyUtils.getUserClass(other)) return false
 
-        other as AssociatedContact
+        other as ReportTransmitter
 
         if (id == other.id) return true
 

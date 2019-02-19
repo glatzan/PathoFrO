@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
+import com.patho.main.model.patient.notification.ReportTransmitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,7 @@ public class ContactSelector extends AbstractSelector implements ID {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private AssociatedContact contact;
+	private ReportTransmitter contact;
 
 	private int copies;
 
@@ -39,27 +39,27 @@ public class ContactSelector extends AbstractSelector implements ID {
 	private boolean manuallyAltered;
 
 	public ContactSelector(Task task, Person person, ContactRole role) {
-		this(new AssociatedContact(task, person, role), false, false);
+		this(new ReportTransmitter(task, person, role), false, false);
 	}
 
 	public ContactSelector(Task task, Person person, ContactRole role, boolean selected, boolean emptyAddress) {
-		this(new AssociatedContact(task, person, role), selected, emptyAddress);
+		this(new ReportTransmitter(task, person, role), selected, emptyAddress);
 	}
 
-	public ContactSelector(AssociatedContact associatedContact) {
-		this(associatedContact, false, false);
+	public ContactSelector(ReportTransmitter reportTransmitter) {
+		this(reportTransmitter, false, false);
 	}
 
-	public ContactSelector(AssociatedContact associatedContact, boolean selected, boolean emptyAddress) {
-		this.contact = associatedContact;
+	public ContactSelector(ReportTransmitter reportTransmitter, boolean selected, boolean emptyAddress) {
+		this.contact = reportTransmitter;
 		this.copies = 1;
 		this.selected = selected;
 		this.organizazionsChoosers = new ArrayList<OrganizationChooser>();
 
-		if (associatedContact.getPerson().getOrganizsations() != null) {
-			for (Organization organization : associatedContact.getPerson().getOrganizsations()) {
+		if (reportTransmitter.getPerson().getOrganizsations() != null) {
+			for (Organization organization : reportTransmitter.getPerson().getOrganizsations()) {
 				this.organizazionsChoosers.add(new OrganizationChooser(this, organization,
-						organization.equals(associatedContact.getPerson().getDefaultAddress())));
+						organization.equals(reportTransmitter.getPerson().getDefaultAddress())));
 			}
 		}
 

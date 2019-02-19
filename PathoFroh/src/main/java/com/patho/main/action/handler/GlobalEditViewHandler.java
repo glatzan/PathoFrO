@@ -8,7 +8,7 @@ import java.util.Optional;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlPanelGroup;
 
-import com.patho.main.model.patient.notification.AssociatedContact;
+import com.patho.main.model.patient.notification.ReportTransmitter;
 import org.primefaces.model.menu.MenuModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -782,7 +782,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 			try {
 
 				associatedContactService.addAssociatedContactAndAddDefaultNotifications(getSelectedTask(),
-						new AssociatedContact(getSelectedTask(), person, role));
+						new ReportTransmitter(getSelectedTask(), person, role));
 				// increment counter
 				associatedContactService.incrementContactPriorityCounter(person);
 			} catch (IllegalArgumentException e) {

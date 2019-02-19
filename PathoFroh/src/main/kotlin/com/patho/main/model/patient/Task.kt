@@ -13,7 +13,7 @@ import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.patient.miscellaneous.Council
-import com.patho.main.model.patient.notification.AssociatedContact
+import com.patho.main.model.patient.notification.ReportTransmitter
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
 import com.patho.main.util.task.TaskStatus
@@ -189,7 +189,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("id ASC")
     @NotAudited
-    open var contacts = mutableSetOf<AssociatedContact>()
+    open var contacts = mutableSetOf<ReportTransmitter>()
 
     /**
      * List with all samples
@@ -271,7 +271,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     }
 
     @Transient
-    fun getPrimaryContactAsString(vararg contactRole: String): AssociatedContact? {
+    fun getPrimaryContactAsString(vararg contactRole: String): ReportTransmitter? {
         return getPrimaryContact(*contactRole.map { p -> ContactRole.valueOf(p) }.toTypedArray())
     }
 
@@ -282,7 +282,7 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
      * @return
      */
     @Transient
-    fun getPrimaryContact(vararg contactRole: ContactRole): AssociatedContact? {
+    fun getPrimaryContact(vararg contactRole: ContactRole): ReportTransmitter? {
         for (associatedContact in contacts) {
             for (i in contactRole.indices) {
                 if (associatedContact.role == contactRole[i])
@@ -337,8 +337,8 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
     }
 
     @Transient
-    fun containsContact(associatedContact: AssociatedContact): Boolean {
-        return if (contacts != null) contacts.stream().anyMatch({ p -> p == associatedContact }) else false
+    fun containsContact(reportTransmitter: ReportTransmitter): Boolean {
+        return if (contacts != null) contacts.stream().anyMatch({ p -> p == reportTransmitter }) else false
     }
 
     @Transient
