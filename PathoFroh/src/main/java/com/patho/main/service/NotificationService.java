@@ -296,7 +296,7 @@ public class NotificationService extends AbstractService {
 				throw new IllegalArgumentException("dialog.notification.sendProcess.mail.error.failed");
 
 			notificationContainer.getNotification().setPerformed(true);
-			notificationContainer.getNotification().setDateOfAction(new Date());
+			notificationContainer.getNotification().setDateOfAction(Instant.now());
 			notificationContainer.getNotification()
 					.setCommentary(resourceBundle.get("dialog.notification.sendProcess.mail.success"));
 			// if success = performed, nothing to do = inactive, if failed = active
@@ -308,7 +308,7 @@ public class NotificationService extends AbstractService {
 
 		} catch (IllegalArgumentException e) {
 			notificationContainer.getNotification().setPerformed(true);
-			notificationContainer.getNotification().setDateOfAction(new Date());
+			notificationContainer.getNotification().setDateOfAction(Instant.now());
 			notificationContainer.getNotification()
 					.setCommentary(resourceBundle.get(e.getMessage(), notificationContainer.getContactAddress()));
 			// if success = performed, nothing to do = inactive, if failed = active
@@ -355,7 +355,7 @@ public class NotificationService extends AbstractService {
 			}
 
 			notificationContainer.getNotification().setPerformed(true);
-			notificationContainer.getNotification().setDateOfAction(new Date());
+			notificationContainer.getNotification().setDateOfAction(Instant.now());
 			notificationContainer.getNotification()
 					.setCommentary(resourceBundle.get("dialog.notification.sendProcess.fax.success"));
 			// if success = performed, nothing to do = inactive, if failed = active
@@ -365,7 +365,7 @@ public class NotificationService extends AbstractService {
 
 		} catch (IllegalArgumentException e) {
 			notificationContainer.getNotification().setPerformed(true);
-			notificationContainer.getNotification().setDateOfAction(new Date());
+			notificationContainer.getNotification().setDateOfAction(Instant.now());
 			notificationContainer.getNotification()
 					.setCommentary(resourceBundle.get(e.getMessage(), notificationContainer.getContactAddress()));
 			// if success = performed, nothing to do = inactive, if failed = active
@@ -402,7 +402,7 @@ public class NotificationService extends AbstractService {
 			userHandlerAction.getSelectedPrinter().print(new PrintOrder(notificationContainer.getPdf(), 1));
 
 			notificationContainer.getNotification().setPerformed(true);
-			notificationContainer.getNotification().setDateOfAction(new Date());
+			notificationContainer.getNotification().setDateOfAction(Instant.now());
 			notificationContainer.getNotification()
 					.setCommentary(resourceBundle.get("dialog.notification.sendProcess.pdf.print"));
 			// if success = performed, nothing to do = inactive, if failed = active
@@ -412,7 +412,7 @@ public class NotificationService extends AbstractService {
 
 		} catch (IllegalArgumentException e) {
 			notificationContainer.getNotification().setPerformed(true);
-			notificationContainer.getNotification().setDateOfAction(new Date());
+			notificationContainer.getNotification().setDateOfAction(Instant.now());
 			notificationContainer.getNotification()
 					.setCommentary(resourceBundle.get(e.getMessage(), notificationContainer.getContactAddress()));
 			// if success = performed, nothing to do = inactive, if failed = active
@@ -438,7 +438,7 @@ public class NotificationService extends AbstractService {
 			boolean recreateAfterNotification) {
 
 		notificationContainer.getNotification().setPerformed(true);
-		notificationContainer.getNotification().setDateOfAction(new Date());
+		notificationContainer.getNotification().setDateOfAction(Instant.now());
 		notificationContainer.getNotification()
 				.setCommentary(resourceBundle.get("dialog.notification.sendProcess.pdf.print"));
 		// if success = performed, nothing to do = inactive, if failed = active

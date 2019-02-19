@@ -5,6 +5,8 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.AssociatedContact
+import com.patho.main.service.impl.SpringContextBridge
+import com.patho.main.util.notification.NotificationStatus
 
 open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
@@ -97,7 +99,7 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
         notificationPhaseCompleted = task.notificationCompleted
 
-        notificationsStatus = task.contacts.map { p -> NotificationStatus(p) }
+        notificationsStatus = SpringContextBridge.services().associatedContactNotificationService.getNotificationTypeStatus(task)
 
         return this
     }
@@ -124,10 +126,5 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
             val performed: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_COMPLETED;
             val ignore: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NO_NOTFICATION;
         }
-    }
-
-
-    public class NotificationStatus(associatedContact: AssociatedContact) {
-        var completed: Boolean = associatedContact.isNotificationPerformed()
     }
 }

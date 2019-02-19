@@ -70,6 +70,14 @@ open class AssociatedContact : AbstractPersistable, ID {
     }
 
     /**
+     * Returns true if any notification is active
+     */
+    @Transient
+    open fun isNotificationActive(): Boolean {
+        return notifications.any { p -> p.active }
+    }
+
+    /**
      * Returns true if the notification type is active
      */
     @Transient

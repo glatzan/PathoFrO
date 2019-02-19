@@ -576,6 +576,22 @@ Select
 
 /* old unused filed*/
 alter table sample drop ReStainingPhase;
+
+/* change notification perform time */
+alter table AssociatedContactNotification add column tmp timestamp;
+update AssociatedContactNotification set tmp = case when dateOfAction is not null then (cast(dateOfAction as text) || ' 00:00:00')::timestamp else null end;
+alter table AssociatedContactNotification drop column dateOfAction;
+alter table AssociatedContactNotification add column dateOfAction timestamp;
+update AssociatedContactNotification set dateOfAction = tmp;
+alter table AssociatedContactNotification drop column tmp;
+
+alter table AssociatedContactNotification_aud add column tmp timestamp;
+update AssociatedContactNotification_aud set tmp = case when dateOfAction is not null then (cast(dateOfAction as text) || ' 00:00:00')::timestamp else null end;
+alter table AssociatedContactNotification_aud drop column dateOfAction;
+alter table AssociatedContactNotification_aud add column dateOfAction timestamp;
+update AssociatedContactNotification_aud set dateOfAction = tmp;
+alter table AssociatedContactNotification_aud drop column tmp;
+
 							
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien

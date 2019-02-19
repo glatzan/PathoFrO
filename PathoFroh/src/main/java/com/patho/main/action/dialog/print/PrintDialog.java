@@ -1,6 +1,7 @@
 package com.patho.main.action.dialog.print;
 
 import java.io.FileNotFoundException;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -242,7 +243,7 @@ public class PrintDialog extends AbstractDialog {
 			// only save if person is associated
 			if (container.getContact() != null && container.getContact().getRole() != ContactRole.NONE) {
 				associatedContactService.addNotificationByType(container.getContact(), NotificationTyp.PRINT, false,
-						true, false, new Date(System.currentTimeMillis()), container.getAddress(), false);
+						true, false, Instant.now(), container.getAddress(), false);
 			}
 
 			printedDocuments += container.getCopies();

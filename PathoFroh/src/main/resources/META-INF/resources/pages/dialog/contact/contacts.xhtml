@@ -1,166 +1,167 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.contacts.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.contacts.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2">
-				<h:outputLabel value="#{msg['dialog.contacts.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2">
+                <h:outputLabel value="#{msg['dialog.contacts.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
+        <div class="dialogContent">
 
-			<h:panelGrid columns="1" styleClass="defaultHistoTable">
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
 
-				<p:dataTable var="contactHolder" styleClass="defaultHistoDataTable"
-					id="contactDatas" scrollable="true" scrollHeight="480"
-					value="#{dialog.contactDialog.contacts}">
+                <p:dataTable var="contactHolder" styleClass="defaultHistoDataTable"
+                             id="contactDatas" scrollable="true" scrollHeight="480"
+                             value="#{dialog.contactDialog.contacts}">
 
-					<!-- Name -->
-					<p:column headerText="#{msg['dialog.contacts.table.name']}"
-						style="width: auto !important"
-						filterBy="#{contactHolder.contact.person.lastName}"
-						filterMatchMode="contains">
-						<h:outputText
-							value="#{contactHolder.contact.person.getFullName()}" />
-					</p:column>
+                    <!-- Name -->
+                    <p:column headerText="#{msg['dialog.contacts.table.name']}"
+                              style="width: auto !important"
+                              filterBy="#{contactHolder.contact.person.lastName}"
+                              filterMatchMode="contains">
+                        <h:outputText
+                                value="#{contactHolder.contact.person.getFullName()}"/>
+                    </p:column>
 
-					<p:column headerText="#{msg['dialog.contacts.table.function']}"
-						style="width:15% !important">
-						<h:outputText
-							value="#{msg['enum.contactRole.'.concat(contactHolder.contact.role)]}" />
-					</p:column>
+                    <p:column headerText="#{msg['dialog.contacts.table.function']}"
+                              style="width:15% !important">
+                        <h:outputText
+                                value="#{msg['enum.contactRole.'.concat(contactHolder.contact.role)]}"/>
+                    </p:column>
 
-					<p:column headerText="#{msg['dialog.contacts.table.notification']}">
+                    <p:column headerText="#{msg['dialog.contacts.table.notification']}">
 
-						<p:dataList var="notifications"
-							rendered="#{contactHolder.contact.notifications.size() gt 0}"
-							styleClass="histoDataList"
-							value="#{contactHolder.contact.notifications}">
-							<p:column>
-								<ui:fragment
-									rendered="#{notifications.notificationTyp eq 'EMAIL'}">
-									<i class="fa fa-envelope icon-grey" />
-								</ui:fragment>
+                        <p:dataList var="notifications"
+                                    rendered="#{contactHolder.contact.notifications.size() gt 0}"
+                                    styleClass="histoDataList"
+                                    value="#{contactHolder.contact.notifications}">
+                            <p:column>
+                                <ui:fragment
+                                        rendered="#{notifications.notificationTyp eq 'EMAIL'}">
+                                    <i class="fa fa-envelope icon-grey"/>
+                                </ui:fragment>
 
-								<ui:fragment
-									rendered="#{notifications.notificationTyp eq 'FAX'}">
-									<i class="fa fa-fax icon-grey" />
-								</ui:fragment>
+                                <ui:fragment
+                                        rendered="#{notifications.notificationTyp eq 'FAX'}">
+                                    <i class="fa fa-fax icon-grey"/>
+                                </ui:fragment>
 
-								<ui:fragment
-									rendered="#{notifications.notificationTyp eq 'LETTER'}">
-									<i class="fa fa-pencil-square-o icon-grey" />
-								</ui:fragment>
+                                <ui:fragment
+                                        rendered="#{notifications.notificationTyp eq 'LETTER'}">
+                                    <i class="fa fa-pencil-square-o icon-grey"/>
+                                </ui:fragment>
 
-								<ui:fragment
-									rendered="#{notifications.notificationTyp eq 'PHONE'}">
-									<i class="fa fa-phone icon-grey" />
-								</ui:fragment>
+                                <ui:fragment
+                                        rendered="#{notifications.notificationTyp eq 'PHONE'}">
+                                    <i class="fa fa-phone icon-grey"/>
+                                </ui:fragment>
 
-								<ui:fragment
-									rendered="#{notifications.notificationTyp eq 'PRINT'}">
-									<i class="fa fa-print icon-grey" />
-								</ui:fragment>
+                                <ui:fragment
+                                        rendered="#{notifications.notificationTyp eq 'PRINT'}">
+                                    <i class="fa fa-print icon-grey"/>
+                                </ui:fragment>
 
-								<span style="marign-left: 10px;"> <h:outputText
-										value="#{msg['enum.notificationType.'.concat(notifications.notificationTyp)]}"></h:outputText>
+                                <span style="marign-left: 10px;"> <h:outputText
+                                        value="#{msg['enum.notificationType.'.concat(notifications.notificationTyp)]}"></h:outputText>
 								</span>
 
-								<ui:fragment
-									rendered="#{notifications.performed and !notifications.failed}">
-									<i class="fa fa-check icon-green"
-										title="#{msg['dialog.contacts.performed']}" />
-								</ui:fragment>
+                                <ui:fragment
+                                        rendered="#{notifications.performed and !notifications.failed}">
+                                    <i class="fa fa-check icon-green"
+                                       title="#{msg['dialog.contacts.performed']}"/>
+                                </ui:fragment>
 
-								<ui:fragment
-									rendered="#{notifications.performed and notifications.failed}">
-									<i class="fa fa-fw fa-times-circle icon-red"
-										title="#{msg['dialog.contacts.failed']}: #{notifications.commentary}" />
-								</ui:fragment>
+                                <ui:fragment
+                                        rendered="#{notifications.performed and notifications.failed}">
+                                    <i class="fa fa-fw fa-times-circle icon-red"
+                                       title="#{msg['dialog.contacts.failed']}: #{notifications.commentary}"/>
+                                </ui:fragment>
 
-								<ui:fragment rendered="#{notifications.performed}">
-									<h:outputText value=" (" />
-									<h:outputText value="#{notifications.dateOfAction}">
-										<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
-									</h:outputText>
-									<h:outputText value=")" />
-								</ui:fragment>
-							</p:column>
-						</p:dataList>
-					</p:column>
+                                <ui:fragment rendered="#{notifications.performed}">
+                                    <h:outputText value=" ("/>
+                                    <h:outputText value="#{notifications.dateOfAction}">
+                                        <f:converter converterId="instantDateTimeConverter"/>
+                                        <f:param value="dd.MM.yyyy HH:mm:ss" name="pattern"/>
+                                    </h:outputText>
+                                    <h:outputText value=")"/>
+                                </ui:fragment>
+                            </p:column>
+                        </p:dataList>
+                    </p:column>
 
-					<!-- options -->
-					<p:column headerText="" style="width:30px !important">
-						<!-- edit -->
-						<p:commandLink title="#{msg['dialog.contacts.change']}"
-							actionListener="#{dialog.contactNotificationDialog.initAndPrepareBean(dialog.contactDialog.task, contactHolder.contact)}">
-							<i class="fa fa-wrench" />
-							<p:ajax event="dialogReturn" update="@form"
-								listener="#{dialog.contactDialog.onDefaultDialogReturn}" />
-						</p:commandLink>
+                    <!-- options -->
+                    <p:column headerText="" style="width:30px !important">
+                        <!-- edit -->
+                        <p:commandLink title="#{msg['dialog.contacts.change']}"
+                                       actionListener="#{dialog.contactNotificationDialog.initAndPrepareBean(dialog.contactDialog.task, contactHolder.contact)}">
+                            <i class="fa fa-wrench"/>
+                            <p:ajax event="dialogReturn" update="@form"
+                                    listener="#{dialog.contactDialog.onDefaultDialogReturn}"/>
+                        </p:commandLink>
 
-						<!-- remove, only if no notification was performed -->
-						<p:commandLink
-							title="#{contactHolder.deleteAble ? msg['dialog.contacts.remove']: msg['dialog.contacts.remove.notPossible']}"
-							disabled="#{!contactHolder.deleteAble}" update="@form">
-							<f:actionListener
-								binding="#{dialog.contactDialog.removeContact(dialog.contactDialog.task, contactHolder.contact)}" />
-							<f:actionListener
-								binding="#{dialog.contactDialog.updateContactHolders()}" />
-							<i class="fa fa-times" />
-						</p:commandLink>
-					</p:column>
+                        <!-- remove, only if no notification was performed -->
+                        <p:commandLink
+                                title="#{contactHolder.deleteAble ? msg['dialog.contacts.remove']: msg['dialog.contacts.remove.notPossible']}"
+                                disabled="#{!contactHolder.deleteAble}" update="@form">
+                            <f:actionListener
+                                    binding="#{dialog.contactDialog.removeContact(dialog.contactDialog.task, contactHolder.contact)}"/>
+                            <f:actionListener
+                                    binding="#{dialog.contactDialog.updateContactHolders()}"/>
+                            <i class="fa fa-times"/>
+                        </p:commandLink>
+                    </p:column>
 
-				</p:dataTable>
+                </p:dataTable>
 
-			</h:panelGrid>
-		</div>
+            </h:panelGrid>
+        </div>
 
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- add new contact -->
-					<p:commandButton value="#{msg['dialog.contact.add']}"
-						icon="fa fa-fw fa-user-plus"
-						actionListener="#{dialog.contactDialog.openAddContactDialog()}">
-						<p:ajax event="dialogReturn" update="@form"
-							listener="#{dialog.contactDialog.onDefaultDialogReturn}" />
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- add new contact -->
+                    <p:commandButton value="#{msg['dialog.contact.add']}"
+                                     icon="fa fa-fw fa-user-plus"
+                                     actionListener="#{dialog.contactDialog.openAddContactDialog()}">
+                        <p:ajax event="dialogReturn" update="@form"
+                                listener="#{dialog.contactDialog.onDefaultDialogReturn}"/>
+                    </p:commandButton>
 
-					<!-- close -->
-					<p:commandButton value="#{msg['general.close']}"
-						icon="fa fa-fw fa-times-circle" id="closeBtn"
-						actionListener="#{dialog.contactDialog.hideDialog()}"></p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
+                    <!-- close -->
+                    <p:commandButton value="#{msg['general.close']}"
+                                     icon="fa fa-fw fa-times-circle" id="closeBtn"
+                                     actionListener="#{dialog.contactDialog.hideDialog()}"></p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
 
-	</h:form>
+    </h:form>
 </h:body>
 </html>

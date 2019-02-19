@@ -231,13 +231,42 @@
                         <h:panelGroup id="notificationDate">
                             <i class="fa fa-fw #{archiveTaskDialog.taskStatus.notificationPhaseCompleted? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
                             <p:tooltip for="notificationDate">
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.notification.phase.completed']}"
+                                <h:outputLabel value="#{msg['dialog.archiveTask.status.notification.phase.true']}"
                                                rendered="#{archiveTaskDialog.taskStatus.notificationPhaseCompleted}"/>
                                 <h:outputLabel
-                                        value="#{msg['dialog.archiveTask.status.notification.phase.notCompleted']}"
+                                        value="#{msg['dialog.archiveTask.status.notification.phase.false']}"
                                         rendered="#{!archiveTaskDialog.taskStatus.notificationPhaseCompleted}"/>
                             </p:tooltip>
                         </h:panelGroup>
+                    </h:panelGrid>
+
+                    <!-- notifications -->
+                    <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
+                        <p:accordionPanel activeIndex="#{archiveTaskDialog.taskStatus.diagnosisAccordionIndex}"
+                                          styleClass="contentAccordionPannel" style="width:450px">
+                            <p:tab title="#{msg['dialog.archiveTask.status.notification.status']}">
+
+                                <p:dataTable styleClass="defaultHistoDataTable"
+                                             value="#{archiveTaskDialog.taskStatus.notificationsStatus}"
+                                             var="notification">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column>
+                                                <h:outputText value="as#{notification.contact.person.getFullName()}"/>
+                                            </p:column>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:subTable var="stats" value="#{notification.notifications}">
+                                        <p:column headerText="Typ">
+                                            <h:outputText value="#{stats.type}"/>
+                                        </p:column>
+                                    </p:subTable>
+
+                                </p:dataTable>
+                            </p:tab>
+                        </p:accordionPanel>
                     </h:panelGrid>
 
 

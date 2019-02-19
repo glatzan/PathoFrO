@@ -1,5 +1,6 @@
 package com.patho.main.service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -191,9 +192,6 @@ public class AssociatedContactService extends AbstractService {
 
 	/**
 	 * Adds an associated contact
-	 * 
-	 * @param task
-	 * @return
 	 */
 	public ContactReturn addAssociatedContact(Task task, Person person, ContactRole role) {
 		return addAssociatedContact(task, new AssociatedContact(task, person, role));
@@ -201,10 +199,6 @@ public class AssociatedContactService extends AbstractService {
 
 	/**
 	 * Adds an associated contact
-	 * 
-	 * @param task
-	 * @param associatedContact
-	 * @return
 	 */
 	public ContactReturn addAssociatedContact(Task task, AssociatedContact associatedContact) {
 
@@ -225,10 +219,6 @@ public class AssociatedContactService extends AbstractService {
 
 	/**
 	 * Adds a new notification with the given type
-	 * 
-	 * @param associatedContact
-	 * @param notificationTyp
-	 * @return
 	 */
 	public NotificationReturn addNotificationByType(AssociatedContact associatedContact,
 			AssociatedContactNotification.NotificationTyp notificationTyp) {
@@ -238,25 +228,17 @@ public class AssociatedContactService extends AbstractService {
 
 	public NotificationReturn addNotificationByType(AssociatedContact associatedContact,
 			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
-			boolean failed, Date dateOfAction, String customAddress, boolean renewed) {
+			boolean failed, Instant dateOfAction, String customAddress, boolean renewed) {
 		return addNotificationByType(associatedContact, notificationTyp, active, performed, failed, dateOfAction,
 				customAddress, renewed, true);
 	}
 
 	/**
 	 * Adds a new notification with the given type
-	 * 
-	 * @param associatedContact
-	 * @param notificationTyp
-	 * @param active
-	 * @param performed
-	 * @param failed
-	 * @param dateOfAction
-	 * @return
 	 */
 	public NotificationReturn addNotificationByType(AssociatedContact associatedContact,
 			AssociatedContactNotification.NotificationTyp notificationTyp, boolean active, boolean performed,
-			boolean failed, Date dateOfAction, String customAddress, boolean renewed, boolean save) {
+			boolean failed, Instant dateOfAction, String customAddress, boolean renewed, boolean save) {
 
 		logger.debug("Adding notification of type " + notificationTyp);
 
@@ -367,7 +349,7 @@ public class AssociatedContactService extends AbstractService {
 		notification.setActive(false);
 
 		notification.setPerformed(true);
-		notification.setDateOfAction(new Date(System.currentTimeMillis()));
+		notification.setDateOfAction(Instant.now());
 		notification.setCommentary(message);
 		// if success = performed, nothing to do = inactive, if failed = active
 		notification.setActive(!success);

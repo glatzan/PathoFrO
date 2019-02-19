@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service()
-public open class TaskService @Autowired constructor(
+open class TaskService @Autowired constructor(
         private val diagnosisRevisionRepository: DiagnosisRevisionRepository,
         private val taskRepository: TaskRepository,
         private val serviceSettings: ServiceSettings) : AbstractService() {
