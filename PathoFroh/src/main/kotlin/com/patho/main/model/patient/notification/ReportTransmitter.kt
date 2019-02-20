@@ -37,6 +37,8 @@ open class ReportTransmitter : AbstractPersistable, ID {
     @OneToMany(mappedBy = "contact", cascade = [CascadeType.ALL])
     open var notifications = mutableListOf<ReportTransmitterNotification>()
 
+    open var history : ReportHistoryJson = ReportHistoryJson()
+
     constructor()
 
     constructor(task: Task, person: Person, contactRole: ContactRole = ContactRole.NONE) {

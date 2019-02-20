@@ -5,7 +5,7 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.util.notification.NotificationStatus
+import com.patho.main.util.status.NotificationStatus
 
 open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 

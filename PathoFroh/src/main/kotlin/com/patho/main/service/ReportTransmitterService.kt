@@ -1,25 +1,34 @@
 package com.patho.main.service
 
-import com.patho.main.model.patient.Task
+import com.patho.main.model.patient.DiagnosisRevision
+import com.patho.main.model.patient.notification.ReportHistoryJson
 import com.patho.main.model.patient.notification.ReportTransmitter
-import com.patho.main.util.notification.NotificationStatus
+import com.patho.main.model.patient.notification.ReportTransmitterNotification
 import org.springframework.stereotype.Service
 
 @Service()
 open class ReportTransmitterService {
 
-
     /**
-     * Returns the status of all contacts
+     * Returns all notification records for a diagnosis
      */
-    open fun getNotificationTypeStatus(task: Task): List<NotificationStatus> {
-        return task.contacts.map { p -> getNotificationTypeStatus(p) }
+    open fun getReportHistoryForDiagnosis(reportTransmitter: ReportTransmitter, diagnosis: DiagnosisRevision): ReportHistoryJson.HistoryRecord {
+        return reportTransmitter.history.records.filter { p -> p.diagnosisID == diagnosis.id }.firstOrNull()
+                ?: ReportHistoryJson.HistoryRecord(diagnosis)
     }
 
     /**
-     * Returns the status of all notifications of one contact.
+     * Returns report data for a specific type and diagnosis
      */
-    open fun getNotificationTypeStatus(contact: ReportTransmitter): NotificationStatus {
-        return NotificationStatus(contact)
+    open fun getReportDataForDiagnosisAndType(reportTransmitter: ReportTransmitter, diagnosis: DiagnosisRevision, type: ReportTransmitterNotification.NotificationTyp): List<ReportHistoryJson.HistoryRecord.ReportData> {
+        return getReportDataForType(getReportHistoryForDiagnosis(reportTransmitter, diagnosis), type)
     }
+
+    /**
+     * Returns the reportdata of a specific type
+     */
+    open fun getReportDataForType(historyRecord: ReportHistoryJson.HistoryRecord, type: ReportTransmitterNotification.NotificationTyp): List<ReportHistoryJson.HistoryRecord.ReportData> {
+        return historyRecord.data.filter { p -> p.type == type }
+    }
+
 }

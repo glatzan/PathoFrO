@@ -81,16 +81,9 @@ open class ReportTransmitterNotification : AbstractPersistable(), ID {
     open var contactAddress: String? = null
 
     /**
-     * Additional data as json
-     */
-    @Type(type = "ReportTransmitterNotificationDataJson")
-    @Column
-    open var additionalData: ReportTransmitterNotificationDataJson? = ReportTransmitterNotificationDataJson()
-
-    /**
      * Type of the notification process
      */
     enum class NotificationTyp {
-        EMAIL, FAX, PHONE, LETTER, PRINT
+        EMAIL, FAX, PHONE, LETTER, PRINT, NONE
     }
 }
