@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.patho.main.model.patient.notification.ReportTransmitter;
+import com.patho.main.model.patient.notification.ReportIntent;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
-import com.patho.main.model.patient.notification.ReportTransmitterNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.ReportIntentNotification.NotificationTyp;
 import com.patho.main.model.Contact;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Person;
@@ -181,7 +181,7 @@ public class NotificationDialog extends AbstractTabDialog {
 		return true;
 	}
 
-	public void openSelectPDFDialog(Task task, ReportTransmitter contact) {
+	public void openSelectPDFDialog(Task task, ReportIntent contact) {
 
 		List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
 				DocumentType.DIAGNOSIS_REPORT_EXTERN);

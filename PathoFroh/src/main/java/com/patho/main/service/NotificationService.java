@@ -187,7 +187,7 @@ public class NotificationService extends AbstractService {
 				if (mail.isRecreateBeforeUsage()) {
 					NotificationReturn returnResult = associatedContactService.renewNotification(mail.getContact(),
 							mail.getNotification());
-					mail.update(returnResult.getReportTransmitter(), returnResult.getReportTransmitterNotification());
+					mail.update(returnResult.getReportIntent(), returnResult.getReportIntentNotification());
 				}
 
 				mail.setPdf(performer.getPDFForContainer(mail, performer.getMailTemplate(),

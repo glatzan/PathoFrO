@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 import com.patho.main.common.ContactRole;
-import com.patho.main.model.patient.notification.ReportTransmitterNotification;
+import com.patho.main.model.patient.notification.ReportIntentNotification;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.util.helper.StreamUtils;
 import com.patho.main.util.version.Version;
@@ -141,7 +141,7 @@ public class PathoConfig {
 
 		private List<DefaultNotificationEntity> defaultNotifications;
 
-		public List<ReportTransmitterNotification.NotificationTyp> getDefaultNotificationForRole(ContactRole role) {
+		public List<ReportIntentNotification.NotificationTyp> getDefaultNotificationForRole(ContactRole role) {
 			if (defaultNotifications != null) {
 				try {
 					return defaultNotifications.stream().filter(p -> p.getRole().equals(role))
@@ -151,7 +151,7 @@ public class PathoConfig {
 				}
 			}
 
-			return new ArrayList<ReportTransmitterNotification.NotificationTyp>();
+			return new ArrayList<ReportIntentNotification.NotificationTyp>();
 		}
 	}
 
@@ -159,7 +159,7 @@ public class PathoConfig {
 	@Setter
 	public static class DefaultNotificationEntity {
 		private ContactRole role;
-		private List<ReportTransmitterNotification.NotificationTyp> notificationTyps;
+		private List<ReportIntentNotification.NotificationTyp> notificationTyps;
 	}
 
 	@Getter

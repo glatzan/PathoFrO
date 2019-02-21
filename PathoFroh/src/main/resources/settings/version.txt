@@ -593,18 +593,21 @@ update AssociatedContactNotification_aud set dateOfAction = tmp;
 alter table AssociatedContactNotification_aud drop column tmp;
 
 /* rename associatedcontact */
-ALTER TABLE associatedcontactnotification RENAME TO ReportTransmitternotification;
-ALTER TABLE associatedcontactnotification_aud RENAME TO ReportTransmitternotification_aud;
+ALTER TABLE associatedcontactnotification RENAME TO ReportIntentNotification;
+ALTER TABLE associatedcontactnotification_aud RENAME TO ReportIntentNotification_aud;
 
-ALTER TABLE associatedContact RENAME TO ReportTransmitter;
-ALTER TABLE associatedContact_aud RENAME TO ReportTransmitter_aud;
+ALTER TABLE associatedContact RENAME TO ReportIntent;
+ALTER TABLE associatedContact_aud RENAME TO ReportIntent_aud;
 
-ALTER SEQUENCE associatedcontact_sequence RENAME TO reporttransmitter_sequence;
-ALTER SEQUENCE associatedcontactnotification_sequence RENAME TO reporttransmitternotification_sequence;
+ALTER SEQUENCE associatedcontact_sequence RENAME TO reportintent_sequence;
+ALTER SEQUENCE associatedcontactnotification_sequence RENAME TO reportintentnotification_sequence;
 
 /* adding new  json field*/
-alter table ReportTransmitternotification add column additionalData jsonb;
-alter table ReportTransmitternotification_aud add column additionalData jsonb;
+alter table ReportTransmitterNotification add column history jsonb;
+alter table ReportTransmitternotification_aud add column history jsonb;
+
+alter table ReportTransmitterNotification add column history jsonb;
+alter table ReportTransmitternotification_aud add column history jsonb;
 
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien

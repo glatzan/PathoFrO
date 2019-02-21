@@ -17,7 +17,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import com.patho.main.model.patient.*;
-import com.patho.main.model.patient.notification.ReportTransmitter;
+import com.patho.main.model.patient.notification.ReportIntent;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,8 +130,8 @@ public class TaskRepositoryImpl extends AbstractRepositoryCustom implements Task
 				JoinType.LEFT);
 		Join<Signature, Physician> signatureTwoPhysicianQuery = signatureTwoQuery.join("physician", JoinType.LEFT);
 
-		Join<ReportTransmitter, Task> contactQuery = root.join("contacts", JoinType.LEFT);
-		Join<Person, ReportTransmitter> personContactQuery = contactQuery.join("person", JoinType.LEFT);
+		Join<ReportIntent, Task> contactQuery = root.join("contacts", JoinType.LEFT);
+		Join<Person, ReportIntent> personContactQuery = contactQuery.join("person", JoinType.LEFT);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 

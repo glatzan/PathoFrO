@@ -6,7 +6,7 @@ import com.patho.main.model.*;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteList_;
 import com.patho.main.model.patient.*;
-import com.patho.main.model.patient.notification.ReportTransmitter;
+import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.model.util.audit.Audit_;
 import com.patho.main.repository.service.PatientRepositoryCustom;
 import com.patho.main.util.helper.HistoUtil;
@@ -195,8 +195,8 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
                 JoinType.LEFT);
         Join<Signature, Physician> signatureTwoPhysicianQuery = signatureTwoQuery.join("physician", JoinType.LEFT);
 
-        Join<ReportTransmitter, Task> contactQuery = taskQuery.join("contacts", JoinType.LEFT);
-        Join<Person, ReportTransmitter> personContactQuery = contactQuery.join("person", JoinType.LEFT);
+        Join<ReportIntent, Task> contactQuery = taskQuery.join("contacts", JoinType.LEFT);
+        Join<Person, ReportIntent> personContactQuery = contactQuery.join("person", JoinType.LEFT);
 
         List<Predicate> predicates = new ArrayList<Predicate>();
         // searching for material

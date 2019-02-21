@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.patho.main.model.Contact;
 import com.patho.main.model.Person;
 
-import com.patho.main.model.patient.notification.ReportTransmitter;
+import com.patho.main.model.patient.notification.ReportIntent;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -84,11 +84,11 @@ public class ClinicContact {
 		return list;
 	}
 	
-	public ReportTransmitter getContact() {
-		ReportTransmitter reportTransmitter = new ReportTransmitter();
+	public ReportIntent getContact() {
+		ReportIntent reportIntent = new ReportIntent();
 		
 		Person person = new Person(new Contact());
-		reportTransmitter.setPerson(person);
+		reportIntent.setPerson(person);
 		
 		String[] nameArr = getName().split("^|^^^^");
 		

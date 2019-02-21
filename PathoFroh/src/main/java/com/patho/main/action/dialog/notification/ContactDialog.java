@@ -2,7 +2,7 @@ package com.patho.main.action.dialog.notification;
 
 import java.util.List;
 
-import com.patho.main.model.patient.notification.ReportTransmitter;
+import com.patho.main.model.patient.notification.ReportIntent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -111,8 +111,8 @@ public class ContactDialog extends AbstractDialog {
 				ContactRole.values(), ContactRole.OTHER_PHYSICIAN).setManuallySelectRole(true);
 	}
 
-	public void removeContact(Task task, ReportTransmitter reportTransmitter) {
-		associatedContactService.removeAssociatedContact(task, reportTransmitter);
+	public void removeContact(Task task, ReportIntent reportIntent) {
+		associatedContactService.removeAssociatedContact(task, reportIntent);
 	}
 
 	/**
@@ -123,10 +123,10 @@ public class ContactDialog extends AbstractDialog {
 	@Transient
 	public void addPhysicianWithRole(Physician physician, ContactRole role) {
 		try {
-			ReportTransmitter reportTransmitter = new ReportTransmitter(getTask(), physician.getPerson(), role);
-			associatedContactService.addAssociatedContactAndAddDefaultNotifications(task, reportTransmitter);
+			ReportIntent reportIntent = new ReportIntent(getTask(), physician.getPerson(), role);
+			associatedContactService.addAssociatedContactAndAddDefaultNotifications(task, reportIntent);
 			// increment counter
-			associatedContactService.incrementContactPriorityCounter(reportTransmitter.getPerson());
+			associatedContactService.incrementContactPriorityCounter(reportIntent.getPerson());
 		} catch (IllegalArgumentException e) {
 			logger.debug("Not adding, double contact");
 			MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");

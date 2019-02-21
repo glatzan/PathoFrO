@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import com.patho.main.model.patient.Task;
 
-import com.patho.main.model.patient.notification.ReportTransmitter;
+import com.patho.main.model.patient.notification.ReportIntent;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +13,10 @@ import lombok.Setter;
 @Setter
 public class AssociatedContactSelector extends AbstractSelector {
 
-	private ReportTransmitter contact;
+	private ReportIntent contact;
 	private boolean deleteAble;
 
-	protected AssociatedContactSelector(ReportTransmitter contact) {
+	protected AssociatedContactSelector(ReportIntent contact) {
 		this.contact = contact;
 		// deletion only possible if no notification was performed
 		setDeleteAble(

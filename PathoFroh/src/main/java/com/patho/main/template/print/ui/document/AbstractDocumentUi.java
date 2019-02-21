@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import com.patho.main.model.patient.notification.ReportTransmitter;
+import com.patho.main.model.patient.notification.ReportIntent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +103,7 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 	 * 
 	 * @return
 	 */
-	public ReportTransmitter getFirstSelectedContact() {
+	public ReportIntent getFirstSelectedContact() {
 		return null;
 	}
 
@@ -168,7 +168,7 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 	@Setter
 	public class TemplateConfiguration<I extends PrintDocument> {
 		private I documentTemplate;
-		private ReportTransmitter contact;
+		private ReportIntent contact;
 		private String address;
 		private int copies;
 
@@ -176,7 +176,7 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 			this(documentTemplate, null, "", 1);
 		}
 
-		public TemplateConfiguration(I documentTemplate, ReportTransmitter contact, String address, int copies) {
+		public TemplateConfiguration(I documentTemplate, ReportIntent contact, String address, int copies) {
 			this.documentTemplate = documentTemplate;
 			this.contact = contact;
 			this.address = address;
@@ -200,7 +200,7 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 			this.initialized = true;
 		}
 
-		public ReportTransmitter getSelectedContact() {
+		public ReportIntent getSelectedContact() {
 			return null;
 		}
 	}

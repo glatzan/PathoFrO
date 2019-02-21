@@ -3,19 +3,19 @@ package com.patho.main.util.status
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportHistoryJson
-import com.patho.main.model.patient.notification.ReportTransmitter
-import com.patho.main.model.patient.notification.ReportTransmitterNotification
+import com.patho.main.model.patient.notification.ReportIntent
+import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.service.impl.SpringContextBridge
 
 /**
  * Helper class for displaying all data
  */
-open class ReportStatus(task: Task, reportTransmitter: ReportTransmitter) {
+open class ReportStatus(task: Task, reportIntent: ReportIntent) {
 
     /**
      * Reporttransmitter
      */
-    val reportTransmitter: ReportTransmitter = reportTransmitter
+    val reportIntent: ReportIntent = reportIntent
 
     /**
      * List for all diagnoses
@@ -29,14 +29,14 @@ open class ReportStatus(task: Task, reportTransmitter: ReportTransmitter) {
 
         val diagnosis = diagnosis
 
-        val historyRecord: ReportHistoryJson.HistoryRecord = SpringContextBridge.services().reportTransmitterService.getReportHistoryForDiagnosis(reportTransmitter, diagnosis)
+        val historyRecord: ReportHistoryJson.HistoryRecord = SpringContextBridge.services().reportTransmitterService.getReportHistoryForDiagnosis(reportIntent, diagnosis)
                 ?: ReportHistoryJson.HistoryRecord(diagnosis)
 
-        val emailNotification = ReportBearer(reportTransmitter, ReportTransmitterNotification.NotificationTyp.EMAIL)
-        val faxNotification = ReportBearer(reportTransmitter, ReportTransmitterNotification.NotificationTyp.FAX)
-        val phoneNotification = ReportBearer(reportTransmitter, ReportTransmitterNotification.NotificationTyp.PHONE)
-        val letterNotification = ReportBearer(reportTransmitter, ReportTransmitterNotification.NotificationTyp.LETTER)
-        val printNotification = ReportBearer(reportTransmitter, ReportTransmitterNotification.NotificationTyp.PRINT)
+        val emailNotification = ReportBearer(reportIntent, ReportIntentNotification.NotificationTyp.EMAIL)
+        val faxNotification = ReportBearer(reportIntent, ReportIntentNotification.NotificationTyp.FAX)
+        val phoneNotification = ReportBearer(reportIntent, ReportIntentNotification.NotificationTyp.PHONE)
+        val letterNotification = ReportBearer(reportIntent, ReportIntentNotification.NotificationTyp.LETTER)
+        val printNotification = ReportBearer(reportIntent, ReportIntentNotification.NotificationTyp.PRINT)
 
         /**
          * Returns all notifications as a list
@@ -55,9 +55,9 @@ open class ReportStatus(task: Task, reportTransmitter: ReportTransmitter) {
         /**
          * Bearer for a single notification type
          */
-        open inner class ReportBearer(contact: ReportTransmitter, type: ReportTransmitterNotification.NotificationTyp) {
+        open inner class ReportBearer(contact: ReportIntent, type: ReportIntentNotification.NotificationTyp) {
 
-            val type: ReportTransmitterNotification.NotificationTyp = type
+            val type: ReportIntentNotification.NotificationTyp = type
 
             val notifications = SpringContextBridge.services().reportTransmitterService.getReportDataForType(historyRecord, type)
 
