@@ -17,6 +17,8 @@ open class ReportHistoryRecord : JsonType<ReportHistoryRecord> {
 
     open var diagnosisID: Long = 0
 
+    open var diagnosisPresent = true
+
     open var data: MutableList<ReportData> = mutableListOf<ReportData>()
 
     /**
@@ -25,7 +27,6 @@ open class ReportHistoryRecord : JsonType<ReportHistoryRecord> {
     open class ReportData {
         open var failed: Boolean = false
         open var actionDate: Instant = Instant.now()
-        open var type: ReportIntentNotification.NotificationTyp = ReportIntentNotification.NotificationTyp.NONE
         open var contactAddress: String = ""
     }
 }

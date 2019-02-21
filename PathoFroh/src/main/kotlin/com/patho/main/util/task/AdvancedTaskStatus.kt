@@ -98,7 +98,7 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
         notificationPhaseCompleted = task.notificationCompleted
 
-        notificationsStatus = SpringContextBridge.services().reportTransmitterService.getNotificationTypeStatus(task)
+        notificationsStatus = SpringContextBridge.services().reportIntentService.getNotificationTypeStatus(task)
 
         return this
     }

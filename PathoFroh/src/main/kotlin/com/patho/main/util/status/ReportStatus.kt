@@ -29,7 +29,7 @@ open class ReportStatus(task: Task, reportIntent: ReportIntent) {
 
         val diagnosis = diagnosis
 
-        val historyRecord: ReportHistoryJson.HistoryRecord = SpringContextBridge.services().reportTransmitterService.getReportHistoryForDiagnosis(reportIntent, diagnosis)
+        val historyRecord: ReportHistoryJson.HistoryRecord = SpringContextBridge.services().reportIntentService.getReportHistoryForDiagnosis(reportIntent, diagnosis)
                 ?: ReportHistoryJson.HistoryRecord(diagnosis)
 
         val emailNotification = ReportBearer(reportIntent, ReportIntentNotification.NotificationTyp.EMAIL)
@@ -59,7 +59,7 @@ open class ReportStatus(task: Task, reportIntent: ReportIntent) {
 
             val type: ReportIntentNotification.NotificationTyp = type
 
-            val notifications = SpringContextBridge.services().reportTransmitterService.getReportDataForType(historyRecord, type)
+            val notifications = SpringContextBridge.services().reportIntentService.getReportDataForType(historyRecord, type)
 
             val totalAttempts: Int = notifications.count()
             val successfulAttempts: Int = notifications.count { p -> !p.failed }
