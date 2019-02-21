@@ -8,6 +8,7 @@ import com.patho.main.model.patient.notification.ReportHistoryRecord
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.repository.AssociatedContactRepository
+import org.apache.velocity.app.event.ReferenceInsertionEventHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
@@ -94,12 +95,20 @@ open class ReportTransmitterService @Autowired constructor(
     }
 
     open fun updateReportIntentNotificationWithDiagnoses(task: Task, reportIntentNotification: ReportIntentNotification) {
+
+        for(reportHistoryRecord in reportIntentNotification.history){
+            task.diagnosisRevisions.firstOrNull { p -> p.id == reportIntentNotification.id }
+
+            reportHistoryRecord.diagnosisID
+        }
+
         for (diagnosisRevision in task.diagnosisRevisions) {
             val record: ReportHistoryRecord? = findReportHistoryRecordByDiagnosis(reportIntentNotification, diagnosisRevision)
 
             if (record == null) reportIntentNotification.history.add(ReportHistoryRecord(diagnosisRevision))
         }
     }
+
 
     open fun updateReportIntentNotificationsWithRole(task: Task) {
         logger.debug("Updating Notifications")
