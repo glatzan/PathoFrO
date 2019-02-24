@@ -4,8 +4,7 @@ import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
-import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.util.status.NotificationStatus
+import com.patho.main.util.status.ReportIntentStatus
 
 open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
 
@@ -61,7 +60,7 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
     /**
      * Status of the contacts
      */
-    var notificationsStatus: List<NotificationStatus> = ArrayList<NotificationStatus>()
+    var notificationsStatus: List<ReportIntentStatus>? = null
 
     /**
      * Contains all favourite list of the task
@@ -97,8 +96,6 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
         diagnosesStatus = task.diagnosisRevisions.map { p -> DiagnosisRevisionStatus(p) }
 
         notificationPhaseCompleted = task.notificationCompleted
-
-        notificationsStatus = SpringContextBridge.services().reportIntentService.getNotificationTypeStatus(task)
 
         return this
     }

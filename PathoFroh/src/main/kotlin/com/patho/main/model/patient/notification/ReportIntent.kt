@@ -49,46 +49,6 @@ open class ReportIntent : AbstractPersistable, ID {
     }
 
     /**
-     * Returns a list of the requested notification type
-     */
-    @Transient
-    open fun findByNotificationTyp(type: ReportIntentNotification.NotificationTyp): List<ReportIntentNotification> {
-        return notifications.filter { p -> p.notificationTyp == type }
-    }
-
-    /**
-     * Checks if all notifications are performed
-     */
-    @Transient
-    open fun isNotificationPerformed(): Boolean {
-        return notifications.all { p -> p.performed }
-    }
-
-    /**
-     * Returns true if the notification type is performed
-     */
-    @Transient
-    open fun isNotificationPerformed(type: ReportIntentNotification.NotificationTyp): Boolean {
-        return findByNotificationTyp(type).all { p -> p.performed }
-    }
-
-    /**
-     * Returns true if any notification is active
-     */
-    @Transient
-    open fun isNotificationActive(): Boolean {
-        return notifications.any { p -> p.active }
-    }
-
-    /**
-     * Returns true if the notification type is active
-     */
-    @Transient
-    open fun isNotificationActive(type: ReportIntentNotification.NotificationTyp): Boolean {
-        return findByNotificationTyp(type).any { p -> p.active }
-    }
-
-    /**
      * Custom equals, checks if person and role is the same
      */
     override fun equals(other: Any?): Boolean {
