@@ -8,9 +8,9 @@ import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
-import com.patho.main.model.Contact;
-import com.patho.main.model.Organization;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Contact;
+import com.patho.main.model.person.Organization;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.Physician;
 
 import lombok.Getter;

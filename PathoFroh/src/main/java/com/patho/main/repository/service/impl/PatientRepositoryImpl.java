@@ -7,6 +7,7 @@ import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteList_;
 import com.patho.main.model.patient.*;
 import com.patho.main.model.patient.notification.ReportIntent;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.util.audit.Audit_;
 import com.patho.main.repository.service.PatientRepositoryCustom;
 import com.patho.main.util.helper.HistoUtil;

@@ -6,6 +6,7 @@ import com.patho.main.action.dialog.media.PDFOrganizer.PDFSelectEvent;
 import com.patho.main.action.dialog.task.CreateTaskDialog.TaskTempData.SampleTempData;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.*;
+import com.patho.main.config.PathoConfig;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.StainingPrototype;

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
-import com.patho.main.model.Organization;
+import com.patho.main.model.person.Organization;
 import com.patho.main.model.Physician;
 import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PhysicianRepository;

@@ -1,8 +1,8 @@
 package com.patho.main.ui.selectors;
 
 import com.patho.main.common.ContactRole;
-import com.patho.main.model.Organization;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Organization;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.notification.ReportIntent;

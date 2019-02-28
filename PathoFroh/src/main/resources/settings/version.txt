@@ -555,25 +555,6 @@ update task_aud set stainingCompletionDate = tmp;
 
 alter table task_aud drop column tmp;
 
-/* View For task display*/
-CREATE OR REPLACE VIEW taskoverview AS
-Select
-	task.id,
-	task.taskId,
-	task.receiptDate,
-	case when task.stainingcompletiondate  is not null then true else false end as stainingcompleted,
-	case when task.diagnosiscompletiondate is not null then true else false end as diagnosiscompleted,
-	case when task.notificationcompletiondate is not null then true else false end as notificationcompleted,
-	task.finalized,
-	task.taskpriority,
-	pers.title,
-	pers.firstname,
-	pers.lastname,
-	pers.birthday
-	from task as task
-		left join patient pat on pat.id = task.parent_id
-		left join person as pers on pers.id = pat.person_id;
-
 /* old unused filed*/
 alter table sample drop ReStainingPhase;
 
@@ -608,6 +589,40 @@ alter table ReportTransmitternotification_aud add column history jsonb;
 
 alter table ReportTransmitterNotification add column history jsonb;
 alter table ReportTransmitternotification_aud add column history jsonb;
+
+/* Changing person birthday to localeDAte*/
+alter table person add column tmp date;
+update person set tmp = case when birthday is not null then  to_timestamp(regexp_replace(birthday, ' \+[0-9]:[0-9]:[0-9]',''),'YYYY-MM-DD')::date else null end;
+alter table person drop column birthday;
+alter table person add column birthday date;
+update person set birthday = tmp;
+alter table person drop column tmp;
+
+alter table person_aud add column tmp date;
+update person_aud set tmp = case when birthday is not null then  to_timestamp(regexp_replace(birthday, ' \+[0-9]:[0-9]:[0-9]',''),'YYYY-MM-DD')::date else null end;
+alter table person_aud drop column birthday;
+alter table person_aud add column birthday date;
+update person_aud set birthday = tmp;
+alter table person_aud drop column tmp;
+
+/* View For task display*/
+CREATE OR REPLACE VIEW taskoverview AS
+Select
+	task.id,
+	task.taskId,
+	task.receiptDate,
+	case when task.stainingcompletiondate  is not null then true else false end as stainingcompleted,
+	case when task.diagnosiscompletiondate is not null then true else false end as diagnosiscompleted,
+	case when task.notificationcompletiondate is not null then true else false end as notificationcompleted,
+	task.finalized,
+	task.taskpriority,
+	pers.title,
+	pers.firstname,
+	pers.lastname,
+	pers.birthday
+	from task as task
+		left join patient pat on pat.id = task.parent_id
+		left join person as pers on pers.id = pat.person_id;
 
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien

@@ -1,14 +1,13 @@
 package com.patho.main.model.dto.json;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
-import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.patho.main.model.Contact;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Contact;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.patient.Patient;
 
 import lombok.Getter;
@@ -45,15 +44,15 @@ public class JSONPatientMapper {
 		patient.getPerson().setFirstName(getVorname());
 
 		if (getGeburtsdatum() != null) {
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			try {
-				Date date = format.parse(getGeburtsdatum());
+				LocalDate date = LocalDate.parse(getGeburtsdatum(),format);
 				patient.getPerson().setBirthday(date);
-			} catch (ParseException e) {
-				patient.getPerson().setBirthday(new Date());
+			} catch (DateTimeParseException e) {
+				patient.getPerson().setBirthday(LocalDate.now());
 			}
 		} else {
-			patient.getPerson().setBirthday(new Date());
+			patient.getPerson().setBirthday(LocalDate.now());
 		}
 
 		patient.setInsurance(getKrankenkasse());

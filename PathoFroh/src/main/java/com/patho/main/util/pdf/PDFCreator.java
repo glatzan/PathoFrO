@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
+import com.patho.main.config.PathoConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,7 +283,7 @@ public class PDFCreator {
 					throw new IOException("Could not move Thumbnail");
 			}
 
-			if (pathoConfig.getFileSettings().isCleanup()) {
+			if (pathoConfig.getFileSettings().getCleanup()) {
 				cleanUp(helper, false);
 				logger.debug("Cleanup Completed");
 			} else {
@@ -443,7 +444,7 @@ public class PDFCreator {
 			}
 
 		} else {
-			if (pathoConfig.getFileSettings().isKeepErrorFiles()) {
+			if (pathoConfig.getFileSettings().getKeepErrorFiles()) {
 				logger.debug("Moving files to error directory");
 				mediaRepository.moveFile(helper.inputFile, errorDirectory);
 				mediaRepository.moveFile(helper.auxFile, errorDirectory);

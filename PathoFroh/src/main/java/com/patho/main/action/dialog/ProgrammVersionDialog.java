@@ -3,6 +3,8 @@ package com.patho.main.action.dialog;
 import java.util.Date;
 import java.util.List;
 
+import com.patho.main.config.PathoConfig;
+import com.patho.main.util.config.VersionContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -10,7 +12,6 @@ import com.patho.main.action.UserHandlerAction;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
 import com.patho.main.util.helper.TimeUtil;
-import com.patho.main.util.version.Version;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -57,7 +58,7 @@ public class ProgrammVersionDialog extends AbstractTabDialog {
 	@Setter
 	public class VersionTab extends AbstractTab {
 
-		private List<Version> versionInfo;
+		private List<VersionContainer.Version> versionInfo;
 
 		public VersionTab() {
 			setTabName("VersionTab");

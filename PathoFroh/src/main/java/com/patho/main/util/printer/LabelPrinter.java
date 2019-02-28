@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import com.patho.main.config.PathoConfig;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;

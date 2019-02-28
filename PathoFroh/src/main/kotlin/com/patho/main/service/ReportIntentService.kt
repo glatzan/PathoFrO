@@ -2,8 +2,8 @@ package com.patho.main.service
 
 import com.patho.main.common.ContactRole
 import com.patho.main.config.PathoConfig
-import com.patho.main.model.Organization
-import com.patho.main.model.Person
+import com.patho.main.model.person.Organization
+import com.patho.main.model.person.Person
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportHistoryRecord
@@ -379,7 +379,7 @@ open class ReportIntentService @Autowired constructor(
     open fun generateAddress(reportIntent: ReportIntent, organization: Organization? = null): String {
         val buffer = StringBuffer()
 
-        buffer.append((reportIntent.person?.fullName ?: "") + "\r\n")
+        buffer.append((reportIntent.person?.getFullName() ?: "") + "\r\n")
 
         val addition1 = if (organization != null) organization?.contact?.addressadditon else reportIntent.person?.contact?.addressadditon
         val addition2 = if (organization != null) organization?.contact?.addressadditon2 else reportIntent.person?.contact?.addressadditon2

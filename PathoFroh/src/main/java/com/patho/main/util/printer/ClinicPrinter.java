@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.patho.main.config.PathoConfig;
 import org.apache.commons.io.FileUtils;
 import org.cups4j.CupsClient;
 import org.cups4j.CupsPrinter;

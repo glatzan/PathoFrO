@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.Organization;
+import com.patho.main.model.person.Organization;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactNotificationRepository;

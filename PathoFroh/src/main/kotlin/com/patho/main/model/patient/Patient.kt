@@ -2,7 +2,7 @@ package com.patho.main.model.patient
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.PDFContainer
-import com.patho.main.model.Person
+import com.patho.main.model.person.Person
 import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.interfaces.ID
 import org.hibernate.annotations.*
@@ -51,7 +51,7 @@ open class Patient : AbstractPersistable, ID, DataList {
      */
     @OneToOne(cascade = [CascadeType.ALL])
     @NotAudited
-    open var person: Person? = null
+    open var person: Person = Person()
 
     /**
      * Task for this patient
@@ -94,7 +94,7 @@ open class Patient : AbstractPersistable, ID, DataList {
      */
     override val publicName: String
         @Transient
-        get() = person?.fullName ?: ""
+        get() = person?.getFullName() ?: ""
 
     /**
      * Returns this, overwrite from datalist

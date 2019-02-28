@@ -17,8 +17,8 @@ import com.patho.main.action.dialog.patient.ConfirmExternalPatientDataDialog.Con
 import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.excepion.ToManyEntriesException;
-import com.patho.main.model.Contact;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Contact;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.service.PatientService;

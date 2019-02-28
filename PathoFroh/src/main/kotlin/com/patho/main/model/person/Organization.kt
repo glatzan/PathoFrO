@@ -1,12 +1,21 @@
-package com.patho.main.model
+package com.patho.main.model.person
 
+import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.interfaces.ID
+import org.hibernate.annotations.DynamicUpdate
+import org.hibernate.annotations.SelectBeforeUpdate
+import org.hibernate.envers.Audited
 import javax.persistence.*
 
+@Entity
+@SelectBeforeUpdate(true)
+@DynamicUpdate(true)
+@Audited
 open class Organization : AbstractPersistable, ID {
 
     @Id
     @GeneratedValue(generator = "organization_sequencegenerator")
+    @SequenceGenerator(name = "organization_sequencegenerator", sequenceName = "organization_sequence")
     @Column(unique = true, nullable = false)
     open override var id: Long = 0
 
@@ -17,7 +26,7 @@ open class Organization : AbstractPersistable, ID {
     open var name: String = ""
 
     @OneToOne(cascade = [CascadeType.ALL])
-    open var contact: Contact? = null
+    open var contact: Contact = Contact()
 
     @Column(columnDefinition = "VARCHAR")
     open var note: String = ""
@@ -33,9 +42,9 @@ open class Organization : AbstractPersistable, ID {
 
     constructor()
 
-    constructor(contact: Contact) {
-        this("", contact, false)
-    }
+    constructor(contact: Contact) : this("", contact, false)
+
+    constructor(name: String, contact: Contact) : this(name, contact, false)
 
     constructor(name: String, contact: Contact, intern: Boolean) {
         this.name = name

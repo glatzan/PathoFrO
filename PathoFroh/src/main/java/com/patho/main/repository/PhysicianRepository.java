@@ -3,7 +3,7 @@ package com.patho.main.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.repository.service.PhysicianRepositoryCustom;
 

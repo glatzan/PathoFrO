@@ -19,6 +19,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import com.patho.main.model.person.Person;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -196,7 +197,7 @@ public class Physician implements Serializable, ArchivAble, ID {
 
 	@Transient
 	public boolean isClinicEmployee() {
-		return getPerson().getOrganizsations().stream().anyMatch(p -> p.isIntern());
+		return getPerson().getOrganizsations().stream().anyMatch(p -> p.getIntern());
 	}
 
 	/********************************************************

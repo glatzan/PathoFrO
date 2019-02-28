@@ -60,7 +60,7 @@ import lombok.Setter;
 	            @ColumnResult(name = "title", type=String.class ),
 	            @ColumnResult(name = "firstname", type=String.class ),
 	            @ColumnResult(name = "lastname", type=String.class ),
-	            @ColumnResult(name = "birthday", type=String.class),
+	            @ColumnResult(name = "birthday", type=LocalDate.class),
 	            @ColumnResult(name = "taskpriority", type=Integer.class ),
 	            @ColumnResult(name = "usercontact", type=Boolean.class )
 	        }
@@ -83,14 +83,14 @@ public class TaskOverview implements FullName {
 	private String title;
 	private String lastName;
 	private String firstName;
-	private Date birthday;
+	private LocalDate birthday;
 	@Enumerated(EnumType.ORDINAL)
 	private TaskPriority taskPriority;
 	private boolean userContact;
 	
 	public TaskOverview(long id, String taskID, LocalDate receiptDate, boolean stainingCompleted,
 						boolean diagnosisCompleted, boolean notificationCompleted, boolean finalized, String title, String lastName,
-						String firstName, String birthday, int taskPriority, boolean userContact) {
+						String firstName, LocalDate birthday, int taskPriority, boolean userContact) {
 		super();
 		this.id = id;
 		this.taskID = taskID;
@@ -102,10 +102,7 @@ public class TaskOverview implements FullName {
 		this.title = title;
 		this.lastName = lastName;
 		this.firstName = firstName;
-		try {
-			this.birthday = new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
-		} catch (Exception e) {
-		}
+		this.birthday = birthday;
 		this.taskPriority = TaskPriority.values()[taskPriority];
 		this.userContact = userContact;
 	}

@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Eye;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Signature;
 import com.patho.main.model.StainingPrototype;

@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.Organization;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Organization;
+import com.patho.main.model.person.Person;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;

@@ -7,8 +7,8 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import com.patho.main.model.Contact;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Contact;
+import com.patho.main.model.person.Person;
 
 import com.patho.main.model.patient.notification.ReportIntent;
 import lombok.Getter;

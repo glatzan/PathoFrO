@@ -32,7 +32,7 @@ import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.Signature;
 import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.DiagnosisRevision;

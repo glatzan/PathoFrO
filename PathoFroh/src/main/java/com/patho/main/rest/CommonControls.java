@@ -2,10 +2,6 @@ package com.patho.main.rest;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
@@ -17,6 +13,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
+import com.patho.main.model.person.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
@@ -101,7 +97,7 @@ public class CommonControls {
 			HistoUser user = new HistoUser();
 			userRepository.save(user, "hallo das test");
 			user.setLastLogin(System.currentTimeMillis());
-			user.setPhysician(new Physician(new com.patho.main.model.Person()));
+			user.setPhysician(new Physician(new Person()));
 			user.setUsername("testAndiTest7");
 			userRepository.save(user, "");
 

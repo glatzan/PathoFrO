@@ -2,6 +2,8 @@ package com.patho.main.service.impl
 
 import com.patho.main.action.UserHandlerAction
 import com.patho.main.config.util.ApplicationContextProvider
+import com.patho.main.config.util.ResourceBundle
+import com.patho.main.service.OrganizationService
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.SpringContextBridgedServices
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +21,10 @@ class SpringContextBridge : SpringContextBridgedServices {
     @Autowired
     override lateinit var userHandlerAction: UserHandlerAction
 
+    @Autowired
+    override lateinit var  resourceBundle : ResourceBundle
+
+    override lateinit var organizationService : OrganizationService
 
     companion object {
         @JvmStatic

@@ -10,7 +10,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.Organization;
+import com.patho.main.model.person.Organization;
 import com.patho.main.model.Organization_;
 import com.patho.main.repository.service.OrganizationRepositoryCustom;
 

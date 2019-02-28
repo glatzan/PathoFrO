@@ -19,7 +19,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.Organization;
+import com.patho.main.model.person.Organization;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototype.StainingType;
@@ -45,7 +45,6 @@ import com.patho.main.service.OrganizationService;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.StainingPrototypeService;
 import com.patho.main.service.UserService;
-import com.patho.main.ui.ListChooser;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;

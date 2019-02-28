@@ -8,7 +8,7 @@ import java.io.StringWriter;
 //import javax.xml.bind.annotation.XmlElement;
 //import javax.xml.bind.annotation.XmlRootElement;
 
-import com.patho.main.model.Person.Gender;
+import com.patho.main.model.person.Person.Gender;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.util.helper.TimeUtil;
 

@@ -6,7 +6,7 @@ import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.common.TaskPriority
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.PDFContainer
-import com.patho.main.model.Person
+import com.patho.main.model.person.Person
 import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.interfaces.DataList

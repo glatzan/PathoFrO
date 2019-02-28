@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.SortOrder;
-import com.patho.main.model.Person;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.Person_;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Physician_;
