@@ -1,6 +1,5 @@
 package com.patho.main.service;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.Arrays;
@@ -10,15 +9,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.patho.main.action.UserHandlerAction;
-import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.config.PathoConfig;
-import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
@@ -30,14 +23,11 @@ import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.ValidatorUtil;
 import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationPerformer;
 import com.patho.main.util.notification.NotificationFeedback;
-import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
-import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.AccessLevel;
 import lombok.Getter;

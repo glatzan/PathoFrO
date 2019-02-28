@@ -1,6 +1,5 @@
 package com.patho.main.action.dialog.council;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +25,6 @@ import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.SortOrder;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;

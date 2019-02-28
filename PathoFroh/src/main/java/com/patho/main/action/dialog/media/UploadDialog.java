@@ -1,6 +1,5 @@
 package com.patho.main.action.dialog.media;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Patient;

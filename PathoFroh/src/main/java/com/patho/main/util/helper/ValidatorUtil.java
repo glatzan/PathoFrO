@@ -4,8 +4,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.config.PathoConfig;
-
 @Configurable
 public class ValidatorUtil {
 

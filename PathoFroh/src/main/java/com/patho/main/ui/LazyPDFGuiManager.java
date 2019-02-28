@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.template.PrintDocument;

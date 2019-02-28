@@ -1,29 +1,18 @@
 package com.patho.main.util;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.config.PathoConfig;
-import com.patho.main.model.PDFContainer;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Task;
 import com.patho.main.repository.BioBankRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PDFRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PDFService;
-import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;

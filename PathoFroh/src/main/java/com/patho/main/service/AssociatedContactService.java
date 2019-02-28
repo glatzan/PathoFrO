@@ -1,29 +1,7 @@
 package com.patho.main.service;
 
-import com.patho.main.common.ContactRole;
-import com.patho.main.config.PathoConfig;
-import com.patho.main.model.Organization;
-import com.patho.main.model.Person;
-import com.patho.main.model.Physician;
-import com.patho.main.model.patient.Diagnosis;
-import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Task;
-import com.patho.main.model.patient.notification.ReportIntent;
-import com.patho.main.model.patient.notification.ReportIntentNotification;
-import com.patho.main.model.patient.notification.ReportIntentNotification.NotificationTyp;
-import com.patho.main.repository.AssociatedContactNotificationRepository;
-import com.patho.main.repository.AssociatedContactRepository;
-import com.patho.main.repository.PhysicianRepository;
-import com.patho.main.util.notification.NotificationContainer;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

@@ -2,6 +2,7 @@ package com.patho.main.model
 
 import org.slf4j.LoggerFactory
 import org.springframework.data.util.ProxyUtils
+import java.io.Serializable
 import javax.persistence.MappedSuperclass
 import javax.persistence.Transient
 
@@ -9,7 +10,7 @@ import javax.persistence.Transient
  * Superclass for hibernate entities
  */
 @MappedSuperclass
-abstract class AbstractPersistable {
+abstract class AbstractPersistable : Serializable {
 
     @Transient
     protected open val logger = LoggerFactory.getLogger(this.javaClass)

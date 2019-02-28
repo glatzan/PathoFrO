@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.util.helper.TimeUtil;
 import com.patho.main.util.version.Version;
 

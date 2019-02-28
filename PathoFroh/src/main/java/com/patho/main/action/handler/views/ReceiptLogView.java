@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.hibernate.validator.internal.metadata.location.GetterConstraintLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Lazy;
@@ -16,7 +15,6 @@ import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.action.handler.GlobalEditViewHandler.StainingListAction;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.action.handler.WorkPhaseHandler;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PrintDocumentRepository;

@@ -171,8 +171,7 @@ open class ReportIntentService @Autowired constructor(
             return Pair(task, reportIntent)
 
 
-        val notifications: MutableList<ReportIntentNotification.NotificationTyp> = pathoConfig.defaultNotification.getDefaultNotificationForRole(reportIntent.role)
-                ?: mutableListOf()
+        val notifications: List<ReportIntentNotification.NotificationTyp> = pathoConfig.defaultNotification.getDefaultNotificationForRole(reportIntent.role)
 
         notifications.forEach { p -> addReportIntentNotification(task, reportIntent, p, save = false) }
 

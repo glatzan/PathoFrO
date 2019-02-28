@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.google.gson.annotations.Expose;
 import com.patho.main.action.handler.MessageHandler;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;

@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.service.PrintService;

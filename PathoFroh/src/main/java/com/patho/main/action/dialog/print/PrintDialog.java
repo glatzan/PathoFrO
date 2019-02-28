@@ -2,7 +2,6 @@ package com.patho.main.action.dialog.print;
 
 import java.io.FileNotFoundException;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.model.patient.notification.ReportIntentNotification.NotificationTyp;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;

@@ -1,15 +1,22 @@
 package com.patho.main.config
 
+import com.patho.main.common.ContactRole
+import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.repository.MediaRepository
-import com.patho.main.util.version.Version
-import com.patho.main.util.version.VersionContainer
+import com.patho.main.util.config.VersionContainer
+import com.patho.main.util.helper.StreamUtils
 import org.apache.commons.io.FileUtils
-import org.apache.tomcat.jni.File
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
+import java.io.File
 import java.io.IOException
+import java.util.ArrayList
 import javax.annotation.PostConstruct
 
+@Configuration
+@ConfigurationProperties(prefix = "patho.settings")
 public open class PathoConfig @Autowired constructor(
         var mediaRepository: MediaRepository) {
 
@@ -35,40 +42,53 @@ public open class PathoConfig @Autowired constructor(
 
     protected val logger = LoggerFactory.getLogger(this.javaClass)
 
-    var lateinit fileSettings: FileSettings
+    var fileSettings: FileSettings = FileSettings()
+
+    var defaultNotification: DefaultNotification = DefaultNotification()
+
+    var defaultDocuments: DefaultDocuments = DefaultDocuments()
+
+    var miscellaneous: Miscellaneous = Miscellaneous()
+
+    var schedule: Schedule = Schedule()
+
+    /**
+     * Container for providing version information
+     */
+    var versionContainer: VersionContainer = VersionContainer()
 
     @PostConstruct
     open fun initialize() {
 
-        val fileRepository = File(fileSettings.getFileRepository())
+        val fileRepository = File(fileSettings.fileRepository)
 
         // checking directories
         if (!fileRepository.isDirectory() && !fileRepository.mkdirs()) {
             logger.error("Error directory not found: fileRepository " + fileRepository.getAbsolutePath())
         }
 
-        val workDirectory = mediaRepository.getWriteFile(fileSettings.getWorkDirectory())
+        val workDirectory = mediaRepository.getWriteFile(fileSettings.workDirectory)
 
         // checking directories
         if (!workDirectory.isDirectory() && !workDirectory.mkdirs()) {
             logger.error("Error directory not found: workDirectory " + workDirectory.getAbsolutePath())
         }
 
-        val auxDirectory = mediaRepository.getWriteFile(fileSettings.getAuxDirectory())
+        val auxDirectory = mediaRepository.getWriteFile(fileSettings.auxDirectory)
 
         // checking directories
         if (!auxDirectory.isDirectory() && !auxDirectory.mkdirs()) {
             logger.error("Error directory not found: auxDirectory " + auxDirectory.getAbsolutePath())
         }
 
-        val errorDirectory = mediaRepository.getWriteFile(fileSettings.getErrorDirectory())
+        val errorDirectory = mediaRepository.getWriteFile(fileSettings.errorDirectory)
 
         // checking directories
         if (!errorDirectory.isDirectory() && !errorDirectory.mkdirs()) {
             logger.error("Error directory not found: errorDirectory " + errorDirectory.getAbsolutePath())
         }
 
-        val printDirectory = mediaRepository.getWriteFile(fileSettings.getPrintDirectory())
+        val printDirectory = mediaRepository.getWriteFile(fileSettings.printDirectory)
 
         // checking directories
         if (!printDirectory.isDirectory() && !printDirectory.mkdirs()) {
@@ -76,7 +96,7 @@ public open class PathoConfig @Autowired constructor(
         }
 
         logger.debug("Copying files to working directory...")
-        for (copyStr in fileSettings.getCopyFromClasspathToWorkDirectory()) {
+        for (copyStr in fileSettings.copyFromClasspathToWorkDirectory) {
             logger.debug("Copying files from '$copyStr' to working directory...")
             val printResouces = mediaRepository.getFilesOfDirectory(copyStr)
 
@@ -92,16 +112,10 @@ public open class PathoConfig @Autowired constructor(
         }
 
         // loading versions
-        val versions = Version.factroy(mediaRepository.getStrings(fileSettings.getProgramVersionInfo()))
-        setVersionContainer(VersionContainer(versions))
+        versionContainer =  VersionContainer(mediaRepository.getStrings(fileSettings.programVersionInfo))
 
-        // setting current version
-        if (versions != null && versions.size > 0) {
-            getVersionContainer().setCurrentVersion(versions[0].version)
-        }
-
-        if (File(fileSettings.getProgramInfo()).exists()) {
-            val programVersionJson = mediaRepository.getString(fileSettings.getProgramInfo())
+        if (File(fileSettings.programInfo).exists()) {
+            val programVersionJson = mediaRepository.getString(fileSettings.programInfo)
         } else {
             logger.debug("First program start")
         }
@@ -110,31 +124,152 @@ public open class PathoConfig @Autowired constructor(
 
     class FileSettings {
 
-        var lateinit  fileRepository: String
+        var fileRepository: String = ""
 
-        var lateinit  workDirectory: String
+        var workDirectory: String = ""
 
-        var lateinit auxDirectory: String
+        var auxDirectory: String = ""
 
-        var lateinit errorDirectory: String
+        var errorDirectory: String = ""
 
-        var lateinit printDirectory: String
+        var printDirectory: String = ""
 
-        var lateinit programInfo: String? = null
+        var programInfo: String = ""
 
-        var lateinit programVersionInfo: String? = null
+        var programVersionInfo: String = ""
 
-        var lateinit copyFromClasspathToWorkDirectory: Array<String>? = null
+        var copyFromClasspathToWorkDirectory: Array<String> = arrayOf<String>()
 
-        var lateinit thumbnailDPI: Int = 0
+        var thumbnailDPI: Int = 0
 
-        var lateinit cleanup: Boolean = false
+        var cleanup: Boolean = false
 
-        var lateinit keepErrorFiles: Boolean = false
+        var keepErrorFiles: Boolean = false
 
         companion object {
             @JvmStatic
             val FILE_REPOSITORY_PATH_TOKEN = "fileRepository:"
         }
     }
+
+    class DefaultDocuments {
+
+        /**
+         * Document-Template which is used on diagnosis phase exit.
+         */
+        var diagnosisApprovedDocument: Long = 0
+
+        /**
+         * Document which can be printed on task creation.
+         */
+        var taskCreationDocument: Long = 0
+
+        /**
+         * Default document for email notification
+         */
+        var notificationDefaultEmailDocument: Long = 0
+
+        /**
+         * Default Email template which is used to notify physicians if task was
+         * completed
+         */
+        var notificationDefaultEmail: Long = 0
+
+        /**
+         * Default document for fax notification
+         */
+        var notificationDefaultFaxDocument: Long = 0
+
+        /**
+         * Default document for letter notification
+         */
+        var notificationDefaultLetterDocument: Long = 0
+
+        /**
+         * Default document for printing in order to sign
+         */
+        var notificationDefaultPrintDocument: Long = 0
+
+        /**
+         * Sendreport which is created after the notification dialog was processed.
+         */
+        var notificationSendReport: Long = 0
+
+        /**
+         * ID of the default slide label
+         */
+        var slideLabelDocument: Long = 0
+
+        /**
+         * Template for diagnosis report for program users
+         */
+        var diagnosisReportForUsers: Long = 0
+
+        /**
+         * ID of the testlabel for slide printing
+         */
+        var slideLableTestDocument: Long = 0
+
+        /**
+         * ID of the test page for document printing
+         */
+        var printerTestDocument: Long = 0
+
+        /**
+         * Path of one empty pdf page
+         */
+        var emptyPage: String? = null
+
+        /**
+         * Testpage for label printer
+         */
+        var lablePrinterTestPage: String? = null
+
+        /**
+         * Test page for cups printer
+         */
+        var cupsPrinterTestPage: String? = null
+    }
+
+    class ProgramInfo {
+        var version: String? = null
+    }
+
+    class Schedule {
+        var pdfCleanupCron: String? = null
+    }
+
+    class Miscellaneous {
+        var phoneRegex: String? = null
+    }
+
+    class DefaultNotification {
+
+        var defaultNotifications: List<DefaultNotificationEntity> = listOf<DefaultNotificationEntity>()
+
+        fun getDefaultNotificationForRole(role: ContactRole): List<ReportIntentNotification.NotificationTyp> {
+            if (defaultNotifications != null) {
+                var tmp = defaultNotifications
+                try {
+                    return tmp.singleOrNull { p -> p.role == role }?.notificationTyps ?: listOf()
+                } catch (e: IllegalStateException) {
+                    // returning empty list
+                }
+            }
+            return ArrayList()
+        }
+    }
+
+    class DefaultNotificationEntity {
+        var role: ContactRole? = null
+        var notificationTyps: List<ReportIntentNotification.NotificationTyp> = listOf<ReportIntentNotification.NotificationTyp>()
+
+        constructor()
+
+        constructor(role: ContactRole) {
+            this.role = role
+        }
+    }
+
+
 }

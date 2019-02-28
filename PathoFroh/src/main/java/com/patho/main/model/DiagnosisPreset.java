@@ -1,37 +1,20 @@
 package com.patho.main.model;
 
+import com.patho.main.common.ContactRole;
+import com.patho.main.model.interfaces.ID;
+import com.patho.main.model.interfaces.ListOrder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import com.patho.main.common.ContactRole;
-import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.ListOrder;
-
-
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
 @SequenceGenerator(name = "diagnosisPreset_sequencegenerator", sequenceName = "diagnosisPreset_sequence")
-@Getter
-@Setter
 public class DiagnosisPreset implements ListOrder<DiagnosisPreset>, ID, Serializable {
 
 	private static final long serialVersionUID = 7345658902599657920L;
@@ -111,4 +94,83 @@ public class DiagnosisPreset implements ListOrder<DiagnosisPreset>, ID, Serializ
 		this.diagnosisReportAsLetter = new HashSet<>(Arrays.asList(diagnosisReportAsLetter));
 	}
 
+	public long getId() {
+		return this.id;
+	}
+
+	public String getCategory() {
+		return this.category;
+	}
+
+	public String getIcd10() {
+		return this.icd10;
+	}
+
+	public boolean isMalign() {
+		return this.malign;
+	}
+
+	public String getDiagnosis() {
+		return this.diagnosis;
+	}
+
+	public String getExtendedDiagnosisText() {
+		return this.extendedDiagnosisText;
+	}
+
+	public String getCommentary() {
+		return this.commentary;
+	}
+
+	public int getIndexInList() {
+		return this.indexInList;
+	}
+
+	public Set<ContactRole> getDiagnosisReportAsLetter() {
+		return this.diagnosisReportAsLetter;
+	}
+
+	public boolean isArchived() {
+		return this.archived;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public void setIcd10(String icd10) {
+		this.icd10 = icd10;
+	}
+
+	public void setMalign(boolean malign) {
+		this.malign = malign;
+	}
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
+	}
+
+	public void setExtendedDiagnosisText(String extendedDiagnosisText) {
+		this.extendedDiagnosisText = extendedDiagnosisText;
+	}
+
+	public void setCommentary(String commentary) {
+		this.commentary = commentary;
+	}
+
+	public void setIndexInList(int indexInList) {
+		this.indexInList = indexInList;
+	}
+
+	public void setDiagnosisReportAsLetter(Set<ContactRole> diagnosisReportAsLetter) {
+		this.diagnosisReportAsLetter = diagnosisReportAsLetter;
+	}
+
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
 }
