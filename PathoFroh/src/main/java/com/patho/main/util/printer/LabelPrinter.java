@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.patho.main.config.PathoConfig;
+import com.patho.main.util.print.PrintPDFBearer;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;

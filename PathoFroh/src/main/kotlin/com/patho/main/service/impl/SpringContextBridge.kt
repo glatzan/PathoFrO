@@ -5,6 +5,7 @@ import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
 import com.patho.main.service.OrganizationService
 import com.patho.main.service.ReportIntentService
+import com.patho.main.service.ReportService
 import com.patho.main.service.SpringContextBridgedServices
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -15,6 +16,10 @@ import org.springframework.stereotype.Component
  */
 @Component
 class SpringContextBridge : SpringContextBridgedServices {
+
+    @Autowired
+    override lateinit var reportService: ReportService
+
     @Autowired
     override lateinit var reportIntentService: ReportIntentService
 
@@ -24,7 +29,9 @@ class SpringContextBridge : SpringContextBridgedServices {
     @Autowired
     override lateinit var  resourceBundle : ResourceBundle
 
+    @Autowired
     override lateinit var organizationService : OrganizationService
+
 
     companion object {
         @JvmStatic

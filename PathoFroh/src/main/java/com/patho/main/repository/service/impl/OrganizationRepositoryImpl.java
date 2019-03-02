@@ -7,11 +7,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import com.patho.main.model.person.Organization_;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.person.Organization;
-import com.patho.main.model.Organization_;
 import com.patho.main.repository.service.OrganizationRepositoryCustom;
 
 @Service

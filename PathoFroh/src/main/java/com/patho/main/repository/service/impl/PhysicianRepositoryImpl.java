@@ -10,13 +10,13 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.patho.main.model.person.Person_;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.SortOrder;
 import com.patho.main.model.person.Person;
-import com.patho.main.model.Person_;
 import com.patho.main.model.Physician;
 import com.patho.main.model.Physician_;
 import com.patho.main.model.patient.Task;

@@ -8,5 +8,5 @@ interface SpringContextBridgedServices {
     var reportIntentService : ReportIntentService
     var resourceBundle : ResourceBundle
     var organizationService : OrganizationService
-
+    var reportService : ReportService
 }

@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.patho.main.config.PathoConfig;
+import com.patho.main.util.print.PrintPDFBearer;
 import org.apache.commons.io.FileUtils;
 import org.cups4j.CupsClient;
 import org.cups4j.CupsPrinter;
@@ -113,6 +114,11 @@ public class ClinicPrinter extends AbstractPrinter {
 	public boolean print(PDFContainer container, int copies, String args) {
 		return print(new PrintOrder(container, copies, false, args));
 	}
+
+	public boolean print(PrintPDFBearer container, int copies) {
+		return print(new PrintOrder(container.getPdfContainer(), copies, false, args));
+	}
+
 
 	public boolean print(PrintOrder printOrder) {
 		logger.debug("Printing xtimes: " + printOrder.getCopies());
