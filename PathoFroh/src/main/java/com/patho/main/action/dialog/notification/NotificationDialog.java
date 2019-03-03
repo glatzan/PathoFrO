@@ -42,11 +42,8 @@ import com.patho.main.template.print.ui.document.report.DiagnosisReportUi;
 import com.patho.main.ui.pdf.PDFStreamContainer;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.helper.ValidatorUtil;
 import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationFeedback;
-import com.patho.main.util.notification.NotificationPerformer;
-import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -125,7 +122,6 @@ public class NotificationDialog extends AbstractTabDialog {
 	public NotificationDialog initAndPrepareBean(Task task) {
 		if (initBean(task))
 			prepareDialog();
-
 		return this;
 	}
 
@@ -217,12 +213,12 @@ public class NotificationDialog extends AbstractTabDialog {
 
 		logger.debug("On custom dialog return " + event.getObject() + " " + container);
 
-		if (event.getObject() != null && event.getObject() instanceof PDFContainer && container != null
-				&& container instanceof NotificationContainer) {
-			logger.debug("Settign custom pdf for container "
-					+ ((NotificationContainer) container).getContact().getPerson().getFirstName());
-			((NotificationContainer) container).setPdf((TemplatePDFContainer) event.getObject());
-		}
+//		if (event.getObject() != null && event.getObject() instanceof PDFContainer && container != null
+//				&& container instanceof NotificationContainer) {
+//			logger.debug("Settign custom pdf for container "
+//					+ ((NotificationContainer) container).getContact().getPerson().getFirstName());
+//			((NotificationContainer) container).setPdf((TemplatePDFContainer) event.getObject());
+//		}
 
 	}
 
@@ -276,33 +272,33 @@ public class NotificationDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			List<NotificationContainer> newContainers = AssociatedContactService.getNotificationListForType(task,
-					notificationType, generalTab.isCompleteNotification());
-
-			List<NotificationContainer> foundContainer = new ArrayList<NotificationContainer>();
-
-			// adding new, saving found one
-			for (NotificationContainer notificationContainer : newContainers) {
-				if (getContainer().stream().anyMatch(p -> p.equals(notificationContainer))) {
-					// TODO update old conatienr
-				} else {
-					getContainer().add(notificationContainer);
-				}
-				foundContainer.add(notificationContainer);
-			}
-
-			// removing old container
-			newContainers.removeAll(foundContainer);
-			getContainer().removeAll(newContainers);
-
-			getContainer().stream().sorted((p1, p2) -> {
-				if (p1.isFaildPreviously() == p2.isFaildPreviously())
-					return 0;
-				else if (p1.isFaildPreviously())
-					return 1;
-				else
-					return -1;
-			});
+//			List<NotificationContainer> newContainers = AssociatedContactService.getNotificationListForType(task,
+//					notificationType, generalTab.isCompleteNotification());
+//
+//			List<NotificationContainer> foundContainer = new ArrayList<NotificationContainer>();
+//
+//			// adding new, saving found one
+//			for (NotificationContainer notificationContainer : newContainers) {
+//				if (getContainer().stream().anyMatch(p -> p.equals(notificationContainer))) {
+//					// TODO update old conatienr
+//				} else {
+//					getContainer().add(notificationContainer);
+//				}
+//				foundContainer.add(notificationContainer);
+//			}
+//
+//			// removing old container
+//			newContainers.removeAll(foundContainer);
+//			getContainer().removeAll(newContainers);
+//
+//			getContainer().stream().sorted((p1, p2) -> {
+//				if (p1.isFaildPreviously() == p2.isFaildPreviously())
+//					return 0;
+//				else if (p1.isFaildPreviously())
+//					return 1;
+//				else
+//					return -1;
+//			});
 		}
 
 		/**
@@ -320,7 +316,7 @@ public class NotificationDialog extends AbstractTabDialog {
 	@Setter
 	public class GeneralTab extends NotificationTab {
 
-		private List<DiagnosisRevision> diagnosisRevisions;
+			private List<DiagnosisRevision> diagnosisRevisions;
 
 		private DiagnosisRevision selectDiagnosisRevision;
 
@@ -590,21 +586,21 @@ public class NotificationDialog extends AbstractTabDialog {
 		public void updateData() {
 			logger.debug("Update Data send");
 
-			ValidatorUtil val = new ValidatorUtil();
-			// checking mails
-			mailTab.getContainerToNotify().forEach(p -> {
-				if (!val.approveMailAddress(p.getContactAddress()))
-					p.setWarning(true, "dialog.notification.sendProcess.mail.error.mailNotValid");
-				else
-					p.clearWarning();
-			});
-
-			faxTab.getContainerToNotify().forEach(p -> {
-				if (!val.approveFaxAddress(p.getContactAddress()))
-					p.setWarning(true, "dialog.notification.sendProcess.fax.error.numberNotValid");
-				else
-					p.clearWarning();
-			});
+//			ValidatorUtil val = new ValidatorUtil();
+//			// checking mails
+//			mailTab.getContainerToNotify().forEach(p -> {
+//				if (!val.approveMailAddress(p.getContactAddress()))
+//					p.setWarning(true, "dialog.notification.sendProcess.mail.error.mailNotValid");
+//				else
+//					p.clearWarning();
+//			});
+//
+//			faxTab.getContainerToNotify().forEach(p -> {
+//				if (!val.approveFaxAddress(p.getContactAddress()))
+//					p.setWarning(true, "dialog.notification.sendProcess.fax.error.numberNotValid");
+//				else
+//					p.clearWarning();
+//			});
 		}
 
 		// @Async("taskExecutor")
@@ -612,47 +608,47 @@ public class NotificationDialog extends AbstractTabDialog {
 
 			logger.debug("Startin notification thread");
 
-			try {
-				if (isNotificationRunning()) {
-					logger.debug("Thread allready running, abort new request!");
-					return;
-				}
-
-				setNotificationRunning(true);
-
-				setSteps(calculateSteps());
-
-				NotificationPerformer performer = new NotificationPerformer(getTask(),
-						generalTab.getSelectDiagnosisRevision());
-
-				performer.printNotification(generalTab.isUseNotification(), generalTab.getSelectedTemplate(),
-						generalTab.getPrintCount());
-
-				performer.mailNotification(mailTab.isUseNotification(), mailTab.getContainerToNotify(),
-						mailTab.isIndividualAddresses(), mailTab.getSelectedTemplate(), mailTab.getMailTemplate());
-
-				performer.faxNotification(faxTab.isUseNotification(), faxTab.getContainerToNotify(),
-						faxTab.isIndividualAddresses(), faxTab.isSendFax(), faxTab.isPrintFax(),
-						faxTab.getSelectedTemplate());
-
-				performer.letterNotification(letterTab.isUseNotification(), letterTab.getContainerToNotify(),
-						letterTab.getSelectedTemplate());
-
-				performer.phoneNotification(phoneTab.isUseNotification(), phoneTab.getContainerToNotify());
-
-				notificationService.performeNotification(performer, this);
-				
-				sendReportTab.setCurrentSendReport(performer.getSendReport());
-
-				setProgressPercent(100);
-
-				// progressStepText("dialog.notification.sendProcess.success");
-
-				logger.debug("Messaging ended");
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				if (isNotificationRunning()) {
+//					logger.debug("Thread allready running, abort new request!");
+//					return;
+//				}
+//
+//				setNotificationRunning(true);
+//
+//				setSteps(calculateSteps());
+//
+//				NotificationPerformer performer = new NotificationPerformer(getTask(),
+//						generalTab.getSelectDiagnosisRevision());
+//
+//				performer.printNotification(generalTab.isUseNotification(), generalTab.getSelectedTemplate(),
+//						generalTab.getPrintCount());
+//
+//				performer.mailNotification(mailTab.isUseNotification(), mailTab.getContainerToNotify(),
+//						mailTab.isIndividualAddresses(), mailTab.getSelectedTemplate(), mailTab.getMailTemplate());
+//
+//				performer.faxNotification(faxTab.isUseNotification(), faxTab.getContainerToNotify(),
+//						faxTab.isIndividualAddresses(), faxTab.isSendFax(), faxTab.isPrintFax(),
+//						faxTab.getSelectedTemplate());
+//
+//				performer.letterNotification(letterTab.isUseNotification(), letterTab.getContainerToNotify(),
+//						letterTab.getSelectedTemplate());
+//
+//				performer.phoneNotification(phoneTab.isUseNotification(), phoneTab.getContainerToNotify());
+//
+//				notificationService.performeNotification(performer, this);
+//
+//				sendReportTab.setCurrentSendReport(performer.getSendReport());
+//
+//				setProgressPercent(100);
+//
+//				// progressStepText("dialog.notification.sendProcess.success");
+//
+//				logger.debug("Messaging ended");
+//
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 
 			setNotificationCompleted(true);
 

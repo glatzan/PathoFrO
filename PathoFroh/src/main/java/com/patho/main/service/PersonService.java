@@ -33,7 +33,7 @@ public class PersonService extends AbstractService {
 	public static boolean copyPersonData(Person source, Person target, boolean forceAutoUpdate) {
 		boolean change = false;
 
-		if (target.isAutoUpdate() || forceAutoUpdate) {
+		if (target.getAutoUpdate() || forceAutoUpdate) {
 			if (HistoUtil.isStringDifferent(source.getTitle(), target.getTitle())) {
 				change = true;
 				target.setTitle(source.getTitle());

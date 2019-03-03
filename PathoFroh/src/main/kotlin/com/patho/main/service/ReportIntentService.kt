@@ -2,15 +2,16 @@ package com.patho.main.service
 
 import com.patho.main.common.ContactRole
 import com.patho.main.config.PathoConfig
-import com.patho.main.model.person.Organization
-import com.patho.main.model.person.Person
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportHistoryRecord
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
+import com.patho.main.model.person.Organization
+import com.patho.main.model.person.Person
 import com.patho.main.repository.AssociatedContactNotificationRepository
 import com.patho.main.repository.AssociatedContactRepository
+import com.patho.main.repository.TaskRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -24,15 +25,16 @@ import javax.transaction.Transactional
 open class ReportIntentService @Autowired constructor(
         private val associatedContactRepository: AssociatedContactRepository,
         private val pathoConfig: PathoConfig,
-        private val associatedContactNotificationRepository: AssociatedContactNotificationRepository) : AbstractService() {
+        private val associatedContactNotificationRepository: AssociatedContactNotificationRepository,
+        private val taskRepository: TaskRepository) : AbstractService() {
 
 
     /**
      * Adds a new report intent to the task. Adding of a person twice with the same role will be prevented.
      */
     @Transactional
-    open fun addReportIntent(task: Task, person: Person, role: ContactRole): Pair<Task, ReportIntent> {
-        return addReportIntent(task, ReportIntent(task, person, role))
+    open fun addReportIntent(task: Task, person: Person, role: ContactRole, defaultNotification: Boolean = false, save: Boolean = true): Pair<Task, ReportIntent> {
+        return addReportIntent(task, ReportIntent(task, person, role), defaultNotification, save)
     }
 
     /**
@@ -227,17 +229,39 @@ open class ReportIntentService @Autowired constructor(
      * Updates the ReportIntentNotification history to match the current diagnoses
      */
     @Transactional
-    open fun updateReportIntentNotificationHistoryWithDiagnoses(task: Task, reportIntent: ReportIntent) {
-        for (notification in reportIntent.notifications) {
-            updateReportIntentNotificationHistoryWithDiagnoses(task, notification)
+    open fun updateReportIntentNotificationHistoryWithDiagnoses(task: Task, save: Boolean = true): Task {
+        for (notification in task.contacts) {
+            updateReportIntentNotificationHistoryWithDiagnoses(task, notification, save = false)
         }
+
+        if (save)
+            return taskRepository.save(task, resourceBundle.get("log.reportIntent.notification.updated", task), task!!.patient)
+
+        return task;
     }
 
     /**
      * Updates the ReportIntentNotification history to match the current diagnoses
      */
     @Transactional
-    open fun updateReportIntentNotificationHistoryWithDiagnoses(task: Task, reportIntentNotification: ReportIntentNotification, save: Boolean = true) {
+    open fun updateReportIntentNotificationHistoryWithDiagnoses(task: Task, reportIntent: ReportIntent, save: Boolean = true): Pair<Task, ReportIntent> {
+        for (notification in reportIntent.notifications) {
+            updateReportIntentNotificationHistoryWithDiagnoses(task, notification, save = false)
+        }
+
+        if (save) {
+            var tmp = associatedContactRepository.save(reportIntent, resourceBundle.get("log.reportIntent.notification.updated", task), task!!.patient)
+            return Pair(task, tmp)
+        }
+
+        return Pair(task, reportIntent)
+    }
+
+    /**
+     * Updates the ReportIntentNotification history to match the current diagnoses
+     */
+    @Transactional
+    open fun updateReportIntentNotificationHistoryWithDiagnoses(task: Task, reportIntentNotification: ReportIntentNotification, save: Boolean = true): Pair<Task, ReportIntentNotification> {
 
         val foundRevisions = mutableListOf<DiagnosisRevision>()
 
@@ -265,16 +289,44 @@ open class ReportIntentService @Autowired constructor(
         }
 
         if (save) {
-            // TODO: save
+            var tmp = associatedContactNotificationRepository.save(reportIntentNotification, resourceBundle.get("log.reportIntent.notification.updated", task), task!!.patient)
+            return Pair(task, tmp)
         }
+
+        return Pair(task, reportIntentNotification)
+    }
+
+    /**
+     * Adds history data to an reportIntentNotification. If the reportIntentNotification is not present, it will be created as well.
+     */
+    @Transactional
+    open fun addNotificationHistoryDataAndReportIntentNotification(task: Task, reportIntent: ReportIntent, type: ReportIntentNotification.NotificationTyp, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<ReportIntent, ReportHistoryRecord.ReportData> {
+        var reportIntentNotification = findReportIntentNotificationByType(reportIntent, type)
+
+        if (reportIntentNotification == null)
+            reportIntentNotification = addReportIntentNotification(task, reportIntent, type, "", save = false).second
+
+        var historyData = addNotificationHistoryData(reportIntentNotification, diagnosisRevision, actionDate, failed, commentary)
+
+        if (save) {
+            val tmp = associatedContactRepository
+                    .save(reportIntent,
+                            resourceBundle.get("log.reportIntent.notification.historyDataAdded", reportIntent.task,
+                                    reportIntent, type.toString()),
+                            reportIntent.task!!.patient)
+            return Pair(tmp, historyData);
+        }
+
+        return Pair(reportIntent, historyData);
     }
 
     /**
      * Adds a history record to a notification
      */
     @Transactional
-    open fun addNotificationHistoryData(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, actionDate: Instant, failed: Boolean): ReportHistoryRecord.ReportData {
+    open fun addNotificationHistoryData(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = ""): ReportHistoryRecord.ReportData {
         val reportData = ReportHistoryRecord.ReportData()
+        reportData.commentary = commentary
         reportData.actionDate = actionDate
         reportData.contactAddress = reportIntentNotification.contactAddress ?: ""
         reportData.failed = failed
@@ -374,7 +426,14 @@ open class ReportIntentService @Autowired constructor(
     }
 
     /**
-     * Generates a adress for the given report intent
+     * Generates a address for a report intent, uses the default address if set
+     */
+    open fun generateAddress(reportIntent: ReportIntent): String {
+        return generateAddress(reportIntent, reportIntent.person?.defaultAddress)
+    }
+
+    /**
+     * Generates a address for the given report intent
      */
     open fun generateAddress(reportIntent: ReportIntent, organization: Organization? = null): String {
         val buffer = StringBuffer()

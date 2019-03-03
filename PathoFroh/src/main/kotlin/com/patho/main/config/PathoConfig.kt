@@ -4,7 +4,6 @@ import com.patho.main.common.ContactRole
 import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.repository.MediaRepository
 import com.patho.main.util.config.VersionContainer
-import com.patho.main.util.helper.StreamUtils
 import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import java.io.File
 import java.io.IOException
-import java.util.ArrayList
+import java.util.*
 import javax.annotation.PostConstruct
 
 @Configuration
@@ -21,22 +20,16 @@ public open class PathoConfig @Autowired constructor(
         var mediaRepository: MediaRepository) {
 
     companion object {
-        @JvmStatic
         val PDF_NOT_FOUND_PDF = "classpath:templates/print/pdfnotfound.pdf"
 
-        @JvmStatic
         val PDF_NOT_FOUND_IMG = "classpath:templates/print/pdfnotfound.png"
 
-        @JvmStatic
         val REPORT_NOT_APPROVED_PDF = "classpath:templates/print/reportnotapproved.pdf"
 
-        @JvmStatic
         val REPORT_NOT_APPROVED_IMG = "classpath:templates/print/reportnotapproved.png"
 
-        @JvmStatic
         val RENDER_ERROR_PDF = "classpath:templates/print/pdfnotfound.pdf"
 
-        @JvmStatic
         val LOGIN_PAGE = "/login.xhtml"
     }
 
@@ -51,6 +44,8 @@ public open class PathoConfig @Autowired constructor(
     var miscellaneous: Miscellaneous = Miscellaneous()
 
     var schedule: Schedule = Schedule()
+
+    var mailSettings: MailSettings = MailSettings()
 
     /**
      * Container for providing version information
@@ -112,7 +107,7 @@ public open class PathoConfig @Autowired constructor(
         }
 
         // loading versions
-        versionContainer =  VersionContainer(mediaRepository.getStrings(fileSettings.programVersionInfo))
+        versionContainer = VersionContainer(mediaRepository.getStrings(fileSettings.programVersionInfo))
 
         if (File(fileSettings.programInfo).exists()) {
             val programVersionJson = mediaRepository.getString(fileSettings.programInfo)
@@ -121,7 +116,9 @@ public open class PathoConfig @Autowired constructor(
         }
     }
 
-
+    /**
+     * File settings container
+     */
     class FileSettings {
 
         var fileRepository: String = ""
@@ -150,6 +147,36 @@ public open class PathoConfig @Autowired constructor(
             @JvmStatic
             val FILE_REPOSITORY_PATH_TOKEN = "fileRepository:"
         }
+    }
+
+    /**
+     * Mail settings
+     */
+    class MailSettings {
+        /**
+         * Server IP
+         */
+        var server: String = ""
+
+        /**
+         * Server Port
+         */
+        var port: Int = 0
+
+        /**
+         * SLL
+         */
+        var ssl: Boolean = false
+
+        var debug: Boolean = false
+
+        var systemMail: String = ""
+
+        var systemName: String = ""
+
+        var adminAddresses: Array<String> = arrayOf<String>()
+
+        var errorAddresses: Array<String> = arrayOf<String>()
     }
 
     class DefaultDocuments {
@@ -240,7 +267,7 @@ public open class PathoConfig @Autowired constructor(
     }
 
     class Miscellaneous {
-        var phoneRegex: String? = null
+        var phoneRegex: String = ""
     }
 
     class DefaultNotification {

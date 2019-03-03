@@ -113,8 +113,8 @@ public class FileMakerImporter {
     @Autowired
     private DiagnosisService diagnosisService;
 
-    @Autowired
-    private AssociatedContactService associatedContactService;
+//    @Autowired
+//    private AssociatedContactService associatedContactService;
 
     @Autowired
     private BioBankService bioBankService;
@@ -443,8 +443,8 @@ public class FileMakerImporter {
                             re.setNotificationDate(sigantureDate.toInstant());
                         }
 
-                        task = associatedContactService
-                                .addAssociatedContact(task, surgeonPhys.getPerson(), ContactRole.SURGEON).getTask();
+//                        task = associatedContactService
+//                                .addAssociatedContact(task, surgeonPhys.getPerson(), ContactRole.SURGEON).getTask();
 //
 //									logger.debug("Searching for material... {}", material);
 //									List<MaterialPreset> m = materialPresetRepository.findAllByName(material, false);
@@ -452,8 +452,8 @@ public class FileMakerImporter {
 //										logger.debug("Found material {}", materialPreset.getName());
 //									}
 
-                        task = associatedContactService
-                                .addAssociatedContact(task, pait.getPerson(), ContactRole.PATIENT).getTask();
+//                        task = associatedContactService
+//                                .addAssociatedContact(task, pait.getPerson(), ContactRole.PATIENT).getTask();
 
                         BioBank bioBank = bioBankService.createBioBank(task);
                     }

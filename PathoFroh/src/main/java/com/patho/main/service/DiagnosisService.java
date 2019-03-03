@@ -75,12 +75,11 @@ public class DiagnosisService extends AbstractService {
     @Autowired
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private AssociatedContactService associatedContactService;
+    private ReportIntentService reportIntentService;
 
     /**
      * Updates all diagnosisRevision of the given revisions
      *
-     * @param Task task
      */
     public Task synchronizeDiagnosesAndSamples(Task task, boolean save) {
         logger.info("Synchronize all diagnoses of task " + task.getTaskID() + " with samples");
@@ -360,7 +359,7 @@ public class DiagnosisService extends AbstractService {
 
         // updating all contacts on diagnosis change, an determine if the
         // contact should receive a physical case report
-        task = associatedContactService.updateNotificationsForPhysicalDiagnosisReport(task);
+        task = reportIntentService.updateReportIntentNotificationHistoryWithDiagnoses(task, true);
 
         task = taskRepository.save(task, resourceBundle.get("log.patient.task.diagnosisRevision.diagnosis.update", task,
                 diagnosis, diagnosis.getDiagnosis()));

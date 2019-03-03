@@ -77,7 +77,7 @@ open class ReportIntentNotification : AbstractPersistable, ID {
      * Manually altered notification address
      */
     @Column(columnDefinition = "VARCHAR")
-    open var contactAddress: String? = null
+    open var contactAddress: String = ""
 
     /**
      * HistoryData

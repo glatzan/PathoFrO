@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
 import com.patho.main.config.PathoConfig;
+import com.patho.main.util.print.LoadedPrintPDFBearer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,6 @@ import com.patho.main.repository.MediaRepository;
 import com.patho.main.service.PDFService;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.util.printer.LoadedPDFContainer;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -481,8 +481,8 @@ public class PDFCreator {
 		return mediaRepository.moveFile(srcFile, destFile);
 	}
 
-	public PDFContainer mergePDFs(PDFContainer target, List<LoadedPDFContainer> containers) {
-		LoadedPDFContainer loadedContainer = PDFCreator.mergePdfs(containers, "", target.getType());
+	public PDFContainer mergePDFs(PDFContainer target, List<LoadedPrintPDFBearer> containers) {
+		LoadedPrintPDFBearer loadedContainer = PDFCreator.mergePdfs(containers, "", target.getType());
 
 		mediaRepository.saveBytes(loadedContainer.getPdfData(), target.getPath());
 
@@ -498,7 +498,7 @@ public class PDFCreator {
 	 * @param container
 	 * @return
 	 */
-	public static int countPDFPages(LoadedPDFContainer container) {
+	public static int countPDFPages(LoadedPrintPDFBearer container) {
 		PdfReader pdfReader;
 		try {
 			pdfReader = new PdfReader(container.getPdfData());
@@ -520,7 +520,7 @@ public class PDFCreator {
 	 * @param type
 	 * @return
 	 */
-	public static LoadedPDFContainer mergePdfs(List<LoadedPDFContainer> containers, String name, DocumentType type) {
+	public static LoadedPrintPDFBearer mergePdfs(List<LoadedPrintPDFBearer> containers, String name, DocumentType type) {
 
 		try {
 			Document document = new Document();
@@ -530,7 +530,7 @@ public class PDFCreator {
 			document.open();
 			PdfContentByte cb = writer.getDirectContent();
 
-			for (LoadedPDFContainer pdfContainer : containers) {
+			for (LoadedPrintPDFBearer pdfContainer : containers) {
 				PdfReader pdfReader = new PdfReader(pdfContainer.getPdfData());
 				for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
 					document.newPage();
@@ -542,7 +542,7 @@ public class PDFCreator {
 			}
 			document.close();
 
-			return new LoadedPDFContainer(type, name, out.toByteArray(), null);
+			return new LoadedPrintPDFBearer(type, name, out.toByteArray(), null);
 		} catch (DocumentException | IOException e) {
 			e.printStackTrace();
 			return null;

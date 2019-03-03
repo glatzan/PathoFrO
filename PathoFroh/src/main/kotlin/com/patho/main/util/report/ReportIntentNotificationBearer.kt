@@ -4,7 +4,7 @@ import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.util.print.PrintPDFBearer
 
-class ReportIntentNotificationBearer(
+open class ReportIntentNotificationBearer(
         var contact: ReportIntent,
         var notification: ReportIntentNotification) {
 

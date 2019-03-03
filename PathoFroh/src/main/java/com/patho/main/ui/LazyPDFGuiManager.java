@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
+import com.patho.main.config.PathoConfig;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
@@ -125,7 +126,7 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 				setPDFContainerToRender(container);
 			} else {
 				setPDFContainerToRender(
-						new PDFContainer(DocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.RENDER_ERROR_PDF));
+						new PDFContainer(DocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.Companion.getRENDER_ERROR_PDF()));
 			}
 
 			getRenderPDF().set(true);
@@ -153,7 +154,7 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 			if (mediaRepository.isFile(getPDFContainerToRender().getPath()))
 				pdf = mediaRepository.getBytes(getPDFContainerToRender().getPath());
 			else
-				pdf = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
+				pdf = mediaRepository.getBytes(PathoConfig.Companion.getPDF_NOT_FOUND_PDF());
 
 			return new DefaultStreamedContent(new ByteArrayInputStream(pdf), "application/pdf",
 					getPDFContainerToRender().getName());

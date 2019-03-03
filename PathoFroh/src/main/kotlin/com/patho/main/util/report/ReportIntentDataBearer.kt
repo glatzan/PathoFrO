@@ -78,7 +78,7 @@ data class ReportIntentDataBearer(var task: Task, var diagnosisRevision: Diagnos
         /**
          * List of mail receivers
          */
-        var receivers: List<ReportIntentNotificationBearer> = listOf<ReportIntentNotificationBearer>()
+        var receivers: List<ReportIntentMailNotificationBearer> = listOf<ReportIntentMailNotificationBearer>()
     }
 
     /**

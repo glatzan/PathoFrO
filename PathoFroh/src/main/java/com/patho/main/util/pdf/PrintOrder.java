@@ -2,8 +2,7 @@ package com.patho.main.util.pdf;
 
 import com.patho.main.model.PDFContainer;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.util.printer.LoadedPDFContainer;
-import com.patho.main.util.printer.TemplatePDFContainer;
+import com.patho.main.util.print.LoadedPrintPDFBearer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +17,7 @@ import lombok.Setter;
 @Setter
 public class PrintOrder {
 
-	private LoadedPDFContainer pdfContainer;
+	private LoadedPrintPDFBearer pdfContainer;
 	private int copies;
 	private boolean duplex;
 	private boolean printEvenPageCount;
@@ -32,10 +31,6 @@ public class PrintOrder {
 		this(container, 1, documentTemplate, false);
 	}
 
-	public PrintOrder(TemplatePDFContainer container, int copies) {
-		this(container.getPdfContainer(), copies, container.getPrintDocument(), false);
-	}
-
 	public PrintOrder(PDFContainer container, int copies, PrintDocument documentTemplate) {
 		this(container, copies, documentTemplate, false);
 	}
@@ -45,7 +40,7 @@ public class PrintOrder {
 	}
 
 	public PrintOrder(PDFContainer container, int copies, boolean duplex, String args) {
-		this.pdfContainer = new LoadedPDFContainer(container);
+		this.pdfContainer = new LoadedPrintPDFBearer(container);
 		this.duplex = duplex;
 		this.args = args;
 		this.copies = copies;

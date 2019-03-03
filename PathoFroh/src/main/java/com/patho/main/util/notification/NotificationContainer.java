@@ -2,8 +2,7 @@ package com.patho.main.util.notification;
 
 import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.model.patient.notification.ReportIntentNotification;
-import com.patho.main.service.AssociatedContactService;
-import com.patho.main.util.printer.TemplatePDFContainer;
+import com.patho.main.util.print.LoadedPrintPDFBearer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +34,7 @@ public class NotificationContainer {
     /**
      * The individual pdf is saved here
      */
-    protected TemplatePDFContainer pdf;
+    protected LoadedPrintPDFBearer pdf;
 
     /**
      * Address, copied form contact
@@ -80,7 +79,7 @@ public class NotificationContainer {
     public void update(ReportIntent contact, ReportIntentNotification notification) {
         this.contact = contact;
         this.notification = notification;
-        this.faildPreviously = notification.getFailed();
+//        this.faildPreviously = notification.getFailed();
         this.perform = true;
     }
 
@@ -89,26 +88,26 @@ public class NotificationContainer {
      * correct it) or if first try from contact.
      */
     public void initAddressForNotificationType() {
-        if (!notification.getFailed() && !notification.getRenewed()) {
-            switch (notification.getNotificationTyp()) {
-                case EMAIL:
-                    setContactAddress(contact.getPerson().getContact().getEmail());
-                    break;
-                case FAX:
-                    setContactAddress(contact.getPerson().getContact().getFax());
-                    break;
-                case PHONE:
-                    setContactAddress(contact.getPerson().getContact().getPhone());
-                    break;
-                case LETTER:
-                    setContactAddress(AssociatedContactService.generateAddress(getContact(),
-                            getContact().getPerson().getDefaultAddress()));
-                default:
-                    break;
-            }
-        } else {
-            setContactAddress(notification.getContactAddress());
-        }
+//        if (!notification.getFailed() && !notification.getRenewed()) {
+//            switch (notification.getNotificationTyp()) {
+//                case EMAIL:
+//                    setContactAddress(contact.getPerson().getContact().getEmail());
+//                    break;
+//                case FAX:
+//                    setContactAddress(contact.getPerson().getContact().getFax());
+//                    break;
+//                case PHONE:
+//                    setContactAddress(contact.getPerson().getContact().getPhone());
+//                    break;
+//                case LETTER:
+//                    setContactAddress(AssociatedContactService.generateAddress(getContact(),
+//                            getContact().getPerson().getDefaultAddress()));
+//                default:
+//                    break;
+//            }
+//        } else {
+//            setContactAddress(notification.getContactAddress());
+//        }
     }
 
     /**

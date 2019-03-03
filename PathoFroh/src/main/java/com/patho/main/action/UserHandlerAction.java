@@ -1,11 +1,12 @@
 package com.patho.main.action;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
+import com.patho.main.model.user.HistoPermissions;
+import com.patho.main.model.user.HistoUser;
+import com.patho.main.repository.GroupRepository;
+import com.patho.main.repository.UserRepository;
+import com.patho.main.service.PrintService;
+import com.patho.main.util.printer.ClinicPrinter;
+import com.patho.main.util.printer.LabelPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +20,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.patho.main.model.user.HistoPermissions;
-import com.patho.main.model.user.HistoUser;
-import com.patho.main.repository.GroupRepository;
-import com.patho.main.repository.UserRepository;
-import com.patho.main.service.PrintService;
-import com.patho.main.template.mail.RequestUnlockMail;
-import com.patho.main.util.printer.ClinicPrinter;
-import com.patho.main.util.printer.LabelPrinter;
-import com.sun.mail.util.logging.MailHandler;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import javax.annotation.PostConstruct;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
-@Getter
-@Setter
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserHandlerAction implements Serializable {
 
@@ -44,19 +34,13 @@ public class UserHandlerAction implements Serializable {
 	private static final long serialVersionUID = -8314968695816748306L;
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private GroupRepository groupRepository;
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	@Lazy
 	private PrintService printService;
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private UserRepository userRepository;
 
 	/********************************************************
@@ -174,4 +158,31 @@ public class UserHandlerAction implements Serializable {
 //		setUnlockRequestSend(true);
 	}
 
+	public Logger getLogger() {
+		return this.logger;
+	}
+
+	public boolean isUnlockRequestSend() {
+		return this.unlockRequestSend;
+	}
+
+	public ClinicPrinter getSelectedPrinter() {
+		return this.selectedPrinter;
+	}
+
+	public LabelPrinter getSelectedLabelPrinter() {
+		return this.selectedLabelPrinter;
+	}
+
+	public void setUnlockRequestSend(boolean unlockRequestSend) {
+		this.unlockRequestSend = unlockRequestSend;
+	}
+
+	public void setSelectedPrinter(ClinicPrinter selectedPrinter) {
+		this.selectedPrinter = selectedPrinter;
+	}
+
+	public void setSelectedLabelPrinter(LabelPrinter selectedLabelPrinter) {
+		this.selectedLabelPrinter = selectedLabelPrinter;
+	}
 }

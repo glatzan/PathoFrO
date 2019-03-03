@@ -28,5 +28,6 @@ open class ReportHistoryRecord : JsonType<ReportHistoryRecord> {
         open var failed: Boolean = false
         open var actionDate: Instant = Instant.now()
         open var contactAddress: String = ""
+        open var commentary : String = ""
     }
 }

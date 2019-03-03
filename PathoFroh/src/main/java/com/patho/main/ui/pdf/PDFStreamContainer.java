@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletResponse;
 
+import com.patho.main.config.PathoConfig;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -70,7 +71,7 @@ public interface PDFStreamContainer {
 			if (getTooltip() != null && getMediaRepository().isFile(getTooltip().getThumbnail()))
 				img = getMediaRepository().getBytes(getTooltip().getThumbnail());
 			else
-				img = getMediaRepository().getBytes(PathoConfig.PDF_NOT_FOUND_IMG);
+				img = getMediaRepository().getBytes(PathoConfig.Companion.getPDF_NOT_FOUND_IMG());
 
 			return new DefaultStreamedContent(new ByteArrayInputStream(img), "image/png");
 		}
@@ -93,7 +94,7 @@ public interface PDFStreamContainer {
 			if (getDisplayPDF() != null && getMediaRepository().isFile(getDisplayPDF().getPath()))
 				file = getMediaRepository().getBytes(getDisplayPDF().getPath());
 			else
-				file = getMediaRepository().getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
+				file = getMediaRepository().getBytes(PathoConfig.Companion.getPDF_NOT_FOUND_PDF());
 
 			return new DefaultStreamedContent(new ByteArrayInputStream(file), "application/pdf",
 					getDisplayPDF().getName());
@@ -127,7 +128,7 @@ public interface PDFStreamContainer {
 			if (getDisplayPDF() != null && getMediaRepository().isFile(getDisplayPDF().getPath()))
 				file = getMediaRepository().getBytes(getDisplayPDF().getPath());
 			else
-				file = getMediaRepository().getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
+				file = getMediaRepository().getBytes(PathoConfig.Companion.getPDF_NOT_FOUND_PDF());
 
 			// Init servlet response.
 			response.reset();

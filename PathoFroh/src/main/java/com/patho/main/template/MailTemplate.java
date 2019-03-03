@@ -1,24 +1,18 @@
 package com.patho.main.template;
 
+import com.patho.main.model.PDFContainer;
+import com.patho.main.util.DateTool;
+import com.patho.main.util.helper.TextToLatexConverter;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.patho.main.util.DateTool;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-
-import com.patho.main.model.PDFContainer;
-import com.patho.main.util.helper.TextToLatexConverter;
-
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class MailTemplate extends AbstractTemplate {
 
-	private PDFContainer attachment;
+	public PDFContainer attachment;
 
 	private String subject;
 
@@ -88,7 +82,46 @@ public class MailTemplate extends AbstractTemplate {
 		return MailType.fromString(this.type);
 	}
 
-	@Getter
+	public PDFContainer getAttachment() {
+		return this.attachment;
+	}
+
+	public String getSubject() {
+		return this.subject;
+	}
+
+	public String getFinalSubject() {
+		return this.finalSubject;
+	}
+
+	public String getBody() {
+		return this.body;
+	}
+
+	public String getFinalBody() {
+		return this.finalBody;
+	}
+
+	public void setAttachment(PDFContainer attachment) {
+		this.attachment = attachment;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public void setFinalSubject(String finalSubject) {
+		this.finalSubject = finalSubject;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public void setFinalBody(String finalBody) {
+		this.finalBody = finalBody;
+	}
+
 	public static enum MailType {
 
 		ERROR_MAIL("error.mail"), REQUEST_UNLOCK_MAIL("unlock.mail"), SUCCESS_UNLOCK_MAIL("unlockOk.mail"),
@@ -109,5 +142,8 @@ public class MailTemplate extends AbstractTemplate {
 			throw new IllegalArgumentException("No constant with text " + text + " found");
 		}
 
+		public String getTemplateName() {
+			return this.templateName;
+		}
 	}
 }

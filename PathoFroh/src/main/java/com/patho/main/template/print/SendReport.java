@@ -11,7 +11,7 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.pdf.PDFCreator;
-import com.patho.main.util.printer.LoadedPDFContainer;
+import com.patho.main.util.print.LoadedPrintPDFBearer;
 
 /**
  * patient, <br>
@@ -91,25 +91,25 @@ public class SendReport extends PrintDocument {
 	}
 
 	public PDFContainer onAfterPDFCreation(PDFContainer container, PDFCreator creator) {
-		List<LoadedPDFContainer> attachPdf = new ArrayList<LoadedPDFContainer>();
+		List<LoadedPrintPDFBearer> attachPdf = new ArrayList<LoadedPrintPDFBearer>();
 
-		attachPdf.add(new LoadedPDFContainer(container));
+		attachPdf.add(new LoadedPrintPDFBearer(container));
 
-		if (useFax && HistoUtil.isNotNullOrEmpty(mails))
-			attachPdf.addAll(mails.stream().filter(p -> p.getPdf() != null).map(p -> new LoadedPDFContainer(p.getPdf()))
-					.collect(Collectors.toList()));
-
-		if (useFax && HistoUtil.isNotNullOrEmpty(faxes))
-			attachPdf.addAll(faxes.stream().filter(p -> p.getPdf() != null).map(p -> new LoadedPDFContainer(p.getPdf()))
-					.collect(Collectors.toList()));
-
-		if (useLetters && HistoUtil.isNotNullOrEmpty(letters))
-			attachPdf.addAll(letters.stream().filter(p -> p.getPdf() != null)
-					.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
-
-		if (usePhone && HistoUtil.isNotNullOrEmpty(phonenumbers))
-			attachPdf.addAll(phonenumbers.stream().filter(p -> p.getPdf() != null)
-					.map(p -> new LoadedPDFContainer(p.getPdf())).collect(Collectors.toList()));
+//		if (useFax && HistoUtil.isNotNullOrEmpty(mails))
+//			attachPdf.addAll(mails.stream().filter(p -> p.getPdf() != null).map(p -> new LoadedPrintPDFBearer(p))
+//					.collect(Collectors.toList()));
+//
+//		if (useFax && HistoUtil.isNotNullOrEmpty(faxes))
+//			attachPdf.addAll(faxes.stream().filter(p -> p.getPdf() != null).map(p -> new LoadedPrintPDFBearer(p.getPdf()))
+//					.collect(Collectors.toList()));
+//
+//		if (useLetters && HistoUtil.isNotNullOrEmpty(letters))
+//			attachPdf.addAll(letters.stream().filter(p -> p.getPdf() != null)
+//					.map(p -> new LoadedPrintPDFBearer(p.getPdf())).collect(Collectors.toList()));
+//
+//		if (usePhone && HistoUtil.isNotNullOrEmpty(phonenumbers))
+//			attachPdf.addAll(phonenumbers.stream().filter(p -> p.getPdf() != null)
+//					.map(p -> new LoadedPrintPDFBearer(p.getPdf())).collect(Collectors.toList()));
 
 		container = creator.mergePDFs(container, attachPdf);
 

@@ -1,8 +1,10 @@
 package com.patho.main.service.impl
 
 import com.patho.main.action.UserHandlerAction
+import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
+import com.patho.main.repository.MediaRepository
 import com.patho.main.service.OrganizationService
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.ReportService
@@ -32,6 +34,11 @@ class SpringContextBridge : SpringContextBridgedServices {
     @Autowired
     override lateinit var organizationService : OrganizationService
 
+    @Autowired
+    override lateinit var pathoConfig: PathoConfig
+
+    @Autowired
+    override lateinit var mediaRepository: MediaRepository
 
     companion object {
         @JvmStatic

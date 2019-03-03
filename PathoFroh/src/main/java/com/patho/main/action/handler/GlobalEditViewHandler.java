@@ -44,7 +44,6 @@ import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoSettings;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.AssociatedContactService;
 import com.patho.main.service.BlockService;
 import com.patho.main.service.DiagnosisService;
 import com.patho.main.service.FavouriteListService;
@@ -561,11 +560,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
 		@Getter(AccessLevel.NONE)
 		@Setter(AccessLevel.NONE)
 		private BlockService blockService;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private AssociatedContactService associatedContactService;
 
 		@Autowired
 		@Getter(AccessLevel.NONE)

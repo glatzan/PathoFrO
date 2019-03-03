@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.List;
 
 import com.patho.main.config.PathoConfig;
+import com.patho.main.service.ReportIntentService;
+import com.patho.main.util.print.LoadedPrintPDFBearer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -26,7 +28,6 @@ import com.patho.main.ui.LazyPDFGuiManager;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
-import com.patho.main.util.printer.TemplatePDFContainer;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -60,7 +61,7 @@ public class PrintDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private AssociatedContactService associatedContactService;
+	private ReportIntentService reportIntentService;
 
 	/**
 	 * Manager for rendering the pdf lazy style
@@ -241,8 +242,11 @@ public class PrintDialog extends AbstractDialog {
 
 			// only save if person is associated
 			if (container.getContact() != null && container.getContact().getRole() != ContactRole.NONE) {
-				associatedContactService.addNotificationByType(container.getContact(), NotificationTyp.PRINT, false,
-						true, false, Instant.now(), container.getAddress(), false);
+//				reportIntentService.addNotificationHistoryDataAndReportIntentNotification(task,container.getContact(),NotificationTyp.PRINT, get);
+				// TODO save print request
+
+//				associatedContactService.addNotificationByType(container.getContact(), NotificationTyp.PRINT, false,
+//						true, false, Instant.now(), container.getAddress(), false);
 			}
 
 			printedDocuments += container.getCopies();
@@ -284,7 +288,7 @@ public class PrintDialog extends AbstractDialog {
 	 */
 	public void hideAndSelectDialog() {
 		super.hideDialog(selectWithTemplate
-				? new TemplatePDFContainer(guiManager.getPDFContainerToRender(),
+				? new LoadedPrintPDFBearer(guiManager.getPDFContainerToRender(),
 						getSelectedTemplate().getDefaultTemplateConfiguration().getDocumentTemplate())
 				: guiManager.getPDFContainerToRender());
 	}
