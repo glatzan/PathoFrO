@@ -1,6 +1,7 @@
 package com.patho.main.model.person
 
 import com.patho.main.model.AbstractPersistable
+import com.patho.main.model.PDFContainer
 import com.patho.main.model.interfaces.ID
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.SelectBeforeUpdate
@@ -15,7 +16,7 @@ open class Organization : AbstractPersistable, ID {
 
     @Id
     @GeneratedValue(generator = "organization_sequencegenerator")
-    @SequenceGenerator(name = "organization_sequencegenerator", sequenceName = "organization_sequence")
+    @SequenceGenerator(name = "organization_sequencegenerator", sequenceName = "organization_sequence" , allocationSize = 1)
     @Column(unique = true, nullable = false)
     open override var id: Long = 0
 
@@ -32,7 +33,7 @@ open class Organization : AbstractPersistable, ID {
     open var note: String = ""
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "organizsations")
-    open var persons: List<Person>? = null
+    open var persons = mutableSetOf<Person>()
 
     @Column
     open var intern: Boolean = false

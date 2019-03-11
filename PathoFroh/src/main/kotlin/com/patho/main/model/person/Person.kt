@@ -52,7 +52,7 @@ open class Person : AbstractPersistable, ID, FullName {
     open var contact: Contact = Contact()
 
     @Column
-    protected var archived: Boolean = false
+    protected open var archived: Boolean = false
 
     /**
      * Default address for notification

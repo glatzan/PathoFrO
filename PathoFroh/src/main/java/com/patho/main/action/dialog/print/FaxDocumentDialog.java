@@ -13,7 +13,6 @@ import com.patho.main.model.person.Organization;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactNotificationRepository;
-import com.patho.main.service.AssociatedContactService;
 import com.patho.main.service.FaxService;
 import com.patho.main.util.helper.HistoUtil;
 
@@ -26,11 +25,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FaxDocumentDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private AssociatedContactService associatedContactService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Lazy
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -16,7 +17,7 @@ import javax.annotation.PostConstruct
 
 @Configuration
 @ConfigurationProperties(prefix = "patho.settings")
-public open class PathoConfig @Autowired constructor(
+public open class PathoConfig @Autowired @Lazy constructor(
         var mediaRepository: MediaRepository) {
 
     companion object {

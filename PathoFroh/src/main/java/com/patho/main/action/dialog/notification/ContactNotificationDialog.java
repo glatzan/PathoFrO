@@ -17,7 +17,6 @@ import com.patho.main.model.patient.notification.ReportIntentNotification.Notifi
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.AssociatedContactService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
@@ -28,11 +27,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContactNotificationDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private AssociatedContactService associatedContactService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -111,11 +105,11 @@ public class ContactNotificationDialog extends AbstractDialog {
 			if (getAssociatedContact().getNotifications() != null)
 				for (ReportIntentNotification reportIntentNotification : getAssociatedContact()
 						.getNotifications()) {
-					if (reportIntentNotification.getNotificationTyp().equals(typeArr[i])
-							&& reportIntentNotification.getActive() && !reportIntentNotification.getFailed()) {
-						disabled = true;
-						break;
-					}
+//					if (reportIntentNotification.getNotificationTyp().equals(typeArr[i])
+//							&& reportIntentNotification.getActive() && !reportIntentNotification.getFailed()) {
+//						disabled = true;
+//						break;
+//					}
 				}
 
 			DefaultMenuItem item = new DefaultMenuItem("");
@@ -129,20 +123,20 @@ public class ContactNotificationDialog extends AbstractDialog {
 	}
 
 	public void removeNotification(ReportIntentNotification reportIntentNotification) {
-		associatedContactService.removeNotification(associatedContact, reportIntentNotification)
-				.getReportIntent();
+//		associatedContactService.removeNotification(associatedContact, reportIntentNotification)
+//				.getReportIntent();
 		update(true);
 	}
 
 	public void addNotification(ReportIntentNotification.NotificationTyp notification) {
-		associatedContactService.addNotificationByTypeAndDisableOld(associatedContact, notification)
-				.getReportIntent();
+//		associatedContactService.addNotificationByTypeAndDisableOld(associatedContact, notification)
+//				.getReportIntent();
 		update(true);
 	}
 
 	public void notificationAsPerformed(ReportIntentNotification reportIntentNotification) {
-		associatedContactService.performNotification(associatedContact, reportIntentNotification,
-				resourceBundle.get("log.contact.notification.performed.manual"), true).getReportIntent();
+//		associatedContactService.performNotification(associatedContact, reportIntentNotification,
+//				resourceBundle.get("log.contact.notification.performed.manual"), true).getReportIntent();
 		update(true);
 	}
 

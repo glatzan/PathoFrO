@@ -103,11 +103,6 @@ public class CreateTaskDialog extends AbstractDialog {
     @Autowired
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private AssociatedContactService associatedContactService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     private BioBankService bioBankService;
 
     @Autowired
@@ -139,6 +134,12 @@ public class CreateTaskDialog extends AbstractDialog {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private PrintDocumentRepository printDocumentRepository;
+
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private ReportIntentService reportIntentService;
+
 
     private Patient patient;
 
@@ -214,8 +215,7 @@ public class CreateTaskDialog extends AbstractDialog {
                 // creating standard diagnoses
                 task = diagnosisService.createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
 
-                task = associatedContactService
-                        .addAssociatedContact(task, getPatient().getPerson(), ContactRole.PATIENT).getTask();
+                task = reportIntentService.addReportIntent(task,getPatient().getPerson(),ContactRole.PATIENT,false, true).getFirst();
 
                 BioBank bioBank = bioBankService.createBioBank(task);
 

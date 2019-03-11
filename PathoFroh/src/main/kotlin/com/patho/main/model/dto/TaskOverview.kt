@@ -1,4 +1,4 @@
-package com.patho.main.model
+package com.patho.main.model.dto
 
 
 import com.patho.main.common.TaskPriority

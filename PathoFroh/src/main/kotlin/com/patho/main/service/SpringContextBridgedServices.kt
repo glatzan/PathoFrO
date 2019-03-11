@@ -16,4 +16,5 @@ interface SpringContextBridgedServices {
     var reportService: ReportService
     var pathoConfig: PathoConfig
     var mediaRepository: MediaRepository
+    var physicianService : PhysicianService
 }

@@ -5,10 +5,7 @@ import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
 import com.patho.main.repository.MediaRepository
-import com.patho.main.service.OrganizationService
-import com.patho.main.service.ReportIntentService
-import com.patho.main.service.ReportService
-import com.patho.main.service.SpringContextBridgedServices
+import com.patho.main.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -39,6 +36,9 @@ class SpringContextBridge : SpringContextBridgedServices {
 
     @Autowired
     override lateinit var mediaRepository: MediaRepository
+
+    @Autowired
+    override lateinit var physicianService: PhysicianService
 
     companion object {
         @JvmStatic

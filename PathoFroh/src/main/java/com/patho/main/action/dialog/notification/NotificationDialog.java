@@ -29,7 +29,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MailRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PrintDocumentRepository;
-import com.patho.main.service.AssociatedContactService;
 import com.patho.main.service.NotificationService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.TaskService;

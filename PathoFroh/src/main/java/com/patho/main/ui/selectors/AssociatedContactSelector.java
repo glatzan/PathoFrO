@@ -19,9 +19,10 @@ public class AssociatedContactSelector extends AbstractSelector {
 	protected AssociatedContactSelector(ReportIntent contact) {
 		this.contact = contact;
 		// deletion only possible if no notification was performed
-		setDeleteAble(
-				contact.getNotifications() != null ? !contact.getNotifications().stream().anyMatch(p -> p.getPerformed())
-						: true);
+//		setDeleteAble(
+//////				contact.getNotifications() != null ? !contact.getNotifications().stream().anyMatch(p -> p.getPerformed())
+//////						: true);
+		setDeleteAble(false);
 	}
 
 	public static List<AssociatedContactSelector> factory(Task task) {

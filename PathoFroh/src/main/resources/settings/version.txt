@@ -584,11 +584,8 @@ ALTER SEQUENCE associatedcontact_sequence RENAME TO reportintent_sequence;
 ALTER SEQUENCE associatedcontactnotification_sequence RENAME TO reportintentnotification_sequence;
 
 /* adding new  json field*/
-alter table ReportTransmitterNotification add column history jsonb;
-alter table ReportTransmitternotification_aud add column history jsonb;
-
-alter table ReportTransmitterNotification add column history jsonb;
-alter table ReportTransmitternotification_aud add column history jsonb;
+alter table ReportIntentNotification add column history jsonb;
+alter table ReportIntentNotification_aud add column history jsonb;
 
 /* Changing person birthday to localeDAte*/
 alter table person add column tmp date;

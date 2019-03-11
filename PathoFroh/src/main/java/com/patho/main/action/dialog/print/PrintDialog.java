@@ -20,7 +20,6 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PrintDocumentRepository;
-import com.patho.main.service.AssociatedContactService;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;

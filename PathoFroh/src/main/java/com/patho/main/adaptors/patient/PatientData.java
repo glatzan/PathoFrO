@@ -1,6 +1,7 @@
 package com.patho.main.adaptors.patient;
 
 import java.io.StringWriter;
+import java.time.format.DateTimeFormatter;
 
 //import javax.xml.bind.JAXBContext;
 //import javax.xml.bind.JAXBException;
@@ -30,7 +31,8 @@ public class PatientData {
 		// <Givenname>Martin</Givenname>
 		setGivenname(patient.getPerson().getLastName());
 		// <BirthDate>1975-11-14</BirthDate>
-		setBirthDate(TimeUtil.formatDate(patient.getPerson().getBirthday(), "yyyy-MM-dd"));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		setBirthDate(formatter.format(patient.getPerson().getBirthday()));
 		// <PersonalTitle>Prof. Dr.</PersonalTitle>
 		setPersonalTitle(patient.getPerson().getTitle());
 		// <JobTitle>Mathematiker</JobTitle>

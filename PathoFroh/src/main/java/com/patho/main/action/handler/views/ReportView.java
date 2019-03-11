@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
+import com.patho.main.config.PathoConfig;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
@@ -103,7 +104,7 @@ public class ReportView extends AbstractTaskView {
 				data.add(new DiagnosisReportData(revision, c.get(), false));
 			} else {
 				PDFContainer container = new PDFContainer(DocumentType.DIAGNOSIS_REPORT_NOT_APPROVED,
-						revision.getName(), PathoConfig.REPORT_NOT_APPROVED_PDF, PathoConfig.REPORT_NOT_APPROVED_IMG);
+						revision.getName(), PathoConfig.Companion.getREPORT_NOT_APPROVED_PDF(), PathoConfig.Companion.getREPORT_NOT_APPROVED_IMG());
 
 				container.setAudit(new Audit());
 				container.getAudit().setCreatedOn(revision.getAudit().getCreatedOn());
@@ -152,7 +153,7 @@ public class ReportView extends AbstractTaskView {
 				return new DefaultStreamedContent(new ByteArrayInputStream(img), "image/png");
 			} else
 				return new DefaultStreamedContent(
-						new ByteArrayInputStream(mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF)), "image/png");
+						new ByteArrayInputStream(mediaRepository.getBytes(PathoConfig.Companion.getPDF_NOT_FOUND_PDF())), "image/png");
 		}
 	}
 
@@ -169,7 +170,7 @@ public class ReportView extends AbstractTaskView {
 			if (mediaRepository.isFile(getSelectedContainer().getPath()))
 				img = mediaRepository.getBytes(getSelectedContainer().getPath());
 			else
-				img = mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF);
+				img = mediaRepository.getBytes(PathoConfig.Companion.getPDF_NOT_FOUND_PDF());
 
 			return new DefaultStreamedContent(new ByteArrayInputStream(img), "application/pdf",
 					getSelectedContainer().getName());

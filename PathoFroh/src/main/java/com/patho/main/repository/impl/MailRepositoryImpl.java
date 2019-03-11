@@ -26,7 +26,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Service
-@ConfigurationProperties(prefix = "patho.mail")
+@ConfigurationProperties(prefix = "patho.settings.mail")
 @Getter
 @Setter
 public class MailRepositoryImpl implements MailRepository {
