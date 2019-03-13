@@ -25,7 +25,7 @@ import javax.persistence.*
                 "pers.firstname, " +
                 "pers.lastname, " +
                 "pers.birthday, " +
-                "case when EXISTS(select contact.id from reporttransmitter as contact where task.id = contact.task_id and contact.person_id = :personid) then true else false end as usercontact " +
+                "case when EXISTS(select contact.id from reportintent as contact where task.id = contact.task_id and contact.person_id = :personid) then true else false end as usercontact " +
                 "from task as task " +
                 "left join patient pat on pat.id = task.parent_id " +
                 "left join person as pers on pers.id = pat.person_id " +

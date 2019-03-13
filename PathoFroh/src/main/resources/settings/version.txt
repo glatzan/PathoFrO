@@ -602,6 +602,10 @@ alter table person_aud add column birthday date;
 update person_aud set birthday = tmp;
 alter table person_aud drop column tmp;
 
+/* adding active field*/
+alter table reportintent add active boolean;
+update  reportintent set active = false
+
 /* View For task display*/
 CREATE OR REPLACE VIEW taskoverview AS
 Select

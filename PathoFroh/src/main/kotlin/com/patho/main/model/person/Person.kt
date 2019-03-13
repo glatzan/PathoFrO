@@ -38,8 +38,7 @@ open class Person : AbstractPersistable, ID, FullName {
     @Column(columnDefinition = "VARCHAR")
     open var birthName: String = ""
 
-    @Column(columnDefinition = "VARCHAR")
-    @Type(type = "date")
+    @Column
     open var birthday: LocalDate = LocalDate.now()
 
     @Column(columnDefinition = "VARCHAR")

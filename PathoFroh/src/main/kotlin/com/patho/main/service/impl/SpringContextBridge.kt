@@ -4,6 +4,7 @@ import com.patho.main.action.UserHandlerAction
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
+import com.patho.main.repository.ListItemRepository
 import com.patho.main.repository.MediaRepository
 import com.patho.main.service.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,6 +40,9 @@ class SpringContextBridge : SpringContextBridgedServices {
 
     @Autowired
     override lateinit var physicianService: PhysicianService
+
+    @Autowired
+    override lateinit var listItemRepository : ListItemRepository
 
     companion object {
         @JvmStatic
