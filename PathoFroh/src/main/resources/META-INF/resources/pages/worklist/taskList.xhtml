@@ -50,7 +50,7 @@
                       style="width:80px">
                 <h:outputText rendered="#{taskOverview.birthday ne null}"
                               value="#{taskOverview.birthday}">
-                    <f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
+                    <f:convertDateTime type="localDate" pattern="dd.MM.yyyy" timeZone="Europe/Berlin"/>
                 </h:outputText>
             </p:column>
 

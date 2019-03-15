@@ -45,7 +45,7 @@
 						value="#{msg['dialog.confirmExternalPatientData.birthday']}: " />
 					<h:outputLabel
 						value="#{confirmExternalPatientDataDialog.patient.person.birthday}">
-						<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+						<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 				</h:panelGroup>
 

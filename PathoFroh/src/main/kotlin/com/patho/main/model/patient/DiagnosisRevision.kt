@@ -129,13 +129,13 @@ open class DiagnosisRevision : AbstractPersistable, ID, AuditAble, Parent<Task> 
      * Selected physician to sign the report
      */
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    open var signatureOne: Signature? = null
+    open var signatureOne: Signature = Signature()
 
     /**
      * Selected consultant to sign the report
      */
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    open var signatureTwo: Signature? = null
+    open var signatureTwo: Signature = Signature()
 
     constructor() {
     }

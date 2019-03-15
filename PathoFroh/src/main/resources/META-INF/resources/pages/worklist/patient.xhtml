@@ -67,7 +67,7 @@
                 <p:outputLabel value="#{msg['body.worklist.patient.birthday']}"/>
                 <h:outputLabel
                         value="#{worklistHandler.current.selectedPatient.person.birthday}">
-                    <f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
+                    <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
                 </h:outputLabel>
 
                 <!-- town -->

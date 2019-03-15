@@ -57,7 +57,7 @@
 						value="#{msg['dialog.mergePatientDialog.birthday']}:" />
 					<h:outputLabel
 						value="#{dialog.mergePatientDialog.source.person.birthday}">
-						<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+						<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 
 					<!-- piz -->
@@ -90,7 +90,7 @@
 						value="#{msg['dialog.mergePatientDialog.birthday']}:" />
 					<h:outputLabel
 						value="#{dialog.mergePatientDialog.target.person.birthday}">
-						<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+						<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 
 					<!-- piz -->

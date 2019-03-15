@@ -171,15 +171,18 @@
 					<h:panelGrid styleClass="defaultHistoTable" columns="1"
 						columnClasses="columnWidth150,">
 
+						<!--person name -->
 						<h:outputText
 							value="#{patient.person.lastName}, #{patient.person.firstName}" />
 
+						<!-- piz -->
 						<h:outputText
 							value="PIZ: #{patient.piz ne 0 ? patient.piz : 'none'}" />
 
+						<!-- birthday -->
 						<h:outputText value="#{patient.person.birthday}"
 							rendered="#{patient.person.birthday ne null}">
-							<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+							<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" timeZone="Europe/Berlin" />
 						</h:outputText>
 						<h:outputText rendered="#{patient.person.birthday eq null}"
 							value="" />
