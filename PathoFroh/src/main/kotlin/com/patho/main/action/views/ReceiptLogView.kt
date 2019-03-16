@@ -1,17 +1,25 @@
 package com.patho.main.action.views
 
+import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
+import com.patho.main.repository.TaskRepository
+import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SlideService
+import com.patho.main.util.print.UnknownPrintingException
+import com.patho.main.util.status.ReportIntentStatusByUser
+import freemarker.template.TemplateNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 
 class ReceiptLogView @Autowired constructor(
         private val slideService: SlideService,
-        private val workPhaseHandler: WorkPhaseHandler) : AbstractTaskView() {
+        private val workPhaseHandler: WorkPhaseHandler,
+        private val taskRepository: TaskRepository,
+        private val printExecutorService: PrintExecutorService) : AbstractTaskView() {
 
     /**
      * Currently selected task entity in table form, transient, used for gui
@@ -30,10 +38,16 @@ class ReceiptLogView @Autowired constructor(
      */
     var actionOnMany: StainingListAction = StainingListAction.NONE
 
+    /**
+     * Status for notification list
+     */
+    var reportIntentStatusByUser: ReportIntentStatusByUser = ReportIntentStatusByUser()
+
     override fun loadView(task: Task) {
         logger.debug("Loading receipt log view")
         actionOnMany = StainingListAction.NONE
         rows = TaskEntityRow.factory(task, false)
+        reportIntentStatusByUser = ReportIntentStatusByUser(task)
     }
 
     /**
@@ -68,11 +82,37 @@ class ReceiptLogView @Autowired constructor(
         }
 
         when (action) {
+            // set slided to performed
             StainingListAction.PERFORMED, StainingListAction.NOT_PERFORMED -> {
                 logger.debug("Setting staining status of selected slides")
                 slideRows.forEach { p -> slideService.completedStaining(p as Slide, action == StainingListAction.PERFORMED) }
-                workPhaseHandler.updateStainingPhase(task)
+                workPhaseHandler.updateStainingPhase(taskRepository.save(task, resourceBundle.get("log.task.slide.completed", task), task.patient))
             }
+            // archive slides
+            StainingListAction.ARCHIVE -> {
+                //TODO implement this feature
+                println("TODO implement")
+            }
+            StainingListAction.PRINT -> {
+                slideRows.filter { p -> p.selected && p.isStainingType }
+            }
+        }
+    }
+
+    fun printLabels(vararg slides: Slide?) {
+        if (slides == null || slides.isEmpty()) {
+            MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate")
+            return
+        }
+        try {
+            printExecutorService.printLabel(slides as Slide)
+            MessageHandler.sendGrowlMessagesAsResource("growl.print", "growl.print.slide.print")
+        } catch (e: UnknownPrintingException) {
+            MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate")
+            return
+        } catch (e: TemplateNotFoundException) {
+            MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate")
+            return
         }
     }
 

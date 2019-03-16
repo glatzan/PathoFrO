@@ -89,29 +89,30 @@ public class PrintDocument extends AbstractTemplate {
         return container;
     }
 
-    public void initilize(InitializeToken... token) {
+    public PrintDocument initilize(InitializeToken... token) {
         HashMap<String, Object> map = new HashMap<String, Object>();
 
         for (int i = 0; i < token.length; i++) {
             map.put(token[i].getKey(), token[i].getValue());
         }
-        initilize(map);
+        return initilize(map);
     }
 
     /**
      * Workaround for kotlin
+     *
      * @param content
      */
-    public void initialize(HashMap<String, Object> content) {
+    public PrintDocument initialize(HashMap<String, Object> content) {
         HashMap<String, Object> map = new HashMap<String, Object>();
 
         for (Map.Entry<String, Object> test : content.entrySet()) {
             map.put(test.getKey(), test.getValue());
         }
-        initilize(map);
+        return initilize(map);
     }
 
-    public void initilize(HashMap<String, Object> content) {
+    public PrintDocument initilize(HashMap<String, Object> content) {
         initVelocity();
 
         /* create a context and add data */
@@ -132,6 +133,8 @@ public class PrintDocument extends AbstractTemplate {
         Velocity.evaluate(context, writer, "test", loadedContent);
 
         finalContent = writer.toString();
+
+        return this;
     }
 
     public void copyIntoDocument(PrintDocument document) {
