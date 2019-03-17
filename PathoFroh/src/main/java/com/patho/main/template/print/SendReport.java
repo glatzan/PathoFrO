@@ -49,7 +49,7 @@ public class SendReport extends PrintDocument {
 		setAfterPDFCreationHook(true);
 	}
 
-	public void initilize(InitializeToken... token) {
+	public PrintDocument initilize(InitializeToken... token) {
 
 		for (InitializeToken initializeToken : token) {
 			switch (initializeToken.getKey()) {
@@ -87,7 +87,7 @@ public class SendReport extends PrintDocument {
 		for (int i = 0; i < token.length; i++) {
 			map.put(token[i].getKey(), token[i].getValue());
 		}
-		initilize(map);
+		return initilize(map);
 	}
 
 	public PDFContainer onAfterPDFCreation(PDFContainer container, PDFCreator creator) {

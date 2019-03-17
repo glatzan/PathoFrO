@@ -10,7 +10,7 @@
 
     <h:outputScript library="scripts" name="closeOverlayPanelOnReturn.js"/>
 
-    <ui:include src="include/navigationBar.xhtml"></ui:include>
+    <ui:include src="include/navigationBar.xhtml" />
 
     <script type="text/javascript">
         // disables the autofocus for the caseHistoryOverlayplpanel
@@ -29,7 +29,7 @@
              styleClass="defaultHistoHiddenTableContainer">
 
         <h:outputLabel value="#{msg['body.diagnosis.headline']}"
-                       style="font-size:1.5em;"></h:outputLabel>
+                       style="font-size:1.5em;" />
 
         <h:panelGrid columns="3" style="margin-top:10px;"
                      styleClass="defaultHistoHiddenTableContainer"
@@ -42,7 +42,7 @@
                              styleClass="defaultHistoHiddenTableContainer">
 
                     <!-- material -->
-                    <c:forEach items="#{worklistHandler.current.selectedTask.samples}"
+                    <c:forEach items="#{diagnosisView.task.samples}"
                                var="sample" varStatus="loopCount">
 
                         <h:panelGrid columns="2" styleClass="defaultHistoTable"
@@ -55,10 +55,10 @@
                                 <!-- Material Name -->
                                 <p:inputText value="#{sample.material}"
                                              id="materialInput#{loopCount.index}"
-                                             disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+                                             disabled="#{!diagnosisView.task.taskStatus.editable}"
                                              tabindex="1" styleClass="customBackground"
                                              onclick="showAndUpdateOverlayPanel('materialOverlayPanel#{loopCount.index}', '#{component.clientId}' ,null, 'materialOverlayPanelDataTable#{loopCount.index}', 0, submitUpdateMaterial#{loopCount.index});"
-                                             style="width:200px;float:right;background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}">
+                                             style="width:200px;float:right;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}">
 
                                     <p:ajax event="change" execute="@this"
                                             listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.material', sample.task, sample ,sample.material)}"/>
@@ -73,14 +73,14 @@
                                     <p:dataTable filterDelay="50"
                                                  id="materialOverlayPanelDataTable#{loopCount.index}"
                                                  widgetVar="materialOverlayPanelDataTable#{loopCount.index}"
-                                                 value="#{globalEditViewHandler.genericView.staticData.materialList}"
+                                                 value="#{genericViewData.materialList}"
                                                  var="preset" styleClass="defaultHistoDataTable"
                                                  scrollable="true" scrollHeight="200" rowKey="#{preset.id}"
-                                                 selection="#{globalEditViewHandler.genericView.selectedMaterialPresets[loopCount.index]}"
+                                                 selection="#{diagnosisView.selectedMaterialPresets[loopCount.index]}"
                                                  selectionMode="single">
 
                                         <p:column filterBy="#{preset.name}" filterMatchMode="contains"
-                                                  filterValue="#{globalEditViewHandler.genericView.selectedMaterialPresetFilter[loopCount.index]}"
+                                                  filterValue="#{diagnosisView.selectedMaterialPresetFilter[loopCount.index]}"
                                                   id="presetName">
                                             <h:outputText value="#{preset.name}"/>
                                         </p:column>
@@ -89,7 +89,7 @@
                                                 process="contentForm:materialOverlayPanel#{loopCount.index}"
                                                 partialSubmit="true"
                                                 update="contentForm:materialInput#{loopCount.index}"
-                                                listener="#{globalEditViewHandler.ct.updateMaterialOfSample(sample, globalEditViewHandler.genericView.selectedMaterialPresets[loopCount.index])}"
+                                                listener="#{globalEditViewHandler.ct.updateMaterialOfSample(sample, diagnosisView.selectedMaterialPresets[loopCount.index])}"
                                                 oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();"/>
                                     </p:dataTable>
                                 </p:overlayPanel>
@@ -97,7 +97,7 @@
                                 <p:remoteCommand name="submitUpdateMaterial#{loopCount.index}"
                                                  partialSubmit="true"
                                                  update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                                 actionListener="#{globalEditViewHandler.ct.updateMaterialOfSampleWithName(sample, globalEditViewHandler.genericView.selectedMaterialPresetFilter[loopCount.index])}"
+                                                 actionListener="#{globalEditViewHandler.ct.updateMaterialOfSampleWithName(sample, diagnosisView.selectedMaterialPresetFilter[loopCount.index])}"
                                                  oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();"/>
 
                             </h:panelGroup>
@@ -110,15 +110,15 @@
                 <h:panelGrid columns="2" styleClass="defaultHistoTable">
                     <h:outputLabel value="#{msg['body.diagnosis.eye']}"/>
                     <p:selectOneMenu styleClass="customBackground" tabindex="6"
-                                     style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
-                                     disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-                                     value="#{worklistHandler.current.selectedTask.eye}">
+                                     style="background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}"
+                                     disabled="#{!diagnosisView.task.taskStatus.editable}"
+                                     value="#{diagnosisView.task.eye}">
 
                         <f:selectItems value="#{enumProvider.eyes}" var="eye"
                                        itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}"/>
 
                         <p:ajax event="change" execute="@this"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.eye',worklistHandler.current.selectedTask,worklistHandler.current.selectedTask.eye)}"/>
+                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.eye',worklistHandler.current.selectedTask,diagnosisView.task.eye)}"/>
                     </p:selectOneMenu>
 
                 </h:panelGrid>
@@ -130,14 +130,14 @@
 
                     <h:panelGroup>
                         <p:inputTextarea styleClass="customBackground"
-                                         value="#{worklistHandler.current.selectedTask.caseHistory}"
+                                         value="#{diagnosisView.task.caseHistory}"
                                          title="#{msg['body.diagnosis.story.watermark']}"
-                                         disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+                                         disabled="#{!diagnosisView.task.taskStatus.editable}"
                                          id="caseHistoryInput" style="width:90%"
                                          onclick="showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
                                          onkeypress="PF('caseHistoryOverlayPanel').hide();">
                             <p:ajax event="change"
-                                    listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',worklistHandler.current.selectedTask,worklistHandler.current.selectedTask.caseHistory)}"></p:ajax>
+                                    listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',worklistHandler.current.selectedTask,diagnosisView.task.caseHistory)}"></p:ajax>
                         </p:inputTextarea>
 
                         <p:overlayPanel id="caseHistoryOverlayPanel"
@@ -147,14 +147,14 @@
                                         onkeypress="return false;">
                             <p:dataTable id="caseHistoryOverlayPanelDataTable"
                                          widgetVar="caseHistoryOverlayPanelDataTable" filterDelay="50"
-                                         value="#{globalEditViewHandler.genericView.staticData.caseHistoryList}"
+                                         value="#{genericViewData.caseHistoryList}"
                                          var="item" styleClass="defaultHistoDataTable" scrollable="true"
                                          scrollHeight="200" rowKey="#{item.id}"
-                                         selection="#{globalEditViewHandler.genericView.selectedCaseHistoryItem}"
+                                         selection="#{diagnosisView.selectedCaseHistoryItem}"
                                          selectionMode="single">
 
                                 <p:column filterBy="#{item.value}" filterMatchMode="contains"
-                                          filterValue="#{globalEditViewHandler.genericView.caseHistoryFilter}"
+                                          filterValue="#{diagnosisView.caseHistoryFilter}"
                                           id="valueColumn">
                                     <h:outputText value="#{item.value}"/>
                                 </p:column>
@@ -162,14 +162,14 @@
                                 <p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
                                         process="contentForm:caseHistoryOverlayPanel"
                                         partialSubmit="true"
-                                        listener="#{globalEditViewHandler.ct.updateCaseHistory(globalEditViewHandler.genericView.selectedCaseHistoryItem)}"
+                                        listener="#{globalEditViewHandler.ct.updateCaseHistory(diagnosisView.selectedCaseHistoryItem)}"
                                         oncomplete="PF('caseHistoryOverlayPanel').hide();"/>
                             </p:dataTable>
                         </p:overlayPanel>
 
                         <p:remoteCommand name="submitNewCustomCaseHistory"
                                          update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                         actionListener="#{globalEditViewHandler.ct.updateCaseHistoryWithName(globalEditViewHandler.genericView.caseHistoryFilter)}"
+                                         actionListener="#{globalEditViewHandler.ct.updateCaseHistoryWithName(diagnosisView.caseHistoryFilter)}"
                                          oncomplete="PF('caseHistoryOverlayPanel').hide();"/>
 
                     </h:panelGroup>
@@ -191,10 +191,10 @@
                     <h:panelGrid columns="2"
                                  styleClass="listingHistoHiddenTableContainer">
                         <p:inputText disabled="true"
-                                     value="#{worklistHandler.current.selectedTask.taskID}"/>
+                                     value="#{diagnosisView.task.taskID}"/>
                         <p:commandLink title="#{msg['body.diagnosis.taskNumber.change']}"
                                        rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_ID')}"
-                                       disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+                                       disabled="#{!diagnosisView.task.taskStatus.editable}"
                                        actionListener="#{dialog.changeTaskIDDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                             <i class="fa fa-fw fa-cog"/>
                             <p:ajax event="dialogReturn"
@@ -205,52 +205,52 @@
                     <!-- date of surgery -->
                     <h:outputLabel value="#{msg['body.diagnosis.surgeryDate']}"/>
                     <p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="2" converter="localDateConverter"
-                                style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
+                                style="background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}"
                                 styleClass="customBackground"
-                                disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-                                value="#{worklistHandler.current.selectedTask.dateOfSugery}">
+                                disabled="#{!diagnosisView.task.taskStatus.editable}"
+                                value="#{diagnosisView.task.dateOfSugery}">
                         <p:ajax event="dateSelect"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dateOfSurgery',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.dateOfSugery))}"/>
+                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dateOfSurgery',worklistHandler.current.selectedTask,'date:'.concat(diagnosisView.task.dateOfSugery))}"/>
                         <f:ajax event="change" execute="@this"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dateOfSurgery',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.dateOfSugery))}"/>
+                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dateOfSurgery',worklistHandler.current.selectedTask,'date:'.concat(diagnosisView.task.dateOfSugery))}"/>
                     </p:calendar>
 
                     <!-- date of receipt -->
                     <h:outputLabel value="#{msg['body.diagnosis.taskEDate']}"/>
                     <p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="3" converter="localDateConverter"
-                                disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-                                style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}"
+                                disabled="#{!diagnosisView.task.taskStatus.editable}"
+                                style="background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}"
                                 styleClass="customBackground"
-                                value="#{worklistHandler.current.selectedTask.receiptDate}">
+                                value="#{diagnosisView.task.receiptDate}">
                         <p:ajax event="dateSelect"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.receiptDate))}"/>
+                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(diagnosisView.task.receiptDate))}"/>
                         <f:ajax event="change" execute="@this"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(worklistHandler.current.selectedTask.receiptDate))}"/>
+                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',worklistHandler.current.selectedTask,'date:'.concat(diagnosisView.task.receiptDate))}"/>
                     </p:calendar>
 
                     <!-- insurance -->
                     <h:outputLabel value="#{msg['body.diagnosis.insurance']}"/>
                     <p:inputText
-                            disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
-                            value="#{worklistHandler.current.selectedTask.insurance}">
+                            disabled="#{!diagnosisView.task.taskStatus.editable}"
+                            value="#{diagnosisView.task.insurance}">
                         <p:ajax event="change" execute="@this"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.insurance',worklistHandler.current.selectedTask,worklistHandler.current.selectedTask.insurance)}"/>
+                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.insurance',worklistHandler.current.selectedTask,diagnosisView.task.insurance)}"/>
                     </p:inputText>
 
                     <!-- ward -->
                     <h:outputLabel value="#{msg['body.diagnosis.ward']}"/>
                     <p:selectOneMenu id="wards"
-                                     value="#{worklistHandler.current.selectedTask.ward}"
+                                     value="#{diagnosisView.task.ward}"
                                      editable="true"
-                                     disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+                                     disabled="#{!diagnosisView.task.taskStatus.editable}"
                                      styleClass="customBackground" tabindex="5"
-                                     style="background:##{userHandlerAction.currentUser.settings.inputFieldColor};color:##{userHandlerAction.currentUser.settings.inputFieldFontColor}">
+                                     style="background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}">
 
                         <f:selectItems
-                                value="#{globalEditViewHandler.genericView.staticData.wardList}"
+                                value="#{genericViewData.wardList}"
                                 itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward"/>
                         <p:ajax event="change" execute="@this"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', worklistHandler.current.selectedTask, worklistHandler.current.selectedTask.ward)}"/>
+                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', worklistHandler.current.selectedTask, diagnosisView.task.ward)}"/>
                     </p:selectOneMenu>
 
                     <!-- surgeon -->
@@ -260,14 +260,14 @@
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
                         <h:outputLabel style="margin-left:10px;"
-                                       value="#{worklistHandler.current.selectedTask.getPrimaryContact('SURGEON', 'EXTERNAL_SURGEON')}"></h:outputLabel>
+                                       value="#{diagnosisView.task.getPrimaryContact('SURGEON', 'EXTERNAL_SURGEON')}"></h:outputLabel>
 
                         <h:panelGroup>
                             <p:commandLink style="float: right; margin-right:5px;"
                                            tabindex="9"
                                            onclick="showAndUpdateOverlayPanel('surgeonPhysicianOverlayPanel', '#{component.clientId}' , null, 'surgeonPhysicianOverlayPanelDataTable', 0 ,null);"
                                            title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
-                                           disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}">
+                                           disabled="#{!diagnosisView.task.taskStatus.editable}">
                                 <i class="fa fa-fw fa-scissors"/>
                             </p:commandLink>
 
@@ -281,16 +281,16 @@
                                 <p:dataTable id="surgeonPhysicianOverlayPanelDataTable"
                                              widgetVar="surgeonPhysicianOverlayPanelDataTable"
                                              disabledSelection="#{physicianSelector.contactOfTask}"
-                                             selection="#{globalEditViewHandler.genericView.selectedSurgeon}"
+                                             selection="#{diagnosisView.selectedSurgeon}"
                                              selectionMode="single"
-                                             value="#{globalEditViewHandler.genericView.surgeons}"
+                                             value="#{genericViewData.surgeons}"
                                              var="physicianSelector" styleClass="defaultHistoDataTable"
                                              scrollable="true" scrollHeight="200"
                                              rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
 
                                     <!-- name -->
                                     <p:column id="nameColumn" style="width:auto"
-                                              filterValue="#{globalEditViewHandler.genericView.selectedSurgeonFilter}"
+                                              filterValue="#{diagnosisView.selectedSurgeonFilter}"
                                               filterBy="#{physicianSelector.physician.person.getFullName()}"
                                               filterMatchMode="contains">
                                         <h:outputText
@@ -324,7 +324,7 @@
                                             update="navigationForm:patientList contentForm:contentPanel headerForm"
                                             process="contentForm:surgeonPhysicianOverlayPanelDataTable"
                                             partialSubmit=""
-                                            listener="#{globalEditViewHandler.ct.addPhysicianWithRole(globalEditViewHandler.genericView.selectedSurgeon.physician.person, 'SURGEON')}"
+                                            listener="#{globalEditViewHandler.ct.addPhysicianWithRole(diagnosisView.selectedSurgeon.physician.person, 'SURGEON')}"
                                             oncomplete="PF('surgeonPhysicianOverlayPanel#{loopCount.index}').hide();"/>
 
                                 </p:dataTable>
@@ -338,14 +338,14 @@
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
                         <h:outputLabel style="margin-left:10px;"
-                                       value="#{worklistHandler.current.selectedTask.getPrimaryContact('PRIVATE_PHYSICIAN')}"></h:outputLabel>
+                                       value="#{diagnosisView.task.getPrimaryContact('PRIVATE_PHYSICIAN')}"></h:outputLabel>
 
                         <h:panelGroup>
                             <p:commandLink style="float: right; margin-right:5px;"
                                            tabindex="9"
                                            onclick="showAndUpdateOverlayPanel('privatePhysicianPhysicianOverlayPanel', '#{component.clientId}' , null, 'privatePhysicianPhysicianOverlayPanelDataTable', 0 ,null);"
                                            title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
-                                           disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}">
+                                           disabled="#{!diagnosisView.task.taskStatus.editable}">
                                 <i class="fa fa-fw fa-eye"/>
                             </p:commandLink>
 
@@ -359,16 +359,16 @@
                                 <p:dataTable id="privatePhysicianPhysicianOverlayPanelDataTable"
                                              widgetVar="privatePhysicianPhysicianOverlayPanelDataTable"
                                              disabledSelection="#{physicianSelector.contactOfTask}"
-                                             selection="#{globalEditViewHandler.genericView.selectedPrivatePhysician}"
+                                             selection="#{diagnosisView.selectedPrivatePhysician}"
                                              selectionMode="single"
-                                             value="#{globalEditViewHandler.genericView.privatePhysicians}"
+                                             value="#{genericViewData.privatePhysicians}"
                                              var="physicianSelector" styleClass="defaultHistoDataTable"
                                              scrollable="true" scrollHeight="200"
                                              rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
 
                                     <!-- name -->
                                     <p:column id="nameColumn" style="width:auto"
-                                              filterValue="#{globalEditViewHandler.genericView.selectedPrivatePhysicianFilter}"
+                                              filterValue="#{diagnosisView.selectedPrivatePhysicianFilter}"
                                               filterBy="#{physicianSelector.physician.person.getFullName()}"
                                               filterMatchMode="contains">
                                         <h:outputText
@@ -402,7 +402,7 @@
                                             update="navigationForm:patientList contentForm:contentPanel headerForm"
                                             process="contentForm:privatePhysicianPhysicianOverlayPanel"
                                             partialSubmit="true"
-                                            listener="#{globalEditViewHandler.ct.addPhysicianWithRole(globalEditViewHandler.genericView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
+                                            listener="#{globalEditViewHandler.ct.addPhysicianWithRole(diagnosisView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
                                             oncomplete="PF('privatePhysicianPhysicianOverlayPanel#{loopCount.index}').hide();"/>
 
                                 </p:dataTable>
@@ -417,7 +417,7 @@
 
         <!-- Diagnoses -->
         <c:forEach
-                items="#{worklistHandler.current.selectedTask.diagnosisRevisions}"
+                items="#{diagnosisView.task.diagnosisRevisions}"
                 varStatus="varCounterOuter" var="revision">
 
             <p:separator/>
@@ -445,7 +445,7 @@
                                         hideEffect="fade" hideEvent="none" showEvent="none">
                             <p:inputText id="nameInputPannelInput#{varCounterOuter.index}"
                                          onkeypress="return closeOverlayPanelOnReturn(event, 'diagnosisNamePannel#{varCounterOuter.index}')"
-                                         disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+                                         disabled="#{!diagnosisView.task.taskStatus.editable}"
                                          value="#{revision.name}"/>
                         </p:overlayPanel>
 
@@ -544,14 +544,14 @@
                                 <p:dataTable
                                         id="diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}"
                                         widgetVar="diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}"
-                                        value="#{globalEditViewHandler.genericView.staticData.diagnosisPresets}"
+                                        value="#{genericViewData.diagnosisPresets}"
                                         var="item" styleClass="defaultHistoDataTable" scrollable="true"
                                         scrollHeight="200" rowKey="#{item.id}"
-                                        selection="#{globalEditViewHandler.genericView.selectedDiagnosisPresets[varCounterOuter.index][varCounterInner.index]}"
+                                        selection="#{diagnosisView.selectedDiagnosisPresets[varCounterOuter.index][varCounterInner.index]}"
                                         selectionMode="single">
 
                                     <p:column filterBy="#{item.diagnosis}" id="diagnosisColumn"
-                                              filterValue="#{globalEditViewHandler.genericView.diagnosisFilter[varCounterOuter.index][varCounterInner.index]}"
+                                              filterValue="#{diagnosisView.diagnosisFilter[varCounterOuter.index][varCounterInner.index]}"
                                               filterMatchMode="contains">
                                         <h:outputText value="#{item.diagnosis}"/>
                                     </p:column>
@@ -560,7 +560,7 @@
                                             process="contentForm:diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}"
                                             partialSubmit="true"
                                             update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                            listener="#{globalEditViewHandler.ct.updateDiagnosisPrototype(diagnosis,globalEditViewHandler.genericView.selectedDiagnosisPresets[varCounterOuter.index][varCounterInner.index])}"
+                                            listener="#{globalEditViewHandler.ct.updateDiagnosisPrototype(diagnosis,diagnosisView.selectedDiagnosisPresets[varCounterOuter.index][varCounterInner.index])}"
                                             oncomplete="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"/>
 
                                 </p:dataTable>
@@ -569,7 +569,7 @@
                                                  process="contentForm:diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}"
                                                  name="submitNewCustomDiagnosis#{varCounterOuter.index}#{varCounterInner.index}"
                                                  update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                                 actionListener="#{globalEditViewHandler.ct.updateDiagnosisPrototype(diagnosis,globalEditViewHandler.genericView.diagnosisFilter[varCounterOuter.index][varCounterInner.index])}"
+                                                 actionListener="#{globalEditViewHandler.ct.updateDiagnosisPrototype(diagnosis,diagnosisView.diagnosisFilter[varCounterOuter.index][varCounterInner.index])}"
                                                  oncomplete="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"/>
 
                             </p:overlayPanel>
@@ -601,7 +601,7 @@
                                 style="width:90% !important;"
                                 panelStyleClass="iconFixForSelectOneMenu"
                                 value="#{revision.signatureOne.physician}"
-                                converter="#{globalEditViewHandler.genericView.staticData.physiciansToSignListTransformer}"
+                                converter="#{genericViewData.physiciansToSignListTransformer}"
                                 filter="true" filterMatchMode="contains">
 
                             <f:selectItem
@@ -609,7 +609,7 @@
                                     itemValue="#{null}"/>
 
                             <f:selectItems
-                                    value="#{globalEditViewHandler.genericView.staticData.physiciansToSignList}"
+                                    value="#{genericViewData.physiciansToSignList}"
                                     var="physician" itemLabel="#{physician.person.getFullName()}"
                                     itemValue="#{physician}"/>
 
@@ -637,14 +637,14 @@
                                 style="width:90% !important;"
                                 panelStyleClass="iconFixForSelectOneMenu"
                                 value="#{revision.signatureTwo.physician}"
-                                converter="#{globalEditViewHandler.genericView.staticData.physiciansToSignListTransformer}"
+                                converter="#{genericViewData.physiciansToSignListTransformer}"
                                 filter="true" filterMatchMode="contains">
                             <f:selectItem
                                     itemLabel="#{msg['body.diagnosis.signature.consultant.select']}"
                                     itemValue="#{null}"/>
 
                             <f:selectItems
-                                    value="#{globalEditViewHandler.genericView.staticData.physiciansToSignList}"
+                                    value="#{genericViewData.physiciansToSignList}"
                                     var="physician" itemLabel="#{physician.person.getFullName()}"
                                     itemValue="#{physician}"/>
 
@@ -730,7 +730,7 @@
                         <p:splitButton
                                 rendered="#{revision.completed and !worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(revision)}"
                                 value="#{msg['body.diagnosis.diagnosis.amendment']}"
-                                disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+                                disabled="#{!diagnosisView.task.taskStatus.editable}"
                                 onclick="$('#contentForm\\:admendDiagnosisRevision#{varCounterOuter.index}').click();"
                                 icon="fa fa-edit">
 
@@ -765,7 +765,7 @@
                                          icon="fa fa-eye-slash"
                                          id="endDiagnosisRevision#{varCounterOuter.index}"
                                          style="#{(revision.completed) ? 'display:none' : ''}"
-                                         disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+                                         disabled="#{!diagnosisView.task.taskStatus.editable}"
                                          actionListener="#{dialog.diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, revision)}">
                             <p:ajax event="dialogReturn"
                                     oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"
@@ -779,7 +779,7 @@
                     <h:panelGroup>
                         <!-- rename diagnosis -->
                         <p:splitButton value="#{msg['body.diagnosis.diagnosis.rename']}"
-                                       disabled="#{!worklistHandler.current.selectedTask.taskStatus.editable}"
+                                       disabled="#{!diagnosisView.task.taskStatus.editable}"
                                        onclick="$('#contentForm\\:editDiagnosisRevision#{varCounterOuter.index}').click();"
                                        icon="fa fa-pencil">
 
@@ -823,7 +823,7 @@
                         <!-- new diagnosis revision -->
                         <p:commandButton id="newDiagnosisRevision#{varCounterOuter.index}"
                                          style="display:none"
-                                         actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                                         actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultDialogReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"

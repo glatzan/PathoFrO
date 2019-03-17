@@ -31,7 +31,7 @@ public class UserService extends AbstractService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private UserService userService;
+	private CurrentUserService userService;
 
 	@Autowired
 	private PhysicianService physicianService;

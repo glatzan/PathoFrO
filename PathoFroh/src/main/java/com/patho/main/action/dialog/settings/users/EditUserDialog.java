@@ -27,7 +27,7 @@ import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.PrintService;
-import com.patho.main.service.UserService;
+import com.patho.main.service.CurrentUserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.printer.ClinicPrinter;
@@ -51,7 +51,7 @@ public class EditUserDialog extends AbstractTabDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private UserService userService;
+	private CurrentUserService userService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

@@ -252,7 +252,7 @@ public class PrintDialog extends AbstractDialog {
 			logger.debug("Printing next order ");
 		}
 
-		MessageHandler.sendGrowlMessagesAsResource("growl.print", "growl.print.success",
+		MessageHandler.sendGrowlMessagesAsResource("growl.print.printing", "growl.print.success",
 				new Object[] { printedDocuments });
 
 		logger.debug("Printing completed");

@@ -35,7 +35,6 @@ public class DefaultTransformer<T extends ID> implements Converter {
 		this(objects, false);
 	}
 
-
 	public DefaultTransformer(T[] objects, boolean advancedMode) {
 		this(Arrays.asList(objects),advancedMode);
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.patho.main.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 import com.patho.main.config.security.util.UserAuthorizationToken;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.service.AuthenticationService;
-import com.patho.main.service.UserService;
+import com.patho.main.service.CurrentUserService;
 import com.patho.main.util.ldap.LDAPAuthenticationException;
 
 @Component

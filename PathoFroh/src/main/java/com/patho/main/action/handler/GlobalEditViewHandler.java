@@ -1,17 +1,39 @@
 package com.patho.main.action.handler;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.component.html.HtmlPanelGroup;
-
-import com.patho.main.model.patient.notification.ReportHistoryRecord;
+import com.patho.main.action.UserHandlerAction;
+import com.patho.main.action.dialog.DialogHandler;
+import com.patho.main.action.handler.views.ReportView;
+import com.patho.main.action.handler.views.TaskView;
+import com.patho.main.action.views.DiagnosisView;
+import com.patho.main.action.views.GenericViewData;
+import com.patho.main.action.views.ReceiptLogView;
+import com.patho.main.common.ContactRole;
+import com.patho.main.common.View;
+import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.model.DiagnosisPreset;
+import com.patho.main.model.ListItem;
+import com.patho.main.model.MaterialPreset;
+import com.patho.main.model.Signature;
+import com.patho.main.model.patient.*;
 import com.patho.main.model.patient.notification.ReportIntent;
+import com.patho.main.model.person.Person;
+import com.patho.main.model.user.HistoPermissions;
+import com.patho.main.model.user.HistoSettings;
+import com.patho.main.repository.PatientRepository;
+import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
 import com.patho.main.service.impl.SpringContextBridge;
+import com.patho.main.ui.StainingTableChooser;
+import com.patho.main.ui.menu.MenuGenerator;
+import com.patho.main.util.helper.HistoUtil;
+import com.patho.main.util.worklist.Worklist;
+import com.patho.main.util.worklist.search.AbstractWorklistSearch;
+import com.patho.main.util.worklist.search.WorklistSimpleSearch;
+import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.model.menu.MenuModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,43 +44,12 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.action.UserHandlerAction;
-import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.action.handler.views.DiagnosisView;
-import com.patho.main.action.handler.views.GenericView;
-import com.patho.main.action.handler.views.ReceiptLogView;
-import com.patho.main.action.handler.views.ReportView;
-import com.patho.main.action.handler.views.TaskView;
-import com.patho.main.common.ContactRole;
-import com.patho.main.common.View;
-import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.DiagnosisPreset;
-import com.patho.main.model.ListItem;
-import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.person.Person;
-import com.patho.main.model.Signature;
-import com.patho.main.model.patient.Diagnosis;
-import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Sample;
-import com.patho.main.model.patient.Slide;
-import com.patho.main.model.patient.Task;
-import com.patho.main.model.user.HistoPermissions;
-import com.patho.main.model.user.HistoSettings;
-import com.patho.main.repository.PatientRepository;
-import com.patho.main.repository.TaskRepository;
-import com.patho.main.ui.StainingTableChooser;
-import com.patho.main.ui.menu.MenuGenerator;
-import com.patho.main.util.helper.HistoUtil;
-import com.patho.main.util.worklist.Worklist;
-import com.patho.main.util.worklist.search.AbstractWorklistSearch;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.html.HtmlPanelGroup;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -126,6 +117,21 @@ public class GlobalEditViewHandler extends AbstractHandler {
     @Setter(AccessLevel.NONE)
     private ReportIntentService reportIntentService;
 
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private GenericViewData genericViewData;
+
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private DiagnosisView diagnosisView;
+
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private ReceiptLogView receiptLogView;
+
     /**
      * Navigation Data
      */
@@ -137,24 +143,9 @@ public class GlobalEditViewHandler extends AbstractHandler {
     private TaskView taskView = new TaskView(this);
 
     /**
-     * Data that are shred between different vies
-     */
-    private GenericView genericView = new GenericView(this);
-
-    /**
      * Data for the report view
      */
     private ReportView reportView = new ReportView(this);
-
-    /**
-     * Data for receipt log view
-     */
-    private ReceiptLogView receiptLogView = new ReceiptLogView(this);
-
-    /**
-     * Data for diangosis view
-     */
-    private DiagnosisView diagnosisView = new DiagnosisView(this);
 
     /**
      * Methodes for saving task data
@@ -216,7 +207,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
         getNavigationData().setLastDefaultView(userHandlerAction.getCurrentUser().getSettings().getDefaultView());
 
         logger.debug("3. Loading common data");
-        genericView.loadStaticData();
+        genericViewData.loadView();
 
         logger.debug("4. Loading view data");
         navigationData.updateData();
@@ -271,8 +262,11 @@ public class GlobalEditViewHandler extends AbstractHandler {
                     receiptLogView.loadView();
                 }
 
-                genericView.loadView();
-                diagnosisView.loadView();
+                if (view == View.WORKLIST_DIAGNOSIS) {
+                    diagnosisView.loadView();
+                }
+
+                genericViewData.loadView();
 
                 break;
             case WORKLIST_PATIENT:
@@ -305,7 +299,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
     public void reloadAllData() {
         logger.debug("Force Reload of all data");
-        genericView.loadStaticData();
+        genericViewData.loadView();
         navigationData.updateData();
         logger.debug("Reloading worklist");
         worklistHandler.reloadWorklist();
@@ -320,7 +314,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
     }
 
     public void reloadGuiData() {
-        genericView.loadStaticData();
+        genericViewData.loadView();
     }
 
     @Transactional

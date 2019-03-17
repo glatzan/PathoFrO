@@ -94,7 +94,7 @@ public class LabelPrinter extends AbstractPrinter {
 
 		if (!doc.isPresent()) {
 			logger.error("New Task: No TemplateUtil for printing label found");
-			MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate");
+			MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.error.noTemplate");
 			return false;
 		}
 

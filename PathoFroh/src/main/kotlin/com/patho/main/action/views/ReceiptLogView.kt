@@ -2,6 +2,8 @@ package com.patho.main.action.views
 
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorkPhaseHandler
+import com.patho.main.model.ListItem
+import com.patho.main.model.MaterialPreset
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
@@ -10,12 +12,18 @@ import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SlideService
+import com.patho.main.ui.selectors.PhysicianSelector
 import com.patho.main.util.print.UnknownPrintingException
 import com.patho.main.util.status.ReportIntentStatusByUser
 import freemarker.template.TemplateNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Scope
+import org.springframework.context.annotation.ScopedProxyMode
+import org.springframework.stereotype.Component
 
-class ReceiptLogView @Autowired constructor(
+@Component
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+open class ReceiptLogView @Autowired constructor(
         private val slideService: SlideService,
         private val workPhaseHandler: WorkPhaseHandler,
         private val taskRepository: TaskRepository,
@@ -41,13 +49,69 @@ class ReceiptLogView @Autowired constructor(
     /**
      * Status for notification list
      */
-    var reportIntentStatusByUser: ReportIntentStatusByUser = ReportIntentStatusByUser()
+    var reportIntentStatusByUser: ReportIntentStatusByUser = ReportIntentStatusByUser(Task())
 
+    /**
+     * Search string for case history
+     */
+    var caseHistoryFilter: String = ""
+
+    /**
+     * Selected List item form caseHistory list
+     */
+    var selectedCaseHistoryItem: ListItem? = null
+
+    /**
+     * Selected material presets
+     */
+    var selectedMaterialPresets: Array<MaterialPreset?> = arrayOf<MaterialPreset?>()
+
+    /**
+     * Material preset filter
+     */
+    var selectedMaterialPresetFilter: Array<String> = arrayOf<String>()
+
+    /**
+     * Selected surgeon
+     */
+    var selectedSurgeon: PhysicianSelector? = null
+
+    /**
+     * Surgeon filter
+     */
+    var selectedSurgeonFilter: String = ""
+
+    /**
+     * Private physician surgeon
+     */
+    var selectedPrivatePhysician: PhysicianSelector? = null
+
+    /**
+     * Private physician filter
+     */
+    var selectedPrivatePhysicianFilter: String = ""
+
+    /**
+     * Loads all task data
+     */
     override fun loadView(task: Task) {
         logger.debug("Loading receipt log view")
+        super.loadView(task)
         actionOnMany = StainingListAction.NONE
         rows = TaskEntityRow.factory(task, false)
         reportIntentStatusByUser = ReportIntentStatusByUser(task)
+
+        selectedCaseHistoryItem = null
+        caseHistoryFilter = ""
+
+        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { p -> null }
+        selectedMaterialPresetFilter = Array<String>(task.samples.size) { p -> "" }
+
+        selectedSurgeon = null
+        selectedSurgeonFilter = ""
+
+        selectedPrivatePhysician = null
+        selectedPrivatePhysicianFilter = ""
     }
 
     /**
@@ -62,7 +126,7 @@ class ReceiptLogView @Autowired constructor(
      * Sets all elemtns of the list to selectedF
      */
     fun selectListChildren(lists: List<TaskEntityRow<out IdManuallyAltered>>, selected: Boolean) {
-        lists.forEach { p -> selectListChildren(p, selected) }
+        lists.forEach { p -> selectChildren(p, selected) }
     }
 
     /**
@@ -72,7 +136,10 @@ class ReceiptLogView @Autowired constructor(
         selectChildren(entity, !entity.selected)
     }
 
-    fun performActionOnSelected(action: StainingListAction) {
+    /**
+     * Runs the selected action on the selected slides
+     */
+    fun performActionOnSelectedSlides(action: StainingListAction) {
         // actions ca only be performed on slides
         val slideRows = rows.filter { p -> p.selected && p.isStainingType }
 
@@ -96,26 +163,40 @@ class ReceiptLogView @Autowired constructor(
             StainingListAction.PRINT -> {
                 slideRows.filter { p -> p.selected && p.isStainingType }
             }
+
+            else -> {
+
+            }
         }
     }
 
+    fun printAllLabels() {
+        printLabels(*rows.filter { p -> p.isStainingType }.map { p -> p.entity as Slide }.toTypedArray())
+    }
+
+    /**
+     * Printing labels
+     */
     fun printLabels(vararg slides: Slide?) {
         if (slides == null || slides.isEmpty()) {
-            MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate")
+            MessageHandler.sendGrowlErrorAsResource("growl.print.error.error", "growl.print.error.noTemplate")
             return
         }
         try {
             printExecutorService.printLabel(slides as Slide)
-            MessageHandler.sendGrowlMessagesAsResource("growl.print", "growl.print.slide.print")
+            MessageHandler.sendGrowlMessagesAsResource("growl.print.printing", "growl.print.slide.print")
         } catch (e: UnknownPrintingException) {
-            MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate")
+            MessageHandler.sendGrowlErrorAsResource("growl.print.error.error", "growl.print.error.printError")
             return
         } catch (e: TemplateNotFoundException) {
-            MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.slide.noTemplate")
+            MessageHandler.sendGrowlErrorAsResource("growl.print.error.error", "growl.print.error.noTemplate")
             return
         }
     }
 
+    /**
+     * Entity row for displaying task slides as a flat list
+     */
     class TaskEntityRow<T : IdManuallyAltered>(var entity: T, val even: Boolean = false) {
         var selected: Boolean = false
 

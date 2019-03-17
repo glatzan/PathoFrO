@@ -21,7 +21,7 @@ public class GroupService extends AbstractService {
 	private GroupRepository groupRepository;
 
 	@Autowired
-	private UserService userService;
+	private CurrentUserService userService;
 
 	public HistoGroup addOrUpdate(HistoGroup g) {
 

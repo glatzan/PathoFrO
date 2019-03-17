@@ -289,8 +289,8 @@ public class PDFOrganizer extends AbstractDialog {
 	 * @param success
 	 */
 	public void displayPrintNotification(boolean success) {
-		MessageHandler.sendGrowlMessagesAsResource("growl.print",
-				success ? "growl.print.success" : "growl.print.failed",
+		MessageHandler.sendGrowlMessagesAsResource("growl.print.printing",
+				success ? "growl.print.success" : "growl.print.error.printError",
 				success ? FacesMessage.SEVERITY_INFO : FacesMessage.SEVERITY_ERROR);
 	}
 

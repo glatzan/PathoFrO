@@ -49,7 +49,7 @@ public class PrintDocument extends AbstractTemplate {
     /**
      * Processed final document
      */
-    protected String finalContent;
+    public String finalContent;
 
     /**
      * If true the pdf generator will call onAfterPDFCreation to allow the template

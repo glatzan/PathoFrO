@@ -260,7 +260,7 @@ public class CreateTaskDialog extends AbstractDialog {
 
                 if (!printDocument.isPresent()) {
                     logger.error("New Task: No TemplateUtil for printing UReport found");
-                    MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.noTemplate");
+                    MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.error.noTemplate");
                     return;
                 }
 
