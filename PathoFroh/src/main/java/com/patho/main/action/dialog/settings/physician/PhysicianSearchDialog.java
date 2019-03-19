@@ -136,7 +136,6 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 		 * result list is a physician list with minimal details. Before adding an clinic
 		 * physician a ldap fetch for more details has to be done
 		 *
-		 * @param name
 		 */
 		public void searchForPhysician() {
 			if (searchString != null && searchString.length() > 3) {
@@ -220,7 +219,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
 			// person is not auto update able
 			getSelectedPhysician().getPerson().setAutoUpdate(false);
 			getSelectedPhysician().getPerson().setOrganizsations(new HashSet<Organization>());
-			getSelectedPhysician().addAssociateRole(ContactRole.OTHER_PHYSICIAN);
+			getSelectedPhysician().addAssociatedRole(ContactRole.OTHER_PHYSICIAN);
 
 			setAllRoles(Arrays.asList(ContactRole.values()));
 

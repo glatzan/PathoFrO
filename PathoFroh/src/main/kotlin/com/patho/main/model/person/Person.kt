@@ -16,9 +16,10 @@ import javax.persistence.OrderBy
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Audited
 @SelectBeforeUpdate(true)
-@SequenceGenerator(name = "person_sequencegenerator", sequenceName = "person_sequence")
 open class Person : AbstractPersistable, ID, FullName {
+
     @Id
+    @SequenceGenerator(name = "person_sequencegenerator", sequenceName = "person_sequence")
     @GeneratedValue(generator = "person_sequencegenerator")
     @Column(unique = true, nullable = false)
     open override var id: Long = 0

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 import com.patho.main.config.security.util.UserAuthorizationToken;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.service.AuthenticationService;
-import com.patho.main.service.CurrentUserService;
 import com.patho.main.util.ldap.LDAPAuthenticationException;
 
 @Component

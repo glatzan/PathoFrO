@@ -86,8 +86,8 @@ open class DiagnosisView @Autowired constructor(
             }
         }
 
-        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { p -> null }
-        selectedMaterialPresetFilter = Array<String>(task.samples.size) { p -> "" }
+        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { _ -> null }
+        selectedMaterialPresetFilter = Array<String>(task.samples.size) { _ -> "" }
 
         selectedCaseHistoryItem = null
         caseHistoryFilter = ""
@@ -102,8 +102,8 @@ open class DiagnosisView @Autowired constructor(
         selectedDiagnosisPresets = arrayOf<Array<DiagnosisPreset?>>()
 
         for (revision in task.diagnosisRevisions) {
-            diagnosisFilter += Array<String>(revision.diagnoses.size) { i -> "" }
-            selectedDiagnosisPresets += Array<DiagnosisPreset?>(revision.diagnoses.size) { i -> null }
+            diagnosisFilter += Array<String>(revision.diagnoses.size) { _ -> "" }
+            selectedDiagnosisPresets += Array<DiagnosisPreset?>(revision.diagnoses.size) {_  -> null }
         }
     }
 

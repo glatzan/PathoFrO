@@ -104,8 +104,8 @@ open class ReceiptLogView @Autowired constructor(
         selectedCaseHistoryItem = null
         caseHistoryFilter = ""
 
-        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { p -> null }
-        selectedMaterialPresetFilter = Array<String>(task.samples.size) { p -> "" }
+        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { _ -> null }
+        selectedMaterialPresetFilter = Array<String>(task.samples.size) { _ -> "" }
 
         selectedSurgeon = null
         selectedSurgeonFilter = ""
@@ -152,7 +152,7 @@ open class ReceiptLogView @Autowired constructor(
             // set slided to performed
             StainingListAction.PERFORMED, StainingListAction.NOT_PERFORMED -> {
                 logger.debug("Setting staining status of selected slides")
-                slideRows.forEach { p -> slideService.completedStaining(p as Slide, action == StainingListAction.PERFORMED) }
+                slideRows.forEach { p -> slideService.completedStaining(p.entity as Slide, action == StainingListAction.PERFORMED) }
                 workPhaseHandler.updateStainingPhase(taskRepository.save(task, resourceBundle.get("log.task.slide.completed", task), task.patient))
             }
             // archive slides
@@ -177,13 +177,13 @@ open class ReceiptLogView @Autowired constructor(
     /**
      * Printing labels
      */
-    fun printLabels(vararg slides: Slide?) {
-        if (slides == null || slides.isEmpty()) {
+    fun printLabels(vararg slides: Slide) {
+        if (slides.isEmpty()) {
             MessageHandler.sendGrowlErrorAsResource("growl.print.error.error", "growl.print.error.noTemplate")
             return
         }
         try {
-            printExecutorService.printLabel(slides as Slide)
+            printExecutorService.printLabel(*slides)
             MessageHandler.sendGrowlMessagesAsResource("growl.print.printing", "growl.print.slide.print")
         } catch (e: UnknownPrintingException) {
             MessageHandler.sendGrowlErrorAsResource("growl.print.error.error", "growl.print.error.printError")

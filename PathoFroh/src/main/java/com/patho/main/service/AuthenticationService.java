@@ -79,7 +79,7 @@ public class AuthenticationService {
 		Optional<HistoUser> user = userRepository.findOptionalByPhysicianUid(uid);
 
 		if (user.isPresent()) {
-			if (user.get().isLocalUser()) {
+			if (user.get().getLocalUser()) {
 				logger.debug("Local user, authentication against local database");
 				if (passwordEncoder.matches(password, user.get().getPassword())) {
 					return user;

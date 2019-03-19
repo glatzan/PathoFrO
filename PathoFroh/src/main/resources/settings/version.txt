@@ -625,6 +625,21 @@ Select
 		left join patient pat on pat.id = task.parent_id
 		left join person as pers on pers.id = pat.person_id;
 
+/* changing last login to timestamp*/
+alter table histouser add column tmp timestamp;
+update histouser set tmp = case when lastlogin != 0 then TO_TIMESTAMP(lastlogin/1000-3600) else null end;
+alter table histouser drop column lastlogin;
+alter table histouser add column lastlogin timestamp;
+update histouser set lastlogin = tmp;
+alter table histouser drop column tmp;
+
+alter table histouser_aud add column tmp timestamp;
+update histouser_aud set tmp = case when lastlogin != 0 then TO_TIMESTAMP(lastlogin/1000-3600) else null end;
+alter table histouser_aud drop column lastlogin;
+alter table histouser_aud add column lastlogin timestamp;
+update histouser_aud set lastlogin = tmp;
+alter table histouser_aud drop column tmp;
+
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien
 

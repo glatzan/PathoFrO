@@ -21,7 +21,7 @@ public class GroupService extends AbstractService {
 	private GroupRepository groupRepository;
 
 	@Autowired
-	private CurrentUserService userService;
+	private UserService userService;
 
 	public HistoGroup addOrUpdate(HistoGroup g) {
 
@@ -41,7 +41,6 @@ public class GroupService extends AbstractService {
 	/**
 	 * Tries to delete the old group
 	 * 
-	 * @param p
 	 */
 	@Transactional(propagation = Propagation.NEVER)
 	public boolean deleteOrArchive(HistoGroup g) {
@@ -57,7 +56,6 @@ public class GroupService extends AbstractService {
 	/**
 	 * Archived or dearchives a group
 	 * 
-	 * @param p
 	 * @param archive
 	 * @return
 	 */
@@ -69,13 +67,10 @@ public class GroupService extends AbstractService {
 
 	/**
 	 * Copies crucial settings from group settings to user settings
-	 * 
-	 * @param user
-	 * @param group
 	 */
 	public static void copyGroupSettings(HistoUser user, HistoGroup group, boolean overwrite) {
 
-		user.setArchived(group.isUserDeactivated());
+		user.setArchived(group.getUserDeactivated());
 
 		user.getSettings().setAvailableViews(new ArrayList<View>(group.getSettings().getAvailableViews()));
 		user.getSettings().setDefaultView(group.getSettings().getDefaultView());
@@ -108,10 +103,6 @@ public class GroupService extends AbstractService {
 
 	/**
 	 * Copies only view settings to the user settings
-	 * 
-	 * @param user
-	 * @param group
-	 * @param overwrite
 	 */
 	public static void copyUpdatedGroupSettings(HistoUser user, HistoGroup group) {
 

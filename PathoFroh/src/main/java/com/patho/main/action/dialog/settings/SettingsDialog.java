@@ -44,7 +44,7 @@ import com.patho.main.service.MaterialPresetService;
 import com.patho.main.service.OrganizationService;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.StainingPrototypeService;
-import com.patho.main.service.CurrentUserService;
+import com.patho.main.service.UserService;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
@@ -123,7 +123,7 @@ public class SettingsDialog extends AbstractTabDialog {
 		@Autowired
 		@Getter(AccessLevel.NONE)
 		@Setter(AccessLevel.NONE)
-		private CurrentUserService userService;
+		private UserService userService;
 
 		@Autowired
 		@Getter(AccessLevel.NONE)

@@ -6,7 +6,6 @@ import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.common.TaskPriority
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.PDFContainer
-import com.patho.main.model.person.Person
 import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.interfaces.DataList
@@ -14,6 +13,7 @@ import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.patient.miscellaneous.Council
 import com.patho.main.model.patient.notification.ReportIntent
+import com.patho.main.model.person.Person
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
 import com.patho.main.util.task.TaskStatus
@@ -333,12 +333,12 @@ open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList 
 
     @Transient
     fun containsContact(person: Person): Boolean {
-        return if (contacts != null) contacts.stream().anyMatch({ p -> p.person == person }) else false
+        return contacts.any { p -> p.person == person }
     }
 
     @Transient
     fun containsContact(reportIntent: ReportIntent): Boolean {
-        return if (contacts != null) contacts.stream().anyMatch({ p -> p == reportIntent }) else false
+        return contacts.any { p -> p == reportIntent }
     }
 
     @Transient

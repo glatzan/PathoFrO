@@ -94,7 +94,7 @@ open class Patient : AbstractPersistable, ID, DataList {
      */
     override val publicName: String
         @Transient
-        get() = person?.getFullName() ?: ""
+        get() = person.getFullName()
 
     /**
      * Returns this, overwrite from datalist
@@ -128,7 +128,7 @@ open class Patient : AbstractPersistable, ID, DataList {
      */
     @Transient
     fun getActiveTasks(activeOnly: Boolean): List<Task> {
-        return tasks.filter { p -> p.isActiveOrActionPending() }
+        return tasks.filter { p -> p.isActiveOrActionPending(activeOnly) }
     }
 
     @Transient
@@ -141,7 +141,7 @@ open class Patient : AbstractPersistable, ID, DataList {
      */
     @Transient
     fun hasActiveTasks(activeOnly: Boolean): Boolean {
-        return tasks.any { p -> p.isActiveOrActionPending() }
+        return tasks.any { p -> p.isActiveOrActionPending(activeOnly) }
     }
 
     /**

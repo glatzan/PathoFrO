@@ -88,7 +88,7 @@ public class PhysicianService extends AbstractService {
      */
     public Physician savePhysican(Physician physician) {
         if (physician.hasNoAssociateRole())
-            physician.addAssociateRole(ContactRole.OTHER_PHYSICIAN);
+            physician.addAssociatedRole(ContactRole.OTHER_PHYSICIAN);
 
         // updating organization
         physician.getPerson().setOrganizsations(new HashSet<Organization>(

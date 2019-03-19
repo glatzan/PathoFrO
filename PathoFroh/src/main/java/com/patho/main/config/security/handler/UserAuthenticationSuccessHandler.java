@@ -41,7 +41,7 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 			HistoUser user = (HistoUser) authentication.getPrincipal();
 
 			// always one group
-			HistoGroup group = user.getAuthorities().get(0);
+			HistoGroup group = (HistoGroup) user.getAuthorities().get(0);
 
 //			if (savedRequest != null) {
 //				try {

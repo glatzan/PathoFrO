@@ -276,15 +276,12 @@ public open class PathoConfig @Autowired @Lazy constructor(
         var defaultNotifications: List<DefaultNotificationEntity> = listOf<DefaultNotificationEntity>()
 
         fun getDefaultNotificationForRole(role: ContactRole): List<ReportIntentNotification.NotificationTyp> {
-            if (defaultNotifications != null) {
-                var tmp = defaultNotifications
-                try {
-                    return tmp.singleOrNull { p -> p.role == role }?.notificationTyps ?: listOf()
-                } catch (e: IllegalStateException) {
-                    // returning empty list
-                }
+            var tmp = defaultNotifications
+            try {
+                return tmp.singleOrNull { p -> p.role == role }?.notificationTyps ?: listOf()
+            } catch (e: IllegalStateException) {
+                return ArrayList()
             }
-            return ArrayList()
         }
     }
 

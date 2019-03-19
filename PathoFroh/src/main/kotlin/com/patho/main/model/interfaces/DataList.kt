@@ -16,7 +16,7 @@ interface DataList : ID, PatientAccessible {
         get() = File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + patient?.id)
 
     open fun containsReportType(type: PrintDocument.DocumentType): Boolean {
-        return attachedPdfs.any { p -> p.type == type } ?: false
+        return attachedPdfs.any { p -> p.type == type }
     }
 
     open fun addReport(pdfTemplate: PDFContainer) {
@@ -28,6 +28,6 @@ interface DataList : ID, PatientAccessible {
     }
 
     open fun containsReport(pdfTemplate: PDFContainer): Boolean {
-        return attachedPdfs.contains(pdfTemplate) ?: false
+        return attachedPdfs.contains(pdfTemplate)
     }
 }

@@ -3,6 +3,7 @@ package com.patho.main.rest;
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
@@ -96,7 +97,7 @@ public class CommonControls {
 		if (u == null) {
 			HistoUser user = new HistoUser();
 			userRepository.save(user, "hallo das test");
-			user.setLastLogin(System.currentTimeMillis());
+			user.setLastLogin(Instant.now());
 			user.setPhysician(new Physician(new Person()));
 			user.setUsername("testAndiTest7");
 			userRepository.save(user, "");

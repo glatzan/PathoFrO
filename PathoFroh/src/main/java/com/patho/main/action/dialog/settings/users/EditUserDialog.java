@@ -27,7 +27,7 @@ import com.patho.main.repository.GroupRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.PrintService;
-import com.patho.main.service.CurrentUserService;
+import com.patho.main.service.UserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.printer.ClinicPrinter;
@@ -51,7 +51,7 @@ public class EditUserDialog extends AbstractTabDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private CurrentUserService userService;
+	private UserService userService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -116,7 +116,7 @@ public class EditUserDialog extends AbstractTabDialog {
 			getPersonTab().setDisabled(false);
 
 			// only refresh if !not local user or uid is not empty
-			if (getUser().isLocalUser() || HistoUtil.isNullOrEmpty(getUser().getUsername())) {
+			if (getUser().getLocalUser() || HistoUtil.isNullOrEmpty(getUser().getUsername())) {
 				setRefreshAble(false);
 			} else {
 				setRefreshAble(true);
