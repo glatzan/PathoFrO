@@ -3,32 +3,34 @@ package com.patho.main.action.views
 import com.patho.main.model.DiagnosisPreset
 import com.patho.main.model.ListItem
 import com.patho.main.model.MaterialPreset
+import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.PhysicianRepository
-import com.patho.main.ui.selectors.PhysicianSelector
+import com.patho.main.service.DiagnosisService
+import com.patho.main.util.bearer.SimplePhysicianBearer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
-import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "session")
 open class DiagnosisView @Autowired constructor(
-        private val physicianRepository: PhysicianRepository) : AbstractTaskView() {
+        private val physicianRepository: PhysicianRepository,
+        private val diagnosisService: DiagnosisService) : AbstractTaskView() {
 
-    var diagnosisViewData = mutableListOf<DiagnosisViewData>()
+    open var diagnosisViewData = listOf<DiagnosisViewData>()
 
     /**
      * Selected material presets
      */
-    var selectedMaterialPresets: Array<MaterialPreset?> = arrayOf<MaterialPreset?>()
+    open var selectedMaterialPresets: Array<MaterialPreset?> = arrayOf<MaterialPreset?>()
 
     /**
      * Material preset filter
      */
-    var selectedMaterialPresetFilter: Array<String> = arrayOf<String>()
+    var selectedMaterialPresetFilter: Array<String?> = arrayOf<String?>()
 
     /**
      * Search string for case history
@@ -43,7 +45,7 @@ open class DiagnosisView @Autowired constructor(
     /**
      * Selected surgeon
      */
-    var selectedSurgeon: PhysicianSelector? = null
+    var selectedSurgeon: SimplePhysicianBearer? = null
 
     /**
      * Surgeon filter
@@ -53,7 +55,7 @@ open class DiagnosisView @Autowired constructor(
     /**
      * Private physician surgeon
      */
-    var selectedPrivatePhysician: PhysicianSelector? = null
+    var selectedPrivatePhysician: SimplePhysicianBearer? = null
 
     /**
      * Private physician filter
@@ -71,9 +73,10 @@ open class DiagnosisView @Autowired constructor(
     var selectedDiagnosisPresets: Array<Array<DiagnosisPreset?>> = arrayOf<Array<DiagnosisPreset?>>()
 
     override fun loadView(task: Task) {
+        logger.debug("Loading diagnosis data")
         super.loadView(task)
-        diagnosisViewData.clear()
-        diagnosisViewData.addAll(task.diagnosisRevisions.map { p -> DiagnosisViewData(p) })
+
+        diagnosisViewData = task.diagnosisRevisions.map { p -> DiagnosisViewData(p) }
 
         // updating signature date and person to sign
         for (revision in task.diagnosisRevisions) {
@@ -86,8 +89,10 @@ open class DiagnosisView @Autowired constructor(
             }
         }
 
-        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { _ -> null }
-        selectedMaterialPresetFilter = Array<String>(task.samples.size) { _ -> "" }
+        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { null }
+        selectedMaterialPresetFilter = Array<String?>(task.samples.size) { "" }
+
+        selectedMaterialPresets.forEach { p -> println(p) }
 
         selectedCaseHistoryItem = null
         caseHistoryFilter = ""
@@ -102,10 +107,42 @@ open class DiagnosisView @Autowired constructor(
         selectedDiagnosisPresets = arrayOf<Array<DiagnosisPreset?>>()
 
         for (revision in task.diagnosisRevisions) {
-            diagnosisFilter += Array<String>(revision.diagnoses.size) { _ -> "" }
-            selectedDiagnosisPresets += Array<DiagnosisPreset?>(revision.diagnoses.size) {_  -> null }
+            diagnosisFilter += Array<String>(revision.diagnoses.size) { "" }
+            selectedDiagnosisPresets += Array<DiagnosisPreset?>(revision.diagnoses.size) { null }
         }
     }
+
+    /**
+     * Updates a diagnosis with a preset
+     *
+     * @param diagnosis
+     * @param preset
+     */
+    fun updateDiagnosisPrototype(diagnosis: Diagnosis, preset: DiagnosisPreset) {
+        logger.debug("Updating diagnosis with prototype")
+        val task = diagnosisService.updateDiagnosisWithPrototype(diagnosis.task, diagnosis, preset)
+
+        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
+    }
+
+    /**
+     * Updates a diagnosis without a preset. (Removes the previously set preset)
+     */
+    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String) {
+        updateDiagnosisPrototype(diagnosis, diagnosisAsText, "", diagnosis.malign, "")
+    }
+
+    /**
+     * Updates a diagnosis without a preset. (Removes the previously set preset)
+     */
+    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String, extendedDiagnosisText: String,
+                                 malign: Boolean, icd10: String) {
+        logger.debug("Updating diagnosis to $diagnosisAsText")
+        setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.task, diagnosis,
+                diagnosisAsText, extendedDiagnosisText, malign, icd10))
+        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
+    }
+
 
     class DiagnosisViewData(diagnosisRevision: DiagnosisRevision) {
         val diagnosisRevision = diagnosisRevision

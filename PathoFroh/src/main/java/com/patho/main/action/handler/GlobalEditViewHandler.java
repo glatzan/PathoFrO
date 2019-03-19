@@ -259,14 +259,16 @@ public class GlobalEditViewHandler extends AbstractHandler {
 
                 if (view == View.WORKLIST_RECEIPTLOG) {
                     // generating guilist for display
-                    receiptLogView.loadView();
+                    logger.debug("Loading receiptlog");
+                    receiptLogView.loadView(worklistHandler.getCurrent().getSelectedTask());
                 }
 
                 if (view == View.WORKLIST_DIAGNOSIS) {
-                    diagnosisView.loadView();
+                    logger.debug("Loading diangosis view");
+                    diagnosisView.loadView(worklistHandler.getCurrent().getSelectedTask());
                 }
 
-                genericViewData.loadView();
+                genericViewData.loadView(worklistHandler.getCurrent().getSelectedTask());
 
                 break;
             case WORKLIST_PATIENT:
@@ -778,7 +780,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
                 MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");
             }
 
-            reloadGuiData();
             globalEditViewHandler.generateViewData(TaskInitilize.RELOAD, TaskInitilize.GENERATE_TASK_STATUS);
         }
 

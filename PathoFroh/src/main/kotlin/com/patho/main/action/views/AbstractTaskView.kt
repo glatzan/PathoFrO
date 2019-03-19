@@ -8,7 +8,7 @@ import com.patho.main.model.patient.Task
  */
 abstract class AbstractTaskView : AbstractView() {
 
-    public lateinit var task: Task
+    open lateinit var task: Task
 
     /**
      * Initializes the current view

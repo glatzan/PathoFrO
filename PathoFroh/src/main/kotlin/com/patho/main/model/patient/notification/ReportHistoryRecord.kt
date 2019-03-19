@@ -2,12 +2,13 @@ package com.patho.main.model.patient.notification
 
 import com.patho.main.model.json.JsonType
 import com.patho.main.model.patient.DiagnosisRevision
+import java.io.Serializable
 import java.time.Instant
 
 /**
  * Class for one diagnosis and its reports
  */
-open class ReportHistoryRecord : JsonType<ReportHistoryRecord> {
+open class ReportHistoryRecord : Serializable {
 
     constructor()
 
@@ -24,10 +25,10 @@ open class ReportHistoryRecord : JsonType<ReportHistoryRecord> {
     /**
      * Class for a single report
      */
-    open class ReportData {
+    open class ReportData : Serializable {
         open var failed: Boolean = false
         open var actionDate: Instant = Instant.now()
         open var contactAddress: String = ""
-        open var commentary : String = ""
+        open var commentary: String = ""
     }
 }

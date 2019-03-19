@@ -2,9 +2,16 @@ package com.patho.main.model.patient.notification
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.interfaces.ID
+import com.vladmihalcea.hibernate.type.array.IntArrayType
+import com.vladmihalcea.hibernate.type.array.StringArrayType
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType
+import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType
+import com.vladmihalcea.hibernate.type.json.JsonNodeStringType
+import com.vladmihalcea.hibernate.type.json.JsonStringType
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
+import org.hibernate.annotations.TypeDefs
 import org.hibernate.envers.Audited
 import javax.persistence.*
 
@@ -14,7 +21,8 @@ import javax.persistence.*
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-@TypeDef(name = "ReportHistoryRecord", typeClass = ReportHistoryRecord::class)
+//@TypeDef(name = "ReportHistoryRecord", typeClass = ReportHistoryRecord::class)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType::class)
 open class ReportIntentNotification : AbstractPersistable, ID {
 
     @Id
@@ -82,9 +90,16 @@ open class ReportIntentNotification : AbstractPersistable, ID {
     /**
      * HistoryData
      */
-    @Column
-    @Type(type = "ReportHistoryRecord")
+//    @Column
+////    @Type(type = "ReportHistoryRecord")
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
     open var history: MutableList<ReportHistoryRecord> = mutableListOf<ReportHistoryRecord>()
+        get() {
+            if (field == null)
+                field = mutableListOf<ReportHistoryRecord>()
+            return field
+        }
 
     constructor()
 

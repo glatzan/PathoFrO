@@ -36,7 +36,7 @@ abstract class JsonType<T> : UserType, Serializable {
         try {
             return objectMapper.readValue(cellContent.toByteArray(StandardCharsets.UTF_8), returnedClass())
         } catch (ex: Exception) {
-            throw HibernateException("Failed to convert value of \${names[0]}: " + ex.message, ex)
+            throw HibernateException("Failed to convert value of ${names[0]}: " + ex.message, ex)
         }
 
     }
@@ -139,11 +139,14 @@ abstract class JsonType<T> : UserType, Serializable {
 
         @Synchronized
         private fun isJsonSupported(sharedSessionContractImplementor: SharedSessionContractImplementor): Boolean {
+           println("$jsonSupportCache ----------------- ${(sharedSessionContractImplementor as SessionImpl).sessionFactory.properties}")
             if (jsonSupportCache == null) {
                 jsonSupportCache = (sharedSessionContractImplementor as SessionImpl).sessionFactory.properties["hibernate.dialect"].toString()
                         .startsWith("org.hibernate.dialect.PostgreSQL")
             }
-            return jsonSupportCache as Boolean
+            println("$jsonSupportCache")
+
+            return true
         }
 
         private fun offsetDateTimeModule(): Module {

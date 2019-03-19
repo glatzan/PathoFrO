@@ -42,6 +42,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transactional
     open fun addReportIntent(task: Task, reportIntent: ReportIntent, defaultNotification: Boolean = false, save: Boolean = true): Pair<Task, ReportIntent> {
+        logger.debug("Add Report Intent for ${reportIntent.person?.getFullName()}")
         var reportIntent = reportIntent
 
         // checks if a report intent with the same person is present
@@ -166,12 +167,11 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transactional
     open fun updateReportIntentNotificationsWithRole(task: Task, reportIntent: ReportIntent, save: Boolean = true): Pair<Task, ReportIntent> {
-        logger.debug("Updating Notifications")
+        logger.debug("Updating default Notifications")
 
         // do nothing if there are some notifications
         if (isHistoryPresent(reportIntent))
             return Pair(task, reportIntent)
-
 
         val notifications: List<ReportIntentNotification.NotificationTyp> = pathoConfig.defaultNotification.getDefaultNotificationForRole(reportIntent.role)
 
@@ -185,6 +185,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transactional
     open fun updateReportIntentNotificationsWithDiagnosisPresets(task: Task, reportIntent: ReportIntent, save: Boolean = true): Pair<Task, ReportIntent> {
+       logger.debug("Updating with diagnosispresets")
         val rolesToUpdate = mutableListOf<ContactRole>()
 
         // collecting roles for which a report should be send by letter
@@ -212,6 +213,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transactional
     open fun addReportHistoryRecord(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): ReportHistoryRecord {
+        logger.debug("Adding history for diagnosis ${diagnosisRevision}")
         val result = ReportHistoryRecord(diagnosisRevision)
         reportIntentNotification.history.add(result)
         return result
@@ -222,6 +224,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transactional
     open fun removeReportHistoryRecord(reportIntentNotification: ReportIntentNotification, reportHistoryRecord: ReportHistoryRecord) {
+        logger.debug("Removing unused history")
         reportIntentNotification.history.remove(reportHistoryRecord)
     }
 
@@ -262,11 +265,12 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transactional
     open fun updateReportIntentNotificationHistoryWithDiagnoses(task: Task, reportIntentNotification: ReportIntentNotification, save: Boolean = true): Pair<Task, ReportIntentNotification> {
+        logger.debug("Updating History with diagnoses")
 
         val foundRevisions = mutableListOf<DiagnosisRevision>()
 
         for (reportHistoryRecord in reportIntentNotification.history) {
-            val diagnosisRevision = task.diagnosisRevisions.singleOrNull { p -> p.id == reportIntentNotification.id }
+            val diagnosisRevision = task.diagnosisRevisions.singleOrNull { p -> p.id == reportHistoryRecord.diagnosisID}
 
             // search if a corresponding diagnosis exists
             if (diagnosisRevision != null) {

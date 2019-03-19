@@ -260,7 +260,7 @@
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
                         <h:outputLabel style="margin-left:10px;"
-                                       value="#{diagnosisView.task.getPrimaryContact('SURGEON', 'EXTERNAL_SURGEON')}"></h:outputLabel>
+                                       value="#{diagnosisView.task.getPrimaryContact('SURGEON', 'EXTERNAL_SURGEON').person.fullName}"></h:outputLabel>
 
                         <h:panelGroup>
                             <p:commandLink style="float: right; margin-right:5px;"
@@ -338,7 +338,7 @@
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
                         <h:outputLabel style="margin-left:10px;"
-                                       value="#{diagnosisView.task.getPrimaryContact('PRIVATE_PHYSICIAN')}"></h:outputLabel>
+                                       value="#{diagnosisView.task.getPrimaryContact('PRIVATE_PHYSICIAN').person.fullName}"></h:outputLabel>
 
                         <h:panelGroup>
                             <p:commandLink style="float: right; margin-right:5px;"
