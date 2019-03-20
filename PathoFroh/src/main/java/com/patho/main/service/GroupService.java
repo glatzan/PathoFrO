@@ -89,15 +89,15 @@ public class GroupService extends AbstractService {
 
 		user.getSettings().setWorklistSortOrder(group.getSettings().getWorklistSortOrder());
 
-		user.getSettings().setWorklistSortOrderAsc(group.getSettings().isWorklistSortOrderAsc());
+		user.getSettings().setWorklistSortOrderAsc(group.getSettings().getWorklistSortOrderAsc());
 
-		user.getSettings().setWorklistHideNoneActiveTasks(group.getSettings().isWorklistHideNoneActiveTasks());
+		user.getSettings().setWorklistHideNoneActiveTasks(group.getSettings().getWorklistHideNoneActiveTasks());
 
-		user.getSettings().setWorklistAutoUpdate(group.getSettings().isWorklistAutoUpdate());
+		user.getSettings().setWorklistAutoUpdate(group.getSettings().getWorklistAutoUpdate());
 
-		user.getSettings().setAlternatePatientAddMode(group.getSettings().isAlternatePatientAddMode());
+		user.getSettings().setAlternatePatientAddMode(group.getSettings().getAlternatePatientAddMode());
 
-		user.getSettings().setAddTaskWithSingelClick(group.getSettings().isAddTaskWithSingelClick());
+		user.getSettings().setAddTaskWithSingleClick(group.getSettings().getAddTaskWithSingleClick());
 
 	}
 

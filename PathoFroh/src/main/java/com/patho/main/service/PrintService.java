@@ -118,7 +118,7 @@ public class PrintService extends AbstractService {
 			if(user == null)
 				return getPrinter().get(0);
 			
-			if (user.getSettings().isAutoSelectedPreferedPrinter()) {
+			if (user.getSettings().getAutoSelectedPreferredPrinter()) {
 				ClinicPrinter printer = getCupsPrinterForRoom();
 				if (printer != null) {
 					logger.debug("Pritner found, setting auto printer to " + printer.getName());
@@ -128,13 +128,13 @@ public class PrintService extends AbstractService {
 
 			}
 
-			if (user.getSettings().getPreferedPrinter() == 0) {
+			if (user.getSettings().getPreferredPrinter() == 0) {
 				// dummy printer is always there
 				return getPrinter().get(0);
 			} else {
 				// updating the current printer, if no printer was selected the dummy printer
 				// will be returned
-				return findPrinterByID(user.getSettings().getPreferedPrinter());
+				return findPrinterByID(user.getSettings().getPreferredPrinter());
 			}
 		}
 
@@ -145,7 +145,6 @@ public class PrintService extends AbstractService {
 		 * 
 		 * If no printer was found the first printer will be returned (DummyPrinter)
 		 * 
-		 * @param clinicPrinter
 		 * @return
 		 */
 		public ClinicPrinter findPrinterByID(long id) {
@@ -258,10 +257,10 @@ public class PrintService extends AbstractService {
 			}
 			
 			// TODO auto select for roon
-			if (user.getSettings().getPreferedLabelPritner() == null) {
+			if (user.getSettings().getPreferredLabelPrinter() == null) {
 				return printer.get(0);
 			} else {
-				LabelPrinter labelPrinter = findPrinterByID(user.getSettings().getPreferedLabelPritner());
+				LabelPrinter labelPrinter = findPrinterByID(user.getSettings().getPreferredLabelPrinter());
 
 				if (labelPrinter != null) {
 					logger.debug("Settings printer " + labelPrinter.getName() + " as selected printer");

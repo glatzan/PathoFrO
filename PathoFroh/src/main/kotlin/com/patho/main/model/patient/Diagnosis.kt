@@ -15,7 +15,7 @@ import javax.persistence.*
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "diagnosis_sequencegenerator", sequenceName = "diagnosis_sequence")
-open class Diagnosis :  AbstractPersistable, ID, Parent<DiagnosisRevision> {
+open class Diagnosis :  AbstractPersistable, Parent<DiagnosisRevision> {
 
     @Id
     @GeneratedValue(generator = "diagnosis_sequencegenerator")

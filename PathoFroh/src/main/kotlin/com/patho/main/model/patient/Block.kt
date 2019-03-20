@@ -16,7 +16,7 @@ import javax.persistence.*
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "block_sequencegenerator", sequenceName = "block_sequence")
-open class Block : AbstractPersistable, ID, Parent<Sample>, IdManuallyAltered {
+open class Block : AbstractPersistable, Parent<Sample>, IdManuallyAltered {
 
     @Id
     @GeneratedValue(generator = "block_sequencegenerator")

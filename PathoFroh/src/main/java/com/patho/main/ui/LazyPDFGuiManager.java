@@ -126,7 +126,7 @@ public class LazyPDFGuiManager implements PdfStreamProvider, LazyPDFReturnHandle
 				setPDFContainerToRender(container);
 			} else {
 				setPDFContainerToRender(
-						new PDFContainer(DocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.Companion.getRENDER_ERROR_PDF()));
+						new PDFContainer(DocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.Companion.getRENDER_ERROR_PDF(),""));
 			}
 
 			getRenderPDF().set(true);

@@ -2,6 +2,8 @@ package com.patho.main.action.handler;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,9 @@ import lombok.Setter;
 @Scope("session")
 @Getter
 @Setter
-public class WorkPhaseHandler extends AbstractHandler {
+public class WorkPhaseHandler{
+
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

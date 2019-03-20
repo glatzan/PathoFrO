@@ -640,6 +640,14 @@ alter table histouser_aud add column lastlogin timestamp;
 update histouser_aud set lastlogin = tmp;
 alter table histouser_aud drop column tmp;
 
+/* typo */
+ALTER TABLE histosettings RENAME COLUMN autoSelectedPreferedPrinter TO autoSelectedPreferredPrinter;
+ALTER TABLE histosettings RENAME COLUMN preferedPrinter TO preferredPrinter;
+ALTER TABLE histosettings RENAME COLUMN autoSelectedPreferedLabelPrinter TO autoSelectedPreferredLabelPrinter;
+ALTER TABLE histosettings RENAME COLUMN preferedLabelPritner TO preferredLabelPrinter;
+ALTER TABLE histosettings RENAME COLUMN addTaskWithSingelClick TO addTaskWithSingleClick;
+
+
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien
 

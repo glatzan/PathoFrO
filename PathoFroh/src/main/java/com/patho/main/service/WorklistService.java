@@ -10,9 +10,9 @@ import com.patho.main.util.worklist.search.AbstractWorklistSearch;
 public class WorklistService {
 
 	public Worklist getWorklist(String name, AbstractWorklistSearch worklistSearch, HistoSettings settings) {
-		Worklist worklist = new Worklist(name, worklistSearch, settings.isWorklistHideNoneActiveTasks(),
-				settings.getWorklistSortOrder(), settings.isWorklistAutoUpdate(), false,
-				settings.isWorklistSortOrderAsc());
+		Worklist worklist = new Worklist(name, worklistSearch, settings.getWorklistHideNoneActiveTasks(),
+				settings.getWorklistSortOrder(), settings.getWorklistAutoUpdate(), false,
+				settings.getWorklistSortOrderAsc());
 		
 		return worklist;
 	}

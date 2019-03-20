@@ -1,24 +1,18 @@
 package com.patho.main.action.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.patient.Task;
+import com.patho.main.util.worklist.Worklist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Task;
-import com.patho.main.util.worklist.Worklist;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @Scope("session")
-@Getter
-@Setter
 public class WorklistHandler {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -113,5 +107,25 @@ public class WorklistHandler {
 			logger.debug("Auto updating worklist");
 			reloadWorklist(false);
 		}
+	}
+
+	public Logger getLogger() {
+		return this.logger;
+	}
+
+	public List<Worklist> getWorklists() {
+		return this.worklists;
+	}
+
+	public Worklist getCurrent() {
+		return this.current;
+	}
+
+	public void setWorklists(List<Worklist> worklists) {
+		this.worklists = worklists;
+	}
+
+	public void setCurrent(Worklist current) {
+		this.current = current;
 	}
 }

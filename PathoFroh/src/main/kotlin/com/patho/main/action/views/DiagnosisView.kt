@@ -112,36 +112,36 @@ open class DiagnosisView @Autowired constructor(
         }
     }
 
-    /**
-     * Updates a diagnosis with a preset
-     *
-     * @param diagnosis
-     * @param preset
-     */
-    fun updateDiagnosisPrototype(diagnosis: Diagnosis, preset: DiagnosisPreset) {
-        logger.debug("Updating diagnosis with prototype")
-        val task = diagnosisService.updateDiagnosisWithPrototype(diagnosis.task, diagnosis, preset)
-
-        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
-    }
-
-    /**
-     * Updates a diagnosis without a preset. (Removes the previously set preset)
-     */
-    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String) {
-        updateDiagnosisPrototype(diagnosis, diagnosisAsText, "", diagnosis.malign, "")
-    }
-
-    /**
-     * Updates a diagnosis without a preset. (Removes the previously set preset)
-     */
-    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String, extendedDiagnosisText: String,
-                                 malign: Boolean, icd10: String) {
-        logger.debug("Updating diagnosis to $diagnosisAsText")
-        setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.task, diagnosis,
-                diagnosisAsText, extendedDiagnosisText, malign, icd10))
-        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
-    }
+//    /**
+//     * Updates a diagnosis with a preset
+//     *
+//     * @param diagnosis
+//     * @param preset
+//     */
+//    fun updateDiagnosisPrototype(diagnosis: Diagnosis, preset: DiagnosisPreset) {
+//        logger.debug("Updating diagnosis with prototype")
+//        val task = diagnosisService.updateDiagnosisWithPrototype(diagnosis.task, diagnosis, preset)
+//
+//        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
+//    }
+//
+//    /**
+//     * Updates a diagnosis without a preset. (Removes the previously set preset)
+//     */
+//    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String) {
+//        updateDiagnosisPrototype(diagnosis, diagnosisAsText, "", diagnosis.malign, "")
+//    }
+//
+//    /**
+//     * Updates a diagnosis without a preset. (Removes the previously set preset)
+//     */
+//    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String, extendedDiagnosisText: String,
+//                                 malign: Boolean, icd10: String) {
+//        logger.debug("Updating diagnosis to $diagnosisAsText")
+//        setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.task, diagnosis,
+//                diagnosisAsText, extendedDiagnosisText, malign, icd10))
+//        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
+//    }
 
 
     class DiagnosisViewData(diagnosisRevision: DiagnosisRevision) {

@@ -18,7 +18,7 @@ import javax.persistence.OrderBy
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "patient_sequencegenerator", sequenceName = "patient_sequence")
-open class Patient : AbstractPersistable, ID, DataList {
+open class Patient : AbstractPersistable, DataList {
 
     @Id
     @GeneratedValue(generator = "patient_sequencegenerator")

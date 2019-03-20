@@ -1,9 +1,9 @@
 package com.patho.main.action.handler;
 
+import com.patho.main.action.views.ReceiptLogView;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.patho.main.action.handler.GlobalEditViewHandler.StainingListAction;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.CouncilState;
 import com.patho.main.common.DateFormat;
@@ -89,8 +89,8 @@ public class EnumProvider {
 	 * 
 	 * @return
 	 */
-	public StainingListAction[] getStainingListActions() {
-		return StainingListAction.values();
+	public ReceiptLogView.StainingListAction[] getStainingListActions() {
+		return ReceiptLogView.StainingListAction.values();
 	}
 
 	/**

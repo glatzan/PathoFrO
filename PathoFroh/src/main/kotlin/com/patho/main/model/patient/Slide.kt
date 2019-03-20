@@ -16,7 +16,7 @@ import javax.persistence.*
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "slide_sequencegenerator", sequenceName = "slide_sequence")
-open class Slide : AbstractPersistable, ID, Parent<Block>, IdManuallyAltered {
+open class Slide : AbstractPersistable, Parent<Block>, IdManuallyAltered {
 
     @Id
     @GeneratedValue(generator = "slide_sequencegenerator")

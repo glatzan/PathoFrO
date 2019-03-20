@@ -10,7 +10,7 @@ import javax.persistence.*
 
 @Entity
 @SelectBeforeUpdate(true)
-open class HistoGroup : AbstractPersistable, ID, GrantedAuthority {
+open class HistoGroup : AbstractPersistable, GrantedAuthority {
 
     companion object {
         /**

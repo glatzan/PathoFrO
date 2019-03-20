@@ -33,7 +33,7 @@
 		<h:outputLabel
 			value="#{msg['component.userSettingsPrinter.printer.autoPrint']}" />
 		<p:selectBooleanCheckbox
-			value="#{cc.attrs.user.settings.autoSelectedPreferedPrinter}">
+			value="#{cc.attrs.user.settings.autoSelectedPreferredPrinter}">
 			<p:ajax event="change" update="@form"
 				listener="#{cc.attrs.valueChangeAction}" />
 		</p:selectBooleanCheckbox>
@@ -44,7 +44,7 @@
 			<!-- select printer -->
 			<p:selectOneMenu panelStyleClass="searchSelectMenuPanel"
 				converter="#{printService.cupsPrinter.printerTransformer}"
-				disabled="#{cc.attrs.user.settings.autoSelectedPreferedPrinter}"
+				disabled="#{cc.attrs.user.settings.autoSelectedPreferredPrinter}"
 				value="#{cc.attrs.printer}" filter="true" filterMatchMode="contains">
 
 				<f:selectItems value="#{printService.cupsPrinter.printer}"
@@ -77,7 +77,7 @@
 		<h:outputLabel
 			value="#{msg['component.userSettingsPrinter.labelPrinter.autoPrint']}" />
 		<p:selectBooleanCheckbox
-			value="#{cc.attrs.user.settings.autoSelectedPreferedLabelPrinter}">
+			value="#{cc.attrs.user.settings.autoSelectedPreferredLabelPrinter}">
 			<p:ajax event="change" update="@form"
 				listener="#{cc.attrs.valueChangeAction}" />
 		</p:selectBooleanCheckbox>
@@ -88,7 +88,7 @@
 		<h:panelGrid columns="2" styleClass="listingHistoHiddenTableContainer">
 			<!-- select printer -->
 			<p:selectOneMenu
-				disabled="#{cc.attrs.user.settings.autoSelectedPreferedLabelPrinter}"
+				disabled="#{cc.attrs.user.settings.autoSelectedPreferredLabelPrinter}"
 				converter="#{printService.lablePrinter.printerTransformer}"
 				panelStyleClass="searchSelectMenuPanel"
 				value="#{cc.attrs.labelPrinter}" filter="true"

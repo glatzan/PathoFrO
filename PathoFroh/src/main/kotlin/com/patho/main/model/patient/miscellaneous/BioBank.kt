@@ -22,7 +22,7 @@ import javax.persistence.OrderBy
 @SelectBeforeUpdate
 @SequenceGenerator(name = "bioBank_sequencegenerator", sequenceName = "bioBank_sequence")
 @EntityListeners(AuditListener::class)
-open class BioBank : AbstractPersistable, ID, DataList, AuditAble {
+open class BioBank : AbstractPersistable, DataList, AuditAble {
 
     @Id
     @GeneratedValue(generator = "bioBank_sequencegenerator")

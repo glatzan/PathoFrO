@@ -11,7 +11,7 @@ import javax.persistence.*
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-open class Physician : AbstractPersistable, ID {
+open class Physician : AbstractPersistable {
 
     @Id
     @SequenceGenerator(name = "physician_sequencegenerator", sequenceName = "physician_sequence")

@@ -22,7 +22,7 @@ import javax.persistence.*
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "sample_sequencegenerator", sequenceName = "sample_sequence")
-open class Sample : AbstractPersistable, ID, Parent<Task>, IdManuallyAltered {
+open class Sample : AbstractPersistable, Parent<Task>, IdManuallyAltered {
 
     @Id
     @GeneratedValue(generator = "sample_sequencegenerator")

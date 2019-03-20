@@ -9,7 +9,7 @@ import javax.persistence.*
 @Entity
 @SelectBeforeUpdate(true)
 @Audited
-open class Contact() : AbstractPersistable(), ID {
+open class Contact() : AbstractPersistable() {
 
     @Id
     @GeneratedValue(generator = "contact_sequencegenerator")

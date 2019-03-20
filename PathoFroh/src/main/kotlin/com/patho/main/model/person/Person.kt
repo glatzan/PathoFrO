@@ -2,7 +2,6 @@ package com.patho.main.model.person
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.interfaces.FullName
-import com.patho.main.model.interfaces.ID
 import org.hibernate.annotations.*
 import org.hibernate.envers.Audited
 import java.time.LocalDate
@@ -16,7 +15,7 @@ import javax.persistence.OrderBy
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Audited
 @SelectBeforeUpdate(true)
-open class Person : AbstractPersistable, ID, FullName {
+open class Person : AbstractPersistable, FullName {
 
     @Id
     @SequenceGenerator(name = "person_sequencegenerator", sequenceName = "person_sequence")

@@ -31,7 +31,7 @@ import javax.persistence.OrderBy
 @Audited
 @SelectBeforeUpdate(true)
 @EntityListeners(AuditListener::class)
-open class Task : AbstractPersistable, ID, Parent<Patient>, AuditAble, DataList {
+open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
 
     @Id
     @GeneratedValue(generator = "task_sequencegenerator")

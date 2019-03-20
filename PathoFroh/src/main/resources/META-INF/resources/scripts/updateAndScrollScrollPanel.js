@@ -1,6 +1,7 @@
 /*
  * Array of id;;classToFocus
  */
+// TODO remove
 function updateAndAutoScrollToSelectedElement() {
 
 	if (arguments.length == 1)

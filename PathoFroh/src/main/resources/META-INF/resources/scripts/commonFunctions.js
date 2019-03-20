@@ -67,7 +67,8 @@ function setScrollPanelScrollSpeed(id, speed) {
 	var idDataTbl = getAlteredID(id);
 
 	$(idDataTbl).jScrollPane({
-		mouseWheelSpeed : speed
+		mouseWheelSpeed : speed,
+        autoReinitialise: true
 	});
 }
 

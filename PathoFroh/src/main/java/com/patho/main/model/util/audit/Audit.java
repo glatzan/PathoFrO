@@ -3,12 +3,7 @@ package com.patho.main.model.util.audit;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Embeddable
-@Getter
-@Setter
 public class Audit {
  
     @Column
@@ -22,5 +17,36 @@ public class Audit {
  
     @Column(length=10)
     private String updatedBy;
-    
+
+    public long getCreatedOn() {
+        return this.createdOn;
+    }
+
+    public String getCreatedBy() {
+        return this.createdBy;
+    }
+
+    public long getUpdatedOn() {
+        return this.updatedOn;
+    }
+
+    public String getUpdatedBy() {
+        return this.updatedBy;
+    }
+
+    public void setCreatedOn(long createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public void setUpdatedOn(long updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 }

@@ -20,9 +20,9 @@
 		</h:outputFormat>
 
 		<h:outputFormat value="#{msg['body.worklist.report.headline2']}"
-			rendered="#{globalEditViewHandler.reportView.selectedData ne null}">
+			rendered="#{reportView.selectedData ne null}">
 			<f:param
-				value="#{globalEditViewHandler.reportView.selectedData.diagnosis.name}" />
+				value="#{reportView.selectedData.diagnosis.name}" />
 		</h:outputFormat>
 
 	</h:panelGrid>
@@ -35,15 +35,15 @@
 			columnClasses="columnTop,columnWidth250">
 
 			<h:panelGrid id="pdfcontent"
-				styleClass="defaultHistoHiddenTableContainer onClickUpdate #{globalEditViewHandler.reportView.generatingSelectedPDF ? 'reloadPDF' : ''}"
+				styleClass="defaultHistoHiddenTableContainer onClickUpdate #{reportView.generatingSelectedPDF ? 'reloadPDF' : ''}"
 				style="width:calc(100% - 20px)">
 				<pe:documentViewer style="margin-left:5px;height:calc(100vh - 75px)"
-					rendered="#{globalEditViewHandler.reportView.selectedContainer ne null}"
-					value="#{globalEditViewHandler.reportView.getPDF()}"
-					download="#{globalEditViewHandler.reportView.selectedContainer.name}" />
+					rendered="#{reportView.selectedContainer ne null}"
+					value="#{reportView.getPDF()}"
+					download="#{reportView.selectedContainer.name}" />
 
 				<h:panelGrid columns="1"
-					rendered="#{globalEditViewHandler.reportView.selectedContainer eq null}"
+					rendered="#{reportView.selectedContainer eq null}"
 					styleClass="defaultHistoHiddenTableContainer"
 					style="width: 100% !important;height: calc(100vh - 75px) !important;"
 					columnClasses="columnMiddle">
@@ -61,7 +61,7 @@
 			<p:scrollPanel styleClass="histoScrollPanelStyle" id="pdfScroller"
 				style="height:calc(100vh - 75px);">
 				<c:forEach varStatus="dataStatus"
-					items="#{globalEditViewHandler.reportView.data}" var="data">
+					items="#{reportView.data}" var="data">
 
 					<h:panelGrid columns="1" columnClasses="columnTop, columnTop "
 						id="bild2" style="width:100% ; "
@@ -95,9 +95,9 @@
 							styleClass="#{data.loading ? 'reloadPDF' : ''} defaultHistoHiddenTableContainer">
 							<p:commandLink rendered="#{!data.loading}"
 								update="@(.onClickUpdate)"
-								actionListener="#{globalEditViewHandler.reportView.setSelectedPDF(data)}">
+								actionListener="#{reportView.setSelectedPDF(data)}">
 								<p:graphicImage height="325" cache="false" 
-									value="#{globalEditViewHandler.reportView.getThumbnail()}"
+									value="#{reportView.getThumbnail()}"
 									style="border: 1px solid black;" width="230">
 									<f:param name="id" value="#{data.pdf.thumbnail}" />
 								</p:graphicImage>
@@ -114,10 +114,10 @@
 				</c:forEach>
 
 				<p:poll
-					autoStart="#{globalEditViewHandler.reportView.generatingPDFs}"
+					autoStart="#{reportView.generatingPDFs}"
 					interval="1" update="@(.reloadPDF)"
-					stop="#{globalEditViewHandler.reportView.generationCompleted}"
-					listener="#{globalEditViewHandler.reportView.updateData()}"></p:poll>
+					stop="#{reportView.generationCompleted}"
+					listener="#{reportView.updateData()}"></p:poll>
 					
 			</p:scrollPanel>
 		</h:panelGrid>

@@ -12,7 +12,7 @@ import javax.persistence.*
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @Audited
-open class Organization : AbstractPersistable, ID {
+open class Organization : AbstractPersistable {
 
     @Id
     @GeneratedValue(generator = "organization_sequencegenerator")

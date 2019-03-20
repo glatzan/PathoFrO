@@ -45,7 +45,7 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 	/**
 	 * Name of the new revision
 	 */
-	private String newRevisionName;
+	private String newRevisionName = "";
 
 	/**
 	 * Type of the new revision
@@ -95,6 +95,8 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 		types[2] = DiagnosisRevisionType.DIAGNOSIS_COUNCIL;
 
 		setTask(task);
+
+		newRevisionName = "";
 
 		setSelectableRevisionTypes(types);
 		setNewRevisionType(types[0]);

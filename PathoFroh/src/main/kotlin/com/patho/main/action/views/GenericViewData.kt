@@ -15,7 +15,6 @@ import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.bearer.SimplePhysicianBearer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
-import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Component
 
 @Component
@@ -72,11 +71,9 @@ open class GenericViewData @Autowired constructor(
     open var privatePhysicians: List<SimplePhysicianBearer> = listOf<SimplePhysicianBearer>()
 
     /**
-     * Loading generic data for all views
+     * Loads generic data for all views
      */
-    override fun loadView(task: Task) {
-        super.loadView(task)
-
+    override fun loadView() {
         logger.debug("Loading generic data")
 
         slideCommentary = listItemRepository
@@ -94,6 +91,20 @@ open class GenericViewData @Autowired constructor(
         physiciansToSignListTransformer = DefaultTransformer(physiciansToSignList)
 
         materialList = materialPresetRepository.findAll(true)
+    }
+
+    /**
+     * Loads generic data for all views
+     */
+    override fun loadView(task: Task) {
+        loadView(task, true);
+    }
+
+    fun loadView(task: Task, loadGeneric: Boolean) {
+        super.loadView(task)
+
+        if (loadGeneric)
+            loadView()
 
         surgeons = physicianRepository.findAllByRole(
                 arrayOf(ContactRole.SURGEON, ContactRole.EXTERNAL_SURGEON), true, SortOrder.PRIORITY).map { p -> SimplePhysicianBearer(p.id, p, task) }

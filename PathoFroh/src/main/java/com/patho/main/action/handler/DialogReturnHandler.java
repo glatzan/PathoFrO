@@ -1,6 +1,8 @@
 package com.patho.main.action.handler;
 
 import org.primefaces.event.SelectEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -29,7 +31,9 @@ import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
 
 @Controller
 @Scope("session")
-public class DialogReturnHandler extends AbstractHandler {
+public class DialogReturnHandler {
+
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private GlobalEditViewHandler globalEditViewHandler;

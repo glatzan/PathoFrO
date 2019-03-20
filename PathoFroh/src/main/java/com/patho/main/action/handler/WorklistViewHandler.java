@@ -60,8 +60,14 @@ public class WorklistViewHandler {
 	@Setter(AccessLevel.NONE)
 	private WorklistHandler worklistHandler;
 
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private CentralHandler centralHandler;
+
+
 	public void goToNavigation() {
-		goToNavigation(globalEditViewHandler.getNavigationData().getCurrentView());
+		goToNavigation(centralHandler.getNavigationData().getCurrentView());
 	}
 
 	public void goToNavigation(View view) {
@@ -156,12 +162,12 @@ public class WorklistViewHandler {
 	public void changeView(View currentView, View displayView) {
 		logger.debug("Changing view to " + currentView + " display view (" + displayView + ")");
 
-		globalEditViewHandler.getNavigationData().setCurrentView(currentView);
-		globalEditViewHandler.getNavigationData().setDisplayView(displayView);
+		centralHandler.getNavigationData().setCurrentView(currentView);
+		centralHandler.getNavigationData().setDisplayView(displayView);
 
 		if (currentView.isLastSubviewAble()) {
 			logger.debug("Setting last default view to " + currentView);
-			globalEditViewHandler.getNavigationData().setLastDefaultView(currentView);
+			centralHandler.getNavigationData().setLastDefaultView(currentView);
 		}
 	}
 
@@ -268,9 +274,9 @@ public class WorklistViewHandler {
 		// task.setActive(true);
 
 		// change if is subview (diagnosis, receipt log or report view)
-		if (!globalEditViewHandler.getNavigationData().getCurrentView().isLastSubviewAble()) {
-			logger.debug("Setting subview " + globalEditViewHandler.getNavigationData().getLastDefaultView());
-			changeView(globalEditViewHandler.getNavigationData().getLastDefaultView());
+		if (!centralHandler.getNavigationData().getCurrentView().isLastSubviewAble()) {
+			logger.debug("Setting subview " + centralHandler.getNavigationData().getLastDefaultView());
+			changeView(centralHandler.getNavigationData().getLastDefaultView());
 		}
 
 		// generating task data, taskstatus is generated previously
@@ -289,9 +295,9 @@ public class WorklistViewHandler {
 
 	public void addWorklist(AbstractWorklistSearch worklistSearch, String name, boolean selected) {
 		addWorklist(new Worklist(name, worklistSearch,
-				userHandlerAction.getCurrentUser().getSettings().isWorklistHideNoneActiveTasks(),
+				userHandlerAction.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
 				userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrder(),
-				userHandlerAction.getCurrentUser().getSettings().isWorklistAutoUpdate()), selected);
+				userHandlerAction.getCurrentUser().getSettings().getWorklistAutoUpdate()), selected);
 	}
 
 	public void addWorklist(Worklist worklist, boolean selected) {
@@ -348,7 +354,7 @@ public class WorklistViewHandler {
 
 	public Task addTaskToWorklist(Task task, boolean changeView) {
 
-		changeView = changeView | userHandlerAction.getCurrentUser().getSettings().isAddTaskWithSingelClick();
+		changeView = changeView | userHandlerAction.getCurrentUser().getSettings().getAddTaskWithSingleClick();
 		task.setActive(true);
 
 		// selecting task if patient is in worklist, or if usersettings force it

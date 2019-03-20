@@ -19,5 +19,6 @@ interface SpringContextBridgedServices {
     var mediaRepository: MediaRepository
     var physicianService : PhysicianService
     var listItemRepository : ListItemRepository
+    var userService: UserService
 
 }

@@ -21,7 +21,7 @@ import javax.persistence.*
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
-open class HistoUser : AbstractPersistable, ID, UserDetails {
+open class HistoUser : AbstractPersistable, UserDetails {
 
     @Id
     @SequenceGenerator(name = "user_sequencegenerator", sequenceName = "user_sequence")

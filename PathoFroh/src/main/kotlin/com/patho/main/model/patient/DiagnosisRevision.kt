@@ -21,7 +21,7 @@ import javax.persistence.*
 @SelectBeforeUpdate(true)
 @EntityListeners(AuditListener::class)
 
-open class DiagnosisRevision : AbstractPersistable, ID, AuditAble, Parent<Task> {
+open class DiagnosisRevision : AbstractPersistable, AuditAble, Parent<Task> {
 
     /**
      * Internal marker for a diagnosis

@@ -96,10 +96,10 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		public Worklist getWorklist() {
 			Worklist worklist = new Worklist("Default", worklistSearch,
-					userHandlerAction.getCurrentUser().getSettings().isWorklistHideNoneActiveTasks(),
+					userHandlerAction.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
 					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrder(),
-					userHandlerAction.getCurrentUser().getSettings().isWorklistAutoUpdate(), false,
-					userHandlerAction.getCurrentUser().getSettings().isWorklistSortOrderAsc());
+					userHandlerAction.getCurrentUser().getSettings().getWorklistAutoUpdate(), false,
+					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrderAsc());
 			return worklist;
 		}
 
@@ -143,10 +143,10 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		public Worklist getWorklist() {
 			Worklist worklist = new Worklist("Default", worklistSearch,
-					userHandlerAction.getCurrentUser().getSettings().isWorklistHideNoneActiveTasks(),
+					userHandlerAction.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
 					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrder(),
-					userHandlerAction.getCurrentUser().getSettings().isWorklistAutoUpdate(), true,
-					userHandlerAction.getCurrentUser().getSettings().isWorklistSortOrderAsc());
+					userHandlerAction.getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
+					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrderAsc());
 			return worklist;
 		}
 
@@ -256,10 +256,10 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		public Worklist getWorklist() {
 			Worklist worklist = new Worklist("Default", worklistSearch,
-					userHandlerAction.getCurrentUser().getSettings().isWorklistHideNoneActiveTasks(),
+					userHandlerAction.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
 					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrder(),
-					userHandlerAction.getCurrentUser().getSettings().isWorklistAutoUpdate(), true,
-					userHandlerAction.getCurrentUser().getSettings().isWorklistSortOrderAsc());
+					userHandlerAction.getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
+					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrderAsc());
 			return worklist;
 		}
 

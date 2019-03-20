@@ -2,11 +2,7 @@ package com.patho.main.action.handler;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.action.handler.views.ReportView;
-import com.patho.main.action.handler.views.TaskView;
-import com.patho.main.action.views.DiagnosisView;
-import com.patho.main.action.views.GenericViewData;
-import com.patho.main.action.views.ReceiptLogView;
+import com.patho.main.action.views.*;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.View;
 import com.patho.main.config.util.ResourceBundle;
@@ -18,7 +14,6 @@ import com.patho.main.model.patient.*;
 import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.model.person.Person;
 import com.patho.main.model.user.HistoPermissions;
-import com.patho.main.model.user.HistoSettings;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
@@ -27,9 +22,6 @@ import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.ui.menu.MenuGenerator;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.worklist.Worklist;
-import com.patho.main.util.worklist.search.AbstractWorklistSearch;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,16 +38,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlPanelGroup;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Getter
 @Setter
-public class GlobalEditViewHandler extends AbstractHandler {
+public class GlobalEditViewHandler{
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     @Getter(AccessLevel.NONE)
@@ -132,20 +124,20 @@ public class GlobalEditViewHandler extends AbstractHandler {
     @Setter(AccessLevel.NONE)
     private ReceiptLogView receiptLogView;
 
-    /**
-     * Navigation Data
-     */
-    private NavigationData navigationData = new NavigationData();
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private CentralHandler centralHandler;
 
-    /**
-     * Data for Taskview
-     */
-    private TaskView taskView = new TaskView(this);
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private ReportView reportView;
 
-    /**
-     * Data for the report view
-     */
-    private ReportView reportView = new ReportView(this);
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private TaskView taskView;
 
     /**
      * Methodes for saving task data
@@ -182,49 +174,8 @@ public class GlobalEditViewHandler extends AbstractHandler {
      */
     private MaterialPreset materialPresetToChange;
 
-    /**
-     * Program start point, is called by the loginhandler
-     */
-    public void initializeDataForSession() {
-        logger.debug("Loading programm data");
-        logger.debug("1. Loading worklist");
-        // loading default worklist
-        HistoSettings settings = userHandlerAction.getCurrentUser().getSettings();
-        SimpleSearchOption defaultWorklistToLoad = settings.getWorklistToLoad();
-        Worklist worklist;
-
-        // if a default to load was provided
-        if (defaultWorklistToLoad != null && defaultWorklistToLoad != SimpleSearchOption.EMPTY_LIST) {
-            WorklistSimpleSearch simpleSearch = new WorklistSimpleSearch(defaultWorklistToLoad);
-            worklist = new Worklist("Default", simpleSearch, settings);
-        } else
-            worklist = new Worklist("Default", new AbstractWorklistSearch());
-
-        logger.debug("2. Setting navigation data");
-        // setting start view
-        getNavigationData().setCurrentView(userHandlerAction.getCurrentUser().getSettings().getStartView());
-        // setting default subview
-        getNavigationData().setLastDefaultView(userHandlerAction.getCurrentUser().getSettings().getDefaultView());
-
-        logger.debug("3. Loading common data");
-        genericViewData.loadView();
-
-        logger.debug("4. Loading view data");
-        navigationData.updateData();
-
-        logger.debug("5. Setting worklist");
-        worklistViewHandler.addWorklist(worklist, true);
-
-        logger.debug("6. Init task data");
-
-        // TODO check if problem, this should be allread done by goToNavigation
-//		generateViewData(TaskInitilize.GENERATE_TASK_STATUS, TaskInitilize.GENERATE_MENU_MODEL,
-//				TaskInitilize.RELOAD_MENU_MODEL_FAVOURITE_LISTS);
-
-    }
-
     public void generateViewData(TaskInitilize... initilizes) {
-        generateViewData(getNavigationData().getCurrentView(), initilizes);
+        generateViewData(centralHandler.getNavigationData().getCurrentView(), initilizes);
     }
 
     public void generateViewData(View view, TaskInitilize... initilizes) {
@@ -302,7 +253,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
     public void reloadAllData() {
         logger.debug("Force Reload of all data");
         genericViewData.loadView();
-        navigationData.updateData();
+        centralHandler.getNavigationData().updateData();
         logger.debug("Reloading worklist");
         worklistHandler.reloadWorklist();
     }
@@ -347,7 +298,7 @@ public class GlobalEditViewHandler extends AbstractHandler {
     }
 
     public void quickSearch() {
-        quickSearch(getQuickSearch(), userHandlerAction.getCurrentUser().getSettings().isAlternatePatientAddMode());
+        quickSearch(getQuickSearch(), userHandlerAction.getCurrentUser().getSettings().getAlternatePatientAddMode());
         setQuickSearch("");
     }
 
@@ -474,61 +425,6 @@ public class GlobalEditViewHandler extends AbstractHandler {
         }
     }
 
-    /**
-     * Navigation Data
-     */
-    @Getter
-    @Setter
-    @Configurable
-    public class NavigationData {
-
-        /**
-         * View options, dynamically generated depending on the users role
-         */
-        private List<View> navigationPages;
-
-        /**
-         * Selected View in the menu
-         */
-        private View displayView;
-
-        /**
-         * Current view which is displayed
-         */
-        private View currentView;
-
-        /**
-         * Can be Diagnosis or Receiptlog
-         */
-        private View lastDefaultView;
-
-        public NavigationData() {
-
-        }
-
-        /**
-         * Returns the center view if present, otherwise an empty page will be
-         * returned**@return
-         */
-        public String getCenterView() {
-            if (getDisplayView() != null)
-                return getDisplayView().getPath();
-            else
-                return View.WORKLIST_BLANK.getPath();
-        }
-
-        /**
-         * Loading all data from Backend
-         */
-        public void updateData() {
-            setNavigationPages(
-                    new ArrayList<View>(userHandlerAction.getCurrentUser().getSettings().getAvailableViews()));
-        }
-    }
-
-    public static enum StainingListAction {
-        NONE, PERFORMED, NOT_PERFORMED, PRINT, ARCHIVE;
-    }
 
     @Getter
     @Setter

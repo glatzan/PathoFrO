@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 
-public class MessageHandler extends AbstractHandler {
+public class MessageHandler {
 
 	protected static final Logger staticLogger = LoggerFactory.getLogger(MessageHandler.class);
 

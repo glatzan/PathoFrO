@@ -233,7 +233,7 @@ public class PDFOrganizer extends AbstractDialog {
 
 		// do not move if is not a pdf, parent is not dropable and pdf is not restricted
 		if (!(dragNode.getData() instanceof PDFContainer) || !dropNode.getType().startsWith("dropAble")
-				|| ((PDFContainer) dragNode.getData()).isRestricted()) {
+				|| ((PDFContainer) dragNode.getData()).getRestricted()) {
 			logger.debug("Cannot move PDf undo change");
 			update(true);
 			return;
@@ -298,7 +298,7 @@ public class PDFOrganizer extends AbstractDialog {
 	 * Deletes the pdf of the current tree node
 	 */
 	public void deletePDFContainer() {
-		if (!((PDFContainer) getSelectedNode().getData()).isRestricted())
+		if (!((PDFContainer) getSelectedNode().getData()).getRestricted())
 			deletePDFContainer((PDFContainer) getSelectedNode().getData());
 		else
 			MessageHandler.sendGrowlMessagesAsResource("growl.pdf.delete.forbidden");
@@ -319,7 +319,7 @@ public class PDFOrganizer extends AbstractDialog {
 	 * Opens the edit dialog for the current tree node
 	 */
 	public void editPDFContainer() {
-		if (!((PDFContainer) getSelectedNode().getData()).isRestricted())
+		if (!((PDFContainer) getSelectedNode().getData()).getRestricted())
 			editPDFContainer((PDFContainer) getSelectedNode().getData());
 		else
 			MessageHandler.sendGrowlMessagesAsResource("growl.pdf.edit.forbidden");

@@ -185,7 +185,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transactional
     open fun updateReportIntentNotificationsWithDiagnosisPresets(task: Task, reportIntent: ReportIntent, save: Boolean = true): Pair<Task, ReportIntent> {
-       logger.debug("Updating with diagnosispresets")
+        logger.debug("Updating with diagnosispresets")
         val rolesToUpdate = mutableListOf<ContactRole>()
 
         // collecting roles for which a report should be send by letter
@@ -268,9 +268,10 @@ open class ReportIntentService @Autowired constructor(
         logger.debug("Updating History with diagnoses")
 
         val foundRevisions = mutableListOf<DiagnosisRevision>()
+        var toRemoveHistory = mutableListOf<ReportHistoryRecord>()
 
         for (reportHistoryRecord in reportIntentNotification.history) {
-            val diagnosisRevision = task.diagnosisRevisions.singleOrNull { p -> p.id == reportHistoryRecord.diagnosisID}
+            val diagnosisRevision = task.diagnosisRevisions.singleOrNull { p -> p.id == reportHistoryRecord.diagnosisID }
 
             // search if a corresponding diagnosis exists
             if (diagnosisRevision != null) {
@@ -280,9 +281,12 @@ open class ReportIntentService @Autowired constructor(
                 if (isHistoryPresent(reportHistoryRecord))
                     reportHistoryRecord.diagnosisPresent = false
                 else
-                    removeReportHistoryRecord(reportIntentNotification, reportHistoryRecord)
+                    toRemoveHistory.add(reportHistoryRecord)
             }
         }
+
+        // removing
+        toRemoveHistory.forEach { p -> removeReportHistoryRecord(reportIntentNotification, p) }
 
         val allRevisions = mutableListOf<DiagnosisRevision>(*task.diagnosisRevisions.toTypedArray())
         allRevisions.removeAll(foundRevisions)

@@ -1,16 +1,5 @@
 package com.patho.main.util.worklist;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.common.WorklistSortOrder;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
@@ -20,26 +9,22 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.ui.task.TaskInfo;
 import com.patho.main.util.helper.TaskUtil;
 import com.patho.main.util.worklist.search.AbstractWorklistSearch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.*;
 
 @Configurable
-@Getter
-@Setter
 public class Worklist {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private PatientRepository patientRepository;
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private TaskRepository taskRepository;
 
 	/**
@@ -576,4 +561,103 @@ public class Worklist {
 		}
 	}
 
+	public Logger getLogger() {
+		return this.logger;
+	}
+
+	public List<Patient> getItems() {
+		return this.items;
+	}
+
+	public WorklistSortOrder getWorklistSortOrder() {
+		return this.worklistSortOrder;
+	}
+
+	public boolean isSortAscending() {
+		return this.sortAscending;
+	}
+
+	public boolean isShowActiveTasksExplicit() {
+		return this.showActiveTasksExplicit;
+	}
+
+	public boolean isShowNoneActiveTasks() {
+		return this.showNoneActiveTasks;
+	}
+
+	public boolean isAutoUpdate() {
+		return this.autoUpdate;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public int getUdpateInterval() {
+		return this.udpateInterval;
+	}
+
+	public AbstractWorklistSearch getWorklistSearch() {
+		return this.worklistSearch;
+	}
+
+	public Patient getSelectedPatient() {
+		return this.selectedPatient;
+	}
+
+	public Task getSelectedTask() {
+		return this.selectedTask;
+	}
+
+	public TaskInfo getSelectedTaskInfo() {
+		return this.selectedTaskInfo;
+	}
+
+	public void setItems(List<Patient> items) {
+		this.items = items;
+	}
+
+	public void setWorklistSortOrder(WorklistSortOrder worklistSortOrder) {
+		this.worklistSortOrder = worklistSortOrder;
+	}
+
+	public void setSortAscending(boolean sortAscending) {
+		this.sortAscending = sortAscending;
+	}
+
+	public void setShowActiveTasksExplicit(boolean showActiveTasksExplicit) {
+		this.showActiveTasksExplicit = showActiveTasksExplicit;
+	}
+
+	public void setShowNoneActiveTasks(boolean showNoneActiveTasks) {
+		this.showNoneActiveTasks = showNoneActiveTasks;
+	}
+
+	public void setAutoUpdate(boolean autoUpdate) {
+		this.autoUpdate = autoUpdate;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setUdpateInterval(int udpateInterval) {
+		this.udpateInterval = udpateInterval;
+	}
+
+	public void setWorklistSearch(AbstractWorklistSearch worklistSearch) {
+		this.worklistSearch = worklistSearch;
+	}
+
+	public void setSelectedPatient(Patient selectedPatient) {
+		this.selectedPatient = selectedPatient;
+	}
+
+	public void setSelectedTask(Task selectedTask) {
+		this.selectedTask = selectedTask;
+	}
+
+	public void setSelectedTaskInfo(TaskInfo selectedTaskInfo) {
+		this.selectedTaskInfo = selectedTaskInfo;
+	}
 }

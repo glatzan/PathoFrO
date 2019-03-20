@@ -44,6 +44,10 @@ class SpringContextBridge : SpringContextBridgedServices {
     @Autowired
     override lateinit var listItemRepository : ListItemRepository
 
+    @Autowired
+    override lateinit var userService: UserService
+
+
     companion object {
         @JvmStatic
         fun services(): SpringContextBridgedServices {

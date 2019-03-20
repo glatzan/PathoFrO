@@ -22,7 +22,7 @@ import kotlin.collections.HashSet
 @SelectBeforeUpdate(true)
 @SequenceGenerator(name = "council_sequencegenerator", sequenceName = "council_sequence")
 @EntityListeners(AuditListener::class)
-open class Council : AbstractPersistable, ID, DataList, AuditAble {
+open class Council : AbstractPersistable, DataList, AuditAble {
 
     @Id
     @GeneratedValue(generator = "council_sequencegenerator")

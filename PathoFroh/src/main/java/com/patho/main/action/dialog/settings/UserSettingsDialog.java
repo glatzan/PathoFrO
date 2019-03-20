@@ -88,7 +88,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 		getUser().getSettings().setLabelPrinter(getPrintTab().getLabelPrinter());
 		getUser().getSettings().setPrinter(getPrintTab().getClinicPrinter());
 		setUser(userRepository.save(getUser()));
-		System.out.println(getUser().getSettings().getPreferedLabelPritner());
+		System.out.println(getUser().getSettings().getPreferredLabelPrinter());
 	}
 
 	public void update() {
