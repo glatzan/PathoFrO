@@ -53,7 +53,7 @@ open class HistoSettings() : AbstractPersistable(), Cloneable {
      * Page which should be shown as default page
      */
     @Enumerated(EnumType.STRING)
-    open var defaultView: View? = null
+    open var defaultView: View = View.LOGIN
 
     /**
      * Page which will be shown on startup

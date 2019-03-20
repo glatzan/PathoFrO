@@ -45,9 +45,6 @@ public class DialogReturnHandler {
 	private WorkPhaseHandler workPhaseHandler;
 
 	@Autowired
-	private WorklistViewHandler worklistViewHandler;
-
-	@Autowired
 	private UserHandlerAction userHandlerAction;
 
 	@Autowired
@@ -70,7 +67,7 @@ public class DialogReturnHandler {
 			logger.debug("Patient was selected, adding to database and worklist");
 			Patient p = ((PatientReturnEvent) event.getObject()).getPatien();
 			// reload if patient is known to database, and may is associated with tasks
-			worklistViewHandler.addPatientToWorkList(p, true,true);
+			worklistHandler.addPatientToWorkList(p, true,true);
 		} else {
 			logger.debug("No Patient was selected");
 		}
@@ -102,9 +99,9 @@ public class DialogReturnHandler {
 				logger.debug("Task reload event.");
 				if (event.getObject() instanceof ReloadTaskEvent
 						&& ((ReloadTaskEvent) event.getObject()).getTask() != null)
-					worklistViewHandler.replaceTaskInWorklist(((ReloadTaskEvent) event.getObject()).getTask());
+					worklistHandler.replaceTaskInWorklist(((ReloadTaskEvent) event.getObject()).getTask());
 				else
-					worklistViewHandler.reloadCurrentTask();
+					worklistHandler.replaceTaskInWorklist();
 			}
 		}
 	}
@@ -117,7 +114,7 @@ public class DialogReturnHandler {
 	public void onWorklistSelectReturn(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof WorklistSearchReturnEvent) {
 			logger.debug("Setting new worklist");
-			worklistViewHandler.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(), true);
+			worklistHandler.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(), true);
 			return;
 		}
 		onDefaultDialogReturn(event);
@@ -134,14 +131,14 @@ public class DialogReturnHandler {
 			PatientMergeEvent p = (PatientMergeEvent) event.getObject();
 
 			if (p.getSource().getArchived())
-				worklistViewHandler.removePatientFromWorklist(p.getSource());
+				worklistHandler.removePatientFromWorklist(p.getSource());
 			else
-				worklistViewHandler.replacePatientInWorklist(p.getSource());
+				worklistHandler.replacePatientInWorklist(p.getSource());
 
 			if (p.getTarget().getArchived())
-				worklistViewHandler.removePatientFromWorklist(p.getTarget());
+				worklistHandler.removePatientFromWorklist(p.getTarget());
 			else
-				worklistViewHandler.replacePatientInWorklist(p.getTarget());
+				worklistHandler.replacePatientInWorklist(p.getTarget());
 
 			return;
 		}
@@ -157,7 +154,7 @@ public class DialogReturnHandler {
 			workPhaseHandler.endStainingPhase(data.getTask(), data.isEndStainingPhase(),
 					data.isRemoveFromStainingList(), data.isGoToDiagnosisPhase(), data.isRemoveFromWorklist());
 
-			worklistViewHandler.reloadCurrentTask();
+			worklistHandler.replaceTaskInWorklist();
 
 			return;
 		}
@@ -173,7 +170,7 @@ public class DialogReturnHandler {
 					data.isAllRevisions() ? null : data.getSelectedRevision(), data.isRemoveFromDiangosisList(),
 					data.isNotification(), data.isRemoveFromWorklist());
 
-			worklistViewHandler.reloadCurrentTask();
+			worklistHandler.replaceTaskInWorklist();
 			return;
 		}
 		onDefaultDialogReturn(event);

@@ -31,7 +31,7 @@
                 <p:commandButton id="changeView" styleClass="hiddenButton"
                                  update="navigationForm:patientList contentForm headerForm"
                                  oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                                 actionListener="#{worklistViewHandler.goToNavigation(centralHandler.navigationData.currentView)}"/>
+                                 actionListener="#{centralHandler.goToNavigation(centralHandler.navigationData.currentView)}"/>
             </h:panelGroup>
 
             <p:commandButton
@@ -124,7 +124,7 @@
             <p:commandButton id="showPatientOverview"
                              oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                              update="navigationForm:patientList contentForm headerForm"
-                             actionListener="#{worklistViewHandler.onDeselectTask()}">
+                             actionListener="#{centralHandler.onDeselectTask()}">
             </p:commandButton>
 
             <!-- upload button -->

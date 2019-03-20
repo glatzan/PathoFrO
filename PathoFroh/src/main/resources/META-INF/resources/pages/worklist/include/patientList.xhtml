@@ -94,24 +94,24 @@
 		<h:panelGroup styleClass="buttonContainer">
 			<!-- Button UP -->
 			<p:commandLink title="#{msg['body.worklist.navigation.button.up']}"
-				actionListener="#{worklistViewHandler.selectNextTask()}"
+				actionListener="#{worklistHandler.selectNextTask()}"
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
 				update="navigationForm:patientList contentForm headerForm">
-				<i class="fa fa-arrow-circle-up"></i>
+				<i class="fa fa-arrow-circle-up"/>
 			</p:commandLink>
 
 			<!-- Button Down -->
 			<p:commandLink title="#{msg['body.worklist.navigation.button.down']}"
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
-				actionListener="#{worklistViewHandler.selectPreviouseTask()}"
+				actionListener="#{worklistHandler.selectPreviousTask()}"
 				update="navigationForm:patientList contentForm headerForm">
-				<i class="fa fa-arrow-circle-down"></i>
+				<i class="fa fa-arrow-circle-down" />
 			</p:commandLink>
 
 			<!-- Button Sort -->
 			<p:commandLink title="#{msg['body.worklist.navigation.button.sort']}"
 				actionListener="#{dialog.worklistSortDialog.initAndPrepareBean()}">
-				<i class="fa fa-th-list"></i>
+				<i class="fa fa-th-list"/>
 				<p:ajax event="dialogReturn"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
 					update="navigationForm contentForm headerForm" />
@@ -121,7 +121,7 @@
 			<p:commandLink
 				title="#{msg['body.worklist.navigation.button.settings']}"
 				actionListener="#{dialog.worklistSettingsDialog.initAndPrepareBean()}">
-				<i class="fa fa-wrench"></i>
+				<i class="fa fa-wrench"/>
 				<p:ajax event="dialogReturn"
 					oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
 					update="navigationForm contentForm headerForm" />
@@ -142,10 +142,10 @@
 			<!-- Worklist clear -->
 			<p:commandLink partialSubmit="true" process="@this"
 				title="#{msg['body.worklist.navigation.button.changelist']}"
-				actionListener="#{worklistViewHandler.clearWorklist(worklistHandler.current)}"
+				actionListener="#{worklistHandler.clearWorklist(worklistHandler.current)}"
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 				update="navigationForm contentForm headerForm">
-				<i class="fa fa-times-circle-o"></i>
+				<i class="fa fa-times-circle-o" />
 			</p:commandLink>
 		</h:panelGroup>
 	</h:panelGrid>
@@ -161,7 +161,7 @@
 
 			<p:ajax event="rowSelect"
 				update="navigationForm:patientList contentForm headerForm"
-				listener="#{worklistViewHandler.selectPatientAndChangeView(worklistHandler.current.selectedPatient)}" />
+				listener="#{centralHandler.onSelectPatient(worklistHandler.current.selectedPatient)}" />
 
 			<p:column>
 				<h:panelGrid styleClass="defaultHistoHiddenTableContainer"
@@ -201,7 +201,7 @@
 								style="#{task.taskStatus.active or (!worklistHandler.current.showActiveTasksExplicit and task.taskStatus.actionPending) ? '' : ' opacity: 0.3;'}">
 								<!-- rendere if something is to do (or active task only) or showNoneActiveTasks -->
 								<p:commandLink partialSubmit="true" process="@this"
-									actionListener="#{worklistViewHandler.onSelectTaskAndPatient(task.id)}"
+									actionListener="#{centralHandler.onSelectTaskAndPatient(task.id)}"
 									update="headerForm contentForm navigationForm:patientList">
 
 									<h:outputLabel value="#{task.taskID}"
@@ -262,7 +262,7 @@
 
 	<p:contextMenu for="patientList">
 		<p:menuitem value="Entfernen" icon="ui-icon-close"
-			actionListener="#{worklistViewHandler.removePatientFromWorklist(worklistHandler.current.selectedPatient)}"
+			actionListener="#{worklistHandler.removePatientFromWorklist(worklistHandler.selectedPatient)}"
 			update="navigationForm:patientList contentForm headerForm" />
 	</p:contextMenu>
 </ui:composition>

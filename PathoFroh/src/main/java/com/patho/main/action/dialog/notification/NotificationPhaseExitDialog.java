@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.GlobalEditViewHandler;
-import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.FavouriteListService;
@@ -46,7 +45,6 @@ public class NotificationPhaseExitDialog extends AbstractDialog {
 	/**
 	 * Initializes the bean and shows the dialog
 	 * 
-	 * @param patient
 	 */
 	public NotificationPhaseExitDialog initAndPrepareBean(Task task) {
 		if (initBean(task))

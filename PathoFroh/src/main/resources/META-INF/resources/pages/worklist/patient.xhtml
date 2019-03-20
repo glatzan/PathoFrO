@@ -94,9 +94,8 @@
                          rowKey="#{task.id}">
 
                 <p:ajax event="rowSelect"
-                        oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
                         update="contentForm:contentPanel headerForm navigationForm:patientList"
-                        listener="#{worklistViewHandler.onSelectTaskAndPatient(worklistHandler.current.selectedTask)}"/>
+                        listener="#{centralHandler.onSelectTaskAndPatient(worklistHandler.current.selectedTask)}"/>
 
                 <p:column headerText="#{msg['body.worklist.patient.tasks']}">
                     <h:outputText
@@ -176,7 +175,6 @@
                                 actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultDialogReturn}"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                             <i class="fa fa-plus"/>
                         </p:commandLink>
@@ -185,7 +183,6 @@
                             rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_DELETE', 'TASK_EDIT_DELETE_EDITED')}"
                             actionListener="#{dialogHandlerAction.deleteTaskDialog.initAndPrepareBean(task)}">
                         <p:ajax event="dialogReturn"
-                                oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
                                 update="navigationForm:patientList contentForm:contentPanel"/>
                         <i class="fa fa-times-circle"/>
                     </p:commandLink>
@@ -253,6 +250,8 @@
             <!-- Buttons -->
             <h:panelGrid columns="2" style="margin-top: 10px;"
                          styleClass="listingHistoHiddenTableContainer">
+
+                <!-- new task button -->
                 <p:commandButton
                         value="#{msg['body.worklist.patient.button.newTask']}"
                         icon="fa fa-plus"
@@ -260,10 +259,10 @@
                         actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                     <p:ajax event="dialogReturn"
                             listener="#{dialogReturnHandler.onDefaultDialogReturn}"
-                            oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                             update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                 </p:commandButton>
 
+                <!-- updlaod button -->
                 <p:commandButton
                         value="#{msg['body.worklist.patient.button.uplaod']}"
                         icon="fa fa-cloud-upload"

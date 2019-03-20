@@ -46,28 +46,23 @@ public class WorkPhaseHandler{
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private WorklistViewHandler worklistViewHandler;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private DiagnosisService diagnosisService;
 
 	public void updateStainingPhase(Task task) {
 		// update staing phase
 		if (workPhaseService.updateStainigPhase(task)) {
-			worklistViewHandler.replaceTaskInWorklist(task);
+			worklistHandler.replaceTaskInWorklist(task);
 			// open end staining phase dialog
 			MessageHandler.executeScript("clickButtonFromBean('headerForm:stainingPhaseExit')");
 		} else {
 			task = workPhaseService.startStainingPhase(task);
-			worklistViewHandler.replaceTaskInWorklist(task);
+			worklistHandler.replaceTaskInWorklist(task);
 		}
 	}
 
 	public void startStainingPhase(Task task) {
 		workPhaseService.startStainingPhase(task);
-		worklistViewHandler.reloadCurrentTask();
+		worklistHandler.replaceTaskInWorklist();
 	}
 
 	public Task endStainingPhase(Task task, boolean endPhase, boolean removeFromList, boolean startDiagnosisPhase,
@@ -96,7 +91,7 @@ public class WorkPhaseHandler{
 				MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
 			} else {
 				// view is updated
-				worklistViewHandler.removePatientFromWorklist(task.getPatient());
+				worklistHandler.removePatientFromWorklist(task.getPatient());
 			}
 		}
 
@@ -108,7 +103,7 @@ public class WorkPhaseHandler{
 		for (DiagnosisRevision revision : task.getDiagnosisRevisions()) {
 			if (revision.getCompleted()) {
 				startDiagnosisPhase(task);
-				worklistViewHandler.reloadCurrentTask();
+				worklistHandler.replaceTaskInWorklist();
 				break;
 			}
 		}
@@ -164,7 +159,7 @@ public class WorkPhaseHandler{
 				MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
 			} else {
 				// remove from current worklist, view is updated
-				worklistViewHandler.removePatientFromWorklist(task.getPatient());
+				worklistHandler.removePatientFromWorklist(task.getPatient());
 			}
 		}
 	}

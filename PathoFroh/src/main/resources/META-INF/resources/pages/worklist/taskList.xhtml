@@ -22,7 +22,7 @@
 
             <p:ajax event="rowSelect"
                     oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight', 'contentForm:contentScrollPane')"
-                    listener="#{worklistViewHandler.addTaskToWorklist(taskView.selectedTask.id)}"
+                    listener="#{worklistHandler.addTaskToWorklist(taskView.selectedTask.id)}"
                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
 
             <!-- task id -->

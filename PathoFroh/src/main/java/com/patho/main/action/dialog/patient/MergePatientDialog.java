@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.miscellaneous.ConfirmDialog.ConfirmEvent;
 import com.patho.main.action.handler.MessageHandler;
-import com.patho.main.action.handler.WorklistViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
@@ -35,11 +34,6 @@ public class MergePatientDialog extends AbstractDialog {
 
 	public static final int MERGE_PIZ = 0;
 	public static final int MERGE_PATIENT = 1;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorklistViewHandler worklistViewHandler;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

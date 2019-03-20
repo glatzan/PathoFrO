@@ -57,11 +57,6 @@ public class GlobalEditViewHandler{
     @Autowired
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private WorklistViewHandler worklistViewHandler;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     private PatientService patientService;
 
     @Autowired
@@ -255,7 +250,7 @@ public class GlobalEditViewHandler{
         genericViewData.loadView();
         centralHandler.getNavigationData().updateData();
         logger.debug("Reloading worklist");
-        worklistHandler.reloadWorklist();
+        worklistHandler.getCurrent().updateWorklist(true);
     }
 
     public void reloadTask() {
@@ -319,7 +314,7 @@ public class GlobalEditViewHandler{
 
                 if (task.isPresent()) {
                     logger.debug("Task found, adding to worklist");
-                    worklistViewHandler.addTaskToWorklist(task.get(), true);
+                    worklistHandler.addTaskToWorklist(task.get(), true);
                     MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.task",
                             "growl.search.patient.task.text");
                 } else {
@@ -346,7 +341,7 @@ public class GlobalEditViewHandler{
                 if (patient.isPresent()) {
                     logger.debug("Found patient " + patient + " and adding to currentworklist");
 
-                    worklistViewHandler.addPatientToWorkList(patient.get(), true, true);
+                    worklistHandler.addPatientToWorkList(patient.get(), true, true);
                     MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.piz",
                             "growl.search.patient.piz.text");
 
@@ -378,7 +373,7 @@ public class GlobalEditViewHandler{
                     logger.debug("Slide found");
                     MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.slide",
                             "growl.search.patient.slide");
-                    worklistViewHandler.addTaskToWorklist(task.get(), true);
+                    worklistHandler.addTaskToWorklist(task.get(), true);
                 } else {
                     // no slide was found
                     logger.debug("No slide with the given id found");

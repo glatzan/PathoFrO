@@ -18,7 +18,7 @@
 			<h:commandLink
 				oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
 				update="navigationForm:patientList contentForm headerForm"
-				actionListener="#{worklistViewHandler.onDeselectTask()}">
+				actionListener="#{centralHandler.onDeselectTask()}">
 				<h:outputFormat value="#{msg['bodyNavigationOverview']}">
 					<f:param
 						value="#{worklistHandler.current.selectedPatient.person.lastName}" />
@@ -31,7 +31,7 @@
 			<!-- Auftrag -->
 			<h:commandLink
 				rendered="#{worklistHandler.current.selectedPatient ne null and worklistHandler.current.selectedTask ne null}"
-				actionListener="#{worklistViewHandler.onDeselectTask()}">
+				actionListener="#{centralHandler.onDeselectTask()}">
 				<h:outputFormat value="#{msg['bodyNavigationTask']}">
 					<f:param
 						value="#{worklistHandler.current.selectedTask.receiptDate}" />
