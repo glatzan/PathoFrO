@@ -97,7 +97,7 @@
 					<!--  archive task and end notification phase -->
 					<p:splitButton
 						value="#{msg['dialog.notification.tab.sendReport.button.archive']}"
-						rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
+						rendered="#{userService.userHasPermission('TASK_EDIT_ARCHIVE')}"
 						onclick="$('#adminForm\\:archiveTaskDialog').click();"
 						icon="fa fa-archive">
 
@@ -111,7 +111,7 @@
 					<!-- end diagnosis phase if other things diagnosis are not approved jet -->
 					<p:splitButton
 						value="#{msg['dialog.notification.tab.sendReport.button.end']}"
-						rendered="#{!userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
+						rendered="#{!userService.userHasPermission('TASK_EDIT_ARCHIVE')}"
 						disabled="#{!dialog.notificationDialog.task.taskStatus.editable}"
 						onclick="$('#adminForm\\:endNotificationPhase').click();"
 						icon="fa fa-volume-off">
@@ -120,7 +120,7 @@
 						<p:menuitem
 							value="#{msg['dialog.notification.tab.sendReport.button.archive']}"
 							icon="fa fa-archive"
-							disabled="#{!userHandlerAction.currentUserHasPermission('TASK_EDIT_ARCHIVE')}"
+							disabled="#{!userService.userHasPermission('TASK_EDIT_ARCHIVE')}"
 							onclick="$('#adminForm\\:archiveTaskDialog').click();" />
 					</p:splitButton>
 

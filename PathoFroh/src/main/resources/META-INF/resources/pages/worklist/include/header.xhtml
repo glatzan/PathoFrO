@@ -68,7 +68,7 @@
 
             <h:panelGroup>
                 <!-- Menu Button -->
-                <p:commandButton id="menuBtn" value="#{msg['header.menu.menu']}"
+                <p:commandButton id="menuBtn" value="#{msg['pages.header.menu.headline']}"
                                  type="button" icon="ui-icon-triangle-1-s"/>
 
                 <!-- Menu Button over -->
@@ -77,17 +77,17 @@
                               styleClass="tieredMenuOptions">
 
                     <p:submenu label="#{msg['body.worklist.header.button.settings']}"
-                               rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS')}">
+                               rendered="#{userService.userHasPermission('PROGRAM_SETTINGS')}">
                         <!-- settings button -->
                         <p:menuitem icon="fa fa-key"
                                     value="#{msg['body.worklist.header.button.settings.admin']}"
-                                    rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS')}"
+                                    rendered="#{userService.userHasPermission('PROGRAM_SETTINGS')}"
                                     onclick="$('#headerForm\\:settingsDialogBtn').click();$('#headerForm\\:tiredMenu').hide();return false;"/>
 
                         <!-- settings button -->
                         <p:menuitem icon="fa fa-money"
                                     value="#{msg['body.worklist.header.button.settings.accounting']}"
-                                    rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS')}"
+                                    rendered="#{userService.userHasPermission('PROGRAM_SETTINGS')}"
                                     onclick="$('#headerForm\\:accountingDialogBtn').click();$('#headerForm\\:tiredMenu').hide();return false;"/>
                     </p:submenu>
 

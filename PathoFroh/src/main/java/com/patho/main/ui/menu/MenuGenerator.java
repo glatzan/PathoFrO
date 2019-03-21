@@ -58,7 +58,7 @@ public class MenuGenerator {
         // patient menu
         {
 
-            boolean PATIENT_EDIT = userHandlerAction.currentUserHasPermission(HistoPermissions.PATIENT_EDIT);
+            boolean PATIENT_EDIT = userService.userHasPermission(HistoPermissions.PATIENT_EDIT);
 
             // patient menu
             DefaultSubMenu patientSubMenu = new DefaultSubMenu(resourceBundle.get("header.menu.patient"));
@@ -137,7 +137,7 @@ public class MenuGenerator {
         }
 
         // task menu
-        if (patient != null && userHandlerAction.currentUserHasPermission(HistoPermissions.TASK_EDIT)) {
+        if (patient != null && userService.userHasPermission(HistoPermissions.TASK_EDIT)) {
 
             boolean taskIsNull = task == null;
 
@@ -155,7 +155,7 @@ public class MenuGenerator {
             item.setOnclick(
                     "$('#headerForm\\\\:newTaskBtn').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
             item.setIcon("fa fa-file");
-            item.setRendered(userHandlerAction.currentUserHasPermission(HistoPermissions.TASK_EDIT_NEW));
+            item.setRendered(userService.userHasPermission(HistoPermissions.TASK_EDIT_NEW));
             taskSubMenu.addElement(item);
 
             // new sample, if task is not null
@@ -354,7 +354,7 @@ public class MenuGenerator {
             // finalized
             if (!taskIsNull) {
                 DefaultSeparator seperator = new DefaultSeparator();
-                seperator.setRendered(userHandlerAction.currentUserHasPermission(HistoPermissions.TASK_EDIT_ARCHIVE,
+                seperator.setRendered(userService.userHasPermission(HistoPermissions.TASK_EDIT_ARCHIVE,
                         HistoPermissions.TASK_EDIT_RESTORE));
                 taskSubMenu.addElement(seperator);
 
@@ -363,7 +363,7 @@ public class MenuGenerator {
                         "$('#headerForm\\\\:archiveTaskBtn').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
                 item.setIcon("fa fa-archive");
                 item.setRendered(!task.getFinalized()
-                        && userHandlerAction.currentUserHasPermission(HistoPermissions.TASK_EDIT_ARCHIVE));
+                        && userService.userHasPermission(HistoPermissions.TASK_EDIT_ARCHIVE));
                 taskSubMenu.addElement(item);
 
                 item = new DefaultMenuItem(resourceBundle.get("header.menu.task.restore"));
@@ -371,7 +371,7 @@ public class MenuGenerator {
                         "$('#headerForm\\\\:restoreTaskBtn').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;");
                 item.setIcon("fa fa-dropbox");
                 item.setRendered(task.getFinalized()
-                        && userHandlerAction.currentUserHasPermission(HistoPermissions.TASK_EDIT_RESTORE));
+                        && userService.userHasPermission(HistoPermissions.TASK_EDIT_RESTORE));
                 taskSubMenu.addElement(item);
             }
 

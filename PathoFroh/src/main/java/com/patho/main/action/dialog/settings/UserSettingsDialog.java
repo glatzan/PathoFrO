@@ -173,7 +173,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 		}
 
 		public boolean initTab() {
-			setDisabled(!userHandlerAction.currentUserHasPermission(HistoPermissions.FAVOURITE_LIST_USE));
+			setDisabled(!userService.userHasPermission(HistoPermissions.FAVOURITE_LIST_USE));
 			return true;
 		}
 

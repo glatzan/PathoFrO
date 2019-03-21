@@ -107,7 +107,7 @@
 
 			<!-- seperator -->
 			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable"
-				rendered="#{userHandlerAction.currentUserHasPermission('FAVOURITE_LIST_ICON')}">
+				rendered="#{userService.userHasPermission('FAVOURITE_LIST_ICON')}">
 				<p:separator />
 			</h:panelGrid>
 
@@ -117,7 +117,7 @@
 				columnClasses="columnWidthPercent50,columnWidthPercent50 columnTop">
 				<!-- icon -->
 				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					rendered="#{userHandlerAction.currentUserHasPermission('FAVOURITE_LIST_ICON')}"
+					rendered="#{userService.userHasPermission('FAVOURITE_LIST_ICON')}"
 					columnClasses="columnWidth150 columnHeading,">
 
 					<!-- use icon -->
@@ -148,10 +148,10 @@
 					<!-- command -->
 					<h:outputLabel
 						value="#{msg['dialog.favouriteListEdit.icon.command']}"
-						rendered="#{userHandlerAction.currentUserHasPermission('FAVOURITE_LIST_ICON_COMMAND')}"></h:outputLabel>
+						rendered="#{userService.userHasPermission('FAVOURITE_LIST_ICON_COMMAND')}"></h:outputLabel>
 					<p:inputText
 						value="#{dialog.favouriteListEditDialog.favouriteList.command}"
-						rendered="#{userHandlerAction.currentUserHasPermission('FAVOURITE_LIST_ICON')}"
+						rendered="#{userService.userHasPermission('FAVOURITE_LIST_ICON')}"
 						disabled="#{!dialog.favouriteListEditDialog.favouriteList.useIcon or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"></p:inputText>
 
 					<!-- color -->

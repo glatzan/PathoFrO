@@ -91,14 +91,14 @@
 		<p:column style="width:15px">
 			<f:facet name="header">
 				<p:commandLink id="upload" 
-					rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA') and cc.attrs.showUpload}"
+					rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA') and cc.attrs.showUpload}"
 					actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient)}">
 					<p:ajax event="dialogReturn" update="@form" />
 					<i class="fa fa-plus"></i>
 				</p:commandLink>
 			</f:facet>
 			<p:commandLink
-				rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+				rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
 				actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient).setPDFToDisplay(attachedPdf)}">
 				<p:ajax event="dialogReturn" update="@form" />
 				<i class="fa fa-search"></i>

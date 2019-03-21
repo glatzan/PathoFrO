@@ -332,7 +332,7 @@ public class GlobalEditViewHandler{
                 Optional<Patient> patient;
                 try {
                     patient = patientService.findPatientByPizInDatabaseAndPDV(quickSerach,
-                            !userHandlerAction.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_ADD_CLINIC), true,
+                            !userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_CLINIC), true,
                             true);
                 } catch (Exception e) {
                     patient = Optional.empty();

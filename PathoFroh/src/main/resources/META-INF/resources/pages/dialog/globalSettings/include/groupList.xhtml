@@ -37,7 +37,7 @@
 
 			<!-- options -->
 			<p:column
-				rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_GROUP')}"
+				rendered="#{userService.userHasPermission('PROGRAM_SETTINGS_GROUP')}"
 				style="width:35px;"
 				styleClass="centerChildElements centerHeaderChildElements">
 
@@ -96,7 +96,7 @@
 				<!-- New group  -->
 				<p:commandButton
 					value="#{msg['dialog.settings.group.button.newGroup']}"
-					rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_GROUP')}"
+					rendered="#{userService.userHasPermission('PROGRAM_SETTINGS_GROUP')}"
 					actionListener="#{dialog.groupEditDialog.initAndPrepareBean()}"
 					icon="fa fa-plus-circle ">
 					<p:ajax event="dialogReturn"

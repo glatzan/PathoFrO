@@ -28,7 +28,7 @@
 				title="#{msg['body.worklist.header.view']}"
 				value="#{dialog.editUserDialog.user.group}"
 				converter="#{dialog.editUserDialog.userTab.groupTransformer}"
-				disabled="#{!userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_USER')}">
+				disabled="#{!userService.userHasPermission('PROGRAM_SETTINGS_USER')}">
 
 				<p:ajax event="change" execute="histoUser" partialSubmit="true"
 					listener="#{dialog.editUserDialog.userTab.roleChange()}"></p:ajax>

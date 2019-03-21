@@ -193,7 +193,7 @@
                         <p:inputText disabled="true"
                                      value="#{diagnosisView.task.taskID}"/>
                         <p:commandLink title="#{msg['body.diagnosis.taskNumber.change']}"
-                                       rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_ID')}"
+                                       rendered="#{userService.userHasPermission('TASK_EDIT_ID')}"
                                        disabled="#{!diagnosisView.task.taskStatus.editable}"
                                        actionListener="#{dialog.changeTaskIDDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                             <i class="fa fa-fw fa-cog"/>

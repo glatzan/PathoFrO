@@ -76,7 +76,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 
 	public SearchPatientDialog externalMode(boolean forceExternalMode) {
 		// only enable if forced or user has the permission to add external patients
-		if (forceExternalMode || userHandlerAction.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN)) {
+		if (forceExternalMode || userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN)) {
 			appendTab(externalPatientTab);
 			externalPatientTab.initTab();
 		}
@@ -165,7 +165,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 			setPatientList(null);
 			setToManyMatchesInClinicDatabase(false);
 			setSearchLocalDatabaseOnly(
-					!userHandlerAction.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_ADD_CLINIC));
+					!userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_CLINIC));
 			return true;
 		}
 
@@ -267,7 +267,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 		}
 
 		public boolean initTab() {
-			setDisabled(!userHandlerAction.currentUserHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN));
+			setDisabled(!userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN));
 			setPatient(new Patient(new Person(new Contact())));
 			getPatient().getPerson().setGender(null);
 			return true;

@@ -171,7 +171,7 @@
                 <p:column style="width:15px">
                     <f:facet name="header">
                         <p:commandLink
-                                rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
+                                rendered="#{userService.userHasPermission('TASK_EDIT_NEW')}"
                                 actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultDialogReturn}"
@@ -180,7 +180,7 @@
                         </p:commandLink>
                     </f:facet>
                     <p:commandLink
-                            rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_DELETE', 'TASK_EDIT_DELETE_EDITED')}"
+                            rendered="#{userService.userHasPermission('TASK_EDIT_DELETE', 'TASK_EDIT_DELETE_EDITED')}"
                             actionListener="#{dialogHandlerAction.deleteTaskDialog.initAndPrepareBean(task)}">
                         <p:ajax event="dialogReturn"
                                 update="navigationForm:patientList contentForm:contentPanel"/>
@@ -230,7 +230,7 @@
                 <p:column style="width:15px">
                     <f:facet name="header">
                         <p:commandLink id="upload"
-                                       rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+                                       rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
                                        actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                             <p:ajax event="dialogReturn"
                                     update="navigationForm:patientList contentForm:contentPanel"/>
@@ -238,7 +238,7 @@
                         </p:commandLink>
                     </f:facet>
                     <p:commandLink
-                            rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+                            rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
                             actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient).setPDFToDisplay(attachedPdf)}">
                         <p:ajax event="dialogReturn"
                                 update="navigationForm:patientList contentForm:contentPanel"/>
@@ -255,7 +255,7 @@
                 <p:commandButton
                         value="#{msg['body.worklist.patient.button.newTask']}"
                         icon="fa fa-plus"
-                        rendered="#{userHandlerAction.currentUserHasPermission('TASK_EDIT_NEW')}"
+                        rendered="#{userService.userHasPermission('TASK_EDIT_NEW')}"
                         actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                     <p:ajax event="dialogReturn"
                             listener="#{dialogReturnHandler.onDefaultDialogReturn}"
@@ -266,7 +266,7 @@
                 <p:commandButton
                         value="#{msg['body.worklist.patient.button.uplaod']}"
                         icon="fa fa-cloud-upload"
-                        rendered="#{userHandlerAction.currentUserHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+                        rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
                         actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                     <p:ajax event="dialogReturn"
                             listener="#{dialogReturnHandler.onDefaultDialogReturn}"

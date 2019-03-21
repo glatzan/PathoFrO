@@ -40,7 +40,7 @@ public class TaskInfo {
 	public boolean isTaksEditable() {
 		// task is editable
 		// users and guest can't edit anything
-		if (!userHandlerAction.currentUserHasPermission(HistoPermissions.TASK_EDIT)) {
+		if (!userService.userHasPermission(HistoPermissions.TASK_EDIT)) {
 			return false;
 		}
 

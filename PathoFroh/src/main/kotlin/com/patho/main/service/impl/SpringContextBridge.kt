@@ -4,6 +4,7 @@ import com.patho.main.action.UserHandlerAction
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
+import com.patho.main.repository.FavouriteListRepository
 import com.patho.main.repository.ListItemRepository
 import com.patho.main.repository.MediaRepository
 import com.patho.main.service.*
@@ -46,6 +47,9 @@ class SpringContextBridge : SpringContextBridgedServices {
 
     @Autowired
     override lateinit var userService: UserService
+
+    @Autowired
+    override lateinit var favouriteListRepository : FavouriteListRepository
 
 
     companion object {

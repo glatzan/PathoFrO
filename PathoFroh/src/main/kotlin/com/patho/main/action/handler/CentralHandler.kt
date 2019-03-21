@@ -8,6 +8,7 @@ import com.patho.main.repository.PatientRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.UserService
 import com.patho.main.service.impl.SpringContextBridge
+import com.patho.main.ui.menu.MenuGenerator
 import com.patho.main.util.worklist.Worklist
 import com.patho.main.util.worklist.search.AbstractWorklistSearch
 import com.patho.main.util.worklist.search.WorklistSimpleSearch
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Component
 
 @Component
-@Scope(value = "session",  proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 open class CentralHandler @Autowired constructor(
         private val worklistHandler: WorklistHandler,
         private val receiptLogView: ReceiptLogView,
@@ -33,7 +34,6 @@ open class CentralHandler @Autowired constructor(
     open val navigationData: NavigationData = NavigationData()
 
     override fun loadHandler() {
-        logger.debug("obejct {${this.hashCode()}}")
         logger.debug("Loading Central Handler")
 
         val settings = userService.currentUser.settings
@@ -67,14 +67,11 @@ open class CentralHandler @Autowired constructor(
 
     }
 
-    fun goToNavigation() {
+    open fun goToNavigation() {
         goToNavigation(navigationData.currentView)
     }
 
-    fun goToNavigation(view: View?) {
-
-        print("obejct ${this.hashCode()}")
-//        logger.debug("Navigation goto: {}")
+    open fun goToNavigation(view: View?) {
 
         when (view) {
             View.WORKLIST_TASKS -> {
@@ -153,14 +150,14 @@ open class CentralHandler @Autowired constructor(
     /**
      * Changes the current view.
      */
-    fun changeView(view: View) {
+    open fun changeView(view: View) {
         changeView(view, view)
     }
 
     /**
      * Changes the currentView. The current view is displayed, the displayView is used for the selecting the view
      */
-    fun changeView(currentView: View, displayView: View) {
+    open fun changeView(currentView: View, displayView: View) {
         logger.debug("Changing view to $currentView display view $displayView")
 
         navigationData.currentView = currentView
@@ -193,8 +190,8 @@ open class CentralHandler @Autowired constructor(
         }
 
         if (loads.contains(Load.MENU_MODEL)) {
-//            MenuGenerator().generateEditMenu(worklistHandler.getCurrent().getSelectedPatient(),
-//                    worklistHandler.getCurrent().getSelectedTask(), taskMenuCommandButtons)
+            genericViewData.taskMenuModel = MenuGenerator().generateEditMenu(worklistHandler.current.selectedPatient,
+                    worklistHandler.current.selectedTask, genericViewData.taskMenuCommandButtons)
         }
 
         when (view) {
@@ -223,15 +220,15 @@ open class CentralHandler @Autowired constructor(
         }
     }
 
-    fun onSelectPatient(patientID: Long) {
+    open fun onSelectPatient(patientID: Long) {
         onSelectPatient(Patient(patientID), true)
     }
 
-    fun onSelectPatient(patient: Patient?) {
+    open fun onSelectPatient(patient: Patient?) {
         onSelectPatient(patient, true)
     }
 
-    fun onSelectPatient(patient: Patient?, reloadPatient: Boolean) {
+    open fun onSelectPatient(patient: Patient?, reloadPatient: Boolean) {
         var mutablePatient = patient
         val startTime = System.currentTimeMillis()
 
@@ -267,18 +264,18 @@ open class CentralHandler @Autowired constructor(
         logger.info("end -> ${(System.currentTimeMillis() - startTime)}")
     }
 
-    fun onSelectTaskAndPatient(taskID: Long) {
+    open fun onSelectTaskAndPatient(taskID: Long) {
         onSelectTaskAndPatient(Task(taskID), true)
     }
 
-    fun onSelectTaskAndPatient(task: Task) {
+    open fun onSelectTaskAndPatient(task: Task) {
         onSelectTaskAndPatient(task, true)
     }
 
     /**
      * Selects a task and sets the patient of this task as selectedPatient
      */
-    fun onSelectTaskAndPatient(task: Task?, reloadTask: Boolean) {
+    open fun onSelectTaskAndPatient(task: Task?, reloadTask: Boolean) {
         val startTime = System.currentTimeMillis()
 
         logger.info("start - > 0")
@@ -334,7 +331,7 @@ open class CentralHandler @Autowired constructor(
     /**
      * Deselects a task an show the worklist patient view.
      */
-    fun onDeselectTask() {
+    open fun onDeselectTask() {
         if (worklistHandler.current.deselectTask())
             goToNavigation(View.WORKLIST_PATIENT)
     }

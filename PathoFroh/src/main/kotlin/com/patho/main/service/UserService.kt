@@ -5,6 +5,7 @@ import com.patho.main.model.Physician
 import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
 import com.patho.main.model.user.HistoGroup
+import com.patho.main.model.user.HistoPermissions
 import com.patho.main.model.user.HistoUser
 import com.patho.main.repository.GroupRepository
 import com.patho.main.repository.LDAPRepository
@@ -39,6 +40,26 @@ open class UserService @Autowired constructor(
      */
     val currentUser: HistoUser
         get() = SecurityContextHolder.getContext().authentication.principal as HistoUser
+
+
+    /**
+     * Checks if currentUser has the passed role.
+     */
+    open fun userHasPermission(vararg permissions: HistoPermissions): Boolean {
+        return userHasPermission(currentUser, *permissions)
+    }
+
+    /**
+     * Checks if user has the passed role.
+     */
+    open fun userHasPermission(user: HistoUser, vararg permissions: HistoPermissions): Boolean {
+        for (permission in permissions) {
+            if (user.group.permissions.any { p -> p == permission })
+                return true
+        }
+
+        return false
+    }
 
     /**
      * Creates a new user, loads data from ldap and creates the user with the guest

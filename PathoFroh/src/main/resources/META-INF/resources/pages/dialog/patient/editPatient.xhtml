@@ -55,11 +55,11 @@
 						<p:menu overlay="true" trigger="menuButton" my="left bottom"
 							style="width:200px;" at="left top">
 							<p:menuitem value="#{msg['dialog.editPatient.merge']}"
-								disabled="#{!userHandlerAction.currentUserHasPermission('PATIENT_EDIT_MERGE')}"
+								disabled="#{!userService.userHasPermission('PATIENT_EDIT_MERGE')}"
 								onclick="PF('mergeBtn').jq.click();return false;"
 								icon="fa fa-fw fa-medkit" />
 							<p:menuitem value="#{msg['dialog.editPatient.delete']}"
-								disabled="#{!userHandlerAction.currentUserHasPermission('PATIENT_EDIT_DELETE')}"
+								disabled="#{!userService.userHasPermission('PATIENT_EDIT_DELETE')}"
 								onclick="PF('deleteBtn').jq.click();return false;"
 								icon="fa fa-fw fa-trash" />
 						</p:menu>

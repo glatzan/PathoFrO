@@ -3,6 +3,7 @@ package com.patho.main.service
 import com.patho.main.action.UserHandlerAction
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ResourceBundle
+import com.patho.main.repository.FavouriteListRepository
 import com.patho.main.repository.ListItemRepository
 import com.patho.main.repository.MediaRepository
 
@@ -17,8 +18,8 @@ interface SpringContextBridgedServices {
     var reportService: ReportService
     var pathoConfig: PathoConfig
     var mediaRepository: MediaRepository
-    var physicianService : PhysicianService
-    var listItemRepository : ListItemRepository
+    var physicianService: PhysicianService
+    var listItemRepository: ListItemRepository
     var userService: UserService
-
+    var favouriteListRepository: FavouriteListRepository
 }

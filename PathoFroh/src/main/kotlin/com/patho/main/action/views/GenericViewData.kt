@@ -13,9 +13,11 @@ import com.patho.main.repository.MaterialPresetRepository
 import com.patho.main.repository.PhysicianRepository
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.bearer.SimplePhysicianBearer
+import org.primefaces.model.menu.MenuModel
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import javax.faces.component.html.HtmlPanelGroup
 
 @Component
 @Scope(value = "session")
@@ -24,6 +26,16 @@ open class GenericViewData @Autowired constructor(
         private val diagnosisPresetRepository: DiagnosisPresetRepository,
         private val physicianRepository: PhysicianRepository,
         private val materialPresetRepository: MaterialPresetRepository) : AbstractTaskView() {
+
+    /**
+     * H:pannelgrid for dynamic command buttons
+     */
+    open var taskMenuCommandButtons: HtmlPanelGroup? = null
+
+    /**
+     * MenuModel for task editing
+     */
+    open var taskMenuModel: MenuModel? = null
 
     /**
      * Contains all available case histories

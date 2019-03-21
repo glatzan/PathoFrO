@@ -50,7 +50,7 @@ open class TaskStatus(task: Task) {
         get() {
             // task is editable
             // users and guest can't edit anything
-            if (!SpringContextBridge.services().userHandlerAction.currentUserHasPermission(HistoPermissions.TASK_EDIT)) {
+            if (!SpringContextBridge.services().userService.userHasPermission(HistoPermissions.TASK_EDIT)) {
                 return false
             }
             // finalized

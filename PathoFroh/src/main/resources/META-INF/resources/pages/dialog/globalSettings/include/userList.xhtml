@@ -71,7 +71,7 @@
 				<p:commandLink
 					title="#{msg['dialog.settings.person.list.options.edit']}"
 					execute="@this" partialSubmit="true"
-					disabled="#{!userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_USER')}"
+					disabled="#{!userService.userHasPermission('PROGRAM_SETTINGS_USER')}"
 					actionListener="#{dialog.editUserDialog.initAndPrepareBean(user)}">
 					<i class="fa fa-fw fa-cog" />
 					<p:ajax event="dialogReturn"
@@ -102,7 +102,7 @@
 			<h:panelGrid columns="2" styleClass="right">
 				<!-- add user -->
 				<p:commandButton value="#{msg['dialog.settings.user.button.add']}"
-					rendered="#{userHandlerAction.currentUserHasPermission('PROGRAM_SETTINGS_USER')}"
+					rendered="#{userService.userHasPermission('PROGRAM_SETTINGS_USER')}"
 					icon="fa fa-fw fa-plus-circle" process="@this" partialSubmit="true"
 					actionListener="#{dialog.editUserDialog.initAndPrepareBean()}">
 					<p:ajax event="dialogReturn"
