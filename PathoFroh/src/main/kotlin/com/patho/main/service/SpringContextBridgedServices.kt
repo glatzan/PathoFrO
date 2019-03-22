@@ -1,6 +1,7 @@
 package com.patho.main.service
 
 import com.patho.main.action.UserHandlerAction
+import com.patho.main.action.handler.CentralHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ResourceBundle
 import com.patho.main.repository.FavouriteListRepository
@@ -22,4 +23,5 @@ interface SpringContextBridgedServices {
     var listItemRepository: ListItemRepository
     var userService: UserService
     var favouriteListRepository: FavouriteListRepository
+    var centralHandler: CentralHandler
 }

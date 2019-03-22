@@ -183,7 +183,7 @@ open class CentralHandler @Autowired constructor(
         }
 
         if (loads.contains(Load.GENERIC_DATA)) {
-            genericViewData.loadView(worklistHandler.current.selectedTask)
+            genericViewData.loadView(worklistHandler.current.selectedTask, true)
         }
 
         if (loads.contains(Load.RELOAD_TASK_STATUS)) {
@@ -203,10 +203,12 @@ open class CentralHandler @Autowired constructor(
             View.WORKLIST_RECEIPTLOG -> {
                 logger.debug("Loading receiptlog")
                 receiptLogView.loadView(worklistHandler.current.selectedTask)
+                genericViewData.loadView(worklistHandler.current.selectedTask)
             }
             View.WORKLIST_DIAGNOSIS -> {
                 logger.debug("Loading diagnosis view")
                 diagnosisView.loadView(worklistHandler.current.selectedTask)
+                genericViewData.loadView(worklistHandler.current.selectedTask)
             }
             View.WORKLIST_PATIENT -> {
                 logger.debug("Loading patient view")

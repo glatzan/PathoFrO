@@ -10,7 +10,7 @@
 
     <h:outputScript library="scripts" name="closeOverlayPanelOnReturn.js"/>
 
-    <ui:include src="include/navigationBar.xhtml" />
+    <ui:include src="include/navigationBar.xhtml"/>
 
     <script type="text/javascript">
         // disables the autofocus for the caseHistoryOverlayplpanel
@@ -29,7 +29,7 @@
              styleClass="defaultHistoHiddenTableContainer">
 
         <h:outputLabel value="#{msg['body.diagnosis.headline']}"
-                       style="font-size:1.5em;" />
+                       style="font-size:1.5em;"/>
 
         <h:panelGrid columns="3" style="margin-top:10px;"
                      styleClass="defaultHistoHiddenTableContainer"
@@ -319,12 +319,11 @@
 
                                     </p:column>
 
-
                                     <p:ajax event="rowSelect"
                                             update="navigationForm:patientList contentForm:contentPanel headerForm"
                                             process="contentForm:surgeonPhysicianOverlayPanelDataTable"
                                             partialSubmit=""
-                                            listener="#{globalEditViewHandler.ct.addPhysicianWithRole(diagnosisView.selectedSurgeon.physician.person, 'SURGEON')}"
+                                            listener="#{diagnosisView.addReportIntentToTask(diagnosisView.selectedSurgeon.physician.person, 'SURGEON')}"
                                             oncomplete="PF('surgeonPhysicianOverlayPanel#{loopCount.index}').hide();"/>
 
                                 </p:dataTable>
@@ -333,12 +332,12 @@
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
-                        <h:outputLabel value="#{msg['body.diagnosis.privatePhysician']}"></h:outputLabel>
+                        <h:outputLabel value="#{msg['body.diagnosis.privatePhysician']}"/>
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
                         <h:outputLabel style="margin-left:10px;"
-                                       value="#{diagnosisView.task.getPrimaryContact('PRIVATE_PHYSICIAN').person.fullName}"></h:outputLabel>
+                                       value="#{diagnosisView.task.getPrimaryContact('PRIVATE_PHYSICIAN').person.fullName}"/>
 
                         <h:panelGroup>
                             <p:commandLink style="float: right; margin-right:5px;"
@@ -367,7 +366,7 @@
                                              rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
 
                                     <!-- name -->
-                                    <p:column id="nameColumn" style="width:auto"
+                                    <p:column style="width:auto"
                                               filterValue="#{diagnosisView.selectedPrivatePhysicianFilter}"
                                               filterBy="#{physicianSelector.physician.person.getFullName()}"
                                               filterMatchMode="contains">
@@ -402,7 +401,7 @@
                                             update="navigationForm:patientList contentForm:contentPanel headerForm"
                                             process="contentForm:privatePhysicianPhysicianOverlayPanel"
                                             partialSubmit="true"
-                                            listener="#{globalEditViewHandler.ct.addPhysicianWithRole(diagnosisView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
+                                            listener="#{diagnosisView.addReportIntentToTask(diagnosisView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
                                             oncomplete="PF('privatePhysicianPhysicianOverlayPanel#{loopCount.index}').hide();"/>
 
                                 </p:dataTable>
@@ -474,7 +473,7 @@
 
                         <c:choose>
                             <c:when test="#{varCounterInner.first}">
-                                <h:outputLabel value="#{msg['body.diagnosis.diagnoses']}"></h:outputLabel>
+                                <h:outputLabel value="#{msg['body.diagnosis.diagnoses']}" />
                             </c:when>
                             <c:otherwise>
                                 <h:outputLabel value=""/>
@@ -501,7 +500,7 @@
                                                process="@this"
                                                actionListener="#{globalEditViewHandler.ct.copyHistologicalRecord(diagnosis)}"
                                                update="contentForm:contentPanel">
-                                    <i class="fa fa-copy"></i>
+                                    <i class="fa fa-copy" />
                                     <p:ajax event="dialogReturn" update="contentForm:contentPanel"
                                             listener="#{dialogReturnHandler.onDefaultDialogReturn}"/>
                                 </p:commandLink>
@@ -583,7 +582,7 @@
                              id="diagnosisSpotContentSignature#{varCounterOuter.index}"
                              columnClasses="columnLabelContainer200 columnTop #{varCounterOuter.even ? '' : 'oddColumnColored' }, #{varCounterOuter.even ? '' : 'oddColumnColored'}, #{varCounterOuter.even ? '' : 'oddColumnColored'}, #{varCounterOuter.even ? '' : 'oddColumnColored'}, #{varCounterOuter.even ? '' : 'oddColumnColored'}, #{varCounterOuter.even ? '' : 'oddColumnColored'}">
 
-                    <h:outputLabel value="#{msg['body.diagnosis.signature.date']}"></h:outputLabel>
+                    <h:outputLabel value="#{msg['body.diagnosis.signature.date']}" />
                     <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
                                 disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                 value="#{revision.signatureDate}">
@@ -748,7 +747,7 @@
                                          icon="fa fa-check-circle-o"
                                          update="diagnosisSpotDiagnosis#{varCounterOuter.index} diagnosisSpotContentSignature#{varCounterOuter.index} diagnosisSpotContentButtons#{varCounterOuter.index}">
                             <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.endDiagnosisAmendment(revision)}"></f:actionListener>
+                                    binding="#{globalEditViewHandler.ct.endDiagnosisAmendment(revision)}" />
                         </p:commandButton>
 
                         <!-- adment revision -->
@@ -757,7 +756,7 @@
                                          oncomplete="PF('diagnosisSpotBlocker#{varCounterOuter.index}').show()"
                                          update="diagnosisSpotDiagnosis#{varCounterOuter.index} diagnosisSpotContentSignature#{varCounterOuter.index} diagnosisSpotContentButtons#{varCounterOuter.index}">
                             <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.beginDiagnosisAmendment(revision)}"></f:actionListener>
+                                    binding="#{globalEditViewHandler.ct.beginDiagnosisAmendment(revision)}" />
                         </p:commandButton>
 
                         <!-- end diangosis -->
@@ -878,7 +877,7 @@
         </c:forEach>
     </p:panel>
 
-    <script>
+    <script type="application/javascript">
         $(document)
             .ready(
                 function () {

@@ -578,21 +578,6 @@ public class GlobalEditViewHandler {
             save(task, false, "log.patient.task.diagnosisRevision.lock", task, diagnosisRevision);
         }
 
-        public void addPhysicianWithRole(Person person, ContactRole role) {
-            try {
-
-                reportIntentService.addReportIntent(getSelectedTask(), new ReportIntent(getSelectedTask(), person, role), true, true);
-                // increment counter
-                SpringContextBridge.services().getPhysicianService().incrementPhysicianPriorityCounter(person);
-            } catch (IllegalArgumentException e) {
-                // todo error message
-                logger.debug("Not adding, double contact");
-                MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");
-            }
-
-            centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK, CentralHandler.Load.RELOAD_TASK_STATUS);
-        }
-
     }
 
     public static enum TaskInitilize {

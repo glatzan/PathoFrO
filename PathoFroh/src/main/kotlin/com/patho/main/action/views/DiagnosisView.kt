@@ -17,49 +17,9 @@ import java.time.LocalDate
 @Scope(value = "session")
 open class DiagnosisView @Autowired constructor(
         private val physicianRepository: PhysicianRepository,
-        private val diagnosisService: DiagnosisService) : AbstractTaskView() {
+        private val diagnosisService: DiagnosisService) : AbstractEditTaskView() {
 
     open var diagnosisViewData = listOf<DiagnosisViewData>()
-
-    /**
-     * Selected material presets
-     */
-    open var selectedMaterialPresets: Array<MaterialPreset?> = arrayOf<MaterialPreset?>()
-
-    /**
-     * Material preset filter
-     */
-    open var selectedMaterialPresetFilter: Array<String?> = arrayOf<String?>()
-
-    /**
-     * Search string for case history
-     */
-    open var caseHistoryFilter: String = ""
-
-    /**
-     * Selected List item form caseHistory list
-     */
-    open var selectedCaseHistoryItem: ListItem? = null
-
-    /**
-     * Selected surgeon
-     */
-    open var selectedSurgeon: SimplePhysicianBearer? = null
-
-    /**
-     * Surgeon filter
-     */
-    open var selectedSurgeonFilter: String = ""
-
-    /**
-     * Private physician surgeon
-     */
-    open var selectedPrivatePhysician: SimplePhysicianBearer? = null
-
-    /**
-     * Private physician filter
-     */
-    open var selectedPrivatePhysicianFilter: String = ""
 
     /**
      * Array for diagnoses filter
@@ -87,20 +47,6 @@ open class DiagnosisView @Autowired constructor(
                 }
             }
         }
-
-        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { null }
-        selectedMaterialPresetFilter = Array<String?>(task.samples.size) { "" }
-
-        selectedMaterialPresets.forEach { p -> println(p) }
-
-        selectedCaseHistoryItem = null
-        caseHistoryFilter = ""
-
-        selectedSurgeon = null
-        selectedSurgeonFilter = ""
-
-        selectedPrivatePhysician = null
-        selectedPrivatePhysicianFilter = ""
 
         diagnosisFilter = arrayOf<Array<String>>()
         selectedDiagnosisPresets = arrayOf<Array<DiagnosisPreset?>>()

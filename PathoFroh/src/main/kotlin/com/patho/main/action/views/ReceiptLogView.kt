@@ -2,8 +2,6 @@ package com.patho.main.action.views
 
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorkPhaseHandler
-import com.patho.main.model.ListItem
-import com.patho.main.model.MaterialPreset
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
@@ -12,7 +10,6 @@ import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SlideService
-import com.patho.main.ui.selectors.PhysicianSelector
 import com.patho.main.util.print.UnknownPrintingException
 import com.patho.main.util.status.ReportIntentStatusByUser
 import freemarker.template.TemplateNotFoundException
@@ -26,7 +23,7 @@ open class ReceiptLogView @Autowired constructor(
         private val slideService: SlideService,
         private val workPhaseHandler: WorkPhaseHandler,
         private val taskRepository: TaskRepository,
-        private val printExecutorService: PrintExecutorService) : AbstractTaskView() {
+        private val printExecutorService: PrintExecutorService) : AbstractEditTaskView() {
 
     /**
      * Currently selected task entity in table form, transient, used for gui
@@ -48,47 +45,16 @@ open class ReceiptLogView @Autowired constructor(
     /**
      * Status for notification list
      */
-    open var reportIntentStatusByUser: ReportIntentStatusByUser = ReportIntentStatusByUser(Task())
+    open var reportIntentStatus: ReportIntentStatusByUser = ReportIntentStatusByUser(Task())
 
     /**
-     * Search string for case history
+     * Selectedd status for displaying infos
      */
-    open var caseHistoryFilter: String = ""
-
-    /**
-     * Selected List item form caseHistory list
-     */
-    open var selectedCaseHistoryItem: ListItem? = null
-
-    /**
-     * Selected material presets
-     */
-    open var selectedMaterialPresets: Array<MaterialPreset?> = arrayOf<MaterialPreset?>()
-
-    /**
-     * Material preset filter
-     */
-    open var selectedMaterialPresetFilter: Array<String> = arrayOf<String>()
-
-    /**
-     * Selected surgeon
-     */
-    open var selectedSurgeon: PhysicianSelector? = null
-
-    /**
-     * Surgeon filter
-     */
-    open var selectedSurgeonFilter: String = ""
-
-    /**
-     * Private physician surgeon
-     */
-    open var selectedPrivatePhysician: PhysicianSelector? = null
-
-    /**
-     * Private physician filter
-     */
-    open var selectedPrivatePhysicianFilter: String = ""
+    open var selectedReportIntentStatus: ReportIntentStatusByUser.ReportIntentBearer? = null
+        get() {
+            println(field?.reportIntentNotifications?.size)
+            return field
+        }
 
     /**
      * Loads all task data
@@ -98,19 +64,9 @@ open class ReceiptLogView @Autowired constructor(
         super.loadView(task)
         actionOnMany = StainingListAction.NONE
         rows = TaskEntityRow.factory(task, false)
-        reportIntentStatusByUser = ReportIntentStatusByUser(task)
 
-        selectedCaseHistoryItem = null
-        caseHistoryFilter = ""
-
-        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { _ -> null }
-        selectedMaterialPresetFilter = Array<String>(task.samples.size) { _ -> "" }
-
-        selectedSurgeon = null
-        selectedSurgeonFilter = ""
-
-        selectedPrivatePhysician = null
-        selectedPrivatePhysicianFilter = ""
+        reportIntentStatus = ReportIntentStatusByUser(task)
+        selectedReportIntentStatus = null
     }
 
     /**

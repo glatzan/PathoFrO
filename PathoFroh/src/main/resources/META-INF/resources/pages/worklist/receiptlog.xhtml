@@ -311,7 +311,7 @@
                                             update="navigationForm:patientList contentForm:contentPanel headerForm"
                                             process="contentForm:surgeonPhysicianOverlayPanelDataTable"
                                             partialSubmit=""
-                                            listener="#{globalEditViewHandler.ct.addPhysicianWithRole(receiptLogView.selectedSurgeon.physician.person, 'SURGEON')}"
+                                            listener="#{receiptLogView.addReportIntentToTask(receiptLogView.selectedSurgeon.physician.person, 'SURGEON')}"
                                             oncomplete="PF('surgeonPhysicianOverlayPanel#{loopCount.index}').hide();"/>
 
                                 </p:dataTable>
@@ -381,7 +381,7 @@
                                             update="navigationForm:patientList contentForm:contentPanel headerForm"
                                             process="contentForm:privatePhysicianPhysicianOverlayPanel"
                                             partialSubmit="true"
-                                            listener="#{globalEditViewHandler.ct.addPhysicianWithRole(receiptLogView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
+                                            listener="#{receiptLogView.addReportIntentToTask(receiptLogView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
                                             oncomplete="PF('privatePhysicianPhysicianOverlayPanel#{loopCount.index}').hide();"/>
 
                                 </p:dataTable>
@@ -400,56 +400,94 @@
                     </h:panelGrid>
 
                 </h:panelGrid>
+                <h:panelGroup>
+                    <!-- contacts -->
+                    <p:dataTable var="reportIntent" scrollable="true" scrollHeight="90"
+                                 style="width:450px" styleClass="defaultHistoDataTable"
+                                 value="#{receiptLogView.reportIntentStatus.reportIntents}">
 
-                <!-- contacts -->
-                <p:dataTable var="contact" scrollable="true" scrollHeight="90"
-                             style="width:450px" styleClass="defaultHistoDataTable"
-                             value="#{receiptLogView.task.contacts}">
+                        <p:column style="width:auto">
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg['body.receiptlog.contact.name']}"/>
+                            </f:facet>
 
-                    <p:column style="width:auto">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg['body.receiptlog.contact.name']}"/>
-                        </f:facet>
-                        <h:outputLabel value="#{contact.person.getFullName()}"/>
-                    </p:column>
+                            <h:outputLabel value="#{reportIntent.person.getFullName()}" id="test123"/>
 
-                    <p:column style="width: 20%;">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg['body.receiptlog.contact.role']}"/>
-                        </f:facet>
-                        <h:outputLabel
-                                value="#{msg['enum.contactRole.'.concat(contact.role)]}"
-                                title="#{msg['enum.contactRole.'.concat(contact.role)]}">
-                            <f:converter converterId="org.histo.ui.TruncateConverter"/>
-                            <f:attribute name="truncateAt" value="13"/>
-                            <f:attribute name="continuationMark" value="..."/>
-                        </h:outputLabel>
-                    </p:column>
+                            <p:commandButton
+                                    oncomplete="showAndUpdateOverlayPanel('carOP', '#{component.clientId}' ,null, null, 'contentForm:reportIntentDate', null);"
+                                    icon="pi pi-search"
+                                    title="View"
+                                    actionListener="#{receiptLogView.setSelectedReportIntentStatus(reportIntent)}">
+                            </p:commandButton>
+                        </p:column>
 
-                    <p:column style="width: 20%;">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg['body.receiptlog.contact.location']}"/>
-                        </f:facet>
+                        <p:column style="width: 20%;">
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg['body.receiptlog.contact.role']}"/>
+                            </f:facet>
+                            <h:outputLabel
+                                    value="#{msg['enum.contactRole.'.concat(reportIntent.role)]}"
+                                    title="#{msg['enum.contactRole.'.concat(reportIntent.role)]}">
+                                <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                                <f:attribute name="truncateAt" value="13"/>
+                                <f:attribute name="continuationMark" value="..."/>
+                            </h:outputLabel>
+                        </p:column>
 
-                        <h:outputLabel
-                                value="#{contact.person.defaultAddress eq null ? contact.person.contact.town : contact.person.defaultAddress.contact.town}"
-                                title="#{contact.person.defaultAddress eq null ? contact.person.contact.town : contact.person.defaultAddress.contact.town}">
-                            <f:converter converterId="org.histo.ui.TruncateConverter"/>
-                            <f:attribute name="truncateAt" value="15"/>
-                            <f:attribute name="continuationMark" value="..."/>
-                        </h:outputLabel>
-                    </p:column>
+                        <p:column style="width: 20%;">
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg['body.receiptlog.contact.location']}"/>
+                            </f:facet>
 
-                    <p:column style="width:15px">
-                        <f:facet name="header">
-                            <i class="fa fa-check-square-o"
-                               title="#{msg['body.receiptlog.contact.type.performed']}"/>
-                        </f:facet>
-                        <ui:fragment rendered="#{contact.notificationPerformed}">
-                            <i class="fa fa-check icon-green"/>
-                        </ui:fragment>
-                    </p:column>
-                </p:dataTable>
+                            <h:outputLabel
+                                    value="#{reportIntent.address.town}"
+                                    title="#{reportIntent.address.town}">
+                                <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                                <f:attribute name="truncateAt" value="15"/>
+                                <f:attribute name="continuationMark" value="..."/>
+                            </h:outputLabel>
+                        </p:column>
+
+                        <p:column style="width:15px">
+                            <f:facet name="header">
+                                <i class="fa fa-check-square-o"
+                                   title="#{msg['body.receiptlog.contact.type.performed']}"/>
+                            </f:facet>
+                            <ui:fragment rendered="#{reportIntent.completed}">
+                                <i class="fa fa-check icon-green"/>
+                            </ui:fragment>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:overlayPanel widgetVar="carOP" hideEvent="null" showEvent="null" dismissable="false"
+                                    showCloseIcon="true">
+                        <p:outputPanel id="carDetail" style="text-align:center;">
+
+                            <p:dataTable value="#{receiptLogView.selectedReportIntentStatus.reportIntentNotifications}"
+                                         id="reportIntentDate" widgetVar="reportIntentDate"
+                                         styleClass="defaultHistoDataTable"
+                                         var="reportIntentNotification" style="width: 300px">
+
+                                <p:columnGroup type="header">
+                                    <p:row>
+                                        <p:column headerText="Twes">
+                                            <h:outputText
+                                                    value="#{reportIntentNotification.notification.notificationTyp} Test"/>
+                                        </p:column>
+                                    </p:row>
+                                </p:columnGroup>
+
+                                <p:subTable var="history" value="#{reportIntentNotification.history}">
+                                    <p:column>
+                                        #{history.diagnosisName}
+                                    </p:column>
+                                </p:subTable>
+
+                            </p:dataTable>
+
+                        </p:outputPanel>
+                    </p:overlayPanel>
+                </h:panelGroup>
             </h:panelGrid>
         </h:panelGrid>
 
@@ -689,7 +727,7 @@
 
                     <f:facet name="header">
                         <h:outputLabel
-                                value="#{msg['body.receiptlog.slide.headline.options']}" />
+                                value="#{msg['body.receiptlog.slide.headline.options']}"/>
                         <p:commandLink id="quickTaskSettings"
                                        actionListener="#{dialog.slideNamingDialog.initAndPrepareBean(receiptLogView.task)}">
                             <i class="fa fa-wrench" style="float: right; margin-right: 5px"
@@ -709,13 +747,13 @@
                                        update="navigationForm:patientList contentForm:contentPanel headerForm"
                                        oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                        actionListener="#{globalEditViewHandler.ct.createNewBlock(stainingRow.entity)}">
-                            <i class="fa fa-fw fa-stop" />
+                            <i class="fa fa-fw fa-stop"/>
                         </p:commandLink>
                         <!-- ********** Delete Button ********** -->
                         <p:commandLink title="#{msg['body.statiningView.archiveSample']}"
                                        disabled="#{!receiptLogView.task.taskStatus.editable}"
                                        actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.sample.text',stainingRow.entity.sampleID).ctext('dialog.delete.sample.text',stainingRow.entity.sampleID)}">
-                            <i class="fa fa-fw fa-times-circle" />
+                            <i class="fa fa-fw fa-times-circle"/>
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDeleteTaskEntityReturn}"
                                     oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
@@ -731,7 +769,7 @@
                             <p:commandLink title="#{msg['body.statiningView.newStaining']}"
                                            disabled="#{!receiptLogView.task.taskStatus.editable}"
                                            actionListener="#{dialog.addSlidesDialog.initAndPrepareBean(stainingRow.entity)}">
-                                <i class="fa fa-fw fa-paint-brush" />
+                                <i class="fa fa-fw fa-paint-brush"/>
                                 <p:ajax event="dialogReturn"
                                         update="navigationForm:patientList contentForm:contentPanel headerForm"
                                         listener="#{dialogReturnHandler.onStainingChangeReturn}"
@@ -743,7 +781,7 @@
                                 disabled="#{!receiptLogView.task.taskStatus.editable}"
                                 title="#{msg['body.statiningView.archiveBlock']}"
                                 actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.block.headline',stainingRow.entity.blockID).ctext('dialog.delete.block.text',stainingRow.entity.blockID)}">
-                            <i class="fa fa-fw fa-times-circle" />
+                            <i class="fa fa-fw fa-times-circle"/>
                             <p:ajax event="dialogReturn"
                                     oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                     listener="#{dialogReturnHandler.onDeleteTaskEntityReturn}"
@@ -848,9 +886,8 @@
                              disabled="#{!receiptLogView.task.taskStatus.editable}"
                              rendered="#{receiptLogView.selectedRow ne null}"
                              value="#{receiptLogView.selectedRow.IDText}">
-                    <p:ajax event="change" process="@this" />
+                    <p:ajax event="change" process="@this"/>
                 </p:inputText>
-
             </p:overlayPanel>
 
             <p:remoteCommand

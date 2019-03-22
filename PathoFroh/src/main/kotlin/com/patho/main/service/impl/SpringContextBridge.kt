@@ -1,6 +1,7 @@
 package com.patho.main.service.impl
 
 import com.patho.main.action.UserHandlerAction
+import com.patho.main.action.handler.CentralHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
@@ -51,6 +52,8 @@ class SpringContextBridge : SpringContextBridgedServices {
     @Autowired
     override lateinit var favouriteListRepository : FavouriteListRepository
 
+    @Autowired
+    override lateinit var centralHandler: CentralHandler
 
     companion object {
         @JvmStatic
