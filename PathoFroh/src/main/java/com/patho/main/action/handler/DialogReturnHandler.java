@@ -36,9 +36,6 @@ public class DialogReturnHandler {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private GlobalEditViewHandler globalEditViewHandler;
-
-	@Autowired
 	private WorklistHandler worklistHandler;
 
 	@Autowired
@@ -55,6 +52,9 @@ public class DialogReturnHandler {
 
 	@Autowired
 	private SampleService sampleService;
+
+	@Autowired
+	private CentralHandler centralHandler;
 
 	/**
 	 * 
@@ -87,13 +87,13 @@ public class DialogReturnHandler {
 					worklistHandler.getCurrent().setSelectedTask(((PatientReturnEvent) event.getObject()).getTask());
 				worklistHandler.getCurrent().reloadSelectedPatientAndTask();
 
-				globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+				centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
 				// staining phase reload event
 			} else if (event.getObject() instanceof DiagnosisPhaseUpdateEvent) {
 				logger.debug("Update Diagnosis phase");
 				// reload task
 				worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-				globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+				centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
 				workPhaseHandler.updateDiagnosisPhase(worklistHandler.getCurrent().getSelectedTask());
 			} else if (event.getObject() instanceof ReloadTaskEvent || event.getObject() instanceof ReloadEvent) {
 				logger.debug("Task reload event.");

@@ -3,7 +3,6 @@ package com.patho.main.action.views
 import com.patho.main.model.DiagnosisPreset
 import com.patho.main.model.ListItem
 import com.patho.main.model.MaterialPreset
-import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.PhysicianRepository
@@ -30,47 +29,47 @@ open class DiagnosisView @Autowired constructor(
     /**
      * Material preset filter
      */
-    var selectedMaterialPresetFilter: Array<String?> = arrayOf<String?>()
+    open var selectedMaterialPresetFilter: Array<String?> = arrayOf<String?>()
 
     /**
      * Search string for case history
      */
-    var caseHistoryFilter: String = ""
+    open var caseHistoryFilter: String = ""
 
     /**
      * Selected List item form caseHistory list
      */
-    var selectedCaseHistoryItem: ListItem? = null
+    open var selectedCaseHistoryItem: ListItem? = null
 
     /**
      * Selected surgeon
      */
-    var selectedSurgeon: SimplePhysicianBearer? = null
+    open var selectedSurgeon: SimplePhysicianBearer? = null
 
     /**
      * Surgeon filter
      */
-    var selectedSurgeonFilter: String = ""
+    open var selectedSurgeonFilter: String = ""
 
     /**
      * Private physician surgeon
      */
-    var selectedPrivatePhysician: SimplePhysicianBearer? = null
+    open var selectedPrivatePhysician: SimplePhysicianBearer? = null
 
     /**
      * Private physician filter
      */
-    var selectedPrivatePhysicianFilter: String = ""
+    open var selectedPrivatePhysicianFilter: String = ""
 
     /**
      * Array for diagnoses filter
      */
-    var diagnosisFilter: Array<Array<String>> = arrayOf<Array<String>>()
+    open var diagnosisFilter: Array<Array<String>> = arrayOf<Array<String>>()
 
     /**
      * Array for selected diagnosis presets
      */
-    var selectedDiagnosisPresets: Array<Array<DiagnosisPreset?>> = arrayOf<Array<DiagnosisPreset?>>()
+    open var selectedDiagnosisPresets: Array<Array<DiagnosisPreset?>> = arrayOf<Array<DiagnosisPreset?>>()
 
     override fun loadView(task: Task) {
         logger.debug("Loading diagnosis data")
@@ -144,7 +143,7 @@ open class DiagnosisView @Autowired constructor(
 //    }
 
 
-    class DiagnosisViewData(diagnosisRevision: DiagnosisRevision) {
-        val diagnosisRevision = diagnosisRevision
+    open class DiagnosisViewData(diagnosisRevision: DiagnosisRevision) {
+        open val diagnosisRevision = diagnosisRevision
     }
 }

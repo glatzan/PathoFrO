@@ -4,7 +4,6 @@ import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.views.*;
 import com.patho.main.common.ContactRole;
-import com.patho.main.common.View;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.ListItem;
@@ -19,7 +18,6 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.StainingTableChooser;
-import com.patho.main.ui.menu.MenuGenerator;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.worklist.Worklist;
 import lombok.AccessLevel;
@@ -45,7 +43,7 @@ import java.util.Optional;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Getter
 @Setter
-public class GlobalEditViewHandler{
+public class GlobalEditViewHandler {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -134,6 +132,12 @@ public class GlobalEditViewHandler{
     @Setter(AccessLevel.NONE)
     private TaskView taskView;
 
+
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private UserService userService;
+
     /**
      * Methodes for saving task data
      */
@@ -155,95 +159,10 @@ public class GlobalEditViewHandler{
     private boolean searchWorklist;
 
     /**
-     * MenuModel for task editing
-     */
-    private MenuModel taskMenuModel;
-
-    /**
-     * H:pannelgrid for dynamic command buttons
-     */
-    private HtmlPanelGroup taskMenuCommandButtons;
-
-    /**
      * DataTable selection to change a material via overlay panel
      */
     private MaterialPreset materialPresetToChange;
 
-    public void generateViewData(TaskInitilize... initilizes) {
-        generateViewData(centralHandler.getNavigationData().getCurrentView(), initilizes);
-    }
-
-    public void generateViewData(View view, TaskInitilize... initilizes) {
-        logger.debug("On Page load");
-
-        switch (view) {
-            case WORKLIST_RECEIPTLOG:
-            case WORKLIST_DIAGNOSIS:
-                logger.debug("Initilizing receipt or diagnosis view");
-
-                boolean reload = false;
-
-                for (TaskInitilize taskInitilize : initilizes) {
-                    if (taskInitilize == TaskInitilize.RELOAD) {
-                        worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-
-                        reload = true;
-                        break;
-                    }
-                }
-
-                for (TaskInitilize taskInitilize : initilizes) {
-                    // updating task status
-                    if (taskInitilize == TaskInitilize.GENERATE_TASK_STATUS && !reload) {
-                        worklistHandler.getCurrent().getSelectedTask().generateTaskStatus();
-                        // updating menu model
-                    } else if (taskInitilize == TaskInitilize.GENERATE_MENU_MODEL)
-                        setTaskMenuModel(
-                                (new MenuGenerator()).generateEditMenu(worklistHandler.getCurrent().getSelectedPatient(),
-                                        worklistHandler.getCurrent().getSelectedTask(), taskMenuCommandButtons));
-                }
-
-                if (view == View.WORKLIST_RECEIPTLOG) {
-                    // generating guilist for display
-                    logger.debug("Loading receiptlog");
-                    receiptLogView.loadView(worklistHandler.getCurrent().getSelectedTask());
-                }
-
-                if (view == View.WORKLIST_DIAGNOSIS) {
-                    logger.debug("Loading diangosis view");
-                    diagnosisView.loadView(worklistHandler.getCurrent().getSelectedTask());
-                }
-
-                genericViewData.loadView(worklistHandler.getCurrent().getSelectedTask());
-
-                break;
-            case WORKLIST_PATIENT:
-                for (TaskInitilize taskInitilize : initilizes) {
-                    if (taskInitilize == TaskInitilize.GENERATE_MENU_MODEL)
-                        setTaskMenuModel(
-                                (new MenuGenerator()).generateEditMenu(worklistHandler.getCurrent().getSelectedPatient(),
-                                        worklistHandler.getCurrent().getSelectedTask(), taskMenuCommandButtons));
-                }
-                break;
-            case WORKLIST_TASKS:
-                logger.debug("Initilizing task view");
-                taskView.loadView();
-                break;
-            case WORKLIST_REPORT:
-                logger.debug("Initlize worklist report data");
-                for (TaskInitilize taskInitilize : initilizes) {
-                    if (taskInitilize == TaskInitilize.GENERATE_MENU_MODEL)
-                        setTaskMenuModel(
-                                (new MenuGenerator()).generateEditMenu(worklistHandler.getCurrent().getSelectedPatient(),
-                                        worklistHandler.getCurrent().getSelectedTask(), taskMenuCommandButtons));
-                }
-
-                reportView.loadView();
-                break;
-            default:
-                break;
-        }
-    }
 
     public void reloadAllData() {
         logger.debug("Force Reload of all data");
@@ -503,10 +422,10 @@ public class GlobalEditViewHandler{
             if (worklistHandler.isSelected(task)) {
                 if (!reload) {
                     setSelectedTask(task);
-                    globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+                    centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
                 } else {
                     worklistHandler.getCurrent().reloadSelectedPatientAndTask();
-                    globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+                    centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
                 }
             }
 
@@ -535,7 +454,7 @@ public class GlobalEditViewHandler{
                     && diagnosis.getDiagnosisPrototype() != null) {
                 logger.debug("No extended diagnosistext found, text copied");
                 setSelectedTask(diagnosisService.copyHistologicalRecord(diagnosis, true));
-                globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+                centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
 
                 return;
             } else if (diagnosis.getDiagnosisPrototype() != null) {
@@ -554,7 +473,7 @@ public class GlobalEditViewHandler{
         public void updateMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
             logger.debug("Change maerial of sample with preset");
             setSelectedTask(sampleService.updateMaterialOfSample(sample, materialPreset));
-            globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+            centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 
         /**
@@ -566,7 +485,7 @@ public class GlobalEditViewHandler{
         public void updateMaterialOfSampleWithName(Sample sample, String materialPreset) {
             logger.debug("Change maerial of sample");
             setSelectedTask(sampleService.updateMaterialOfSampleWithoutPrototype(sample, materialPreset));
-            globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+            centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 
         /**
@@ -578,7 +497,7 @@ public class GlobalEditViewHandler{
         public void updateDiagnosisPrototype(Diagnosis diagnosis, DiagnosisPreset preset) {
             logger.debug("Updating diagnosis with prototype");
             setSelectedTask(diagnosisService.updateDiagnosisWithPrototype(diagnosis.getTask(), diagnosis, preset));
-            globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+            centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 
         /**
@@ -596,7 +515,7 @@ public class GlobalEditViewHandler{
             logger.debug("Updating diagnosis to " + diagnosisAsText);
             setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.getTask(), diagnosis,
                     diagnosisAsText, extendedDiagnosisText, malign, icd10));
-            globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS);
+            centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 
         /**
@@ -671,7 +590,7 @@ public class GlobalEditViewHandler{
                 MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");
             }
 
-            globalEditViewHandler.generateViewData(TaskInitilize.RELOAD, TaskInitilize.GENERATE_TASK_STATUS);
+            centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK, CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 
     }

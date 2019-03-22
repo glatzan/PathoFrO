@@ -1,21 +1,20 @@
 package com.patho.main.util.menu
 
-import com.patho.main.action.handler.GlobalEditViewHandler
+import com.patho.main.action.handler.CentralHandler
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.model.user.HistoPermissions
 import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.ui.menu.MethodSignature
 import org.primefaces.model.menu.*
 import org.slf4j.LoggerFactory
 import javax.faces.component.html.HtmlPanelGroup
 
-class MenuGenerator {
+class JSFMenuGenerator {
 
-    protected val logger = LoggerFactory.getLogger(this.javaClass)
+    private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    fun generateEditMenu(patient: Patient?, task: Task?, taskMenuCommandButtons: HtmlPanelGroup?): MenuModel {
+    fun generateEditMenu(patient: Patient?, task: Task?, taskMenuCommandButtons: HtmlPanelGroup): MenuModel {
         logger.debug("Generating new MenuModel")
 
         val model = DefaultMenuModel()
@@ -324,7 +323,7 @@ class MenuGenerator {
             taskSubMenu.addElement(seperator)
 
             // Favorite lists
-            if (!taskIsNull) {
+            if (task != null) {
 
                 val items = favouriteListRepository
                         .getMenuItems(userService.currentUser, task)
@@ -349,23 +348,23 @@ class MenuGenerator {
                             // dumplist
                             if (favouriteListItem.isDumpList()) {
 
-                                val signature = MethodSignature(
-                                        "favouriteListItemRemoveDialog.initAndPrepareBean",
-                                        VaribaleHolder<Task>(task, "task"),
-                                        VaribaleHolder<Long>(favouriteListItem.getId(), "favListId"))
+                                val backendButton = JSFBackendButton().initializeButton("favouriteListItemRemoveDialog.initAndPrepareBean",
+                                        variables = listOf(JSFBackendButton.VariableHolder<Task>(task, "task"),
+                                                JSFBackendButton.VariableHolder<Long>(favouriteListItem.id, "favListId")))
 
-                                signature.generateButton().addAjaxBehaviorToButton("dialogReturn", MethodSignature(
-                                        "globalEditViewHandler.generateViewData",
-                                        "navigationForm:patientList contentForm headerForm", null,
-                                        "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll');",
-                                        VaribaleHolder(GlobalEditViewHandler.TaskInitilize.GENERATE_MENU_MODEL, "valu1"),
-                                        VaribaleHolder(GlobalEditViewHandler.TaskInitilize.GENERATE_TASK_STATUS, "valu1"),
-                                        VaribaleHolder(
-                                                GlobalEditViewHandler.TaskInitilize.RELOAD_MENU_MODEL_FAVOURITE_LISTS, "valu2")))
-                                        .addToParent(taskMenuCommandButtons)
+                                backendButton.addAjaxBehaviorToButton(
+                                        event = "dialogReturn",
+                                        signature = "centralHandler.loadViews",
+                                        update = "navigationForm:patientList contentForm headerForm",
+                                        onComplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll');",
+                                        variables = listOf(JSFBackendButton.VariableHolder<CentralHandler.Load>(CentralHandler.Load.MENU_MODEL, "valu1"),
+                                                JSFBackendButton.VariableHolder<CentralHandler.Load>(CentralHandler.Load.RELOAD_TASK_STATUS, "valu2"),
+                                                JSFBackendButton.VariableHolder<CentralHandler.Load>(CentralHandler.Load.RELOAD_MENU_MODEL_FAVOURITE_LISTS, "valu3")))
+
+                                backendButton.addToParent(taskMenuCommandButtons)
 
                                 // onlick active the command button
-                                item.onclick = ("$('#headerForm\\\\:" + signature.buttonId
+                                item.onclick = ("$('#headerForm\\\\:" + backendButton.id
                                         + "').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;")
 
                             } else {

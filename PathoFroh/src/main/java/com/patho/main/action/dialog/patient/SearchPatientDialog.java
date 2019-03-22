@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.patho.main.service.UserService;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,11 @@ public class SearchPatientDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private UserHandlerAction userHandlerAction;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private UserService userService;
 
 	private ClinicSearchTab clinicSearchTab;
 

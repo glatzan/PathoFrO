@@ -1,14 +1,6 @@
 package com.patho.main.model.dto;
 
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.SqlResultSetMapping;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
 
 @NamedNativeQuery(
 	    name = "favouriteListMenuItemDTO",
@@ -41,8 +33,6 @@ import lombok.Setter;
 	        }
 	    )
 	)
-@Getter
-@Setter
 @Entity
 public class FavouriteListMenuItem {
 
@@ -66,5 +56,52 @@ public class FavouriteListMenuItem {
 		this.dumpList = dumpList;
 		this.hidden = hidden;
 	}
-	
+
+	public long getTmp_id() {
+		return this.tmp_id;
+	}
+
+	public long getId() {
+		return this.id;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public boolean isContainsTask() {
+		return this.containsTask;
+	}
+
+	public boolean isDumpList() {
+		return this.dumpList;
+	}
+
+	public boolean isHidden() {
+		return this.hidden;
+	}
+
+	public void setTmp_id(long tmp_id) {
+		this.tmp_id = tmp_id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setContainsTask(boolean containsTask) {
+		this.containsTask = containsTask;
+	}
+
+	public void setDumpList(boolean dumpList) {
+		this.dumpList = dumpList;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+	}
 }

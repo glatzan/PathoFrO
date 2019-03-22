@@ -8,7 +8,7 @@ import com.patho.main.repository.PatientRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.UserService
 import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.ui.menu.MenuGenerator
+import com.patho.main.util.menu.JSFMenuGenerator
 import com.patho.main.util.worklist.Worklist
 import com.patho.main.util.worklist.search.AbstractWorklistSearch
 import com.patho.main.util.worklist.search.WorklistSimpleSearch
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Component
+import javax.faces.component.html.HtmlPanelGroup
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -190,8 +191,12 @@ open class CentralHandler @Autowired constructor(
         }
 
         if (loads.contains(Load.MENU_MODEL)) {
-            genericViewData.taskMenuModel = MenuGenerator().generateEditMenu(worklistHandler.current.selectedPatient,
-                    worklistHandler.current.selectedTask, genericViewData.taskMenuCommandButtons)
+            if (genericViewData.taskMenuCommandButtons != null) {
+                genericViewData.taskMenuModel = JSFMenuGenerator().generateEditMenu(worklistHandler.current.selectedPatient,
+                        worklistHandler.current.selectedTask, genericViewData.taskMenuCommandButtons as HtmlPanelGroup)
+            } else {
+                logger.debug("Buttons not ready do nothing")
+            }
         }
 
         when (view) {
@@ -212,7 +217,7 @@ open class CentralHandler @Autowired constructor(
             }
             View.WORKLIST_REPORT -> {
                 logger.debug("Loading report view")
-                reportView.loadView()
+                reportView.loadView(worklistHandler.current.selectedTask)
             }
             else -> {
                 logger.debug("Unknow view!")

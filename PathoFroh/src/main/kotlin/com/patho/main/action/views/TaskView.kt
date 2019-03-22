@@ -15,39 +15,39 @@ import java.util.*
 @Component
 @Scope(value = "session")
 @ConfigurationProperties(prefix = "patho.common.taskview", ignoreInvalidFields = true, ignoreUnknownFields = true)
-class TaskView @Autowired constructor(
+open class TaskView @Autowired constructor(
         private val taskOverviewRepository: TaskOverviewRepository,
         private val userService: UserService) : AbstractView() {
 
     /**
      * Lists of task to display
      */
-    var taskList: List<TaskOverview> = listOf<TaskOverview>()
+    open var taskList: List<TaskOverview> = listOf<TaskOverview>()
 
     /**
      * Task to select from list
      */
-    var selectedTask: TaskOverview? = null
+    open var selectedTask: TaskOverview? = null
 
     /**
      * Task per Page, Initialized by spring
      */
-    var tasksPerPage: Int = 0
+    open var tasksPerPage: Int = 0
 
     /**
      * Options to choose the taksperPage, Initialized by spring
      */
-    var tasksPerPageOptions: IntArray = IntArray(0)
+    open var tasksPerPageOptions: IntArray = IntArray(0)
 
     /**
      * List of available pages
      */
-    var pages: List<Int> = listOf<Int>()
+    open var pages: List<Int> = listOf<Int>()
 
     /**
      * Page of list
      */
-    var page = 0
+    open var page = 0
 
     /**
      * Loads view data
@@ -59,7 +59,7 @@ class TaskView @Autowired constructor(
     /**
      * Reloads view data on criteria change
      */
-    fun onChangeSelectionCriteria() {
+    open fun onChangeSelectionCriteria() {
         if (tasksPerPage == 0) {
             logger.error("Configuration error, default task per page is not configured, setting 50")
             tasksPerPage = 50
@@ -90,7 +90,7 @@ class TaskView @Autowired constructor(
         }
     }
 
-    fun addUserToNotification(task: Task, histoUser: HistoUser) {
+    open fun addUserToNotification(task: Task, histoUser: HistoUser) {
         // AssociatedContact associatedContact = contactDAO.addAssociatedContact(task,
         // histoUser.getPhysician().getPerson(), ContactRole.CLINIC_PHYSICIAN);
         //
@@ -98,7 +98,7 @@ class TaskView @Autowired constructor(
         // AssociatedContactNotification.NotificationTyp.EMAIL);
     }
 
-    fun removeUserFromNotification(task: Task, histoUser: HistoUser) {
+    open fun removeUserFromNotification(task: Task, histoUser: HistoUser) {
         // if (task.getContacts() != null) {
         // try {
         // AssociatedContact associatedContact = task.getContacts().stream()

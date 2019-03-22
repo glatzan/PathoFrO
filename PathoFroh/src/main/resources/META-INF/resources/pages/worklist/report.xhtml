@@ -39,7 +39,7 @@
 				style="width:calc(100% - 20px)">
 				<pe:documentViewer style="margin-left:5px;height:calc(100vh - 75px)"
 					rendered="#{reportView.selectedContainer ne null}"
-					value="#{reportView.getPDF()}"
+					value="#{reportView.PDF}"
 					download="#{reportView.selectedContainer.name}" />
 
 				<h:panelGrid columns="1"
@@ -97,7 +97,7 @@
 								update="@(.onClickUpdate)"
 								actionListener="#{reportView.setSelectedPDF(data)}">
 								<p:graphicImage height="325" cache="false" 
-									value="#{reportView.getThumbnail()}"
+									value="#{reportView.thumbnail}"
 									style="border: 1px solid black;" width="230">
 									<f:param name="id" value="#{data.pdf.thumbnail}" />
 								</p:graphicImage>

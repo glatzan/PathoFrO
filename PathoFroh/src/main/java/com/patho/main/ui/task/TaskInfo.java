@@ -2,6 +2,7 @@ package com.patho.main.ui.task;
 
 import java.util.HashSet;
 
+import com.patho.main.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class TaskInfo {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private UserHandlerAction userHandlerAction;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private UserService userService;
 
 	private Task task;
 

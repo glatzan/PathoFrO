@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller
 
 @Controller
 @Scope("session")
-class WorklistHandler @Autowired @Lazy constructor(
+open class WorklistHandler @Autowired @Lazy constructor(
         private val centralHandler: CentralHandler,
         private val userService: UserService,
         private val taskRepository: TaskRepository,
@@ -27,23 +27,23 @@ class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Containing all worklists
      */
-    var worklists: MutableList<Worklist> = mutableListOf()
+    open var worklists: MutableList<Worklist> = mutableListOf()
 
     /**
      * Current worklist
      */
-    var current: Worklist = Worklist(DEFAULT_WORKLIST_NAME, AbstractWorklistSearch())
+    open var current: Worklist = Worklist(DEFAULT_WORKLIST_NAME, AbstractWorklistSearch())
 
     /**
      * Returns the current patient
      */
-    val selectedPatient: Patient?
+    open val selectedPatient: Patient?
         get() = current.selectedPatient
 
     /**
      * Returns the current task
      */
-    val selectedTask: Task?
+    open val selectedTask: Task?
         get() = current.selectedTask
 
 
@@ -53,28 +53,28 @@ class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Returns true if the given patient is selected
      */
-    fun isSelected(patient: Patient): Boolean {
+    open fun isSelected(patient: Patient): Boolean {
         return current.isSelected(patient)
     }
 
     /**
      * Returns true if the given task is selected
      */
-    fun isSelected(task: Task): Boolean {
+    open fun isSelected(task: Task): Boolean {
         return current.isSelected(task)
     }
 
     /**
      * Returns true if the worklist is the active worklist
      */
-    fun isSelected(worklist: Worklist): Boolean {
+    open fun isSelected(worklist: Worklist): Boolean {
         return current == worklist
     }
 
     /**
      * Adds a worklist with the default user settings
      */
-    fun addWorklist(worklistSearch: AbstractWorklistSearch, name: String, selected: Boolean = true) {
+    open fun addWorklist(worklistSearch: AbstractWorklistSearch, name: String, selected: Boolean = true) {
         addWorklist(Worklist(name, worklistSearch,
                 userService.currentUser.settings.worklistHideNoneActiveTasks,
                 userService.currentUser.settings.worklistSortOrder,
@@ -84,7 +84,7 @@ class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Adds the given worklist to the worklist array
      */
-    fun addWorklist(worklist: Worklist, selected: Boolean = true) {
+    open fun addWorklist(worklist: Worklist, selected: Boolean = true) {
 
         // removing worklist if worklist with the same name is present
         val toRemove = worklists.singleOrNull { p -> p.name == worklist.name }
@@ -104,7 +104,7 @@ class WorklistHandler @Autowired @Lazy constructor(
      * Removes a worklist an updates the view if the worklist is the current
      * worklist
      */
-    fun removeWorklist(worklist: Worklist) {
+    open fun removeWorklist(worklist: Worklist) {
         worklists.remove(worklist)
         if (isSelected(worklist)) {
             current = Worklist(DEFAULT_WORKLIST_NAME, AbstractWorklistSearch())
@@ -115,7 +115,7 @@ class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Clears a worklist an updates the view if the worklist was the current worklist
      */
-    fun clearWorklist(worklist: Worklist) {
+    open fun clearWorklist(worklist: Worklist) {
         // if a patient was selected and the worklist is the current worklist update
         // view
         if (worklist.clear() && isSelected(worklist))
@@ -124,18 +124,18 @@ class WorklistHandler @Autowired @Lazy constructor(
 
 
     // TODO implement
-    fun autoReloadWorklist() {
+    open fun autoReloadWorklist() {
         if (current.isAutoUpdate) {
             logger.debug("Auto updating worklist")
             current.updateWorklist(false)
         }
     }
 
-    fun addTaskToWorklist(id: Long): Task? {
+    open fun addTaskToWorklist(id: Long): Task? {
         return addTaskToWorklist(id, false)
     }
 
-    fun addTaskToWorklist(id: Long, changeView: Boolean): Task? {
+    open fun addTaskToWorklist(id: Long, changeView: Boolean): Task? {
         val oTask = taskRepository.findOptionalByIdAndInitialize(id, false, true, true, true, true)
         return if (oTask.isPresent()) addTaskToWorklist(oTask.get(), changeView) else null
     }
@@ -144,7 +144,7 @@ class WorklistHandler @Autowired @Lazy constructor(
      * Adds a task to the worklist. If changeView is true or the user setting addTaskWithSingleClick is set
      * the task will be set as the selected task
      */
-    fun addTaskToWorklist(task: Task, changeView: Boolean): Task {
+    open fun addTaskToWorklist(task: Task, changeView: Boolean): Task {
         val changeViewOrClick = changeView or userService.currentUser.settings.addTaskWithSingleClick
         task.active = true
 
@@ -171,21 +171,21 @@ class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Replaces the current task in the current worklist
      */
-    fun replaceTaskInWorklist() {
+    open fun replaceTaskInWorklist() {
         replaceTaskInWorklist(current.selectedTask, true)
     }
 
     /**
      * Replaces the task in the current worklist, if the task is the selected task
      */
-    fun replaceTaskInWorklist(task: Task) {
+    open fun replaceTaskInWorklist(task: Task) {
         replaceTaskInWorklist(task, true)
     }
 
     /**
      * Replaces the task in the current worklist, if the task is the selected task
      */
-    fun replaceTaskInWorklist(task: Task, reload: Boolean) {
+    open fun replaceTaskInWorklist(task: Task, reload: Boolean) {
         var reloadedTask = task
 
         if (reload) {
@@ -209,7 +209,7 @@ class WorklistHandler @Autowired @Lazy constructor(
      * should be selected. If so, the patient will be selected. The patient isn't
      * added twice. The patient will not be reloaded.
      */
-    fun addPatientToWorkList(patient: Patient, changeView: Boolean) {
+    open fun addPatientToWorkList(patient: Patient, changeView: Boolean) {
         addPatientToWorkList(patient, changeView, false)
     }
 
@@ -218,7 +218,7 @@ class WorklistHandler @Autowired @Lazy constructor(
      * should be selected. If so, the patient will be selected. The patient isn't
      * added twice.
      */
-    fun addPatientToWorkList(patient: Patient, changeView: Boolean, reload: Boolean) {
+    open fun addPatientToWorkList(patient: Patient, changeView: Boolean, reload: Boolean) {
         // change view to patient
         if (changeView)
             centralHandler.onSelectPatient(patient, reload)
@@ -229,7 +229,7 @@ class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Removes a patient from the worklist.
      */
-    fun removePatientFromWorklist(patient: Patient) {
+    open fun removePatientFromWorklist(patient: Patient) {
         logger.debug("Removing Patient from Worklist: #{patient.person.getFullName()} ")
 
         // if patient is the selected patient the view has to be updated
@@ -243,14 +243,14 @@ class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Replaces the given patient within the worklist
      */
-    fun replacePatientInWorklist(patient: Patient) {
+    open fun replacePatientInWorklist(patient: Patient) {
         replacePatientInWorklist(patient, true)
     }
 
     /**
      * Replaces the given patient within the worklist
      */
-    fun replacePatientInWorklist(patient: Patient, reload: Boolean) {
+    open fun replacePatientInWorklist(patient: Patient, reload: Boolean) {
         var reloadedPatient = patient
 
         if (reload) {
@@ -271,7 +271,7 @@ class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Selects the next task in List
      */
-    fun selectNextTask() {
+    open fun selectNextTask() {
         if (!current.isEmpty) {
             if (current.selectedPatient != null) {
 
@@ -317,7 +317,7 @@ class WorklistHandler @Autowired @Lazy constructor(
         }
     }
 
-    fun selectPreviousTask() {
+    open fun selectPreviousTask() {
         if (!current.isEmpty) {
             if (current.selectedPatient != null) {
 

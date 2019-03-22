@@ -8,7 +8,6 @@ import com.patho.main.model.util.audit.Audit
 import com.patho.main.service.PDFService
 import com.patho.main.template.PrintDocument
 import com.patho.main.ui.task.DiagnosisReportUpdater
-import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.pdf.LazyPDFReturnHandler
 import com.patho.main.util.pdf.StreamedContentInterface
 import org.springframework.context.annotation.Scope
@@ -16,17 +15,17 @@ import org.springframework.stereotype.Component
 
 @Component
 @Scope(value = "session")
-class ReportView : AbstractTaskView(), StreamedContentInterface {
+open class ReportView : AbstractTaskView(), StreamedContentInterface {
 
     /**
      * List of all diagnosis revisions with correspondending reports
      */
-    var data: MutableList<DiagnosisReportReturnHandler> = mutableListOf()
+    open var data: MutableList<DiagnosisReportReturnHandler> = mutableListOf()
 
     /**
      * The data which are displayed
      */
-    var selectedData: DiagnosisReportReturnHandler? = null
+    open var selectedData: DiagnosisReportReturnHandler? = null
 
     /**
      * The selected PDF container
@@ -36,17 +35,17 @@ class ReportView : AbstractTaskView(), StreamedContentInterface {
     /**
      * If true the update poll will be started
      */
-    var generatingPDFs: Boolean = false
+    open var generatingPDFs: Boolean = false
 
     /**
      * If true the update poll will be stoped
      */
-    var generationCompleted: Boolean = false
+    open var generationCompleted: Boolean = false
 
     /**
      * True if selected pdf is currently generating
      */
-    var generatingSelectedPDF: Boolean = false
+    open var generatingSelectedPDF: Boolean = false
 
     /**
      * Returns a the thumbnail list for displaying the thumbnails
@@ -57,6 +56,8 @@ class ReportView : AbstractTaskView(), StreamedContentInterface {
     override fun loadView(task: Task) {
         super.loadView(task)
 
+        logger.debug("Loading report view")
+
         data = mutableListOf()
 
         generatingPDFs = false
@@ -64,14 +65,12 @@ class ReportView : AbstractTaskView(), StreamedContentInterface {
         generatingSelectedPDF = false
         generationCompleted = false
 
-        for (i in 0 until task.diagnosisRevisions.size) {
-            val revision = HistoUtil.getNElement<DiagnosisRevision>(task.diagnosisRevisions, i)
+        for ((i, revision) in task.diagnosisRevisions.withIndex()) {
 
-            val c = PDFService.findDiagnosisReport(task, revision!!)
+            val c = PDFService.findDiagnosisReport(task, revision)
 
             if (!c.isPresent && revision.completed) {
                 logger.debug("No report present, generating new report")
-
                 val returnHandler = DiagnosisReportReturnHandler(revision, true)
                 // TODO updating task globally?
                 this.task = DiagnosisReportUpdater().updateDiagnosisReportNoneBlocking(task, revision, returnHandler)
@@ -93,6 +92,8 @@ class ReportView : AbstractTaskView(), StreamedContentInterface {
 
         }
 
+        println(data +" ---- ")
+
         if (data.size > 0) {
             selectedData
             setSelectedPDF(data[0])
@@ -102,7 +103,7 @@ class ReportView : AbstractTaskView(), StreamedContentInterface {
     /**
      * Is called via poll by the gui, checks if the selected pdf is generated or if it is ready
      */
-    fun updateData() {
+    open fun updateData() {
         if (generatingSelectedPDF) {
             setSelectedPDF(selectedData)
         }
@@ -116,7 +117,7 @@ class ReportView : AbstractTaskView(), StreamedContentInterface {
     /**
      * Sets the selected PDF if it is available
      */
-    fun setSelectedPDF(data: DiagnosisReportReturnHandler?) {
+    open fun setSelectedPDF(data: DiagnosisReportReturnHandler?) {
         logger.debug("Setting pdf " + data!!)
         if (data != null) {
             selectedData = data
@@ -133,16 +134,16 @@ class ReportView : AbstractTaskView(), StreamedContentInterface {
     /**
      * Return-Handler for pdf generation
      */
-    class DiagnosisReportReturnHandler : LazyPDFReturnHandler {
+    open class DiagnosisReportReturnHandler : LazyPDFReturnHandler {
 
-        var diagnosis: DiagnosisRevision
+        open var diagnosis: DiagnosisRevision
 
-        var pdf: PDFContainer?
+        open var pdf: PDFContainer?
 
         /**
          * True if the image is generated
          */
-        var loading: Boolean = false
+        open var loading: Boolean = false
 
         constructor(diagnosis: DiagnosisRevision, pdf: PDFContainer?, loading: Boolean) {
             this.diagnosis = diagnosis

@@ -112,7 +112,7 @@ open class GenericViewData @Autowired constructor(
         loadView(task, true);
     }
 
-    fun loadView(task: Task, loadGeneric: Boolean) {
+    open fun loadView(task: Task, loadGeneric: Boolean) {
         super.loadView(task)
 
         if (loadGeneric)

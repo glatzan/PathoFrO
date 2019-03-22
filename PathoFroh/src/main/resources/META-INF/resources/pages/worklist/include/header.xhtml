@@ -61,7 +61,7 @@
 
                 <!-- Options menu -->
                 <p:tieredMenu overlay="true" trigger="taskMenuButton" my="left top"
-                              model="#{globalEditViewHandler.taskMenuModel}" at="left bottom"
+                              model="#{genericViewData.taskMenuModel}" at="left bottom"
                               id="taskTieredMenuButton">
                 </p:tieredMenu>
             </h:panelGroup>
@@ -236,7 +236,7 @@
                 <f:actionListener
                         binding="#{diagnosisService.startDiagnosisPhase(worklistHandler.current.selectedTask)}"/>
                 <f:actionListener
-                        listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
+                        listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
             </p:commandButton>
 
             <!-- Council button -->
@@ -266,7 +266,7 @@
                 <p:ajax event="dialogReturn"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                         update="navigationForm:patientList contentForm headerForm"
-                        listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
+                        listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
             </p:commandButton>
 
             <p:hotkey bind="shift+b"
@@ -278,7 +278,7 @@
                 <p:ajax event="dialogReturn"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                         update="navigationForm:patientList contentForm headerForm"
-                        listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
+                        listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
             </p:commandButton>
 
             <!-- Archive Task -->
@@ -286,7 +286,7 @@
                              actionListener="#{archiveTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                 <p:ajax event="dialogReturn"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                        listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"
+                        listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"
                         update="navigationForm:patientList contentForm headerForm"/>
             </p:commandButton>
 
@@ -295,7 +295,7 @@
                              actionListener="#{dialog.restoreTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                 <p:ajax event="dialogReturn"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                        listener="#{globalEditViewHandler.generateViewData('GENERATE_TASK_STATUS', 'GENERATE_MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"
+                        listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"
                         update="navigationForm:patientList contentForm headerForm"/>
             </p:commandButton>
 
@@ -372,6 +372,6 @@
         </h:panelGroup>
 
         <h:panelGroup
-                binding="#{globalEditViewHandler.taskMenuCommandButtons}"/>
+                binding="#{genericViewData.taskMenuCommandButtons}"/>
     </h:panelGrid>
 </ui:composition>

@@ -35,7 +35,7 @@ public enum HistoPermissions {
 	/**
 	 * User can alter patient data <br>
 	 * -> Used in <br>
-	 * --> MenuGenerator, if set edit dialog button is displayed
+	 * --> JSFMenuGenerator, if set edit dialog button is displayed
 	 */
 	PATIENT_EDIT_ALTER_DATA(PATIENT_EDIT),
 
@@ -44,14 +44,14 @@ public enum HistoPermissions {
 	 * -> Used in <br>
 	 * --> worklist/patient (patient.xhtml) for hiding the pdf upload button <br>
 	 * --> pdfTable.xhtml (component) to display updalog button <br>
-	 * --> MenuGenerator to display or hide dialog button
+	 * --> JSFMenuGenerator to display or hide dialog button
 	 */
 	PATIENT_EDIT_UPLOAD_DATA(PATIENT_EDIT),
 
 	/**
 	 * User can delete patients <br>
 	 * -> Used in <br>
-	 * --> MenuGenerator, if set the delete dialog button is displayed
+	 * --> JSFMenuGenerator, if set the delete dialog button is displayed
 	 * --> editPatient.xhtml, disables delete dialog button
 	 */
 	PATIENT_EDIT_DELETE(PATIENT_EDIT),
@@ -59,7 +59,7 @@ public enum HistoPermissions {
 	/**
 	 * User can merge Patients <br>
 	 * -> Used in <br>
-	 * --> MenuGenerator, if set the merge dialog is set
+	 * --> JSFMenuGenerator, if set the merge dialog is set
 	 * --> editPatient.xhtml, disables merge dialog button
 	 */
 	PATIENT_EDIT_MERGE(PATIENT_EDIT),
