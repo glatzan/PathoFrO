@@ -4,6 +4,7 @@ import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportHistoryRecord
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
+import com.patho.main.model.person.Contact
 import com.patho.main.service.impl.SpringContextBridge
 
 /**
@@ -13,9 +14,22 @@ import com.patho.main.service.impl.SpringContextBridge
  */
 class ReportIntentStatusByDiagnosis(val task: Task) {
 
+    val reportIntentBearer = task.contacts.map { p -> ReportIntentBearer(p, task) }
+
+    val completed: Boolean = reportIntentBearer.all { p -> p.completed }
+
     open class ReportIntentBearer(val reportIntent: ReportIntent, val task: Task) {
 
         val diagnosisBearers = mutableListOf<DiagnosisBearer>()
+
+        val person = reportIntent.person
+
+        val role = reportIntent.role
+
+        var address: Contact = if (person?.defaultAddress != null) person?.defaultAddress?.contact
+                ?: person.contact else person?.contact ?: Contact()
+
+        val completed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportIntent)
 
         init {
             reportIntent.notifications.forEach { p -> addNotification(p) }

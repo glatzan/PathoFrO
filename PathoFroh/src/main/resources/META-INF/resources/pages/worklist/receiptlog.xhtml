@@ -9,6 +9,7 @@
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
 
     <h:outputScript library="scripts" name="closeOverlayPanelOnReturn.js"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 
     <ui:include src="include/navigationBar.xhtml"/>
 
@@ -118,7 +119,7 @@
                                      value="#{receiptLogView.task.caseHistory}"
                                      title="#{msg['body.diagnosis.story.watermark']}"
                                      id="caseHistoryInput" style="width:90%"
-                                     onclick="showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
+                                     onclick="commonFunctions.showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
                                      onkeypress="PF('caseHistoryOverlayPanel').hide();">
                         <p:ajax event="change"
                                 listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',receiptLogView.task,receiptLogView.task.caseHistory)}"> </p:ajax>
@@ -191,7 +192,7 @@
                                          id="materialInput#{loopCount.index}"
                                          disabled="#{!receiptLogView.task.taskStatus.editable}"
                                          tabindex="1" styleClass="customBackground"
-                                         onclick="showAndUpdateOverlayPanel('materialOverlayPanel#{loopCount.index}', '#{component.clientId}' ,null, 'materialOverlayPanelDataTable#{loopCount.index}', 0, submitUpdateMaterial#{loopCount.index});"
+                                         onclick="commonFunctions.showAndUpdateOverlayPanel('materialOverlayPanel#{loopCount.index}', '#{component.clientId}' ,null, 'materialOverlayPanelDataTable#{loopCount.index}', 0, submitUpdateMaterial#{loopCount.index});"
                                          style="width:200px;float:right;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}">
 
                                 <p:ajax event="change" execute="@this"
@@ -252,7 +253,7 @@
                         <!-- quickContact surgeon -->
                         <h:panelGroup>
                             <p:commandLink
-                                    onclick="showAndUpdateOverlayPanel('surgeonPhysicianOverlayPanel', '#{component.clientId}' , null, 'surgeonPhysicianOverlayPanelDataTable', 0 ,null);"
+                                    onclick="commonFunctions.showAndUpdateOverlayPanel('surgeonPhysicianOverlayPanel', '#{component.clientId}' , null, 'surgeonPhysicianOverlayPanelDataTable', 0 ,null);"
                                     title="#{msg['body.receiptlog.notification.surgeon.hint']}"
                                     disabled="#{!receiptLogView.task.taskStatus.editable}">
                                 <i class="fa fa-fw fa-scissors"/>
@@ -322,7 +323,7 @@
                         <!-- quickcontact private physician  -->
                         <h:panelGroup>
                             <p:commandLink
-                                    onclick="showAndUpdateOverlayPanel('privatePhysicianPhysicianOverlayPanel', '#{component.clientId}' , null, 'privatePhysicianPhysicianOverlayPanelDataTable', 0 ,null);"
+                                    onclick="commonFunctions.showAndUpdateOverlayPanel('privatePhysicianPhysicianOverlayPanel', '#{component.clientId}' , null, 'privatePhysicianPhysicianOverlayPanelDataTable', 0 ,null);"
                                     title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
                                     disabled="#{!receiptLogView.task.taskStatus.editable}">
                                 <i class="fa fa-fw fa-eye"/>
@@ -404,7 +405,7 @@
                     <!-- contacts -->
                     <p:dataTable var="reportIntent" scrollable="true" scrollHeight="90"
                                  style="width:450px" styleClass="defaultHistoDataTable"
-                                 value="#{receiptLogView.reportIntentStatus.reportIntents}">
+                                 value="#{receiptLogView.reportIntentStatus.reportIntentBearer}">
 
                         <p:column style="width:auto">
                             <f:facet name="header">
@@ -413,12 +414,13 @@
 
                             <h:outputLabel value="#{reportIntent.person.getFullName()}" id="test123"/>
 
-                            <p:commandButton
-                                    oncomplete="showAndUpdateOverlayPanel('carOP', '#{component.clientId}' ,null, null, 'contentForm:reportIntentDate', null);"
+                            <p:commandLink
+                                    styleClass="contactInfoOverplayTrigger"
                                     icon="pi pi-search"
-                                    title="View"
-                                    actionListener="#{receiptLogView.setSelectedReportIntentStatus(reportIntent)}">
-                            </p:commandButton>
+                                    actionListener="#{receiptLogView.setSelectedReportIntentStatus(reportIntent)}"
+                                    oncomplete="commonFunctions.showAndUpdateOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}' ,null, 'reportIntentData', null, null);">
+                                <i class="fa fa-info-circle"/>
+                            </p:commandLink>
                         </p:column>
 
                         <p:column style="width: 20%;">
@@ -459,27 +461,39 @@
                         </p:column>
                     </p:dataTable>
 
-                    <p:overlayPanel widgetVar="carOP" hideEvent="null" showEvent="null" dismissable="false"
-                                    showCloseIcon="true">
+                    <script type="text/javascript">
+                        commonFunctions.addHideOverlayPanelOnMouseClickHandler('contactInfoOverlayPanel')
+
+                        let tmpSel = $(".contactInfoOverplayTrigger")
+
+                        tmpSel.mouseenter(function () {
+                            this.click();
+                        })
+
+                        tmpSel.mouseleave(function () {
+                            commonFunctions.hideOverlayPanel('contactInfoOverlayPanel')
+                        })
+
+                    </script>
+
+                    <p:overlayPanel widgetVar="contactInfoOverlayPanel" hideEvent="null" showEvent="null"
+                                    dismissable="false" id="contactInfoOverlayPanel">
                         <p:outputPanel id="carDetail" style="text-align:center;">
 
-                            <p:dataTable value="#{receiptLogView.selectedReportIntentStatus.reportIntentNotifications}"
-                                         id="reportIntentDate" widgetVar="reportIntentDate"
+                            <p:dataTable value="#{receiptLogView.selectedReportIntentStatus.diagnosisBearers}"
+                                         id="reportIntentData" widgetVar="reportIntentData"
                                          styleClass="defaultHistoDataTable"
-                                         var="reportIntentNotification" style="width: 300px">
+                                         var="diagnosisBearer" style="width: 300px">
 
-                                <p:columnGroup type="header">
-                                    <p:row>
-                                        <p:column headerText="Twes">
-                                            <h:outputText
-                                                    value="#{reportIntentNotification.notification.notificationTyp} Test"/>
-                                        </p:column>
-                                    </p:row>
-                                </p:columnGroup>
+                                <p:column headerText="Twes">
+                                    <h:outputText
+                                            value="#{diagnosisBearer.diagnosisName} Test"/>
+                                </p:column>
 
-                                <p:subTable var="history" value="#{reportIntentNotification.history}">
+                                <p:subTable var="reportIntentNotificationBearers"
+                                            value="#{diagnosisBearer.reportIntentNotificationBearers}">
                                     <p:column>
-                                        #{history.diagnosisName}
+                                        #{reportIntentNotificationBearers.type}
                                     </p:column>
                                 </p:subTable>
 
@@ -529,7 +543,7 @@
                         <h:panelGroup layout="block" style="width: 90%; min-height:20px">
                             <p:commandLink process="@this" update="contentForm:contentPanel"
                                            styleClass="updateName_js_Class"
-                                           oncomplete="showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
+                                           oncomplete="commonFunctions.showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
 
                                 <h:outputLabel styleClass="doNotHideOverlay_js_Class"
                                                value="#{msg['body.receiptlog.slide.sample']} #{stainingRow.IDText}"/>
@@ -562,7 +576,7 @@
                         <h:panelGroup layout="block" style="width: 90%; min-height:20px">
                             <p:commandLink process="@this" update="contentForm:contentPanel"
                                            styleClass="updateName_js_Class"
-                                           oncomplete="showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
+                                           oncomplete="commonFunctions.showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
                                 <h:outputLabel styleClass="doNotHideOverlay_js_Class"
                                                value="#{msg['body.receiptlog.slide.block']} #{stainingRow.IDText}"/>
                                 <h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
@@ -614,7 +628,7 @@
 
                             <p:commandLink process="@this" update="contentForm:contentPanel"
                                            styleClass="updateName_js_Class"
-                                           oncomplete="showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
+                                           oncomplete="commonFunctions.showAndUpdateOverlayPanel('idInputPannel', '#{component.clientId}' ,null, null, 'contentForm:idInputPannelInput', null);">
 
                                 <h:outputLabel value="#{stainingRow.IDText}"
                                                styleClass="doNotHideOverlay_js_Class"/>
@@ -833,46 +847,7 @@
             </p:dataTable>
 
             <script type="text/javascript">
-                var hideNS = 'mousedown.idInputPannel';
-
-                // Function checks if click is on a link which should show the overlay. If so
-                // and the overlay is visible the overlay will not be hidden. Otherwise the overlay will
-                // be hidden
-                $(document.body)
-                    .off(hideNS)
-                    .on(
-                        hideNS,
-                        function (e) {
-                            // do nothing if overlay is hidden
-                            if ($("#idInputPannel").hasClass(
-                                'ui-overlay-hidden')) {
-                                return;
-                            }
-
-                            //do nothing on target mousedown
-                            if ($("#idInputPannel").target) {
-                                var target = $(e.target);
-                                if ($(hideNS).target.is(target)
-                                    || $this.target.has(target).length > 0) {
-                                    return;
-                                }
-                            }
-
-                            // check if pannel is visivle
-                            if (PF('idInputPannel').isVisible()) {
-                                // check if on link is click that should show the overlay
-                                if (!$(e.target).hasClass(
-                                    "doNotHideOverlay_js_Class")) {
-                                    // hide
-                                    PF('idInputPannel').hide();
-                                } else {
-
-                                }
-                            }
-
-                            return;
-
-                        });
+                commonFunctions.addHideOverlayPanelOnMouseClickHandler('idInputPannel')
             </script>
 
             <!-- overlaypannel for editing sample/block/slide name -->
@@ -938,7 +913,7 @@
                              actionListener="#{receiptLogView.selectListChildren(receiptLogView.rows,true)}"/>
 
             <h:outputLabel value="#{msg['body.statiningView.choosenElements']}"
-                           style="margin-left:20px;"></h:outputLabel>
+                           style="margin-left:20px;"/>
 
             <h:panelGroup>
                 <p:selectOneMenu
