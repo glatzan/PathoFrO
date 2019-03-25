@@ -418,7 +418,10 @@
                                     styleClass="contactInfoOverplayTrigger"
                                     icon="pi pi-search"
                                     actionListener="#{receiptLogView.setSelectedReportIntentStatus(reportIntent)}"
-                                    oncomplete="commonFunctions.showAndUpdateOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}' ,null, 'reportIntentData', null, null);">
+                                    partialSubmit="true"
+                                    process="@this"
+                                    update="contentForm:contactInfoOverlayPanel"
+                                    oncomplete="commonFunctions.showAndUpdateOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}' ,null, null, null, null);">
                                 <i class="fa fa-info-circle"/>
                             </p:commandLink>
                         </p:column>
@@ -464,7 +467,7 @@
                     <script type="text/javascript">
                         commonFunctions.addHideOverlayPanelOnMouseClickHandler('contactInfoOverlayPanel')
 
-                        let tmpSel = $(".contactInfoOverplayTrigger")
+                        var tmpSel = $(".contactInfoOverplayTrigger")
 
                         tmpSel.mouseenter(function () {
                             this.click();
@@ -480,24 +483,29 @@
                                     dismissable="false" id="contactInfoOverlayPanel">
                         <p:outputPanel id="carDetail" style="text-align:center;">
 
-                            <p:dataTable value="#{receiptLogView.selectedReportIntentStatus.diagnosisBearers}"
-                                         id="reportIntentData" widgetVar="reportIntentData"
-                                         styleClass="defaultHistoDataTable"
-                                         var="diagnosisBearer" style="width: 300px">
+                            <p:repeat value="#{receiptLogView.selectedReportIntentStatus.diagnosisBearers}"
+                                      var="diagnosisBearer">
 
-                                <p:column headerText="Twes">
-                                    <h:outputText
-                                            value="#{diagnosisBearer.diagnosisName} Test"/>
-                                </p:column>
+                                <h:outputText value="#{diagnosisBearer.diagnosisName}"/>
 
-                                <p:subTable var="reportIntentNotificationBearers"
-                                            value="#{diagnosisBearer.reportIntentNotificationBearers}">
+                                <p:dataTable value="#{diagnosisBearer.reportIntentNotificationBearers}"
+                                             styleClass="defaultHistoDataTable"
+                                             var="notificationBearer" style="width: 300px">
+
                                     <p:column>
-                                        #{reportIntentNotificationBearers.type}
+                                        #{notificationBearer.type}
                                     </p:column>
-                                </p:subTable>
 
-                            </p:dataTable>
+                                    <p:subTable var="reportIntentNotificationBearers"
+                                                value="#{notificationBearer.reportData}">
+                                        <p:column>
+                                            #{reportData}
+                                        </p:column>
+                                    </p:subTable>
+
+                                </p:dataTable>
+
+                            </p:repeat>
 
                         </p:outputPanel>
                     </p:overlayPanel>

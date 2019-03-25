@@ -145,6 +145,18 @@ var commonFunctions = {
      * search filter and unselects all rows. A enter key press will be routed to an
      * submit function
      *
+     * Updating the overlay should be performed via update of the calling object.
+     *
+     * Example for an single overlaypanel handling e.g. a whole datatable
+     * <p:commandLink
+     *  actionListener="setting object"
+     *  partialSubmit="true"
+     *  process="@this"
+     *  update="contentForm:contentpanel"
+     *  oncomplete="commonFunctions.showAndUpdateOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}' ,null, 'null', null, null);">
+     *  <i class="fa fa-info-circle"/>
+     * </p:commandLink>
+     *
      * @param panelID
      *            ID of the overlaypanel, widgetwar
      * @param parentID

@@ -12,7 +12,6 @@ import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SlideService
 import com.patho.main.util.print.UnknownPrintingException
 import com.patho.main.util.status.ReportIntentStatusByDiagnosis
-import com.patho.main.util.status.ReportIntentStatusByUser
 import freemarker.template.TemplateNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -54,7 +53,12 @@ open class ReceiptLogView @Autowired constructor(
     open var selectedReportIntentStatus: ReportIntentStatusByDiagnosis.ReportIntentBearer? = null
         get() {
             println(field?.diagnosisBearers?.size)
+            println("returning ${field?.person}")
             return field
+        }
+        set(value) {
+            println("setting: ${value?.person}")
+            field = value
         }
 
     /**

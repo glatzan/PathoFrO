@@ -50,6 +50,7 @@ class ReportIntentStatusByDiagnosis(val task: Task) {
             if (diagnosisBearer == null) {
                 diagnosisBearer = DiagnosisBearer(diagnosisID, task)
                 diagnosisBearers.add(diagnosisBearer)
+                print("new diagnosis $diagnosisID")
             }
 
             val reportIntentNotificationBearer = DiagnosisBearer.ReportIntentNotificationBearer(type, reportIntentNotifications)
