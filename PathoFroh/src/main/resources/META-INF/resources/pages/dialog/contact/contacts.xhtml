@@ -34,7 +34,7 @@
 
                 <p:dataTable var="contactHolder" styleClass="defaultHistoDataTable"
                              id="contactDatas" scrollable="true" scrollHeight="480"
-                             value="#{dialog.contactDialog.contacts}">
+                             value="#{contactDialog.reportIntents}">
 
                     <!-- Name -->
                     <p:column headerText="#{msg['dialog.contacts.table.name']}"
@@ -115,10 +115,10 @@
                     <p:column headerText="" style="width:30px !important">
                         <!-- edit -->
                         <p:commandLink title="#{msg['dialog.contacts.change']}"
-                                       actionListener="#{dialog.contactNotificationDialog.initAndPrepareBean(dialog.contactDialog.task, contactHolder.contact)}">
+                                       actionListener="#{dialog.contactNotificationDialog.initAndPrepareBean(contactDialog.task, contactHolder.contact)}">
                             <i class="fa fa-wrench"/>
                             <p:ajax event="dialogReturn" update="@form"
-                                    listener="#{dialog.contactDialog.onDefaultDialogReturn}"/>
+                                    listener="#{contactDialog.onDefaultDialogReturn}"/>
                         </p:commandLink>
 
                         <!-- remove, only if no notification was performed -->
@@ -126,9 +126,9 @@
                                 title="#{contactHolder.deleteAble ? msg['dialog.contacts.remove']: msg['dialog.contacts.remove.notPossible']}"
                                 disabled="#{!contactHolder.deleteAble}" update="@form">
                             <f:actionListener
-                                    binding="#{dialog.contactDialog.removeContact(dialog.contactDialog.task, contactHolder.contact)}"/>
+                                    binding="#{contactDialog.removeContact(contactDialog.task, contactHolder.contact)}"/>
                             <f:actionListener
-                                    binding="#{dialog.contactDialog.updateContactHolders()}"/>
+                                    binding="#{contactDialog.updateContactHolders()}"/>
                             <i class="fa fa-times"/>
                         </p:commandLink>
                     </p:column>
@@ -149,15 +149,15 @@
                     <!-- add new contact -->
                     <p:commandButton value="#{msg['dialog.contact.add']}"
                                      icon="fa fa-fw fa-user-plus"
-                                     actionListener="#{dialog.contactDialog.openAddContactDialog()}">
+                                     actionListener="#{contactDialog.openAddContactDialog()}">
                         <p:ajax event="dialogReturn" update="@form"
-                                listener="#{dialog.contactDialog.onDefaultDialogReturn}"/>
+                                listener="#{contactDialog.onDefaultDialogReturn}"/>
                     </p:commandButton>
 
                     <!-- close -->
                     <p:commandButton value="#{msg['general.close']}"
                                      icon="fa fa-fw fa-times-circle" id="closeBtn"
-                                     actionListener="#{dialog.contactDialog.hideDialog()}"></p:commandButton>
+                                     actionListener="#{contactDialog.hideDialog()}"></p:commandButton>
                 </h:panelGrid>
             </h:panelGrid>
         </div>

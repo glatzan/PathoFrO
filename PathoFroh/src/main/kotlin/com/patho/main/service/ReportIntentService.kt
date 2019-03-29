@@ -422,7 +422,7 @@ open class ReportIntentService @Autowired constructor(
      * Checks if all notifications are performed
      */
     open fun isNotificationPerformed(reportHistoryRecord: ReportHistoryRecord): Boolean {
-        return reportHistoryRecord.data.any { p -> !p.failed } && reportHistoryRecord.data.isNotEmpty()
+        return !(reportHistoryRecord.data.lastOrNull()?.failed ?: true) && reportHistoryRecord.data.isNotEmpty()
     }
 
     /**

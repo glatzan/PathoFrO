@@ -6,32 +6,41 @@
 @table_body_height: 100px;
 @defualt_padding: 4px 4px;
 @default_font: Verdana, Arial, "Trebuchet MS", sans-serif;
+@table_header_background: #e6e6e6 url(/Histo2016/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x;
+@table_header_color: #d3d3d3;
+
 // default font
 .histo_font (@size: 11px) {
-	font-size: @size;
-	font-family: @default_font;
-	box-shadow: none;
-	font-style: normal;
-	font-variant: normal;
-	text-align: left;
+  font-size: @size;
+  font-family: @default_font;
+  box-shadow: none;
+  font-style: normal;
+  font-variant: normal;
+  text-align: left;
+}
+
+.histo_header {
+  background: @table_header_background;
+  border: 1px, solid, @table_header_color;
+  padding: @defualt_padding;
 }
 
 // no padding
 .histo_noPadding {
-	padding: 0px;
-	border-collapse: collapse ! important;
-	border: 0px ! important;
-	border-spacing: 0px ! important;
+  padding: 0px;
+  border-collapse: collapse ! important;
+  border: 0px ! important;
+  border-spacing: 0px ! important;
 }
 
 // iteration for creating column width in unit. use: xxxx20px
 .column_width (@count , @name , @step , @unit) when (@count > 0) {
-	.column_width ((@count - 1) , @name , @step , @unit);
-	@widthpara: (@step * @count);
-	@name1: ~"@{name}@{widthpara}";
-	.@{name1} {
-		width: ~"@{widthpara}@{unit}";
-	}
+  .column_width ((@count - 1), @name, @step, @unit);
+  @widthpara: (@step * @count);
+  @name1: ~"@{name}@{widthpara}";
+  .@{name1} {
+    width: ~"@{widthpara}@{unit}";
+  }
 }
 
 @icon-colors: green, purple, orange, #555555, red, blue;
@@ -41,180 +50,182 @@
 .generate-incon-colors (@names;
 @colors;
 @index) when (iscolor(extract(@colors, @index))) and (@index > 0) {
-	.generate-incon-colors (@names;
-	@colors;
-	(@index - 1));
-	@name: extract(@icon-names, @index);
-	@color: extract(@icon-colors, @index);
-	.@{name} , .@{name}:link , .@{name}:active , .@{name}:hover , .@{name}:visited {
-		color: @color;
-	}
+  .generate-incon-colors (@names; @colors; (@index - 1));
+  @name: extract(@icon-names, @index);
+  @color: extract(@icon-colors, @index);
+  .@{name}, .@{name}:link, .@{name}:active, .@{name}:hover, .@{name}:visited {
+    color: @color;
+  }
 }
 
 /**
  * common classes for tables
  */
 .tableCommonClasses {
-	W:focus {
-		outline: none ! important;
-	}
+  W:focus {
+    outline: none ! important;
+  }
 
-	.bigFont, .columnHeading {
-		font-weight: bold ! important;
-		.histo_font();
-	}
+  .bigFont, .columnHeading {
+    font-weight: bold ! important;
+    .histo_font();
+  }
 
-	.hugeFont, .hugeFont label {
-		font-weight: bold ! important;
-		color: #555555;
-		.histo_font(1.5em);
-	}
+  .hugeFont, .hugeFont label {
+    font-weight: bold ! important;
+    color: #555555;
+    .histo_font(1.5em);
+  }
 
-	.ui-selectonemenu lable {
-		padding: @defualt_padding ! important;
-	}
+  .ui-selectonemenu lable {
+    padding: @defualt_padding ! important;
+  }
 
-	.columnTop {
-		vertical-align: top;
-	}
-	
-	.columnMiddle {
-		vertical-align: middle;
-	}
-	
-	.columnBottom{
-		vertical-align: bottom;
-	}
-	
-	.columnHorizontalCenter{
-		text-align: center !important;
-	}
-	
-	.columnRight {
-		text-align: right;
-	}
+  .columnTop {
+    vertical-align: top;
+  }
 
-	.columnLeft {
-		text-align: left;
-	}
-	a {
-		text-decoration: none ! important;
-	}
+  .columnMiddle {
+    vertical-align: middle;
+  }
 
-	label {
-		.histo_noPadding();
-		.histo_font ();
-	}
+  .columnBottom {
+    vertical-align: bottom;
+  }
 
-	.headline {
-		font-size: 12px ! important;
-		font-weight: bold;
-		color: #555555;
-	}
-	
-	.columnWidthMin{
-		width: 1%;
-		white-space: nowrap;
-	}
-	
-	.columnWidthAuto{
-		width: auto;
-	}
+  .columnHorizontalCenter {
+    text-align: center !important;
+  }
+
+  .columnRight {
+    text-align: right;
+  }
+
+  .columnLeft {
+    text-align: left;
+  }
+
+  a {
+    text-decoration: none ! important;
+  }
+
+  label {
+    .histo_noPadding();
+    .histo_font ();
+  }
+
+  .headline {
+    font-size: 12px ! important;
+    font-weight: bold;
+    color: #555555;
+  }
+
+  .columnWidthMin {
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  .columnWidthAuto {
+    width: auto;
+  }
 }
 
 /**
  * dialog common classes
  */
-.dialogCommonClasses{
-	div.buttonContainer {
-		width: 100%;
-		position: absolute;
-		bottom: 0px !important;
-		
-		
-		
-		// table padding for the two nested tables
-		> table { 
-			padding: 0.1em 0em;
-			width: 100%;
-			tbody > tr, tbody>tr>td{
-				.histo_noPadding();
-			}
-		}
-		
-		// left column style
-		.left {
-			margin-left: 0px;
-			
-			button, .ui-selectcheckboxmenu, .ui-chkbox-box, label{
-				margin-left: 0.3em !important;
-			}
-			
-			td:first-child>button{
-				margin-left: 0em !important;
-			}
-			
-			/* style of the popup menu
-			.ui-selectonemenu{
-				margin-left: 0.3em !important;
-			
-				 .ui-selectonemenu-label{
-					padding: 0.2em !important;
-				}
-			}*/
-		}
-		
-		// right column style
-		.right {
-			margin-right: 0px;
-			float: right;
-			
-			button {
-				margin-right: 0.3em !important;
-			}
-			
-			// last button with no margin
-			td:last-child>button{
-				margin-right: 0em !important;
-			}
-		}
-	}
+.dialogCommonClasses {
+  div.buttonContainer {
+    width: 100%;
+    position: absolute;
+    bottom: 0px !important;
+
+
+    // table padding for the two nested tables
+    > table {
+      padding: 0.1em 0em;
+      width: 100%;
+
+      tbody > tr, tbody > tr > td {
+        .histo_noPadding();
+      }
+    }
+
+    // left column style
+    .left {
+      margin-left: 0px;
+
+      button, .ui-selectcheckboxmenu, .ui-chkbox-box, label {
+        margin-left: 0.3em !important;
+      }
+
+      td:first-child > button {
+        margin-left: 0em !important;
+      }
+
+      /* style of the popup menu
+      .ui-selectonemenu{
+          margin-left: 0.3em !important;
+
+           .ui-selectonemenu-label{
+              padding: 0.2em !important;
+          }
+      }*/
+    }
+
+    // right column style
+    .right {
+      margin-right: 0px;
+      float: right;
+
+      button {
+        margin-right: 0.3em !important;
+      }
+
+      // last button with no margin
+      td:last-child > button {
+        margin-right: 0em !important;
+      }
+    }
+  }
 }
 
 /* Tree without border */
-.histoTree{
-	border: 0px;
+.histoTree {
+  border: 0px;
 }
-		
+
 /* scrollpanel style */
-.histoScrollPanelStyle{
-	width: ~"calc(100% - 1px) !important";
-	border: 1px #aaaaaa solid !important;
-	border-spacing: 0px !important;
-	border-radius: 4px;
-	
-	.ui-scrollpanel-hbar{
-		display: none;
-	}
-	
-	/* scrollpanel body with*/
-	//.ui-scrollpanel-content, .ui-scrollpanel-container{
-	//	width: 100% !important;
-	//}
-	
-	/*scrollpanel bar*/
-	.ui-scrollpanel-vbar {
-		width: 5px;
-	}
-	
-	/* background of the bar*/
-	.ui-scrollpanel-track {
-		background: none;
-		
-		/* background of the bars drag*/
-		.ui-scrollpanel-drag {
-			background: #555555;
-			border-radius: 5px;
-		}
-	}
+.histoScrollPanelStyle {
+  width: ~"calc(100% - 1px) !important";
+  border: 1px #aaaaaa solid !important;
+  border-spacing: 0px !important;
+  border-radius: 4px;
+
+  .ui-scrollpanel-hbar {
+    display: none;
+  }
+
+  /* scrollpanel body with*/
+  //.ui-scrollpanel-content, .ui-scrollpanel-container{
+  //	width: 100% !important;
+  //}
+
+  /*scrollpanel bar*/
+
+  .ui-scrollpanel-vbar {
+    width: 5px;
+  }
+
+  /* background of the bar*/
+
+  .ui-scrollpanel-track {
+    background: none;
+
+    /* background of the bars drag*/
+
+    .ui-scrollpanel-drag {
+      background: #555555;
+      border-radius: 5px;
+    }
+  }
 }

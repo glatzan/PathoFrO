@@ -253,7 +253,7 @@
 
             <!-- Contacts button -->
             <p:commandButton id="editContactBtn"
-                             actionListener="#{dialog.contactDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                             actionListener="#{contactDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                 <p:ajax event="dialogReturn"
                         listener="#{dialogReturnHandler.onDefaultDialogReturn}"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"

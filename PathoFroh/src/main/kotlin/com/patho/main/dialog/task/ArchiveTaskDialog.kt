@@ -26,7 +26,7 @@ class ArchiveTaskDialog : AbstractTaskDialog() {
 
     var removeFromWorklist: Boolean = true
 
-    override fun iniBean(task: Task): Boolean {
+    override fun initBean(task: Task): Boolean {
         println(serviceSettings)
         println("hallo")
         println(serviceSettings.taskArchiveRules.blockingFavouriteLists)

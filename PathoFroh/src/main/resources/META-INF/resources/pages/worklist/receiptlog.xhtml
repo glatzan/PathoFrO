@@ -392,7 +392,7 @@
                         <!-- edit contacts -->
                         <p:commandLink title="#{msg['body.receiptlog.notification.hint']}"
                                        disabled="#{!receiptLogView.task.taskStatus.editable}"
-                                       actionListener="#{dialog.contactDialog.initAndPrepareBean(receiptLogView.task)}">
+                                       actionListener="#{contactDialog.initAndPrepareBean(receiptLogView.task)}">
                             <i class="fa fa-fw fa-cog"/>
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultDialogReturn}"
@@ -479,35 +479,92 @@
 
                     </script>
 
+                    <!-- overlay for contact notifications -->
                     <p:overlayPanel widgetVar="contactInfoOverlayPanel" hideEvent="null" showEvent="null"
-                                    dismissable="false" id="contactInfoOverlayPanel">
-                        <p:outputPanel id="carDetail" style="text-align:center;">
+                                    dismissable="false" id="contactInfoOverlayPanel" styleClass="histoOverlayPanel">
 
-                            <p:repeat value="#{receiptLogView.selectedReportIntentStatus.diagnosisBearers}"
-                                      var="diagnosisBearer">
+                        <c:forEach items="#{receiptLogView.selectedReportIntentStatus.diagnosisBearers}"
+                                   var="diagnosisBearer">
 
-                                <h:outputText value="#{diagnosisBearer.diagnosisName}"/>
+                            <h:panelGrid columns="1" style="width:400px !important;" styleClass="defaultHistoTable">
 
-                                <p:dataTable value="#{diagnosisBearer.reportIntentNotificationBearers}"
-                                             styleClass="defaultHistoDataTable"
-                                             var="notificationBearer" style="width: 300px">
+                                <h:panelGroup layout="block" style="widht:100%;" styleClass="histo_header">
+                                    <h:outputText value="#{diagnosisBearer.diagnosisName}"/>
+                                </h:panelGroup>
 
-                                    <p:column>
-                                        #{notificationBearer.type}
-                                    </p:column>
+                                <c:forEach items="#{diagnosisBearer.reportIntentNotificationBearers}"
+                                           var="notificationBearer">
 
-                                    <p:subTable var="reportIntentNotificationBearers"
-                                                value="#{notificationBearer.reportData}">
-                                        <p:column>
-                                            #{reportData}
-                                        </p:column>
-                                    </p:subTable>
+                                    <h:panelGrid columns="5" styleClass="defaultHistoHiddenTableContainer"
+                                                 style="width:98% !important;margin-left: 10px" columnClasses="columnWidth25,columnWidth75,columnWidth75,columnWidth75,">
 
-                                </p:dataTable>
+                                        <!-- type icon -->
+                                        <h:panelGroup>
+                                            <ui:fragment
+                                                    rendered="#{notificationBearer.type eq 'EMAIL'}">
+                                                <i class="fa fa-envelope icon-grey"/>
+                                            </ui:fragment>
 
-                            </p:repeat>
+                                            <ui:fragment rendered="#{notificationBearer.type eq 'FAX'}">
+                                                <i class="fa fa-fax icon-grey"/>
+                                            </ui:fragment>
 
-                        </p:outputPanel>
+                                            <ui:fragment
+                                                    rendered="#{notificationBearer.type eq 'LETTER'}">
+                                                <i class="fa fa-pencil-square-o icon-grey"/>
+                                            </ui:fragment>
+
+                                            <ui:fragment
+                                                    rendered="#{notificationBearer.type eq 'PHONE'}">
+                                                <i class="fa fa-phone icon-grey"/>
+                                            </ui:fragment>
+
+                                            <ui:fragment
+                                                    rendered="#{notificationBearer.type eq 'PRINT'}">
+                                                <i class="fa fa-print icon-grey"/>
+                                            </ui:fragment>
+                                        </h:panelGroup>
+
+                                        <!-- attempts -->
+                                        <h:outputFormat value="#{msg['body.receiptlog.contact.overview.attempts']}">
+                                            <f:param value="#{notificationBearer.attempts}"/>
+                                        </h:outputFormat>
+
+                                        <!-- successes -->
+                                        <h:outputFormat value="#{msg['body.receiptlog.contact.overview.success']}">
+                                            <f:param value="#{notificationBearer.successes}"/>
+                                        </h:outputFormat>
+
+                                        <!-- failedAttempts -->
+                                        <h:outputFormat
+                                                value="#{msg['body.receiptlog.contact.overview.failedAttampts']}">
+                                            <f:param value="#{notificationBearer.failedAttempts}"/>
+                                        </h:outputFormat>
+
+                                        <!-- performed -->
+                                        <ui:fragment rendered="#{notificationBearer.attempts != 0}">
+                                            <h:panelGroup>
+                                                <h:outputLabel
+                                                        value="#{msg['body.receiptlog.contact.overview.performed']}"/>
+                                                <i class="fa fa-fw #{notificationBearer.success ? 'fa-check-circle icon-green' :'fa-exclamation-triangle icon-red'}"
+                                                   title="#{msg['body.statiningView.idManuallyAltered']}"/>
+                                            </h:panelGroup>
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="#{notificationBearer.attempts == 0}">
+                                            <h:panelGroup>
+                                                <h:outputLabel
+                                                        value="#{msg['body.receiptlog.contact.overview.performed']}"/>
+                                                <i class="fa fa-fw fa-minus"/>
+                                            </h:panelGroup>
+                                        </ui:fragment>
+
+                                    </h:panelGrid>
+
+                                </c:forEach>
+                            </h:panelGrid>
+                        </c:forEach>
+
                     </p:overlayPanel>
                 </h:panelGroup>
             </h:panelGrid>

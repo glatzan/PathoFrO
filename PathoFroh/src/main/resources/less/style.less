@@ -20,6 +20,9 @@
 	
 // separator
 // defaultHistoSeperatorTable
+
+// hiding head of the datatable
+// histoDataTable-HideColumnHeader
 /*
  * Default Body Style
  */
@@ -239,7 +242,7 @@ body {
 		padding: 0px ! important;
 		td {
 			border: 1px solid #d3d3d3;
-			background: #e6e6e6 url(/Histo2016/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x;
+			background: @table_header_background;
 		}
 
 		td , label {
@@ -722,7 +725,7 @@ div.contentAccordionPannel{
 	
 	// selected header background
 	div.ui-accordion-header.ui-state-active{
-		background: #e6e6e6 url(/Histo2016/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x !important;
+		background: @table_header_background;
     	font-weight: normal;
     	color: #555555;
 	}

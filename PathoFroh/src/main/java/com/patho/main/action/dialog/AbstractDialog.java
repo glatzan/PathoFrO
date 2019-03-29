@@ -134,6 +134,9 @@ public abstract class AbstractDialog {
 		logger.debug("Showing Dialog: " + dialog);
 	}
 
+	public void update(){
+	}
+
 	/**
 	 * Method for hiding the associated dialog.
 	 * 

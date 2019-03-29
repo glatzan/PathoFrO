@@ -163,7 +163,7 @@
 				<p:commandButton
 					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
 					icon="fa fa-fw fa-cog" process="@form"
-					actionListener="#{dialog.contactDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
+					actionListener="#{contactDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
 					<p:ajax event="dialogReturn" update="@form"
 						listener="#{dialog.notificationDialog.letterTab.updateData()}" />
 				</p:commandButton>

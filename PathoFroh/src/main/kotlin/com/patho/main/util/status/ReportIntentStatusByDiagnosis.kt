@@ -40,11 +40,11 @@ class ReportIntentStatusByDiagnosis(val task: Task) {
 
             for (history in notification.history) {
                 addType(history.diagnosisID, type
-                        ?: ReportIntentNotification.NotificationTyp.NONE, history.data.toList())
+                        ?: ReportIntentNotification.NotificationTyp.NONE, history)
             }
         }
 
-        private fun addType(diagnosisID: Long, type: ReportIntentNotification.NotificationTyp, reportIntentNotifications: List<ReportHistoryRecord.ReportData>) {
+        private fun addType(diagnosisID: Long, type: ReportIntentNotification.NotificationTyp, reportHistoryRecord: ReportHistoryRecord) {
             var diagnosisBearer = diagnosisBearers.firstOrNull { p -> p.diagnosisID == diagnosisID }
 
             if (diagnosisBearer == null) {
@@ -53,7 +53,7 @@ class ReportIntentStatusByDiagnosis(val task: Task) {
                 print("new diagnosis $diagnosisID")
             }
 
-            val reportIntentNotificationBearer = DiagnosisBearer.ReportIntentNotificationBearer(type, reportIntentNotifications)
+            val reportIntentNotificationBearer = DiagnosisBearer.ReportIntentNotificationBearer(type, reportHistoryRecord)
             diagnosisBearer.reportIntentNotificationBearers.add(reportIntentNotificationBearer)
 
         }
@@ -66,7 +66,12 @@ class ReportIntentStatusByDiagnosis(val task: Task) {
             val diagnosisName: String = (task.diagnosisRevisions.firstOrNull { p -> p.id == diagnosisID })?.name
                     ?: SpringContextBridge.services().resourceBundle.get("")
 
-            open class ReportIntentNotificationBearer(var type: ReportIntentNotification.NotificationTyp, val reportData: List<ReportHistoryRecord.ReportData>) {
+            open class ReportIntentNotificationBearer(var type: ReportIntentNotification.NotificationTyp, val reportHistoryRecord: ReportHistoryRecord) {
+                val success = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportHistoryRecord)
+                val successes = reportHistoryRecord.data.count { p -> !p.failed }
+                val failedAttempts = reportHistoryRecord.data.count { p -> p.failed }
+                val attempts = reportHistoryRecord.data.size
+                val reportData = reportHistoryRecord.data.toList()
 
             }
         }
