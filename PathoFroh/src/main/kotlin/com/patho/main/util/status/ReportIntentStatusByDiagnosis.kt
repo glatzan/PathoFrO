@@ -1,6 +1,7 @@
 package com.patho.main.util.status
 
 import com.patho.main.model.patient.Task
+import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportHistoryRecord
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
@@ -40,11 +41,11 @@ class ReportIntentStatusByDiagnosis(val task: Task) {
 
             for (history in notification.history) {
                 addType(history.diagnosisID, type
-                        ?: ReportIntentNotification.NotificationTyp.NONE, history)
+                        ?: NotificationTyp.NONE, history)
             }
         }
 
-        private fun addType(diagnosisID: Long, type: ReportIntentNotification.NotificationTyp, reportHistoryRecord: ReportHistoryRecord) {
+        private fun addType(diagnosisID: Long, type: NotificationTyp, reportHistoryRecord: ReportHistoryRecord) {
             var diagnosisBearer = diagnosisBearers.firstOrNull { p -> p.diagnosisID == diagnosisID }
 
             if (diagnosisBearer == null) {
@@ -66,7 +67,7 @@ class ReportIntentStatusByDiagnosis(val task: Task) {
             val diagnosisName: String = (task.diagnosisRevisions.firstOrNull { p -> p.id == diagnosisID })?.name
                     ?: SpringContextBridge.services().resourceBundle.get("")
 
-            open class ReportIntentNotificationBearer(var type: ReportIntentNotification.NotificationTyp, val reportHistoryRecord: ReportHistoryRecord) {
+            open class ReportIntentNotificationBearer(var type: NotificationTyp, val reportHistoryRecord: ReportHistoryRecord) {
                 val success = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportHistoryRecord)
                 val successes = reportHistoryRecord.data.count { p -> !p.failed }
                 val failedAttempts = reportHistoryRecord.data.count { p -> p.failed }

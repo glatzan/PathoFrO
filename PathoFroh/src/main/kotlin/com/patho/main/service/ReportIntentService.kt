@@ -4,6 +4,7 @@ import com.patho.main.common.ContactRole
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
+import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportHistoryRecord
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
@@ -88,7 +89,7 @@ open class ReportIntentService @Autowired constructor(
      * Adds a new notification to a report intent
      */
     @Transactional
-    open fun addReportIntentNotification(task: Task, reportIntent: ReportIntent, type: ReportIntentNotification.NotificationTyp, customAddress: String = "", save: Boolean = true): Pair<ReportIntent, ReportIntentNotification> {
+    open fun addReportIntentNotification(task: Task, reportIntent: ReportIntent, type: NotificationTyp, customAddress: String = "", save: Boolean = true): Pair<ReportIntent, ReportIntentNotification> {
         logger.debug("Adding notification of type $type")
 
         val reportIntentNotification = findReportIntentNotificationByType(reportIntent, type)
@@ -121,7 +122,7 @@ open class ReportIntentService @Autowired constructor(
      * Removes a notification path from the report intent
      */
     @Transactional
-    open fun removeReportIntentNotification(task: Task, reportIntent: ReportIntent, type: ReportIntentNotification.NotificationTyp): Pair<Task, ReportIntent> {
+    open fun removeReportIntentNotification(task: Task, reportIntent: ReportIntent, type: NotificationTyp): Pair<Task, ReportIntent> {
         val tmp = findReportIntentNotificationByType(reportIntent, type)
         if (tmp != null)
             return removeReportIntentNotification(task, reportIntent, tmp)
@@ -173,7 +174,7 @@ open class ReportIntentService @Autowired constructor(
         if (isHistoryPresent(reportIntent))
             return Pair(task, reportIntent)
 
-        val notifications: List<ReportIntentNotification.NotificationTyp> = pathoConfig.defaultNotification.getDefaultNotificationForRole(reportIntent.role)
+        val notifications: List<NotificationTyp> = pathoConfig.defaultNotification.getDefaultNotificationForRole(reportIntent.role)
 
         notifications.forEach { p -> addReportIntentNotification(task, reportIntent, p, save = false) }
 
@@ -198,7 +199,7 @@ open class ReportIntentService @Autowired constructor(
         // checking if contact is within the send letter to roles
         if (isContactRolePresent(reportIntent, rolesToUpdate))
         // adding notification and return
-            addReportIntentNotification(task, reportIntent, ReportIntentNotification.NotificationTyp.LETTER, save = false)
+            addReportIntentNotification(task, reportIntent, NotificationTyp.LETTER, save = false)
 
 
         if (save) {
@@ -308,7 +309,7 @@ open class ReportIntentService @Autowired constructor(
      * Adds history data to an reportIntentNotification. If the reportIntentNotification is not present, it will be created as well.
      */
     @Transactional
-    open fun addNotificationHistoryDataAndReportIntentNotification(task: Task, reportIntent: ReportIntent, type: ReportIntentNotification.NotificationTyp, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<ReportIntent, ReportHistoryRecord.ReportData> {
+    open fun addNotificationHistoryDataAndReportIntentNotification(task: Task, reportIntent: ReportIntent, type: NotificationTyp, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<ReportIntent, ReportHistoryRecord.ReportData> {
         var reportIntentNotification = findReportIntentNotificationByType(reportIntent, type)
 
         if (reportIntentNotification == null)
@@ -372,7 +373,7 @@ open class ReportIntentService @Autowired constructor(
      * Search for a notification with the given type. If not found null is returned.
      */
     @Transactional
-    open fun findReportIntentNotificationByType(reportIntent: ReportIntent, type: ReportIntentNotification.NotificationTyp): ReportIntentNotification? {
+    open fun findReportIntentNotificationByType(reportIntent: ReportIntent, type: NotificationTyp): ReportIntentNotification? {
         return reportIntent.notifications.lastOrNull { p -> p.notificationTyp == type }
     }
 
@@ -428,7 +429,7 @@ open class ReportIntentService @Autowired constructor(
     /**
      * Checks if the notifications of the given type were performed
      */
-    open fun isNotificationPerformed(reportIntent: ReportIntent, type: ReportIntentNotification.NotificationTyp): Boolean {
+    open fun isNotificationPerformed(reportIntent: ReportIntent, type: NotificationTyp): Boolean {
         val tmp = findReportIntentNotificationByType(reportIntent, type)
         return if (tmp != null) isNotificationPerformed(tmp) else false
     }

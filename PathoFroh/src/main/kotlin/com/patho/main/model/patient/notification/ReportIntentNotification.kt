@@ -108,11 +108,6 @@ open class ReportIntentNotification : AbstractPersistable, ID {
         this.notificationTyp = notificationTyp
         this.active = active
     }
-
-    /**
-     * Type of the notification process
-     */
-    enum class NotificationTyp {
-        EMAIL, FAX, PHONE, LETTER, PRINT, NONE
-    }
 }
+
+

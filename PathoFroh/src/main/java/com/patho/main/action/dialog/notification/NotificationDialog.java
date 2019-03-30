@@ -19,7 +19,7 @@ import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.patient.notification.ReportIntentNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.NotificationTyp;
 import com.patho.main.model.person.Contact;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.person.Person;

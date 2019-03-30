@@ -15,7 +15,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.patient.notification.ReportIntentNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.NotificationTyp;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MediaRepository;

@@ -1,6 +1,7 @@
 package com.patho.main.config
 
 import com.patho.main.common.ContactRole
+import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.repository.MediaRepository
 import com.patho.main.util.config.VersionContainer
@@ -275,7 +276,7 @@ public open class PathoConfig @Autowired @Lazy constructor(
 
         var defaultNotifications: List<DefaultNotificationEntity> = listOf<DefaultNotificationEntity>()
 
-        fun getDefaultNotificationForRole(role: ContactRole): List<ReportIntentNotification.NotificationTyp> {
+        fun getDefaultNotificationForRole(role: ContactRole): List<NotificationTyp> {
             var tmp = defaultNotifications
             try {
                 return tmp.singleOrNull { p -> p.role == role }?.notificationTyps ?: listOf()
@@ -287,7 +288,7 @@ public open class PathoConfig @Autowired @Lazy constructor(
 
     class DefaultNotificationEntity {
         var role: ContactRole? = null
-        var notificationTyps: List<ReportIntentNotification.NotificationTyp> = listOf<ReportIntentNotification.NotificationTyp>()
+        var notificationTyps: List<NotificationTyp> = listOf<NotificationTyp>()
 
         constructor()
 

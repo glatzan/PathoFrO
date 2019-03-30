@@ -2,6 +2,7 @@ package com.patho.main.util.status
 
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
+import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportHistoryRecord
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification

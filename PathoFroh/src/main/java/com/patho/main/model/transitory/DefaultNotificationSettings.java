@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.patho.main.common.ContactRole;
+import com.patho.main.model.patient.notification.NotificationTyp;
 import com.patho.main.model.patient.notification.ReportIntentNotification;
 import com.patho.main.util.helper.StreamUtils;
 
@@ -16,7 +17,7 @@ public class DefaultNotificationSettings {
 
 	private List<DefaultNotification> defaultNotifications;
 
-	public List<ReportIntentNotification.NotificationTyp> getDefaultNotificationForRole(ContactRole role) {
+	public List<NotificationTyp> getDefaultNotificationForRole(ContactRole role) {
 		if (defaultNotifications != null) {
 			try {
 				return defaultNotifications.stream().filter(p -> p.getRole().equals(role))
@@ -26,13 +27,13 @@ public class DefaultNotificationSettings {
 			}
 		}
 
-		return new ArrayList<ReportIntentNotification.NotificationTyp>();
+		return new ArrayList<NotificationTyp>();
 	}
 
 	@Getter
 	@Setter
 	public class DefaultNotification {
 		private ContactRole role;
-		private List<ReportIntentNotification.NotificationTyp> notificationTyps;
+		private List<NotificationTyp> notificationTyps;
 	}
 }

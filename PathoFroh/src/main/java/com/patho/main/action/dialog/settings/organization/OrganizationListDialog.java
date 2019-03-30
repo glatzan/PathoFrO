@@ -53,7 +53,7 @@ public class OrganizationListDialog extends AbstractDialog {
 		setSelectMode(selectMode);
 	}
 
-	private void update() {
+	public void update() {
 		setSelectedOrganization(null);
 		setOrganizations(organizationRepository.findAll(true));
 	}

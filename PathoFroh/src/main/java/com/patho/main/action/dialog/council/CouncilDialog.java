@@ -214,7 +214,7 @@ public class CouncilDialog extends AbstractDialog {
 	 * Updates the tree menu und reloads the patient's data
 	 * 
 	 */
-	private void update(boolean reloadTask) {
+	public void update(boolean reloadTask) {
 
 		if (reloadTask) {
 			setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), true, true, true, true, true).get());

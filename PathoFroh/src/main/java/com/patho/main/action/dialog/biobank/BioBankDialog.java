@@ -93,7 +93,7 @@ public class BioBankDialog extends AbstractDialog {
 				getTask().getPatient());
 	}
 
-	private void update(boolean reloadTask) {
+	public void update(boolean reloadTask) {
 		if (reloadTask) {
 			Optional<Task> oTask = taskRepository.findOptionalByIdAndInitialize(getTask().getId(), false, false, false,
 					false, true);

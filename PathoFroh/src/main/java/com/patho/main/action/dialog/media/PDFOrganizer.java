@@ -148,7 +148,7 @@ public class PDFOrganizer extends AbstractDialog {
 	 * 
 	 * @param reloadPatient
 	 */
-	private void update(boolean reloadPatient) {
+	public void update(boolean reloadPatient) {
 		if (reloadPatient)
 			setPatient(patientRepository.findOptionalById(getPatient().getId(), true).get());
 

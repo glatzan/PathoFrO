@@ -13,7 +13,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.notification.ReportIntentNotification;
-import com.patho.main.model.patient.notification.ReportIntentNotification.NotificationTyp;
+import com.patho.main.model.patient.notification.NotificationTyp;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.TaskRepository;
@@ -94,7 +94,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 	}
 
 	public void generatedMenuModel() {
-		ReportIntentNotification.NotificationTyp[] typeArr = { NotificationTyp.EMAIL, NotificationTyp.FAX,
+		NotificationTyp[] typeArr = { NotificationTyp.EMAIL, NotificationTyp.FAX,
 				NotificationTyp.LETTER, NotificationTyp.PHONE };
 
 		model = new DefaultMenuModel();
@@ -128,7 +128,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 		update(true);
 	}
 
-	public void addNotification(ReportIntentNotification.NotificationTyp notification) {
+	public void addNotification(NotificationTyp notification) {
 //		associatedContactService.addNotificationByTypeAndDisableOld(associatedContact, notification)
 //				.getReportIntent();
 		update(true);
