@@ -7,9 +7,14 @@
       xmlns:pe="http://primefaces.org/ui/extensions"
 >
 
+<!-- importing enum for switch -->
+<p:importEnum
+        type="com.patho.main.model.patient.notification.NotificationTyp"
+        var="notificationTyp" allSuffix="ALL_ENUM_VALUES"/>
+
 <h:head>
     <title><h:outputFormat
-            value="#{msg['dialog.contacts.headline']}"/></title>
+            value="#{msg['dialog.contactDialog.headline']}"/></title>
     <h:outputStylesheet name="style.css" value="style.css" library="css"/>
     <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
                         library="css"/>
@@ -21,7 +26,7 @@
 
         <div class="dialogHeader">
             <h:panelGrid style="width:100%;" columns="2">
-                <h:outputLabel value="#{msg['dialog.contacts.headline']}"/>
+                <h:outputLabel value="#{msg['dialog.contactDialog.headline']}"/>
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
                                onclick="$('#dialogContent\\:closeBtn').click();return false;">
                     <i class="fa fa-fw fa-times"/>
@@ -33,13 +38,14 @@
 
             <h:panelGrid columns="1" styleClass="defaultHistoTable">
 
-                <p:dataTable var="contactHolder" styleClass="defaultHistoDataTable"
+                <!-- contacts -->
+                <p:dataTable var="contactHolder" styleClass="contactDialog_DataTable"
                              id="contactDatas" scrollable="true" scrollHeight="480"
                              sortBy="#{contactHolder.item.id}"
                              value="#{contactDialog.reportIntents}">
 
                     <!-- Name -->
-                    <p:column headerText="#{msg['dialog.contacts.table.name']}"
+                    <p:column headerText="#{msg['dialog.contactDialog.data.name']}"
                               style="width: auto !important"
                               filterBy="#{contactHolder.item.person.lastName}"
                               filterMatchMode="contains">
@@ -47,80 +53,91 @@
                                 value="#{contactHolder.item.person.getFullName()}"/>
                     </p:column>
 
-                    <p:column headerText="#{msg['dialog.contacts.table.function']}"
+                    <p:column headerText="#{msg['dialog.contactDialog.data.role']}"
                               style="width:15% !important">
                         <h:outputText
                                 value="#{msg['enum.contactRole.'.concat(contactHolder.item.role)]}"/>
                     </p:column>
 
-                    <p:column headerText="#{msg['dialog.contacts.table.notification']}">
+                    <!-- status by type -->
+                    <p:column headerText="#{msg['dialog.contactDialog.data.notification']}">
+                        <p:repeat value="#{contactHolder.reportIntentByTyp}" var="intentByType" varStatus="index">
+                            <h:panelGrid styleClass="listingHistoHiddenTableContainer" columns="3" style="width:auto">
+                                <pe:switch value="#{intentByType.reportIntentNotification.notificationTyp}">
+                                    <!-- mail -->
+                                    <pe:case value="#{notificationTyp.EMAIL}">
+                                        <i class="fa fa-envelope icon-grey"/>
+                                    </pe:case>
+                                    <!-- fax -->
+                                    <pe:case value="#{notificationTyp.FAX}">
+                                        <i class="fa fa-fax icon-grey"/>
+                                    </pe:case>
+                                    <!-- letter -->
+                                    <pe:case value="#{notificationTyp.LETTER}">
+                                        <i class="fa fa-pencil-square-o icon-grey"/>
+                                    </pe:case>
+                                    <!-- phone -->
+                                    <pe:case value="#{notificationTyp.PHONE}">
+                                        <i class="fa fa-phone icon-grey"/>
+                                    </pe:case>
+                                    <!-- print -->
+                                    <pe:case value="#{notificationTyp.PRINT}">
+                                        <i class="fa fa-print icon-grey"/>
+                                    </pe:case>
+                                    <!-- default -->
+                                    <pe:defaultCase>
+                                        <i class="fa fa-question icon-grey"/>
+                                    </pe:defaultCase>
+                                </pe:switch>
 
-                        <p:dataList var="notifications"
-                                    rendered="#{contactHolder.item.notifications.size() gt 0}"
-                                    styleClass="histoDataList"
-                                    value="#{contactHolder.item.notifications}">
-                            <p:column>
-                                <ui:fragment
-                                        rendered="#{notifications.notificationTyp eq 'EMAIL'}">
-                                    <i class="fa fa-envelope icon-grey"/>
+                                <!-- name -->
+                                <h:outputText
+                                        style="margin-left: 5px"
+                                        value="#{msg['enum.notificationType.'.concat(intentByType.reportIntentNotification.notificationTyp)]}"/>
+
+                                <!-- status, only visible if a report notification was performed -->
+                                <ui:fragment rendered="#{intentByType.history}">
+                                    <i class="fa fa-fw #{intentByType.reportStatus ? 'fa-check-circle icon-green' :'fa-exclamation-triangle icon-red'}"/>
                                 </ui:fragment>
-
-                                <ui:fragment
-                                        rendered="#{notifications.notificationTyp eq 'FAX'}">
-                                    <i class="fa fa-fax icon-grey"/>
-                                </ui:fragment>
-
-                                <ui:fragment
-                                        rendered="#{notifications.notificationTyp eq 'LETTER'}">
-                                    <i class="fa fa-pencil-square-o icon-grey"/>
-                                </ui:fragment>
-
-                                <ui:fragment
-                                        rendered="#{notifications.notificationTyp eq 'PHONE'}">
-                                    <i class="fa fa-phone icon-grey"/>
-                                </ui:fragment>
-
-                                <ui:fragment
-                                        rendered="#{notifications.notificationTyp eq 'PRINT'}">
-                                    <i class="fa fa-print icon-grey"/>
-                                </ui:fragment>
-
-                                <span style="margin-left: 10px;">
-                                    <h:outputText
-                                            value="#{msg['enum.notificationType.'.concat(notifications.notificationTyp)]}"/>
-								</span>
-
-
-                            </p:column>
-                        </p:dataList>
+                            </h:panelGrid>
+                        </p:repeat>
                     </p:column>
 
                     <!-- options -->
-                    <p:column headerText="" style="width:30px !important">
+                    <p:column headerText="#{msg['dialog.contactDialog.data.options']}" style="width:50px !important">
                         <!-- edit -->
-                        <p:commandLink title="#{msg['dialog.contacts.change']}"
+                        <p:commandLink title="#{msg['dialog.contactDialog.data.edit']}"
                                        actionListener="#{dialog.contactNotificationDialog.initAndPrepareBean(contactDialog.task, contactHolder.contact)}">
-                            <i class="fa fa-wrench"/>
+                            <i class="fa fa-edit"/>
                             <p:ajax event="dialogReturn" update="@form"
                                     listener="#{contactDialog.onSubDialogReturn}"/>
                         </p:commandLink>
 
                         <!-- remove, only if no notification was performed -->
                         <p:commandLink
-                                title="#{contactHolder.deletable ? msg['dialog.contacts.remove']: msg['dialog.contacts.remove.notPossible']}"
+                                title="#{msg['dialog.contactDialog.data.remove']}"
                                 disabled="#{!contactHolder.deletable}" update="@form">
 
                             <f:actionListener
                                     binding="#{contactDialog.update()}"/>
                             <i class="fa fa-times"/>
                         </p:commandLink>
+
+                        <!-- show detailed infos -->
+                        <p:commandLink
+                                update="@form"
+                                disabled="#{!contactHolder.detailsPresent}"
+                                actionListener="#{contactHolder.toggleDetails}">
+                            <i class="fa fa-info-circle"/>
+                        </p:commandLink>
                     </p:column>
 
+                    <!-- detailed data -->
                     <p:summaryRow>
-                        <p:column colspan="4" style="text-align:right">
-                            <ui:repeat value="#{contactHolder.reportIntentStatus.diagnosisBearers}"
-                                       var="diagnosisBearer">
-                                <h:panelGrid columns="2">
+                        <p:column colspan="4" style="text-align:right" rendered="#{contactHolder.showDetails}">
+                            <p:repeat value="#{contactHolder.reportIntentStatus.diagnosisBearers}"
+                                      var="diagnosisBearer">
+                                <h:panelGrid columns="2" columnClasses="columnWidth250">
                                     <!-- diagnosis name -->
                                     <h:panelGroup>
                                         <i class="fa fa-eyedropper"/>
@@ -129,15 +146,13 @@
 
                                     <!-- notification status -->
                                     <p:dataTable value="#{diagnosisBearer.reportIntentNotificationBearers}"
+                                                 style="width: 600px"
                                                  styleClass="plainHistoTable"
                                                  var="reportIntentBearer">
-                                        <p:column>
-                                            <!-- type icon -->
-                                            <h:panelGroup>
-                                                <p:importEnum
-                                                        type="com.patho.main.model.patient.notification.NotificationTyp"
-                                                        var="notificationTyp" allSuffix="ALL_ENUM_VALUES"/>
 
+                                        <!-- type icon -->
+                                        <p:column>
+                                            <h:panelGroup>
                                                 <pe:switch value="#{reportIntentBearer.type}">
                                                     <!-- mail -->
                                                     <pe:case value="#{notificationTyp.EMAIL}">
@@ -164,52 +179,51 @@
                                                     <pe:defaultCase>
                                                         <i class="fa fa-question icon-grey"/>
                                                     </pe:defaultCase>
-
                                                 </pe:switch>
 
+                                                <!-- name -->
+                                                <h:outputText
+                                                        style="margin-left: 5px"
+                                                        value="#{msg['enum.notificationType.'.concat(reportIntentBearer.type)]}"/>
                                             </h:panelGroup>
                                         </p:column>
-                                        <p:column>
-                                            <!-- attempts -->
-                                            <h:outputFormat value="#{msg['body.receiptlog.contact.overview.attempts']}">
-                                                <f:param value="#{bearer.attempts}"/>
-                                            </h:outputFormat>
-                                        </p:column>
-                                        <p:column>
-                                            <!-- successes -->
-                                            <h:outputFormat value="#{msg['body.receiptlog.contact.overview.success']}">
-                                                <f:param value="#{bearer.successes}"/>
-                                            </h:outputFormat>
-                                        </p:column>
-                                        <p:column>
-                                            <!-- failedAttempts -->
-                                            <h:outputFormat
-                                                    value="#{msg['body.receiptlog.contact.overview.failedAttampts']}">
-                                                <f:param value="#{bearer.failedAttempts}"/>
-                                            </h:outputFormat>
-                                        </p:column>
-                                        <p:column>
-                                            <!-- performed -->
-                                            <ui:fragment rendered="#{bearer.attempts != 0}">
-                                                <h:panelGroup>
-                                                    <h:outputLabel
-                                                            value="#{msg['body.receiptlog.contact.overview.performed']}"/>
-                                                    <i class="fa fa-fw #{bearer.success ? 'fa-check-circle icon-green' :'fa-exclamation-triangle icon-red'}"
-                                                       title="#{msg['body.statiningView.idManuallyAltered']}"/>
-                                                </h:panelGroup>
-                                            </ui:fragment>
 
-                                            <ui:fragment rendered="#{notificationBearer.attempts == 0}">
+                                        <!-- attempts -->
+                                        <p:column>
+                                            <h:outputFormat value="#{msg['dialog.contactDialog.data.attempts']}">
+                                                <f:param value="#{reportIntentBearer.attempts}"/>
+                                            </h:outputFormat>
+                                        </p:column>
+
+                                        <!-- successes -->
+                                        <p:column>
+                                            <h:outputFormat value="#{msg['dialog.contactDialog.data.success']}">
+                                                <f:param value="#{reportIntentBearer.successes}"/>
+                                            </h:outputFormat>
+                                        </p:column>
+
+                                        <!-- failedAttempts -->
+                                        <p:column>
+                                            <h:outputFormat
+                                                    value="#{msg['dialog.contactDialog.data.failedAttempts']}">
+                                                <f:param value="#{reportIntentBearer.failedAttempts}"/>
+                                            </h:outputFormat>
+                                        </p:column>
+
+                                        <!-- performed -->
+                                        <p:column>
+                                            <ui:fragment rendered="#{reportIntentBearer.attempts != 0}">
                                                 <h:panelGroup>
                                                     <h:outputLabel
-                                                            value="#{msg['body.receiptlog.contact.overview.performed']}"/>
-                                                    <i class="fa fa-fw fa-minus"/>
+                                                            value="#{msg['dialog.contactDialog.data.performed']}"/>
+                                                    <i class="fa fa-fw #{reportIntentBearer.success ? 'fa-check-circle icon-green' :'fa-exclamation-triangle icon-red'}"
+                                                       title="#{reportIntentBearer.success ? msg['dialog.contactDialog.data.performedSuccess'] : msg['dialog.contactDialog.data.performedFailed'] }"/>
                                                 </h:panelGroup>
                                             </ui:fragment>
                                         </p:column>
                                     </p:dataTable>
                                 </h:panelGrid>
-                            </ui:repeat>
+                            </p:repeat>
                         </p:column>
                     </p:summaryRow>
 

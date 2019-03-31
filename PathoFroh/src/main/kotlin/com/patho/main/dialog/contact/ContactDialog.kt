@@ -6,6 +6,7 @@ import com.patho.main.common.Dialog
 import com.patho.main.dialog.task.AbstractTaskDialog
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportIntent
+import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
@@ -78,8 +79,52 @@ open class ContactDialog @Autowired constructor(
      * a flag if the report intent is deletable.
      */
     class ReportIntentSelector(val reportIntent: ReportIntent, task: Task) : UISelector<ReportIntent>(reportIntent) {
+        /**
+         * Status sorted by diagnoses
+         */
+        val reportIntentStatus = ReportIntentStatusByDiagnosis.ReportIntentBearer(reportIntent, task)
+
+        /**
+         * True if the report intent can be deleted
+         */
         var deletable: Boolean = !SpringContextBridge.services().reportIntentService.isHistoryPresent(reportIntent)
-        var reportIntentStatus = ReportIntentStatusByDiagnosis.ReportIntentBearer(reportIntent, task)
+
+        /**
+         * Toggle var for showing details
+         */
+        var showDetails = false
+
+        /**
+         * True is details ar present, for older task pre version 2.0 there aren't any details
+         */
+        val detailsPresent = reportIntentStatus.diagnosisBearers.isNotEmpty()
+
+        /**
+         * Status for the report intents sorted by type
+         */
+        val reportIntentByTyp = (reportIntent.notifications.map { p -> ReportIntentTypeStatus(p) }).sortedBy { p -> p.reportIntentNotification.notificationTyp }
+
+        /**
+         * Toggles visibility of the details
+         */
+        fun toggleDetails() {
+            showDetails = !showDetails
+        }
+
+        /**
+         * Class for a reportIntentNotification an its status
+         */
+        class ReportIntentTypeStatus(val reportIntentNotification: ReportIntentNotification) {
+            /**
+             * If true a report notification was performed
+             */
+            val isHistory = SpringContextBridge.services().reportIntentService.isHistoryPresent(reportIntentNotification)
+
+            /**
+             * Status if a notification was performed
+             */
+            val reportStatus = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportIntentNotification)
+        }
     }
 
 }

@@ -2,117 +2,132 @@
 
 
 // column width for favourite table
-.worklistSearchDilaog_FavouriteListTable{
-	.histoDataTable (true, true);
+.worklistSearchDilaog_FavouriteListTable {
+  .histoDataTable (true, true);
 
-	tr {
-		display: table;
-		
-		th:nth-child(1), td:nth-child(1) {
-			width: 40%;
-		}
-		
-		th:nth-child(2), td:nth-child(2) {
-			width: auto;
-		}
-		th:nth-child(3), td:nth-child(3) {
-			width: 55px !important;
-		}
-	}
+  tr {
+    display: table;
+
+    th:nth-child(1), td:nth-child(1) {
+      width: 40%;
+    }
+
+    th:nth-child(2), td:nth-child(2) {
+      width: auto;
+    }
+
+    th:nth-child(3), td:nth-child(3) {
+      width: 55px !important;
+    }
+  }
 }
 
 
 // column width for favourite table
-.userDialog_FavouriteListTable{
-	.histoDataTable (true, true);
+.userDialog_FavouriteListTable {
+  .histoDataTable (true, true);
 
-	tr {
-		display: table;
-		
-		th:nth-child(1), td:nth-child(1) {
-			width: 40%;
-		}
-		
-		th:nth-child(2), td:nth-child(2) {
-			width: auto;
-		}
-		th:nth-child(3), td:nth-child(3) {
-			width: 20px !important;
-		}
-	}
+  tr {
+    display: table;
+
+    th:nth-child(1), td:nth-child(1) {
+      width: 40%;
+    }
+
+    th:nth-child(2), td:nth-child(2) {
+      width: auto;
+    }
+
+    th:nth-child(3), td:nth-child(3) {
+      width: 20px !important;
+    }
+  }
 }
 
 // class for normal table with scrollable tbody
 .printDialog_AdressTable {
-	.dynamicScrollTable (false);
-	tbody {
-		height: 175px;
-	}
+  .dynamicScrollTable (false);
 
-	tr td:nth-child(1) {
-		width: 25px;
-	}
+  tbody {
+    height: 175px;
+  }
 
-	tr td:nth-child(2) {
-		width: 35px;
-	}
+  tr td:nth-child(1) {
+    width: 25px;
+  }
 
-	tr td:nth-child(3) {
-		width: 80px;
-	}
+  tr td:nth-child(2) {
+    width: 35px;
+  }
 
-	tr td:nth-child(4) {
-		width: auto;
-	}
+  tr td:nth-child(3) {
+    width: 80px;
+  }
 
-	tr td:nth-child(5) {
-		width: 15px;
-	}
+  tr td:nth-child(4) {
+    width: auto;
+  }
+
+  tr td:nth-child(5) {
+    width: 15px;
+  }
 }
 
 .worklistSearchDialog_FavouriteSearchTable {
-	.histoDataTable (true);
-	width: 98%;
+  .histoDataTable (true);
+  width: 98%;
 
-	tr td:nth-child(1), th:nth-child(1){
-		width: 30% !important;
-	}
+  tr td:nth-child(1), th:nth-child(1) {
+    width: 30% !important;
+  }
 
-	tr td:nth-child(2), th:nth-child(2) {
-		width: auto !important;
-	}
-	
-	tr td:nth-child(3), th:nth-child(3) {
-		width: 3% !important;
-	}
+  tr td:nth-child(2), th:nth-child(2) {
+    width: auto !important;
+  }
+
+  tr td:nth-child(3), th:nth-child(3) {
+    width: 3% !important;
+  }
 }
 
-.addSlide_StainingTable{
-	.histoDataTable (true, false);
-	
-	div.ui-datatable-scrollable-header{
-		display: none;	
-	}
-	
+// data table in the contact dialog with all columns colored in
+// alternate row background color
+.contactDialog_DataTable {
+  .histoDataTable (false);
+
+  tr.ui-datatable-even, tr.ui-datatable-odd {
+    > td {
+      background-color: @alternate_row_background_color;
+    }
+  }
+}
+
+.addSlide_StainingTable {
+  .histoDataTable (true, false);
+
+  div.ui-datatable-scrollable-header {
+    display: none;
+  }
+
 }
 
 // class for mergeDialog task picklist
-.mergePatientPicklist{
-	
-	.ui-picklist-source{
-		width: 400px !important;
-	}
-	
-	.ui-picklist-target{
-		width: 400px !important;
-	}
+.mergePatientPicklist {
+
+  .ui-picklist-source {
+    width: 400px !important;
+  }
+
+  .ui-picklist-target {
+    width: 400px !important;
+  }
 }
 
 // tooltip with for navigation tree in the pdfOrganizer dialog
-body.pdfOrganizer, body.councilDialog{
-	.ui-tooltip, .qtip-content {
-		width: 500px;
-	}
+body.pdfOrganizer, body.councilDialog {
+  .ui-tooltip, .qtip-content {
+    width: 500px;
+  }
 }
 
 

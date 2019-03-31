@@ -361,12 +361,19 @@ body {
   }
 }
 
+// plain datatable without row highlighting etc.
 .plainHistoTable {
   // header of the table
   .ui-datatable-header {
     background: transparent !important;
     text-align: left !important;
     border: none !important;
+  }
+
+  tr.ui-datatable-even, tr.ui-datatable-odd {
+    > td {
+      background-color: transparent !important;
+    }
   }
 }
 
