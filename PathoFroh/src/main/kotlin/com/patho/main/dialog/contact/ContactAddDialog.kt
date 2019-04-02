@@ -2,9 +2,13 @@ package com.patho.main.dialog.contact
 
 import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
+import com.patho.main.common.SortOrder
 import com.patho.main.dialog.task.AbstractTaskDialog
+import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
+import com.patho.main.repository.PhysicianRepository
 import com.patho.main.ui.selectors.PhysicianSelector
+import com.patho.main.util.dialogReturn.DialogReturnEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Component
 @Component()
 @Scope(value = "session")
 open class ContactAddDialog @Autowired constructor(
+        private val physicianRepository: PhysicianRepository
 ) : AbstractTaskDialog() {
 
     /**
@@ -60,10 +65,8 @@ open class ContactAddDialog @Autowired constructor(
     override fun initBean(task: Task): Boolean {
         selectAbleRoles = ContactRole.values()
         showRoles = ContactRole.values()
-        reportIntents = task.contacts.map { p -> ContactDialog.ReportIntentSelector(p, task) }
-        return super.initBean(task, Dialog.CONTACTS)
 
-        super.initBean(task, Dialog.CONTACTS_SELECT)
+        return super.initBean(task, Dialog.CONTACTS_SELECT)
     }
 
     open fun _setSelectAbleRoles(roles: Array<ContactRole>): ContactAddDialog {
@@ -100,4 +103,42 @@ open class ContactAddDialog @Autowired constructor(
         this.autoRoleSelection = autoRoleSelection
         return this
     }
+
+    /**
+     * Updates the contacts of a task.
+     */
+    override fun update() {
+        contactList = physicianRepository.findSelectorsByRole(getTask(), showRoles, SortOrder.PRIORITY);
+    }
+
+    /**
+     * If autoRoleSelection is disabled the addContactRole will be returned. If autoRoleSelection
+     * is enabled the addableRoles will be check against the physician roles. The first matching
+     * role will be returned.
+     */
+    private fun getDynamicRoleForContact(physician: Physician): ContactRole {
+        if (autoRoleSelection) {
+            val first = addableRoles.firstOrNull { p -> physician.associatedRoles.contains(p) }
+
+            return first ?: ContactRole.OTHER_PHYSICIAN
+        }
+
+        return addContactAsRole
+    }
+
+    fun selectAndHide() {
+        if (selectedContact != null)
+            super.hideDialog(SelectPhysicianReturnEvent(selectedContact?.physician
+                    ?: Physician(), getDynamicRoleForContact(selectedContact?.physician
+                    ?: Physician())))
+        else
+            super.hideDialog()
+
+    }
+
+    /**
+     * Return event object of this dialog
+     */
+    class SelectPhysicianReturnEvent(val physician: Physician, val role: ContactRole) : DialogReturnEvent
+
 }
