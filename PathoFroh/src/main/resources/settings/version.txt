@@ -604,7 +604,7 @@ alter table person_aud drop column tmp;
 
 /* adding active field*/
 alter table reportintent add active boolean;
-update  reportintent set active = false
+update  reportintent set active = false;
 
 /* View For task display*/
 CREATE OR REPLACE VIEW taskoverview AS
