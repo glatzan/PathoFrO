@@ -7,19 +7,19 @@ import com.patho.main.model.user.HistoPermissions
 import com.patho.main.service.impl.SpringContextBridge
 import org.slf4j.LoggerFactory
 
-open class TaskStatus(task: Task) {
+open class TaskStatus {
 
     protected val logger = LoggerFactory.getLogger(this.javaClass)
 
     /**
      * Task
      */
-    var task: Task = task
+    var task: Task
 
     /**
      * Static status of favourite lists
      */
-    var listStatus: ListStatus = ListStatus(task)
+    var listStatus: ListStatus
 
     /**
      * Returns true if task is finalized
@@ -45,6 +45,11 @@ open class TaskStatus(task: Task) {
      * True if task is active
      */
     var active: Boolean = false
+
+    constructor(task: Task) {
+        this.task = task
+        listStatus = ListStatus(task)
+    }
 
     val isTaskEditable: Boolean
         get() {

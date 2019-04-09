@@ -148,6 +148,7 @@ public abstract class AbstractDialog {
      * @param event
      */
     public void onSubDialogReturn(SelectEvent event) {
+        logger.debug("Default Dialog return function object: {}",event.getObject() != null ? event.getObject().getClass() : "empty");
         if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
             update(true);
         }

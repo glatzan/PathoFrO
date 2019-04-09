@@ -50,7 +50,7 @@
                               filterBy="#{contactHolder.item.person.lastName}"
                               filterMatchMode="contains">
                         <h:outputText
-                                value="#{contactHolder.item.person.getFullName()}"/>
+                                value="#{contactHolder.item.person.getFullName()}  #{contactHolder.id} s"/>
                     </p:column>
 
                     <p:column headerText="#{msg['dialog.contactDialog.data.role']}"
@@ -116,16 +116,15 @@
                         <!-- remove, only if no notification was performed -->
                         <p:commandLink
                                 title="#{msg['dialog.contactDialog.data.remove']}"
-                                disabled="#{!contactHolder.deletable}" update="@form">
-
-                            <f:actionListener
-                                    binding="#{contactDialog.update()}"/>
+                                disabled="#{!contactHolder.deletable}" update="@form"
+                                actionListener="#{contactDialog.removeContact(contactHolder.reportIntent)}">
                             <i class="fa fa-times"/>
                         </p:commandLink>
 
                         <!-- show detailed infos -->
                         <p:commandLink
                                 update="@form"
+                                title="#{msg['dialog.contactDialog.data.info']}"
                                 disabled="#{!contactHolder.detailsPresent}"
                                 actionListener="#{contactHolder.toggleDetails}">
                             <i class="fa fa-info-circle"/>

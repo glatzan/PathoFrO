@@ -13,6 +13,7 @@ import com.patho.main.model.person.Person
 import com.patho.main.repository.AssociatedContactNotificationRepository
 import com.patho.main.repository.AssociatedContactRepository
 import com.patho.main.repository.TaskRepository
+import com.patho.main.util.exception.DuplicatedReportIntentException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -48,7 +49,7 @@ open class ReportIntentService @Autowired constructor(
 
         // checks if a report intent with the same person is present
         if (task.contacts.contains(reportIntent))
-            throw IllegalArgumentException("Already in list")
+            throw DuplicatedReportIntentException()
 
         task.contacts.add(reportIntent)
         reportIntent.task = task

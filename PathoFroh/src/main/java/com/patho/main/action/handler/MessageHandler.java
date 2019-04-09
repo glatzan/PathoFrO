@@ -3,6 +3,7 @@ package com.patho.main.action.handler;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import com.patho.main.util.exception.DialogException;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.Constants;
 import org.slf4j.Logger;
@@ -43,6 +44,10 @@ public class MessageHandler {
 
 	public static void sendGrowlMessagesAsResource(CustomUserNotificationExcepetion e) {
 		sendGrowlMessagesAsResource(e.getHeadline(), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+	}
+
+	public static void sendGrowlMessagesAsResource(DialogException e) {
+		sendGrowlMessagesAsResource(e.getGuiHeadline(), e.getGuiText(), FacesMessage.SEVERITY_ERROR);
 	}
 
 	public static void sendGrowlMessagesAsResource(String headline) {

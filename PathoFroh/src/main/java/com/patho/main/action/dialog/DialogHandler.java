@@ -20,7 +20,6 @@ import com.patho.main.action.dialog.miscellaneous.ConfirmDialog;
 import com.patho.main.action.dialog.miscellaneous.DeleteDialog;
 import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
-import com.patho.main.action.dialog.notification.ContactSelectDialog;
 import com.patho.main.action.dialog.notification.NotificationDialog;
 import com.patho.main.action.dialog.patient.DeletePatientDialog;
 import com.patho.main.action.dialog.patient.EditPatientDialog;
@@ -86,7 +85,6 @@ public class DialogHandler {
 	private ChangeTaskIDDialog changeTaskIDDialog = new ChangeTaskIDDialog();
 	private AccountingDataDialog accountingDataDialog = new AccountingDataDialog();
 	private ContactDialog contactDialog = new ContactDialog();
-	private ContactSelectDialog contactSelectDialog = new ContactSelectDialog();
 	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
 	private CopyHistologicalRecordDialog copyHistologicalRecordDialog = new CopyHistologicalRecordDialog();
 	private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();

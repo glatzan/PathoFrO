@@ -1,21 +1,16 @@
 package com.patho.main.ui.selectors;
 
+import com.patho.main.common.ContactRole;
+import com.patho.main.model.Physician;
+import com.patho.main.model.patient.Task;
+import com.patho.main.model.patient.notification.ReportIntent;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import com.patho.main.common.ContactRole;
-import com.patho.main.model.Physician;
-import com.patho.main.model.patient.Task;
-
-import com.patho.main.model.patient.notification.ReportIntent;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class PhysicianSelector implements Serializable {
 
 	private static final long serialVersionUID = -3843101038957964232L;
@@ -80,4 +75,43 @@ public class PhysicianSelector implements Serializable {
 		return resultList;
 	}
 
+	public int getId() {
+		return this.id;
+	}
+
+	public Physician getPhysician() {
+		return this.physician;
+	}
+
+	public List<ContactRole> getAssociatedRoles() {
+		return this.associatedRoles;
+	}
+
+	public boolean isContactOfTask() {
+		return this.contactOfTask;
+	}
+
+	public AssociatedContactSelector getContactSelector() {
+		return this.contactSelector;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setPhysician(Physician physician) {
+		this.physician = physician;
+	}
+
+	public void setAssociatedRoles(List<ContactRole> associatedRoles) {
+		this.associatedRoles = associatedRoles;
+	}
+
+	public void setContactOfTask(boolean contactOfTask) {
+		this.contactOfTask = contactOfTask;
+	}
+
+	public void setContactSelector(AssociatedContactSelector contactSelector) {
+		this.contactSelector = contactSelector;
+	}
 }

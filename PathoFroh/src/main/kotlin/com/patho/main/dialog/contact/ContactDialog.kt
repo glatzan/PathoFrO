@@ -1,16 +1,19 @@
 package com.patho.main.dialog.contact
 
-import com.patho.main.action.dialog.notification.ContactSelectDialog
+import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.task.AbstractTaskDialog
+import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.repository.TaskRepository
+import com.patho.main.service.PhysicianService
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.dialogReturn.ReloadEvent
+import com.patho.main.util.exception.DuplicatedReportIntentException
 import com.patho.main.util.status.ReportIntentStatusByDiagnosis
 import com.patho.main.util.task.TaskNotFoundException
 import com.patho.main.util.ui.selector.UISelector
@@ -23,7 +26,9 @@ import org.springframework.stereotype.Component
 @Scope(value = "session")
 open class ContactDialog @Autowired constructor(
         private val taskRepository: TaskRepository,
-        private val reportIntentService: ReportIntentService) :
+        private val reportIntentService: ReportIntentService,
+        private val physicianService: PhysicianService,
+        private val contactAddDialog: ContactAddDialog) :
         AbstractTaskDialog() {
 
     open var showRole = arrayOf<ContactRole>()
@@ -31,42 +36,49 @@ open class ContactDialog @Autowired constructor(
     open var reportIntents = listOf<ReportIntentSelector>()
 
     override fun initBean(task: Task): Boolean {
+        val suc = super.initBean(task, Dialog.CONTACTS)
         selectAbleRoles = ContactRole.values()
         showRole = ContactRole.values()
-        reportIntents = task.contacts.map { p -> ReportIntentSelector(p, task) }
-        return super.initBean(task, Dialog.CONTACTS)
+        update(true)
+        return suc
     }
 
     override fun update(reload: Boolean) {
-        super.update()
 
         if (reload) {
             var optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, false, false, false, true, true)
             if (!optionalTask.isPresent)
                 throw TaskNotFoundException()
+
+            task = optionalTask.get()
         }
 
-        reportIntents = task.contacts.map { p -> ReportIntentSelector(p, task) }
+        reportIntents = task.contacts.mapIndexed { index, p -> ReportIntentSelector(p, task, index.toLong()) }
     }
 
     open fun removeContact(reportIntent: ReportIntent) {
         reportIntentService.removeReportIntent(task, reportIntent)
         update(true)
+        MessageHandler.sendGrowlMessagesAsResource("growl.contact.removed.headline", "growl.contact.removed.success", arrayOf(reportIntent.person?.getFullName()))
+
     }
 
     open fun openNewContactDialog() {
-
+        contactAddDialog.initAndPrepareBean(task, manuallySelectRole = true, addContactAsRole = ContactRole.OTHER_PHYSICIAN)
     }
 
     /**
      *
      */
     override fun onSubDialogReturn(event: SelectEvent) {
-        if (event.`object`?.javaClass is ContactSelectDialog.SelectPhysicianReturnEvent) {
-
+        if (event.`object` is ContactAddDialog.SelectPhysicianReturnEvent) {
+            logger.debug("Return from contactAddDialog, reloading!")
+            val tmp = (event.`object` as ContactAddDialog.SelectPhysicianReturnEvent)
+            addPhysician(tmp.physician, tmp.role)
             update(true)
             return;
         }
+
         super.onSubDialogReturn(event)
     }
 
@@ -74,11 +86,23 @@ open class ContactDialog @Autowired constructor(
         super.hideDialog(ReloadEvent())
     }
 
+    private fun addPhysician(physician: Physician, role: ContactRole) {
+        try {
+            // adding physician
+            reportIntentService.addReportIntent(task, physician.person, role, true, true)
+            // increment counter
+            physicianService.incrementPhysicianPriorityCounter(physician.person)
+        } catch (e: DuplicatedReportIntentException) {
+            logger.debug("Duplicated ReportIntent")
+            MessageHandler.sendGrowlMessagesAsResource(e)
+        }
+    }
+
     /**
      * Class for selecting the report intent. This class also contains a report intent status and
      * a flag if the report intent is deletable.
      */
-    class ReportIntentSelector(val reportIntent: ReportIntent, task: Task) : UISelector<ReportIntent>(reportIntent) {
+    class ReportIntentSelector(val reportIntent: ReportIntent, task: Task, override var id: Long) : UISelector<ReportIntent>(reportIntent) {
         /**
          * Status sorted by diagnoses
          */

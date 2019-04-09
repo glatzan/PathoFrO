@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -217,5 +218,9 @@ public class PhysicianService extends AbstractService {
         }
 
         return null;
+    }
+
+    public static boolean hasRole(Physician physician, List<ContactRole> roles) {
+        return physician.getAssociatedRoles().stream().anyMatch(p -> roles.contains(p));
     }
 }

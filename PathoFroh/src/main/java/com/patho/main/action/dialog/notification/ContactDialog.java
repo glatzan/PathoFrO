@@ -2,7 +2,6 @@ package com.patho.main.action.dialog.notification;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.action.dialog.notification.ContactSelectDialog.SelectPhysicianReturnEvent;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -112,8 +111,8 @@ public class ContactDialog extends AbstractDialog {
      * Opens the add contact dialog
      */
     public void openAddContactDialog() {
-        dialogHandler.getContactSelectDialog().initAndPrepareBean(task, ContactRole.values(), ContactRole.values(),
-                ContactRole.values(), ContactRole.OTHER_PHYSICIAN).setManuallySelectRole(true);
+//        dialogHandler.getContactSelectDialog().initAndPrepareBean(task, ContactRole.values(), ContactRole.values(),
+//                ContactRole.values(), ContactRole.OTHER_PHYSICIAN).setManuallySelectRole(true);
     }
 
     public void removeContact(Task task, ReportIntent reportIntent) {
@@ -145,15 +144,15 @@ public class ContactDialog extends AbstractDialog {
      * @param event
      */
     public void onDefaultDialogReturn(SelectEvent event) {
-        if (event.getObject() != null) {
-            if (event.getObject() instanceof ReloadEvent) {
-                update(true);
-            } else if (event.getObject() instanceof SelectPhysicianReturnEvent) {
-                addPhysicianWithRole(((SelectPhysicianReturnEvent) event.getObject()).getPhysician(),
-                        ((SelectPhysicianReturnEvent) event.getObject()).getRole());
-                update(true);
-            }
-        }
+//        if (event.getObject() != null) {
+//            if (event.getObject() instanceof ReloadEvent) {
+//                update(true);
+//            } else if (event.getObject() instanceof SelectPhysicianReturnEvent) {
+//                addPhysicianWithRole(((SelectPhysicianReturnEvent) event.getObject()).getPhysician(),
+//                        ((SelectPhysicianReturnEvent) event.getObject()).getRole());
+//                update(true);
+//            }
+//        }
     }
 
     @Override

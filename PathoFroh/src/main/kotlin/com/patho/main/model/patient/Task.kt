@@ -9,7 +9,6 @@ import com.patho.main.model.PDFContainer
 import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.interfaces.DataList
-import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.patient.miscellaneous.Council
 import com.patho.main.model.patient.notification.ReportIntent
@@ -242,16 +241,18 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
      * Contains static list entries for the gui, improves reload speed
      */
     @Transient
-    open var taskStatus: TaskStatus = TaskStatus(this)
+    open lateinit var taskStatus: TaskStatus
 
     constructor() {}
 
     constructor(id: Long) {
         this.id = id
+        taskStatus = TaskStatus(this)
     }
 
     constructor(parent: Patient) {
         this.parent = parent
+        taskStatus = TaskStatus(this)
     }
 
     /**
@@ -302,6 +303,10 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
     @Transient
     fun generateTaskStatus(): TaskStatus {
         logger.debug("Generating taskstatus for " + taskID + " " + hashCode())
+        if(!::taskStatus.isInitialized){
+            taskStatus = TaskStatus(this)
+        }
+
         return taskStatus.generateStatus()
     }
 
