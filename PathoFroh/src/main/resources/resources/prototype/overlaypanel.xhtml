@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<h:head>
+</h:head>
+
+<h:body>
+
+    <!-- set widgetvar and id = xxxxxx -->
+
+    <p:overlayPanel widgetVar="xxxxxx" hideEvent="null" showEvent="null"
+                    dismissable="false" id="xxxxxx" styleClass="histoOverlayPanel">
+    </p:overlayPanel>
+
+
+    <script type="text/javascript">
+        // global hide by click on the outer regions of the overplay panel
+        commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('contactInfoOverlayPanel')
+
+        // shown overlay panel on mouse over
+        commonFunctions.addShowDialogOnMouseEnter(".contactInfoOverplayTrigger", "contactInfoOverlayPanel")
+    </script>
+
+    <!-- 1. styleClass="contactInfoOverplayTrigger" if show on mouse enter -->
+    <!-- 2. actionListener="#{receiptLogView.setSelectedReportIntentStatus(reportIntent)}" setting current data that is displayed in the dialog -->
+    <!-- 3. update="contentForm:contactInfoOverlayPanel" update the dialog -->
+    <!-- 4. oncomplete="commonFunctions.showOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}');" show the overlay panel-->
+    <p:commandLink
+            styleClass="contactInfoOverplayTrigger"
+            icon="pi pi-search"
+            actionListener="#{receiptLogView.setSelectedReportIntentStatus(reportIntent)}"
+            partialSubmit="true"
+            process="@this"
+            update="contentForm:contactInfoOverlayPanel"
+            oncomplete="commonFunctions.showOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}');">
+        <i class="fa fa-info-circle"/>
+    </p:commandLink>
+
+
+</h:body>
+</html>

@@ -6,8 +6,10 @@ import com.patho.main.common.Dialog
 import com.patho.main.dialog.task.AbstractTaskDialog
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
+import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
+import com.patho.main.repository.AssociatedContactRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.PhysicianService
 import com.patho.main.service.ReportIntentService
@@ -28,12 +30,17 @@ open class ContactDialog @Autowired constructor(
         private val taskRepository: TaskRepository,
         private val reportIntentService: ReportIntentService,
         private val physicianService: PhysicianService,
-        private val contactAddDialog: ContactAddDialog) :
+        private val contactAddDialog: ContactAddDialog,
+        private val associatedContactRepository: AssociatedContactRepository) :
         AbstractTaskDialog() {
 
     open var showRole = arrayOf<ContactRole>()
     open var selectAbleRoles = arrayOf<ContactRole>()
     open var reportIntents = listOf<ReportIntentSelector>()
+
+    open var selectedReportIntent: ReportIntentSelector? = null
+
+    open var selectableRoles = ContactRole.values()
 
     override fun initBean(task: Task): Boolean {
         val suc = super.initBean(task, Dialog.CONTACTS)
@@ -65,6 +72,27 @@ open class ContactDialog @Autowired constructor(
 
     open fun openNewContactDialog() {
         contactAddDialog.initAndPrepareBean(task, manuallySelectRole = true, addContactAsRole = ContactRole.OTHER_PHYSICIAN)
+    }
+
+    open fun onRoleChange() {
+        val reportIntent = selectedReportIntent?.reportIntent
+        if (reportIntent != null) {
+            associatedContactRepository.save(reportIntent,
+                    resourceBundle.get("log.contact.roleChange", reportIntent.task, reportIntent.person?.getFullName(), reportIntent.role),
+                    reportIntent.task?.patient)
+            update(true)
+        }
+    }
+
+    open fun addReportIntentType(reportIntent: ReportIntent, notificationTyp: NotificationTyp) {
+
+        val reportIntent = selectedReportIntent?.reportIntent
+        val task = reportIntent?.task
+
+        if (reportIntent != null && task != null) {
+            reportIntentService.addReportIntentNotification(task, reportIntent, notificationTyp, save = true)
+            update(true)
+        }
     }
 
     /**
@@ -129,6 +157,15 @@ open class ContactDialog @Autowired constructor(
         val reportIntentByTyp = (reportIntent.notifications.map { p -> ReportIntentTypeStatus(p) }).sortedBy { p -> p.reportIntentNotification.notificationTyp }
 
         /**
+         * Status for  buttons in overlay panel
+         */
+        val buttonStatus = listOf<ReportIntentGuiButtonStatus>(
+                ReportIntentGuiButtonStatus(reportIntentByTyp.firstOrNull { p -> p.reportIntentNotification.notificationTyp == NotificationTyp.EMAIL }, NotificationTyp.EMAIL),
+                ReportIntentGuiButtonStatus(reportIntentByTyp.firstOrNull { p -> p.reportIntentNotification.notificationTyp == NotificationTyp.LETTER }, NotificationTyp.LETTER),
+                ReportIntentGuiButtonStatus(reportIntentByTyp.firstOrNull { p -> p.reportIntentNotification.notificationTyp == NotificationTyp.FAX }, NotificationTyp.FAX),
+                ReportIntentGuiButtonStatus(reportIntentByTyp.firstOrNull { p -> p.reportIntentNotification.notificationTyp == NotificationTyp.PHONE }, NotificationTyp.PHONE))
+
+        /**
          * Toggles visibility of the details
          */
         fun toggleDetails() {
@@ -148,6 +185,41 @@ open class ContactDialog @Autowired constructor(
              * Status if a notification was performed
              */
             val reportStatus = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportIntentNotification)
+        }
+
+        /**
+         * Class for rendering editing options in the gui for an notification type
+         */
+        class ReportIntentGuiButtonStatus(val reportIntentTypeStatus: ReportIntentTypeStatus?, val notificationTyp: NotificationTyp) {
+            private val isPresent = reportIntentTypeStatus != null
+            private val isHistory = reportIntentTypeStatus?.isHistory ?: false
+
+            val isActive = reportIntentTypeStatus?.reportIntentNotification?.active ?: false
+
+            /**
+             * True if add button should be rendered
+             */
+            val renderAddButton
+                get() = !isPresent
+
+            /**
+             * True if remove button should be rendered
+             */
+            val renderRemoveButton
+                get() = isPresent && !isHistory
+
+            /**
+             * True if enable button should be rendered
+             */
+            val renderEnableButton
+                get() = isPresent && !isActive && isHistory
+
+            /**
+             * True if disable button should be rendered
+             */
+            val renderDisableButton
+                get() = isPresent && isActive && isHistory
+
         }
     }
 

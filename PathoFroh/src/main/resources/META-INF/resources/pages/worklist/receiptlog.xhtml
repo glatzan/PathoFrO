@@ -421,7 +421,7 @@
                                     partialSubmit="true"
                                     process="@this"
                                     update="contentForm:contactInfoOverlayPanel"
-                                    oncomplete="commonFunctions.showAndUpdateOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}' ,null, null, null, null);">
+                                    oncomplete="commonFunctions.showOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}');">
                                 <i class="fa fa-info-circle"/>
                             </p:commandLink>
                         </p:column>
@@ -465,18 +465,8 @@
                     </p:dataTable>
 
                     <script type="text/javascript">
-                        commonFunctions.addHideOverlayPanelOnMouseClickHandler('contactInfoOverlayPanel')
-
-                        var tmpSel = $(".contactInfoOverplayTrigger")
-
-                        tmpSel.mouseenter(function () {
-                            this.click();
-                        })
-
-                        tmpSel.mouseleave(function () {
-                            commonFunctions.hideOverlayPanel('contactInfoOverlayPanel')
-                        })
-
+                        commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('contactInfoOverlayPanel')
+                        commonFunctions.addShowDialogOnMouseEnter(".contactInfoOverplayTrigger", "contactInfoOverlayPanel")
                     </script>
 
                     <!-- overlay for contact notifications -->
@@ -496,7 +486,8 @@
                                            var="notificationBearer">
 
                                     <h:panelGrid columns="5" styleClass="defaultHistoHiddenTableContainer"
-                                                 style="width:98% !important;margin-left: 10px" columnClasses="columnWidth25,columnWidth75,columnWidth75,columnWidth75,">
+                                                 style="width:98% !important;margin-left: 10px"
+                                                 columnClasses="columnWidth25,columnWidth75,columnWidth75,columnWidth75,">
 
                                         <!-- type icon -->
                                         <h:panelGroup>
@@ -912,7 +903,7 @@
             </p:dataTable>
 
             <script type="text/javascript">
-                commonFunctions.addHideOverlayPanelOnMouseClickHandler('idInputPannel')
+                commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('idInputPannel')
             </script>
 
             <!-- overlaypannel for editing sample/block/slide name -->

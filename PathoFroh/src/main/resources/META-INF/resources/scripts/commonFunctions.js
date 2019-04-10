@@ -195,7 +195,7 @@ var commonFunctions = {
                 PF(dataTable).unselectAllRows();
             }
 
-            if (data != null) {
+            if (focusElementID != null) {
                 var data = focusElementID;
 
                 if (data === parseInt(data, 10)) {
@@ -232,6 +232,30 @@ var commonFunctions = {
     },
 
     /**
+     *  Shows
+     * @param panelID
+     *      ID and widget var of the overlay panel
+     * @param parentID
+     *      ID of the element the overlay panel should be aligned with
+     * @resetContentFunction
+     *      Javascript function which is called on dialog open
+     */
+    showOverlayPanel: function (panelID, parentID, resetContentFunction = null) {
+
+        // only work if panel is not visible
+        // if (!PF(panelID).jq.hasClass("ui-overlay-visible")) {
+        if (!PF(panelID).isVisible()) {
+
+            PF(panelID).show(parentID);
+
+            if (resetContentFunction != null) {
+                // reset values in backend bean
+                resetContentFunction();
+            }
+        }
+    },
+
+    /**
      * Hides an overlayPanel
      * @param overlayPanelID
      */
@@ -243,10 +267,14 @@ var commonFunctions = {
     /**
      *  Removes the mousedown handler from the p:overlaypanel. Adds a new handler
      *  that will close the overplay panel if it was not target of the mouse click.
-     *  The id and widgetVar of the p:overlaypanel has to be the same.
-     * @param overlayPanelID
+     *  If the overlay panel should jump between to call entities the enmities have to contain the
+     *  css class "doNotHideOverlay_js_Class"
+     *  @param overlayPanelID
+     *      ID and widget var of the overly panel
+     *  @doNotHideOnOverlayPanelClick
+     *      If true the overlay panel will not be closed by clicking on a child of it
      */
-    addHideOverlayPanelOnMouseClickHandler: function (overlayPanelID) {
+    addGlobalHideOverlayPanelOnMouseClickHandler: function (overlayPanelID, doNotHideOnOverlayPanelClick = false) {
         //var hideNS = 'mousedown.idInputPannel';
         var hideNS = 'mousedown.' + overlayPanelID;
 
@@ -276,12 +304,21 @@ var commonFunctions = {
                     // check if pannel is visivle
                     if (PF(overlayPanelID).isVisible()) {
                         // check if on link is click that should show the overlay
-                        if (!$(e.target).hasClass(
+                        if ($(e.target).hasClass(
                             "doNotHideOverlay_js_Class")) {
-                            // hide
+                            return;
+                        } else if (doNotHideOnOverlayPanelClick) {
+                            var test = $(e.target);
+                            var i = 0;
+                            do {
+                                if (test.get(0).id == PF(overlayPanelID).id) {
+                                    return;
+                                }
+                            } while ((test = test.parent()).length != 0 && i++ < 40)
                             PF(overlayPanelID).hide();
-                        } else {
 
+                        } else {
+                            PF(overlayPanelID).hide();
                         }
                     }
                 });
@@ -294,5 +331,23 @@ var commonFunctions = {
             .on(hideNS, function (e) {
                 handlerFunction();
             });
+    },
+
+    /**
+     * This will alter an element to show an overlay panel on mouse enter.
+     * On mouse out the panel will be closed.
+     * @param classID
+     * @param overlayPanelID
+     */
+    addShowDialogOnMouseEnter(classID, overlayPanelID) {
+        var tmpSel = $(classID)
+
+        tmpSel.mouseenter(function () {
+            this.click();
+        })
+
+        tmpSel.mouseleave(function () {
+            commonFunctions.hideOverlayPanel(overlayPanelID)
+        })
     }
 }

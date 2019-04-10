@@ -4,7 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 
 <!-- importing enum for switch -->
@@ -107,10 +107,13 @@
                     <p:column headerText="#{msg['dialog.contactDialog.data.options']}" style="width:50px !important">
                         <!-- edit -->
                         <p:commandLink title="#{msg['dialog.contactDialog.data.edit']}"
-                                       actionListener="#{dialog.contactNotificationDialog.initAndPrepareBean(contactDialog.task, contactHolder.contact)}">
+                                       styleClass="editOverplayTrigger"
+                                       actionListener="#{contactDialog.setSelectedReportIntent(contactHolder)}"
+                                       partialSubmit="true"
+                                       process="@this"
+                                       update="dialogContent:editOverlayPanel"
+                                       oncomplete="commonFunctions.showOverlayPanel('editOverlayPanel', '#{component.clientId}');">
                             <i class="fa fa-edit"/>
-                            <p:ajax event="dialogReturn" update="@form"
-                                    listener="#{contactDialog.onSubDialogReturn}"/>
                         </p:commandLink>
 
                         <!-- remove, only if no notification was performed -->
@@ -228,7 +231,83 @@
 
 
                 </p:dataTable>
+                <!-- overlay for contact notifications -->
+                <p:overlayPanel widgetVar="editOverlayPanel" hideEvent="null" showEvent="null"
+                                dismissable="false" id="editOverlayPanel" styleClass="histoOverlayPanel">
 
+                    <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                        <h:outputLabel value="Benachrichtigung"/>
+                        <h:panelGrid columns="2" styleClass="defaultHistoTable">
+
+                            <c:forEach var="buttonStatus" items="#{contactDialog.selectedReportIntent.buttonStatus}">
+
+                                <h:panelGroup>
+                                    <pe:switch value="#{buttonStatus.notificationTyp}">
+                                        <!-- mail -->
+                                        <pe:case value="#{notificationTyp.EMAIL}">
+                                            <i class="fa fa-envelope icon-grey"/>
+                                            <h:outputFormat value="Email{0}: ">
+                                                <f:param value="#{buttonStatus.active ? ' (aktiv)' : ''} "/>
+                                            </h:outputFormat>
+                                        </pe:case>
+                                        <!-- fax -->
+
+                                        <pe:case value="#{notificationTyp.FAX}">
+                                            <i class="fa fa-fax icon-grey"/>
+                                            <h:outputFormat value="Fax{0}: ">
+                                                <f:param value="#{buttonStatus.active ? ' (aktiv)' : ''} "/>
+                                            </h:outputFormat>
+                                        </pe:case>
+                                        <!-- letter -->
+                                        <pe:case value="#{notificationTyp.LETTER}">
+                                            <i class="fa fa-pencil-square-o icon-grey"/>
+                                            <h:outputFormat value="Biref{0}: ">
+                                                <f:param value="#{buttonStatus.active ? ' (aktiv)' : ''} "/>
+                                            </h:outputFormat>
+                                        </pe:case>
+                                        <!-- phone -->
+                                        <pe:case value="#{notificationTyp.PHONE}">
+                                            <i class="fa fa-phone icon-grey"/>
+                                            <h:outputFormat value="Telefon{0}: ">
+                                                <f:param value="#{buttonStatus.active ? ' (aktiv)' : ''} "/>
+                                            </h:outputFormat>
+                                        </pe:case>
+                                    </pe:switch>
+                                </h:panelGroup>
+
+                                <p:commandLink rendered="#{buttonStatus.renderAddButton and contactDialog.selectedReportIntent ne null}"
+                                               oncomplete="commonFunctions.hideOverlayPanel('editOverlayPanel')"
+                                               update="@form"
+                                               actionListener="#{contactDialog.addReportIntentType(contactDialog.selectedReportIntent.reportIntent,notificationTyp.EMAIL)}"
+                                               value="Hinzufügen"/>
+                                <p:commandLink rendered="#{buttonStatus.renderRemoveButton}"
+                                               value="Entfernen"/>
+                                <p:commandLink rendered="#{buttonStatus.renderEnableButton}"
+                                               value="Aktivieren"/>
+                                <p:commandLink rendered="#{buttonStatus.renderDisableButton}"
+                                               value="Deaktivieren"/>
+                            </c:forEach>
+                        </h:panelGrid>
+
+                        <h:outputLabel value="Rolle"/>
+
+                        <p:selectOneMenu rendered="#{contactDialog.selectedReportIntent ne null}"
+                                         value="#{contactDialog.selectedReportIntent.reportIntent.role}">
+                            <f:selectItems
+                                    value="#{contactDialog.selectableRoles}"
+                                    var="role" itemLabel="#{msg['enum.contactRole.'.concat(role)]}"
+                                    itemValue="#{role}"/>
+
+                            <p:ajax event="change" oncomplete="commonFunctions.hideOverlayPanel('editOverlayPanel')"
+                                    update="@form"
+                                    listener="#{contactDialog.onRoleChange()}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </p:overlayPanel>
+
+                <script type="text/javascript">
+                    commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('editOverlayPanel', true)
+                </script>
             </h:panelGrid>
         </div>
 
