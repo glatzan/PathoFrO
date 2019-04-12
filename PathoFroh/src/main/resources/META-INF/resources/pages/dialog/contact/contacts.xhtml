@@ -50,7 +50,7 @@
                               filterBy="#{contactHolder.item.person.lastName}"
                               filterMatchMode="contains">
                         <h:outputText
-                                value="#{contactHolder.item.person.getFullName()}  #{contactHolder.id} s"/>
+                                value="#{contactHolder.item.person.getFullName()}"/>
                     </p:column>
 
                     <p:column headerText="#{msg['dialog.contactDialog.data.role']}"
@@ -228,69 +228,101 @@
                             </p:repeat>
                         </p:column>
                     </p:summaryRow>
-
-
                 </p:dataTable>
+
                 <!-- overlay for contact notifications -->
                 <p:overlayPanel widgetVar="editOverlayPanel" hideEvent="null" showEvent="null"
                                 dismissable="false" id="editOverlayPanel" styleClass="histoOverlayPanel">
 
                     <h:panelGrid columns="1" styleClass="defaultHistoTable">
-                        <h:outputLabel value="Benachrichtigung"/>
+
+                        <!-- notification -->
+                        <h:outputLabel value="#{msg['dialog.contactDialog.overlay.notification']}"
+                                       styleClass="headline"/>
                         <h:panelGrid columns="2" styleClass="defaultHistoTable">
 
+                            <!-- notification list by type -->
                             <c:forEach var="buttonStatus" items="#{contactDialog.selectedReportIntent.buttonStatus}">
 
                                 <h:panelGroup>
+                                    <!-- icon -->
                                     <pe:switch value="#{buttonStatus.notificationTyp}">
                                         <!-- mail -->
                                         <pe:case value="#{notificationTyp.EMAIL}">
                                             <i class="fa fa-envelope icon-grey"/>
-                                            <h:outputFormat value="Email{0}: ">
-                                                <f:param value="#{buttonStatus.active ? ' (aktiv)' : ''} "/>
+                                            <h:outputFormat value=" #{msg['dialog.contactDialog.overlay.mail']}:">
+                                                <f:param
+                                                        value="#{buttonStatus.active ? msg['dialog.contactDialog.overlay.active'] : ''} "/>
                                             </h:outputFormat>
                                         </pe:case>
                                         <!-- fax -->
-
                                         <pe:case value="#{notificationTyp.FAX}">
                                             <i class="fa fa-fax icon-grey"/>
-                                            <h:outputFormat value="Fax{0}: ">
-                                                <f:param value="#{buttonStatus.active ? ' (aktiv)' : ''} "/>
+                                            <h:outputFormat value=" #{msg['dialog.contactDialog.overlay.fax']}:">
+                                                <f:param
+                                                        value="#{buttonStatus.active ? msg['dialog.contactDialog.overlay.active'] : ''} "/>
                                             </h:outputFormat>
                                         </pe:case>
                                         <!-- letter -->
                                         <pe:case value="#{notificationTyp.LETTER}">
                                             <i class="fa fa-pencil-square-o icon-grey"/>
-                                            <h:outputFormat value="Biref{0}: ">
-                                                <f:param value="#{buttonStatus.active ? ' (aktiv)' : ''} "/>
+                                            <h:outputFormat value=" #{msg['dialog.contactDialog.overlay.letter']}:">
+                                                <f:param
+                                                        value="#{buttonStatus.active ? msg['dialog.contactDialog.overlay.active'] : ''} "/>
                                             </h:outputFormat>
                                         </pe:case>
                                         <!-- phone -->
                                         <pe:case value="#{notificationTyp.PHONE}">
                                             <i class="fa fa-phone icon-grey"/>
-                                            <h:outputFormat value="Telefon{0}: ">
-                                                <f:param value="#{buttonStatus.active ? ' (aktiv)' : ''} "/>
+                                            <h:outputFormat value=" #{msg['dialog.contactDialog.overlay.phone']}:">
+                                                <f:param
+                                                        value="#{buttonStatus.active ? msg['dialog.contactDialog.overlay.active'] : ''} "/>
                                             </h:outputFormat>
                                         </pe:case>
                                     </pe:switch>
                                 </h:panelGroup>
 
-                                <p:commandLink rendered="#{buttonStatus.renderAddButton and contactDialog.selectedReportIntent ne null}"
+                                <!-- add button -->
+                                <p:commandLink
+                                        rendered="#{buttonStatus.renderAddButton and contactDialog.selectedReportIntent ne null}"
+                                        oncomplete="commonFunctions.hideOverlayPanel('editOverlayPanel')"
+                                        update="@form"
+                                        style="text-decoration: underline !important;"
+                                        actionListener="#{contactDialog.addReportIntentNotification(contactDialog.selectedReportIntent.reportIntent,buttonStatus.notificationTyp)}"
+                                        value="#{msg['dialog.contactDialog.overlay.button.add']}"/>
+
+                                <!-- remove button -->
+                                <p:commandLink rendered="#{buttonStatus.renderRemoveButton}"
                                                oncomplete="commonFunctions.hideOverlayPanel('editOverlayPanel')"
                                                update="@form"
-                                               actionListener="#{contactDialog.addReportIntentType(contactDialog.selectedReportIntent.reportIntent,notificationTyp.EMAIL)}"
-                                               value="Hinzufügen"/>
-                                <p:commandLink rendered="#{buttonStatus.renderRemoveButton}"
-                                               value="Entfernen"/>
+                                               style="text-decoration: underline !important;"
+                                               actionListener="#{contactDialog.removeReportIntentNotification(contactDialog.selectedReportIntent.reportIntent,buttonStatus.reportIntentNotification)}"
+                                               value="#{msg['dialog.contactDialog.overlay.button.remove']}"/>
+
+                                <!-- enable button -->
                                 <p:commandLink rendered="#{buttonStatus.renderEnableButton}"
-                                               value="Aktivieren"/>
-                                <p:commandLink rendered="#{buttonStatus.renderDisableButton}"
-                                               value="Deaktivieren"/>
+                                               oncomplete="commonFunctions.hideOverlayPanel('editOverlayPanel')"
+                                               update="@form"
+                                               style="text-decoration: underline !important;"
+                                               actionListener="#{contactDialog.toggleReportIntentNotificationActiveStatus(contactDialog.selectedReportIntent.reportIntent,buttonStatus.reportIntentNotification, true)}"
+                                               value="#{msg['dialog.contactDialog.overlay.button.enable']}"/>
+
+                                <!-- disable button-->
+                                <p:commandLink rendered="#{buttonStatus.renderEnableButton}"
+                                               oncomplete="commonFunctions.hideOverlayPanel('editOverlayPanel')"
+                                               update="@form"
+                                               style="text-decoration: underline !important;"
+                                               actionListener="#{contactDialog.toggleReportIntentNotificationActiveStatus(contactDialog.selectedReportIntent.reportIntent,buttonStatus.reportIntentNotification, false)}"
+                                               value="#{msg['dialog.contactDialog.overlay.button.disable']}"/>
                             </c:forEach>
                         </h:panelGrid>
 
-                        <h:outputLabel value="Rolle"/>
+                        <p:separator/>
 
+                        <!-- role -->
+                        <h:outputLabel value="#{msg['dialog.contactDialog.overlay.role']}" styleClass="headline"/>
+
+                        <!-- select role -->
                         <p:selectOneMenu rendered="#{contactDialog.selectedReportIntent ne null}"
                                          value="#{contactDialog.selectedReportIntent.reportIntent.role}">
                             <f:selectItems
@@ -306,6 +338,7 @@
                 </p:overlayPanel>
 
                 <script type="text/javascript">
+                    <!-- hide overlaypanel on mouse click -->
                     commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('editOverlayPanel', true)
                 </script>
             </h:panelGrid>

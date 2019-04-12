@@ -1,11 +1,10 @@
 package com.patho.main.dialog.contact
 
-import com.patho.main.action.dialog.AbstractDialog
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.common.SortOrder
-import com.patho.main.dialog.task.AbstractTaskDialog
+import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportIntent
@@ -26,7 +25,7 @@ open class ContactAddDialog @Autowired constructor(
         private val physicianRepository: PhysicianRepository,
         private val reportIntentService: ReportIntentService,
         private val taskRepository: TaskRepository
-) : AbstractTaskDialog() {
+) : AbstractTaskDialog(Dialog.CONTACTS_SELECT) {
 
     /**
      * Array of roles for that physicians should be shown.
@@ -83,7 +82,7 @@ open class ContactAddDialog @Autowired constructor(
                            addableRoles: Array<ContactRole> = ContactRole.values(),
                            addContactAsRole: ContactRole = ContactRole.NONE,
                            manuallySelectRole: Boolean = false,
-                           autoRoleSelection: Boolean = true): AbstractDialog {
+                           autoRoleSelection: Boolean = true): ContactAddDialog {
         if (initBean(task, selectAbleRoles, showRoles, addableRoles, addContactAsRole, manuallySelectRole, autoRoleSelection))
             prepareDialog();
         return this;
@@ -101,7 +100,7 @@ open class ContactAddDialog @Autowired constructor(
                  manuallySelectRole: Boolean = false,
                  autoRoleSelection: Boolean = true): Boolean {
 
-        val suc = super.initBean(task, Dialog.CONTACTS_SELECT)
+        super.initBean(task)
         this.addableRoles = addableRoles
         this.selectAbleRoles = selectAbleRoles
         this.showRoles = showRoles
@@ -112,7 +111,7 @@ open class ContactAddDialog @Autowired constructor(
 
         update(true)
 
-        return suc
+        return true
     }
 
     /**

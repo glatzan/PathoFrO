@@ -96,13 +96,16 @@ open class ReportIntentService @Autowired constructor(
         val reportIntentNotification = findReportIntentNotificationByType(reportIntent, type)
                 ?: ReportIntentNotification(reportIntent, type, true)
 
+        logger.debug("${reportIntentNotification.id}")
+
         reportIntentNotification.active = true
         reportIntentNotification.contactAddress = customAddress
 
         // updating the history
         updateReportIntentNotificationHistoryWithDiagnoses(task, reportIntentNotification)
 
-        reportIntent.notifications.add(reportIntentNotification)
+        if (!reportIntent.notifications.contains(reportIntentNotification))
+            reportIntent.notifications.add(reportIntentNotification)
 
         // saves the notification
         if (save) {
@@ -153,6 +156,21 @@ open class ReportIntentService @Autowired constructor(
             associatedContactNotificationRepository.delete(reportIntentNotification)
             return Pair(task, reportIntent)
         }
+    }
+
+    /**
+     * Enables or disables a notification of a report intent
+     */
+    open fun toggleReportIntentNotificationActiveStatus(task: Task, reportIntent: ReportIntent, reportIntentNotification: ReportIntentNotification, enable: Boolean): Pair<Task, ReportIntent> {
+        reportIntentNotification.active = enable
+
+        // saving for log
+        var reportIntent = associatedContactRepository.save(reportIntent,
+                resourceBundle.get(if (enable) "log.reportIntent.notification.enabled" else "log.reportIntent.notification.disabled", reportIntent.task,
+                        reportIntent.toString(), reportIntentNotification.notificationTyp.toString()),
+                reportIntent.task!!.patient)
+
+        return Pair(task, reportIntent)
     }
 
     /**

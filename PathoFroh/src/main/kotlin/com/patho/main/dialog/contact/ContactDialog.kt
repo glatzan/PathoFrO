@@ -3,7 +3,7 @@ package com.patho.main.dialog.contact
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
-import com.patho.main.dialog.task.AbstractTaskDialog
+import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
@@ -32,7 +32,7 @@ open class ContactDialog @Autowired constructor(
         private val physicianService: PhysicianService,
         private val contactAddDialog: ContactAddDialog,
         private val associatedContactRepository: AssociatedContactRepository) :
-        AbstractTaskDialog() {
+        AbstractTaskDialog(Dialog.CONTACTS) {
 
     open var showRole = arrayOf<ContactRole>()
     open var selectAbleRoles = arrayOf<ContactRole>()
@@ -43,11 +43,11 @@ open class ContactDialog @Autowired constructor(
     open var selectableRoles = ContactRole.values()
 
     override fun initBean(task: Task): Boolean {
-        val suc = super.initBean(task, Dialog.CONTACTS)
+        super.initBean(task)
         selectAbleRoles = ContactRole.values()
         showRole = ContactRole.values()
         update(true)
-        return suc
+        return true
     }
 
     override fun update(reload: Boolean) {
@@ -84,13 +84,31 @@ open class ContactDialog @Autowired constructor(
         }
     }
 
-    open fun addReportIntentType(reportIntent: ReportIntent, notificationTyp: NotificationTyp) {
+    open fun addReportIntentNotification(reportIntent: ReportIntent?, notificationTyp: NotificationTyp) {
 
-        val reportIntent = selectedReportIntent?.reportIntent
         val task = reportIntent?.task
 
         if (reportIntent != null && task != null) {
             reportIntentService.addReportIntentNotification(task, reportIntent, notificationTyp, save = true)
+            update(true)
+        }
+    }
+
+    open fun removeReportIntentNotification(reportIntent: ReportIntent?, reportIntentNotification: ReportIntentNotification?) {
+
+        val task = reportIntent?.task
+
+        if (reportIntent != null && task != null && reportIntentNotification != null) {
+            reportIntentService.removeReportIntentNotification(task, reportIntent, reportIntentNotification)
+            update(true)
+        }
+    }
+
+    open fun toggleReportIntentNotificationActiveStatus(reportIntent: ReportIntent?, reportIntentNotification: ReportIntentNotification?, enabled: Boolean) {
+        val task = reportIntent?.task
+
+        if (reportIntent != null && task != null && reportIntentNotification != null) {
+            reportIntentService.toggleReportIntentNotificationActiveStatus(task, reportIntent, reportIntentNotification, enabled)
             update(true)
         }
     }
@@ -193,6 +211,8 @@ open class ContactDialog @Autowired constructor(
         class ReportIntentGuiButtonStatus(val reportIntentTypeStatus: ReportIntentTypeStatus?, val notificationTyp: NotificationTyp) {
             private val isPresent = reportIntentTypeStatus != null
             private val isHistory = reportIntentTypeStatus?.isHistory ?: false
+
+            val reportIntentNotification = reportIntentTypeStatus?.reportIntentNotification
 
             val isActive = reportIntentTypeStatus?.reportIntentNotification?.active ?: false
 
