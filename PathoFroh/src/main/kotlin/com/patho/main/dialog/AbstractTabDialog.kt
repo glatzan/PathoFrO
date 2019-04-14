@@ -153,22 +153,49 @@ abstract class AbstractTabDialog_(dialog: Dialog) : AbstractDialog_(dialog) {
          */
         open var eventHandler: TabChangeEventListener = TabChangeEventListener()
 
+        /**
+         * Returns true if a parent is present
+         */
         val isParent: Boolean
             get() = parentTab != null
 
+        constructor()
+
+        /**
+         * Constructor with parameters
+         */
+        constructor(tabName: String, name: String, viewID: String, centerInclude: String) {
+            this.tabName = tabName
+            this.name = name
+            this.viewID = viewID
+            this.centerInclude = centerInclude
+        }
+
+        /**
+         * Function for updating tab data
+         */
         open fun updateData() {
-            return
+        }
+
+        /**
+         * Initializes the tab
+         */
+        open fun initTab(): Boolean {
+            return initTab(false)
         }
 
         /**
          * Initializes the tab if not already done or if forced
          */
-        open fun initTab(force: Boolean): Boolean {
+        open fun initTab(force: Boolean = false): Boolean {
             if (!initialized || force)
                 initialized = true
             return true
         }
 
+        /**
+         * Method is called if an change event should be triggered on tab change
+         */
         open fun triggerEventOnChange() {
             logger.debug("Event fired")
             this.eventHandler.fireEventOnScopeLost = true

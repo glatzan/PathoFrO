@@ -271,33 +271,33 @@ public class NotificationDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-//			List<NotificationContainer> newContainers = AssociatedContactService.getNotificationListForType(task,
-//					notificationType, generalTab.isCompleteNotification());
-//
-//			List<NotificationContainer> foundContainer = new ArrayList<NotificationContainer>();
-//
-//			// adding new, saving found one
-//			for (NotificationContainer notificationContainer : newContainers) {
-//				if (getContainer().stream().anyMatch(p -> p.equals(notificationContainer))) {
-//					// TODO update old conatienr
-//				} else {
-//					getContainer().add(notificationContainer);
-//				}
-//				foundContainer.add(notificationContainer);
-//			}
-//
-//			// removing old container
-//			newContainers.removeAll(foundContainer);
-//			getContainer().removeAll(newContainers);
-//
-//			getContainer().stream().sorted((p1, p2) -> {
-//				if (p1.isFaildPreviously() == p2.isFaildPreviously())
-//					return 0;
-//				else if (p1.isFaildPreviously())
-//					return 1;
-//				else
-//					return -1;
-//			});
+			List<NotificationContainer> newContainers = AssociatedContactService.getNotificationListForType(task,
+					notificationType, generalTab.isCompleteNotification());
+
+			List<NotificationContainer> foundContainer = new ArrayList<NotificationContainer>();
+
+			// adding new, saving found one
+			for (NotificationContainer notificationContainer : newContainers) {
+				if (getContainer().stream().anyMatch(p -> p.equals(notificationContainer))) {
+					// TODO update old conatienr
+				} else {
+					getContainer().add(notificationContainer);
+				}
+				foundContainer.add(notificationContainer);
+			}
+
+			// removing old container
+			newContainers.removeAll(foundContainer);
+			getContainer().removeAll(newContainers);
+
+			getContainer().stream().sorted((p1, p2) -> {
+				if (p1.isFaildPreviously() == p2.isFaildPreviously())
+					return 0;
+				else if (p1.isFaildPreviously())
+					return 1;
+				else
+					return -1;
+			});
 		}
 
 		/**
@@ -369,7 +369,7 @@ public class NotificationDialog extends AbstractTabDialog {
 			// if no diagnosis is pending setting last diagnosis
 			onDiangosisSelect();
 
-			logger.debug("General Data initialized");
+
 			return true;
 		}
 

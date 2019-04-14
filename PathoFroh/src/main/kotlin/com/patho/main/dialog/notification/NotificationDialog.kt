@@ -1,44 +1,120 @@
 package com.patho.main.dialog.notification
 
-import com.patho.main.action.dialog.AbstractTabDialog
 import com.patho.main.common.Dialog
+import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTabTaskDialog
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
+import com.patho.main.model.patient.notification.NotificationTyp
+import com.patho.main.repository.MailRepository
+import com.patho.main.repository.PrintDocumentRepository
+import com.patho.main.template.InitializeToken
+import com.patho.main.template.MailTemplate
 import com.patho.main.template.PrintDocument
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.notification.NotificationContainer
+import org.springframework.beans.factory.annotation.Autowired
+import java.util.ArrayList
 
-class NotificationDialog : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
+class NotificationDialog @Autowired constructor(
+        private val printDocumentRepository: PrintDocumentRepository,
+        private val pathoConfig: PathoConfig,
+        private val mailRepository: MailRepository) : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
 
     val generalTab: GeneralTab = GeneralTab()
 
-    fun initBean(task: Task): Boolean {
-        return super.initBean(task, true, null)
+    init {
+        tabs = arrayOf(generalTab)
     }
 
-    abstract inner class NotificationTab : AbstractTab(){
+    fun initBean(task: Task): Boolean {
+        return super.initBean(task, true, generalTab)
+    }
+
+    /**
+     * Class for notification tabs
+     */
+    abstract inner class NotificationTab(tabName: String,
+                                         name: String,
+                                         viewID: String,
+                                         centerInclude: String) : AbstractTab(tabName, name, viewID, centerInclude) {
 
         /**
          * True if notification method should be used
          */
-        protected var useNotification: Boolean = false
-
-        protected var templateList: List<PrintDocument>? = null
-
-        protected var templateListTransformer: DefaultTransformer<PrintDocument>? = null
-
-        protected var selectedTemplate: PrintDocument? = null
+        var useNotification: Boolean = false
 
         /**
-         * Updates the notification container list and if at least one notification for
-         * this task should be performed useTab is set to true
+         * List of templates to select from
          */
-        override fun updateData() {}
+        var templates: List<PrintDocument> = listOf()
+            set(value) {
+                field = value
+                templatesTransformer = DefaultTransformer(value)
+            }
+
+        /**
+         * Transformer for gui
+         */
+        var templatesTransformer: DefaultTransformer<PrintDocument> = DefaultTransformer(templates)
+
+        /**
+         * The selected template
+         */
+        var selectedTemplate: PrintDocument? = null
     }
 
-    inner class GeneralTab : NotificationTab() {
+    /**
+     *
+     */
+    abstract inner class ContactTab(tabName: String,
+                                    name: String,
+                                    viewID: String,
+                                    centerInclude: String,
+                                    val notificationTyp: NotificationTyp) : NotificationTab(tabName, name, viewID, centerInclude) {
+        /**
+         * If true individual addresses will be used in the reports
+         */
+        var individualAddresses: Boolean = false
 
-        private var diagnosisRevisions: List<DiagnosisRevision>? = null
+        override fun updateData() {
+            val newContainers = AssociatedContactService.getNotificationListForType(task,
+                    notificationType, generalTab.isCompleteNotification())
+
+            val foundContainer = ArrayList<NotificationContainer>()
+
+            // adding new, saving found one
+            for (notificationContainer in newContainers) {
+                if (getContainer().stream().anyMatch({ p -> p == notificationContainer })) {
+                    // TODO update old conatienr
+                } else {
+                    getContainer().add(notificationContainer)
+                }
+                foundContainer.add(notificationContainer)
+            }
+
+            // removing old container
+            newContainers.removeAll(foundContainer)
+            getContainer().removeAll(newContainers)
+
+            getContainer().stream().sorted({ p1, p2 ->
+                if (p1.isFaildPreviously() == p2.isFaildPreviously())
+                    return@getContainer ().stream().sorted 0
+                else if (p1.isFaildPreviously())
+                return@getContainer ().stream().sorted 1
+                else
+                return@getContainer ().stream().sorted - 1
+            })
+        }
+    }
+
+    inner class GeneralTab : NotificationTab(
+            "GeneralTab",
+            "dialog.notification.tab.general",
+            "generalTab",
+            "include/general.xhtml") {
+
+        private var diagnosisRevisions: List<DiagnosisRevision> = listOf()
 
         private var selectDiagnosisRevision: DiagnosisRevision? = null
 
@@ -59,19 +135,58 @@ class NotificationDialog : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
          */
         private var completeNotification: Boolean = false
 
-        init {
-            tabName = "GeneralTab"
-            name = "dialog.notification.tab.general"
-            viewID = "generalTab"
-            centerInclude = "include/general.xhtml"
-        }
-
         override fun initTab(): Boolean {
-            return true
+            logger.debug("Initializing general data...")
+            diagnosisRevisions = task.diagnosisRevisions.toList()
+            selectDiagnosisRevision = diagnosisRevisions.firstOrNull { p -> p.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_PENDING }
+            useNotification = true
+
+            // setting templates + transformer
+            templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
+                    PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+
+            selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultPrintDocument).orElse(null)
+            printCount = 2
+
+            return super.initTab()
         }
 
         override fun updateData() {}
 
     }
 
+    inner class MailTab : ContactTab(
+            "MailTab",
+            "dialog.notification.tab.general",
+            "generalTab",
+            "include/general.xhtml",
+            NotificationTyp.EMAIL) {
+
+        /**
+         * Template of the email which is send to the receivers
+         */
+        var mailTemplate: MailTemplate? = null
+
+        override fun initTab(): Boolean {
+            individualAddresses = false
+            // setting templates + transformer
+            templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
+                    PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+
+            selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
+
+            mailTemplate = mailRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
+
+            mailTemplate?.initilize(
+                    InitializeToken("patient", task.patient),
+                    InitializeToken("task", task),
+                    InitializeToken("contact", null))
+
+            updateData()
+
+            useNotification = container.size > 0
+
+            return super.initTab()
+        }
+    }
 }
