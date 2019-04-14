@@ -2,28 +2,21 @@ package com.patho.main.dialog.notification
 
 import com.patho.main.action.dialog.AbstractTabDialog
 import com.patho.main.common.Dialog
+import com.patho.main.dialog.AbstractTabTaskDialog
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.template.PrintDocument
 import com.patho.main.ui.transformer.DefaultTransformer
 
-class NotificationDialog : AbstractTabDialog() {
+class NotificationDialog : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
 
     val generalTab: GeneralTab = GeneralTab()
 
-    override fun initAndPrepareBean(task: Task): NotificationDialog {
-        if (initBean(task))
-            prepareDialog()
-        return this
-    }
-
     fun initBean(task: Task): Boolean {
-
-        return super.initBean(task, Dialog.NOTIFICATION)
+        return super.initBean(task, true, null)
     }
 
-
-    abstract inner class NotificationTab : AbstractTabDialog.AbstractTab() {
+    abstract inner class NotificationTab : AbstractTab(){
 
         /**
          * True if notification method should be used

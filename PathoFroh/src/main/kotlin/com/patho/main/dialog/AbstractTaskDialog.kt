@@ -11,7 +11,7 @@ abstract class AbstractTaskDialog(dialog: Dialog) : AbstractDialog_(dialog) {
     /**
      * Task
      */
-    protected lateinit var task: Task
+    open lateinit var task: Task
 
     /**
      * Initializes and displays the dialog
