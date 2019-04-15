@@ -12,8 +12,8 @@
 		<h:outputLabel
 			value="#{msg['dialog.notification.tab.sendReport.headline']} " />
 		<h:outputText
-			rendered="#{dialog.notificationDialog.sendReportTab.currentSendReport ne null}"
-			value="#{dialog.notificationDialog.sendReportTab.currentSendReport.audit.createdOn}">
+			rendered="#{notificationDialog.sendReportTab.currentSendReport ne null}"
+			value="#{notificationDialog.sendReportTab.currentSendReport.audit.createdOn}">
 			<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm" />
 		</h:outputText>
 	</p:outputPanel>
@@ -22,13 +22,13 @@
 		<!-- view send report -->
 		<pe:documentViewer height="460" style="margin-left:5px;"
 			class="noupdate"
-			rendered="#{dialog.notificationDialog.sendReportTab.renderPDF()}"
-			value="#{dialog.notificationDialog.sendReportTab.getPDF()}"
-			download="#{dialog.notificationDialog.sendReportTab.displayPDF.name}" />
+			rendered="#{notificationDialog.sendReportTab.renderPDF()}"
+			value="#{notificationDialog.sendReportTab.getPDF()}"
+			download="#{notificationDialog.sendReportTab.displayPDF.name}" />
 
 		<!-- error no sendreport -->
 		<h:panelGrid columns="1" styleClass="defaultHistoTable"
-			rendered="#{!dialog.notificationDialog.sendReportTab.renderPDF()}"
+			rendered="#{!notificationDialog.sendReportTab.renderPDF()}"
 			style="width: 100% !important;height: calc( 100vh - 110px )!important;"
 			columnClasses="columnHorizontalCenter columnMiddle">
 			<h:outputLabel styleClass="bigFont"
@@ -43,7 +43,7 @@
 
 			<h:panelGrid columns="2" styleClass="newTableContainer left">
 				<p:selectOneMenu
-					converter="#{dialog.notificationDialog.sendReportTab.sendReportConverter}"
+					converter="#{notificationDialog.sendReportTab.sendReportConverter}"
 					title="#{msg['body.worklist.header.view']}"
 					value="#{dialogHandlerAction.mediaDialog.PDFContainerToRender}">
 
@@ -76,21 +76,21 @@
 					value="#{msg['dialog.notification.tab.sendReport.button.resend']}"
 					icon="fa fa-mail-forward" update="@form"
 					title="#{msg['dialog.notification.tab.sendReport.button.resend.text']}"
-					actionListener="#{dialog.notificationDialog.sendReportTab.repeatNotification()}" />
+					actionListener="#{notificationDialog.sendReportTab.repeatNotification()}" />
 
 
 				<!-- end diagnosis phase -->
 				<p:commandButton id="endNotificationPhase"
 					value="#{msg['dialog.notification.tab.sendReport.button.resend']}"
-					actionListener="#{dialogHandlerAction.notificationPhaseExitDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
+					actionListener="#{dialogHandlerAction.notificationPhaseExitDialog.initAndPrepareBean(notificationDialog.task)}">
 					<p:ajax event="dialogReturn"
-						listener="#{dialog.notificationDialog.sendReportTab.onReturnDialog}" />
+						listener="#{notificationDialog.sendReportTab.onReturnDialog}" />
 				</p:commandButton>
 
 				<!-- reperform send -->
 				<p:commandButton icon="fa fa-mail-forward" update="@form"
 					title="#{msg['dialog.notification.tab.sendReport.button.resend.text']}"
-					actionListener="#{dialog.notificationDialog.sendReportTab.repeatNotification()}" />
+					actionListener="#{notificationDialog.sendReportTab.repeatNotification()}" />
 
 
 				<h:panelGroup>
@@ -112,7 +112,7 @@
 					<p:splitButton
 						value="#{msg['dialog.notification.tab.sendReport.button.end']}"
 						rendered="#{!userService.userHasPermission('TASK_EDIT_ARCHIVE')}"
-						disabled="#{!dialog.notificationDialog.task.taskStatus.editable}"
+						disabled="#{!notificationDialog.task.taskStatus.editable}"
 						onclick="$('#adminForm\\:endNotificationPhase').click();"
 						icon="fa fa-volume-off">
 
@@ -125,9 +125,9 @@
 					</p:splitButton>
 
 					<p:commandButton id="archiveTaskDialog" style="display:none"
-						actionListener="#{archiveTaskDialog.initAndPrepareBean(dialog.notificationDialog.task)}">
+						actionListener="#{archiveTaskDialog.initAndPrepareBean(notificationDialog.task)}">
 						<p:ajax event="dialogReturn"
-							listener="#{dialog.notificationDialog.sendReportTab.onReturnDialog}" />
+							listener="#{notificationDialog.sendReportTab.onReturnDialog}" />
 					</p:commandButton>
 
 				</h:panelGroup>

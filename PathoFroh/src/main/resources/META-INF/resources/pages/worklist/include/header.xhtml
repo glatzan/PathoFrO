@@ -262,7 +262,7 @@
 
             <!-- Notification perform  -->
             <p:commandButton id="notificationPerformBtn"
-                             actionListener="#{dialog.notificationDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                             actionListener="#{notificationDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                 <p:ajax event="dialogReturn"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                         update="navigationForm:patientList contentForm headerForm"

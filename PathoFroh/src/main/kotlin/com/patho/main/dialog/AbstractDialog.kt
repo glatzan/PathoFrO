@@ -2,8 +2,8 @@ package com.patho.main.dialog
 
 import com.patho.main.common.Dialog
 import com.patho.main.config.util.ResourceBundle
+import com.patho.main.util.dialog.UniqueRequestID
 import com.patho.main.util.dialogReturn.ReloadEvent
-import com.patho.main.util.helper.UniqueRequestID
 import org.primefaces.PrimeFaces
 import org.primefaces.event.SelectEvent
 import org.slf4j.LoggerFactory
@@ -45,7 +45,7 @@ abstract class AbstractDialog_(val dialog: Dialog) {
      * Initializes the dialog
      */
     open fun initBean(dialog: Dialog = this.dialog, uniqueRequestEnabled: Boolean = false): Boolean {
-        this.uniqueRequestID.isEnabled = uniqueRequestEnabled
+        this.uniqueRequestID.enabled = uniqueRequestEnabled
 
         if (uniqueRequestEnabled)
             uniqueRequestID.nextUniqueRequestID()

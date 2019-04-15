@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.patient.notification.ReportIntent;
+import com.patho.main.util.status.ReportIntentStatusByType;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -271,33 +272,33 @@ public class NotificationDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			List<NotificationContainer> newContainers = AssociatedContactService.getNotificationListForType(task,
-					notificationType, generalTab.isCompleteNotification());
-
-			List<NotificationContainer> foundContainer = new ArrayList<NotificationContainer>();
-
-			// adding new, saving found one
-			for (NotificationContainer notificationContainer : newContainers) {
-				if (getContainer().stream().anyMatch(p -> p.equals(notificationContainer))) {
-					// TODO update old conatienr
-				} else {
-					getContainer().add(notificationContainer);
-				}
-				foundContainer.add(notificationContainer);
-			}
-
-			// removing old container
-			newContainers.removeAll(foundContainer);
-			getContainer().removeAll(newContainers);
-
-			getContainer().stream().sorted((p1, p2) -> {
-				if (p1.isFaildPreviously() == p2.isFaildPreviously())
-					return 0;
-				else if (p1.isFaildPreviously())
-					return 1;
-				else
-					return -1;
-			});
+//			List<NotificationContainer> newContainers = AssociatedContactService.getNotificationListForType(task,
+//					notificationType, generalTab.isCompleteNotification());
+//
+//			List<NotificationContainer> foundContainer = new ArrayList<NotificationContainer>();
+//
+//			// adding new, saving found one
+//			for (NotificationContainer notificationContainer : newContainers) {
+//				if (getContainer().stream().anyMatch(p -> p.equals(notificationContainer))) {
+//					// TODO update old conatienr
+//				} else {
+//					getContainer().add(notificationContainer);
+//				}
+//				foundContainer.add(notificationContainer);
+//			}
+//
+//			// removing old container
+//			newContainers.removeAll(foundContainer);
+//			getContainer().removeAll(newContainers);
+//
+//			getContainer().stream().sorted((p1, p2) -> {
+//				if (p1.isFaildPreviously() == p2.isFaildPreviously())
+//					return 0;
+//				else if (p1.isFaildPreviously())
+//					return 1;
+//				else
+//					return -1;
+//			});
 		}
 
 		/**

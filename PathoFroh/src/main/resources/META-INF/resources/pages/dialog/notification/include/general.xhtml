@@ -29,8 +29,8 @@
                          scrollHeight="100" styleClass="defaultHistoDataTable"
                          scrollable="true" selectionMode="single"
                          rowKey="#{diangosisList.id}"
-                         selection="#{dialog.notificationDialog.generalTab.selectDiagnosisRevision}"
-                         value="#{dialog.notificationDialog.generalTab.diagnosisRevisions}">
+                         selection="#{notificationDialog.generalTab.selectDiagnosisRevision}"
+                         value="#{notificationDialog.generalTab.diagnosisRevisions}">
 
                 <!-- Name -->
                 <p:column
@@ -76,7 +76,7 @@
                 </p:column>
 
                 <p:ajax event="rowSelect" process="@form" update="@form"
-                        listener="#{dialog.notificationDialog.generalTab.onDiangosisSelect()}"/>
+                        listener="#{notificationDialog.generalTab.onDiangosisSelect()}"/>
             </p:dataTable>
 
             <h:outputLabel value=" "/>
@@ -84,17 +84,17 @@
                 <!-- diagnosis not approved warning -->
                 <h:outputLabel styleClass="icon-red bigFont"
                                value="#{msg['dialog.notification.tab.general.diagnosis.notApproved']}"
-                               rendered="#{dialog.notificationDialog.generalTab.selectedDiagnosisNotApprovedy}"/>
+                               rendered="#{notificationDialog.generalTab.selectedDiagnosisNotApprovedy}"/>
                 <!-- diagnosis select manually -->
                 <h:outputLabel styleClass="icon-red bigFont"
                                value="#{msg['dialog.notification.tab.general.diagnosis.selectManually']}"
-                               rendered="#{dialog.notificationDialog.generalTab.selectDiagnosisManually}"/>
+                               rendered="#{notificationDialog.generalTab.selectDiagnosisManually}"/>
             </h:panelGroup>
 
             <h:outputLabel
                     value="#{msg['dialog.notification.tab.general.completeNotification']}"/>
             <p:selectBooleanCheckbox
-                    value="#{dialog.notificationDialog.generalTab.completeNotification}"
+                    value="#{notificationDialog.generalTab.completeNotification}"
                     title="#{msg['dialog.notification.tab.general.completeNotification.tex']}">
                 <p:ajax event="change" process="@this"/>
             </p:selectBooleanCheckbox>
@@ -114,7 +114,7 @@
             <h:outputLabel value="#{msg['dialog.notification.tab.general.use']}"
                            styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    value="#{dialog.notificationDialog.generalTab.useNotification}"
+                    value="#{notificationDialog.generalTab.useNotification}"
                     title="#{msg['dialog.notification.tab.general.use.text']}">
                 <p:ajax event="change" process="@form" update="@form"/>
             </p:selectBooleanCheckbox>
@@ -123,15 +123,15 @@
             <h:outputLabel styleClass="bigFont"
                            value="#{msg['dialog.notification.tab.general.additionalPrints.tempalte']}"/>
             <p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
-                             disabled="#{!dialog.notificationDialog.generalTab.useNotification}"
-                             value="#{dialog.notificationDialog.generalTab.selectedTemplate}"
-                             converter="#{dialog.notificationDialog.generalTab.templateListTransformer}">
+                             disabled="#{!notificationDialog.generalTab.useNotification}"
+                             value="#{notificationDialog.generalTab.selectedTemplate}"
+                             converter="#{notificationDialog.generalTab.templatesTransformer}">
 
                 <f:selectItem itemValue="#{null}"
                               itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}"></f:selectItem>
 
                 <f:selectItems
-                        value="#{dialog.notificationDialog.generalTab.templateList}"
+                        value="#{notificationDialog.generalTab.templates}"
                         var="template" itemLabel="#{template.name}" itemValue="#{template}"/>
 
                 <p:ajax update="@this" event="change" process="@this"
@@ -143,8 +143,8 @@
                            value="#{msg['dialog.notification.tab.general.additionalPrints.count']} "
                            title="#{msg['dialog.notification.tab.send.count']}"/>
             <p:spinner
-                    disabled="#{!dialog.notificationDialog.generalTab.useNotification}"
-                    value="#{dialog.notificationDialog.generalTab.printCount}"
+                    disabled="#{!notificationDialog.generalTab.useNotification}"
+                    value="#{notificationDialog.generalTab.printCount}"
                     styleClass="oneNumberSpinner" min="0" max="9"/>
         </h:panelGrid>
     </p:outputPanel>
@@ -158,14 +158,14 @@
                 <!-- next -->
                 <p:commandButton value="#{msg['general.next']}"
                                  icon="fa fa-fw fa-arrow-right"
-                                 disabled="#{dialog.notificationDialog.generalTab.selectDiagnosisManually}"
-                                 actionListener="#{dialog.notificationDialog.nextTab()}"
+                                 disabled="#{notificationDialog.generalTab.selectDiagnosisManually}"
+                                 actionListener="#{notificationDialog.nextTab()}"
                                  process="@form" update="@form"/>
 
                 <!-- close -->
                 <p:commandButton value="#{msg['general.close']}"
                                  icon="fa fa-times-circle"
-                                 actionListener="#{dialog.notificationDialog.hideDialog()}"/>
+                                 actionListener="#{notificationDialog.hideDialog()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </div>

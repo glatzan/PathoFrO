@@ -2,6 +2,7 @@ package com.patho.main.dialog
 
 import com.patho.main.action.dialog.AbstractTabChangeEventHandler
 import com.patho.main.common.Dialog
+import com.patho.main.util.dialog.TabChangeEventListener
 import org.slf4j.LoggerFactory
 
 /**

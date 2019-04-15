@@ -1,4 +1,6 @@
-package com.patho.main.dialog
+package com.patho.main.util.dialog
+
+import com.patho.main.dialog.AbstractTabDialog_
 
 /**
  * Tab change event listener
