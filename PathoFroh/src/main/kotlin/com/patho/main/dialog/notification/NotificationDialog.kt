@@ -12,6 +12,7 @@ import com.patho.main.template.InitializeToken
 import com.patho.main.template.MailTemplate
 import com.patho.main.template.PrintDocument
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.status.ReportIntentStatusByDiagnosis
 import com.patho.main.util.status.ReportIntentStatusByType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -124,9 +125,11 @@ class NotificationDialog @Autowired constructor(
             "generalTab",
             "include/general.xhtml") {
 
-        open var diagnosisRevisions: List<DiagnosisRevision> = listOf()
+        open var diagnosisRevisions: List<ReportIntentStatusByDiagnosis.DiagnosisBearer> = mutableListOf()
 
-        open var selectDiagnosisRevision: DiagnosisRevision? = null
+        open var selectDiagnosisRevision: ReportIntentStatusByDiagnosis.DiagnosisBearer? = null
+
+        open var viewDiagnosisRevisionDetails : ReportIntentStatusByDiagnosis.DiagnosisBearer? = null
 
         open var printCount: Int = 0
 
@@ -145,10 +148,10 @@ class NotificationDialog @Autowired constructor(
          */
         open var completeNotification: Boolean = false
 
-        override fun initTab(): Boolean {
+        override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing general data...")
-            diagnosisRevisions = task.diagnosisRevisions.toList()
-            selectDiagnosisRevision = diagnosisRevisions.firstOrNull { p -> p.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_PENDING }
+            diagnosisRevisions = ReportIntentStatusByDiagnosis(task).diagnosisBearer
+            selectDiagnosisRevision = diagnosisRevisions.firstOrNull { p -> p.diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_PENDING }
             useNotification = true
 
             // setting templates + transformer
@@ -158,7 +161,7 @@ class NotificationDialog @Autowired constructor(
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultPrintDocument).orElse(null)
             printCount = 2
 
-            return super.initTab()
+            return super.initTab(force)
         }
 
         override fun updateData() {}
@@ -177,7 +180,7 @@ class NotificationDialog @Autowired constructor(
          */
         open var mailTemplate: MailTemplate? = null
 
-        override fun initTab(): Boolean {
+        override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing mail data...")
             individualAddresses = false
             // setting templates + transformer
@@ -197,7 +200,7 @@ class NotificationDialog @Autowired constructor(
 
 //            useNotification = container.size > 0
 
-            return super.initTab()
+            return super.initTab(force)
         }
     }
 
@@ -218,7 +221,7 @@ class NotificationDialog @Autowired constructor(
          */
         open var printFax = false
 
-        override fun initTab(): Boolean {
+        override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing fax data...")
 
             individualAddresses = true
@@ -236,7 +239,7 @@ class NotificationDialog @Autowired constructor(
 
 //            useNotification = container.size > 0
 
-            return super.initTab()
+            return super.initTab(force)
         }
     }
 
@@ -252,7 +255,7 @@ class NotificationDialog @Autowired constructor(
          */
         open var printLetter = true
 
-        override fun initTab(): Boolean {
+        override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing letter data...")
 
             individualAddresses = true
@@ -268,7 +271,7 @@ class NotificationDialog @Autowired constructor(
 
 //            useNotification = container.size > 0
 
-            return super.initTab()
+            return super.initTab(force)
         }
     }
 
@@ -279,14 +282,14 @@ class NotificationDialog @Autowired constructor(
             "include/phone.xhtml",
             NotificationTyp.PHONE) {
 
-        override fun initTab(): Boolean {
+        override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing phone data...")
 
             updateData()
 
 //            useNotification = container.size > 0
 
-            return super.initTab()
+            return super.initTab(force)
         }
     }
 

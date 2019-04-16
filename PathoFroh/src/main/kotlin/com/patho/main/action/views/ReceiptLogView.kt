@@ -11,7 +11,7 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SlideService
 import com.patho.main.util.print.UnknownPrintingException
-import com.patho.main.util.status.ReportIntentStatusByDiagnosis
+import com.patho.main.util.status.ReportIntentStatusByReportIntentAndDiagnosis
 import freemarker.template.TemplateNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -45,12 +45,12 @@ open class ReceiptLogView @Autowired constructor(
     /**
      * Status for notification list
      */
-    open var reportIntentStatus: ReportIntentStatusByDiagnosis = ReportIntentStatusByDiagnosis(Task())
+    open var reportIntentStatus: ReportIntentStatusByReportIntentAndDiagnosis = ReportIntentStatusByReportIntentAndDiagnosis(Task())
 
     /**
      * Selectedd status for displaying infos
      */
-    open var selectedReportIntentStatus: ReportIntentStatusByDiagnosis.ReportIntentBearer? = null
+    open var selectedReportIntentStatus: ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer? = null
         get() {
             println(field?.diagnosisBearers?.size)
             println("returning ${field?.person}")
@@ -70,7 +70,7 @@ open class ReceiptLogView @Autowired constructor(
         actionOnMany = StainingListAction.NONE
         rows = TaskEntityRow.factory(task, false)
 
-        reportIntentStatus = ReportIntentStatusByDiagnosis(task)
+        reportIntentStatus = ReportIntentStatusByReportIntentAndDiagnosis(task)
         selectedReportIntentStatus = null
     }
 

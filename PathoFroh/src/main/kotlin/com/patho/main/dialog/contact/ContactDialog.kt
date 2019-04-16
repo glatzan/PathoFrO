@@ -16,7 +16,7 @@ import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.dialogReturn.ReloadEvent
 import com.patho.main.util.exception.DuplicatedReportIntentException
-import com.patho.main.util.status.ReportIntentStatusByDiagnosis
+import com.patho.main.util.status.ReportIntentStatusByReportIntentAndDiagnosis
 import com.patho.main.util.task.TaskNotFoundException
 import com.patho.main.util.ui.selector.UISelector
 import org.primefaces.event.SelectEvent
@@ -152,7 +152,7 @@ open class ContactDialog @Autowired constructor(
         /**
          * Status sorted by diagnoses
          */
-        val reportIntentStatus = ReportIntentStatusByDiagnosis.ReportIntentBearer(reportIntent, task)
+        val reportIntentStatus = ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer(reportIntent, task)
 
         /**
          * True if the report intent can be deleted

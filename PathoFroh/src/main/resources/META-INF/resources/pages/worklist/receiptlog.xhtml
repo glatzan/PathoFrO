@@ -407,6 +407,7 @@
                                  style="width:450px" styleClass="defaultHistoDataTable"
                                  value="#{receiptLogView.reportIntentStatus.reportIntentBearer}">
 
+                        <!-- name -->
                         <p:column style="width:auto">
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg['body.receiptlog.contact.name']}"/>
@@ -426,6 +427,7 @@
                             </p:commandLink>
                         </p:column>
 
+                        <!-- role-->
                         <p:column style="width: 20%;">
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg['body.receiptlog.contact.role']}"/>
@@ -439,6 +441,7 @@
                             </h:outputLabel>
                         </p:column>
 
+                        <!-- city -->
                         <p:column style="width: 20%;">
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg['body.receiptlog.contact.location']}"/>
@@ -453,6 +456,7 @@
                             </h:outputLabel>
                         </p:column>
 
+                        <!-- completed -->
                         <p:column style="width:15px">
                             <f:facet name="header">
                                 <i class="fa fa-check-square-o"

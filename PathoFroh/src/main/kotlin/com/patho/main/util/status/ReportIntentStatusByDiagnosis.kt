@@ -1,80 +1,66 @@
 package com.patho.main.util.status
 
+import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportHistoryRecord
 import com.patho.main.model.patient.notification.ReportIntent
-import com.patho.main.model.patient.notification.ReportIntentNotification
-import com.patho.main.model.person.Contact
 import com.patho.main.service.impl.SpringContextBridge
 
 /**
- * Klass listing notifications diagnosis focused
- * ReportIntent -> Diagnosis -> NotificationType -> History
- * Normal structure is: ReportIntent -> NotificationType -> Diagnosis -> History
  */
-class ReportIntentStatusByDiagnosis(val task: Task) {
+open class ReportIntentStatusByDiagnosis(val task: Task) {
 
-    val reportIntentBearer = task.contacts.map { p -> ReportIntentBearer(p, task) }
+    val diagnosisBearer: List<DiagnosisBearer> = task.diagnosisRevisions.map { p -> DiagnosisBearer(task, p) }
 
-    val completed: Boolean = reportIntentBearer.all { p -> p.completed }
+//    val completed: Boolean = reportIntents.all { p -> p.completed }
 
-    open class ReportIntentBearer(val reportIntent: ReportIntent, val task: Task) {
+    open class DiagnosisBearer(task: Task, val diagnosisRevision: DiagnosisRevision) {
 
-        val diagnosisBearers = mutableListOf<DiagnosisBearer>()
-
-        val person = reportIntent.person
-
-        val role = reportIntent.role
-
-        var address: Contact = if (person?.defaultAddress != null) person?.defaultAddress?.contact
-                ?: person.contact else person?.contact ?: Contact()
-
-        val completed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportIntent)
+        val reportIntents = mutableListOf<NotificationBearer>()
 
         init {
-            reportIntent.notifications.forEach { p -> addNotification(p) }
-        }
+            for (contact in task.contacts) {
+                val notificationArray = mutableListOf<TypedRecord>()
+                for (notification in contact.notifications) {
+                    val record = SpringContextBridge.services().reportIntentService.findReportHistoryRecordByDiagnosis(notification, diagnosisRevision)
+                    if (record != null) {
+                        notificationArray.add(TypedRecord(record, notification.notificationTyp))
+                    }
+                }
 
-        private fun addNotification(notification: ReportIntentNotification) {
-            val type = notification.notificationTyp
-
-            for (history in notification.history) {
-                addType(history.diagnosisID, type
-                        ?: NotificationTyp.NONE, history)
+                reportIntents.add(NotificationBearer(contact, notificationArray))
             }
         }
 
-        private fun addType(diagnosisID: Long, type: NotificationTyp, reportHistoryRecord: ReportHistoryRecord) {
-            var diagnosisBearer = diagnosisBearers.firstOrNull { p -> p.diagnosisID == diagnosisID }
+        open class TypedRecord(val reportHistoryRecord: ReportHistoryRecord, val notificationTyp: NotificationTyp)
 
-            if (diagnosisBearer == null) {
-                diagnosisBearer = DiagnosisBearer(diagnosisID, task)
-                diagnosisBearers.add(diagnosisBearer)
-                print("new diagnosis $diagnosisID")
-            }
+        open class NotificationBearer(val reportIntent: ReportIntent, val records: List<TypedRecord>) {
 
-            val reportIntentNotificationBearer = DiagnosisBearer.ReportIntentNotificationBearer(type, reportHistoryRecord)
-            diagnosisBearer.reportIntentNotificationBearers.add(reportIntentNotificationBearer)
+            val mailRecord = records.firstOrNull { p -> p.notificationTyp == NotificationTyp.EMAIL }
+            val isMailRecord
+                get() = mailRecord != null
+            val mailPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(mailRecord?.reportHistoryRecord
+                    ?: ReportHistoryRecord())
 
-        }
+            val faxRecord = records.firstOrNull { p -> p.notificationTyp == NotificationTyp.FAX }
+            val isFaxRecord
+                get() = faxRecord != null
+            val faxPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(faxRecord?.reportHistoryRecord
+                    ?: ReportHistoryRecord())
 
+            val letterRecord = records.firstOrNull { p -> p.notificationTyp == NotificationTyp.LETTER }
+            val isLetterRecord
+                get() = letterRecord != null
+            val letterPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(letterRecord?.reportHistoryRecord
+                    ?: ReportHistoryRecord())
 
-        open class DiagnosisBearer(val diagnosisID: Long, task: Task) {
-
-            val reportIntentNotificationBearers = mutableListOf<ReportIntentNotificationBearer>()
-
-            val diagnosisName: String = (task.diagnosisRevisions.firstOrNull { p -> p.id == diagnosisID })?.name
-                    ?: SpringContextBridge.services().resourceBundle.get("")
-
-            open class ReportIntentNotificationBearer(var type: NotificationTyp, val reportHistoryRecord: ReportHistoryRecord) {
-                val success = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportHistoryRecord)
-                val successes = reportHistoryRecord.data.count { p -> !p.failed }
-                val failedAttempts = reportHistoryRecord.data.count { p -> p.failed }
-                val attempts = reportHistoryRecord.data.size
-                val reportData = reportHistoryRecord.data.toList()
-
-            }
+            val phoneRecord = records.firstOrNull { p -> p.notificationTyp == NotificationTyp.EMAIL }
+            val isPhoneRecord
+                get() = phoneRecord != null
+            val phonePerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(phoneRecord?.reportHistoryRecord
+                    ?: ReportHistoryRecord())
         }
     }
+
 }

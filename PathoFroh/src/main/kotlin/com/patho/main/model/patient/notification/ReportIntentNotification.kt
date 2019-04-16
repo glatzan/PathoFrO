@@ -41,7 +41,7 @@ open class ReportIntentNotification : AbstractPersistable, ID {
      * Notification type, e.g. mail
      */
     @Enumerated(EnumType.STRING)
-    open var notificationTyp: NotificationTyp? = null
+    open var notificationTyp: NotificationTyp = NotificationTyp.NONE
 
     /**
      * Notification is active

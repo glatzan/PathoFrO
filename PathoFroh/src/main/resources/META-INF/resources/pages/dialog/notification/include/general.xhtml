@@ -25,60 +25,88 @@
                     value="#{msg['dialog.notification.tab.general.diagnosis']}"
                     styleClass="bigFont"/>
 
-            <p:dataTable var="diangosisList" id="diangosisList"
-                         scrollHeight="100" styleClass="defaultHistoDataTable"
-                         scrollable="true" selectionMode="single"
-                         rowKey="#{diangosisList.id}"
-                         selection="#{notificationDialog.generalTab.selectDiagnosisRevision}"
-                         value="#{notificationDialog.generalTab.diagnosisRevisions}">
+            <h:panelGroup>
+                <p:dataTable var="diangosis" id="diangosisList"
+                             scrollHeight="100" styleClass="defaultHistoDataTable"
+                             scrollable="true" selectionMode="single"
+                             rowKey="#{diangosis.diagnosisRevision.id}"
+                             selection="#{notificationDialog.generalTab.selectDiagnosisRevision}"
+                             value="#{notificationDialog.generalTab.diagnosisRevisions}">
 
-                <!-- Name -->
-                <p:column
-                        headerText="#{msg['dialog.notification.tab.general.diagnosis.table.name']}"
-                        style="width:auto">
-                    <h:outputText value="#{diangosisList.name}"/>
-                </p:column>
+                    <!-- Name -->
+                    <p:column
+                            headerText="#{msg['dialog.notification.tab.general.diagnosis.table.name']}"
+                            style="width:auto">
+                        <h:outputText value="#{diangosis.diagnosisRevision.name}"/>
+                        <p:commandLink
+                                styleClass="diagnosisOverlayPanelyTrigger"
+                                icon="pi pi-search"
+                                actionListener="#{notificationDialog.generalTab.setViewDiagnosisRevisionDetails(diangosis)}"
+                                partialSubmit="true"
+                                process="@this"
+                                update="adminForm:diagnosisOverlayPanel"
+                                oncomplete="commonFunctions.showOverlayPanel('diagnosisOverlayPanel', '#{component.clientId}');">
+                            <i class="fa fa-info-circle"/>
+                        </p:commandLink>
+                    </p:column>
 
-                <!-- pending -->
-                <p:column style="width:25%" styleClass="centerChildElements"
-                          headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus']}">
-                    <ui:fragment
-                            rendered="#{diangosisList.notificationStatus eq 'NOT_APPROVED'}">
-                        <i class="fa fa-fw fa-volume-off icon-red"
-                           title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOT_APPROVED']}"/>
-                    </ui:fragment>
-                    <ui:fragment
-                            rendered="#{diangosisList.notificationStatus eq 'NOTIFICATION_PENDING'}">
-                        <i class="fa fa-fw fa-volume-up icon-orange"
-                           title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_PENDING']}"/>
-                    </ui:fragment>
-                    <ui:fragment
-                            rendered="#{diangosisList.notificationStatus eq 'NO_NOTFICATION'}">
-                        <i class="fa fa-fw fa-circle icon-red"
-                           title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NO_NOTFICATION']}"/>
-                    </ui:fragment>
-                    <ui:fragment
-                            rendered="#{diangosisList.notificationStatus eq 'NOTIFICATION_COMPLETED'}">
-                        <i class="fa fa-fw fa-check-circle icon-green"
-                           title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_COMPLETED']}"/>
-                    </ui:fragment>
-                </p:column>
+                    <!-- pending -->
+                    <p:column style="width:25%" styleClass="centerChildElements"
+                              headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus']}">
+                        <ui:fragment
+                                rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NOT_APPROVED'}">
+                            <i class="fa fa-fw fa-volume-off icon-red"
+                               title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOT_APPROVED']}"/>
+                        </ui:fragment>
+                        <ui:fragment
+                                rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NOTIFICATION_PENDING'}">
+                            <i class="fa fa-fw fa-volume-up icon-orange"
+                               title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_PENDING']}"/>
+                        </ui:fragment>
+                        <ui:fragment
+                                rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NO_NOTFICATION'}">
+                            <i class="fa fa-fw fa-circle icon-red"
+                               title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NO_NOTFICATION']}"/>
+                        </ui:fragment>
+                        <ui:fragment
+                                rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NOTIFICATION_COMPLETED'}">
+                            <i class="fa fa-fw fa-check-circle icon-green"
+                               title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_COMPLETED']}"/>
+                        </ui:fragment>
+                    </p:column>
 
-                <!-- performed -->
-                <p:column style="width:20%"
-                          headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPerformd']}">
+                    <!-- performed -->
+                    <p:column style="width:20%"
+                              headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPerformd']}">
 
-                    <h:outputText value="#{diangosisList.notificationDate}"
-                                  rendered="#{diangosisList.notificated}">
-                        <f:converter converterId="instantDateTimeConverter"/>
-                        <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
-                    </h:outputText>
-                </p:column>
+                        <h:outputText value="#{diangosis.diagnosisRevision.notificationDate}"
+                                      rendered="#{diangosis.diagnosisRevision.notificated}">
+                            <f:converter converterId="instantDateTimeConverter"/>
+                            <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
+                        </h:outputText>
+                    </p:column>
 
-                <p:ajax event="rowSelect" process="@form" update="@form"
-                        listener="#{notificationDialog.generalTab.onDiangosisSelect()}"/>
-            </p:dataTable>
+                    <p:ajax event="rowSelect" process="@form" update="@form"
+                            listener="#{notificationDialog.generalTab.onDiangosisSelect()}"/>
+                </p:dataTable>
 
+                <script type="text/javascript">
+                    commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('diagnosisOverlayPanel')
+                    commonFunctions.addShowDialogOnMouseEnter(".diagnosisOverlayPanelyTrigger", "diagnosisOverlayPanel")
+                </script>
+                <!-- overlay for contact notifications -->
+                <p:overlayPanel widgetVar="diagnosisOverlayPanel" hideEvent="null" showEvent="null"
+                                dismissable="false" id="diagnosisOverlayPanel" styleClass="histoOverlayPanel">
+                    <p:dataTable value="#{notificationDialog.generalTab.viewDiagnosisRevisionDetails.reportIntents}"
+                                 var="reportIntent">
+                        <p:column>
+                            <h:outputLabel value="#{reportIntent.reportIntent.person.fullName}"/>
+
+                        </p:column>
+                    </p:dataTable>
+                </p:overlayPanel>
+
+            </h:panelGroup>
             <h:outputLabel value=" "/>
             <h:panelGroup>
                 <!-- diagnosis not approved warning -->
