@@ -5,12 +5,12 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui" xmlns:ff="http://java.sun.com/jsf/core"
 >
 
     <p:outputPanel styleClass="headerPannel">
         <h:outputLabel
-                value="#{msg['dialog.notification.tab.general.headline']}"/>
+                value="#{msg['dialog.notificationDialog.general.headline']}"/>
     </p:outputPanel>
 
 
@@ -22,7 +22,7 @@
 
             <!-- Notifications -->
             <h:outputLabel
-                    value="#{msg['dialog.notification.tab.general.diagnosis']}"
+                    value="#{msg['dialog.notificationDialog.general.diagnosis']}"
                     styleClass="bigFont"/>
 
             <h:panelGroup>
@@ -35,7 +35,7 @@
 
                     <!-- Name -->
                     <p:column
-                            headerText="#{msg['dialog.notification.tab.general.diagnosis.table.name']}"
+                            headerText="#{msg['dialog.notificationDialog.general.data.name']}"
                             style="width:auto">
                         <h:outputText value="#{diangosis.diagnosisRevision.name}"/>
                         <p:commandLink
@@ -52,7 +52,7 @@
 
                     <!-- pending -->
                     <p:column style="width:25%" styleClass="centerChildElements"
-                              headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus']}">
+                              headerText="#{msg['dialog.notificationDialog.general.data.status']}">
                         <ui:fragment
                                 rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NOT_APPROVED'}">
                             <i class="fa fa-fw fa-volume-off icon-red"
@@ -94,15 +94,39 @@
                     commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('diagnosisOverlayPanel')
                     commonFunctions.addShowDialogOnMouseEnter(".diagnosisOverlayPanelyTrigger", "diagnosisOverlayPanel")
                 </script>
+
                 <!-- overlay for contact notifications -->
                 <p:overlayPanel widgetVar="diagnosisOverlayPanel" hideEvent="null" showEvent="null"
                                 dismissable="false" id="diagnosisOverlayPanel" styleClass="histoOverlayPanel">
                     <p:dataTable value="#{notificationDialog.generalTab.viewDiagnosisRevisionDetails.reportIntents}"
                                  var="reportIntent">
-                        <p:column>
+                        <!-- name -->
+                        <p:column headerText="#{msg['dialog.notificationDialog.general.overlay.personName']}">
                             <h:outputLabel value="#{reportIntent.reportIntent.person.fullName}"/>
-
                         </p:column>
+
+                        <!-- mail status -->
+                        <p:column>
+                            <f:facet name="header">
+                                <i class="fa fa-envelope icon-grey"/>
+                            </f:facet>
+                            <h:panelGroup rendered="#{reportIntent.isMailRecord()}">
+                                <i class="fa fa-fw fa-envelope #{reportIntent.mailPerformed ? 'icon-green' : ''}"
+                                   title="#{reportIntent.mailPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
+                            </h:panelGroup>
+                        </p:column>
+
+                        <!-- fax status -->
+                        <p:column>
+                            <f:facet name="header">
+                                <i class="fa fa-fax icon-grey"/>
+                            </f:facet>
+                            <h:panelGroup rendered="#{reportIntent.isFaxRecord()}">
+                                <i class="fa fa-fw fa-fax #{reportIntent.faxPerformed ? 'icon-green' : ''}"
+                                   title="#{reportIntent.faxPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
+                            </h:panelGroup>
+                        </p:column>
+
                     </p:dataTable>
                 </p:overlayPanel>
 
