@@ -25,7 +25,7 @@ open class ReportIntentStatusByDiagnosis(val task: Task) {
                 for (notification in contact.notifications) {
                     val record = SpringContextBridge.services().reportIntentService.findReportHistoryRecordByDiagnosis(notification, diagnosisRevision)
                     if (record != null) {
-                        notificationArray.add(TypedRecord(record, notification.notificationTyp))
+                        notificationArray.add(TypedRecord(record, notification.notificationTyp, notification.active))
                     }
                 }
 
@@ -33,31 +33,33 @@ open class ReportIntentStatusByDiagnosis(val task: Task) {
             }
         }
 
-        open class TypedRecord(val reportHistoryRecord: ReportHistoryRecord, val notificationTyp: NotificationTyp)
+        open class TypedRecord(val reportHistoryRecord: ReportHistoryRecord, val notificationTyp: NotificationTyp, val active: Boolean)
 
         open class NotificationBearer(val reportIntent: ReportIntent, val records: List<TypedRecord>) {
 
+            val isActive = reportIntent.active
+
             val mailRecord = records.firstOrNull { p -> p.notificationTyp == NotificationTyp.EMAIL }
-            val isMailRecord
-                get() = mailRecord != null
+            val isMailRecord = mailRecord != null
+            val isMailActive = isActive && mailRecord?.active ?: false
             val mailPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(mailRecord?.reportHistoryRecord
                     ?: ReportHistoryRecord())
 
             val faxRecord = records.firstOrNull { p -> p.notificationTyp == NotificationTyp.FAX }
-            val isFaxRecord
-                get() = faxRecord != null
+            val isFaxRecord = faxRecord != null
+            val isFaxActive = isActive && faxRecord?.active ?: false
             val faxPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(faxRecord?.reportHistoryRecord
                     ?: ReportHistoryRecord())
 
             val letterRecord = records.firstOrNull { p -> p.notificationTyp == NotificationTyp.LETTER }
-            val isLetterRecord
-                get() = letterRecord != null
+            val isLetterRecord = letterRecord != null
+            val isLetterActive = isActive && letterRecord?.active ?: false
             val letterPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(letterRecord?.reportHistoryRecord
                     ?: ReportHistoryRecord())
 
             val phoneRecord = records.firstOrNull { p -> p.notificationTyp == NotificationTyp.EMAIL }
-            val isPhoneRecord
-                get() = phoneRecord != null
+            val isPhoneRecord = phoneRecord != null
+            val isPhoneActive = isActive && phoneRecord?.active ?: false
             val phonePerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(phoneRecord?.reportHistoryRecord
                     ?: ReportHistoryRecord())
         }
