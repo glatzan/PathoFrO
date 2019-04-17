@@ -4,7 +4,6 @@ import com.patho.main.common.DiagnosisRevisionType
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.Signature
 import com.patho.main.model.audit.AuditAble
-import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
@@ -94,7 +93,7 @@ open class DiagnosisRevision : AbstractPersistable, AuditAble, Parent<Task> {
     /**
      * Returns true if notification date is set
      */
-    open val notificated: Boolean
+    open val isNotified: Boolean
         @Transient
         get() = notificationDate != null
 
@@ -161,23 +160,4 @@ open class DiagnosisRevision : AbstractPersistable, AuditAble, Parent<Task> {
     open override val task: Task?
         @Transient
         get() = parent?.task
-
-    enum class NotificationStatus {
-        /**
-         * Not approved yet
-         */
-        NOT_APPROVED,
-        /**
-         * Notification is pending
-         */
-        NOTIFICATION_PENDING,
-        /**
-         * No Notification should be performed
-         */
-        NO_NOTFICATION,
-        /**
-         * Notification was performed
-         */
-        NOTIFICATION_COMPLETED
-    }
 }

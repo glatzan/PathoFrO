@@ -9,5 +9,10 @@ import com.patho.main.service.impl.SpringContextBridge
  * Listing for notification types
  */
 class ReportIntentStatusByType(val task: Task, notificationTyp: NotificationTyp) {
-    var reportIntent: List<ReportIntentNotification> = task.contacts.mapNotNull { p -> SpringContextBridge.services().reportIntentService.findReportIntentNotificationByType(p, notificationTyp) }
+
+    var reportIntents: List<ReportIntentBearer> = task.contacts.filter { p -> p.active }.mapNotNull { p -> SpringContextBridge.services().reportIntentService.findReportIntentNotificationByType(p, notificationTyp) }.map { p -> ReportIntentBearer(p) }
+
+    class ReportIntentBearer(reportIntentNotification: ReportIntentNotification) {
+
+    }
 }

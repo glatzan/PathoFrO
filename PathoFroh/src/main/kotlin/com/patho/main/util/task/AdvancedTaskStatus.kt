@@ -2,6 +2,7 @@ package com.patho.main.util.task
 
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.DiagnosisRevision
+import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.util.status.ReportIntentStatus
@@ -119,8 +120,8 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
         val notificationStatus: DiagnosisNotificationStatus = DiagnosisNotificationStatus(diagnosisRevision)
 
         public class DiagnosisNotificationStatus(diagnosisRevision: DiagnosisRevision) {
-            val performed: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_COMPLETED;
-            val ignore: Boolean = diagnosisRevision.notificationStatus == DiagnosisRevision.NotificationStatus.NO_NOTFICATION;
+            val performed: Boolean = diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_COMPLETED;
+            val ignore: Boolean = diagnosisRevision.notificationStatus == NotificationStatus.NO_NOTFICATION;
         }
     }
 }

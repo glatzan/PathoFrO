@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.faces.application.FacesMessage;
 
 import com.patho.main.model.patient.miscellaneous.BioBank;
+import com.patho.main.template.PrintDocument;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
@@ -33,7 +34,6 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.ui.pdf.PDFStreamContainerImpl;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.dialogReturn.ReloadEvent;
@@ -95,7 +95,7 @@ public class PDFOrganizer extends AbstractDialog {
 	private boolean viewOnly;
 
 	@Accessors(chain = true)
-	private DocumentType uploadDocumentType;
+	private PrintDocument.DocumentType uploadDocumentType;
 
 	@Accessors(chain = true)
 	private DataList uploadTarget;
@@ -120,7 +120,7 @@ public class PDFOrganizer extends AbstractDialog {
 		this.enablePDFSelection = false;
 		this.viewOnly = false;
 
-		uploadDocumentType = DocumentType.OTHER;
+		uploadDocumentType = PrintDocument.DocumentType.OTHER;
 		uploadTarget = patient;
 
 		super.initBean(null, Dialog.PDF_ORGANIZER);

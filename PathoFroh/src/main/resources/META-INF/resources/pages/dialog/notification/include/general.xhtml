@@ -5,8 +5,14 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui" xmlns:ff="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
 >
+
+    <!-- importing enum for switch -->
+    <p:importEnum
+            type="com.patho.main.model.patient.NotificationStatus"
+            var="notificationStatus" allSuffix="ALL_ENUM_VALUES"/>
 
     <p:outputPanel styleClass="headerPannel">
         <h:outputLabel
@@ -32,12 +38,18 @@
                              rowKey="#{diangosis.diagnosisRevision.id}"
                              selection="#{notificationDialog.generalTab.selectDiagnosisRevision}"
                              value="#{notificationDialog.generalTab.diagnosisRevisions}">
-
                     <!-- Name -->
                     <p:column
                             headerText="#{msg['dialog.notificationDialog.general.data.name']}"
                             style="width:auto">
                         <h:outputText value="#{diangosis.diagnosisRevision.name}"/>
+                    </p:column>
+
+                    <!-- info -->
+                    <p:column style="width: 5%" styleClass="centerChildElements centerHeaderChildElements">
+                        <f:facet name="header">
+                            <i class="fa fa-info-circle"/>
+                        </f:facet>
                         <p:commandLink
                                 styleClass="diagnosisOverlayPanelyTrigger"
                                 icon="pi pi-search"
@@ -51,43 +63,45 @@
                     </p:column>
 
                     <!-- pending -->
-                    <p:column style="width:25%" styleClass="centerChildElements"
-                              headerText="#{msg['dialog.notificationDialog.general.data.status']}">
-                        <ui:fragment
-                                rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NOT_APPROVED'}">
-                            <i class="fa fa-fw fa-volume-off icon-red"
-                               title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOT_APPROVED']}"/>
-                        </ui:fragment>
-                        <ui:fragment
-                                rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NOTIFICATION_PENDING'}">
-                            <i class="fa fa-fw fa-volume-up icon-orange"
-                               title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_PENDING']}"/>
-                        </ui:fragment>
-                        <ui:fragment
-                                rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NO_NOTFICATION'}">
-                            <i class="fa fa-fw fa-circle icon-red"
-                               title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NO_NOTFICATION']}"/>
-                        </ui:fragment>
-                        <ui:fragment
-                                rendered="#{diangosis.diagnosisRevision.notificationStatus eq 'NOTIFICATION_COMPLETED'}">
-                            <i class="fa fa-fw fa-check-circle icon-green"
-                               title="#{msg['dialog.notification.tab.general.diagnosis.table.notificationStatus.NOTIFICATION_COMPLETED']}"/>
-                        </ui:fragment>
+                    <p:column style="width:10%" styleClass="centerChildElements"
+                              headerText="#{msg['dialog.notificationDialog.general.data.status.text']}">
+                        <pe:switch value="#{diangosis.diagnosisRevision.notificationStatus}">
+                            <pe:case value="#{notificationStatus.NOT_APPROVED}">
+                                <i class="fa fa-fw fa-volume-off icon-red"
+                                   title="#{msg['dialog.notificationDialog.general.data.status.notApproved']}"/>
+                            </pe:case>
+                            <pe:case value="#{notificationStatus.NOTIFICATION_PENDING}">
+                                <i class="fa fa-fw fa-volume-up icon-orange"
+                                   title="#{msg['dialog.notificationDialog.general.data.status.pending']}"/>
+                            </pe:case>
+                            <pe:case value="#{notificationStatus.NO_NOTFICATION}">
+                                <i class="fa fa-fw fa-circle icon-red"
+                                   title="#{msg['dialog.notificationDialog.general.data.status.none']}"/>
+                            </pe:case>
+                            <pe:case value="#{notificationStatus.NOTIFICATION_COMPLETED}">
+                                <i class="fa fa-fw fa-check-circle icon-green"
+                                   title="#{msg['dialog.notificationDialog.general.data.status.completed']}"/>
+                            </pe:case>
+                            <pe:defaultCase>
+                                <i class="fa fa-question icon-grey"/>
+                            </pe:defaultCase>
+                        </pe:switch>
                     </p:column>
 
                     <!-- performed -->
                     <p:column style="width:20%"
-                              headerText="#{msg['dialog.notification.tab.general.diagnosis.table.notificationPerformd']}">
+                              headerText="#{msg['dialog.notificationDialog.general.data.performed']}">
 
                         <h:outputText value="#{diangosis.diagnosisRevision.notificationDate}"
-                                      rendered="#{diangosis.diagnosisRevision.notificated}">
+                                      rendered="#{diangosis.diagnosisRevision.notified}">
                             <f:converter converterId="instantDateTimeConverter"/>
                             <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
                         </h:outputText>
+
                     </p:column>
 
                     <p:ajax event="rowSelect" process="@form" update="@form"
-                            listener="#{notificationDialog.generalTab.onDiangosisSelect()}"/>
+                            listener="#{notificationDialog.generalTab.onDiagnosisSelect()}"/>
                 </p:dataTable>
 
                 <script type="text/javascript">
@@ -97,16 +111,18 @@
 
                 <!-- overlay for contact notifications -->
                 <p:overlayPanel widgetVar="diagnosisOverlayPanel" hideEvent="null" showEvent="null"
+                                style="width: 500px;"
                                 dismissable="false" id="diagnosisOverlayPanel" styleClass="histoOverlayPanel">
                     <p:dataTable value="#{notificationDialog.generalTab.viewDiagnosisRevisionDetails.reportIntents}"
-                                 var="reportIntent">
+                                 var="reportIntent" styleClass="defaultHistoDataTable">
                         <!-- name -->
-                        <p:column headerText="#{msg['dialog.notificationDialog.general.overlay.personName']}">
+                        <p:column headerText="#{msg['dialog.notificationDialog.general.overlay.personName']}"
+                                  style="width: auto">
                             <h:outputLabel value="#{reportIntent.reportIntent.person.fullName}"/>
                         </p:column>
 
                         <!-- mail status -->
-                        <p:column>
+                        <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
                             <f:facet name="header">
                                 <i class="fa fa-envelope icon-grey"/>
                             </f:facet>
@@ -117,70 +133,82 @@
                         </p:column>
 
                         <!-- fax status -->
-                        <p:column>
+                        <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
                             <f:facet name="header">
                                 <i class="fa fa-fax icon-grey"/>
                             </f:facet>
                             <h:panelGroup rendered="#{reportIntent.isFaxRecord()}">
-                                <i class="fa fa-fw fa-fax #{reportIntent.faxPerformed ? 'icon-green' : ''}"
+                                <i class="fa fa-fax #{reportIntent.faxPerformed ? 'icon-green' : ''}"
                                    title="#{reportIntent.faxPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
                             </h:panelGroup>
                         </p:column>
 
+                        <!-- letter -->
+                        <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+                            <f:facet name="header">
+                                <i class="fa fa-pencil-square-o icon-grey"/>
+                            </f:facet>
+                            <h:panelGroup rendered="#{reportIntent.isLetterRecord()}">
+                                <i class="fa fa-pencil-square-o #{reportIntent.letterPerformed ? 'icon-green' : ''}"
+                                   title="#{reportIntent.letterPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
+                            </h:panelGroup>
+                        </p:column>
+
+                        <!-- phone -->
+                        <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+                            <f:facet name="header">
+                                <i class="fa fa-phone icon-grey"/>
+                            </f:facet>
+                            <h:panelGroup rendered="#{reportIntent.isPhoneRecord()}">
+                                <i class="fa fa-phone #{reportIntent.letterPerformed ? 'icon-green' : ''}"
+                                   title="#{reportIntent.letterPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
+                            </h:panelGroup>
+                        </p:column>
                     </p:dataTable>
                 </p:overlayPanel>
 
             </h:panelGroup>
-            <h:outputLabel value=" "/>
-            <h:panelGroup>
-                <!-- diagnosis not approved warning -->
-                <h:outputLabel styleClass="icon-red bigFont"
-                               value="#{msg['dialog.notification.tab.general.diagnosis.notApproved']}"
-                               rendered="#{notificationDialog.generalTab.selectedDiagnosisNotApprovedy}"/>
-                <!-- diagnosis select manually -->
-                <h:outputLabel styleClass="icon-red bigFont"
-                               value="#{msg['dialog.notification.tab.general.diagnosis.selectManually']}"
-                               rendered="#{notificationDialog.generalTab.selectDiagnosisManually}"/>
-            </h:panelGroup>
 
-            <h:outputLabel
-                    value="#{msg['dialog.notification.tab.general.completeNotification']}"/>
-            <p:selectBooleanCheckbox
-                    value="#{notificationDialog.generalTab.completeNotification}"
-                    title="#{msg['dialog.notification.tab.general.completeNotification.tex']}">
-                <p:ajax event="change" process="@this"/>
-            </p:selectBooleanCheckbox>
+            <h:outputLabel value=" "/>
+            <!-- diagnosis not approved warning -->
+            <h:panelGroup>
+                <h:outputLabel styleClass="icon-red bigFont"
+                               value="#{msg['dialog.notificationDialog.general.warning.notApproved']}"
+                               rendered="#{notificationDialog.generalTab.selectedDiagnosisNotApproved}"/>
+            </h:panelGroup>
         </h:panelGrid>
 
         <!-- Separator -->
         <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
             <p:separator/>
             <h:outputLabel
-                    value="#{msg['dialog.notification.tab.general.notification']}"/>
+                    value="#{msg['dialog.notificationDialog.general.additionalPrints.headline']}"/>
         </h:panelGrid>
 
         <!-- additional prints -->
         <h:panelGrid columns="2" styleClass="defaultHistoTable"
                      columnClasses="columnWidth150,">
+
             <!-- Use additional prints-->
-            <h:outputLabel value="#{msg['dialog.notification.tab.general.use']}"
+            <h:outputLabel value="#{msg['dialog.notificationDialog.general.additionalPrints.use.text']}"
                            styleClass="bigFont"/>
             <p:selectBooleanCheckbox
                     value="#{notificationDialog.generalTab.useNotification}"
-                    title="#{msg['dialog.notification.tab.general.use.text']}">
+                    title="#{msg['dialog.notificationDialog.general.additionalPrints.use.info']}">
                 <p:ajax event="change" process="@form" update="@form"/>
             </p:selectBooleanCheckbox>
 
             <!-- additional prints -->
             <h:outputLabel styleClass="bigFont"
-                           value="#{msg['dialog.notification.tab.general.additionalPrints.tempalte']}"/>
+                           value="#{msg['dialog.notificationDialog.general.additionalPrints.template.text']}"/>
             <p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
+                             title="#{msg['dialog.notificationDialog.general.additionalPrints.template.info']}"
                              disabled="#{!notificationDialog.generalTab.useNotification}"
                              value="#{notificationDialog.generalTab.selectedTemplate}"
                              converter="#{notificationDialog.generalTab.templatesTransformer}">
 
                 <f:selectItem itemValue="#{null}"
-                              itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}"></f:selectItem>
+                              itemLabel="#{msg['dialog.notificationDialog.general.additionalPrints.template.none']}"/>
 
                 <f:selectItems
                         value="#{notificationDialog.generalTab.templates}"
@@ -192,12 +220,12 @@
 
             <!-- print -->
             <h:outputLabel styleClass="bigFont"
-                           value="#{msg['dialog.notification.tab.general.additionalPrints.count']} "
-                           title="#{msg['dialog.notification.tab.send.count']}"/>
-            <p:spinner
-                    disabled="#{!notificationDialog.generalTab.useNotification}"
-                    value="#{notificationDialog.generalTab.printCount}"
-                    styleClass="oneNumberSpinner" min="0" max="9"/>
+                           value="#{msg['dialog.notificationDialog.general.additionalPrints.count.text']} "
+                           title="#{msg['dialog.notificationDialog.general.additionalPrints.count.info']}"/>
+            <p:spinner title="#{msg['dialog.notificationDialog.general.additionalPrints.count.info']}"
+                       disabled="#{!notificationDialog.generalTab.useNotification}"
+                       value="#{notificationDialog.generalTab.printCount}"
+                       styleClass="oneNumberSpinner" min="0" max="9"/>
         </h:panelGrid>
     </p:outputPanel>
 
@@ -210,7 +238,6 @@
                 <!-- next -->
                 <p:commandButton value="#{msg['general.next']}"
                                  icon="fa fa-fw fa-arrow-right"
-                                 disabled="#{notificationDialog.generalTab.selectDiagnosisManually}"
                                  actionListener="#{notificationDialog.nextTab()}"
                                  process="@form" update="@form"/>
 

@@ -847,12 +847,12 @@
                         <h:panelGroup id="notificationsCompleted#{varCounterOuter.index}">
                             <h:panelGroup
                                     rendered="#{revision.notificationStatus != 'NO_NOTFICATION'}">
-                                <i class="fa fa-fw fa-volume-up fa-lg #{revision.notificated ? 'icon-green' : 'icon-grey'}"
+                                <i class="fa fa-fw fa-volume-up fa-lg #{revision.notified ? 'icon-green' : 'icon-grey'}"
                                    title=""/>
                                 <p:tooltip for="notificationsCompleted#{varCounterOuter.index}">
                                     <h:outputLabel
-                                            value="#{revision.notificated ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} "/>
-                                    <h:outputText rendered="#{revision.notificated}"
+                                            value="#{revision.notified ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} "/>
+                                    <h:outputText rendered="#{revision.notified}"
                                                   value="#{revision.notificationDate}">
                                         <f:converter converterId="instantDateTimeConverter"/>
                                         <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>

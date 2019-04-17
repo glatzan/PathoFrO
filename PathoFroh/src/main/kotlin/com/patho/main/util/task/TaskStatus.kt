@@ -3,6 +3,7 @@ package com.patho.main.util.task
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.*
+import com.patho.main.model.patient.NotificationStatus.*
 import com.patho.main.model.user.HistoPermissions
 import com.patho.main.service.impl.SpringContextBridge
 import org.slf4j.LoggerFactory
@@ -243,7 +244,7 @@ open class TaskStatus {
          */
         @JvmStatic
         fun checkIfNotificationIsCompleted(revision: DiagnosisRevision): Boolean {
-            return revision.notificationStatus == DiagnosisRevision.NotificationStatus.NOTIFICATION_PENDING
+            return revision.notificationStatus == NOTIFICATION_PENDING
         }
 
     }

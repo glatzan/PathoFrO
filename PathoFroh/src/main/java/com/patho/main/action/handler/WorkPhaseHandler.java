@@ -2,6 +2,7 @@ package com.patho.main.action.handler;
 
 import java.util.List;
 
+import com.patho.main.model.patient.NotificationStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
-import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.service.DiagnosisService;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.WorkPhaseService;

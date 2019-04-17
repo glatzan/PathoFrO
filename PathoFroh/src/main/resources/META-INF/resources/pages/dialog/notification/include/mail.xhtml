@@ -62,7 +62,7 @@
 				disabled="#{!notificationDialog.mailTab.useNotification}">
 
 				<f:selectItem itemValue="#{null}"
-					itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}"></f:selectItem>
+					itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}" />
 
 				<f:selectItems
 					value="#{notificationDialog.mailTab.templates}"
@@ -76,27 +76,27 @@
 				value="#{msg['dialog.notification.tab.mail.receiver']}"
 				styleClass="bigFont" />
 
-			<p:dataTable var="container" scrollable="true" scrollHeight="160"
+			<p:dataTable var="reportIntent" scrollable="true" scrollHeight="160"
 				style="width:96%" styleClass="defaultHistoDataTable"
-				value="#{notificationDialog.mailTab.container}">
+				value="#{notificationDialog.mailTab.reportIntentStatus.reportIntents}">
 
 				<!-- name of receiver -->
 				<p:column
 					headerText="#{msg['dialog.notification.tab.mail.receiver.name']}"
 					style="width:auto">
-					<h:outputText value="#{container.contact.person.getFullName()}" />
-					<ui:fragment rendered="#{container.notification.failed}">
-						<i class="fa fa-fw fa-times-circle icon-red"
-							title="#{msg['dialog.notification.tab.mail.receiver.failedAndRetry']}: #{container.notification.commentary}" />
-					</ui:fragment>
+					<h:outputText value="#{reportIntent.person.getFullName()}" />
+					<!--<ui:fragment rendered="#{container.notification.failed}">-->
+						<!--<i class="fa fa-fw fa-times-circle icon-red"-->
+							<!--title="#{msg['dialog.notification.tab.mail.receiver.failedAndRetry']}: #{container.notification.commentary}" />-->
+					<!--</ui:fragment>-->
 				</p:column>
 
 				<!-- email -->
 				<p:column
 					headerText="#{msg['dialog.notification.tab.mail.receiver.email']}"
 					style="width:auto">
-					<p:inputText value="#{container.contactAddress}"
-						disabled="#{!notificationDialog.mailTab.useNotification or !container.perform}"
+					<p:inputText value="#{reportIntent.contactAddress}"
+						disabled="#{!notificationDialog.mailTab.useNotification or !reportIntent.perform}"
 						style="width:96%" />
 				</p:column>
 

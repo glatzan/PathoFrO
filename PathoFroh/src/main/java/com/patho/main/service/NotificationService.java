@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.action.UserHandlerAction;
 import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.DiagnosisRevision.NotificationStatus;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.DiagnosisRevisionRepository;

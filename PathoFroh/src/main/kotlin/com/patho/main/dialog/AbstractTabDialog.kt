@@ -46,7 +46,14 @@ abstract class AbstractTabDialog_(dialog: Dialog) : AbstractDialog_(dialog) {
     /**
      * Function is called when a tab is changed. Will execute a tab change event.
      */
-    open fun onTabChange(targetTab: AbstractTab, ignoreTabChangeEvent: Boolean = false) {
+    open fun onTabChange(targetTab: AbstractTab) {
+        onTabChange(targetTab, false)
+    }
+
+    /**
+     * Function is called when a tab is changed. Will execute a tab change event.
+     */
+    open fun onTabChange(targetTab: AbstractTab, ignoreTabChangeEvent: Boolean) {
         val tmpTab = selectedTab
         if (tmpTab != null && !ignoreTabChangeEvent && tmpTab.eventHandler.isFireEvent(targetTab, tmpTab)) {
             tmpTab.eventHandler.executeEvent(targetTab, tmpTab)
