@@ -19,6 +19,9 @@ open class ReportIntentStatusByDiagnosis(val task: Task) {
 
         val reportIntents = mutableListOf<NotificationBearer>()
 
+        val activeReportIntents : List<NotificationBearer>
+        get() = reportIntents.filter { p -> p.isActive }
+
         init {
             for (contact in task.contacts) {
                 val notificationArray = mutableListOf<TypedRecord>()
@@ -31,7 +34,7 @@ open class ReportIntentStatusByDiagnosis(val task: Task) {
 
                 reportIntents.add(NotificationBearer(contact, notificationArray))
             }
-        }
+         }
 
         open class TypedRecord(val reportHistoryRecord: ReportHistoryRecord, val notificationTyp: NotificationTyp, val active: Boolean)
 

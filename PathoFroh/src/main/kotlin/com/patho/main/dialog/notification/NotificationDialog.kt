@@ -64,7 +64,7 @@ class NotificationDialog @Autowired constructor(
         /**
          * True if notification method should be used
          */
-        open var useNotification: Boolean = false
+        open val useNotification: Boolean = false
 
         /**
          * List of templates to select from
@@ -104,34 +104,14 @@ class NotificationDialog @Autowired constructor(
          */
         open lateinit var reportIntentStatus: ReportIntentStatusByType
 
+        /**
+         * Returns true if notification intents are set in the notification status
+         */
+        override val useNotification: Boolean
+            get() = reportIntentStatus.size > 0
+
         override fun updateData() {
-//            val newContainers = AssociatedContactService.getNotificationListForType(task,
-//                    notificationType, generalTab.isCompleteNotification())
-//
-//            val foundContainer = ArrayList<NotificationContainer>()
-//
-//            // adding new, saving found one
-//            for (notificationContainer in newContainers) {
-//                if (getContainer().stream().anyMatch({ p -> p == notificationContainer })) {
-//                    // TODO update old conatienr
-//                } else {
-//                    getContainer().add(notificationContainer)
-//                }
-//                foundContainer.add(notificationContainer)
-//            }
-//
-//            // removing old container
-//            newContainers.removeAll(foundContainer)
-//            getContainer().removeAll(newContainers)
-//
-//            getContainer().stream().sorted({ p1, p2 ->
-//                if (p1.isFaildPreviously() == p2.isFaildPreviously())
-//                    return@getContainer ().stream().sorted 0
-//                else if (p1.isFaildPreviously())
-//                return@getContainer ().stream().sorted 1
-//                else
-//                return@getContainer ().stream().sorted - 1
-//            })
+            reportIntentStatus.update(task)
         }
     }
 
@@ -169,11 +149,15 @@ class NotificationDialog @Autowired constructor(
          */
         open var selectedDiagnosisNotApproved: Boolean = false
 
+        /**
+         * This tab should always be used
+         */
+        override var useNotification: Boolean = true
+
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing general data...")
             diagnosisRevisions = ReportIntentStatusByDiagnosis(task).diagnosisBearer
             selectDiagnosisRevision = diagnosisRevisions.firstOrNull { p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
-            useNotification = true
 
             // setting templates + transformer
             templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
@@ -233,9 +217,7 @@ class NotificationDialog @Autowired constructor(
                     InitializeToken("task", task),
                     InitializeToken("contact", null))
 
-            updateData()
-
-//            useNotification = container.size > 0
+            reportIntentStatus = ReportIntentStatusByType(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -272,9 +254,7 @@ class NotificationDialog @Autowired constructor(
 
             printFax = false
 
-            updateData()
-
-//            useNotification = container.size > 0
+            reportIntentStatus = ReportIntentStatusByType(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -304,9 +284,7 @@ class NotificationDialog @Autowired constructor(
 
             printLetter = true
 
-            updateData()
-
-//            useNotification = container.size > 0
+            reportIntentStatus = ReportIntentStatusByType(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -322,9 +300,7 @@ class NotificationDialog @Autowired constructor(
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing phone data...")
 
-            updateData()
-
-//            useNotification = container.size > 0
+            reportIntentStatus = ReportIntentStatusByType(task, notificationTyp)
 
             return super.initTab(force)
         }
