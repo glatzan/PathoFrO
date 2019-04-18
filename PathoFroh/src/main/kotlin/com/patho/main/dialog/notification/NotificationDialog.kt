@@ -1,22 +1,32 @@
 package com.patho.main.dialog.notification
 
+import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTabTaskDialog
+import com.patho.main.dialog.contact.ContactAddDialog
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
+import com.patho.main.model.patient.notification.ReportIntent
+import com.patho.main.model.person.Contact
+import com.patho.main.model.person.Person
 import com.patho.main.repository.MailRepository
 import com.patho.main.repository.PrintDocumentRepository
 import com.patho.main.template.InitializeToken
 import com.patho.main.template.MailTemplate
 import com.patho.main.template.PrintDocument
+import com.patho.main.template.print.ui.document.AbstractDocumentUi
+import com.patho.main.template.print.ui.document.report.DiagnosisReportUi
+import com.patho.main.ui.selectors.ContactSelector
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.status.ReportIntentStatusByDiagnosis
 import com.patho.main.util.status.ReportIntentStatusByType
+import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component()
 @Scope(value = "session")
@@ -51,6 +61,55 @@ class NotificationDialog @Autowired constructor(
         this.letterTab.disabled = letterTab
         this.phoneTab.disabled = phoneTab
         this.sendTab.disabled = sendTab
+    }
+
+    /**
+     * Open the print dialog in select mode in order to select a report for the given contact
+     */
+    fun openSelectPDFDialog(task: Task, contact: ReportIntent) {
+
+        val printDocuments = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
+                PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+
+        val selectors = ArrayList<ContactSelector>()
+
+        selectors.add(ContactSelector(contact))
+        selectors.add(ContactSelector(task,
+                Person(resourceBundle.get("dialog.print.individualAddress"), Contact()), ContactRole.NONE))
+        selectors[0].isSelected = true
+
+        // getting ui objects
+        val printDocumentUIs = AbstractDocumentUi.factory(printDocuments)
+
+        for (documentUi in printDocumentUIs) {
+            (documentUi as DiagnosisReportUi).initialize(task, selectors)
+            documentUi.sharedData.isRenderSelectedContact = true
+            documentUi.sharedData.isUpdatePdfOnEverySettingChange = true
+            documentUi.sharedData.isSingleSelect = true
+        }
+
+//        dialogHandler.getPrintDialog().initAndPrepareBean(task, printDocumentUIs, printDocumentUIs[0])
+//                .selectMode(true)
+    }
+
+    /**
+     * Default return function, handel the pdf select return
+     */
+    override fun onSubDialogReturn(event: SelectEvent) {
+        val container = event.component.attributes["container"]
+
+        if (event.`object` is ContactAddDialog.SelectPhysicianReturnEvent) {
+            logger.debug("On custom dialog return ${event.getObject()}  $container")
+//            if (event.getObject() != null && event.getObject() instanceof PDFContainer && container != null
+//                    && container instanceof NotificationContainer) {
+//                logger.debug("Settign custom pdf for container "
+//                        + ((NotificationContainer) container).getContact().getPerson().getFirstName());
+//                ((NotificationContainer) container).setPdf((TemplatePDFContainer) event . getObject ());
+//            }
+            return;
+        }
+
+        super.onSubDialogReturn(event)
     }
 
     /**

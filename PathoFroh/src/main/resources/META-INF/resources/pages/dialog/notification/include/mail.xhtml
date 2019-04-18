@@ -84,7 +84,7 @@
                 <p:column
                         headerText="#{msg['dialog.notification.tab.mail.receiver.name']}"
                         style="width:auto">
-                    <h:outputText value="#{reportIntentNotificationBearer.reportIntentNotification.person.getFullName()}"/>
+                    <h:outputText value="#{reportIntentNotificationBearer.reportIntent.person.getFullName()}"/>
                     <!--<ui:fragment rendered="#{container.notification.failed}">-->
                     <!--<i class="fa fa-fw fa-times-circle icon-red"-->
                     <!--title="#{msg['dialog.notification.tab.mail.receiver.failedAndRetry']}: #{container.notification.commentary}" />-->
@@ -96,7 +96,7 @@
                         headerText="#{msg['dialog.notification.tab.mail.receiver.email']}"
                         style="width:auto">
                     <p:inputText value="#{reportIntentNotificationBearer.contactAddress}"
-                                 disabled="#{!notificationDialog.mailTab.useNotification or !reportIntent.perform}"
+                                 disabled="#{!notificationDialog.mailTab.useNotification or !reportIntentNotificationBearer.performNotification}"
                                  style="width:96%"/>
                 </p:column>
 
@@ -109,7 +109,7 @@
 
                     <p:selectBooleanCheckbox
                             disabled="#{!notificationDialog.mailTab.useNotification}"
-                            value="#{container.perform}">
+                            value="#{reportIntentNotificationBearer.performNotification}">
                         <p:ajax event="change" update="@form"/>
                     </p:selectBooleanCheckbox>
                 </p:column>
@@ -123,17 +123,17 @@
 
                     <!-- add pdf, if pdf == null -->
                     <p:commandLink
-                            rendered="#{container.pdf eq null and container.perform}"
+                            rendered="#{reportIntentNotificationBearer.pdf eq null and reportIntentNotificationBearer.performNotification}"
                             disabled="#{!notificationDialog.mailTab.useNotification}"
                             title="#{msg['dialog.notification.tab.mail.receiver.pdf.info']}"
                             execute="@this" onstart="PF('blockUIWidget').block()"
                             oncomplete="PF('blockUIWidget').unblock()"
-                            actionListener="#{notificationDialog.openSelectPDFDialog(notificationDialog.task, container.contact)}">
+                            actionListener="#{notificationDialog.openSelectPDFDialog(notificationDialog.task, reportIntentNotificationBearer.reportIntent)}">
 
-                        <f:attribute name="container" value="#{container}"/>
+                        <f:attribute name="container" value="#{reportIntentNotificationBearer.reportIntent}"/>
 
                         <p:ajax event="dialogReturn" update="@form" process="@form"
-                                listener="#{notificationDialog.onSelectPDFDialogReturn}">
+                                listener="#{notificationDialog.onSubDialogReturn}">
                         </p:ajax>
 
                         <i class="fa fa-fw fa-file-pdf-o"/>
@@ -141,22 +141,22 @@
 
                     <!-- show pdf, if pdf != null -->
                     <p:commandLink
-                            rendered="#{container.pdf ne null and container.perform}"
+                            rendered="#{reportIntentNotificationBearer.pdf ne null and reportIntentNotificationBearer.performNotification}"
                             title="#{msg['dialog.notification.tab.mail.receiver.pdf.show']}"
                             execute="@this"
                             disabled="#{!notificationDialog.mailTab.useNotification}"
-                            actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(notificationDialog.task.patient).viewMode().setPDFToDisplay(container.pdf)}">
+                            actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(notificationDialog.task.patient).viewMode().setPDFToDisplay(reportIntentNotificationBearer.pdf)}">
 
                         <i class="fa fa-search icon-grey"/>
                     </p:commandLink>
 
                     <!-- remove pdf, if pdf != null -->
                     <p:commandLink style="margin-left: 10px;"
-                                   rendered="#{container.pdf ne null and container.perform}"
+                                   rendered="#{reportIntentNotificationBearer.pdf ne null and reportIntentNotificationBearer.performNotification}"
                                    title="#{msg['dialog.notification.tab.mail.receiver.pdf.remove']}"
                                    execute="@this"
                                    disabled="#{!notificationDialog.mailTab.useNotification}"
-                                   update="@form" actionListener="#{container.setPdf(null)}">
+                                   update="@form" actionListener="#{reportIntentNotificationBearer.setPdf(null)}">
 
                         <i class="fa fa-close icon-grey"/>
                     </p:commandLink>

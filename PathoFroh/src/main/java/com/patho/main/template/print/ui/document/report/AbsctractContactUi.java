@@ -1,20 +1,18 @@
 package com.patho.main.template.print.ui.document.report;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import com.patho.main.model.patient.notification.ReportIntent;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.selectors.ContactSelector.OrganizationChooser;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Configurable;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -165,8 +163,6 @@ public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractCont
 	 * @author andi
 	 *
 	 */
-	@Getter
-	@Setter
 	public static class SharedContactData extends AbstractDocumentUi.SharedData {
 		/**
 		 * List with all associated contacts
@@ -197,6 +193,38 @@ public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractCont
 		public void initializ(Task task, List<ContactSelector> contactList) {
 			if (isInitialized())
 				return;
+		}
+
+		public List<ContactSelector> getContactList() {
+			return this.contactList;
+		}
+
+		public boolean isSingleSelect() {
+			return this.singleSelect;
+		}
+
+		public boolean isUpdatePdfOnEverySettingChange() {
+			return this.updatePdfOnEverySettingChange;
+		}
+
+		public boolean isRenderSelectedContact() {
+			return this.renderSelectedContact;
+		}
+
+		public void setContactList(List<ContactSelector> contactList) {
+			this.contactList = contactList;
+		}
+
+		public void setSingleSelect(boolean singleSelect) {
+			this.singleSelect = singleSelect;
+		}
+
+		public void setUpdatePdfOnEverySettingChange(boolean updatePdfOnEverySettingChange) {
+			this.updatePdfOnEverySettingChange = updatePdfOnEverySettingChange;
+		}
+
+		public void setRenderSelectedContact(boolean renderSelectedContact) {
+			this.renderSelectedContact = renderSelectedContact;
 		}
 	}
 

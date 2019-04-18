@@ -1,5 +1,6 @@
 package com.patho.main.util.status
 
+import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntent
@@ -39,7 +40,7 @@ class ReportIntentStatusByType(var task: Task, val notificationTyp: Notification
                 // removing found container, so that these won't be deleted
                 toDeleteContainer.remove(toUpdate)
             } else {
-                reportNotificationIntents.add(ReportIntentNotificationBearer(p))
+                reportNotificationIntents.add(p)
             }
         }
 
@@ -60,6 +61,9 @@ class ReportIntentStatusByType(var task: Task, val notificationTyp: Notification
 
         var contactAddress: String = reportIntentNotification.contactAddress
 
+        /**
+         * Status of the reportintentNotification
+         */
         val status: ReportIntentBearerStatus = if (reportIntentNotification.active) {
             // status is active, check if history is present, if so check if the notification was successful
             if (SpringContextBridge.services().reportIntentService.isHistoryPresent(reportIntentNotification)) {
@@ -73,6 +77,10 @@ class ReportIntentStatusByType(var task: Task, val notificationTyp: Notification
             // is inactive
         } else
             ReportIntentBearerStatus.INACTIVE
+
+        var performNotification: Boolean = status == ReportIntentBearerStatus.ACTIVE
+
+        var pdf : PDFContainer? = null
 
         fun update(update: ReportIntentNotificationBearer) {
             this.reportIntent = update.reportIntent

@@ -1,37 +1,28 @@
 package com.patho.main.template.print.ui.document;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
+import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.model.interfaces.ID;
+import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.notification.ReportIntent;
+import com.patho.main.repository.PrintDocumentRepository;
+import com.patho.main.template.InitializeToken;
+import com.patho.main.template.PrintDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.patient.Task;
-import com.patho.main.repository.PrintDocumentRepository;
-import com.patho.main.template.InitializeToken;
-import com.patho.main.template.PrintDocument;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 @Configurable
 public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocumentUi.SharedData> implements ID {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	protected ResourceBundle resourceBundle;
 
 	/**
@@ -158,14 +149,48 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 	public void setId(long l) {
 	}
 
+	public Logger getLogger() {
+		return this.logger;
+	}
+
+	public T getPrintDocument() {
+		return this.printDocument;
+	}
+
+	public S getSharedData() {
+		return this.sharedData;
+	}
+
+	public Task getTask() {
+		return this.task;
+	}
+
+	public String getInputInclude() {
+		return this.inputInclude;
+	}
+
+	public void setPrintDocument(T printDocument) {
+		this.printDocument = printDocument;
+	}
+
+	public void setSharedData(S sharedData) {
+		this.sharedData = sharedData;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+
+	public void setInputInclude(String inputInclude) {
+		this.inputInclude = inputInclude;
+	}
+
 	/**
 	 * Return container for generated template
 	 * 
 	 * @author andi
 	 *
 	 */
-	@Getter
-	@Setter
 	public class TemplateConfiguration<I extends PrintDocument> {
 		private I documentTemplate;
 		private ReportIntent contact;
@@ -182,6 +207,38 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 			this.address = address;
 			this.copies = copies;
 		}
+
+		public I getDocumentTemplate() {
+			return this.documentTemplate;
+		}
+
+		public ReportIntent getContact() {
+			return this.contact;
+		}
+
+		public String getAddress() {
+			return this.address;
+		}
+
+		public int getCopies() {
+			return this.copies;
+		}
+
+		public void setDocumentTemplate(I documentTemplate) {
+			this.documentTemplate = documentTemplate;
+		}
+
+		public void setContact(ReportIntent contact) {
+			this.contact = contact;
+		}
+
+		public void setAddress(String address) {
+			this.address = address;
+		}
+
+		public void setCopies(int copies) {
+			this.copies = copies;
+		}
 	}
 
 	/**
@@ -190,8 +247,6 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 	 * @author andi
 	 *
 	 */
-	@Getter
-	@Setter
 	public static class SharedData {
 
 		private boolean initialized;
@@ -202,6 +257,14 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 
 		public ReportIntent getSelectedContact() {
 			return null;
+		}
+
+		public boolean isInitialized() {
+			return this.initialized;
+		}
+
+		public void setInitialized(boolean initialized) {
+			this.initialized = initialized;
 		}
 	}
 }
