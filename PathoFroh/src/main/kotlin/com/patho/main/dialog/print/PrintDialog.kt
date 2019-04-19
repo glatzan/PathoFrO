@@ -86,15 +86,18 @@ class PrintDialog : AbstractTaskDialog(Dialog.PRINT) {
     }
 
     fun initBean(task: Task, templateUI: List<AbstractDocumentUi<*, *>>,
-                 selectedTemplateUi: AbstractDocumentUi<*, *>): Boolean {
+                 selectTemplateUi: AbstractDocumentUi<*, *>): Boolean {
 
         if (templateUI != null) {
 
             // setting template list to choose from
-            setTemplateList(templateUI)
-            setTemplateTransformer(DefaultTransformer<AbstractDocumentUi<*, *>>(getTemplateList()))
 
-            selectedTemplateUi?.let { setSelectedTemplate(it) } ?: setSelectedTemplate(templateUI[0])
+            this.templateList = templateUI
+
+            if(selectTemplateUi != null)
+                this.selectedTemplate = selectTemplateUi
+            else
+                this.selectedTemplate = templateUI[0]
 
             guiManager.isRenderComponent = true
         } else {
@@ -103,12 +106,12 @@ class PrintDialog : AbstractTaskDialog(Dialog.PRINT) {
 
         guiManager.reset()
 
-        setSelectMode(false)
-        setFaxMode(true)
-        setSavePDF(true)
-        setSingleAddressSelectMode(false)
+        selectMode = false
+        faxMode = false
+        savePDF = false
+        singleAddressSelectMode = false
 
-        super.initBean(task, Dialog.PRINT)
+        super.initAndPrepareBean(task)
 
         // rendering the template
         onChangePrintTemplate()
