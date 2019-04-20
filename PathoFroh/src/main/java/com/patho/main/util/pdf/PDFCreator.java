@@ -146,11 +146,6 @@ public class PDFCreator {
 		container.setType(template.getDocumentType());
 		container.setName(template.getGeneratedFileName());
 
-		this.absoulteTargetFile = mediaRepository.getWriteFile(container.getPath());
-		this.relativeTargetFile = container.getPath();
-		this.absoluteTargetImg = mediaRepository.getWriteFile(container.getThumbnail());
-		this.relativeTargetImg = container.getThumbnail();
-
 		return runPDFCreation(template, container, generateThumbnail);
 	}
 
@@ -173,11 +168,13 @@ public class PDFCreator {
 				try {
 					lock.acquire();
 
-					logger.debug("Stargin PDF Generation in new Thread");
+					logger.debug("Starting PDF Generation in new Thread");
 					PDFContainer returnPDF = createPDF(template, relaiveTargetDirectory, generateThumbnail);
 					returnHandler.returnPDFContent(returnPDF, uuid);
 					logger.debug("PDF Generation completed, thread ended");
 				} catch (Exception e) {
+					logger.debug("Error");
+					e.printStackTrace();
 				} finally {
 					lock.release();
 				}
@@ -428,7 +425,7 @@ public class PDFCreator {
 		logger.debug("PDF with output file " + outFile.getPath() + " dir " + absoluteTargetDirectory.getPath());
 		PDFContainer pdfContainer = new PDFContainer();
 		pdfContainer.setPath(outFile.getPath());
-		pdfContainer.setThumbnail(thumbnail ? outImg.getPath() : null);
+		pdfContainer.setThumbnail(thumbnail ? outImg.getPath() : "");
 		return pdfContainer;
 	}
 

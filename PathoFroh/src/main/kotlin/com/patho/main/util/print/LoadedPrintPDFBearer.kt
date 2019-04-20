@@ -18,7 +18,7 @@ class LoadedPrintPDFBearer : PrintPDFBearer {
     constructor(pdfContainer: PDFContainer, printDocument: PrintDocument) : super(pdfContainer, printDocument) {
         pdfData = SpringContextBridge.services().mediaRepository.getBytes(pdfContainer.path)
 
-        if (pdfContainer.thumbnail != null)
+        if (pdfContainer.isThumbnailPreset)
             thumbnailData = SpringContextBridge.services().mediaRepository.getBytes(pdfContainer.thumbnail)
     }
 

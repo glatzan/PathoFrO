@@ -4,11 +4,11 @@ import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTabTaskDialog
-import com.patho.main.dialog.contact.ContactAddDialog
-import com.patho.main.model.patient.NotificationStatus
+import com.patho.main.dialog.print.PrintDialog
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntent
+import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
 import com.patho.main.repository.MailRepository
@@ -20,6 +20,7 @@ import com.patho.main.template.print.ui.document.AbstractDocumentUi
 import com.patho.main.template.print.ui.document.report.DiagnosisReportUi
 import com.patho.main.ui.selectors.ContactSelector
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.print.LoadedPrintPDFBearer
 import com.patho.main.util.status.ReportIntentStatusByDiagnosis
 import com.patho.main.util.status.ReportIntentStatusByType
 import org.primefaces.event.SelectEvent
@@ -33,7 +34,8 @@ import java.util.*
 class NotificationDialog @Autowired constructor(
         private val printDocumentRepository: PrintDocumentRepository,
         private val pathoConfig: PathoConfig,
-        private val mailRepository: MailRepository) : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
+        private val mailRepository: MailRepository,
+        private val printDialog: PrintDialog) : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
 
     val generalTab: GeneralTab = GeneralTab()
     val mailTab: MailTab = MailTab()
@@ -71,11 +73,11 @@ class NotificationDialog @Autowired constructor(
         val printDocuments = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
                 PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
 
+        //
         val selectors = ArrayList<ContactSelector>()
-
         selectors.add(ContactSelector(contact))
         selectors.add(ContactSelector(task,
-                Person(resourceBundle.get("dialog.print.individualAddress"), Contact()), ContactRole.NONE))
+                Person(resourceBundle.get("dialog.printDialog.individualAddress"), Contact()), ContactRole.NONE))
         selectors[0].isSelected = true
 
         // getting ui objects
@@ -88,8 +90,8 @@ class NotificationDialog @Autowired constructor(
             documentUi.sharedData.isSingleSelect = true
         }
 
-//        dialogHandler.getPrintDialog().initAndPrepareBean(task, printDocumentUIs, printDocumentUIs[0])
-//                .selectMode(true)
+        printDialog.initAndPrepareBean(task, printDocumentUIs, printDocumentUIs[0])
+                .selectMode(true)
     }
 
     /**
@@ -97,15 +99,11 @@ class NotificationDialog @Autowired constructor(
      */
     override fun onSubDialogReturn(event: SelectEvent) {
         val container = event.component.attributes["container"]
+        val returnObject = event.`object`
 
-        if (event.`object` is ContactAddDialog.SelectPhysicianReturnEvent) {
-            logger.debug("On custom dialog return ${event.getObject()}  $container")
-//            if (event.getObject() != null && event.getObject() instanceof PDFContainer && container != null
-//                    && container instanceof NotificationContainer) {
-//                logger.debug("Settign custom pdf for container "
-//                        + ((NotificationContainer) container).getContact().getPerson().getFirstName());
-//                ((NotificationContainer) container).setPdf((TemplatePDFContainer) event . getObject ());
-//            }
+        if (returnObject is LoadedPrintPDFBearer && container is ReportIntentStatusByType.ReportIntentNotificationBearer) {
+            logger.debug("Setting custom pdf for container $container.reportIntent.person?.getFullName()}")
+            container.pdf = returnObject.pdfContainer
             return;
         }
 
@@ -123,7 +121,7 @@ class NotificationDialog @Autowired constructor(
         /**
          * True if notification method should be used
          */
-        open val useNotification: Boolean = false
+        open var useNotification: Boolean = false
 
         /**
          * List of templates to select from
@@ -163,14 +161,16 @@ class NotificationDialog @Autowired constructor(
          */
         open lateinit var reportIntentStatus: ReportIntentStatusByType
 
-        /**
-         * Returns true if notification intents are set in the notification status
-         */
-        override val useNotification: Boolean
-            get() = reportIntentStatus.size > 0
-
         override fun updateData() {
             reportIntentStatus.update(task)
+        }
+
+        /**
+         * Initializes the useNotification value and calls the parent method
+         */
+        override fun initTab(force: Boolean): Boolean {
+            useNotification = reportIntentStatus.size > 0
+            return super.initTab(force)
         }
     }
 
@@ -373,5 +373,11 @@ class NotificationDialog @Autowired constructor(
 
     }
 
+
+    class NotificationStatus(task: Task, notificationTyp: NotificationTyp, ignoreActive: Boolean = false) : ReportIntentStatusByType(task, notificationTyp, ignoreActive) {
+        class Test(reportIntent: ReportIntent, reportIntentNotification: ReportIntentNotification) : ReportIntentNotificationBearer(reportIntent,reportIntentNotification) {
+
+        }
+    }
 
 }

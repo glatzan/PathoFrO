@@ -28,7 +28,6 @@ import com.patho.main.action.dialog.patient.PatientLogDialog;
 import com.patho.main.action.dialog.patient.SearchPatientDialog;
 import com.patho.main.action.dialog.print.CustomAddressDialog;
 import com.patho.main.action.dialog.print.FaxDocumentDialog;
-import com.patho.main.action.dialog.print.PrintDialog;
 import com.patho.main.action.dialog.settings.SettingsDialog;
 import com.patho.main.action.dialog.settings.UserSettingsDialog;
 import com.patho.main.action.dialog.settings.diagnosis.DiagnosisPresetEditDialog;
@@ -77,7 +76,6 @@ public class DialogHandler {
 	private EditPDFDialog editPDFDialog = new EditPDFDialog();
 	private DeletePDFDialog deletePDFDialog = new DeletePDFDialog();
 	private DiagnosisPhaseExitDialog diagnosisPhaseExitDialog = new DiagnosisPhaseExitDialog();
-	private PrintDialog printDialog = new PrintDialog();
 	private CreateDiagnosisRevisionDialog createDiagnosisRevisionDialog = new CreateDiagnosisRevisionDialog();
 	private EditDiagnosisRevisionsDialog editDiagnosisRevisionsDialog = new EditDiagnosisRevisionsDialog();
 	private DeleteDiagnosisRevisionDialog deleteDiagnosisRevisionDialog = new DeleteDiagnosisRevisionDialog();

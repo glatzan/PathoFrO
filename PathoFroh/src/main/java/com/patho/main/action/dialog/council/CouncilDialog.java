@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 
+import com.patho.main.dialog.print.PrintDialog;
 import com.patho.main.model.patient.miscellaneous.Council;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
@@ -103,6 +104,11 @@ public class CouncilDialog extends AbstractDialog {
 	@Setter(AccessLevel.NONE)
 	@Lazy
 	private DialogHandler dialogHandler;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private PrintDialog printDialog;
 
 	/**
 	 * Root node for Tree
@@ -547,7 +553,7 @@ public class CouncilDialog extends AbstractDialog {
 			((CouncilReportUi) documentUi).getSharedData().setSingleSelect(true);
 		}
 
-		dialogHandler.getPrintDialog().initAndPrepareBean(getTask(), printDocumentUIs, printDocumentUIs.get(0));
+		printDialog.initAndPrepareBean(getTask(), printDocumentUIs, printDocumentUIs.get(0));
 	}
 
 	@Override

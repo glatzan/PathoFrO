@@ -7,9 +7,6 @@ import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TextToLatexConverter;
 import com.patho.main.util.helper.TimeUtil;
 import com.patho.main.util.pdf.PDFCreator;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +17,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
-@Setter
 @Configurable
 public class PrintDocument extends AbstractTemplate {
 
     @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     protected ResourceBundle resourceBundle;
 
     /**
@@ -161,6 +154,62 @@ public class PrintDocument extends AbstractTemplate {
     public String getGeneratedFileName() {
         return resourceBundle.get("enum.documentType." + getDocumentType()) + "-"
                 + TimeUtil.formatDate(new Date(), "dd.MM.yyyy") + ".pdf";
+    }
+
+    public String getUiClass() {
+        return this.uiClass;
+    }
+
+    public int getSharedContextGroup() {
+        return this.sharedContextGroup;
+    }
+
+    public String getLoadedContent() {
+        return this.loadedContent;
+    }
+
+    public String getFinalContent() {
+        return this.finalContent;
+    }
+
+    public boolean isAfterPDFCreationHook() {
+        return this.afterPDFCreationHook;
+    }
+
+    public boolean isDuplexPrinting() {
+        return this.duplexPrinting;
+    }
+
+    public boolean isPrintEvenPageCount() {
+        return this.printEvenPageCount;
+    }
+
+    public void setUiClass(String uiClass) {
+        this.uiClass = uiClass;
+    }
+
+    public void setSharedContextGroup(int sharedContextGroup) {
+        this.sharedContextGroup = sharedContextGroup;
+    }
+
+    public void setLoadedContent(String loadedContent) {
+        this.loadedContent = loadedContent;
+    }
+
+    public void setFinalContent(String finalContent) {
+        this.finalContent = finalContent;
+    }
+
+    public void setAfterPDFCreationHook(boolean afterPDFCreationHook) {
+        this.afterPDFCreationHook = afterPDFCreationHook;
+    }
+
+    public void setDuplexPrinting(boolean duplexPrinting) {
+        this.duplexPrinting = duplexPrinting;
+    }
+
+    public void setPrintEvenPageCount(boolean printEvenPageCount) {
+        this.printEvenPageCount = printEvenPageCount;
     }
 
     /**

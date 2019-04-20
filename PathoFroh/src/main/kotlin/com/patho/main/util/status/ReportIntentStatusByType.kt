@@ -10,7 +10,7 @@ import com.patho.main.service.impl.SpringContextBridge
 /**
  * Listing for notification types
  */
-class ReportIntentStatusByType(var task: Task, val notificationTyp: NotificationTyp, val ignoreActive: Boolean = false) {
+open class ReportIntentStatusByType<out ReportIntentNotificationBearer>(var task: Task, val notificationTyp: NotificationTyp, val ignoreActive: Boolean = false) {
 
     var reportNotificationIntents: MutableList<ReportIntentNotificationBearer> = getReportIntentNotificationBearerList()
 
@@ -57,7 +57,7 @@ class ReportIntentStatusByType(var task: Task, val notificationTyp: Notification
     /**
      * Bearer for the notification intent
      */
-    class ReportIntentNotificationBearer(var reportIntent: ReportIntent, var reportIntentNotification: ReportIntentNotification) {
+    open class ReportIntentNotificationBearer(var reportIntent: ReportIntent, var reportIntentNotification: ReportIntentNotification) {
 
         var contactAddress: String = reportIntentNotification.contactAddress
 

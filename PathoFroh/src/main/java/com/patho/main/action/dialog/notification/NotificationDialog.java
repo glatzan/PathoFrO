@@ -183,7 +183,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
         selectors.add(new ContactSelector(contact));
         selectors.add(new ContactSelector(task,
-                new Person(resourceBundle.get("dialog.print.individualAddress"), new Contact()), ContactRole.NONE));
+                new Person(resourceBundle.get("dialog.printDialog.individualAddress"), new Contact()), ContactRole.NONE));
         selectors.get(0).setSelected(true);
 
         // getting ui objects
@@ -196,8 +196,8 @@ public class NotificationDialog extends AbstractTabDialog {
             ((DiagnosisReportUi) documentUi).getSharedData().setSingleSelect(true);
         }
 
-        dialogHandler.getPrintDialog().initAndPrepareBean(getTask(), printDocumentUIs, printDocumentUIs.get(0))
-                .selectMode(true);
+//        dialogHandler.getPrintDialog().initAndPrepareBean(getTask(), printDocumentUIs, printDocumentUIs.get(0))
+//                .selectMode(true);
     }
 
     /**

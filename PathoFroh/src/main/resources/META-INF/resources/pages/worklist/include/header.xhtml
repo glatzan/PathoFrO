@@ -309,11 +309,8 @@
 
             <!-- Print button -->
             <p:commandButton id="printBtn" widgetVar="printBtnVar"
-                             onstart="PF('blockUIWidget').block()"
-                             oncomplete="PF('blockUIWidget').unblock()"
-                             actionListener="#{dialog.printDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                             actionListener="#{printDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                 <p:ajax event="dialogReturn"
-                        oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                         update="navigationForm:patientList contentForm headerForm"/>
             </p:commandButton>
 

@@ -126,8 +126,7 @@
                             rendered="#{reportIntentNotificationBearer.pdf eq null and reportIntentNotificationBearer.performNotification}"
                             disabled="#{!notificationDialog.mailTab.useNotification}"
                             title="#{msg['dialog.notification.tab.mail.receiver.pdf.info']}"
-                            execute="@this" onstart="PF('blockUIWidget').block()"
-                            oncomplete="PF('blockUIWidget').unblock()"
+                            execute="@this"
                             actionListener="#{notificationDialog.openSelectPDFDialog(notificationDialog.task, reportIntentNotificationBearer.reportIntent)}">
 
                         <f:attribute name="container" value="#{reportIntentNotificationBearer.reportIntent}"/>

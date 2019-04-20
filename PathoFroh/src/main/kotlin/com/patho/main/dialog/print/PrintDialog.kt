@@ -12,8 +12,8 @@ import com.patho.main.service.PrintService
 import com.patho.main.service.UserService
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.print.ui.document.AbstractDocumentUi
-import com.patho.main.ui.LazyPDFGuiManager
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.pdf.LazyPDFGuiManager
 import com.patho.main.util.pdf.PDFCreator
 import com.patho.main.util.pdf.PrintOrder
 import com.patho.main.util.print.LoadedPrintPDFBearer
@@ -33,12 +33,12 @@ class PrintDialog @Autowired constructor(
     /**
      * Manager for rendering the pdf lazy style
      */
-    private val guiManager = LazyPDFGuiManager()
+    val guiManager = LazyPDFGuiManager()
 
     /**
      * List of all templates for printing
      */
-    var templateList: List<AbstractDocumentUi<*, *>> = listOf()
+    var templates: List<AbstractDocumentUi<*, *>> = listOf()
         set(value) {
             field = value
             templateTransformer = DefaultTransformer(value)
@@ -47,7 +47,7 @@ class PrintDialog @Autowired constructor(
     /**
      * The TemplateListtransformer for selecting a template
      */
-    var templateTransformer: DefaultTransformer<AbstractDocumentUi<*, *>> = DefaultTransformer(templateList)
+    var templateTransformer: DefaultTransformer<AbstractDocumentUi<*, *>> = DefaultTransformer(templates)
 
     /**
      * Ui object for template
@@ -131,16 +131,16 @@ class PrintDialog @Autowired constructor(
 
             // setting template list to choose from
 
-            this.templateList = templateUI
+            this.templates = templateUI
 
             if (selectTemplateUi != null)
                 this.selectedTemplate = selectTemplateUi
             else
                 this.selectedTemplate = templateUI[0]
 
-            guiManager.isRenderComponent = true
+            guiManager.renderComponent = true
         } else {
-            guiManager.isRenderComponent = false
+            guiManager.renderComponent = false
         }
 
         guiManager.reset()
@@ -150,7 +150,7 @@ class PrintDialog @Autowired constructor(
         savePDF = false
         singleAddressSelectMode = false
 
-        super.initAndPrepareBean(task)
+        super.initBean(task)
 
         // rendering the template
         onChangePrintTemplate()
@@ -232,9 +232,16 @@ class PrintDialog @Autowired constructor(
         logger.debug("Printing completed")
     }
 
-    fun hideAndSelectDialog() {
-        super.hideDialog(
-            LoadedPrintPDFBearer(guiManager.pdfContainerToRender,
-                    selectedTemplate?.defaultTemplateConfiguration.documentTemplate))
+    /**
+     * Hides the dialog. If a rendered pdf is available and a template was selected a LoadedPrintPDFBearer is returned.
+     */
+    fun hideAndSelect() {
+        val pdf = guiManager.pdfContainerToRender
+        val template = selectedTemplate?.defaultTemplateConfiguration?.documentTemplate
+
+        if (pdf != null && template != null) {
+            hideDialog(LoadedPrintPDFBearer(pdf, template))
+        } else
+            hideDialog()
     }
 }

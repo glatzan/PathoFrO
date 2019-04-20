@@ -143,7 +143,7 @@ public class DiagnosisReportUi extends AbsctractContactUi<DiagnosisReport, Diagn
 				getContactList().addAll(ContactSelector.factory(task));
 
 				getContactList().add(new ContactSelector(task,
-						new Person(resourceBundle.get("dialog.print.individualAddress"), new Contact()),
+						new Person(resourceBundle.get("dialog.printDialog.individualAddress"), new Contact()),
 						ContactRole.NONE));
 
 				getContactList().add(new ContactSelector(task,
