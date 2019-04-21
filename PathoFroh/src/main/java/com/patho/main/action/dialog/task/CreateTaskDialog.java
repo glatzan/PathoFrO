@@ -20,7 +20,7 @@ import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
-import com.patho.main.template.InitializeToken;
+import com.patho.main.template.DocumentToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.util.dialogReturn.PatientReturnEvent;
@@ -264,8 +264,8 @@ public class CreateTaskDialog extends AbstractDialog {
                     return;
                 }
 
-                printDocument.get().initialize(new InitializeToken("task", task),
-                        new InitializeToken("patient", patient));
+                printDocument.get().initialize(new DocumentToken("task", task),
+                        new DocumentToken("patient", patient));
 
                 PDFContainer container = null;
                 try {

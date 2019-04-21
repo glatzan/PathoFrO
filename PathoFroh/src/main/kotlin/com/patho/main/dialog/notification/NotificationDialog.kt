@@ -5,6 +5,8 @@ import com.patho.main.common.Dialog
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTabTaskDialog
 import com.patho.main.dialog.print.PrintDialog
+import com.patho.main.dialog.print.documentUi.AbstractDocumentUi
+import com.patho.main.dialog.print.documentUi.DiagnosisReportUi
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
@@ -14,11 +16,10 @@ import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
 import com.patho.main.repository.MailRepository
 import com.patho.main.repository.PrintDocumentRepository
-import com.patho.main.template.InitializeToken
+import com.patho.main.template.DocumentToken
 import com.patho.main.template.MailTemplate
 import com.patho.main.template.PrintDocument
-import com.patho.main.template.print.ui.document.AbstractDocumentUi
-import com.patho.main.template.print.ui.document.report.DiagnosisReportUi
+import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.selectors.ContactSelector
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.print.LoadedPrintPDFBearer
@@ -72,7 +73,7 @@ class NotificationDialog @Autowired constructor(
     fun openSelectPDFDialog(task: Task, contact: ReportIntent) {
 
         val printDocuments = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
-                PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+                PrintDocumentType.DIAGNOSIS_REPORT_EXTERN)
 
         //
         val selectors = ArrayList<ContactSelector>()
@@ -220,8 +221,8 @@ class NotificationDialog @Autowired constructor(
             selectDiagnosisRevision = diagnosisRevisions.firstOrNull { p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
 
             // setting templates + transformer
-            templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
-                    PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+            templates = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
+                    PrintDocumentType.DIAGNOSIS_REPORT_EXTERN)
 
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultPrintDocument).orElse(null)
             printCount = 2
@@ -265,8 +266,8 @@ class NotificationDialog @Autowired constructor(
             logger.debug("Initializing mail data...")
             individualAddresses = false
             // setting templates + transformer
-            templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
-                    PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+            templates = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
+                    PrintDocumentType.DIAGNOSIS_REPORT_EXTERN)
 
             println(printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail))
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
@@ -275,9 +276,9 @@ class NotificationDialog @Autowired constructor(
             mailTemplate = mailRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
 
             mailTemplate?.initialize(
-                    InitializeToken("patient", task.patient),
-                    InitializeToken("task", task),
-                    InitializeToken("contact", null))
+                    DocumentToken("patient", task.patient),
+                    DocumentToken("task", task),
+                    DocumentToken("contact", null))
 
             reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
 
@@ -307,8 +308,8 @@ class NotificationDialog @Autowired constructor(
 
             individualAddresses = true
             // setting templates + transformer
-            templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
-                    PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+            templates = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
+                    PrintDocumentType.DIAGNOSIS_REPORT_EXTERN)
 
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultFaxDocument).orElse(null)
 
@@ -339,8 +340,8 @@ class NotificationDialog @Autowired constructor(
 
             individualAddresses = true
             // setting templates + transformer
-            templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
-                    PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+            templates = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
+                    PrintDocumentType.DIAGNOSIS_REPORT_EXTERN)
 
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultLetterDocument).orElse(null)
 

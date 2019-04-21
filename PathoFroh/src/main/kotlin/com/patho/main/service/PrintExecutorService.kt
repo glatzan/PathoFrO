@@ -4,7 +4,7 @@ import com.patho.main.action.UserHandlerAction
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.patient.Slide
 import com.patho.main.repository.PrintDocumentRepository
-import com.patho.main.template.InitializeToken
+import com.patho.main.template.DocumentToken
 import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.print.UnknownPrintingException
 import com.patho.main.util.templates.TemplateNotFoundException
@@ -30,8 +30,8 @@ open class PrintExecutorService @Autowired constructor(
             val template = printDocumentRepository.findByID(pathoConfig.defaultDocuments.slideLabelDocument).get()
 
             val result: List<String> = slides.map { p ->
-                template.initialize(InitializeToken("slide", p), InitializeToken("date", Date()),
-                        InitializeToken("uniqueID",
+                template.initialize(DocumentToken("slide", p), DocumentToken("date", Date()),
+                        DocumentToken("uniqueID",
                                 p.task!!.taskID + "" + HistoUtil.fitString(p.uniqueIDinTask, 3, '0'))).finalContent
             }
 

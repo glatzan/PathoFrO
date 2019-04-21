@@ -57,7 +57,7 @@ open class PrintDocument : AbstractTemplate {
     /**
      * Returns a dynamic generated name for this document
      */
-    val generatedFileNamed
+    val generatedFileName
         get() = "${SpringContextBridge.services().resourceBundle.get("enum.documentType.$type")}-${TimeUtil.formatDate(Date(), "dd.MM.yyyy")}.pdf"
 
     constructor()
@@ -81,6 +81,13 @@ open class PrintDocument : AbstractTemplate {
         afterPDFCreationHook = printDocument.afterPDFCreationHook
         duplexPrinting = printDocument.duplexPrinting
         printEvenPageCount = printDocument.printEvenPageCount
+    }
+
+    /**
+     * Makes clone public
+     */
+    override fun clone(): Any {
+        return super.clone()
     }
 
     /**

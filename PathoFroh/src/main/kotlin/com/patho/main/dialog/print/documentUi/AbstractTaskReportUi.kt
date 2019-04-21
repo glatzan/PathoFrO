@@ -134,6 +134,11 @@ abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.
     open class SharedContactData : AbstractDocumentUi.SharedData() {
 
         /**
+         * Task
+         */
+        lateinit var task : Task
+
+        /**
          * List with all associated contacts
          */
         var contactList: MutableList<ContactSelector> = mutableListOf()
@@ -156,9 +161,21 @@ abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.
         /**
          * Initializes the shareddata context.
          */
+        open fun initialize(task: Task): Boolean {
+            // return if already initialized
+            if (super.initialize())
+                return true
+
+            this.task = task
+            return false
+        }
+
+        /**
+         * Initializes the shareddata context.
+         */
         open fun initialize(task: Task, contactSelector: List<ContactSelector>): Boolean {
             // return if already initialized
-            if (initialized)
+            if (initialize(task))
                 return true
 
             // setting other contacts (physicians)

@@ -30,9 +30,13 @@ class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportU
      * Change Address dialog return event handler
      */
     fun onCustomAddressReturn(event: SelectEvent) {
-        if (event.`object` is CustomAddressDialog.CustomAddressReturn) {
-            event.`object`.contactSelector.isManuallyAltered = true
-            event.`object`.contactSelector.customAddress = event.`object`.customAddress
+        logger.debug("Returning from custom address dialog")
+        val returnObject = event.`object`
+
+        if (returnObject is CustomAddressDialog.CustomAddressReturn) {
+            returnObject.contactSelector.isManuallyAltered = true
+            returnObject.contactSelector.customAddress = returnObject.customAddress
+            logger.debug("Custom address set to ${returnObject.customAddress}")
         }
     }
 
@@ -87,7 +91,7 @@ class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportU
         /**
          * Initializes the shareddata context.
          */
-        fun initialize(task: Task): Boolean {
+        override fun initialize(task: Task): Boolean {
             return initialize(task, task.contacts.map { ContactSelector(it, false, false) }.toList())
         }
 

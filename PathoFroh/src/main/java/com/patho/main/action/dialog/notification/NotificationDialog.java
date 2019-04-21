@@ -20,12 +20,8 @@ import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.service.NotificationService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.TaskService;
-import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
-import com.patho.main.template.print.ui.document.AbstractDocumentUi;
-import com.patho.main.template.print.ui.document.report.DiagnosisReportUi;
 import com.patho.main.ui.pdf.PDFStreamContainer;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -176,25 +172,25 @@ public class NotificationDialog extends AbstractTabDialog {
 
     public void openSelectPDFDialog(Task task, ReportIntent contact) {
 
-        List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
-                DocumentType.DIAGNOSIS_REPORT_EXTERN);
-
-        ArrayList<ContactSelector> selectors = new ArrayList<ContactSelector>();
-
-        selectors.add(new ContactSelector(contact));
-        selectors.add(new ContactSelector(task,
-                new Person(resourceBundle.get("dialog.printDialog.individualAddress"), new Contact()), ContactRole.NONE));
-        selectors.get(0).setSelected(true);
-
-        // getting ui objects
-        List<AbstractDocumentUi<?, ?>> printDocumentUIs = AbstractDocumentUi.factory(printDocuments);
-
-        for (AbstractDocumentUi<?, ?> documentUi : printDocumentUIs) {
-            ((DiagnosisReportUi) documentUi).initialize(task, selectors);
-            ((DiagnosisReportUi) documentUi).getSharedData().setRenderSelectedContact(true);
-            ((DiagnosisReportUi) documentUi).getSharedData().setUpdatePdfOnEverySettingChange(true);
-            ((DiagnosisReportUi) documentUi).getSharedData().setSingleSelect(true);
-        }
+//        List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
+//                DocumentType.DIAGNOSIS_REPORT_EXTERN);
+//
+//        ArrayList<ContactSelector> selectors = new ArrayList<ContactSelector>();
+//
+//        selectors.add(new ContactSelector(contact));
+//        selectors.add(new ContactSelector(task,
+//                new Person(resourceBundle.get("dialog.printDialog.individualAddress"), new Contact()), ContactRole.NONE));
+//        selectors.get(0).setSelected(true);
+//
+//        // getting ui objects
+//        List<AbstractDocumentUi<?, ?>> printDocumentUIs = AbstractDocumentUi.factory(printDocuments);
+//
+//        for (AbstractDocumentUi<?, ?> documentUi : printDocumentUIs) {
+//            ((DiagnosisReportUi) documentUi).initialize(task, selectors);
+//            ((DiagnosisReportUi) documentUi).getSharedData().setRenderSelectedContact(true);
+//            ((DiagnosisReportUi) documentUi).getSharedData().setUpdatePdfOnEverySettingChange(true);
+//            ((DiagnosisReportUi) documentUi).getSharedData().setSingleSelect(true);
+//        }
 
 //        dialogHandler.getPrintDialog().initAndPrepareBean(getTask(), printDocumentUIs, printDocumentUIs.get(0))
 //                .selectMode(true);
@@ -352,8 +348,8 @@ public class NotificationDialog extends AbstractTabDialog {
 
             useNotification = true;
 
-            templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
-                    DocumentType.DIAGNOSIS_REPORT_EXTERN);
+//            templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
+//                    DocumentType.DIAGNOSIS_REPORT_EXTERN);
 
             templateListTransformer = new DefaultTransformer<PrintDocument>(templateList);
 
@@ -416,8 +412,8 @@ public class NotificationDialog extends AbstractTabDialog {
 
             individualAddresses = false;
 
-            templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
-                    DocumentType.DIAGNOSIS_REPORT_EXTERN);
+//            templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
+//                    DocumentType.DIAGNOSIS_REPORT_EXTERN);
 
             templateListTransformer = new DefaultTransformer<PrintDocument>(templateList);
 
@@ -427,8 +423,8 @@ public class NotificationDialog extends AbstractTabDialog {
             mailTemplate = mailRepository.findByID(pathoConfig.getDefaultDocuments().getNotificationDefaultEmail())
                     .orElse(null);
 
-            mailTemplate.initialize(new InitializeToken("patient", task.getPatient()), new InitializeToken("task", task),
-                    new InitializeToken("contact", null));
+//            mailTemplate.initialize(new InitializeToken("patient", task.getPatient()), new InitializeToken("task", task),
+//                    new InitializeToken("contact", null));
 
             updateData();
 
@@ -461,8 +457,8 @@ public class NotificationDialog extends AbstractTabDialog {
 
             individualAddresses = true;
 
-            templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
-                    DocumentType.DIAGNOSIS_REPORT_EXTERN);
+//            templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
+//                    DocumentType.DIAGNOSIS_REPORT_EXTERN);
 
             templateListTransformer = new DefaultTransformer<PrintDocument>(templateList);
 
@@ -501,8 +497,8 @@ public class NotificationDialog extends AbstractTabDialog {
         public boolean initTab() {
             individualAddresses = true;
 
-            templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
-                    DocumentType.DIAGNOSIS_REPORT_EXTERN);
+//            templateList = printDocumentRepository.findAllByTypes(DocumentType.DIAGNOSIS_REPORT,
+//                    DocumentType.DIAGNOSIS_REPORT_EXTERN);
 
             templateListTransformer = new DefaultTransformer<PrintDocument>(templateList);
 
@@ -747,8 +743,8 @@ public class NotificationDialog extends AbstractTabDialog {
         public void updateData() {
             logger.debug("Update Data sendReport");
             // getting all sendreports
-            sendReportList = PDFService.findPDFsByDocumentType(task.getAttachedPdfs(),
-                    DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
+//            sendReportList = PDFService.findPDFsByDocumentType(task.getAttachedPdfs(),
+//                    DocumentType.MEDICAL_FINDINGS_SEND_REPORT_COMPLETED);
 
             setSendReportConverter(new DefaultTransformer<>(sendReportList));
         }

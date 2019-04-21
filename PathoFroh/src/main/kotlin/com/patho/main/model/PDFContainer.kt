@@ -4,6 +4,7 @@ import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
 import com.patho.main.template.PrintDocument
+import com.patho.main.template.PrintDocumentType
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.annotations.Type
 import org.hibernate.envers.Audited
@@ -31,7 +32,7 @@ open class PDFContainer : AbstractPersistable, AuditAble {
     open var data: ByteArray = ByteArray(0)
 
     @Enumerated(EnumType.STRING)
-    open var type: PrintDocument.DocumentType = PrintDocument.DocumentType.EMPTY
+    open var type: PrintDocumentType = PrintDocumentType.EMPTY
 
     @Column(length = 255)
     open var name: String = ""
@@ -67,13 +68,13 @@ open class PDFContainer : AbstractPersistable, AuditAble {
 
     constructor()
 
-    constructor(type: PrintDocument.DocumentType, name: String = "", data: ByteArray = ByteArray(0)) {
+    constructor(type: PrintDocumentType, name: String = "", data: ByteArray = ByteArray(0)) {
         this.type = type
         this.data = data
         this.name = name
     }
 
-    constructor(type: PrintDocument.DocumentType, name: String = "", path: String = "", thumbnail: String = "") {
+    constructor(type: PrintDocumentType, name: String = "", path: String = "", thumbnail: String = "") {
         this.type = type
         this.path = path
         this.name = name

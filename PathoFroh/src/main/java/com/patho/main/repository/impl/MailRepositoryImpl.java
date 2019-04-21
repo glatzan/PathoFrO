@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import com.patho.main.template.MailType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class MailRepositoryImpl implements MailRepository {
 	private void initializeDocuments() {
 		for (MailTemplate mail : mails) {
 			logger.debug(
-					"Initilizing " + mail.getName() + " - " + mail.getType() + " - Default " + mail.isDefaultOfType());
+					"Initilizing " + mail.getName() + " - " + mail.getType() + " - Default " + mail.getDefaultOfType());
 
 			String jsonContent = mediaRepository.getString(mail.getContent());
 			
@@ -59,11 +60,11 @@ public class MailRepositoryImpl implements MailRepository {
 		}
 	}
 
-	public List<MailTemplate> findAllByTypes(MailTemplate.MailType... types) {
+	public List<MailTemplate> findAllByTypes(MailType... types) {
 		return findAllByTypes(Arrays.asList(types));
 	}
 
-	public List<MailTemplate> findAllByTypes(List<MailTemplate.MailType> types) {
+	public List<MailTemplate> findAllByTypes(List<MailType> types) {
 		List<MailTemplate> result = new ArrayList<MailTemplate>();
 
 		if (types == null || types.size() == 0)
@@ -71,7 +72,7 @@ public class MailRepositoryImpl implements MailRepository {
 
 		// return a copy of the printDocument
 		for (MailTemplate mail : mails) {
-			for (MailTemplate.MailType type : types) {
+			for (MailType type : types) {
 				if (mail.getDocumentType() == type) {
 					result.add(MailRepository.loadDocument(mail));
 				}
@@ -94,10 +95,10 @@ public class MailRepositoryImpl implements MailRepository {
 		return Optional.empty();
 	}
 
-	public Optional<MailTemplate> findByTypeAndDefault(MailTemplate.MailType type) {
+	public Optional<MailTemplate> findByTypeAndDefault(MailType type) {
 		List<MailTemplate> mails = findAllByTypes(type);
 		for (MailTemplate mail : mails) {
-			if (mail.isDefaultOfType())
+			if (mail.getDefaultOfType())
 				return Optional.ofNullable(MailRepository.loadDocument(mail));
 		}
 

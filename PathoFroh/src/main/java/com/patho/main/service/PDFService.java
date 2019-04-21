@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.patient.miscellaneous.BioBank;
 import com.patho.main.model.patient.miscellaneous.Council;
+import com.patho.main.template.PrintDocumentType;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -34,7 +35,6 @@ import com.patho.main.repository.PDFRepository;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
 import com.patho.main.util.pdf.PDFCreator;
@@ -71,11 +71,6 @@ public class PDFService extends AbstractService {
 	/**
 	 * Creates a new empty pdf with no file on the hard drive. This is a "virtual"
 	 * pdf.
-	 * 
-	 * @param dataList
-	 * @param pdfInfo
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PDFInfo pdfInfo) throws FileNotFoundException {
 		return createAndAttachPDF(dataList, pdfInfo, null, false);
@@ -85,12 +80,6 @@ public class PDFService extends AbstractService {
 	 * Creates a new pdf and saves the content to the hard drive. If a target folder
 	 * is passed via pdfInfo, the targetFolder will be used, otherwise the dataLists
 	 * targetFolder is used.
-	 * 
-	 * @param dataList
-	 * @param pdfInfo
-	 * @param content
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PDFInfo pdfInfo, byte[] content)
 			throws FileNotFoundException {
@@ -101,13 +90,6 @@ public class PDFService extends AbstractService {
 	 * Creates a new pdf and saves the content to the hard drive. If a target folder
 	 * is passed via pdfInfo, the targetFolder will be used, otherwise the dataLists
 	 * targetFolder is used.
-	 * 
-	 * @param dataList
-	 * @param pdfInfo
-	 * @param content
-	 * @param createThumbnail
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PDFInfo pdfInfo, byte[] content, boolean createThumbnail)
 			throws FileNotFoundException {
@@ -143,11 +125,6 @@ public class PDFService extends AbstractService {
 	/**
 	 * Creates a new PDF Object an runs the PDFCreator in order to create a pdf from
 	 * the printDocument
-	 * 
-	 * @param dataList
-	 * @param printDocument
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument) throws FileNotFoundException {
 		return createAndAttachPDF(dataList, printDocument, new PDFInfo(printDocument.getGeneratedFileName(),
@@ -157,12 +134,6 @@ public class PDFService extends AbstractService {
 	/**
 	 * Creates a new PDF Object an runs the PDFCreator in order to create a pdf from
 	 * the printDocument
-	 * 
-	 * @param dataList
-	 * @param printDocument
-	 * @param createThumbnail
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, boolean createThumbnail)
 			throws FileNotFoundException {
@@ -176,12 +147,6 @@ public class PDFService extends AbstractService {
 	 * Creates a new PDF Object an runs the PDFCreator in order to create a pdf from
 	 * the printDocument. For PDF Object creation data from the pdfInfo objects are
 	 * used.
-	 * 
-	 * @param dataList
-	 * @param printDocument
-	 * @param pdfInfo
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, PDFInfo pdfInfo)
 			throws FileNotFoundException {
@@ -193,14 +158,6 @@ public class PDFService extends AbstractService {
 	 * the printDocument. For PDF Object creation data from the pdfInfo objects are
 	 * used. If nonBlocking is true the new PDf Obejct will be returnd and the pdf
 	 * will be generated in a new Thread.
-	 * 
-	 * @param dataList
-	 * @param printDocument
-	 * @param pdfInfo
-	 * @param createThumbnail
-	 * @param nonBlocking
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFReturn createAndAttachPDF(DataList dataList, PrintDocument printDocument, PDFInfo pdfInfo,
 			boolean createThumbnail, boolean nonBlocking, LazyPDFReturnHandler returnHandler)
@@ -238,11 +195,6 @@ public class PDFService extends AbstractService {
 	/**
 	 * Updates a already created PDF Object. If nonBlocking is true, the pdf
 	 * creation will be done in a seperate thread.
-	 * 
-	 * @param pdfContainer
-	 * @param printDocument
-	 * @param nonBlocking
-	 * @return
 	 */
 	public PDFContainer updateAttachedPDF(PDFContainer pdfContainer, PrintDocument printDocument,
 			boolean createThumbnail, boolean nonBlocking) {
@@ -261,10 +213,6 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Removes a pdf form the datalist and saves the change.
-	 * 
-	 * @param dataList
-	 * @param pdfContainer
-	 * @return
 	 */
 	public DataList removePdf(DataList dataList, PDFContainer pdfContainer) {
 		dataList.removeReport(pdfContainer);
@@ -274,10 +222,6 @@ public class PDFService extends AbstractService {
 	/**
 	 * Removes a pdf form the datalist and deletes the content from the hard drive.
 	 * Als this method call will save all changes to the database.
-	 * 
-	 * @param dataList
-	 * @param pdfContainer
-	 * @return
 	 */
 	public DataList deletePdf(DataList dataList, PDFContainer pdfContainer) {
 
@@ -296,10 +240,6 @@ public class PDFService extends AbstractService {
 	/**
 	 * Moves a pdf from one datalist to the target datalist. Notice the pdf storen
 	 * on the hard disk will not be moved if the targetDatalist has an other folder.
-	 * 
-	 * @param from
-	 * @param to
-	 * @param pdfContainer
 	 */
 	public void movePdf(DataList from, DataList to, PDFContainer pdfContainer) {
 		removePdf(from, pdfContainer);
@@ -326,10 +266,6 @@ public class PDFService extends AbstractService {
 	/**
 	 * Adds a pdf to the datalist and saves the datalist depending on the datalists
 	 * type.
-	 * 
-	 * @param dataList
-	 * @param pdfContainer
-	 * @return
 	 */
 	private DataList saveORAttachPDF(DataList dataList, PDFContainer pdfContainer) {
 		dataList.getAttachedPdfs().add(pdfContainer);
@@ -338,10 +274,6 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Saves the datalist depending on the dtatalists type.
-	 * 
-	 * @param dataList
-	 * @param log
-	 * @return
 	 */
 	public DataList saveDataList(DataList dataList, String log) {
 		if (dataList instanceof Patient) {
@@ -359,11 +291,6 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Creates a new PDF Object, does not save PDF Data to database.
-	 * 
-	 * @param pdfInfo
-	 * @param targetFolder
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	private PDFContainer newPDF(PDFInfo pdfInfo, File targetFolder) throws FileNotFoundException {
 		return newPDF(pdfInfo.getName(), pdfInfo.getDocumentType(), pdfInfo.getCommentary(),
@@ -372,16 +299,8 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Creates a new PDF Object, does not save PDF Data to database.
-	 * 
-	 * @param name
-	 * @param documentType
-	 * @param commentary
-	 * @param commentaryIntern
-	 * @param targetFolder
-	 * @return
-	 * @throws FileNotFoundException
 	 */
-	private PDFContainer newPDF(String name, DocumentType documentType, String commentary, String commentaryIntern,
+	private PDFContainer newPDF(String name, PrintDocumentType documentType, String commentary, String commentaryIntern,
 			File targetFolder) throws FileNotFoundException {
 		PDFContainer pdf = new PDFContainer();
 		pdf.setName(name);
@@ -428,11 +347,6 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Returns a buffered Image from a pdf page, page number is zero based
-	 * 
-	 * @param pdf
-	 * @param page
-	 * @param path
-	 * @return
 	 */
 	public BufferedImage gerateThumbnail(byte[] pdf, int pageNo, int dpi) {
 		PDDocument document = null;
@@ -479,10 +393,6 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Gets a uinique file within the folder
-	 * 
-	 * @param folder
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFContainer getUniquePDF(File folder) throws FileNotFoundException {
 		return getUniquePDF(folder, new PDFContainer());
@@ -490,11 +400,6 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Gets a uinique file within the folder
-	 * 
-	 * @param folder
-	 * @param container
-	 * @return
-	 * @throws FileNotFoundException
 	 */
 	public PDFContainer getUniquePDF(File folder, PDFContainer container) throws FileNotFoundException {
 		File uniqueFile = new File(folder, mediaRepository.getUniqueName(folder, ".pdf"));
@@ -505,10 +410,6 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Search for the parentdatalist of the given pdf.
-	 * 
-	 * @param dataLists
-	 * @param container
-	 * @return
 	 */
 	public static DataList getParentOfPDF(List<DataList> dataLists, PDFContainer container) {
 
@@ -525,10 +426,6 @@ public class PDFService extends AbstractService {
 	/**
 	 * Searches for a datalist within all datalists e.g. of a patient. This is to
 	 * find the datalist with the current version.
-	 * 
-	 * @param dataLists
-	 * @param findeThisList
-	 * @return
 	 */
 	public static DataList getDatalistFromDatalists(List<DataList> dataLists, DataList findeThisList) {
 		for (DataList dataList : dataLists) {
@@ -541,20 +438,13 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Returns a list of pdfs with the given type.
-	 * 
-	 * @param containers
-	 * @param type
-	 * @return
 	 */
-	public static List<PDFContainer> findPDFsByDocumentType(Set<PDFContainer> containers, DocumentType type) {
+	public static List<PDFContainer> findPDFsByDocumentType(Set<PDFContainer> containers, PrintDocumentType type) {
 		return containers.stream().filter(p -> p.getType().equals(type)).collect(Collectors.toList());
 	}
 
 	/**
 	 * Returns the pdf with the most recent creation date.
-	 * 
-	 * @param containers
-	 * @return
 	 */
 	public static PDFContainer findNewestPDF(Set<PDFContainer> containers) {
 		if (containers.size() == 0)
@@ -572,10 +462,6 @@ public class PDFService extends AbstractService {
 
 	/**
 	 * Sorts an set an retuns it as soreted list. (Sorted by creation date)
-	 * 
-	 * @param list
-	 * @param asc
-	 * @return
 	 */
 	public static List<PDFContainer> sortPDFsByDate(Set<PDFContainer> set, boolean asc) {
 		List<PDFContainer> list = new ArrayList<PDFContainer>(set);
@@ -635,24 +521,24 @@ public class PDFService extends AbstractService {
 	@Setter
 	public static class PDFInfo {
 		private String name;
-		private DocumentType documentType;
+		private PrintDocumentType documentType;
 		private String commentary;
 		private String commentaryIntern;
 		private File targetFolder;
 
-		public PDFInfo(String name, DocumentType documentType) {
+		public PDFInfo(String name, PrintDocumentType documentType) {
 			this(name, documentType, "", "", null);
 		}
 
-		public PDFInfo(String name, DocumentType documentType, File targetFolder) {
+		public PDFInfo(String name, PrintDocumentType documentType, File targetFolder) {
 			this(name, documentType, "", "", targetFolder);
 		}
 
-		public PDFInfo(String name, DocumentType documentType, String commentary, String commentaryIntern) {
+		public PDFInfo(String name, PrintDocumentType documentType, String commentary, String commentaryIntern) {
 			this(name, documentType, commentary, commentaryIntern, null);
 		}
 
-		public PDFInfo(String name, DocumentType documentType, String commentary, String commentaryIntern,
+		public PDFInfo(String name, PrintDocumentType documentType, String commentary, String commentaryIntern,
 				File targetFolder) {
 			this.name = name;
 			this.documentType = documentType;

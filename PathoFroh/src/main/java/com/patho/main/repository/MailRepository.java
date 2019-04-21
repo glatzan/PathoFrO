@@ -6,18 +6,19 @@ import java.util.List;
 import java.util.Optional;
 
 import com.patho.main.template.MailTemplate;
+import com.patho.main.template.MailType;
 
 public interface MailRepository {
 
-	public List<MailTemplate> findAllByTypes(MailTemplate.MailType... types);
+	public List<MailTemplate> findAllByTypes(MailType... types);
 
-	public List<MailTemplate> findAllByTypes(List<MailTemplate.MailType> types);
+	public List<MailTemplate> findAllByTypes(List<MailType> types);
 
 	public List<MailTemplate> findAll();
 
 	public Optional<MailTemplate> findByID(long id);
 
-	public Optional<MailTemplate> findByTypeAndDefault(MailTemplate.MailType type);
+	public Optional<MailTemplate> findByTypeAndDefault(MailType type);
 
 	/**
 	 * Loads documents with the correct document classes, copies content form

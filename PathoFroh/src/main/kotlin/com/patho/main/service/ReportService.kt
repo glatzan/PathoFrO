@@ -5,6 +5,7 @@ import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.repository.PrintDocumentRepository
+import com.patho.main.template.DocumentToken
 import com.patho.main.template.InitializeToken
 import com.patho.main.template.PrintDocument
 import com.patho.main.util.notification.NotificationFeedback
@@ -313,10 +314,10 @@ open class ReportService @Autowired constructor(
      * If pdf creation is not possible an error is thrown
      */
     private fun getPrintPDFBearer(printDocument: PrintDocument, address: String, diagnosisRevision: DiagnosisRevision): PrintPDFBearer {
-        printDocument.initialize(InitializeToken("task", diagnosisRevision.parent),
-                InitializeToken("diagnosisRevisions", Arrays.asList<DiagnosisRevision>(diagnosisRevision)),
-                InitializeToken("patient", diagnosisRevision.patient), InitializeToken("address", address),
-                InitializeToken("subject", ""))
+        printDocument.initialize(DocumentToken("task", diagnosisRevision.parent),
+                DocumentToken("diagnosisRevisions", Arrays.asList<DiagnosisRevision>(diagnosisRevision)),
+                DocumentToken("patient", diagnosisRevision.patient), DocumentToken("address", address),
+                DocumentToken("subject", ""))
 
         try {
             return PrintPDFBearer(PDFCreator().createPDF(printDocument), printDocument)

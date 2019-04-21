@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 
+import com.patho.main.template.PrintDocumentType;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
-import com.patho.main.template.PrintDocument.DocumentType;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
@@ -61,12 +61,12 @@ public class UploadDialog extends AbstractDialog {
 	/**
 	 * Type of uploaded file
 	 */
-	private DocumentType fileType;
+	private PrintDocumentType fileType;
 
 	/**
 	 * Type of uploaded file
 	 */
-	private DocumentType[] availableFileTypes;
+	private PrintDocumentType[] availableFileTypes;
 
 	/**
 	 * Associated Patient with datalists
@@ -79,20 +79,20 @@ public class UploadDialog extends AbstractDialog {
 	}
 
 	public UploadDialog initAndPrepareBean(DataList[] dataList, Patient patient) {
-		if (initBean(dataList, patient, DocumentType.values(), DocumentType.OTHER))
+		if (initBean(dataList, patient, PrintDocumentType.values(), PrintDocumentType.OTHER))
 			prepareDialog();
 		return this;
 	}
 
-	public UploadDialog initAndPrepareBean(DataList[] dataList, Patient patient, DocumentType[] availableFileTypes,
-			DocumentType selectedFileType) {
+	public UploadDialog initAndPrepareBean(DataList[] dataList, Patient patient, PrintDocumentType[] availableFileTypes,
+			PrintDocumentType selectedFileType) {
 		if (initBean(dataList, patient, availableFileTypes, selectedFileType))
 			prepareDialog();
 		return this;
 	}
 
-	public boolean initBean(DataList[] dataList, Patient patient, DocumentType[] availableFileTypes,
-			DocumentType selectedFileType) {
+	public boolean initBean(DataList[] dataList, Patient patient, PrintDocumentType[] availableFileTypes,
+			PrintDocumentType selectedFileType) {
 
 		DataListContainer[] containers = new DataListContainer[dataList.length];
 
@@ -118,8 +118,8 @@ public class UploadDialog extends AbstractDialog {
 	 * Sets file types for uploading
 	 */
 	public void initializeUploadFileTypes() {
-		setAvailableFileTypes(new DocumentType[] { DocumentType.BIOBANK_INFORMED_CONSENT, DocumentType.COUNCIL_REPLY,
-				DocumentType.OTHER, DocumentType.U_REPORT });
+		setAvailableFileTypes(new PrintDocumentType[] { PrintDocumentType.BIOBANK_INFORMED_CONSENT, PrintDocumentType.COUNCIL_REPLY,
+				PrintDocumentType.OTHER, PrintDocumentType.U_REPORT });
 	}
 
 	/**

@@ -5,9 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 
+import com.patho.main.dialog.print.documentUi.AbstractDocumentUi;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
-import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 
 public interface PrintDocumentRepository {
 
@@ -24,9 +24,6 @@ public interface PrintDocumentRepository {
 	/**
 	 * Loads documents with the correct document classes, copies content form
 	 * document to the new object
-	 * 
-	 * @param document
-	 * @return
 	 */
 	public static PrintDocument loadDocument(PrintDocument document) {
 		PrintDocument copy;
@@ -48,9 +45,6 @@ public interface PrintDocumentRepository {
 
 	/**
 	 * Loads the ui class for a template
-	 * 
-	 * @param document
-	 * @return
 	 */
 	public static AbstractDocumentUi<? extends PrintDocument, ? extends AbstractDocumentUi.SharedData> loadUiClass(
 			PrintDocument document) {
@@ -60,10 +54,6 @@ public interface PrintDocumentRepository {
 	/**
 	 * Loads the ui class for a template, if a sharedData object is passed the new
 	 * object will share data with the an other one
-	 * 
-	 * @param document
-	 * @param sharedData
-	 * @return
 	 */
 	public static AbstractDocumentUi<? extends PrintDocument, ? extends AbstractDocumentUi.SharedData> loadUiClass(
 			PrintDocument document, AbstractDocumentUi.SharedData sharedData) {
@@ -96,10 +86,6 @@ public interface PrintDocumentRepository {
 
 	/**
 	 * Returns the default document of a given type.
-	 * 
-	 * @param documents
-	 * @param type
-	 * @return
 	 */
 	public static Optional<PrintDocument> getByTypAndDefault(List<PrintDocument> documents, PrintDocumentType type) {
 

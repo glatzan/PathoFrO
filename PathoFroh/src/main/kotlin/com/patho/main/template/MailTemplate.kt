@@ -55,6 +55,13 @@ open class MailTemplate : AbstractTemplate {
     }
 
     /**
+     * Makes clone public
+     */
+    override fun clone(): Any {
+        return super.clone()
+    }
+
+    /**
      * Initializes values for the velocity template engine. Generates a
      * final document version and saves this version into finalSubject and
      * finalBody

@@ -5,11 +5,18 @@ import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.template.PrintDocument
 import org.slf4j.LoggerFactory
 import java.io.Serializable
+import com.patho.main.repository.PrintDocumentRepository
+import com.patho.main.dialog.print.documentUi.AbstractDocumentUi.SharedData
+import com.patho.main.template.PrintDocument
+import java.util.ArrayList
+import java.util.HashMap
+
+
 
 /**
  * UI class for displaying individual template settings to the user
  */
-abstract class AbstractDocumentUi<T : PrintDocument, S : AbstractDocumentUi.SharedData>(val printDocument: T, val sharedData: S) : ID, Serializable {
+open class AbstractDocumentUi<T : PrintDocument, S : AbstractDocumentUi.SharedData>(val printDocument: T, val sharedData: S) : ID, Serializable {
 
     protected val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -63,6 +70,42 @@ abstract class AbstractDocumentUi<T : PrintDocument, S : AbstractDocumentUi.Shar
      */
     open fun getFirstSelectedContact(): ReportIntent? {
         return null
+    }
+
+    /**
+     * Loads a gui object for a print template
+     */
+    fun factory(document: PrintDocument): AbstractDocumentUi<*, *> {
+        return factory(Arrays.asList(document)).get(0)
+    }
+
+    /**
+     * Loads for a list of print templates all ui objects, if a sharedData context
+     * exists the data will be shared between objects.
+     */
+    fun factory(documents: List<PrintDocument>): List<AbstractDocumentUi<*, *>> {
+        val sharedGroups = HashMap<Int, SharedData>()
+
+        val result = ArrayList<AbstractDocumentUi<*, *>>(documents.size)
+
+        for (printDocument in documents) {
+            // shared group exsist
+            if (printDocument.sharedContextGroup != 0) {
+                val sharedData = sharedGroups[printDocument.sharedContextGroup]
+
+                if (sharedData != null) {
+                    result.add(PrintDocumentRepository.loadUiClass(printDocument, sharedData))
+                } else {
+                    val tmp = PrintDocumentRepository.loadUiClass(printDocument)
+                    sharedGroups[printDocument.sharedContextGroup] = tmp.sharedData
+                    result.add(tmp)
+                }
+            } else {
+                result.add(PrintDocumentRepository.loadUiClass(printDocument))
+            }
+        }
+
+        return result
     }
 
     /**

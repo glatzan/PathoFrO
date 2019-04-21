@@ -7,6 +7,7 @@ import com.patho.main.model.patient.Task
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.service.PDFService
 import com.patho.main.template.PrintDocument
+import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.task.DiagnosisReportUpdater
 import com.patho.main.util.pdf.LazyPDFReturnHandler
 import com.patho.main.util.pdf.StreamedContentInterface
@@ -81,7 +82,7 @@ open class ReportView : AbstractTaskView(), StreamedContentInterface {
             } else if (revision.completed) {
                 data.add(DiagnosisReportReturnHandler(revision, c.get(), false))
             } else {
-                val container = PDFContainer(PrintDocument.DocumentType.DIAGNOSIS_REPORT_NOT_APPROVED,
+                val container = PDFContainer(PrintDocumentType.DIAGNOSIS_REPORT_NOT_APPROVED,
                         revision.name, PathoConfig.REPORT_NOT_APPROVED_PDF, PathoConfig.REPORT_NOT_APPROVED_IMG)
 
                 container.audit = Audit()
