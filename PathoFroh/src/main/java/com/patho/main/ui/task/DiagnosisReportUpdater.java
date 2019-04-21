@@ -86,7 +86,7 @@ public class DiagnosisReportUpdater {
 	public Task updateDiagnosisReportNoneBlocking(Task task, DiagnosisRevision diagnosisRevision,
 			PrintDocument printDocument, LazyPDFReturnHandler returnHandler) {
 
-		printDocument.initilize(new InitializeToken("task", diagnosisRevision.getTask()),
+		printDocument.initialize(new InitializeToken("task", diagnosisRevision.getTask()),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
 				new InitializeToken("patient", diagnosisRevision.getPatient()), new InitializeToken("address", ""),
 				new InitializeToken("subject", ""));

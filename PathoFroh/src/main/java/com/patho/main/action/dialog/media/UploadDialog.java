@@ -117,7 +117,7 @@ public class UploadDialog extends AbstractDialog {
 	/**
 	 * Sets file types for uploading
 	 */
-	public void initilizeUploadFileTypes() {
+	public void initializeUploadFileTypes() {
 		setAvailableFileTypes(new DocumentType[] { DocumentType.BIOBANK_INFORMED_CONSENT, DocumentType.COUNCIL_REPLY,
 				DocumentType.OTHER, DocumentType.U_REPORT });
 	}

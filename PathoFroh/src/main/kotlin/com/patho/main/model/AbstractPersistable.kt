@@ -27,7 +27,7 @@ abstract class AbstractPersistable : Serializable, ID {
 
         other as AbstractPersistable
 
-        return if (this.id == null) false else this.id == other.id
+        return this.id == other.id
     }
 
     open override fun hashCode(): Int {

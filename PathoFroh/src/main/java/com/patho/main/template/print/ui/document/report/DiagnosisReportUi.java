@@ -72,7 +72,7 @@ public class DiagnosisReportUi extends AbsctractContactUi<DiagnosisReport, Diagn
 	 * Return default template configuration for printing
 	 */
 	public TemplateConfiguration<DiagnosisReport> getDefaultTemplateConfiguration() {
-		printDocument.initilize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
+		printDocument.initialize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(getSharedData().getSelectedDiagnosis())),
 				new InitializeToken("address", getSharedData().renderSelectedContact ? getAddressOfFirstSelectedContact() : ""));
 
@@ -84,7 +84,7 @@ public class DiagnosisReportUi extends AbsctractContactUi<DiagnosisReport, Diagn
 	 */
 	public TemplateConfiguration<DiagnosisReport> getNextTemplateConfiguration() {
 		String address = contactListPointer != null ? contactListPointer.getCustomAddress() : "";
-		printDocument.initilize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
+		printDocument.initialize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
 				new InitializeToken("diagnosisRevisions", Arrays.asList(getSharedData().getSelectedDiagnosis())),
 				new InitializeToken("address", address));
 

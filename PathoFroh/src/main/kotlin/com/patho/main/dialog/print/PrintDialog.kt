@@ -11,6 +11,7 @@ import com.patho.main.repository.PrintDocumentRepository
 import com.patho.main.service.PrintService
 import com.patho.main.service.UserService
 import com.patho.main.template.PrintDocument
+import com.patho.main.template.PrintDocumentType
 import com.patho.main.template.print.ui.document.AbstractDocumentUi
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.pdf.LazyPDFGuiManager
@@ -104,8 +105,8 @@ class PrintDialog @Autowired constructor(
     }
 
     override fun initBean(task: Task): Boolean {
-        val templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
-                PrintDocument.DocumentType.U_REPORT, PrintDocument.DocumentType.U_REPORT_EMTY, PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
+        val templates = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
+                PrintDocumentType.U_REPORT, PrintDocumentType.U_REPORT_EMTY, PrintDocumentType.DIAGNOSIS_REPORT_EXTERN)
 
         return initBean(task, templates, if (templates.size > 0) templates[0] else null)
     }
@@ -179,8 +180,8 @@ class PrintDialog @Autowired constructor(
             guiManager.startRendering(template.defaultTemplateConfiguration.documentTemplate,
                     pathoConfig.fileSettings.printDirectory)
 
-            duplexPrinting = template.printDocument.isDuplexPrinting
-            printEvenPageCounts = template.printDocument.isPrintEvenPageCount
+            duplexPrinting = template.printDocument.duplexPrinting
+            printEvenPageCounts = template.printDocument.printEvenPageCount
         }
     }
 

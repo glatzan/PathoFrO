@@ -73,7 +73,7 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport, CouncilRe
 	 * Return default template configuration for printing
 	 */
 	public TemplateConfiguration<CouncilReport> getDefaultTemplateConfiguration() {
-		printDocument.initilize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
+		printDocument.initialize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
 				new InitializeToken("council", getSharedData().getSelectedCouncil()), new InitializeToken("address",
 						getSharedData().renderSelectedContact ? getAddressOfFirstSelectedContact() : ""));
 
@@ -85,7 +85,7 @@ public class CouncilReportUi extends AbsctractContactUi<CouncilReport, CouncilRe
 	 */
 	public TemplateConfiguration<CouncilReport> getNextTemplateConfiguration() {
 		String address = contactListPointer != null ? contactListPointer.getCustomAddress() : "";
-		printDocument.initilize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
+		printDocument.initialize(new InitializeToken("patient", task.getParent()), new InitializeToken("task", task),
 				new InitializeToken("council", getSharedData().getSelectedCouncil()),
 				new InitializeToken("address", address));
 		return new TemplateConfiguration<CouncilReport>(printDocument,

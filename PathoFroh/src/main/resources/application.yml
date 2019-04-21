@@ -226,7 +226,7 @@ patho:
         id: 0
         name: Eingangsbogen
         content: classpath:templates/print/USchein_full.tex
-        content2:
+        alternateContent:
         type: U_REPORT
         attributes:
         templateName: com.patho.main.template.print.CaseCertificate
@@ -239,7 +239,7 @@ patho:
         id: 1
         name: Eingangsbogen bedrucken
         content: classpath:templates/print/USchein_empty.tex
-        content2: 
+        alternateContent: ""
         type: U_REPORT_EMTY
         attributes: 
         templateName: com.patho.main.template.print.CaseCertificate
@@ -252,7 +252,7 @@ patho:
         id: 2
         name: Eingangsbogen bedrucken, umgekehrt
         content: classpath:templates/print/USchein_empty_rotated180.tex
-        content2: 
+        alternateContent: ""
         type: U_REPORT_EMTY
         attributes: media:keyword:default,tray1
         templateName: com.patho.main.template.print.CaseCertificate
@@ -265,7 +265,7 @@ patho:
         id: 10
         name: Befundbericht
         content: classpath:templates/print/Report_Intern.tex
-        content2: 
+        alternateContent: ""
         type: DIAGNOSIS_REPORT
         attributes: sides:keyword:one-side
         templateName: com.patho.main.template.print.DiagnosisReport
@@ -280,7 +280,7 @@ patho:
         id: 11
         name: Befundbericht - ohne Logo
         content: classpath:templates/print/Report_Intern_noLogo.tex
-        content2: 
+        alternateContent: ""
         type: DIAGNOSIS_REPORT
         attributes: "sides:keyword:one-side#media:keyword:default,tray2"
         templateName: com.patho.main.template.print.DiagnosisReport
@@ -295,7 +295,7 @@ patho:
         id: 20
         name: Befundbericht extern
         content: classpath:templates/print/Report_Extern.tex
-        content2: 
+        alternateContent: ""
         type: DIAGNOSIS_REPORT_EXTERN
         attributes: sides:keyword:one-side
         templateName: com.patho.main.template.print.DiagnosisReport
@@ -310,7 +310,7 @@ patho:
         id: 21
         name: Befundbericht extern - ohne Logo
         content: classpath:templates/print/Report_Extern_noLogo.tex
-        content2: 
+        alternateContent: ""
         type: DIAGNOSIS_REPORT_EXTERN
         attributes: "sides:keyword:one-side#media:keyword:default,tray2"
         templateName: com.patho.main.template.print.DiagnosisReport
@@ -325,7 +325,7 @@ patho:
         id: 50
         name: Konsil
         content: classpath:templates/print/council.tex
-        content2: 
+        alternateContent: ""
         type: COUNCIL_REQUEST
         attributes: 
         templateName: com.patho.main.template.print.CouncilReport
@@ -337,7 +337,7 @@ patho:
         id: 100
         name: Default Slide Lable
         content: classpath:templates/print_label/defaultLable.zpl
-        content2: 
+        alternateContent: ""
         type: LABLE
         attributes: 
         templateName: com.patho.main.template.print.SlideLable
@@ -348,7 +348,7 @@ patho:
         id: 150
         name: Test Slide Lable
         content: classpath:templates/print_label/testLable.zpl
-        content2: 
+        alternateContent: ""
         type: TEST_LABLE
         attributes: 
         templateName: com.patho.main.template.print.SlideLable
@@ -359,7 +359,7 @@ patho:
         id: 1000
         name: Send Report
         content: classpath:templates/print/SendReport.tex
-        content2: 
+        alternateContent: ""
         attributes: 
         type: NOTIFICATION_SEND_REPORT
         templateName: com.patho.main.template.print.SendReport

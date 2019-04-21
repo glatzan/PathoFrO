@@ -32,7 +32,7 @@ public class CaseCertificateUi extends AbstractDocumentUi<CaseCertificate, Abstr
 	 * Return default template configuration for printing
 	 */
 	public TemplateConfiguration<CaseCertificate> getDefaultTemplateConfiguration() {
-		printDocument.initilize(new InitializeToken("task", task), new InitializeToken("patient", task.getParent()));
+		printDocument.initialize(new InitializeToken("task", task), new InitializeToken("patient", task.getParent()));
 		return new TemplateConfiguration<CaseCertificate>(printDocument);
 	}
 

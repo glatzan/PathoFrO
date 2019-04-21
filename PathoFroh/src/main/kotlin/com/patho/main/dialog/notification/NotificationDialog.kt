@@ -5,6 +5,7 @@ import com.patho.main.common.Dialog
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTabTaskDialog
 import com.patho.main.dialog.print.PrintDialog
+import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntent
@@ -22,7 +23,7 @@ import com.patho.main.ui.selectors.ContactSelector
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.print.LoadedPrintPDFBearer
 import com.patho.main.util.status.ReportIntentStatusByDiagnosis
-import com.patho.main.util.status.ReportIntentStatusByType
+import com.patho.main.util.status.ReportIntentStatusNotification
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -101,7 +102,7 @@ class NotificationDialog @Autowired constructor(
         val container = event.component.attributes["container"]
         val returnObject = event.`object`
 
-        if (returnObject is LoadedPrintPDFBearer && container is ReportIntentStatusByType.ReportIntentNotificationBearer) {
+        if (returnObject is LoadedPrintPDFBearer && container is ReportIntentStatusNotification.ReportIntentNotificationBearer) {
             logger.debug("Setting custom pdf for container $container.reportIntent.person?.getFullName()}")
             container.pdf = returnObject.pdfContainer
             return;
@@ -159,7 +160,7 @@ class NotificationDialog @Autowired constructor(
         /**
          * Contais a list of contacts with the specified notification type
          */
-        open lateinit var reportIntentStatus: ReportIntentStatusByType
+        open lateinit var reportIntentStatus: ReportIntentStatusNotification
 
         override fun updateData() {
             reportIntentStatus.update(task)
@@ -179,7 +180,7 @@ class NotificationDialog @Autowired constructor(
      */
     open inner class GeneralTab : NotificationTab(
             "GeneralTab",
-            "dialog.notification.tab.general",
+            "dialog.notificationDialog.general.navigationText",
             "generalTab",
             "include/general.xhtml") {
 
@@ -250,7 +251,7 @@ class NotificationDialog @Autowired constructor(
 
     open inner class MailTab : ContactTab(
             "MailTab",
-            "dialog.notification.tab.mail",
+            "dialog.notificationDialog.mail.navigationText",
             "mailTab",
             "include/mail.xhtml",
             NotificationTyp.EMAIL) {
@@ -267,16 +268,18 @@ class NotificationDialog @Autowired constructor(
             templates = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
                     PrintDocument.DocumentType.DIAGNOSIS_REPORT_EXTERN)
 
+            println(printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail))
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
+            println(selectedTemplate)
 
             mailTemplate = mailRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
 
-            mailTemplate?.initilize(
+            mailTemplate?.initialize(
                     InitializeToken("patient", task.patient),
                     InitializeToken("task", task),
                     InitializeToken("contact", null))
 
-            reportIntentStatus = ReportIntentStatusByType(task, notificationTyp)
+            reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -313,7 +316,7 @@ class NotificationDialog @Autowired constructor(
 
             printFax = false
 
-            reportIntentStatus = ReportIntentStatusByType(task, notificationTyp)
+            reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -343,7 +346,7 @@ class NotificationDialog @Autowired constructor(
 
             printLetter = true
 
-            reportIntentStatus = ReportIntentStatusByType(task, notificationTyp)
+            reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -359,7 +362,7 @@ class NotificationDialog @Autowired constructor(
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing phone data...")
 
-            reportIntentStatus = ReportIntentStatusByType(task, notificationTyp)
+            reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -371,13 +374,6 @@ class NotificationDialog @Autowired constructor(
             "sendTab",
             "include/send.xhtml") {
 
-    }
-
-
-    class NotificationStatus(task: Task, notificationTyp: NotificationTyp, ignoreActive: Boolean = false) : ReportIntentStatusByType(task, notificationTyp, ignoreActive) {
-        class Test(reportIntent: ReportIntent, reportIntentNotification: ReportIntentNotification) : ReportIntentNotificationBearer(reportIntent,reportIntentNotification) {
-
-        }
     }
 
 }

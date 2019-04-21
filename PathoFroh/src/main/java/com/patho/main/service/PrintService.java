@@ -39,7 +39,7 @@ public class PrintService extends AbstractService {
 	private LablePrinterHandler lablePrinter;
 
 	@PostConstruct
-	public void initilizePrinters() {
+	public void initializePrinters() {
 		getCupsPrinter().initialize();
 		getLablePrinter().initialize();
 	}

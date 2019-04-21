@@ -313,7 +313,7 @@ open class ReportService @Autowired constructor(
      * If pdf creation is not possible an error is thrown
      */
     private fun getPrintPDFBearer(printDocument: PrintDocument, address: String, diagnosisRevision: DiagnosisRevision): PrintPDFBearer {
-        printDocument.initilize(InitializeToken("task", diagnosisRevision.parent),
+        printDocument.initialize(InitializeToken("task", diagnosisRevision.parent),
                 InitializeToken("diagnosisRevisions", Arrays.asList<DiagnosisRevision>(diagnosisRevision)),
                 InitializeToken("patient", diagnosisRevision.patient), InitializeToken("address", address),
                 InitializeToken("subject", ""))

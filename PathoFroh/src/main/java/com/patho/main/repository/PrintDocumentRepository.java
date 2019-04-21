@@ -6,20 +6,20 @@ import java.util.List;
 import java.util.Optional;
 
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.template.PrintDocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 
 public interface PrintDocumentRepository {
 
-	public List<PrintDocument> findAllByTypes(DocumentType... types);
+	public List<PrintDocument> findAllByTypes(PrintDocumentType... types);
 
-	public List<PrintDocument> findAllByTypes(List<DocumentType> types);
+	public List<PrintDocument> findAllByTypes(List<PrintDocumentType> types);
 
 	public List<PrintDocument> findAll();
 
 	public Optional<PrintDocument> findByID(long id);
 
-	public Optional<PrintDocument> findByTypeAndDefault(DocumentType type);
+	public Optional<PrintDocument> findByTypeAndDefault(PrintDocumentType type);
 
 	/**
 	 * Loads documents with the correct document classes, copies content form
@@ -101,10 +101,10 @@ public interface PrintDocumentRepository {
 	 * @param type
 	 * @return
 	 */
-	public static Optional<PrintDocument> getByTypAndDefault(List<PrintDocument> documents, DocumentType type) {
+	public static Optional<PrintDocument> getByTypAndDefault(List<PrintDocument> documents, PrintDocumentType type) {
 
 		for (PrintDocument printDocument : documents) {
-			if (printDocument.getDocumentType() == type && printDocument.isDefaultOfType())
+			if (printDocument.getDocumentType() == type && printDocument.getDefaultOfType())
 				return Optional.ofNullable(printDocument);
 		}
 		return Optional.empty();

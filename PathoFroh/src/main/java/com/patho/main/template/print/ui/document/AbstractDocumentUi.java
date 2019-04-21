@@ -84,7 +84,7 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 	 * @return
 	 */
 	public TemplateConfiguration<T> getDefaultTemplateConfiguration() {
-		printDocument.initilize(new InitializeToken("task", task));
+		printDocument.initialize(new InitializeToken("task", task));
 		return new TemplateConfiguration<T>(printDocument);
 	}
 
@@ -243,9 +243,6 @@ public class AbstractDocumentUi<T extends PrintDocument, S extends AbstractDocum
 
 	/**
 	 * Data which can be share between Ui Objects.
-	 * 
-	 * @author andi
-	 *
 	 */
 	public static class SharedData {
 

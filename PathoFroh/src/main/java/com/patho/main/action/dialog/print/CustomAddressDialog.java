@@ -1,16 +1,13 @@
 package com.patho.main.action.dialog.print;
 
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Configurable;
 
 @Configurable
 @Getter
@@ -47,11 +44,30 @@ public class CustomAddressDialog extends AbstractDialog {
 		hideDialog(new CustomAddressReturn(customAddress,contactContainer));
 	}
 
-	@Getter
-	@Setter
-	@AllArgsConstructor
 	public static class CustomAddressReturn implements DialogReturnEvent {
 		private String customAddress;
 		private ContactSelector contactSelector;
+
+		@java.beans.ConstructorProperties({"customAddress", "contactSelector"})
+		public CustomAddressReturn(String customAddress, ContactSelector contactSelector) {
+			this.customAddress = customAddress;
+			this.contactSelector = contactSelector;
+		}
+
+		public String getCustomAddress() {
+			return this.customAddress;
+		}
+
+		public ContactSelector getContactSelector() {
+			return this.contactSelector;
+		}
+
+		public void setCustomAddress(String customAddress) {
+			this.customAddress = customAddress;
+		}
+
+		public void setContactSelector(ContactSelector contactSelector) {
+			this.contactSelector = contactSelector;
+		}
 	}
 }

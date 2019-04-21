@@ -8,7 +8,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <p:outputPanel styleClass="headerPannel">
-        <h:outputLabel value="#{msg['dialog.notification.tab.mail.headline']}"/>
+        <h:outputLabel value="#{msg['dialog.notificationDialog.mail.headline']}"/>
     </p:outputPanel>
 
     <p:outputPanel styleClass="bodyPannel">
@@ -16,53 +16,61 @@
                      columnClasses="columnWidth150 columnTop, ">
 
             <!-- Use Mail -->
-            <h:outputLabel value="#{msg['dialog.notification.tab.mail.use']}"
-                           styleClass="bigFont"/>
+            <h:outputLabel value="#{msg['dialog.notificationDialog.mail.use.text']}"
+                           title="#{msg['dialog.notificationDialog.mail.use.info']}"
+                           styleClass=" bigFont"/>
             <p:selectBooleanCheckbox
                     value="#{notificationDialog.mailTab.useNotification}"
-                    title="#{msg['dialog.notification.tab.mail.use.text']}">
+                    title="#{msg['dialog.notificationDialog.mail.use.info']}">
                 <p:ajax event="change" process="@this" update="@form"/>
             </p:selectBooleanCheckbox>
 
             <!-- subject -->
-            <h:outputLabel value="#{msg['dialog.notification.tab.mail.subject']}"
+            <h:outputLabel value="#{msg['dialog.notificationDialog.mail.subject.text']}"
+                           title="#{msg['dialog.notificationDialog.mail.subject.info']}"
                            styleClass="bigFont"/>
             <p:inputText
                     value="#{notificationDialog.mailTab.mailTemplate.finalSubject}"
+                    title="#{msg['dialog.notificationDialog.mail.subject.info']}"
                     style="width:95%"
                     disabled="#{!notificationDialog.mailTab.useNotification}"/>
 
             <!-- Text -->
-            <h:outputLabel value="#{msg['dialog.notification.tab.mail.text']}"
+            <h:outputLabel value="#{msg['dialog.notificationDialog.mail.text.text']}"
+                           title="#{msg['dialog.notificationDialog.mail.text.info']}"
                            styleClass="bigFont"/>
             <p:inputTextarea escape="false"
                              value="#{notificationDialog.mailTab.mailTemplate.finalBody}"
+                             title="#{msg['dialog.notificationDialog.mail.text.info']}"
                              style="width:95%"
                              disabled="#{!notificationDialog.mailTab.useNotification}"
                              rows="10"/>
 
             <!-- Individual address -->
             <h:outputLabel
-                    value="#{msg['dialog.notification.tab.mail.individualAddress']}"
+                    value="#{msg['dialog.notificationDialog.mail.individualAddress.text']}"
+                    title="#{msg['dialog.notificationDialog.mail.individualAddress.info']}"
                     styleClass="bigFont"/>
             <p:selectBooleanCheckbox
                     disabled="#{!notificationDialog.mailTab.useNotification}"
                     value="#{notificationDialog.mailTab.individualAddresses}"
-                    title="#{msg['dialog.notification.tab.mail.individualAddress.text']}">
+                    title="#{msg['dialog.notificationDialog.mail.individualAddress.info']}">
                 <p:ajax event="change" process="@this" update="@form"/>
             </p:selectBooleanCheckbox>
 
             <!-- pdf template -->
             <h:outputLabel
-                    value="#{msg['dialog.notification.tab.mail.pdfTemplate']}"
+                    value="#{msg['dialog.notificationDialog.mail.template.text']}"
+                    title="#{msg['dialog.notificationDialog.mail.template.info']}"
                     styleClass="bigFont"/>
             <p:selectOneMenu
                     value="#{notificationDialog.mailTab.selectedTemplate}"
+                    title="#{msg['dialog.notificationDialog.mail.template.info']}"
                     converter="#{notificationDialog.mailTab.templatesTransformer}"
                     disabled="#{!notificationDialog.mailTab.useNotification}">
 
                 <f:selectItem itemValue="#{null}"
-                              itemLabel="#{msg['dialog.notification.tab.mail.pdfTemplate.none']}"/>
+                              itemLabel="#{msg['dialog.notificationDialog.mail.template.none']}"/>
 
                 <f:selectItems
                         value="#{notificationDialog.mailTab.templates}"
@@ -73,27 +81,32 @@
 
             <!-- receiver -->
             <h:outputLabel
-                    value="#{msg['dialog.notification.tab.mail.receiver']}"
+                    value="#{msg['dialog.notificationDialog.mail.receiverTable.text']}"
                     styleClass="bigFont"/>
 
             <p:dataTable var="reportIntentNotificationBearer" scrollable="true" scrollHeight="160"
-                         style="width:96%" styleClass="defaultHistoDataTable"
-                         value="#{notificationDialog.mailTab.reportIntentStatus.reportNotificationIntents}">
+                         style="width:96%" id="notificationTable" styleClass="defaultHistoDataTable"
+                         value="#{notificationDialog.mailTab.reportIntentStatus.reportNotificationIntents}"
+                         sortBy="#{reportIntentNotificationBearer.status}">
+
+                <!-- header sorting by status -->
+                <p:headerRow>
+                    <p:column colspan="4">
+                        <h:outputText
+                                value="#{msg['dialog.notificationDialog.notificationStatus.'.concat(reportIntentNotificationBearer.status)]}"/>
+                    </p:column>
+                </p:headerRow>
 
                 <!-- name of receiver -->
                 <p:column
-                        headerText="#{msg['dialog.notification.tab.mail.receiver.name']}"
+                        headerText="#{msg['dialog.notificationDialog.mail.receiverTable.name']}"
                         style="width:auto">
                     <h:outputText value="#{reportIntentNotificationBearer.reportIntent.person.getFullName()}"/>
-                    <!--<ui:fragment rendered="#{container.notification.failed}">-->
-                    <!--<i class="fa fa-fw fa-times-circle icon-red"-->
-                    <!--title="#{msg['dialog.notification.tab.mail.receiver.failedAndRetry']}: #{container.notification.commentary}" />-->
-                    <!--</ui:fragment>-->
                 </p:column>
 
                 <!-- email -->
                 <p:column
-                        headerText="#{msg['dialog.notification.tab.mail.receiver.email']}"
+                        headerText="#{msg['dialog.notificationDialog.mail.receiverTable.mail']}"
                         style="width:auto">
                     <p:inputText value="#{reportIntentNotificationBearer.contactAddress}"
                                  disabled="#{!notificationDialog.mailTab.useNotification or !reportIntentNotificationBearer.performNotification}"
@@ -104,11 +117,12 @@
                 <p:column style="width:7%;text-align:center;">
                     <f:facet name="header">
                         <i class="fa fa-check-circle-o "
-                           title="#{msg['dialog.notification.tab.mail.receiver.use']}"/>
+                           title="#{msg['dialog.notificationDialog.mail.receiverTable.perform']}"/>
                     </f:facet>
 
                     <p:selectBooleanCheckbox
                             disabled="#{!notificationDialog.mailTab.useNotification}"
+                            title="#{msg['dialog.notificationDialog.mail.receiverTable.perform']}"
                             value="#{reportIntentNotificationBearer.performNotification}">
                         <p:ajax event="change" update="@form"/>
                     </p:selectBooleanCheckbox>
@@ -118,17 +132,18 @@
                 <p:column style="width:10%; text-align:center;">
                     <f:facet name="header">
                         <i class="fa fa-file-pdf-o"
-                           title="#{msg['dialog.notification.tab.mail.receiver.pdf.info']}"/>
+                           title="#{msg['dialog.notificationDialog.mail.receiverTable.pdf.info']}"/>
                     </f:facet>
 
                     <!-- add pdf, if pdf == null -->
                     <p:commandLink
                             rendered="#{reportIntentNotificationBearer.pdf eq null and reportIntentNotificationBearer.performNotification}"
                             disabled="#{!notificationDialog.mailTab.useNotification}"
-                            title="#{msg['dialog.notification.tab.mail.receiver.pdf.info']}"
+                            title="#{msg['dialog.notificationDialog.mail.receiverTable.pdf.select']}"
                             execute="@this"
                             actionListener="#{notificationDialog.openSelectPDFDialog(notificationDialog.task, reportIntentNotificationBearer.reportIntent)}">
 
+                        <!-- current container is passed to the dialogReturn methode -->
                         <f:attribute name="container" value="#{reportIntentNotificationBearer.reportIntent}"/>
 
                         <p:ajax event="dialogReturn" update="@form" process="@form"
@@ -141,7 +156,7 @@
                     <!-- show pdf, if pdf != null -->
                     <p:commandLink
                             rendered="#{reportIntentNotificationBearer.pdf ne null and reportIntentNotificationBearer.performNotification}"
-                            title="#{msg['dialog.notification.tab.mail.receiver.pdf.show']}"
+                            title="#{msg['dialog.notificationDialog.mail.receiverTable.pdf.view']}"
                             execute="@this"
                             disabled="#{!notificationDialog.mailTab.useNotification}"
                             actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(notificationDialog.task.patient).viewMode().setPDFToDisplay(reportIntentNotificationBearer.pdf)}">
@@ -152,7 +167,7 @@
                     <!-- remove pdf, if pdf != null -->
                     <p:commandLink style="margin-left: 10px;"
                                    rendered="#{reportIntentNotificationBearer.pdf ne null and reportIntentNotificationBearer.performNotification}"
-                                   title="#{msg['dialog.notification.tab.mail.receiver.pdf.remove']}"
+                                   title="#{msg['dialog.notificationDialog.mail.receiverTable.pdf.remove']}"
                                    execute="@this"
                                    disabled="#{!notificationDialog.mailTab.useNotification}"
                                    update="@form" actionListener="#{reportIntentNotificationBearer.setPdf(null)}">
@@ -197,5 +212,11 @@
             </h:panelGrid>
         </h:panelGrid>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            dataTableFunction.syncColumnWidthOnGroupingTables('#adminForm\\:notificationTable', 16);
+        });
+    </script>
 
 </ui:composition>

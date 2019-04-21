@@ -264,7 +264,7 @@ public class CreateTaskDialog extends AbstractDialog {
                     return;
                 }
 
-                printDocument.get().initilize(new InitializeToken("task", task),
+                printDocument.get().initialize(new InitializeToken("task", task),
                         new InitializeToken("patient", patient));
 
                 PDFContainer container = null;

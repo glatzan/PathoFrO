@@ -427,7 +427,7 @@ public class NotificationDialog extends AbstractTabDialog {
             mailTemplate = mailRepository.findByID(pathoConfig.getDefaultDocuments().getNotificationDefaultEmail())
                     .orElse(null);
 
-            mailTemplate.initilize(new InitializeToken("patient", task.getPatient()), new InitializeToken("task", task),
+            mailTemplate.initialize(new InitializeToken("patient", task.getPatient()), new InitializeToken("task", task),
                     new InitializeToken("contact", null));
 
             updateData();

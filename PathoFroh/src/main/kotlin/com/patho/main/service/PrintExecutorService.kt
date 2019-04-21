@@ -30,7 +30,7 @@ open class PrintExecutorService @Autowired constructor(
             val template = printDocumentRepository.findByID(pathoConfig.defaultDocuments.slideLabelDocument).get()
 
             val result: List<String> = slides.map { p ->
-                template.initilize(InitializeToken("slide", p), InitializeToken("date", Date()),
+                template.initialize(InitializeToken("slide", p), InitializeToken("date", Date()),
                         InitializeToken("uniqueID",
                                 p.task!!.taskID + "" + HistoUtil.fitString(p.uniqueIDinTask, 3, '0'))).finalContent
             }

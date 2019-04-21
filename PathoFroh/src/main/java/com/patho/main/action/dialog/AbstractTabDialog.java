@@ -131,7 +131,7 @@ public abstract class AbstractTabDialog extends AbstractDialog {
 	public abstract static class AbstractTab {
 
 		/**
-		 * True if initilized
+		 * True if initialized
 		 */
 		protected boolean initialized;
 

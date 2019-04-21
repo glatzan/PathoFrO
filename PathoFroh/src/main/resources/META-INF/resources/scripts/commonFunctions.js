@@ -139,6 +139,26 @@ function focusElement(clintId) {
 
 }
 
+var dataTableFunction = {
+    syncColumnWidthOnGroupingTables: function (id, scrollbarWidth) {
+        // Change the selector if needed
+        var $table = $(id);
+        var $bodyCells = $table.find('thead:first tr:first').children()
+        // column with array
+        var colWidth = $bodyCells.map(function () {
+            return $(this).width();
+        }).get();
+
+        // extend last column
+        colWidth[colWidth.length - 1] = colWidth[colWidth.length - 1] + scrollbarWidth;
+
+        // Set the width of thead columns
+        $table.find('tbody tr').children().each(function (i, v) {
+            $(v).width(colWidth[i]);
+        });
+    }
+}
+
 var commonFunctions = {
     /**
      * Show an overlaypanel with a datatable. Will call a reset function, clear the

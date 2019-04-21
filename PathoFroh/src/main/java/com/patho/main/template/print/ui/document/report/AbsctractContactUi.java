@@ -159,9 +159,6 @@ public class AbsctractContactUi<T extends PrintDocument, S extends AbsctractCont
 
 	/**
 	 * Data which can be share between Ui Objects.
-	 * 
-	 * @author andi
-	 *
 	 */
 	public static class SharedContactData extends AbstractDocumentUi.SharedData {
 		/**

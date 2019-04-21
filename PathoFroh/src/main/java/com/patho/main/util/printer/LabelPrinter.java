@@ -98,7 +98,7 @@ public class LabelPrinter extends AbstractPrinter {
 			return false;
 		}
 
-		doc.get().initilize(new HashMap<String, Object>());
+		doc.get().initialize(new HashMap<String, Object>());
 
 		print(doc.get().getFinalContent());
 

@@ -10,7 +10,7 @@ import com.patho.main.service.impl.SpringContextBridge
 /**
  * Listing for notification types
  */
-open class ReportIntentStatusByType<out ReportIntentNotificationBearer>(var task: Task, val notificationTyp: NotificationTyp, val ignoreActive: Boolean = false) {
+open class ReportIntentStatusNotification(var task: Task, val notificationTyp: NotificationTyp, val ignoreActive: Boolean = false) {
 
     var reportNotificationIntents: MutableList<ReportIntentNotificationBearer> = getReportIntentNotificationBearerList()
 
