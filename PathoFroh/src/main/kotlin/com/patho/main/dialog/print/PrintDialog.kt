@@ -5,6 +5,8 @@ import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTaskDialog
+import com.patho.main.dialog.print.documentUi.AbstractDocumentUi
+import com.patho.main.dialog.print.documentUi.AbstractTaskReportUi
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.PrintDocumentRepository
@@ -12,7 +14,6 @@ import com.patho.main.service.PrintService
 import com.patho.main.service.UserService
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
-import com.patho.main.template.print.ui.document.AbstractDocumentUi
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.pdf.LazyPDFGuiManager
 import com.patho.main.util.pdf.PDFCreator
@@ -39,7 +40,7 @@ class PrintDialog @Autowired constructor(
     /**
      * List of all templates for printing
      */
-    var templates: List<AbstractDocumentUi<*, *>> = listOf()
+    var templates: List<AbstractDocumentUi<out PrintDocument, out AbstractDocumentUi.SharedData>> = listOf()
         set(value) {
             field = value
             templateTransformer = DefaultTransformer(value)
@@ -48,12 +49,12 @@ class PrintDialog @Autowired constructor(
     /**
      * The TemplateListtransformer for selecting a template
      */
-    var templateTransformer: DefaultTransformer<AbstractDocumentUi<*, *>> = DefaultTransformer(templates)
+    var templateTransformer: DefaultTransformer<AbstractDocumentUi<out PrintDocument, out AbstractDocumentUi.SharedData>> = DefaultTransformer(templates)
 
     /**
      * Ui object for template
      */
-    var selectedTemplate: AbstractDocumentUi<*, *>? = null
+    var selectedTemplate: AbstractDocumentUi<out PrintDocument, out AbstractDocumentUi.SharedData>? = null
 
     /**
      * Can be set to true, if so the generated pdf will be saved
@@ -97,8 +98,8 @@ class PrintDialog @Autowired constructor(
         return this
     }
 
-    fun initAndPrepareBean(task: Task, templateUI: List<AbstractDocumentUi<*, *>>,
-                           selectedTemplateUi: AbstractDocumentUi<*, *>): PrintDialog {
+    fun initAndPrepareBean(task: Task, templateUI: List<AbstractDocumentUi<out PrintDocument, out AbstractDocumentUi.SharedData>>,
+                           selectedTemplateUi: AbstractDocumentUi<out PrintDocument, out AbstractDocumentUi.SharedData>): PrintDialog {
         if (initBean(task, templateUI, selectedTemplateUi))
             prepareDialog();
         return this;
@@ -115,10 +116,13 @@ class PrintDialog @Autowired constructor(
                  selectTemplate: PrintDocument? = null): Boolean {
 
         // getting ui objects
-        val printDocumentUIs = AbstractDocumentUi.factory(templates)
+        val printDocumentUIs = PrintDocumentRepository.factory(templates)
 
         // init templates
-        printDocumentUIs.forEach { p -> p.initialize(task) }
+        printDocumentUIs.forEach { p ->
+            if (p is AbstractTaskReportUi)
+                p.initialize(task)
+        }
 
         val selectedPrintDocument = selectedTemplate?.let { printDocumentUIs.firstOrNull { p -> p.printDocument == it } }
 
@@ -177,7 +181,7 @@ class PrintDialog @Autowired constructor(
 
         val template = selectedTemplate
         if (template != null) {
-            guiManager.startRendering(template.defaultTemplateConfiguration.documentTemplate,
+            guiManager.startRendering(template.getDefaultTemplateConfiguration().documentTemplate,
                     pathoConfig.fileSettings.printDirectory)
 
             duplexPrinting = template.printDocument.duplexPrinting
@@ -197,7 +201,7 @@ class PrintDialog @Autowired constructor(
 
         while (template.hasNextTemplateConfiguration()) {
             val container = template
-                    .nextTemplateConfiguration
+                    .getNextTemplateConfiguration()
 
             var pdf: PDFContainer? = null
 
@@ -209,13 +213,13 @@ class PrintDialog @Autowired constructor(
                 continue
             }
 
-            val printOrder = PrintOrder(pdf, container.getCopies(), duplexPrinting,
+            val printOrder = PrintOrder(pdf, container.copies, duplexPrinting,
                     container.documentTemplate.attributes)
 
             printService.getCurrentPrinter(userService.currentUser).print(printOrder)
 
             // only save if person is associated
-            if (container.contact != null && container.contact.role != ContactRole.NONE) {
+            if (container.contact != null && container.contact?.role != ContactRole.NONE) {
                 //				reportIntentService.addNotificationHistoryDataAndReportIntentNotification(task,container.getContact(),NotificationTyp.PRINT, get);
                 // TODO save print request
 
@@ -238,7 +242,7 @@ class PrintDialog @Autowired constructor(
      */
     fun hideAndSelect() {
         val pdf = guiManager.pdfContainerToRender
-        val template = selectedTemplate?.defaultTemplateConfiguration?.documentTemplate
+        val template = selectedTemplate?.getDefaultTemplateConfiguration()?.documentTemplate
 
         if (pdf != null && template != null) {
             hideDialog(LoadedPrintPDFBearer(pdf, template))

@@ -4,6 +4,7 @@ import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocument
+import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.interfaces.PdfStreamProvider
 import lombok.Synchronized
 import org.primefaces.model.DefaultStreamedContent
@@ -97,7 +98,7 @@ class LazyPDFGuiManager() : PdfStreamProvider, LazyPDFReturnHandler {
                 setPDFContainerToRender(container)
             } else {
                 setPDFContainerToRender(
-                        PDFContainer(PrintDocument.DocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.RENDER_ERROR_PDF, ""))
+                        PDFContainer(PrintDocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.RENDER_ERROR_PDF, ""))
             }
 
             renderPDF.set(true)

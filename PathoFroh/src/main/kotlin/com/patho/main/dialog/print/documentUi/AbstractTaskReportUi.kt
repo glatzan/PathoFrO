@@ -7,21 +7,21 @@ import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocument
-import com.patho.main.ui.selectors.ContactSelector
+import com.patho.main.util.ui.selector.ReportIntentSelector
 
 abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.SharedContactData>(printDocument: T, sharedData: S) : AbstractTaskDocumentUi<T, S>(printDocument, sharedData) {
     /**
      * Pointer for printing all selected contacts
      */
-    var contactListPointer: ContactSelector? = null
+    var contactListPointer: ReportIntentSelector? = null
 
     /**
      * Updates the pdf content if a associatedContact was chosen for the first time
      */
-    fun onChooseContact(container: ContactSelector) {
-        if (!container.isSelected)
+    fun onChooseContact(container: ReportIntentSelector) {
+        if (!container.selected)
         // if container was deselected, deselect all organizations
-            container.organizazionsChoosers.forEach { p -> p.isSelected = false }
+            container.organizations.forEach { p -> p.selected = false }
         else {
 
             // setting default address to true

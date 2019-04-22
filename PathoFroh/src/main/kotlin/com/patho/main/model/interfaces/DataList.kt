@@ -3,6 +3,7 @@ package com.patho.main.model.interfaces
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
 import com.patho.main.template.PrintDocument
+import com.patho.main.template.PrintDocumentType
 import java.io.File
 import javax.persistence.Transient
 
@@ -15,7 +16,7 @@ interface DataList : ID, PatientAccessible {
         @Transient
         get() = File(PathoConfig.FileSettings.FILE_REPOSITORY_PATH_TOKEN + patient?.id)
 
-    open fun containsReportType(type: PrintDocument.DocumentType): Boolean {
+    open fun containsReportType(type: PrintDocumentType): Boolean {
         return attachedPdfs.any { p -> p.type == type }
     }
 

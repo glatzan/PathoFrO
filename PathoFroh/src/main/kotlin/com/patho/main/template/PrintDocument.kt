@@ -91,10 +91,17 @@ open class PrintDocument : AbstractTemplate {
     }
 
     /**
+     * Initializes values for the velocity template engine
+     */
+    override fun initialize(vararg token: DocumentToken): Pair<out PrintDocument, Context> {
+        return initialize(hashMapOf(*token.map { it.key to it.value }.toTypedArray()))
+    }
+
+    /**
      * Initializes values for the velocity template engine. Generates a
      * final document version and saves this version into finalContent
      */
-    override fun initialize(content: HashMap<String, Any>): Pair<out PrintDocument, Context> {
+    override fun initialize(content: HashMap<String, Any?>): Pair<out PrintDocument, Context> {
         val context = super.initialize(content).second
 
         /* now render the template into a StringWriter */

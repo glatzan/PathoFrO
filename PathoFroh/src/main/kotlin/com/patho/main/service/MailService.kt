@@ -79,12 +79,12 @@ class MailService @Autowired constructor(
                 email.subject = mail.subject
                 email.setMsg(mail.body)
 
-                val `is` = ByteArrayInputStream(mediaRepository.getBytes(mail.attachment.path))
+                val `is` = ByteArrayInputStream(mediaRepository.getBytes(mail.attachment?.path))
 
                 val source = ByteArrayDataSource(`is`, "application/pdf")
 
                 // add the attachment
-                email.attach(source, mail.attachment.name, "")
+                email.attach(source, mail.attachment?.name, "")
 
                 // send the email
                 email.send()

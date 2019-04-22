@@ -42,7 +42,7 @@ class SendReport(printDocument: PrintDocument) : PrintDocument(printDocument) {
         afterPDFCreationHook = true
     }
 
-    override fun initialize(content: HashMap<String, Any>): Pair<out PrintDocument, Context> {
+    override fun initialize(content: HashMap<String, Any?>): Pair<out PrintDocument, Context> {
         content.forEach { p ->
             when (p.key) {
                 "useMail" -> useMail = p.value as Boolean

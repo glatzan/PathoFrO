@@ -2,5 +2,11 @@ package com.patho.main.util.ui.selector
 
 import com.patho.main.model.Physician
 
-open class PhysicianSelector(val physician: Physician, override var id: Long) : UISelector<Physician>(physician) {
+open class PhysicianSelector(physician: Physician, id: Long) : UISelector<Physician>(physician,id) {
+
+    /**
+     * Returns the item as a phyisican field
+     */
+    val physician
+        get() = item
 }

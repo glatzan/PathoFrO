@@ -11,7 +11,16 @@ import java.util.*
  */
 open class MailTemplate : AbstractTemplate {
 
-    var attachment: PDFContainer = PDFContainer()
+    /**
+     * Attachment of the mail
+     */
+    var attachment: PDFContainer? = null
+
+    /**
+     * Returns true if attachment is set
+     */
+    val isAttachment
+        get() = attachment != null
 
     /**
      * Subject of the mail, as a template
@@ -66,7 +75,7 @@ open class MailTemplate : AbstractTemplate {
      * final document version and saves this version into finalSubject and
      * finalBody
      */
-    override fun initialize(content: HashMap<String, Any>): Pair<out MailTemplate, Context> {
+    override fun initialize(content: HashMap<String, Any?>): Pair<out MailTemplate, Context> {
         val context = super.initialize(content).second
 
         /* now render the template into a StringWriter */

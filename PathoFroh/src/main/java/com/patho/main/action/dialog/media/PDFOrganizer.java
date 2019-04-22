@@ -95,7 +95,7 @@ public class PDFOrganizer extends AbstractDialog {
 	private boolean viewOnly;
 
 	@Accessors(chain = true)
-	private PrintDocument.DocumentType uploadDocumentType;
+	private PrintDocumentType uploadDocumentType;
 
 	@Accessors(chain = true)
 	private DataList uploadTarget;
@@ -120,7 +120,7 @@ public class PDFOrganizer extends AbstractDialog {
 		this.enablePDFSelection = false;
 		this.viewOnly = false;
 
-		uploadDocumentType = PrintDocument.DocumentType.OTHER;
+		uploadDocumentType = PrintDocumentType.OTHER;
 		uploadTarget = patient;
 
 		super.initBean(null, Dialog.PDF_ORGANIZER);

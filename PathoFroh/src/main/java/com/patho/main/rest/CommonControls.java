@@ -43,7 +43,7 @@ import com.patho.main.service.AuthenticationService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.helper.HistoUtil;
 
 @RestController
@@ -176,7 +176,7 @@ public class CommonControls {
 			@RequestParam(value = "piz", required = false) String piz,
 			@RequestParam(value = "taskID", required = false) String taskID,
 			@RequestParam(value = "fileName", required = false) String fileName,
-			@RequestParam(value = "documentType", required = false) DocumentType documentType) {
+			@RequestParam(value = "documentType", required = false) PrintDocumentType documentType) {
 
 		logger.debug("Calling updloag with piz {}, taskID {}, filename {}, document type {}", piz, taskID, fileName,
 				documentType);
@@ -199,7 +199,7 @@ public class CommonControls {
 					String name = fileName != null ? fileName : new PrintDocument(documentType).getGeneratedFileName();
 
 					pdfService.createAndAttachPDF(task.get(),
-							new PDFInfo(name, documentType == null ? DocumentType.UNKNOWN : documentType),
+							new PDFInfo(name, documentType == null ? PrintDocumentType.UNKNOWN : documentType),
 							file.getBytes(), true);
 
 					logger.debug("Success: Uploading to task successful. (Task ID: {}, Filename: {})", taskID, name);
@@ -217,7 +217,7 @@ public class CommonControls {
 					String name = fileName != null ? fileName : new PrintDocument(documentType).getGeneratedFileName();
 
 					pdfService.createAndAttachPDF(p.get(),
-							new PDFInfo(name, documentType == null ? DocumentType.UNKNOWN : documentType),
+							new PDFInfo(name, documentType == null ? PrintDocumentType.UNKNOWN : documentType),
 							file.getBytes(), true);
 
 					logger.debug("Success: Uploading to patient successful. (Patient PIZ: {}, Filename: {})", piz,

@@ -6,7 +6,6 @@ import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.repository.PrintDocumentRepository
 import com.patho.main.template.DocumentToken
-import com.patho.main.template.InitializeToken
 import com.patho.main.template.PrintDocument
 import com.patho.main.util.notification.NotificationFeedback
 import com.patho.main.util.pdf.PDFCreationFailedException

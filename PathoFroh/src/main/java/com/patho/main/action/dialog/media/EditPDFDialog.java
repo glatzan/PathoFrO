@@ -7,7 +7,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.PDFRepository;
-import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;

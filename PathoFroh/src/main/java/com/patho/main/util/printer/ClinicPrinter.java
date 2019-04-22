@@ -7,7 +7,7 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.service.PrintService;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;

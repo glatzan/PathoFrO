@@ -40,7 +40,7 @@ import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.template.PrintDocument;
-import com.patho.main.template.PrintDocument.DocumentType;
+import com.patho.main.template.PrintDocumentType;
 import com.patho.main.template.print.ui.document.AbstractDocumentUi;
 import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.pdf.PDFStreamContainerImpl;

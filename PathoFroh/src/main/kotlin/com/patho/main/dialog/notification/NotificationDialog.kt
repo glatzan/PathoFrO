@@ -20,11 +20,11 @@ import com.patho.main.template.DocumentToken
 import com.patho.main.template.MailTemplate
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
-import com.patho.main.ui.selectors.ContactSelector
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.print.LoadedPrintPDFBearer
 import com.patho.main.util.status.ReportIntentStatusByDiagnosis
 import com.patho.main.util.status.ReportIntentStatusNotification
+import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -72,18 +72,18 @@ class NotificationDialog @Autowired constructor(
      */
     fun openSelectPDFDialog(task: Task, contact: ReportIntent) {
 
-        val printDocuments = printDocumentRepository.findAllByTypes(PrintDocument.DocumentType.DIAGNOSIS_REPORT,
+        val printDocuments = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
                 PrintDocumentType.DIAGNOSIS_REPORT_EXTERN)
 
         //
-        val selectors = ArrayList<ContactSelector>()
-        selectors.add(ContactSelector(contact))
-        selectors.add(ContactSelector(task,
+        val selectors = ArrayList<ReportIntentSelector>()
+        selectors.add(ReportIntentSelector(contact))
+        selectors.add(ReportIntentSelector(task,
                 Person(resourceBundle.get("dialog.printDialog.individualAddress"), Contact()), ContactRole.NONE))
         selectors[0].isSelected = true
 
         // getting ui objects
-        val printDocumentUIs = AbstractDocumentUi.factory(printDocuments)
+        val printDocumentUIs = PrintDocumentRepository.factory(printDocuments)
 
         for (documentUi in printDocumentUIs) {
             (documentUi as DiagnosisReportUi).initialize(task, selectors)

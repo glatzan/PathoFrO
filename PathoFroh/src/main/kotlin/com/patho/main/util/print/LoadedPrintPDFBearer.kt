@@ -3,6 +3,7 @@ package com.patho.main.util.print
 import com.patho.main.model.PDFContainer
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocument
+import com.patho.main.template.PrintDocumentType
 
 /**
  * Container which loads the pdf data in ram
@@ -22,7 +23,7 @@ class LoadedPrintPDFBearer : PrintPDFBearer {
             thumbnailData = SpringContextBridge.services().mediaRepository.getBytes(pdfContainer.thumbnail)
     }
 
-    constructor(type: PrintDocument.DocumentType, name: String, pdfData: ByteArray, thumbnailData: ByteArray?) : super(PDFContainer(type, name), PrintDocument()) {
+    constructor(type: PrintDocumentType, name: String, pdfData: ByteArray, thumbnailData: ByteArray?) : super(PDFContainer(type, name), PrintDocument()) {
         this.pdfData = pdfData
         this.thumbnailData = thumbnailData
     }
