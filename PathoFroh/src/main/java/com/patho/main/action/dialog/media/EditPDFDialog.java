@@ -32,7 +32,7 @@ public class EditPDFDialog extends AbstractDialog {
 	/**
 	 * Type of uploaded file
 	 */
-	private DocumentType[] availableFileTypes;
+	private PrintDocumentType[] availableFileTypes;
 
 	public EditPDFDialog initAndPrepareBean(PDFContainer container) {
 		if (initBean(container))
@@ -42,8 +42,8 @@ public class EditPDFDialog extends AbstractDialog {
 
 	public boolean initBean(PDFContainer container) {
 		setContainer(container);
-		setAvailableFileTypes(new DocumentType[] { DocumentType.BIOBANK_INFORMED_CONSENT, DocumentType.COUNCIL_REPLY,
-				DocumentType.OTHER, DocumentType.U_REPORT });
+		setAvailableFileTypes(new PrintDocumentType[] { PrintDocumentType.BIOBANK_INFORMED_CONSENT, PrintDocumentType.COUNCIL_REPLY,
+				PrintDocumentType.OTHER, PrintDocumentType.U_REPORT });
 		super.initBean(null, Dialog.PDF_EDIT);
 		return true;
 	}

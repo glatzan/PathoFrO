@@ -126,9 +126,9 @@ public class ClinicPrinter extends AbstractPrinter {
             // Merging with empty page
             LoadedPrintPDFBearer cont = PDFCreator.mergePdfs(
                     Arrays.asList(printOrder.getPdfContainer(),
-                            new LoadedPrintPDFBearer(new PDFContainer(DocumentType.EMPTY, "",
+                            new LoadedPrintPDFBearer(new PDFContainer(PrintDocumentType.EMPTY, "",
                                     pathoConfig.getDefaultDocuments().getEmptyPage(), ""))),
-                    "", DocumentType.PRINT_DOCUMENT);
+                    "", PrintDocumentType.PRINT_DOCUMENT);
 
             printOrder.setPdfContainer(cont);
 

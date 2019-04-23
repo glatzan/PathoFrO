@@ -80,7 +80,7 @@ class NotificationDialog @Autowired constructor(
         selectors.add(ReportIntentSelector(contact))
         selectors.add(ReportIntentSelector(task,
                 Person(resourceBundle.get("dialog.printDialog.individualAddress"), Contact()), ContactRole.NONE))
-        selectors[0].isSelected = true
+        selectors[0].selected = true
 
         // getting ui objects
         val printDocumentUIs = PrintDocumentRepository.factory(printDocuments)

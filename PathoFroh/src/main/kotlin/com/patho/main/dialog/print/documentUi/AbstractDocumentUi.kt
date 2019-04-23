@@ -93,11 +93,11 @@ open class AbstractDocumentUi<T : PrintDocument, S : AbstractDocumentUi.SharedDa
         var initialized: Boolean = false
 
         fun initialize(): Boolean {
-            if (initialized)
-                return true
-            else {
+            return if (initialized) {
+                true
+            } else {
                 initialized = true
-                return false
+                false
             }
 
         }

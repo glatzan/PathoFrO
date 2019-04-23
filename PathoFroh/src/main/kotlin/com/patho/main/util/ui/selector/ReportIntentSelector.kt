@@ -1,14 +1,16 @@
 package com.patho.main.util.ui.selector
 
+import com.patho.main.common.ContactRole
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.person.Organization
+import com.patho.main.model.person.Person
 import com.patho.main.service.impl.SpringContextBridge
 
 /**
  * Selector for reportinetnts an their organizations. Is used in the print dialog
  */
-class ReportIntentSelector(reportIntent: ReportIntent, id: Long = reportIntent.id, selected: Boolean = false, emptyAddress: Boolean = false) : UISelector<ReportIntent>(reportIntent, id) {
+class ReportIntentSelector : UISelector<ReportIntent> {
 
     /**
      * Returns the item form the contect field
@@ -29,28 +31,29 @@ class ReportIntentSelector(reportIntent: ReportIntent, id: Long = reportIntent.i
     /**
      * True if address should be empty
      */
-    var emptyAddress: Boolean = emptyAddress
+    var emptyAddress: Boolean
 
     /**
      * Save field for the address
      */
-    var customAddress: String = if (!emptyAddress) generateAddress() else ""
+    var customAddress: String = ""
 
     /**
      * True if address was manually altered
      */
     var manuallyAltered: Boolean = false
 
-    /**
-     * Creates organization selectors
-     */
-    init {
+    constructor(task: Task, person: Person, contactRole: ContactRole, selected: Boolean = false, emptyAddress: Boolean = false) : this(ReportIntent(task, person, contactRole), selected, emptyAddress)
+
+    constructor(reportIntent: ReportIntent, selected: Boolean = false, emptyAddress: Boolean = false) : super(reportIntent, reportIntent.id) {
+        this.emptyAddress = emptyAddress
         this.selected = selected
-        reportIntent.person?.organizsations?.forEach {
-            organizations.add(OrganizationSelector(this, it, it == reportIntent.person?.defaultAddress))
+        updateAddress()
+
+        // Creates organization selectors
+        contact.person?.organizsations?.forEach {
+            organizations.add(OrganizationSelector(this, it, it == contact.person?.defaultAddress))
         }
-
-
     }
 
     /**
@@ -63,13 +66,15 @@ class ReportIntentSelector(reportIntent: ReportIntent, id: Long = reportIntent.i
     /**
      * Generates the address base on the contact and organization selection
      */
-    fun generateAddress(): String {
+    fun updateAddress(overwrite: Boolean = false) {
+        if (customAddress.isNotEmpty() && !overwrite)
+            return;
+
         val selectedOrganization = getSelectedOrganization()?.organization
 
-        val customAddress = SpringContextBridge.services().reportIntentService.generateAddress(contact, selectedOrganization)
+        customAddress = SpringContextBridge.services().reportIntentService.generateAddress(contact, selectedOrganization)
 
         logger.trace("Custom Address is: $customAddress")
-        return customAddress
     }
 
     /**

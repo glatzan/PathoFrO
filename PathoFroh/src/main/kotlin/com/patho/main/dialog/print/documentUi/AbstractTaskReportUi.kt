@@ -26,9 +26,9 @@ abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.
 
             // setting default address to true
             if (container.contact.person?.defaultAddress != null) {
-                for (organizationChooser in container.organizazionsChoosers) {
+                for (organizationChooser in container.organizations) {
                     if (organizationChooser.organization == container.contact.person!!.defaultAddress) {
-                        organizationChooser.isSelected = true
+                        organizationChooser.selected = true
                         break
                     }
                 }
@@ -38,63 +38,63 @@ abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.
             if (sharedData.isSingleSelect) {
                 sharedData.contactList.forEach { p ->
                     if (p !== container) {
-                        p.isSelected = false
-                        p.organizazionsChoosers.forEach { s -> s.isSelected = false }
+                        p.selected = false
+                        p.organizations.forEach { s -> s.selected = false }
                     }
                 }
             }
         }
 
-        container.generateAddress(false)
+        container.updateAddress()
 
     }
 
     /**
      * Updates the person if a organization was selected or deselected
      */
-    fun onChooseOrganizationOfContact(chooser: ContactSelector.OrganizationChooser) {
-        if (chooser.isSelected) {
+    fun onChooseOrganizationOfContact(chooser: ReportIntentSelector.OrganizationSelector) {
+        if (chooser.selected) {
             // only one organization can be selected, removing other
             // organizations
             // from selection
-            if (chooser.parent.isSelected) {
-                for (organizationChooser in chooser.parent
-                        .organizazionsChoosers) {
-                    if (organizationChooser !== chooser) {
-                        organizationChooser.isSelected = false
+            if (chooser.parent.selected) {
+                for (organizationSelector in chooser.parent
+                        .organizations) {
+                    if (organizationSelector !== chooser) {
+                        organizationSelector.selected = false
                     }
                 }
             } else {
                 // setting parent as selected
-                chooser.parent.isSelected = true
+                chooser.parent.selected = true
             }
 
             // if single select mode remove other selections
             if (sharedData.isSingleSelect) {
                 sharedData.contactList.forEach { p ->
                     if (p !== chooser.parent) {
-                        p.isSelected = false
-                        p.organizazionsChoosers.forEach { s -> s.isSelected = false }
+                        p.selected = false
+                        p.organizations.forEach { s -> s.selected = false }
                     }
                 }
             }
         }
 
-        chooser.parent.generateAddress(true)
+        chooser.parent.updateAddress(true)
     }
 
     /**
      * Gets the address of the first selected contact
      */
     fun getAddressOfFirstSelectedContact(): String {
-        return sharedData.contactList.firstOrNull { p -> p.isSelected }?.customAddress ?: ""
+        return sharedData.contactList.firstOrNull { p -> p.selected }?.customAddress ?: ""
     }
 
     /**
      * Returns the first selected contact
      */
     override fun getFirstSelectedContact(): ReportIntent? {
-        return sharedData.contactList.firstOrNull { p -> p.isSelected }?.contact
+        return sharedData.contactList.firstOrNull { p -> p.selected }?.contact
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.
         var searchForNextContact = false
 
         for (contactSelector in sharedData.contactList) {
-            if (contactSelector.isSelected) {
+            if (contactSelector.selected) {
                 // first contact pointer
                 if (contactListPointer == null) {
                     contactListPointer = contactSelector
@@ -136,12 +136,12 @@ abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.
         /**
          * Task
          */
-        lateinit var task : Task
+        lateinit var task: Task
 
         /**
          * List with all associated contacts
          */
-        var contactList: MutableList<ContactSelector> = mutableListOf()
+        var contactList: MutableList<ReportIntentSelector> = mutableListOf()
 
         /**
          * If true single select mode of contacts is enabled
@@ -173,21 +173,23 @@ abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.
         /**
          * Initializes the shareddata context.
          */
-        open fun initialize(task: Task, contactSelector: List<ContactSelector>): Boolean {
+        open fun initialize(task: Task, contactSelector: List<ReportIntentSelector>): Boolean {
             // return if already initialized
-            if (initialize(task))
+            if (super.initialize())
                 return true
+
+            this.task = task
 
             // setting other contacts (physicians)
             this.contactList.addAll(contactSelector)
 
             // setting custom address
-            this.contactList.add(ContactSelector(task,
+            this.contactList.add(ReportIntentSelector(task,
                     Person(SpringContextBridge.services().resourceBundle.get("dialog.printDialog.individualAddress"), Contact()),
                     ContactRole.NONE))
 
             // setting blank address
-            this.contactList.add(ContactSelector(task,
+            this.contactList.add(ReportIntentSelector(task,
                     Person(SpringContextBridge.services().resourceBundle.get("dialog.print.blankAddress"), Contact()), ContactRole.NONE,
                     true, true))
 

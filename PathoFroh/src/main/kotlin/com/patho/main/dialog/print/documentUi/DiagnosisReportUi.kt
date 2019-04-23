@@ -5,8 +5,8 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.print.DiagnosisReport
-import com.patho.main.ui.selectors.ContactSelector
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
 
 class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportUi.DiagnosisSharedData> {
@@ -21,7 +21,7 @@ class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportU
         initialize(task, listOf())
     }
 
-    fun initialize(task: Task, contactList: List<ContactSelector>) {
+    fun initialize(task: Task, contactList: List<ReportIntentSelector>) {
         sharedData.initialize(task, contactList)
         super.initialize(task)
     }
@@ -34,7 +34,7 @@ class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportU
         val returnObject = event.`object`
 
         if (returnObject is CustomAddressDialog.CustomAddressReturn) {
-            returnObject.contactSelector.isManuallyAltered = true
+            returnObject.contactSelector.manuallyAltered = true
             returnObject.contactSelector.customAddress = returnObject.customAddress
             logger.debug("Custom address set to ${returnObject.customAddress}")
         }
@@ -92,13 +92,13 @@ class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportU
          * Initializes the shareddata context.
          */
         override fun initialize(task: Task): Boolean {
-            return initialize(task, task.contacts.map { ContactSelector(it, false, false) }.toList())
+            return initialize(task, task.contacts.map { ReportIntentSelector(it, false, false) }.toList())
         }
 
         /**
          * Initializes the shareddata context.
          */
-        override fun initialize(task: Task, contactSelector: List<ContactSelector>): Boolean {
+        override fun initialize(task: Task, contactSelector: List<ReportIntentSelector>): Boolean {
             // return if already initialized
             if (super.initialize(task, contactList))
                 return true

@@ -19,7 +19,6 @@ import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.DiagnosisRevisionRepository;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.service.PDFService.PDFReturn;
-import com.patho.main.template.InitializeToken;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.notification.NotificationContainer;

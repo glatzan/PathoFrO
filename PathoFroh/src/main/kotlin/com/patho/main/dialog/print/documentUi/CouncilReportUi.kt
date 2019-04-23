@@ -9,8 +9,8 @@ import com.patho.main.model.person.Person
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.print.CouncilReport
-import com.patho.main.ui.selectors.ContactSelector
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
 
 class CouncilReportUi : AbstractTaskReportUi<CouncilReport, CouncilReportUi.CouncilSharedData> {
@@ -38,7 +38,7 @@ class CouncilReportUi : AbstractTaskReportUi<CouncilReport, CouncilReportUi.Coun
         val returnObject = event.`object`
 
         if (returnObject is CustomAddressDialog.CustomAddressReturn) {
-            returnObject.contactSelector.isManuallyAltered = true
+            returnObject.contactSelector.manuallyAltered = true
             returnObject.contactSelector.customAddress = returnObject.customAddress
             logger.debug("Custom address set to ${returnObject.customAddress}")
         }
@@ -114,20 +114,20 @@ class CouncilReportUi : AbstractTaskReportUi<CouncilReport, CouncilReportUi.Coun
 
             // only one address so set as chosen
             if (selectedCouncil != null && selectedCouncil?.councilPhysician != null) {
-                val chooser = ContactSelector(task,
-                        selectedCouncil?.councilPhysician?.person, ContactRole.CASE_CONFERENCE)
-                chooser.isSelected = true
+                val chooser = ReportIntentSelector(task,
+                        selectedCouncil?.councilPhysician?.person ?: Person(), ContactRole.CASE_CONFERENCE)
+                chooser.selected = true
                 // setting patient
                 contactList.add(chooser)
             }
 
             // setting custom address
-            this.contactList.add(ContactSelector(task,
+            this.contactList.add(ReportIntentSelector(task,
                     Person(SpringContextBridge.services().resourceBundle.get("dialog.printDialog.individualAddress"), Contact()),
                     ContactRole.NONE))
 
             // setting blank address
-            this.contactList.add(ContactSelector(task,
+            this.contactList.add(ReportIntentSelector(task,
                     Person(SpringContextBridge.services().resourceBundle.get("dialog.print.blankAddress"), Contact()), ContactRole.NONE,
                     true, true))
         }

@@ -6,6 +6,7 @@ import com.patho.main.common.Dialog
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.dialog.print.documentUi.AbstractDocumentUi
+import com.patho.main.dialog.print.documentUi.AbstractTaskDocumentUi
 import com.patho.main.dialog.print.documentUi.AbstractTaskReportUi
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.Task
@@ -120,8 +121,11 @@ class PrintDialog @Autowired constructor(
 
         // init templates
         printDocumentUIs.forEach { p ->
-            if (p is AbstractTaskReportUi)
+            if (p is AbstractTaskDocumentUi) {
+                logger.debug("Initializing $p")
                 p.initialize(task)
+            }else
+                logger.debug("No TaskReportUI: $p")
         }
 
         val selectedPrintDocument = selectedTemplate?.let { printDocumentUIs.firstOrNull { p -> p.printDocument == it } }

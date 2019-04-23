@@ -23,7 +23,6 @@ import com.patho.main.service.TaskService;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.pdf.PDFStreamContainer;
-import com.patho.main.ui.selectors.ContactSelector;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.notification.NotificationContainer;
 import com.patho.main.util.notification.NotificationFeedback;

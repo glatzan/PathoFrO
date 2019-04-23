@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 
 import com.patho.main.model.patient.miscellaneous.BioBank;
 import com.patho.main.template.PrintDocument;
+import com.patho.main.template.PrintDocumentType;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;

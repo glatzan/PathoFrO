@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.faces.application.FacesMessage;
 
 import com.patho.main.dialog.print.PrintDialog;
+import com.patho.main.dialog.print.documentUi.AbstractDocumentUi;
+import com.patho.main.dialog.print.documentUi.CouncilReportUi;
 import com.patho.main.model.patient.miscellaneous.Council;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
@@ -41,8 +43,6 @@ import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
-import com.patho.main.template.print.ui.document.AbstractDocumentUi;
-import com.patho.main.template.print.ui.document.report.CouncilReportUi;
 import com.patho.main.ui.pdf.PDFStreamContainerImpl;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialogReturn.ReloadEvent;
@@ -443,7 +443,7 @@ public class CouncilDialog extends AbstractDialog {
 			logger.debug("Uploadgin to Council: " + getSelectedCouncil().getId());
 
 			pdfService.createAndAttachPDF(getSelectedCouncil().getCouncil(),
-					new PDFInfo(file.getFileName(), DocumentType.COUNCIL_REPLY), file.getContents(), true);
+					new PDFInfo(file.getFileName(), PrintDocumentType.COUNCIL_REPLY), file.getContents(), true);
 
 			MessageHandler.sendGrowlMessagesAsResource("growl.upload.success");
 		} catch (IllegalAccessError e) {
@@ -541,10 +541,10 @@ public class CouncilDialog extends AbstractDialog {
 	 */
 	public void printCouncilReport() {
 
-		List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(DocumentType.COUNCIL_REQUEST);
+		List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(PrintDocumentType.COUNCIL_REQUEST);
 
 		// getting ui objects
-		List<AbstractDocumentUi<?, ?>> printDocumentUIs = AbstractDocumentUi.factory(printDocuments);
+		List<AbstractDocumentUi<? extends PrintDocument, ? extends AbstractDocumentUi.SharedData>> printDocumentUIs = PrintDocumentRepository.factory(printDocuments);
 
 		for (AbstractDocumentUi<?, ?> documentUi : printDocumentUIs) {
 			((CouncilReportUi) documentUi).initialize(task, getSelectedCouncil());

@@ -236,7 +236,7 @@ public class PDFCreator {
 			// TODO throw error
 		}
 
-		if (template.isAfterPDFCreationHook())
+		if (template.getAfterPDFCreationHook())
 			container = template.onAfterPDFCreation(container, this);
 
 		return container;
@@ -517,7 +517,7 @@ public class PDFCreator {
 	 * @param type
 	 * @return
 	 */
-	public static LoadedPrintPDFBearer mergePdfs(List<LoadedPrintPDFBearer> containers, String name, DocumentType type) {
+	public static LoadedPrintPDFBearer mergePdfs(List<LoadedPrintPDFBearer> containers, String name, PrintDocumentType type) {
 
 		try {
 			Document document = new Document();

@@ -36,7 +36,7 @@ public class PrintOrder {
 	}
 
 	public PrintOrder(PDFContainer container, int copies, PrintDocument documentTemplate, boolean duplex) {
-		this(container, copies, documentTemplate.isDuplexPrinting() || duplex, documentTemplate.getAttributes());
+		this(container, copies, documentTemplate.getDuplexPrinting() || duplex, documentTemplate.getAttributes());
 	}
 
 	public PrintOrder(PDFContainer container, int copies, boolean duplex, String args) {
