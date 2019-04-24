@@ -20,8 +20,11 @@ abstract class AbstractTabTaskDialog(dialog: Dialog) : AbstractTabDialog_(dialog
     }
 
     open fun initBean(): Boolean {
-        this.task = task
-        return true
+        return initBean(task, forceInitialization = true)
+    }
+
+    open fun initBean(task: Task): Boolean {
+        return initBean(task, forceInitialization = true)
     }
 
     open fun initBean(task: Task, forceInitialization: Boolean = true, tabName: String): Boolean {

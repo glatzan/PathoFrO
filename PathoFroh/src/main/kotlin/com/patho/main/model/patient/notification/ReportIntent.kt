@@ -40,12 +40,16 @@ open class ReportIntent : AbstractPersistable, ID {
     @Column
     open var active : Boolean = true
 
+    @Column
+    open var deleteable : Boolean = true
+
     constructor()
 
-    constructor(task: Task, person: Person, contactRole: ContactRole = ContactRole.NONE) {
+    constructor(task: Task, person: Person, contactRole: ContactRole = ContactRole.NONE, deleteable : Boolean = true) {
         this.task = task
         this.person = person
         this.role = contactRole
+        this.deleteable = deleteable
     }
 
     /**

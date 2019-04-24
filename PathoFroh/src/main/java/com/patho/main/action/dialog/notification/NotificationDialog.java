@@ -1,6 +1,5 @@
 package com.patho.main.action.dialog.notification;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.common.ContactRole;
@@ -20,6 +19,7 @@ import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.service.NotificationService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.TaskService;
+import com.patho.main.service.UserService;
 import com.patho.main.template.MailTemplate;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.pdf.PDFStreamContainer;
@@ -65,7 +65,7 @@ public class NotificationDialog extends AbstractTabDialog {
     @Autowired
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private UserHandlerAction userHandlerAction;
+    private UserService userService;
 
     @Autowired
     @Getter(AccessLevel.NONE)

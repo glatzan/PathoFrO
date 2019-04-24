@@ -5,6 +5,8 @@ import com.patho.main.model.Physician
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
+import com.patho.main.util.printer.ClinicPrinter
+import com.patho.main.util.printer.LabelPrinter
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
@@ -60,6 +62,12 @@ open class HistoUser : AbstractPersistable, UserDetails {
 
     @Transient
     open var credentialsNonExpired = true
+
+    /**
+     *  Transient settings for changing with no permanent effect
+     */
+    @Transient
+    open var transient : TransientSettings = TransientSettings()
 
     constructor()
 
@@ -120,5 +128,20 @@ open class HistoUser : AbstractPersistable, UserDetails {
     @Transient
     override fun isAccountNonLocked(): Boolean {
         return true
+    }
+
+    /**
+     * Transient settings which are not stored in database
+     */
+    class TransientSettings {
+        /**
+         * Selected printer
+         */
+        var selectedPrinter: ClinicPrinter? = null
+
+        /**
+         * Selected label printer
+         */
+        var selectedLabelPrinter: LabelPrinter? = null
     }
 }

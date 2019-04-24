@@ -16,6 +16,8 @@ import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
 import com.patho.main.repository.MailRepository
 import com.patho.main.repository.PrintDocumentRepository
+import com.patho.main.repository.TaskRepository
+import com.patho.main.service.ReportIntentService
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.MailTemplate
 import com.patho.main.template.PrintDocument
@@ -24,6 +26,7 @@ import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.print.LoadedPrintPDFBearer
 import com.patho.main.util.status.ReportIntentStatusByDiagnosis
 import com.patho.main.util.status.ReportIntentStatusNotification
+import com.patho.main.util.task.TaskNotFoundException
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,7 +40,9 @@ class NotificationDialog @Autowired constructor(
         private val printDocumentRepository: PrintDocumentRepository,
         private val pathoConfig: PathoConfig,
         private val mailRepository: MailRepository,
-        private val printDialog: PrintDialog) : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
+        private val printDialog: PrintDialog,
+        private val taskRepository: TaskRepository,
+        private val reportIntentService: ReportIntentService) : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
 
     val generalTab: GeneralTab = GeneralTab()
     val mailTab: MailTab = MailTab()
@@ -50,8 +55,39 @@ class NotificationDialog @Autowired constructor(
         tabs = arrayOf(generalTab, mailTab, faxTab, letterTab, phoneTab, sendTab)
     }
 
-    fun initBean(task: Task): Boolean {
+    override fun initBean(task: Task): Boolean {
+        logger.debug("Initializing notification dialog")
         return super.initBean(task, true, generalTab)
+    }
+
+    /**
+     * Reloads task data and updates the tabs
+     */
+    override fun update() {
+        update(true)
+    }
+
+    /**
+     * Reloads task data and updates the tabs
+     */
+    override fun update(reload: Boolean) {
+        logger.debug("Updating content, reload task $reload")
+        if (reload) {
+            var optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, false, true, false, true, true)
+            if (!optionalTask.isPresent)
+                throw TaskNotFoundException()
+            task = optionalTask.get()
+        }
+
+        tabs.forEach { it.updateData() }
+    }
+
+    /**
+     * Dis or enabled the given reportIntentNotification
+     */
+    open fun disableNotification(reportIntentNotification: ReportIntentNotification, active: Boolean) {
+        reportIntentService.toggleReportIntentNotificationActiveStatus(task, reportIntentNotification, active)
+        update(true)
     }
 
     /**
@@ -80,6 +116,7 @@ class NotificationDialog @Autowired constructor(
         selectors.add(ReportIntentSelector(contact))
         selectors.add(ReportIntentSelector(task,
                 Person(resourceBundle.get("dialog.printDialog.individualAddress"), Contact()), ContactRole.NONE))
+
         selectors[0].selected = true
 
         // getting ui objects
@@ -102,6 +139,9 @@ class NotificationDialog @Autowired constructor(
     override fun onSubDialogReturn(event: SelectEvent) {
         val container = event.component.attributes["container"]
         val returnObject = event.`object`
+
+        println(container)
+        println(returnObject)
 
         if (returnObject is LoadedPrintPDFBearer && container is ReportIntentStatusNotification.ReportIntentNotificationBearer) {
             logger.debug("Setting custom pdf for container $container.reportIntent.person?.getFullName()}")
@@ -269,9 +309,7 @@ class NotificationDialog @Autowired constructor(
             templates = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
                     PrintDocumentType.DIAGNOSIS_REPORT_EXTERN)
 
-            println(printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail))
-            selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
-            println(selectedTemplate)
+            selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmailDocument).orElse(null)
 
             mailTemplate = mailRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
 

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.patho.main.service.UserService;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
 import com.patho.main.common.ContactRole;
@@ -46,12 +46,12 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
+	private FavouriteListRepository favouriteListRepository;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private FavouriteListRepository favouriteListRepository;
+	private UserService userService;
 
 	private SimpleSearchTab simpleSearchTab;
 	private FavouriteSearchTab favouriteSearchTab;
@@ -96,10 +96,10 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		public Worklist getWorklist() {
 			Worklist worklist = new Worklist("Default", worklistSearch,
-					userHandlerAction.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
-					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrder(),
-					userHandlerAction.getCurrentUser().getSettings().getWorklistAutoUpdate(), false,
-					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrderAsc());
+					userService.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
+					userService.getCurrentUser().getSettings().getWorklistSortOrder(),
+					userService.getCurrentUser().getSettings().getWorklistAutoUpdate(), false,
+					userService.getCurrentUser().getSettings().getWorklistSortOrderAsc());
 			return worklist;
 		}
 
@@ -135,18 +135,18 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		@Override
 		public void updateData() {
 			List<FavouriteList> list = favouriteListRepository.findByUserAndWriteableAndReadable(
-					userHandlerAction.getCurrentUser(), false, true, true, true, true, false);
+					userService.getCurrentUser(), false, true, true, true, true, false);
 
-			containers = list.stream().map(p -> new FavouriteListContainer(p, userHandlerAction.getCurrentUser()))
+			containers = list.stream().map(p -> new FavouriteListContainer(p, userService.getCurrentUser()))
 					.collect(Collectors.toList());
 		}
 
 		public Worklist getWorklist() {
 			Worklist worklist = new Worklist("Default", worklistSearch,
-					userHandlerAction.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
-					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrder(),
-					userHandlerAction.getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
-					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrderAsc());
+					userService.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
+					userService.getCurrentUser().getSettings().getWorklistSortOrder(),
+					userService.getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
+					userService.getCurrentUser().getSettings().getWorklistSortOrderAsc());
 			return worklist;
 		}
 
@@ -256,10 +256,10 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		public Worklist getWorklist() {
 			Worklist worklist = new Worklist("Default", worklistSearch,
-					userHandlerAction.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
-					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrder(),
-					userHandlerAction.getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
-					userHandlerAction.getCurrentUser().getSettings().getWorklistSortOrderAsc());
+					userService.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
+					userService.getCurrentUser().getSettings().getWorklistSortOrder(),
+					userService.getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
+					userService.getCurrentUser().getSettings().getWorklistSortOrderAsc());
 			return worklist;
 		}
 

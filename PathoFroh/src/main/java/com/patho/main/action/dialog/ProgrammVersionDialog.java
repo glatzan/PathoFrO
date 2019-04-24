@@ -8,7 +8,6 @@ import com.patho.main.util.config.VersionContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
 import com.patho.main.util.helper.TimeUtil;
@@ -21,11 +20,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProgrammVersionDialog extends AbstractTabDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

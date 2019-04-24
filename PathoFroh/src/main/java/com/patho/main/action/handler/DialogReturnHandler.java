@@ -1,5 +1,6 @@
 package com.patho.main.action.handler;
 
+import com.patho.main.service.UserService;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog.DiagnosisPhaseExitData;
 import com.patho.main.action.dialog.miscellaneous.DeleteDialog.DeleteEvent;
 import com.patho.main.action.dialog.patient.MergePatientDialog.PatientMergeEvent;
@@ -42,7 +42,7 @@ public class DialogReturnHandler {
 	private WorkPhaseHandler workPhaseHandler;
 
 	@Autowired
-	private UserHandlerAction userHandlerAction;
+	private UserService userService;
 
 	@Autowired
 	private SlideService slideService;
@@ -179,7 +179,7 @@ public class DialogReturnHandler {
 	public void onUserSettingsReturn(SelectEvent event) {
 		if (event.getObject() instanceof ReloadUserEvent) {
 			logger.debug("Updating user");
-			userHandlerAction.updateCurrentUser();
+			userService.reloadCurrentUser();
 			return;
 		}
 

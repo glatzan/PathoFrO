@@ -5,18 +5,17 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import com.patho.main.model.audit.AuditAble;
+import com.patho.main.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Lazy;
-
-import com.patho.main.action.UserHandlerAction;
 
 @Configurable
 public class AuditListener {
 	
 	@Autowired
 	@Lazy
-	private UserHandlerAction userHandlerAction;
+	private UserService userService;
 	
     @PrePersist
     public void setCreatedOn(AuditAble auditable) {
@@ -28,14 +27,14 @@ public class AuditListener {
         }
  
         audit.setCreatedOn(System.currentTimeMillis());
-        audit.setCreatedBy(userHandlerAction.getCurrentUser().getUsername());
+        audit.setCreatedBy(userService.getCurrentUser().getUsername());
     }
  
     @PreUpdate
     public void setUpdatedOn(AuditAble auditable) {
-        System.out.println("persists " +userHandlerAction.getCurrentUser().getUsername());
+        System.out.println("persists " +userService.getCurrentUser().getUsername());
     	Audit audit = auditable.getAudit();
         audit.setUpdatedOn(System.currentTimeMillis());
-        audit.setUpdatedBy(userHandlerAction.getCurrentUser().getUsername());
+        audit.setUpdatedBy(userService.getCurrentUser().getUsername());
     }
 }

@@ -5,11 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.patho.main.service.UserService;
+import org.apache.catalina.User;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.settings.groups.GroupListDialog.GroupSelectEvent;
 import com.patho.main.action.dialog.settings.users.UserListDialog.HistoUserSelectEvent;
@@ -38,7 +39,7 @@ public class FavouriteListEditDialog extends AbstractDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
+	private UserService userService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -74,7 +75,7 @@ public class FavouriteListEditDialog extends AbstractDialog {
 		favouriteList.setUsers(new HashSet<FavouritePermissionsUser>());
 		favouriteList.setGroups(new HashSet<FavouritePermissionsGroup>());
 		favouriteList.setItems(new ArrayList<FavouriteListItem>());
-		favouriteList.setOwner(userHandlerAction.getCurrentUser());
+		favouriteList.setOwner(userService.getCurrentUser());
 
 		return initAndPrepareBean(favouriteList, adminMode, false);
 	}
@@ -114,13 +115,13 @@ public class FavouriteListEditDialog extends AbstractDialog {
 		if (adminMode) {
 			dumpLists = favouriteListRepository.findAll(false, false, false, false);
 		} else {
-			dumpLists = favouriteListRepository.findByUserAndWriteableAndReadable(userHandlerAction.getCurrentUser(),
+			dumpLists = favouriteListRepository.findByUserAndWriteableAndReadable(userService.getCurrentUser(),
 					true, false);
 		}
 
 		setDumpListTransformer(new DefaultTransformer<FavouriteList>(dumpLists));
 
-		setUserPermission(new FavouriteListContainer(favouriteList, userHandlerAction.getCurrentUser()));
+		setUserPermission(new FavouriteListContainer(favouriteList, userService.getCurrentUser()));
 		return super.initBean(task, Dialog.SETTINGS_FAVOURITE_LIST_EDIT);
 	}
 

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.AssociatedContactRepository;
@@ -63,10 +62,6 @@ public class NotificationService extends AbstractService {
 	@Setter(AccessLevel.NONE)
 	private AssociatedContactRepository associatedContactRepository;
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

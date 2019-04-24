@@ -1,7 +1,7 @@
 package com.patho.main.service.impl
 
-import com.patho.main.action.UserHandlerAction
 import com.patho.main.action.handler.CentralHandler
+import com.patho.main.action.handler.CurrentUserHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
@@ -26,7 +26,7 @@ class SpringContextBridge : SpringContextBridgedServices {
     override lateinit var reportIntentService: ReportIntentService
 
     @Autowired
-    override lateinit var userHandlerAction: UserHandlerAction
+    override lateinit var currentUserHandler: CurrentUserHandler
 
     @Autowired
     override lateinit var  resourceBundle : ResourceBundle

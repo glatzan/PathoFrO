@@ -1,6 +1,5 @@
 package com.patho.main.action.handler;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.views.*;
 import com.patho.main.common.ContactRole;
@@ -50,7 +49,7 @@ public class GlobalEditViewHandler {
     @Autowired
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private UserHandlerAction userHandlerAction;
+    private UserService userService;
 
     @Autowired
     @Getter(AccessLevel.NONE)
@@ -133,11 +132,6 @@ public class GlobalEditViewHandler {
     private TaskView taskView;
 
 
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private UserService userService;
-
     /**
      * Methodes for saving task data
      */
@@ -212,7 +206,7 @@ public class GlobalEditViewHandler {
     }
 
     public void quickSearch() {
-        quickSearch(getQuickSearch(), userHandlerAction.getCurrentUser().getSettings().getAlternatePatientAddMode());
+        quickSearch(getQuickSearch(), userService.getCurrentUser().getSettings().getAlternatePatientAddMode());
         setQuickSearch("");
     }
 

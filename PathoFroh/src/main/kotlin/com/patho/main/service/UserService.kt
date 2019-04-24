@@ -12,6 +12,9 @@ import com.patho.main.repository.LDAPRepository
 import com.patho.main.repository.UserRepository
 import com.patho.main.util.user.HistoGroupNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -23,14 +26,15 @@ open class UserService @Autowired constructor(
         private val ldapRepository: LDAPRepository,
         private val groupRepository: GroupRepository,
         private val userRepository: UserRepository,
-        private val physicianService: PhysicianService) : AbstractService() {
+        private val physicianService: PhysicianService,
+        private val printService: PrintService) : AbstractService() {
 
     /**
      * Checks if the session is associated with a user.
      *
      * @return
      */
-    val isCurrentUserAvailable: Boolean
+    open val isCurrentUserAvailable: Boolean
         get() = SecurityContextHolder.getContext().authentication.principal is HistoUser
 
     /**
@@ -38,9 +42,23 @@ open class UserService @Autowired constructor(
      *
      * @return
      */
-    val currentUser: HistoUser
+    open val currentUser: HistoUser
         get() = SecurityContextHolder.getContext().authentication.principal as HistoUser
 
+    /**
+     * Loads the current user from database an replaces the old user in security Context
+     */
+    open fun reloadCurrentUser(){
+        val user = userRepository.findById(currentUser.id).get()
+
+        val t = ArrayList<GrantedAuthority>()
+        t.add(SimpleGrantedAuthority("USER"))
+
+        val authentication = UsernamePasswordAuthenticationToken(user, null, t)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        initializeTransientSettings(user)
+    }
 
     /**
      * Checks if currentUser has the passed role.
@@ -59,6 +77,21 @@ open class UserService @Autowired constructor(
         }
 
         return false
+    }
+
+    /**
+     * Loads transient settings for the current user
+     */
+    open fun initializeTransientSettings() {
+        initializeTransientSettings(currentUser)
+    }
+
+    /**
+     * Loads transient settings for the given user
+     */
+    open fun initializeTransientSettings(user: HistoUser) {
+        user.transient.selectedPrinter = printService.getCurrentPrinter(user)
+        user.transient.selectedLabelPrinter = printService.getCurrentLabelPrinter(user)
     }
 
     /**

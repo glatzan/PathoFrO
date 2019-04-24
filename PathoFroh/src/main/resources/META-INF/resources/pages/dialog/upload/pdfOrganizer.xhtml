@@ -356,13 +356,13 @@
 					<p:commandButton value="#{msg['dialog.pdfOrganizer.button.print']}"
 						disabled="#{dialog.pdfOrganizer.streamContainer.displayPDF eq null}"
 						icon="fa fa-print"
-						actionListener="#{dialog.pdfOrganizer.displayPrintNotification(userHandlerAction.selectedPrinter.print(dialog.pdfOrganizer.streamContainer.displayPDF))}"></p:commandButton>
+						actionListener="#{dialog.pdfOrganizer.displayPrintNotification(currentUserHandler.printer.print(dialog.pdfOrganizer.streamContainer.displayPDF))}"></p:commandButton>
 
 					<!-- select printer -->
 					<p:selectOneMenu 
 						panelStyleClass="searchSelectMenuPanel"
 						converter="#{printService.cupsPrinter.printerTransformer}"
-						value="#{userHandlerAction.selectedPrinter}" filter="true"
+						value="#{currentUserHandler.printer}" filter="true"
 						filterMatchMode="contains">
 
 						<f:selectItems value="#{printService.cupsPrinter.printer}"

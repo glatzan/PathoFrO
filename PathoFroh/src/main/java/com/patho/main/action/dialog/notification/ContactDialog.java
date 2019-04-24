@@ -129,7 +129,7 @@ public class ContactDialog extends AbstractDialog {
     @Transient
     public void addPhysicianWithRole(Physician physician, ContactRole role) {
         try {
-            reportIntentService.addReportIntent(getTask(), physician.getPerson(), role, true, true);
+            reportIntentService.addReportIntent(getTask(), physician.getPerson(), role, true, true, true);
             // increment counter
             physicianService.incrementPhysicianPriorityCounter(physician.getPerson());
         } catch (IllegalArgumentException e) {

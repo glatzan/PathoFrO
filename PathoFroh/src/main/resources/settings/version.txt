@@ -649,6 +649,13 @@ ALTER TABLE histosettings RENAME COLUMN addTaskWithSingelClick TO addTaskWithSin
 
 update histouser_aud set localuser = false;
 update histouser set localuser = false;
+
+/* adding deleteable column to reportintent*/
+alter table reportintent add column deleteable boolean;
+alter table reportintent_aud add column deleteable boolean;
+update reportintent set deleteable = true;
+update reportintent_aud set deleteable = true;
+
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien
 

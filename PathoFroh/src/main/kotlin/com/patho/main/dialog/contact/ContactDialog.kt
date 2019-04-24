@@ -135,7 +135,7 @@ open class ContactDialog @Autowired constructor(
     private fun addPhysician(physician: Physician, role: ContactRole) {
         try {
             // adding physician
-            reportIntentService.addReportIntent(task, physician.person, role, true, true)
+            reportIntentService.addReportIntent(task, physician.person, role, true, true, true)
             // increment counter
             physicianService.incrementPhysicianPriorityCounter(physician.person)
         } catch (e: DuplicatedReportIntentException) {

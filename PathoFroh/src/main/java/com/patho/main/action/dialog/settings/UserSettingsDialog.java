@@ -8,7 +8,6 @@ import com.patho.main.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.AbstractTabChangeEventHandler;
 import com.patho.main.action.dialog.AbstractTabDialog;
@@ -40,7 +39,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	@Autowired
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
+	private UserService userService;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -51,11 +50,6 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private FavouriteListRepository favouriteListRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserService userService;
 
 	private GeneralTab generalTab;
 	private PrinterTab printTab;
@@ -85,7 +79,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	}
 
 	public boolean initBean() {
-		setUser(userHandlerAction.getCurrentUser());
+		setUser(userService.getCurrentUser());
 		update();
 		return super.initBean(Dialog.USER_SETTINGS);
 	}
@@ -129,8 +123,8 @@ public class UserSettingsDialog extends AbstractTabDialog {
 
 		public boolean initTab() {
 			setAvailableViews(
-					new ArrayList<View>(userHandlerAction.getCurrentUser().getSettings().getAvailableViews()));
-			setAvailableWorklistsToLoad(userHandlerAction.getCurrentUser().getSettings().getAvailableWorklists());
+					new ArrayList<View>(userService.getCurrentUser().getSettings().getAvailableViews()));
+			setAvailableWorklistsToLoad(userService.getCurrentUser().getSettings().getAvailableWorklists());
 			return true;
 		}
 	}
@@ -155,8 +149,8 @@ public class UserSettingsDialog extends AbstractTabDialog {
 		}
 
 		public boolean initTab() {
-			ClinicPrinter printer = printService.getCurrentPrinter(userHandlerAction.getCurrentUser());
-			LabelPrinter labelPrinter = printService.getCurrentLabelPrinter(userHandlerAction.getCurrentUser());
+			ClinicPrinter printer = printService.getCurrentPrinter(userService.getCurrentUser());
+			LabelPrinter labelPrinter = printService.getCurrentLabelPrinter(userService.getCurrentUser());
 
 			setLabelPrinter(labelPrinter);
 			setClinicPrinter(printer);

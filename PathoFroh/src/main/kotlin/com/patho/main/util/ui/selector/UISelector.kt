@@ -7,6 +7,6 @@ abstract class UISelector<T>(var item: T, id: Long = 0) : Serializable {
 
     protected val logger = LoggerFactory.getLogger(this.javaClass)
 
-    open var id: Long = 0
+    open var id: Long = id
     open var selected: Boolean = false
 }

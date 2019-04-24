@@ -169,4 +169,5 @@ open class HistoSettings() : AbstractPersistable(), Cloneable {
     open fun setLabelPrinter(printer: LabelPrinter) {
         preferredLabelPrinter = printer.id.toString()
     }
+
 }

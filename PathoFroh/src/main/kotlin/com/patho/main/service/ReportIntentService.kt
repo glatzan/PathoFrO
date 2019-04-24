@@ -35,8 +35,8 @@ open class ReportIntentService @Autowired constructor(
      * Adds a new report intent to the task. Adding of a person twice with the same role will be prevented.
      */
     @Transactional
-    open fun addReportIntent(task: Task, person: Person, role: ContactRole, defaultNotification: Boolean = false, save: Boolean = true): Pair<Task, ReportIntent> {
-        return addReportIntent(task, ReportIntent(task, person, role), defaultNotification, save)
+    open fun addReportIntent(task: Task, person: Person, role: ContactRole, defaultNotification: Boolean = false, deleteable: Boolean = true, save: Boolean = true): Pair<Task, ReportIntent> {
+        return addReportIntent(task, ReportIntent(task, person, role, deleteable), defaultNotification, save)
     }
 
     /**
@@ -156,6 +156,14 @@ open class ReportIntentService @Autowired constructor(
             associatedContactNotificationRepository.delete(reportIntentNotification)
             return Pair(task, reportIntent)
         }
+    }
+
+    /**
+     * Enables or disables a notification of a report intent
+     */
+    open fun toggleReportIntentNotificationActiveStatus(task: Task, reportIntentNotification: ReportIntentNotification, enable: Boolean): Pair<Task, ReportIntent> {
+        val reportIntent = reportIntentNotification?.contact ?: throw IllegalStateException()
+        return toggleReportIntentNotificationActiveStatus(task, reportIntent, reportIntentNotification, enable)
     }
 
     /**

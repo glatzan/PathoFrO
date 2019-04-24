@@ -1,9 +1,9 @@
 package com.patho.main.action.dialog.task;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.media.PDFOrganizer.PDFSelectEvent;
 import com.patho.main.action.dialog.task.CreateTaskDialog.TaskTempData.SampleTempData;
+import com.patho.main.action.handler.CurrentUserHandler;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.*;
 import com.patho.main.config.PathoConfig;
@@ -68,7 +68,7 @@ public class CreateTaskDialog extends AbstractDialog {
     @Autowired
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private UserHandlerAction userHandlerAction;
+    private CurrentUserHandler currentUserHandler;
 
     @Autowired
     @Getter(AccessLevel.NONE)
@@ -215,7 +215,7 @@ public class CreateTaskDialog extends AbstractDialog {
                 // creating standard diagnoses
                 task = diagnosisService.createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
 
-                task = reportIntentService.addReportIntent(task,getPatient().getPerson(),ContactRole.PATIENT,false, true).getFirst();
+                task = reportIntentService.addReportIntent(task, getPatient().getPerson(), ContactRole.PATIENT, false, false, true).getFirst();
 
                 BioBank bioBank = bioBankService.createBioBank(task);
 
@@ -276,7 +276,7 @@ public class CreateTaskDialog extends AbstractDialog {
                     return;
                 }
 
-                userHandlerAction.getSelectedPrinter().print(new PrintOrder(container, 1, printDocument.get()));
+                currentUserHandler.getPrinter().print(new PrintOrder(container, 1, printDocument.get()));
 
                 logger.debug("PDF Generation completed, thread ended");
             }

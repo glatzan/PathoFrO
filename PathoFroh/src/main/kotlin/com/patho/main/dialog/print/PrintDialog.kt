@@ -1,5 +1,6 @@
 package com.patho.main.dialog.print
 
+import com.patho.main.action.handler.CurrentUserHandler
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
@@ -30,6 +31,7 @@ import java.io.FileNotFoundException
 class PrintDialog @Autowired constructor(
         private val pathoConfig: PathoConfig,
         private val printService: PrintService,
+        private val currentUserHandler: CurrentUserHandler,
         private val userService: UserService,
         private val printDocumentRepository: PrintDocumentRepository) : AbstractTaskDialog(Dialog.PRINT) {
 
@@ -220,7 +222,7 @@ class PrintDialog @Autowired constructor(
             val printOrder = PrintOrder(pdf, container.copies, duplexPrinting,
                     container.documentTemplate.attributes)
 
-            printService.getCurrentPrinter(userService.currentUser).print(printOrder)
+            currentUserHandler.printer?.print(printOrder)
 
             // only save if person is associated
             if (container.contact != null && container.contact?.role != ContactRole.NONE) {

@@ -100,7 +100,9 @@ open class ContactAddDialog @Autowired constructor(
                  manuallySelectRole: Boolean = false,
                  autoRoleSelection: Boolean = true): Boolean {
 
+        logger.debug("Initializing ContactAddDialog")
         super.initBean(task)
+
         this.addableRoles = addableRoles
         this.selectAbleRoles = selectAbleRoles
         this.showRoles = showRoles
@@ -182,8 +184,8 @@ open class ContactAddDialog @Autowired constructor(
      * Special class for displaying the contacts and marking already selected contacts
      */
     open class ContactPhysicianSelector(physician: Physician, id: Long, task: Task) : PhysicianSelector(physician, id) {
-        val reportIntentOfTask = task.contacts.firstOrNull { p -> p.person == physician.person }
+        val reportIntentOfTask = task.contacts.firstOrNull { it.person == physician.person }
         val contactOfTask = reportIntentOfTask != null
-        val removeAble: Boolean = if (reportIntentOfTask != null) !SpringContextBridge.services().reportIntentService.isHistoryPresent(reportIntentOfTask) else false
+        val removeAble: Boolean = (reportIntentOfTask?.deleteable ?: true) || (reportIntentOfTask?.let {!SpringContextBridge.services().reportIntentService.isHistoryPresent(it)} ?: true)
     }
 }

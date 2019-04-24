@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoPermissions;
@@ -23,11 +22,6 @@ import lombok.Setter;
 public class TaskInfo {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)

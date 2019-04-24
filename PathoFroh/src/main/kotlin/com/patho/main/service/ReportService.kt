@@ -1,6 +1,6 @@
 package com.patho.main.service
 
-import com.patho.main.action.UserHandlerAction
+import com.patho.main.action.handler.CurrentUserHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.DiagnosisRevision
@@ -25,7 +25,7 @@ import kotlin.collections.HashMap
 
 @Service()
 open class ReportService @Autowired constructor(
-        private val userHandlerAction: UserHandlerAction,
+        private val currentUserHandler: CurrentUserHandler,
         private val mailService: MailService,
         private val reportIntentService: ReportIntentService,
         private val faxService: FaxService,
@@ -88,7 +88,7 @@ open class ReportService @Autowired constructor(
             if (bearer.additionalReports.additionalReport == null)
                 bearer.additionalReports.additionalReport = getPrintPDFBearer(bearer.additionalReports.additionalReportTemplate as PrintDocument, "", bearer.diagnosisRevision)
 
-            userHandlerAction.selectedPrinter.print(bearer.additionalReports.additionalReport, bearer.additionalReports.printAdditionalReportsCount)
+            currentUserHandler.printer?.print(bearer.additionalReports.additionalReport, bearer.additionalReports.printAdditionalReportsCount)
             return true
         }
         return false
@@ -202,7 +202,7 @@ open class ReportService @Autowired constructor(
 
         // printing
         if (bearer.faxReports.printFax) {
-            userHandlerAction.selectedPrinter.print(container.printPDFBearer, 1)
+            currentUserHandler.printer?.print(container.printPDFBearer, 1)
         }
 
         // sending fax
@@ -261,7 +261,7 @@ open class ReportService @Autowired constructor(
         var success = true
 
         // printing
-        userHandlerAction.selectedPrinter.print(container.printPDFBearer, 1)
+        currentUserHandler.printer?.print(container.printPDFBearer, 1)
 
         reportIntentService.addNotificationHistoryData(container.notification, bearer.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.print.printSuccessful") else resourceBundle.get("report.feedback.print.printFailed"))
 

@@ -46,11 +46,6 @@ public class MainHandlerAction {
 	@Setter(AccessLevel.NONE)
 	private final PDFRepository pdfRepository;
 
-	@Lazy
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private final UserHandlerAction userHandlerAction;
-
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	protected final ResourceBundle resourceBundle;
@@ -76,10 +71,9 @@ public class MainHandlerAction {
 	private LocalDate localDate = LocalDate.now();
 
 	@Autowired
-	public MainHandlerAction(ThreadPoolTaskExecutor taskExecutor, PDFRepository pdfRepository, UserHandlerAction userHandlerAction, ResourceBundle resourceBundle) {
+	public MainHandlerAction(ThreadPoolTaskExecutor taskExecutor, PDFRepository pdfRepository, ResourceBundle resourceBundle) {
 		this.taskExecutor = taskExecutor;
 		this.pdfRepository = pdfRepository;
-		this.userHandlerAction = userHandlerAction;
 		this.resourceBundle = resourceBundle;
 	}
 

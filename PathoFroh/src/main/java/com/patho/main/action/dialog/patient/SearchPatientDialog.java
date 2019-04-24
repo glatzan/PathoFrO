@@ -12,7 +12,6 @@ import org.primefaces.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.UserHandlerAction;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.patient.ConfirmExternalPatientDataDialog.ConfirmExternalPatientReturnEvent;
 import com.patho.main.common.Dialog;
@@ -39,11 +38,6 @@ public class SearchPatientDialog extends AbstractTabDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private PatientService patientService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserHandlerAction userHandlerAction;
 
 	@Autowired
 	@Getter(AccessLevel.NONE)
@@ -238,8 +232,6 @@ public class SearchPatientDialog extends AbstractTabDialog {
 		/**
 		 * Searches for the given strings and adds the patient to the worklist if one
 		 * patient was found. (this method reacts to return clicks)
-		 * 
-		 * @param addToWorklist
 		 */
 		public void onQuickSubmit() {
 			logger.debug("Quicksubmit, search for result and adding result to worklist if unique result");

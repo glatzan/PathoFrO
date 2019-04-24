@@ -166,7 +166,7 @@
                                 title="#{msg['dialog.printDialog.button.selectPrinter.info']}"
                                 panelStyleClass="searchSelectMenuPanel"
                                 converter="#{printService.cupsPrinter.printerTransformer}"
-                                value="#{userHandlerAction.selectedPrinter}" filter="true"
+                                value="#{currentUserHandler.printer}" filter="true"
                                 filterMatchMode="contains">
 
                             <f:selectItems value="#{printService.cupsPrinter.printer}"

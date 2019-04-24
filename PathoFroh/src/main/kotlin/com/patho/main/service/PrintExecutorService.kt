@@ -1,6 +1,6 @@
 package com.patho.main.service
 
-import com.patho.main.action.UserHandlerAction
+import com.patho.main.action.handler.CurrentUserHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.patient.Slide
 import com.patho.main.repository.PrintDocumentRepository
@@ -20,7 +20,7 @@ import java.util.*
 open class PrintExecutorService @Autowired constructor(
         private val printDocumentRepository: PrintDocumentRepository,
         private val pathoConfig: PathoConfig,
-        private val userHandlerAction: UserHandlerAction) : AbstractService() {
+        private val currentUserHandler: CurrentUserHandler) : AbstractService() {
 
     /**
      * Prints all slides, uses the default label template
@@ -47,7 +47,7 @@ open class PrintExecutorService @Autowired constructor(
     fun printLabel(vararg commandStrings: String) {
         try {
             logger.debug("Printing labels..")
-            userHandlerAction.selectedLabelPrinter.print(*commandStrings)
+            currentUserHandler.labelPrinter?.print(*commandStrings)
         } catch (e: Exception) {
             logger.debug("Printing labels.., Error")
             throw UnknownPrintingException()
