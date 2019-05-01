@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+
+<composite:interface>
+    <composite:attribute name="renderNext" required="false" default="true"/>
+    <composite:attribute name="renderBack" required="false" default="true"/>
+    <composite:attribute name="renderClose" required="false" default="true"/>
+    <composite:attribute name="renderContact" required="false" default="true"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
+            <h:panelGrid columns="1" styleClass="left">
+                <!-- Contact -->
+                <p:commandButton process="@form" rendered="#{cc.attrs.renderContact}"
+                                 value="#{msg['dialog.notificationDialog.button.select.text']}"
+                                 icon="fa fa-fw fa-cog"
+                                 title="#{msg['dialog.notificationDialog.button.select.info']}"
+                                 actionListener="#{contactDialog.initAndPrepareBean(notificationDialog.task)}">
+                    <p:ajax event="dialogReturn" update="@form"
+                            listener="#{notificationDialog.update}"/>
+                </p:commandButton>
+            </h:panelGrid>
+
+            <h:panelGrid columns="3" styleClass="right" id="buttonContainer">
+                <!-- previouse -->
+                <p:commandButton value="#{msg['general.back']}" rendered="#{cc.attrs.renderBack}"
+                                 icon="fa fa-fw fa-arrow-left"
+                                 actionListener="#{notificationDialog.previousTab()}"
+                                 process="@form" update="@form"/>
+
+                <!-- next -->
+                <p:commandButton value="#{msg['general.next']}" rendered="#{cc.attrs.renderNext}"
+                                 icon="fa fa-fw fa-arrow-right"
+                                 actionListener="#{notificationDialog.nextTab()}"
+                                 process="@form" update="@form"/>
+
+                <!-- close -->
+                <p:commandButton value="#{msg['general.close']}" rendered="#{cc.attrs.renderClose}"
+                                 icon="fa fa-times-circle" process="@form"
+                                 actionListener="#{notificationDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
+
+</composite:implementation>
+</html>
