@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:composite="http://java.sun.com/jsf/composite">
 
@@ -7,6 +7,7 @@
     <composite:attribute name="renderNext" required="false" default="true"/>
     <composite:attribute name="renderBack" required="false" default="true"/>
     <composite:attribute name="renderClose" required="false" default="true"/>
+    <composite:attribute name="disableNavigation" required="false" default="false"/>
     <composite:attribute name="renderContact" required="false" default="true"/>
 </composite:interface>
 
@@ -17,9 +18,9 @@
             <h:panelGrid columns="1" styleClass="left">
                 <!-- Contact -->
                 <p:commandButton process="@form" rendered="#{cc.attrs.renderContact}"
-                                 value="#{msg['dialog.notificationDialog.button.select.text']}"
+                                 value="#{msg['dialog.notificationDialog.component.navigationBar.button.select.text']}"
                                  icon="fa fa-fw fa-cog"
-                                 title="#{msg['dialog.notificationDialog.button.select.info']}"
+                                 title="#{msg['dialog.notificationDialog.component.navigationBar.button.select.info']}"
                                  actionListener="#{contactDialog.initAndPrepareBean(notificationDialog.task)}">
                     <p:ajax event="dialogReturn" update="@form"
                             listener="#{notificationDialog.update}"/>
@@ -30,11 +31,13 @@
                 <!-- previouse -->
                 <p:commandButton value="#{msg['general.back']}" rendered="#{cc.attrs.renderBack}"
                                  icon="fa fa-fw fa-arrow-left"
+                                 disabled="#{cc.attrs.disableNavigation}"
                                  actionListener="#{notificationDialog.previousTab()}"
                                  process="@form" update="@form"/>
 
                 <!-- next -->
                 <p:commandButton value="#{msg['general.next']}" rendered="#{cc.attrs.renderNext}"
+                                 disabled="#{cc.attrs.disableNavigation}"
                                  icon="fa fa-fw fa-arrow-right"
                                  actionListener="#{notificationDialog.nextTab()}"
                                  process="@form" update="@form"/>

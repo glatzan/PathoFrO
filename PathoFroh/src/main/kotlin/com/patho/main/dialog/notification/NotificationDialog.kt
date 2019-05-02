@@ -33,6 +33,18 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.util.*
+import javax.faces.push.Push
+import javax.faces.push.PushContext
+import javax.inject.Inject
+import org.primefaces.push.EventBusFactory
+import org.primefaces.push.EventBus
+import org.primefaces.push.annotation.OnClose
+import org.primefaces.push.annotation.OnMessage
+import org.primefaces.push.annotation.OnOpen
+import org.primefaces.push.annotation.PushEndpoint
+import org.primefaces.push.impl.JSONEncoder
+
+
 
 @Component()
 @Scope(value = "session")
@@ -42,7 +54,8 @@ class NotificationDialog @Autowired constructor(
         private val mailRepository: MailRepository,
         private val printDialog: PrintDialog,
         private val taskRepository: TaskRepository,
-        private val reportIntentService: ReportIntentService) : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
+        private val reportIntentService: ReportIntentService,
+        private val performNotificationDialog: PerformNotificationDialog) : AbstractTabTaskDialog(Dialog.NOTIFICATION) {
 
     val generalTab: GeneralTab = GeneralTab()
     val mailTab: MailTab = MailTab()
@@ -251,6 +264,12 @@ class NotificationDialog @Autowired constructor(
         open var selectedDiagnosisNotApproved: Boolean = false
 
         /**
+         * True if a diagnosis is selected
+         */
+        open val diagnosisSelected
+            get() = selectDiagnosisRevision != null
+
+        /**
          * This tab should always be used
          */
         override var useNotification: Boolean = true
@@ -326,7 +345,7 @@ class NotificationDialog @Autowired constructor(
 
     open inner class FaxTab : ContactTab(
             "FaxTab",
-            "dialog.notification.tab.fax",
+            "dialog.notificationDialog.fax.navigationText",
             "faxTab",
             "include/fax.xhtml",
             NotificationTyp.FAX) {
@@ -363,7 +382,7 @@ class NotificationDialog @Autowired constructor(
 
     open inner class LetterTab : ContactTab(
             "LetterTab",
-            "dialog.notification.tab.letter",
+            "dialog.notificationDialog.letter.navigationText",
             "letterTab",
             "include/letter.xhtml",
             NotificationTyp.LETTER) {
@@ -393,7 +412,7 @@ class NotificationDialog @Autowired constructor(
 
     open inner class PhoneTab : ContactTab(
             "PhoneTab",
-            "dialog.notification.tab.phone",
+            "dialog.notificationDialog.phone.navigationText",
             "phoneTab",
             "include/phone.xhtml",
             NotificationTyp.PHONE) {
@@ -413,6 +432,43 @@ class NotificationDialog @Autowired constructor(
             "sendTab",
             "include/send.xhtml") {
 
+        /**
+         * Only active notifications
+         */
+        var activeNotifications: MutableList<ReportIntentSummaryEntry> = mutableListOf()
+
+        /**
+         * True if no notifications are available
+         */
+        val noNotifications
+            get() = activeNotifications.isEmpty()
+
+        override fun initTab(force: Boolean): Boolean {
+            logger.debug("Initializing letter data...")
+
+            updateData()
+
+            return super.initTab(force)
+        }
+
+        override fun updateData() {
+            activeNotifications.clear()
+            if (mailTab.useNotification) activeNotifications.addAll(mailTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.EMAIL, it) })
+            if (faxTab.useNotification) activeNotifications.addAll(faxTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.FAX, it) })
+            if (letterTab.useNotification) activeNotifications.addAll(letterTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.LETTER, it) })
+            if (phoneTab.useNotification) activeNotifications.addAll(phoneTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.PHONE, it) })
+        }
+
+        inner class ReportIntentSummaryEntry(val notificationTyp: NotificationTyp,
+                                             var notificationBearer: ReportIntentStatusNotification.ReportIntentNotificationBearer)
+
+
+        /**
+         * Starting perform notification dialog
+         */
+        open fun performNotifications() {
+            performNotificationDialog.initBean(task, activeNotifications.map { it.notificationBearer.reportIntentNotification })
+        }
     }
 
 }

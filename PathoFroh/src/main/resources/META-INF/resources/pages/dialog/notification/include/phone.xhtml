@@ -1,104 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:histo="http://java.sun.com/jsf/composite/components/special/notificationDialog"
+                xmlns:pe="http://primefaces.org/ui/extensions">
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel
-			value="#{msg['dialog.notification.tab.phone.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel
+                value="#{msg['dialog.notificationDialog.phone.headline']}"/>
+    </p:outputPanel>
 
+    <p:outputPanel styleClass="bodyPannel">
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth150 columnTop, ">
 
-	<p:outputPanel styleClass="bodyPannel">
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150 columnTop, ">
+            <!-- Use phone-->
+            <h:outputLabel value="#{msg['dialog.notificationDialog.phone.use.text']}"
+                           title="#{msg['dialog.notificationDialog.phone.use.info']}"
+                           styleClass="bigFont"/>
+            <p:selectBooleanCheckbox
+                    value="#{notificationDialog.phoneTab.useNotification}"
+                    title="#{msg['dialog.notificationDialog.phone.use.info']}">
+                <p:ajax event="change" process="@form" update="@form"/>
+            </p:selectBooleanCheckbox>
 
-			<!-- Use phone-->
-			<h:outputLabel value="#{msg['dialog.notification.tab.phone.use']}"
-				styleClass="bigFont" />
-			<p:selectBooleanCheckbox
-				value="#{notificationDialog.phoneTab.useNotification}"
-				title="#{msg['dialog.notification.tab.phone.use.text']}">
-				<p:ajax event="change" process="@form" update="@form" />
-			</p:selectBooleanCheckbox>
+            <!-- pdf template -->
+            <h:outputLabel
+                    value="#{msg['dialog.notificationDialog.phone.receiver']}"
+                    styleClass="bigFont"/>
 
-			<!-- pdf template -->
-			<h:outputLabel
-				value="#{msg['dialog.notification.tab.phone.receiver']}"
-				styleClass="bigFont" />
+            <!-- receiver datatable -->
+            <histo:reportIntentTable reportIntentStatus="#{notificationDialog.phoneTab.reportIntentStatus}"
+                                     task="#{notificationDialog.task}"/>
 
-			<p:dataTable var="container" styleClass="defaultHistoDataTable"
-				scrollHeight="160" scrollable="true" style="width:96%"
-				value="#{notificationDialog.phoneTab.container}">
+        </h:panelGrid>
+    </p:outputPanel>
 
-				<!-- name of receiver -->
-				<p:column
-					headerText="#{msg['dialog.notification.tab.phone.receiver.name']}"
-					style="width:auto">
-					<h:outputText value="#{container.contact.person.getFullName()}" />
-				</p:column>
-
-				<p:column
-					headerText="#{msg['dialog.notification.tab.phone.receiver.number']}"
-					style="width:auto">
-					<p:inputText value="#{container.contactAddress}"
-						disabled="#{!notificationDialog.phoneTab.useNotification or !container.perform}"
-						styleClass="smallInput" style="width:98%" />
-				</p:column>
-
-				<!-- perform notification on user -->
-				<p:column style="width:6%;text-align:center;">
-					<f:facet name="header">
-						<i class="fa fa-check-circle-o "
-							title="#{msg['dialog.notification.tab.phone.receiver.use']}" />
-					</f:facet>
-
-					<p:selectBooleanCheckbox
-						disabled="#{!notificationDialog.phoneTab.useNotification}"
-						value="#{container.perform}">
-						<p:ajax event="change" update="@form" />
-					</p:selectBooleanCheckbox>
-				</p:column>
-			</p:dataTable>
-		</h:panelGrid>
-	</p:outputPanel>
-
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
-			<h:panelGrid columns="1" styleClass="left">
-				<!-- Contact -->
-				<p:commandButton process="@form"
-					value="#{msg['dialog.notification.tab.mail.button.contact.select']}"
-					icon="fa fa-fw fa-cog"
-					actionListener="#{contactDialog.initAndPrepareBean(notificationDialog.task)}">
-					<p:ajax event="dialogReturn" update="@form"
-						listener="#{notificationDialog.phoneTab.updateData()}" />
-				</p:commandButton>
-			</h:panelGrid>
-
-			<h:panelGrid columns="3" styleClass="right" id="buttonContainer">
-				<!-- previouse -->
-				<p:commandButton value="#{msg['general.back']}"
-					icon="fa fa-fw fa-arrow-left"
-					actionListener="#{notificationDialog.previousTab()}"
-					process="@form" update="@form" />
-
-				<!-- next -->
-				<p:commandButton value="#{msg['general.next']}"
-					icon="fa fa-fw fa-arrow-right"
-					actionListener="#{notificationDialog.nextTab()}"
-					process="@form" update="@form" />
-
-				<!-- close -->
-				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle"
-					actionListener="#{notificationDialog.hideDialog()}" />
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+    <!-- navigation bar -->
+    <histo:navigationBar/>
 
 </ui:composition>

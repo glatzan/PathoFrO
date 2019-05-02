@@ -357,6 +357,11 @@
             <version>3.2.10</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-runtime</artifactId>
+            <version>2.5.3</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -372,7 +377,18 @@
 
     <build>
         <plugins>
-
+            <plugin>
+                <groupId>org.joinfaces</groupId>
+                <artifactId>joinfaces-maven-plugin</artifactId>
+                <version>${joinfaces.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>classpath-scan</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>

@@ -1,5 +1,6 @@
 package com.patho.main;
 
+import com.patho.main.config.PushConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,7 +17,7 @@ import com.patho.main.config.MessageConfig;
 @EnableSpringConfigured
 @EnableScheduling
 @EnableConfigurationProperties
-@Import({ MessageConfig.class, DatabaseConfig.class, LdapConfig.class })
+@Import({ MessageConfig.class, DatabaseConfig.class, LdapConfig.class, PushConfig.class})
 public class PathoFrohApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PathoFrohApplication.class, args);

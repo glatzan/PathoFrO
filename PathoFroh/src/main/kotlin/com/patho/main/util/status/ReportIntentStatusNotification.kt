@@ -21,6 +21,12 @@ open class ReportIntentStatusNotification(var task: Task, val notificationTyp: N
         get() = reportNotificationIntents.size
 
     /**
+     * Returns all active notifications
+     */
+    val activeNotifications
+        get() = reportNotificationIntents.filter { it.performNotification }
+
+    /**
      * Updates the reportNotificationIntents list. New notification intents will be added, old ones will be updated and
      * removed intents will be removed form the list.
      */
