@@ -1,0 +1,140 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<composite:interface>
+    <composite:attribute name="reportIntentStatus" required="true" type="com.patho.main.util.status.ReportIntentStatusNotification"/>
+    <composite:attribute name="useNotification" required="false" default="true"/>
+    <composite:attribute name="task" required="true" />
+</composite:interface>
+
+<composite:implementation>
+
+    <p:dataTable var="reportIntentNotificationBearer" scrollable="true" scrollHeight="160"
+                 style="width:96%" id="notificationTable" styleClass="defaultHistoDataTable"
+                 value="#{cc.attrs.reportIntentStatus.reportNotificationIntents}"
+                 sortBy="#{reportIntentNotificationBearer.status}">
+
+        <!-- header sorting by status -->
+        <p:headerRow>
+            <p:column colspan="5">
+                <h:outputText
+                        value="#{msg['dialog.notificationDialog.notificationStatus.'.concat(reportIntentNotificationBearer.status)]}"/>
+            </p:column>
+        </p:headerRow>
+
+        <!-- perform notification on user -->
+        <p:column style="width:7%;text-align:center;">
+            <f:facet name="header">
+                <i class="fa fa-check-circle-o "
+                   title="#{msg['dialog.notificationDialog.component.reportIntentTable.perform']}"/>
+            </f:facet>
+
+            <p:selectBooleanCheckbox
+                    disabled="#{!cc.attrs.useNotification or !reportIntentNotificationBearer.renderInactiveButton}"
+                    title="#{msg['dialog.notificationDialog.component.reportIntentTable.perform']}"
+                    value="#{reportIntentNotificationBearer.performNotification}">
+                <p:ajax event="change" update="@form"/>
+            </p:selectBooleanCheckbox>
+        </p:column>
+
+        <!-- name of receiver -->
+        <p:column
+                headerText="#{msg['dialog.notificationDialog.component.reportIntentTable.name']}"
+                style="width:auto">
+            <h:outputText value="#{reportIntentNotificationBearer.reportIntent.person.getFullName()}"/>
+        </p:column>
+
+        <!-- address -->
+        <p:column
+                headerText="#{msg['dialog.notificationDialog.component.reportIntentTable.address']}"
+                style="width:auto">
+            <p:inputText value="#{reportIntentNotificationBearer.contactAddress}"
+                         disabled="#{!cc.attrs.useNotification or !reportIntentNotificationBearer.performNotification}"
+                         style="width:96%"/>
+        </p:column>
+
+        <!-- options -->
+        <p:column style="width:10%;" styleClass="centerChildElements centerHeaderChildElements">
+            <f:facet name="header">
+                <i class="fa fa-file-pdf-o"
+                   title="#{msg['dialog.notificationDialog.component.reportIntentTable.pdf.info']}"/>
+            </f:facet>
+
+            <!-- add pdf, if pdf == null -->
+            <p:commandLink
+                    rendered="#{reportIntentNotificationBearer.pdf eq null and reportIntentNotificationBearer.performNotification}"
+                    disabled="#{!cc.attrs.useNotification}"
+                    title="#{msg['dialog.notificationDialog.component.reportIntentTable.pdf.select']}"
+                    execute="@this"
+                    actionListener="#{notificationDialog.openSelectPDFDialog(cc.attrs.task, reportIntentNotificationBearer.reportIntent)}">
+
+                <!-- current container is passed to the dialogReturn methode -->
+                <f:attribute name="container" value="#{reportIntentNotificationBearer}"/>
+
+                <p:ajax event="dialogReturn" update="@form" process="@form"
+                        listener="#{notificationDialog.onSubDialogReturn}">
+                </p:ajax>
+
+                <i class="fa fa-fw fa-file-pdf-o"/>
+            </p:commandLink>
+
+            <!-- show pdf, if pdf != null -->
+            <p:commandLink
+                    rendered="#{reportIntentNotificationBearer.pdf ne null and reportIntentNotificationBearer.performNotification}"
+                    title="#{msg['dialog.notificationDialog.component.reportIntentTable.pdf.view']}"
+                    execute="@this"
+                    disabled="#{!cc.attrs.useNotification}"
+                    actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(cc.attrs.task.patient).viewMode().setPDFToDisplay(reportIntentNotificationBearer.pdf)}">
+
+                <i class="fa fa-search icon-grey"/>
+            </p:commandLink>
+
+            <!-- remove pdf, if pdf != null -->
+            <p:commandLink style="margin-left: 10px;"
+                           rendered="#{reportIntentNotificationBearer.pdf ne null and reportIntentNotificationBearer.performNotification}"
+                           title="#{msg['dialog.notificationDialog.component.reportIntentTable.pdf.remove']}"
+                           execute="@this"
+                           disabled="#{!cc.attrs.useNotification}"
+                           update="@form" actionListener="#{reportIntentNotificationBearer.setPdf(null)}">
+
+                <i class="fa fa-close icon-grey"/>
+            </p:commandLink>
+
+
+        </p:column>
+
+        <!-- enable and disable -->
+        <p:column style="width: 5%" styleClass="centerChildElements centerHeaderChildElements">
+            <f:facet name="header">
+                <i class="fa fa-stop"
+                   title="#{msg['dialog.notificationDialog.component.reportIntentTable.active.headline']}"/>
+            </f:facet>
+            <!-- enable button -->
+            <p:commandLink
+                    rendered="#{reportIntentNotificationBearer.renderActiveButton}"
+                    title="#{msg['dialog.notificationDialog.component.reportIntentTable.active.enable']}"
+                    execute="@this"
+                    disabled="#{!cc.attrs.useNotification}"
+                    update="@form"
+                    actionListener="#{notificationDialog.disableNotification(reportIntentNotificationBearer.reportIntentNotification, true)}">
+                <i class="fa fa-undo icon-grey"/>
+            </p:commandLink>
+
+            <!-- disable button -->
+            <p:commandLink
+                    rendered="#{reportIntentNotificationBearer.renderInactiveButton}"
+                    title="#{msg['dialog.notificationDialog.component.reportIntentTable.active.disable']}"
+                    execute="@this"
+                    disabled="#{!cc.attrs.useNotification}"
+                    update="@form"
+                    actionListener="#{notificationDialog.disableNotification(reportIntentNotificationBearer.reportIntentNotification, false)}">
+                <i class="fa fa-times-circle icon-red"/>
+            </p:commandLink>
+        </p:column>
+    </p:dataTable>
+
+</composite:implementation>
+</html>
