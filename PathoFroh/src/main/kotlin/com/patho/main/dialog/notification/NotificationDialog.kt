@@ -5,7 +5,6 @@ import com.patho.main.common.Dialog
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTabTaskDialog
 import com.patho.main.dialog.print.PrintDialog
-import com.patho.main.dialog.print.documentUi.AbstractDocumentUi
 import com.patho.main.dialog.print.documentUi.DiagnosisReportUi
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
@@ -29,21 +28,11 @@ import com.patho.main.util.status.ReportIntentStatusNotification
 import com.patho.main.util.task.TaskNotFoundException
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
+import org.primefaces.push.EventBusFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.util.*
-import javax.faces.push.Push
-import javax.faces.push.PushContext
-import javax.inject.Inject
-import org.primefaces.push.EventBusFactory
-import org.primefaces.push.EventBus
-import org.primefaces.push.annotation.OnClose
-import org.primefaces.push.annotation.OnMessage
-import org.primefaces.push.annotation.OnOpen
-import org.primefaces.push.annotation.PushEndpoint
-import org.primefaces.push.impl.JSONEncoder
-
 
 
 @Component()
@@ -467,8 +456,7 @@ class NotificationDialog @Autowired constructor(
          * Starting perform notification dialog
          */
         open fun performNotifications() {
-            performNotificationDialog.initBean(task, activeNotifications.map { it.notificationBearer.reportIntentNotification })
+            performNotificationDialog.initAndPrepareBean(task, activeNotifications.map { it.notificationBearer.reportIntentNotification })
         }
     }
-
 }

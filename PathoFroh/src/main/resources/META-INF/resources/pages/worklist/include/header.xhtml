@@ -5,6 +5,9 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
+    <p:hotkey bind="ctrl+b"
+              oncomplete="$('#headerForm\\:notificationPerformBtn').click();return false;"/>
+
     <h:panelGrid columns="2"
                  styleClass="defaultHistoHiddenTableContainer headerTable">
 
@@ -264,9 +267,6 @@
                         update="navigationForm:patientList contentForm headerForm"
                         listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
             </p:commandButton>
-
-            <p:hotkey bind="alt+b"
-                      oncomplete="$('#headerForm\\:notificationPerformBtn').click();return false;"/>
 
             <!-- Notification exit -->
             <p:commandButton id="notificationPhaseExit"

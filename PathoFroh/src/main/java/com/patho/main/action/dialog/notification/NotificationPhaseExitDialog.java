@@ -8,7 +8,6 @@ import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.FavouriteListService;
-import com.patho.main.service.NotificationService;
 import com.patho.main.service.SampleService;
 import com.patho.main.service.TaskService;
 

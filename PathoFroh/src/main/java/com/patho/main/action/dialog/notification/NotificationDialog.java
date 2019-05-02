@@ -16,7 +16,6 @@ import com.patho.main.model.person.Person;
 import com.patho.main.repository.MailRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PrintDocumentRepository;
-import com.patho.main.service.NotificationService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.TaskService;
 import com.patho.main.service.UserService;
@@ -66,11 +65,6 @@ public class NotificationDialog extends AbstractTabDialog {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private UserService userService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private NotificationService notificationService;
 
     @Autowired
     @Getter(AccessLevel.NONE)

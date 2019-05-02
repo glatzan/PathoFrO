@@ -12,16 +12,16 @@ import org.primefaces.push.impl.JSONEncoder
 class NotifyBean {
 
     @OnOpen
-    fun onOpen(r: RemoteEndpoint, eventBus: EventBus) {
+    fun onOpen(r: RemoteEndpoint?, eventBus: EventBus?) {
     }
 
     @OnClose
-    fun onClose(r: RemoteEndpoint, eventBus: EventBus) {
+    fun onClose(r: RemoteEndpoint?, eventBus: EventBus?) {
     }
 
 
     @OnMessage(encoders = [JSONEncoder::class])
-    fun onMessage(count: String): String {
+    fun onMessage(count: String?): String? {
         println("OnMessage $count")
         return count
     }

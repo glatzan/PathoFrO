@@ -73,23 +73,7 @@
                 <p:commandButton value="#{msg['general.close']}"
                                  icon="fa fa-times-circle" process="@form"
                                  actionListener="#{notificationDialog.hideDialog()}"/>
-
-                <p:commandButton value="#{msg['general.close']}"
-                                 icon="fa fa-times-circle" process="@form"
-                                 actionListener="#{notificationDialog.sendMessage()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </div>
-
-    <script>
-        function test(message) {
-            console.log('jsf push message::' + message + ", channel ::" );
-        }
-    </script>
-
-    <p:socket onMessage="test" channel="/test" autoConnect="true" widgetVar='subscriber' />
-
-
-
-
 </ui:composition>

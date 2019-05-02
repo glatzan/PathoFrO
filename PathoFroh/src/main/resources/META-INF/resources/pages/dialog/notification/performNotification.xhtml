@@ -1,94 +1,63 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.notificationDialog.headline']}">
-	</h:outputFormat></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-						library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.notificationDialog.headline']}">
+    </h:outputFormat></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
-<h:body styleClass="contentInputDialog">
-	<h:form id="dialogContent">
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
-				<h:outputLabel
-					value="#{msg['dialog.notificationPhaseExit.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
 
-		<div class="dialogContent">
-			<h:panelGrid columns="1" styleClass="newStyleListingTable"
-				columnClasses="columnLongText">
-				<h:outputLabel value="#{msg['dialog.notificationPhaseExit.text']}"></h:outputLabel>
-			</h:panelGrid>
+<h:body styleClass="histoDialogStyle">
 
-			<h:panelGrid columns="2" styleClass="newStyleListingTable"
-				style="margin-left:10px">
-				<!-- end phase -->
-				<p:selectBooleanCheckbox
-					value="#{dialogHandlerAction.notificationPhaseExitDialog.removeFromNotificationList}" />
-				<h:outputLabel
-					value="#{msg['dialog.notificationPhaseExit.checkBox.removeFromNotificationList']}" />
+    <h:form id="dialogContent">
 
-				<h:outputLabel />
-				<h:panelGrid columns="2" styleClass="newTableContainer">
-					<!-- end phase -->
-					<p:selectBooleanCheckbox
-						disabled="#{!dialogHandlerAction.notificationPhaseExitDialog.removeFromNotificationList}"
-						value="#{dialogHandlerAction.notificationPhaseExitDialog.endNotificationPhase}" />
-					<h:outputLabel style="margin-left:20px"
-						value="#{msg['dialog.notificationPhaseExit.checkBox.endNotification']}" />
-				</h:panelGrid>
+        <h:outputScript library="scripts" name="selectCheckboxMenuTop.js"/>
 
-				<!-- remove from worklist -->
-				<p:selectBooleanCheckbox
-					value="#{dialogHandlerAction.notificationPhaseExitDialog.removeFromWorklist}" />
-				<h:outputLabel
-					value="#{msg['dialog.notificationPhaseExit.checkBox.removeFromWorklist']}" />
-			</h:panelGrid>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2">
+                <h:panelGroup id="headerText">
+                    <h:outputFormat value="#{msg['dialog.contactAddDialog.headline']}">
+                        <f:param
+                                value="#{msg['enum.contactRole.'.concat(contactAddDialog.addContactAsRole)]}"/>
+                    </h:outputFormat>
+                </h:panelGroup>
 
-		</div>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+        <div class="dialogContent">
+            <p:progressBar ajax="true" interval="500" value="#{performNotificationDialog.notificationProgress}" labelTemplate="{value}% ">
+                <p:ajax event="complete"
+                        oncomplete="console.log('test')"/>
+            </p:progressBar>
+        </div>
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
-				</h:panelGrid>
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+                <h:panelGrid columns="3" styleClass="left">
+                </h:panelGrid>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- abort -->
+                    <p:commandButton value="#{msg['general.abort']}"
+                                     icon="fa fa-times-circle"
+                                     actionListener="#{performNotificationDialog.hideDialog()}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
-					<!-- Ok button -->
-					<p:commandButton value="#{msg['general.ok']}" id="closeBtn"
-						icon="fa fa-check-circle-o">
-						<f:actionListener
-							binding="#{dialogHandlerAction.notificationPhaseExitDialog.exitPhase()}" />
-						<f:actionListener
-							binding="#{dialogHandlerAction.notificationPhaseExitDialog.hideDialog()}" />
-					</p:commandButton>
-
-					<!-- abort -->
-					<p:commandButton value="#{msg['general.abort']}"
-						icon="fa fa-times-circle"
-						actionListener="#{dialogHandlerAction.notificationPhaseExitDialog.hideDialog()}"></p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-
-	</h:form>
+    </h:form>
 </h:body>
 </html>
