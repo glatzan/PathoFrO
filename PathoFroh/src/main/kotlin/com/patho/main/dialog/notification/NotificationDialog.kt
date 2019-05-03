@@ -485,6 +485,8 @@ class NotificationDialog @Autowired constructor(
                     }
                 }
 
+
+
                 // fax
                 report.faxReports.applyReport = faxTab.useNotification
                 report.faxReports.individualAddress = faxTab.individualAddresses

@@ -20,7 +20,7 @@ spring:
       max-file-size: 50MB  
       max-request-size: 100MB
   datasource:
-    url: jdbc:postgresql://localhost/histo1
+    url: jdbc:postgresql://localhost/histo5
     username: postgres
     password: postgres
   jpa:
@@ -135,17 +135,16 @@ patho:
   settings:
     ####### MAIL #######
     mail:
-      settings:
-        server: smtp.ukl.uni-freiburg.de
-        port: 465
-        ssl: true
-        debug: false
-        systemMail: augenklinik.histologie@uniklinik-freiburg.de
-        systemName: Histologisches Labor der Augenklinik Freiburg
-        adminAddresses:
-          - andreas.glatz@uniklinik-freiburg.de
-        errorAddresses:
-          - andreas.glatz@uniklinik-freiburg.de
+      server: smtp.ukl.uni-freiburg.de
+      port: 465
+      ssl: true
+      debug: false
+      systemMail: augenklinik.histologie@uniklinik-freiburg.de
+      systemName: Histologisches Labor der Augenklinik Freiburg
+      adminAddresses:
+        - andreas.glatz@uniklinik-freiburg.de
+      errorAddresses:
+        - andreas.glatz@uniklinik-freiburg.de
       mails:
         -
           id: 0

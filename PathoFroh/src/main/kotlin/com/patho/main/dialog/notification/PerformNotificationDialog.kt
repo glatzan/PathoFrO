@@ -34,7 +34,6 @@ open class PerformNotificationDialog @Autowired constructor(
     open fun initBean(task: Task, data: ReportIntentExecuteData): Boolean {
         super.initBean(task)
         this.data = data
-        update(true)
         return true
     }
 

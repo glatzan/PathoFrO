@@ -133,7 +133,7 @@ open class ReportService @Autowired constructor(
         container.mailTemplate.attachment = container.printPDFBearer?.pdfContainer
 
         // checking mail validity
-        if (ReportAddressValidator.approveMailAddress(container.contactAddress)) {
+        if (!ReportAddressValidator.approveMailAddress(container.contactAddress)) {
             reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.notValid", container.contactAddress))
             return false
         }
@@ -189,7 +189,7 @@ open class ReportService @Autowired constructor(
         container.notification.contactAddress = container.contactAddress
 
         // checking fax validity
-        if (ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
+        if (!ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
             reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress))
             return false
         }
@@ -248,8 +248,8 @@ open class ReportService @Autowired constructor(
         }
 
 
-        // checking fax validity
-        if (ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
+        // checking address validity
+        if (!ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
             reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress))
             return false
         }
