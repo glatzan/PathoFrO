@@ -9,7 +9,7 @@ import com.patho.main.util.print.PrintPDFBearer
 /**
  * Class for performing a notification for a diangosis
  */
-data class ReportIntentDataBearer(var task: Task, var diagnosisRevision: DiagnosisRevision) {
+data class ReportIntentExecuteData(var task: Task, var diagnosisRevision: DiagnosisRevision) {
 
     var additionalReports: AdditionalReports = AdditionalReports()
 
@@ -78,7 +78,7 @@ data class ReportIntentDataBearer(var task: Task, var diagnosisRevision: Diagnos
         /**
          * List of mail receivers
          */
-        var receivers: List<ReportIntentMailNotificationBearer> = listOf<ReportIntentMailNotificationBearer>()
+        var receivers: List<MailNotificationExecuteData> = listOf<MailNotificationExecuteData>()
     }
 
     /**
@@ -118,7 +118,7 @@ data class ReportIntentDataBearer(var task: Task, var diagnosisRevision: Diagnos
         /**
          * List of all fax receivers
          */
-        var receivers: List<ReportIntentNotificationBearer> = listOf<ReportIntentNotificationBearer>()
+        var receivers: List<NotificationExecuteData> = listOf<NotificationExecuteData>()
 
     }
 
@@ -149,7 +149,7 @@ data class ReportIntentDataBearer(var task: Task, var diagnosisRevision: Diagnos
         /**
          * List of all letter receivers
          */
-        var receivers: List<ReportIntentNotificationBearer> = listOf<ReportIntentNotificationBearer>()
+        var receivers: List<NotificationExecuteData> = listOf<NotificationExecuteData>()
     }
 
     /**
@@ -164,7 +164,7 @@ data class ReportIntentDataBearer(var task: Task, var diagnosisRevision: Diagnos
         /**
          * List of all letter receivers
          */
-        var receivers: List<ReportIntentNotificationBearer> = listOf<ReportIntentNotificationBearer>()
+        var receivers: List<NotificationExecuteData> = listOf<NotificationExecuteData>()
 
     }
 }

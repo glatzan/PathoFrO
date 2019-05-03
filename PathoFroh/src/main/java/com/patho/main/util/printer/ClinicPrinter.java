@@ -114,7 +114,7 @@ public class ClinicPrinter extends AbstractPrinter {
     }
 
     public boolean print(PrintPDFBearer container, int copies) {
-        return print(new PrintOrder(container.getPdfContainer(), copies, null));
+        return print(new PrintOrder(container.getPdfContainer(), copies, container.getPrintDocument()));
     }
 
     public boolean print(PrintOrder printOrder) {

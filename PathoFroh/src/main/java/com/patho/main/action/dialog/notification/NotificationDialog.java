@@ -2,7 +2,6 @@ package com.patho.main.action.dialog.notification;
 
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
@@ -11,8 +10,6 @@ import com.patho.main.model.patient.NotificationStatus;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.notification.NotificationTyp;
 import com.patho.main.model.patient.notification.ReportIntent;
-import com.patho.main.model.person.Contact;
-import com.patho.main.model.person.Person;
 import com.patho.main.repository.MailRepository;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.repository.PrintDocumentRepository;
@@ -24,7 +21,6 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.pdf.PDFStreamContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.notification.NotificationContainer;
-import com.patho.main.util.notification.NotificationFeedback;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -536,7 +532,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
     @Getter
     @Setter
-    public class SendTab extends NotificationTab implements NotificationFeedback {
+    public class SendTab extends NotificationTab {
 
         private boolean notificationCompleted;
 

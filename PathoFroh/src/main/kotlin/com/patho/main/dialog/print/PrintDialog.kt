@@ -21,6 +21,7 @@ import com.patho.main.util.pdf.LazyPDFGuiManager
 import com.patho.main.util.pdf.PDFCreator
 import com.patho.main.util.pdf.PrintOrder
 import com.patho.main.util.print.LoadedPrintPDFBearer
+import com.patho.main.util.print.PrintPDFBearer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -251,7 +252,7 @@ class PrintDialog @Autowired constructor(
         val template = selectedTemplate?.getDefaultTemplateConfiguration()?.documentTemplate
 
         if (pdf != null && template != null) {
-            hideDialog(LoadedPrintPDFBearer(pdf, template))
+            hideDialog(PrintPDFBearer(pdf, template))
         } else
             hideDialog()
     }

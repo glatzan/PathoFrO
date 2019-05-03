@@ -1,5 +1,6 @@
 package com.patho.main.dialog.notification
 
+import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.config.PathoConfig
@@ -23,12 +24,16 @@ import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.print.LoadedPrintPDFBearer
+import com.patho.main.util.print.PrintPDFBearer
+import com.patho.main.util.report.MailNotificationExecuteData
+import com.patho.main.util.report.NotificationExecuteData
+import com.patho.main.util.report.ReportIntentExecuteData
+import com.patho.main.util.report.ui.ReportIntentNotificationUIContainer
 import com.patho.main.util.status.ReportIntentStatusByDiagnosis
-import com.patho.main.util.status.ReportIntentStatusNotification
+import com.patho.main.util.report.ui.ReportIntentUIContainer
 import com.patho.main.util.task.TaskNotFoundException
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
-import org.primefaces.push.EventBusFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -145,9 +150,9 @@ class NotificationDialog @Autowired constructor(
         println(container)
         println(returnObject)
 
-        if (returnObject is LoadedPrintPDFBearer && container is ReportIntentStatusNotification.ReportIntentNotificationBearer) {
+        if (returnObject is PrintPDFBearer && container is ReportIntentNotificationUIContainer) {
             logger.debug("Setting custom pdf for container $container.reportIntent.person?.getFullName()}")
-            container.pdf = returnObject.pdfContainer
+            container.printPDF = returnObject
             return;
         }
 
@@ -203,7 +208,7 @@ class NotificationDialog @Autowired constructor(
         /**
          * Contais a list of contacts with the specified notification type
          */
-        open lateinit var reportIntentStatus: ReportIntentStatusNotification
+        open lateinit var reportIntentStatus: ReportIntentUIContainer
 
         override fun updateData() {
             reportIntentStatus.update(task)
@@ -326,7 +331,7 @@ class NotificationDialog @Autowired constructor(
                     DocumentToken("task", task),
                     DocumentToken("contact", null))
 
-            reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
+            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -363,7 +368,7 @@ class NotificationDialog @Autowired constructor(
 
             printFax = false
 
-            reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
+            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -393,7 +398,7 @@ class NotificationDialog @Autowired constructor(
 
             printLetter = true
 
-            reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
+            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -409,7 +414,7 @@ class NotificationDialog @Autowired constructor(
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing phone data...")
 
-            reportIntentStatus = ReportIntentStatusNotification(task, notificationTyp)
+            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp)
 
             return super.initTab(force)
         }
@@ -449,14 +454,65 @@ class NotificationDialog @Autowired constructor(
         }
 
         inner class ReportIntentSummaryEntry(val notificationTyp: NotificationTyp,
-                                             var notificationBearer: ReportIntentStatusNotification.ReportIntentNotificationBearer)
+                                             var notificationBearer: ReportIntentNotificationUIContainer)
 
 
         /**
          * Starting perform notification dialog
          */
         open fun performNotifications() {
-            performNotificationDialog.initAndPrepareBean(task, activeNotifications.map { it.notificationBearer.reportIntentNotification })
+            val diagnosis = generalTab.selectDiagnosisRevision?.diagnosisRevision
+            if (diagnosis != null) {
+                var report = ReportIntentExecuteData(task, diagnosis)
+                // general
+                report.additionalReports.printAdditionalReports = generalTab.useNotification
+                report.additionalReports.printAdditionalReportsCount = generalTab.printCount
+                report.additionalReports.additionalReportTemplate = generalTab.selectedTemplate
+
+                // mail
+                report.mailReports.applyReport = mailTab.useNotification
+                report.mailReports.individualAddress = mailTab.individualAddresses
+                report.mailReports.mailTemplate = mailTab.mailTemplate
+                report.mailReports.reportTemplate = mailTab.selectedTemplate
+
+                if (mailTab.useNotification) {
+                    val mailTemplate = mailTab.mailTemplate
+                    if (mailTemplate == null) {
+                        MessageHandler.sendGrowlMessagesAsResource("growl.headline.error", "growl.notification.noMailTemplateSelected")
+                        return;
+                    } else {
+                        report.mailReports.receivers = mailTab.reportIntentStatus.activeNotifications.map { MailNotificationExecuteData(it.reportIntent, it.reportIntentNotification, mailTemplate, true, it.contactAddress, it.printPDF) }
+                    }
+                }
+
+                // fax
+                report.faxReports.applyReport = faxTab.useNotification
+                report.faxReports.individualAddress = faxTab.individualAddresses
+                report.faxReports.sendFax = faxTab.sendFax
+                report.faxReports.printFax = faxTab.printFax
+                report.faxReports.reportTemplate = faxTab.selectedTemplate
+
+                if (faxTab.useNotification)
+                    report.faxReports.receivers = faxTab.reportIntentStatus.activeNotifications.map { NotificationExecuteData(it.reportIntent, it.reportIntentNotification, true, it.contactAddress, it.printPDF) }
+
+                // letter
+                report.letterReports.applyReport = letterTab.useNotification
+                report.letterReports.individualAddress = letterTab.individualAddresses
+                report.letterReports.reportTemplate = letterTab.selectedTemplate
+
+                if (letterTab.useNotification)
+                    report.letterReports.receivers = letterTab.reportIntentStatus.activeNotifications.map { NotificationExecuteData(it.reportIntent, it.reportIntentNotification, true, it.contactAddress, it.printPDF) }
+
+                // phone
+                report.phoneReports.applyReport = phoneTab.useNotification
+                if (phoneTab.useNotification)
+                    report.phoneReports.receivers = phoneTab.reportIntentStatus.activeNotifications.map { NotificationExecuteData(it.reportIntent, it.reportIntentNotification, true, it.contactAddress, it.printPDF) }
+
+                performNotificationDialog.initAndPrepareBean(task, report).startNotification()
+
+            } else {
+                MessageHandler.sendGrowlMessagesAsResource("growl.headline.error", "growl.notification.notDiagnosisSelected")
+            }
         }
     }
 }
