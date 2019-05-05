@@ -32,6 +32,7 @@
                 </h:panelGroup>
 
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               disabled="#{!performNotificationDialog.completed}"
                                onclick="$('#dialogContent\\:closeBtn').click();return false;">
                     <i class="fa fa-fw fa-times"/>
                 </p:commandLink>
@@ -39,19 +40,72 @@
         </div>
 
         <div class="dialogContent">
-            <p:progressBar ajax="true" interval="500" value="#{performNotificationDialog.notificationProgress}" labelTemplate="{value}% ">
-                <p:ajax event="complete"
-                        oncomplete="console.log('test')"/>
-            </p:progressBar>
+            <h:panelGrid styleClass="defaultHistoHiddenTableContainer" columns="1" style="width: 100%" id="pollTable"
+                         columnClasses="columnHorizontalCenter">
+
+                <h:panelGrid styleClass="defaultHistoTable" columns="1"
+                             style="margin-top:80px; width: 70% !important; margin-left: auto; margin-right: auto"
+                             columnClasses="columnHorizontalCenter">
+                    <p:progressBar ajax="true" interval="500" value="#{performNotificationDialog.progress}"
+                                   widgetVar="pdfProgressBar" global="false"
+                                   labelTemplate="{value}%">
+                    </p:progressBar>
+                </h:panelGrid>
+
+                <h:panelGrid styleClass="defaultHistoTable" columns="1"
+                             style="height: 40px !important; width: 70% !important; margin-left: auto; margin-right: auto"
+                             columnClasses="columnHorizontalCenter">
+                    <h:graphicImage value="/gfx/ajax-loader1.gif"
+                                    rendered="#{!performNotificationDialog.completed}"/>
+                </h:panelGrid>
+
+
+                <h:panelGrid styleClass="defaultHistoTable" columns="1"
+                             style="width: 70% !important; margin-left: auto; margin-right: auto">
+                    <h:outputFormat value="#{performNotificationDialog.status}"/>
+
+                    <h:panelGroup rendered="#{performNotificationDialog.completed}">
+                        <h:outputLabel
+                                value="Status: "/>
+                        <h:outputLabel
+                                rendered="#{performNotificationDialog.success}"
+                                value="Erfolgreich" styleClass="icon-green"/>
+                        <h:outputLabel
+                                rendered="#{!performNotificationDialog.success}"
+                                value="Fehler" styleClass="icon-red"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:panelGrid>
+
+            <p:poll async="true" interval="1" widgetVar="progressPoll" autoStart="false"
+                    update="pollTable rightButtonContainer" stop="#{performNotificationDialog.completed}"/>
+
+            <p:remoteCommand autoRun="#{performNotificationDialog.delayedStart}" onstart="PF('progressPoll').start();"
+                             async="true"
+                             actionListener="#{performNotificationDialog.startNotification(false)}"/>
+
         </div>
 
         <div class="buttonContainer">
             <h:panelGrid columns="2">
                 <h:panelGrid columns="3" styleClass="left">
                 </h:panelGrid>
-                <h:panelGrid columns="2" styleClass="right">
+                <h:panelGrid columns="3" styleClass="right" id="rightButtonContainer">
+
+                    <!-- end notification -->
+                    <p:commandButton value="Benachrichtigung abschließen"
+                                     disabled="#{!performNotificationDialog.completed}"
+                                     icon="fa fa-times-circle"
+                                     actionListener="#{performNotificationDialog.hideDialog()}"/>
+
+                    <!-- send report -->
+                    <p:commandButton value="Sendebericht"
+                                     disabled="#{!performNotificationDialog.completed}"
+                                     icon="fa fa-times-circle"
+                                     actionListener="#{performNotificationDialog.hideDialog()}"/>
                     <!-- abort -->
-                    <p:commandButton value="#{msg['general.abort']}"
+                    <p:commandButton value="#{msg['general.close']}"
+                                     disabled="#{!performNotificationDialog.completed}"
                                      icon="fa fa-times-circle"
                                      actionListener="#{performNotificationDialog.hideDialog()}"/>
                 </h:panelGrid>

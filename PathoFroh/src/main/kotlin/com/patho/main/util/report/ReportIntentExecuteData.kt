@@ -17,39 +17,12 @@ data class ReportIntentExecuteData(var task: Task, var diagnosisRevision: Diagno
 
     var faxReports: FaxReports = FaxReports()
 
-    var letterReports: LetterReports = LetterReports()
+    var letterReports: Reports = Reports()
 
-    var phoneReports : PhoneReports = PhoneReports()
+    var phoneReports: Reports = Reports()
 
-    /**
-     * Additional reports with empty address
-     */
-    class AdditionalReports {
-        /**
-         * True if additional reports should be printed
-         */
-        var printAdditionalReports: Boolean = false
 
-        /**
-         * Number of the addition reports prints
-         */
-        var printAdditionalReportsCount: Int = 0
-
-        /**
-         * Template for printing additional reports, report has no address
-         */
-        var additionalReportTemplate: PrintDocument? = null
-
-        /**
-         * Bearer containing created pdf
-         */
-        var additionalReport: PrintPDFBearer? = null
-    }
-
-    /**
-     * Class containing settings for sending the report via mail
-     */
-    class MailReports {
+    open class Reports {
         /**
          * True if mail should be send
          */
@@ -59,11 +32,6 @@ data class ReportIntentExecuteData(var task: Task, var diagnosisRevision: Diagno
          * True if the address should be used
          */
         var individualAddress: Boolean = false
-
-        /**
-         * Mail template
-         */
-        var mailTemplate: MailTemplate? = null
 
         /**
          * Template of the generic report which should be send via mail
@@ -78,23 +46,37 @@ data class ReportIntentExecuteData(var task: Task, var diagnosisRevision: Diagno
         /**
          * List of mail receivers
          */
-        var receivers: List<MailNotificationExecuteData> = listOf<MailNotificationExecuteData>()
+        var receivers: List<out NotificationExecuteData> = listOf<NotificationExecuteData>()
+    }
+
+
+    /**
+     * Additional reports with empty address
+     */
+    class AdditionalReports : Reports() {
+
+        /**
+         * Number of the addition reports prints
+         */
+        var printAdditionalReportsCount: Int = 0
+    }
+
+    /**
+     * Class containing settings for sending the report via mail
+     */
+    class MailReports : Reports() {
+
+        /**
+         * Mail template
+         */
+        var mailTemplate: MailTemplate? = null
+
     }
 
     /**
      * Class containing settings for sending the report via fax
      */
-    class FaxReports {
-        /**
-         * True if fax should be send
-         */
-        var applyReport: Boolean = false
-
-        /**
-         * True if the address should be used
-         */
-        var individualAddress: Boolean = false
-
+    class FaxReports : Reports() {
         /**
          * True if the fax should be send by the program
          */
@@ -105,66 +87,6 @@ data class ReportIntentExecuteData(var task: Task, var diagnosisRevision: Diagno
          */
         var printFax: Boolean = false
 
-        /**
-         * Template of the generic report which should be send via mail
-         */
-        var reportTemplate: PrintDocument? = null
-
-        /**
-         * Bearer for the generic report which should be send via mail
-         */
-        var report: PrintPDFBearer? = null
-
-        /**
-         * List of all fax receivers
-         */
-        var receivers: List<NotificationExecuteData> = listOf<NotificationExecuteData>()
-
     }
 
-    /**
-     * Class containing settings for sending the report via letter
-     */
-    class LetterReports {
-        /**
-         * True if the report should be send via letter
-         */
-        var applyReport: Boolean = false
-
-        /**
-         * True if the address should be used
-         */
-        var individualAddress: Boolean = false
-
-        /**
-         * Template of the generic report which should be send via mail
-         */
-        var reportTemplate: PrintDocument? = null
-
-        /**
-         * Bearer for the generic report which should be send via mail
-         */
-        var report: PrintPDFBearer? = null
-
-        /**
-         * List of all letter receivers
-         */
-        var receivers: List<NotificationExecuteData> = listOf<NotificationExecuteData>()
-    }
-
-    /**
-     * Class containing settings for announcing the report via phone
-     */
-    class PhoneReports {
-        /**
-         * True if the reports should be announced
-         */
-        var applyReport: Boolean = false
-
-        /**
-         * List of all letter receivers
-         */
-        var receivers: List<NotificationExecuteData> = listOf<NotificationExecuteData>()
-
-    }
 }

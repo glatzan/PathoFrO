@@ -134,7 +134,7 @@ patho:
   ####### SETTINGS ####### 
   settings:
     ####### MAIL #######
-    mail:
+    mailSettings:
       server: smtp.ukl.uni-freiburg.de
       port: 465
       ssl: true
@@ -145,31 +145,31 @@ patho:
         - andreas.glatz@uniklinik-freiburg.de
       errorAddresses:
         - andreas.glatz@uniklinik-freiburg.de
-      mails:
-        -
-          id: 0
-          templateName: org.histo.template.mail.SuccessUnlockMail
-          defaultOfType: true
-          name: Benutzer-Freischaltung erfolgt
-          content: classpath:templates/mail/successUnlock.txt
-        -
-          id: 1
-          templateName: org.histo.template.mail.RequestUnlockMail
-          name: Benutzer-Freischaltung erbeten
-          defaultOfType: true
-          content: classpath:templates/mail/requestUnlock.txt
-        -
-          id: 2
-          templateName: org.histo.template.mail.DiagnosisReportMail
-          name: Diagnose-Benachrichtigung
-          defaultOfType : true
-          content: classpath:templates/mail/diagnosisReport.txt
-        -
-          id: 3
-          templateName: org.histo.template.mail.ErrorMail
-          name: Fehlermeldung!
-          defaultOfType : true
-          content: classpath:templates/mail/error.txt
+    mails:
+      -
+        id: 0
+        templateName: org.histo.template.mail.SuccessUnlockMail
+        defaultOfType: true
+        name: Benutzer-Freischaltung erfolgt
+        content: classpath:templates/mail/successUnlock.txt
+      -
+        id: 1
+        templateName: org.histo.template.mail.RequestUnlockMail
+        name: Benutzer-Freischaltung erbeten
+        defaultOfType: true
+        content: classpath:templates/mail/requestUnlock.txt
+      -
+        id: 2
+        templateName: org.histo.template.mail.DiagnosisReportMail
+        name: Diagnose-Benachrichtigung
+        defaultOfType : true
+        content: classpath:templates/mail/diagnosisReport.txt
+      -
+        id: 3
+        templateName: org.histo.template.mail.ErrorMail
+        name: Fehlermeldung!
+        defaultOfType : true
+        content: classpath:templates/mail/error.txt
     fileSettings:
       thumbnailDPI: 50
       fileRepository: D:/patho

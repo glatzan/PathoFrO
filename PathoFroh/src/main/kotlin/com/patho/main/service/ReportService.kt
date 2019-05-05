@@ -31,21 +31,23 @@ open class ReportService @Autowired constructor(
 
 
     open fun executeReportNotification(execute: ReportIntentExecuteData, feedback: NotificationFeedback) {
-        feedback.progress = calculateSteps(execute)
+        feedback.initializeFeedback(calculateSteps(execute))
         feedback.setFeedback("report.feedback.generatingReport")
 
         var success = true
         var containerList = HashMap<String, List<NotificationExecuteData>>()
 
         // printing generic report
-        if (execute.additionalReports.printAdditionalReports)
+        if (execute.additionalReports.applyReport) {
             printAdditionalReportPDF(execute)
+            feedback.progress()
+        }
 
         // sending the report via mail
         if (execute.mailReports.applyReport) {
             containerList["mailReports"] = execute.mailReports.receivers
             for (container in execute.mailReports.receivers) {
-                success.and(sendMail(container, execute, feedback))
+                success.and(sendMail(container as MailNotificationExecuteData, execute, feedback))
                 feedback.progress()
             }
         }
@@ -75,21 +77,27 @@ open class ReportService @Autowired constructor(
         }
 
         generateSendReport(execute, containerList, success)
+        feedback.progress()
+        feedback.end(success)
     }
 
     /**
      * Prints additional reports
      */
     private fun printAdditionalReportPDF(execute: ReportIntentExecuteData): Boolean {
-        if (execute.additionalReports.additionalReportTemplate != null) {
-            if (execute.additionalReports.additionalReport == null)
-                execute.additionalReports.additionalReport = getPrintPDFBearer(execute.additionalReports.additionalReportTemplate as PrintDocument, "", execute.diagnosisRevision)
+        if (execute.additionalReports.applyReport != null) {
+            // creating generic report
+            if (execute.additionalReports.report == null)
+                execute.additionalReports.report = getPrintPDFBearer(execute.additionalReports.reportTemplate as PrintDocument, "", execute.diagnosisRevision)
 
-            currentUserHandler.printer?.print(execute.additionalReports.additionalReport, execute.additionalReports.printAdditionalReportsCount)
+            currentUserHandler.printer?.print(execute.additionalReports.report, execute.additionalReports.printAdditionalReportsCount)
             return true
         }
         return false
     }
+
+
+//    execute: ReportIntentExecuteData, report: ReportIntentExecuteData.Reports, container: NotificationExecuteData, template: PrintDocument?, individualAddress: Boolean
 
     /**
      * Sends a report mail to the given person
@@ -98,32 +106,9 @@ open class ReportService @Autowired constructor(
         feedback.setFeedback("report.feedback.mail.sending", container.contactAddress)
         logger.debug("Sending mail to {}", container.contactAddress)
 
-        // pdf was selected for the individual contact
-        // adding pdf to generated pdf array
-        if (container.printPDFBearer == null) {
-            if (execute.mailReports.reportTemplate != null) {
-                if (!execute.mailReports.individualAddress) {
-                    // setting generic pdf
-                    logger.debug("Using generic pdf as attachment")
-                    var tmp = getGeneratedPDFForTemplate(execute.mailReports.reportTemplate, execute)
-
-                    // checking if a generic pdf was found, if not setting the mail generic pdf
-                    if (tmp == null) {
-                        logger.debug("Generating mail generic pdf")
-                        execute.mailReports.report = getPrintPDFBearer(execute.mailReports.reportTemplate as PrintDocument, "", execute.diagnosisRevision)
-                        tmp = execute.mailReports.report as PrintPDFBearer
-                    }
-                    container.printPDFBearer = tmp
-                } else {
-                    // individual address
-                    val reportAddressField = reportIntentService.generateAddress(container.contact)
-                    logger.debug("Generating pdf for {} (individual address)", reportAddressField)
-                    container.printPDFBearer = getPrintPDFBearer(execute.mailReports.reportTemplate as PrintDocument, reportAddressField, execute.diagnosisRevision)
-                }
-            } else {
-                reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.reportGenerationFailed"))
-                return false
-            }
+        if (!generatePrintPDf(execute, execute.mailReports, container)) {
+            execute.task = reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.reportGenerationFailed")).first
+            return false
         }
 
         // saving contact address for reusing it later
@@ -134,12 +119,12 @@ open class ReportService @Autowired constructor(
 
         // checking mail validity
         if (!ReportAddressValidator.approveMailAddress(container.contactAddress)) {
-            reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.notValid", container.contactAddress))
+            execute.task =  reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.notValid", container.contactAddress)).first
             return false
         }
 
         val success: Boolean = mailService.sendMail(container.contactAddress, container.mailTemplate)
-        reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.mail.sendSuccessful") else resourceBundle.get("report.feedback.mail.sendFailed"))
+        execute.task =  reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.mail.sendSuccessful") else resourceBundle.get("report.feedback.mail.sendFailed")).first
         return success
     }
 
@@ -157,32 +142,9 @@ open class ReportService @Autowired constructor(
             logger.debug("Print fax for person {}", container.notification.contact?.person?.getFullName())
         }
 
-        // pdf was selected for the individual contact
-        // adding pdf to generated pdf array
-        if (container.printPDFBearer == null) {
-            if (execute.faxReports.reportTemplate != null) {
-                if (!execute.faxReports.individualAddress) {
-                    // setting generic pdf
-                    logger.debug("Using generic pdf as attachment")
-                    var tmp = getGeneratedPDFForTemplate(execute.faxReports.reportTemplate, execute)
-
-                    // checking if a generic pdf was found, if not setting the mail generic pdf
-                    if (tmp == null) {
-                        logger.debug("Generating mail generic pdf")
-                        execute.faxReports.report = getPrintPDFBearer(execute.faxReports.reportTemplate as PrintDocument, "", execute.diagnosisRevision)
-                        tmp = execute.faxReports.report as PrintPDFBearer
-                    }
-                    container.printPDFBearer = tmp
-                } else {
-                    // individual address
-                    val reportAddressField = reportIntentService.generateAddress(container.contact)
-                    logger.debug("Generating pdf for {} (individual address)", reportAddressField)
-                    container.printPDFBearer = getPrintPDFBearer(execute.faxReports.reportTemplate as PrintDocument, reportAddressField, execute.diagnosisRevision)
-                }
-            } else {
-                reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.reportGenerationFailed"))
-                return false
-            }
+        if (!generatePrintPDf(execute, execute.faxReports, container)) {
+            execute.task = reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.reportGenerationFailed")).first
+            return false
         }
 
         // saving contact address for reusing it later
@@ -190,7 +152,7 @@ open class ReportService @Autowired constructor(
 
         // checking fax validity
         if (!ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
-            reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress))
+            execute.task =  reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress)).first
             return false
         }
 
@@ -207,7 +169,7 @@ open class ReportService @Autowired constructor(
             faxService.sendFax(container.contactAddress, container.printPDFBearer?.pdfContainer)
         }
 
-        reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.fax.sendSuccessful") else resourceBundle.get("report.feedback.fax.sendFailed"))
+        execute.task = reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.fax.sendSuccessful") else resourceBundle.get("report.feedback.fax.sendFailed")).first
 
         return success
     }
@@ -219,38 +181,15 @@ open class ReportService @Autowired constructor(
         feedback.setFeedback("report.feedback.print.printing")
         logger.debug("Printing report for person {}", container.notification.contact?.person?.getFullName())
 
-        // pdf was selected for the individual contact
-        // adding pdf to generated pdf array
-        if (container.printPDFBearer == null) {
-            if (execute.letterReports.reportTemplate != null) {
-                if (!execute.letterReports.individualAddress) {
-                    // setting generic pdf
-                    logger.debug("Using generic pdf as attachment")
-                    var tmp = getGeneratedPDFForTemplate(execute.letterReports.reportTemplate, execute)
-
-                    // checking if a generic pdf was found, if not setting the mail generic pdf
-                    if (tmp == null) {
-                        logger.debug("Generating mail generic pdf")
-                        execute.letterReports.report = getPrintPDFBearer(execute.letterReports.reportTemplate as PrintDocument, "", execute.diagnosisRevision)
-                        tmp = execute.letterReports.report as PrintPDFBearer
-                    }
-                    container.printPDFBearer = tmp
-                } else {
-                    // individual address
-                    val reportAddressField = reportIntentService.generateAddress(container.contact)
-                    logger.debug("Generating pdf for {} (individual address)", reportAddressField)
-                    container.printPDFBearer = getPrintPDFBearer(execute.letterReports.reportTemplate as PrintDocument, reportAddressField, execute.diagnosisRevision)
-                }
-            } else {
-                reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.print.reportGenerationFailed"))
-                return false
-            }
+        if (!generatePrintPDf(execute, execute.letterReports, container)) {
+            execute.task =  reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.print.reportGenerationFailed")).first
+            return false
         }
 
 
         // checking address validity
         if (!ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
-            reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress))
+            execute.task =  reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress)).first
             return false
         }
 
@@ -260,7 +199,7 @@ open class ReportService @Autowired constructor(
         // printing
         currentUserHandler.printer?.print(container.printPDFBearer, 1)
 
-        reportIntentService.addNotificationHistoryData(container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.print.printSuccessful") else resourceBundle.get("report.feedback.print.printFailed"))
+        execute.task =  reportIntentService.addNotificationHistoryData(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.print.printSuccessful") else resourceBundle.get("report.feedback.print.printFailed")).first
 
         return success
     }
@@ -304,6 +243,42 @@ open class ReportService @Autowired constructor(
         }
     }
 
+    /**
+     * Generates the pdf
+     */
+    private fun generatePrintPDf(execute: ReportIntentExecuteData, report: ReportIntentExecuteData.Reports, container: NotificationExecuteData): Boolean {
+
+        val template = report.reportTemplate
+
+        if (container.printPDFBearer != null) {
+            return true
+        } else {
+            if (template == null)
+                return false
+
+            if (report.individualAddress) {
+                val reportAddressField = reportIntentService.generateAddress(container.contact)
+                logger.debug("Generating pdf for $reportAddressField (individual address)")
+                container.printPDFBearer = getPrintPDFBearer(template as PrintDocument, reportAddressField, execute.diagnosisRevision)
+            } else {
+                logger.debug("Using generic pdf as attachment")
+                var tmp = getGenericReport(template, execute)
+
+                // checking if a generic pdf was found, if not setting the mail generic pdf
+                if (tmp == null) {
+                    logger.debug("Generating generic pdf")
+                    report.report = getPrintPDFBearer(template as PrintDocument, "", execute.diagnosisRevision)
+                    tmp = report.report as PrintPDFBearer
+                }
+
+                container.printPDFBearer = tmp
+            }
+
+            return true
+        }
+
+        return false
+    }
 
     /**
      * Creates a pdf for a printDocument. This happens in the same thread.
@@ -325,9 +300,10 @@ open class ReportService @Autowired constructor(
     /**
      * This method look for an already generated pdf with the same printDocument
      */
-    private fun getGeneratedPDFForTemplate(printDocument: PrintDocument?, execute: ReportIntentExecuteData): PrintPDFBearer? {
-        if (execute.additionalReports.additionalReportTemplate == printDocument && execute.additionalReports.additionalReport != null)
-            return execute.additionalReports.additionalReport as PrintPDFBearer
+    private fun getGenericReport(printDocument: PrintDocument, execute: ReportIntentExecuteData): PrintPDFBearer? {
+        logger.debug("Searching for $printDocument - print ${execute.additionalReports.reportTemplate} - mail ${execute.mailReports.reportTemplate} - fax ${execute.faxReports.reportTemplate} - letter ${execute.letterReports.reportTemplate}")
+        if (execute.additionalReports.reportTemplate == printDocument && execute.additionalReports.report != null)
+            return execute.additionalReports.report as PrintPDFBearer
 
         if (execute.mailReports.reportTemplate == printDocument && execute.mailReports.report != null)
             return execute.mailReports.report as PrintPDFBearer
@@ -342,8 +318,9 @@ open class ReportService @Autowired constructor(
     }
 
     private fun calculateSteps(execute: ReportIntentExecuteData): Int {
-        var result = 0
+        var result = 1
 
+        if(execute.additionalReports.applyReport) result += 1
         result += execute.mailReports.receivers.size
         result += execute.faxReports.receivers.size
         result += execute.letterReports.receivers.size
@@ -352,92 +329,3 @@ open class ReportService @Autowired constructor(
         return result
     }
 }
-//	public boolean executeNotification(NotificationFeedback feedback, Task task, MailContainerList mailContainerList,
-//			NotificationContainerList faxContainerList, NotificationContainerList letterContainerList,
-//			NotificationContainerList phoneContainerList, NotificationContainerList printContainerList,
-//			boolean temporaryNotification) {
-//
-//		boolean emailSendSuccessful = executeMailNotification(feedback, task, mailContainerList, temporaryNotification);
-//		boolean faxSendSuccessful = executeFaxNotification(feedback, task, faxContainerList, temporaryNotification);
-//		boolean letterSendSuccessful = executeLetterNotification(feedback, task, letterContainerList,
-//				temporaryNotification);
-//
-//		if (printContainerList.isUse() && printContainerList.getDefaultReport() != null) {
-//			// addition templates
-//			((DiagnosisReport) printContainerList.getDefaultReport()).initData(task, "");
-//			PDFContainer report = (new PDFGenerator())
-//					.getPDF(((DiagnosisReport) printContainerList.getDefaultReport()));
-//
-//			userHandlerAction.getSelectedPrinter().print(report, printContainerList.getPrintCount(),
-//					printContainerList.getDefaultReport().getAttributes());
-//
-//		}
-//
-//		feedback.progressStep();
-//
-
-//	public void finishSendProecess(T container, boolean success, String message) {
-//	container.getNotification().setPerformed(true);
-//	container.getNotification().setDateOfAction(new Date(System.currentTimeMillis()));
-//	container.getNotification().setCommentary(message);
-//	// if success = performed, nothing to do = inactive, if failed = active
-//	container.getNotification().setActive(!success);
-//	// if success = !failed = false
-//	container.getNotification().setFailed(!success);
-//}
-
-
-//	public boolean endNotification(NotificationPerformer performer, Task task, DiagnosisRevision diagnosisRevision,
-//			List<NotificationContainer> emails, List<NotificationContainer> faxes, List<NotificationContainer> letters,
-//			List<NotificationContainer> phones, boolean success) {
-//
-//		Optional<PrintDocument> document = printDocumentRepository
-//				.findByID(pathoConfig.getDefaultDocuments().getNotificationSendReport());
-//
-//		if (!document.isPresent()) {
-//			logger.debug("Printdocument not found");
-//			return false;
-//		}
-//
-//		document.get().initilize(new InitializeToken("task", task),
-//				new InitializeToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
-//				new InitializeToken("useMail", !emails.isEmpty()), new InitializeToken("mails", emails),
-//				new InitializeToken("useFax", !faxes.isEmpty()), new InitializeToken("faxes", faxes),
-//				new InitializeToken("useLetter", !letters.isEmpty()), new InitializeToken("letters", letters),
-//				new InitializeToken("usePhone", !phones.isEmpty()), new InitializeToken("phonenumbers", phones),
-//				new InitializeToken("reportDate", new Date()));
-//
-//		try {
-//			PDFReturn pdfReturn = pdfService.createAndAttachPDF(task, document.get(), true);
-//			performer.setSendReport(pdfReturn.getContainer());
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//			performer.setSendReport(null);
-//		}
-//
-//		diagnosisRevision.setNotificationStatus(NotificationStatus.NOTIFICATION_COMPLETED);
-//		diagnosisRevision.setNotificationDate(Instant.now());
-//
-//		diagnosisRevisionRepository.save(diagnosisRevision, "log.patient.task.notification.send", task.getPatient());
-//
-//		return true;
-//	}
-
-
-//	public PDFContainer generateSendReport(NotificationFeedback feedback, Task task,
-//			MailContainerList mailContainerList, NotificationContainerList faxContainerList,
-//			NotificationContainerList letterContainerList, NotificationContainerList phoneContaienrList,
-//			Date notificationDate, boolean temporarayNotification) {
-//
-//		feedback.setFeedback("log.notification.pdf.sendReport.generation");
-//
-//		SendReport sendReport = DocumentTemplate
-//				.getTemplateByID(globalSettings.getDefaultDocuments().getNotificationSendReport());
-//
-//		sendReport.initializeTempalte(task, mailContainerList, faxContainerList, letterContainerList,
-//				phoneContaienrList, notificationDate, temporarayNotification);
-//
-//		PDFContainer container = (new PDFGenerator()).getPDF(sendReport);
-//
-//		return container;
-//	}

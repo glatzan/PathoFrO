@@ -3,8 +3,6 @@ package com.patho.main.dialog.notification
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
-import com.patho.main.model.patient.notification.ReportIntentNotification
-import com.patho.main.service.ReportIntentService
 import com.patho.main.service.ReportService
 import com.patho.main.util.report.NotificationFeedback
 import com.patho.main.util.report.ReportIntentExecuteData
@@ -23,7 +21,13 @@ open class PerformNotificationDialog @Autowired constructor(
 
     override var progress: Int = 0
 
-    var notificationProgress: Int = 0
+    override var progressPerStep: Int = 0
+
+    override var completed: Boolean = false
+
+    override var success: Boolean = false
+
+    var delayedStart: Boolean = false
 
     open fun initAndPrepareBean(task: Task, data: ReportIntentExecuteData): PerformNotificationDialog {
         if (initBean(task, data))
@@ -34,6 +38,11 @@ open class PerformNotificationDialog @Autowired constructor(
     open fun initBean(task: Task, data: ReportIntentExecuteData): Boolean {
         super.initBean(task)
         this.data = data
+        status = " "
+        progress = 0
+        progressPerStep = 0
+        completed = false
+        delayedStart = false
         return true
     }
 
@@ -42,8 +51,11 @@ open class PerformNotificationDialog @Autowired constructor(
         return false
     }
 
-    open fun startNotification() {
-        reportService.executeReportNotification(data, this)
+    open fun startNotification(delayedStart: Boolean = false) {
+        this.delayedStart = delayedStart
+
+        if (!delayedStart)
+            reportService.executeReportNotification(data, this)
     }
 
 }

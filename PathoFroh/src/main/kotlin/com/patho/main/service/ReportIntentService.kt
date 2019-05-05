@@ -10,8 +10,8 @@ import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.model.person.Organization
 import com.patho.main.model.person.Person
-import com.patho.main.repository.AssociatedContactNotificationRepository
 import com.patho.main.repository.AssociatedContactRepository
+import com.patho.main.repository.ReportIntentNotificationRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.util.exception.DuplicatedReportIntentException
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,7 +27,7 @@ import javax.transaction.Transactional
 open class ReportIntentService @Autowired constructor(
         private val associatedContactRepository: AssociatedContactRepository,
         private val pathoConfig: PathoConfig,
-        private val associatedContactNotificationRepository: AssociatedContactNotificationRepository,
+        private val reportIntentNotificationRepository: ReportIntentNotificationRepository,
         private val taskRepository: TaskRepository) : AbstractService() {
 
 
@@ -153,7 +153,7 @@ open class ReportIntentService @Autowired constructor(
 
             // only remove from array, and deleting the entity only (no saving
             // of contact necessary because mapped within notification)
-            associatedContactNotificationRepository.delete(reportIntentNotification)
+            reportIntentNotificationRepository.delete(reportIntentNotification)
             return Pair(task, reportIntent)
         }
     }
@@ -240,11 +240,18 @@ open class ReportIntentService @Autowired constructor(
      * Adds a reportHistoryRecord to a notification
      */
     @Transactional
-    open fun addReportHistoryRecord(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): ReportHistoryRecord {
-        logger.debug("Adding history for diagnosis ${diagnosisRevision}")
+    open fun addReportHistoryRecord(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Pair<Task, ReportHistoryRecord> {
+        logger.debug("Adding history for diagnosis $diagnosisRevision")
+
         val result = ReportHistoryRecord(diagnosisRevision)
         reportIntentNotification.history.add(result)
-        return result
+
+        if (save) {
+            var tmp = taskRepository.save(task, resourceBundle.get("log.reportIntent.notification.record.add", task, diagnosisRevision, reportIntentNotification.contact?.person), task!!.patient)
+            return Pair(tmp, result)
+        }
+
+        return Pair(task, result)
     }
 
     /**
@@ -321,11 +328,11 @@ open class ReportIntentService @Autowired constructor(
 
         // adding new diagnoses
         for (diagnosisRevision in allRevisions) {
-            addReportHistoryRecord(reportIntentNotification, diagnosisRevision)
+            addReportHistoryRecord(task, reportIntentNotification, diagnosisRevision, false)
         }
 
         if (save) {
-            var tmp = associatedContactNotificationRepository.save(reportIntentNotification, resourceBundle.get("log.reportIntent.notification.updated", task), task!!.patient)
+            var tmp = reportIntentNotificationRepository.save(reportIntentNotification, resourceBundle.get("log.reportIntent.notification.updated", task), task!!.patient)
             return Pair(task, tmp)
         }
 
@@ -342,7 +349,7 @@ open class ReportIntentService @Autowired constructor(
         if (reportIntentNotification == null)
             reportIntentNotification = addReportIntentNotification(task, reportIntent, type, "", save = false).second
 
-        var historyData = addNotificationHistoryData(reportIntentNotification, diagnosisRevision, actionDate, failed, commentary)
+        var historyData = addNotificationHistoryData(task, reportIntentNotification, diagnosisRevision, actionDate, failed, commentary, false)
 
         if (save) {
             val tmp = associatedContactRepository
@@ -350,25 +357,32 @@ open class ReportIntentService @Autowired constructor(
                             resourceBundle.get("log.reportIntent.notification.historyDataAdded", reportIntent.task,
                                     reportIntent, type.toString()),
                             reportIntent.task!!.patient)
-            return Pair(tmp, historyData);
+            return Pair(tmp, historyData.second);
         }
 
-        return Pair(reportIntent, historyData);
+        return Pair(reportIntent, historyData.second);
     }
 
     /**
      * Adds a history record to a notification
      */
     @Transactional
-    open fun addNotificationHistoryData(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = ""): ReportHistoryRecord.ReportData {
+    open fun addNotificationHistoryData(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<Task, ReportHistoryRecord.ReportData> {
         val reportData = ReportHistoryRecord.ReportData()
         reportData.commentary = commentary
         reportData.actionDate = actionDate
         reportData.contactAddress = reportIntentNotification.contactAddress ?: ""
         reportData.failed = failed
+
         (findReportHistoryRecordByDiagnosis(reportIntentNotification, diagnosisRevision)
-                ?: addReportHistoryRecord(reportIntentNotification, diagnosisRevision)).data.add(reportData)
-        return reportData
+                ?: addReportHistoryRecord(task, reportIntentNotification, diagnosisRevision, false).second).data.add(reportData)
+
+        if (save) {
+            var tmp = taskRepository.save(task, resourceBundle.get("log.reportIntent.notification.diagnosisRecord.record.add", task, reportIntentNotification.contact?.person), task!!.patient)
+            return Pair(tmp, reportData)
+        }
+
+        return Pair(task, reportData)
     }
 
 

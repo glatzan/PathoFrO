@@ -465,9 +465,9 @@ class NotificationDialog @Autowired constructor(
             if (diagnosis != null) {
                 var report = ReportIntentExecuteData(task, diagnosis)
                 // general
-                report.additionalReports.printAdditionalReports = generalTab.useNotification
+                report.additionalReports.applyReport = generalTab.useNotification
                 report.additionalReports.printAdditionalReportsCount = generalTab.printCount
-                report.additionalReports.additionalReportTemplate = generalTab.selectedTemplate
+                report.additionalReports.reportTemplate = generalTab.selectedTemplate
 
                 // mail
                 report.mailReports.applyReport = mailTab.useNotification
@@ -484,8 +484,6 @@ class NotificationDialog @Autowired constructor(
                         report.mailReports.receivers = mailTab.reportIntentStatus.activeNotifications.map { MailNotificationExecuteData(it.reportIntent, it.reportIntentNotification, mailTemplate, true, it.contactAddress, it.printPDF) }
                     }
                 }
-
-
 
                 // fax
                 report.faxReports.applyReport = faxTab.useNotification
@@ -510,7 +508,7 @@ class NotificationDialog @Autowired constructor(
                 if (phoneTab.useNotification)
                     report.phoneReports.receivers = phoneTab.reportIntentStatus.activeNotifications.map { NotificationExecuteData(it.reportIntent, it.reportIntentNotification, true, it.contactAddress, it.printPDF) }
 
-                performNotificationDialog.initAndPrepareBean(task, report).startNotification()
+                performNotificationDialog.initAndPrepareBean(task, report).startNotification(true)
 
             } else {
                 MessageHandler.sendGrowlMessagesAsResource("growl.headline.error", "growl.notification.notDiagnosisSelected")
