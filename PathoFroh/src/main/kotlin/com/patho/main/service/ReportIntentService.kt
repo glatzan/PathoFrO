@@ -4,10 +4,7 @@ import com.patho.main.common.ContactRole
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
-import com.patho.main.model.patient.notification.NotificationTyp
-import com.patho.main.model.patient.notification.ReportHistoryRecord
-import com.patho.main.model.patient.notification.ReportIntent
-import com.patho.main.model.patient.notification.ReportIntentNotification
+import com.patho.main.model.patient.notification.*
 import com.patho.main.model.person.Organization
 import com.patho.main.model.person.Person
 import com.patho.main.repository.AssociatedContactRepository
@@ -21,7 +18,7 @@ import javax.persistence.Transient
 import javax.transaction.Transactional
 
 /**
- * ReportIntent 1 -> 4 ReportIntentNotification 1 -> n (diagnoses) ReportHistoryRecord 1 -> n ReportData
+ * ReportIntent 1 -> 4 ReportIntentNotification 1 -> n (diagnoses) DiagnosisHistoryRecord 1 -> n HistoryEntry
  */
 @Service()
 open class ReportIntentService @Autowired constructor(
@@ -237,13 +234,13 @@ open class ReportIntentService @Autowired constructor(
     }
 
     /**
-     * Adds a reportHistoryRecord to a notification
+     * Adds a diagnosisHistoryRecord to a notification
      */
     @Transactional
-    open fun addReportHistoryRecord(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Pair<Task, ReportHistoryRecord> {
+    open fun addDiagnosisHistoryRecord(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Pair<Task, DiagnosisHistoryRecord> {
         logger.debug("Adding history for diagnosis $diagnosisRevision")
 
-        val result = ReportHistoryRecord(diagnosisRevision)
+        val result = DiagnosisHistoryRecord(diagnosisRevision)
         reportIntentNotification.history.add(result)
 
         if (save) {
@@ -255,12 +252,12 @@ open class ReportIntentService @Autowired constructor(
     }
 
     /**
-     * Removes a reportHistoryRecord from a notification
+     * Removes a diagnosisHistoryRecord from a notification
      */
     @Transactional
-    open fun removeReportHistoryRecord(reportIntentNotification: ReportIntentNotification, reportHistoryRecord: ReportHistoryRecord) {
+    open fun removeDiagnosisHistoryRecord(reportIntentNotification: ReportIntentNotification, diagnosisHistoryRecord: DiagnosisHistoryRecord) {
         logger.debug("Removing unused history")
-        reportIntentNotification.history.remove(reportHistoryRecord)
+        reportIntentNotification.history.remove(diagnosisHistoryRecord)
     }
 
     /**
@@ -303,32 +300,32 @@ open class ReportIntentService @Autowired constructor(
         logger.debug("Updating History with diagnoses")
 
         val foundRevisions = mutableListOf<DiagnosisRevision>()
-        var toRemoveHistory = mutableListOf<ReportHistoryRecord>()
+        var toRemoveHistory = mutableListOf<DiagnosisHistoryRecord>()
 
-        for (reportHistoryRecord in reportIntentNotification.history) {
-            val diagnosisRevision = task.diagnosisRevisions.singleOrNull { p -> p.id == reportHistoryRecord.diagnosisID }
+        for (diagnosisHistoryRecord in reportIntentNotification.history) {
+            val diagnosisRevision = task.diagnosisRevisions.singleOrNull { p -> p.id == diagnosisHistoryRecord.diagnosisID }
 
             // search if a corresponding diagnosis exists
             if (diagnosisRevision != null) {
                 foundRevisions.add(diagnosisRevision)
             } else {
                 // if a notification was performed do not remove!
-                if (isHistoryPresent(reportHistoryRecord))
-                    reportHistoryRecord.diagnosisPresent = false
+                if (isHistoryPresent(diagnosisHistoryRecord))
+                    diagnosisHistoryRecord.diagnosisPresent = false
                 else
-                    toRemoveHistory.add(reportHistoryRecord)
+                    toRemoveHistory.add(diagnosisHistoryRecord)
             }
         }
 
         // removing
-        toRemoveHistory.forEach { p -> removeReportHistoryRecord(reportIntentNotification, p) }
+        toRemoveHistory.forEach { p -> removeDiagnosisHistoryRecord(reportIntentNotification, p) }
 
         val allRevisions = mutableListOf<DiagnosisRevision>(*task.diagnosisRevisions.toTypedArray())
         allRevisions.removeAll(foundRevisions)
 
         // adding new diagnoses
         for (diagnosisRevision in allRevisions) {
-            addReportHistoryRecord(task, reportIntentNotification, diagnosisRevision, false)
+            addDiagnosisHistoryRecord(task, reportIntentNotification, diagnosisRevision, false)
         }
 
         if (save) {
@@ -343,39 +340,39 @@ open class ReportIntentService @Autowired constructor(
      * Adds history data to an reportIntentNotification. If the reportIntentNotification is not present, it will be created as well.
      */
     @Transactional
-    open fun addNotificationHistoryDataAndReportIntentNotification(task: Task, reportIntent: ReportIntent, type: NotificationTyp, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<ReportIntent, ReportHistoryRecord.ReportData> {
+    open fun addHistoryEntryAndReportIntentNotification(task: Task, reportIntent: ReportIntent, type: NotificationTyp, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<ReportIntent, HistoryEntry> {
         var reportIntentNotification = findReportIntentNotificationByType(reportIntent, type)
 
         if (reportIntentNotification == null)
             reportIntentNotification = addReportIntentNotification(task, reportIntent, type, "", save = false).second
 
-        var historyData = addNotificationHistoryData(task, reportIntentNotification, diagnosisRevision, actionDate, failed, commentary, false)
+        var historyEntry = addHistoryEntry(task, reportIntentNotification, diagnosisRevision, actionDate, failed, commentary, false)
 
         if (save) {
             val tmp = associatedContactRepository
                     .save(reportIntent,
-                            resourceBundle.get("log.reportIntent.notification.historyDataAdded", reportIntent.task,
+                            resourceBundle.get("log.reportIntent.notification.historyEntryAdded", reportIntent.task,
                                     reportIntent, type.toString()),
                             reportIntent.task!!.patient)
-            return Pair(tmp, historyData.second);
+            return Pair(tmp, historyEntry.second);
         }
 
-        return Pair(reportIntent, historyData.second);
+        return Pair(reportIntent, historyEntry.second);
     }
 
     /**
      * Adds a history record to a notification
      */
     @Transactional
-    open fun addNotificationHistoryData(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<Task, ReportHistoryRecord.ReportData> {
-        val reportData = ReportHistoryRecord.ReportData()
+    open fun addHistoryEntry(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<Task, HistoryEntry> {
+        val reportData = HistoryEntry()
         reportData.commentary = commentary
         reportData.actionDate = actionDate
         reportData.contactAddress = reportIntentNotification.contactAddress ?: ""
         reportData.failed = failed
 
-        (findReportHistoryRecordByDiagnosis(reportIntentNotification, diagnosisRevision)
-                ?: addReportHistoryRecord(task, reportIntentNotification, diagnosisRevision, false).second).data.add(reportData)
+        (findDiagnosisHistoryRecordByDiagnosis(reportIntentNotification, diagnosisRevision)
+                ?: addDiagnosisHistoryRecord(task, reportIntentNotification, diagnosisRevision, false).second).data.add(reportData)
 
         if (save) {
             var tmp = taskRepository.save(task, resourceBundle.get("log.reportIntent.notification.diagnosisRecord.record.add", task, reportIntentNotification.contact?.person), task!!.patient)
@@ -406,8 +403,8 @@ open class ReportIntentService @Autowired constructor(
      * Checks if a notification was performed
      */
     @Transactional
-    open fun isHistoryPresent(reportHistoryRecord: ReportHistoryRecord): Boolean {
-        return reportHistoryRecord.data.isNotEmpty()
+    open fun isHistoryPresent(diagnosisHistoryRecord: DiagnosisHistoryRecord): Boolean {
+        return diagnosisHistoryRecord.data.isNotEmpty()
     }
 
     /**
@@ -422,7 +419,7 @@ open class ReportIntentService @Autowired constructor(
      * Searches for a history record with the given diagnosis id, returns last element
      */
     @Transactional
-    open fun findReportHistoryRecordByDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): ReportHistoryRecord? {
+    open fun findDiagnosisHistoryRecordByDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): DiagnosisHistoryRecord? {
         return reportIntentNotification.history.lastOrNull { p -> p.diagnosisID == diagnosisRevision.id }
     }
 
@@ -430,7 +427,7 @@ open class ReportIntentService @Autowired constructor(
      * Searches for all history records with the given diagnosis id
      */
     @Transactional
-    open fun findCompleteReportHistoryRecordByDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): List<ReportHistoryRecord> {
+    open fun findCompletedDiagnosisHistoryRecordByDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): List<DiagnosisHistoryRecord> {
         return reportIntentNotification.history.filter { p -> p.diagnosisID == diagnosisRevision.id }
     }
 
@@ -463,8 +460,8 @@ open class ReportIntentService @Autowired constructor(
     /**
      * Checks if all notifications are performed
      */
-    open fun isNotificationPerformed(reportHistoryRecord: ReportHistoryRecord): Boolean {
-        return !(reportHistoryRecord.data.lastOrNull()?.failed ?: true) && reportHistoryRecord.data.isNotEmpty()
+    open fun isNotificationPerformed(diagnosisHistoryRecord: DiagnosisHistoryRecord): Boolean {
+        return !(diagnosisHistoryRecord.data.lastOrNull()?.failed ?: true) && diagnosisHistoryRecord.data.isNotEmpty()
     }
 
     /**

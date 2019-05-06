@@ -2,8 +2,7 @@ package com.patho.main.util.status
 
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
-import com.patho.main.model.patient.notification.NotificationTyp
-import com.patho.main.model.patient.notification.ReportHistoryRecord
+import com.patho.main.model.patient.notification.DiagnosisHistoryRecord
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.service.impl.SpringContextBridge
@@ -35,8 +34,8 @@ open class ReportIntentStatus(task: Task) {
                 val reportIntentNotification = reportIntentNotification
                 val type = reportIntentNotification.notificationTyp
 
-                val historyForDiagnosis : List<ReportHistoryRecord> = SpringContextBridge.services().reportIntentService.findCompleteReportHistoryRecordByDiagnosis(reportIntentNotification,diagnosis)
-                val historyPresent = historyForDiagnosis.isNotEmpty()
+                val historyForDiagnoses : List<DiagnosisHistoryRecord> = SpringContextBridge.services().reportIntentService.findCompletedDiagnosisHistoryRecordByDiagnosis(reportIntentNotification,diagnosis)
+                val historyPresent = historyForDiagnoses.isNotEmpty()
 
             }
         }

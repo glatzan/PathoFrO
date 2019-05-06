@@ -75,7 +75,6 @@ public class DiagnosisService extends AbstractService {
 
     /**
      * Updates all diagnosisRevision of the given revisions
-     *
      */
     public Task synchronizeDiagnosesAndSamples(Task task, boolean save) {
         logger.info("Synchronize all diagnoses of task " + task.getTaskID() + " with samples");
@@ -236,8 +235,11 @@ public class DiagnosisService extends AbstractService {
         }
 
         // saving to database
-        return taskRepository.save(task,
+        task = taskRepository.save(task,
                 resourceBundle.get("log.patient.task.diagnosisRevision.new", diagnosisRevision));
+
+        // updating diagnoses with notification intents
+        return reportIntentService.updateReportIntentNotificationHistoryWithDiagnoses(task, true);
     }
 
     /**
@@ -255,6 +257,9 @@ public class DiagnosisService extends AbstractService {
 
             task = taskRepository.save(revision.getParent(),
                     resourceBundle.get("log.patient.task.diagnosisRevision.delete", revision.toString()));
+
+            // updating diagnoses with notification intents
+            task = reportIntentService.updateReportIntentNotificationHistoryWithDiagnoses(task, true);
 
             diagnosisRevisionRepository.delete(revision);
             return task;
@@ -328,14 +333,6 @@ public class DiagnosisService extends AbstractService {
 
     /**
      * Updates a diagnosis with the given data. Also updates notification via letter
-     *
-     * @param task
-     * @param diagnosis
-     * @param diagnosisAsText
-     * @param extendedDiagnosisText
-     * @param malign
-     * @param icd10
-     * @return
      */
     public Task updateDiagnosis(Task task, Diagnosis diagnosis, String diagnosisAsText, String extendedDiagnosisText,
                                 boolean malign, String icd10) {
@@ -386,9 +383,6 @@ public class DiagnosisService extends AbstractService {
     /**
      * Returns an empty list if the diangosis is valied, if not the errors will be
      * liested
-     *
-     * @param diagnosisRevision
-     * @return
      */
     public List<DiagnosisValidationError> validateDiangosisRevision(DiagnosisRevision diagnosisRevision) {
         ArrayList<DiagnosisValidationError> result = new ArrayList<DiagnosisValidationError>();
@@ -408,11 +402,6 @@ public class DiagnosisService extends AbstractService {
 
     /**
      * Copies the histological record
-     *
-     * @param diagnosis
-     * @param overwrite
-     * @return
-     * @throws HistoDatabaseInconsistentVersionException
      */
     public Task copyHistologicalRecord(Diagnosis diagnosis, boolean overwrite)
             throws HistoDatabaseInconsistentVersionException {

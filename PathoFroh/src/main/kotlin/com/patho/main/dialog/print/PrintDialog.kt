@@ -227,7 +227,7 @@ class PrintDialog @Autowired constructor(
 
             // only save if person is associated
             if (container.contact != null && container.contact?.role != ContactRole.NONE) {
-                //				reportIntentService.addNotificationHistoryDataAndReportIntentNotification(task,container.getContact(),NotificationTyp.PRINT, get);
+                //				reportIntentService.addHistoryEntryAndReportIntentNotification(task,container.getContact(),NotificationTyp.PRINT, get);
                 // TODO save print request
 
                 //				associatedContactService.addNotificationByType(container.getContact(), NotificationTyp.PRINT, false,

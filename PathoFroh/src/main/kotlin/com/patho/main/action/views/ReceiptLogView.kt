@@ -51,15 +51,6 @@ open class ReceiptLogView @Autowired constructor(
      * Selectedd status for displaying infos
      */
     open var selectedReportIntentStatus: ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer? = null
-        get() {
-            println(field?.diagnosisBearers?.size)
-            println("returning ${field?.person}")
-            return field
-        }
-        set(value) {
-            println("setting: ${value?.person}")
-            field = value
-        }
 
     /**
      * Loads all task data
