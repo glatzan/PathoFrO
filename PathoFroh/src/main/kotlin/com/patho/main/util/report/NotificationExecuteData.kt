@@ -17,7 +17,7 @@ open class NotificationExecuteData {
     /**
      * Notification to perform
      */
-    val notification: ReportIntentNotification
+    var notification: ReportIntentNotification
 
     /**
      * If true the notification should be performed

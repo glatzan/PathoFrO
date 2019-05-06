@@ -15,8 +15,6 @@ import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhase
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.ListItem;
-import com.patho.main.model.patient.Block;
-import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.ListItemRepository;
@@ -25,7 +23,7 @@ import com.patho.main.service.SlideService;
 import com.patho.main.service.WorkPhaseService;
 import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
-import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
+import com.patho.main.util.event.dialog.StainingPhaseUpdateEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;

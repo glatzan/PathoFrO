@@ -98,15 +98,13 @@ public class WorkPhaseHandler{
 		return task;
 	}
 
-	public void updateDiagnosisPhase(Task task) {
-
+	public Task updateDiagnosisPhase(Task task) {
 		for (DiagnosisRevision revision : task.getDiagnosisRevisions()) {
-			if (revision.getCompleted()) {
-				startDiagnosisPhase(task);
-				worklistHandler.replaceTaskInWorklist();
-				break;
+			if (!revision.getCompleted()) {
+				return startDiagnosisPhase(task);
 			}
 		}
+		return task;
 	}
 
 	public Task startDiagnosisPhase(Task task) {
@@ -116,10 +114,6 @@ public class WorkPhaseHandler{
 	/**
 	 * Ends the notification pahse, if no diagnosis revision is passed, all
 	 * diangoses will be ended.
-	 * 
-	 * @param task
-	 * @param diagnosisRevision
-	 * @param notification
 	 */
 	public void endDiagnosisPhase(Task task, DiagnosisRevision diagnosisRevision, boolean removeFromDiagnosisList,
 			boolean notification, boolean removeFromCurrentWorklist) {

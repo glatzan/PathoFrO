@@ -12,7 +12,7 @@ import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.service.SlideService;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.util.dialogReturn.DialogReturnEvent;
-import com.patho.main.util.dialogReturn.StainingPhaseUpdateEvent;
+import com.patho.main.util.event.dialog.StainingPhaseUpdateEvent;
 import com.patho.main.util.task.TaskStatus;
 import lombok.AccessLevel;
 import lombok.Getter;

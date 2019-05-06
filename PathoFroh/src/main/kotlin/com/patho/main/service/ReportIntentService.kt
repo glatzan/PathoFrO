@@ -237,18 +237,18 @@ open class ReportIntentService @Autowired constructor(
      * Adds a diagnosisHistoryRecord to a notification
      */
     @Transactional
-    open fun addDiagnosisHistoryRecord(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Pair<Task, DiagnosisHistoryRecord> {
+    open fun addDiagnosisHistoryRecord(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Pair<ReportIntentNotification, DiagnosisHistoryRecord> {
         logger.debug("Adding history for diagnosis $diagnosisRevision")
 
         val result = DiagnosisHistoryRecord(diagnosisRevision)
         reportIntentNotification.history.add(result)
 
         if (save) {
-            var tmp = taskRepository.save(task, resourceBundle.get("log.reportIntent.notification.record.add", task, diagnosisRevision, reportIntentNotification.contact?.person), task!!.patient)
+            var tmp = reportIntentNotificationRepository.save(reportIntentNotification, resourceBundle.get("log.reportIntent.notification.record.add", task, diagnosisRevision, reportIntentNotification.contact?.person), task!!.patient)
             return Pair(tmp, result)
         }
 
-        return Pair(task, result)
+        return Pair(reportIntentNotification, result)
     }
 
     /**
@@ -364,7 +364,7 @@ open class ReportIntentService @Autowired constructor(
      * Adds a history record to a notification
      */
     @Transactional
-    open fun addHistoryEntry(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<Task, HistoryEntry> {
+    open fun addHistoryEntry(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, actionDate: Instant = Instant.now(), failed: Boolean = false, commentary: String = "", save: Boolean = true): Pair<ReportIntentNotification, HistoryEntry> {
         val reportData = HistoryEntry()
         reportData.commentary = commentary
         reportData.actionDate = actionDate
@@ -375,11 +375,11 @@ open class ReportIntentService @Autowired constructor(
                 ?: addDiagnosisHistoryRecord(task, reportIntentNotification, diagnosisRevision, false).second).data.add(reportData)
 
         if (save) {
-            var tmp = taskRepository.save(task, resourceBundle.get("log.reportIntent.notification.diagnosisRecord.record.add", task, reportIntentNotification.contact?.person), task!!.patient)
+            var tmp =  reportIntentNotificationRepository.save(reportIntentNotification, resourceBundle.get("log.reportIntent.notification.diagnosisRecord.record.add", task, reportIntentNotification.contact?.person), task!!.patient)
             return Pair(tmp, reportData)
         }
 
-        return Pair(task, reportData)
+        return Pair(reportIntentNotification, reportData)
     }
 
 

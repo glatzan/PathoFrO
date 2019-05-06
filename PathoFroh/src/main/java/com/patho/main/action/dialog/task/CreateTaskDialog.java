@@ -23,7 +23,7 @@ import com.patho.main.service.*;
 import com.patho.main.template.DocumentToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
-import com.patho.main.util.dialogReturn.PatientReturnEvent;
+import com.patho.main.util.event.dialog.PatientReloadEvent;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TaskUtil;
@@ -245,7 +245,7 @@ public class CreateTaskDialog extends AbstractDialog {
 
     public void createAndHide() {
         Task task = createNewTask();
-        hideDialog(new PatientReturnEvent(getPatient(), task));
+        hideDialog(new PatientReloadEvent(getPatient(), task, true));
     }
 
     public void createPrintAndHide() {
@@ -282,7 +282,7 @@ public class CreateTaskDialog extends AbstractDialog {
             }
         });
 
-        hideDialog(new PatientReturnEvent(getPatient(), task));
+        hideDialog(new PatientReloadEvent(getPatient(), task, true));
     }
 
     public void validateTaskID(FacesContext context, UIComponent componentToValidate, Object value)

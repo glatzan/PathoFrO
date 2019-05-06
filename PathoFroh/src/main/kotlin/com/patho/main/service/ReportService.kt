@@ -19,7 +19,6 @@ import java.io.FileNotFoundException
 import java.time.Instant
 import java.util.*
 import kotlin.collections.HashMap
-import kotlin.concurrent.timerTask
 
 @Service()
 open class ReportService @Autowired constructor(
@@ -112,7 +111,7 @@ open class ReportService @Autowired constructor(
         logger.debug("Sending mail to {}", container.contactAddress)
 
         if (!generatePrintPDf(execute, execute.mailReports, container)) {
-            reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.reportGenerationFailed"), save = false)
+            container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.reportGenerationFailed"), save = true).first
             return false
         }
 
@@ -124,12 +123,12 @@ open class ReportService @Autowired constructor(
 
         // checking mail validity
         if (!ReportAddressValidator.approveMailAddress(container.contactAddress)) {
-            reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.notValid", container.contactAddress), save = false)
+            container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.notValid", container.contactAddress), save = true).first
             return false
         }
 
         val success: Boolean = mailService.sendMail(container.contactAddress, container.mailTemplate)
-        reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.mail.sendSuccessful") else resourceBundle.get("report.feedback.mail.sendFailed"), save = false)
+        container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.mail.sendSuccessful") else resourceBundle.get("report.feedback.mail.sendFailed"), save = true).first
         return success
     }
 
@@ -148,7 +147,7 @@ open class ReportService @Autowired constructor(
         }
 
         if (!generatePrintPDf(execute, execute.faxReports, container)) {
-            execute.task = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.reportGenerationFailed")).first
+            container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.reportGenerationFailed"), save = true).first
             return false
         }
 
@@ -157,7 +156,7 @@ open class ReportService @Autowired constructor(
 
         // checking fax validity
         if (!ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
-            execute.task = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress)).first
+            container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress), save = true).first
             return false
         }
 
@@ -174,7 +173,7 @@ open class ReportService @Autowired constructor(
             faxService.sendFax(container.contactAddress, container.printPDFBearer?.pdfContainer)
         }
 
-        execute.task = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.fax.sendSuccessful") else resourceBundle.get("report.feedback.fax.sendFailed")).first
+        container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.fax.sendSuccessful") else resourceBundle.get("report.feedback.fax.sendFailed"), save = true).first
 
         return success
     }
@@ -187,14 +186,14 @@ open class ReportService @Autowired constructor(
         logger.debug("Printing report for person {}", container.notification.contact?.person?.getFullName())
 
         if (!generatePrintPDf(execute, execute.letterReports, container)) {
-            execute.task = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.print.reportGenerationFailed")).first
+            container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.print.reportGenerationFailed"), save = true).first
             return false
         }
 
 
         // checking address validity
         if (!ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
-            execute.task = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress)).first
+            container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress), save = true).first
             return false
         }
 
@@ -204,7 +203,7 @@ open class ReportService @Autowired constructor(
         // printing
         currentUserHandler.printer?.print(container.printPDFBearer, 1)
 
-        execute.task = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.print.printSuccessful") else resourceBundle.get("report.feedback.print.printFailed")).first
+        container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = !success, commentary = if (success) resourceBundle.get("report.feedback.print.printSuccessful") else resourceBundle.get("report.feedback.print.printFailed"), save = true).first
 
         return success
     }

@@ -846,7 +846,7 @@
                                 <i class="fa fa-fw fa-paint-brush"/>
                                 <p:ajax event="dialogReturn"
                                         update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                        listener="#{dialogReturnHandler.onStainingChangeReturn}"
+                                        listener="#{dialogReturnHandler.onStainingPhaseUpdateReturn}"
                                         oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane');"/>
                             </p:commandLink>
                         </h:panelGroup>
@@ -954,7 +954,7 @@
                              value="#{msg['body.statiningView.newSample']}"
                              actionListener="#{dialog.createSampleDialog.initAndPrepareBean(receiptLogView.task)}">
                 <p:ajax event="dialogReturn"
-                        listener="#{dialogReturnHandler.onStainingChangeReturn}"
+                        listener="#{dialogReturnHandler.onStainingPhaseUpdateReturn}"
                         oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                         update="navigationForm:patientList contentForm:contentPanel"/>
             </p:commandButton>

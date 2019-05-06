@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.patho.main.util.event.dialog.PatientMergeEvent;
+import com.patho.main.util.event.dialog.PatientReloadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PatientService;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.dialogReturn.PatientReturnEvent;
 import com.patho.main.util.event.HistoEvent;
 
 import lombok.AccessLevel;
@@ -96,8 +97,8 @@ public class MergePatientDialog extends AbstractDialog {
 	}
 
 	public void onReturnSelectSource(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof PatientReturnEvent) {
-			Patient patient = ((PatientReturnEvent) event.getObject()).getPatien();
+		if (event.getObject() != null && event.getObject() instanceof PatientReloadEvent) {
+			Patient patient = ((PatientReloadEvent) event.getObject()).getPatient();
 			// Reloading patient with tasks
 			setSource(patient.getId() != 0 ? patientRepository.findOptionalById(patient.getId(), true, false).get()
 					: patient);
@@ -107,8 +108,8 @@ public class MergePatientDialog extends AbstractDialog {
 	}
 
 	public void onReturnSelectTarget(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof PatientReturnEvent) {
-			Patient patient = ((PatientReturnEvent) event.getObject()).getPatien();
+		if (event.getObject() != null && event.getObject() instanceof PatientReloadEvent) {
+			Patient patient = ((PatientReloadEvent) event.getObject()).getPatient();
 			// Reloading patient with tasks
 			setTarget(patient.getId() != 0 ? patientRepository.findOptionalById(patient.getId(), true, false).get()
 					: patient);
@@ -163,13 +164,4 @@ public class MergePatientDialog extends AbstractDialog {
 			}
 		}
 	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class PatientMergeEvent extends HistoEvent {
-		private Patient source;
-		private Patient target;
-	}
-
 }

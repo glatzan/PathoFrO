@@ -15,6 +15,8 @@ import com.patho.main.service.PhysicianService
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.dialogReturn.ReloadEvent
+import com.patho.main.util.dialogReturn.ReloadTaskEvent
+import com.patho.main.util.event.dialog.PatientReloadEvent
 import com.patho.main.util.exception.DuplicatedReportIntentException
 import com.patho.main.util.status.ReportIntentStatusByReportIntentAndDiagnosis
 import com.patho.main.util.task.TaskNotFoundException
@@ -129,7 +131,7 @@ open class ContactDialog @Autowired constructor(
     }
 
     override fun hideDialog() {
-        super.hideDialog(ReloadEvent())
+        super.hideDialog(ReloadTaskEvent())
     }
 
     private fun addPhysician(physician: Physician, role: ContactRole) {

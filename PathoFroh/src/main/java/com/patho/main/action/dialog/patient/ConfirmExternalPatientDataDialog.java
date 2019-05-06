@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.patient;
 
+import com.patho.main.util.event.dialog.ExternalPatientSelectEvent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -34,13 +35,7 @@ public class ConfirmExternalPatientDataDialog extends AbstractDialog {
 	}
 
 	public void hideDialogAndSelectItem() {
-		super.hideDialog(new ConfirmExternalPatientReturnEvent(getPatient()));	
+		super.hideDialog(new ExternalPatientSelectEvent(getPatient()));
 	}
 	
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public class ConfirmExternalPatientReturnEvent implements DialogReturnEvent{
-		private Patient patient;
-	}
 }

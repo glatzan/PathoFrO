@@ -159,6 +159,9 @@ class NotificationDialog @Autowired constructor(
         super.onSubDialogReturn(event)
     }
 
+
+
+
     /**
      * Class for notification tabs
      */

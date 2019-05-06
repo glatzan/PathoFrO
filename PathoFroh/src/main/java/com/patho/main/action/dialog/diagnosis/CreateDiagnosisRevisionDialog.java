@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import com.patho.main.action.handler.WorkPhaseHandler;
+import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -18,7 +20,6 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.DiagnosisService;
-import com.patho.main.util.dialogReturn.DiagnosisPhaseUpdateEvent;
 import com.patho.main.util.helper.TaskUtil;
 
 import lombok.AccessLevel;
@@ -41,6 +42,11 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private TaskRepository taskRepository;
+
+	@Autowired
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private WorkPhaseHandler workPhaseHandler;
 
 	/**
 	 * Name of the new revision
@@ -82,10 +88,6 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 
 	/**
 	 * If rename is true no new diagnosis revision will be created
-	 * 
-	 * @param task
-	 * @param rename
-	 * @return
 	 */
 	public boolean initBean(Task task) {
 
@@ -159,8 +161,9 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 
 		task = diagnosisService.renameDiagnosisRevisions(task, getRevisionList());
 		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName, null);
+		task = workPhaseHandler.updateDiagnosisPhase(task);
 
-		super.hideDialog(new DiagnosisPhaseUpdateEvent(task));
+		super.hideDialog(new ReloadTaskEvent(task));
 	}
 
 	/**
