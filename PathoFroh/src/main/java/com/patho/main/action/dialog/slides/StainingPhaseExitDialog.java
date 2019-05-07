@@ -27,6 +27,26 @@ public class StainingPhaseExitDialog extends AbstractDialog {
     private StainingPhaseExitData data;
 
     /**
+     * If true the task will be removed from worklist
+     */
+    private boolean removeFromWorklist;
+
+    /**
+     * If true the task will be removed from staining list
+     */
+    private boolean removeFromStainingList;
+
+    /**
+     * If true the staining phase of the task will be finished
+     */
+    private boolean endStainingPhase;
+
+    /**
+     * If true the task will be shifted to the diagnosis phase
+     */
+    private boolean goToDiagnosisPhase;
+
+    /**
      * Initializes the bean and shows the dialog
      */
     public StainingPhaseExitDialog initAndPrepareBean(Task task) {
@@ -86,24 +106,6 @@ public class StainingPhaseExitDialog extends AbstractDialog {
          */
         private Task task;
 
-        /**
-         * If true the task will be removed from worklist
-         */
-        private boolean removeFromWorklist;
 
-        /**
-         * If true the task will be removed from staining list
-         */
-        private boolean removeFromStainingList;
-
-        /**
-         * If true the staining phase of the task will be finished
-         */
-        private boolean endStainingPhase;
-
-        /**
-         * If true the task will be shifted to the diagnosis phase
-         */
-        private boolean goToDiagnosisPhase;
     }
 }

@@ -10,7 +10,7 @@ import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.service.PatientService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.ListChooser;
-import com.patho.main.util.event.dialog.ExternalPatientSelectEvent;
+import com.patho.main.util.event.dialog.PatientSelectEvent;
 import com.patho.main.util.event.dialog.PatientReloadEvent;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
 import lombok.AccessLevel;
@@ -222,9 +222,9 @@ public class SearchPatientDialog extends AbstractTabDialog {
          * dialog
          */
         public void hideDialogAndSelectItem() {
-            SearchPatientDialog.this.hideDialog(new PatientReloadEvent(
+            SearchPatientDialog.this.hideDialog(new PatientSelectEvent(
                     persistPatient ? patientService.addPatient(getSelectedPatientListItem().getListItem(), false)
-                            : getSelectedPatientListItem().getListItem(), null, true));
+                            : getSelectedPatientListItem().getListItem()));
         }
 
         /**
@@ -278,11 +278,11 @@ public class SearchPatientDialog extends AbstractTabDialog {
          * @param event
          */
         public void onConfirmExternalPatientDialog(SelectEvent event) {
-            if (event.getObject() != null && event.getObject() instanceof ExternalPatientSelectEvent) {
-                SearchPatientDialog.this.hideDialog(new PatientReloadEvent(persistPatient
+            if (event.getObject() != null && event.getObject() instanceof PatientSelectEvent) {
+                SearchPatientDialog.this.hideDialog(new PatientSelectEvent(persistPatient
                         ? patientService
-                        .addPatient(((ExternalPatientSelectEvent) event.getObject()).getObj(), false)
-                        : ((ExternalPatientSelectEvent) event.getObject()).getObj(), null, true));
+                        .addPatient(((PatientSelectEvent) event.getObject()).getObj(), false)
+                        : ((PatientSelectEvent) event.getObject()).getObj()));
             }
         }
     }

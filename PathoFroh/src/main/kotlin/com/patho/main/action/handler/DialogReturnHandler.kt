@@ -7,15 +7,14 @@ import com.patho.main.model.patient.Task
 import com.patho.main.service.BlockService
 import com.patho.main.service.SampleService
 import com.patho.main.service.SlideService
+import com.patho.main.service.UserService
 import com.patho.main.util.dialogReturn.ReloadTaskEvent
-import com.patho.main.util.event.dialog.PatientMergeEvent
-import com.patho.main.util.event.dialog.PatientReloadEvent
-import com.patho.main.util.event.dialog.StainingPhaseUpdateEvent
-import com.patho.main.util.event.dialog.TaskEntityDeleteEvent
+import com.patho.main.util.event.dialog.*
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import com.patho.main.util.event.dialog.WorklistSelectEvent as WorklistSelectEvent
 
 @Component
 @Scope(value = "session")
@@ -24,7 +23,8 @@ open class DialogReturnHandler @Autowired constructor(
         private val workPhaseHandler: WorkPhaseHandler,
         private val slideService: SlideService,
         private val blockService: BlockService,
-        private val sampleService: SampleService) : AbstractHandler() {
+        private val sampleService: SampleService,
+        private val userService: UserService) : AbstractHandler() {
     override fun loadHandler() {
     }
 
@@ -114,6 +114,46 @@ open class DialogReturnHandler @Autowired constructor(
             if (task != null)
                 onStainingPhaseUpdateReturn(SelectEvent(event.component, event.behavior, StainingPhaseUpdateEvent(task)))
 
+            return
+        }
+        onDefaultReturn(event)
+    }
+
+    /**
+     * Return handler for UserSettingsDialog
+     */
+    open fun onUserSettingsReturn(event: SelectEvent) {
+        if (event.`object` is UserReloadEvent) {
+            logger.debug("User settings return event")
+            userService.reloadCurrentUser()
+            return
+        }
+        onDefaultReturn(event)
+    }
+
+    /**
+     * Return event handler for selecting new worklists
+     */
+    open fun onWorklistSelectReturn(event: SelectEvent) {
+        val obj = event.`object`
+        if (obj is WorklistSelectEvent) {
+            worklistHandler.addWorklist(obj.obj, true)
+            return
+        }
+        onDefaultReturn(event)
+    }
+
+    /**
+     * Event handler for adding a patient to the current worklist
+     */
+    open fun onSearchForPatientReturn(event: SelectEvent) {
+        val obj = event.`object`
+        if (obj is PatientSelectEvent) {
+            logger.debug("Patient select event")
+
+            obj.obj ?: logger.debug("No Patient selected"); return;
+
+            worklistHandler.addPatientToWorkList(obj.obj, true, true)
             return
         }
         onDefaultReturn(event)

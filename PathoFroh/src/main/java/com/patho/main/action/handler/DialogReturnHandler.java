@@ -50,22 +50,6 @@ public class DialogReturnHandler {
     private CentralHandler centralHandler;
 
     /**
-     * Patient add dialog return function
-     *
-     * @param event
-     */
-    public void onSearchForPatientReturn(SelectEvent event) {
-        if (event.getObject() != null && event.getObject() instanceof PatientReturnEvent) {
-            logger.debug("Patient was selected, adding to database and worklist");
-            Patient p = ((PatientReturnEvent) event.getObject()).getPatien();
-            // reload if patient is known to database, and may is associated with tasks
-            worklistHandler.addPatientToWorkList(p, true, true);
-        } else {
-            logger.debug("No Patient was selected");
-        }
-    }
-
-    /**
      * Dialog return function, reloads the selected task
      *
      * @param event
@@ -90,20 +74,6 @@ public class DialogReturnHandler {
                     worklistHandler.replaceTaskInWorklist();
             }
         }
-    }
-
-    /**
-     * Is called on return of a worklist selection via dialog
-     *
-     * @param event
-     */
-    public void onWorklistSelectReturn(SelectEvent event) {
-        if (event.getObject() != null && event.getObject() instanceof WorklistSearchReturnEvent) {
-            logger.debug("Setting new worklist");
-            worklistHandler.addWorklist(((WorklistSearchReturnEvent) event.getObject()).getWorklist(), true);
-            return;
-        }
-        onDefaultDialogReturn(event);
     }
 
 
@@ -134,16 +104,6 @@ public class DialogReturnHandler {
             worklistHandler.replaceTaskInWorklist();
             return;
         }
-        onDefaultDialogReturn(event);
-    }
-
-    public void onUserSettingsReturn(SelectEvent event) {
-        if (event.getObject() instanceof ReloadUserEvent) {
-            logger.debug("Updating user");
-            userService.reloadCurrentUser();
-            return;
-        }
-
         onDefaultDialogReturn(event);
     }
 

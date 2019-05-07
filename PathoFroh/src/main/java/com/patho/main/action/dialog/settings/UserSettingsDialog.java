@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.patho.main.service.UserService;
+import com.patho.main.util.event.dialog.UserReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -98,12 +99,12 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	public void saveAndHide() {
 		logger.debug("Saving user Settings");
 		save();
-		super.hideDialog(new ReloadUserEvent(getUser()));
+		super.hideDialog(new UserReloadEvent(getUser()));
 	}
 
 	public void hideDialog() {
 		logger.debug("Resetting user Settings");
-		super.hideDialog(new ReloadUserEvent());
+		super.hideDialog();
 	}
 
 	@Getter
@@ -190,14 +191,6 @@ public class UserSettingsDialog extends AbstractTabDialog {
 			logger.info("end -> " + (System.currentTimeMillis() - test));
 		}
 
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class ReloadUserEvent implements DialogReturnEvent {
-		private HistoUser user;
 	}
 
 }

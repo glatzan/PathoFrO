@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.patho.main.service.UserService;
+import com.patho.main.util.event.dialog.WorklistSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -104,7 +105,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		}
 
 		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistSearchReturnEvent(getWorklist()));
+			WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
 		}
 	}
 
@@ -151,7 +152,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		}
 
 		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistSearchReturnEvent(getWorklist()));
+			WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
 		}
 
 		public void setSelectedContainer(FavouriteListContainer selectedContainer) {
@@ -264,7 +265,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		}
 
 		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistSearchReturnEvent(getWorklist()));
+			WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
 		}
 
 		public void exportWorklist() {
@@ -291,12 +292,5 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		logger.debug("Calling extended search");
 
 		return null;
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public class WorklistSearchReturnEvent implements DialogReturnEvent {
-		private Worklist worklist;
 	}
 }
