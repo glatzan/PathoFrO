@@ -13,7 +13,7 @@
 
         <!-- left -->
         <h:panelGrid columns="3" styleClass="histoTable">
-            <h:outputLabel value="#{msg['header.view']}" styleClass="bigFont"></h:outputLabel>
+            <h:outputLabel value="#{msg['header.view']}" styleClass="bigFont" />
 
             <h:panelGroup>
                 <p:selectOneMenu title="#{msg['body.worklist.header.view']}"
@@ -24,7 +24,7 @@
                             var="page" itemLabel="#{msg['enum.pages.'.concat(page)]}"/>
 
                     <p:ajax event="change" process="@this"
-                            oncomplete="$('#headerForm\\:changeView').click();" />
+                            oncomplete="$('#headerForm\\:changeView').click();"/>
                 </p:selectOneMenu>
 
                 <p:commandButton id="changeView" styleClass="hiddenButton"
@@ -50,7 +50,7 @@
             <p:commandLink
                     value="#{msg['header.version']}: #{pathoConfig.versionContainer.currentVersion}"
                     styleClass="icon-grey"
-                    actionListener="#{dialog.programmVersionDialog.initAndPrepareBean()}" />
+                    actionListener="#{dialog.programmVersionDialog.initAndPrepareBean()}"/>
 
             <h:panelGroup>
                 <!-- button edit -->
@@ -223,7 +223,7 @@
             <p:commandButton id="diagnosisPhaseExit"
                              actionListener="#{dialog.diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                 <p:ajax event="dialogReturn"
-                        listener="#{dialogReturnHandler.onDiagnosisPhaseExitReutrn}"
+                        listener="#{dialogReturnHandler.onDiagnosisPhaseExitReturn}"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                         update="navigationForm:patientList contentForm headerForm"/>
             </p:commandButton>
@@ -265,8 +265,7 @@
                 <p:ajax event="dialogReturn"
                         listener="#{dialogReturnHandler.onDefaultDialogReturn}"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                        update="navigationForm:patientList contentForm headerForm"
-                        listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
+                        update="navigationForm:patientList contentForm headerForm"/>
             </p:commandButton>
 
             <!-- Notification exit -->

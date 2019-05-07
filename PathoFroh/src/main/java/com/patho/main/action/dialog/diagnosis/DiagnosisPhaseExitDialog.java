@@ -8,7 +8,7 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.DiagnosisService;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
+import com.patho.main.util.event.dialog.DiagnosisPhaseExitEvent;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.task.TaskStatus;
 import lombok.Getter;
@@ -21,8 +21,6 @@ import java.util.Set;
 @Setter
 @Getter
 public class DiagnosisPhaseExitDialog extends AbstractDialog {
-
-    private DiagnosisPhaseExitData data;
 
     /**
      * List of diagnosis revisions of the task
@@ -44,6 +42,32 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
      */
     private boolean removeFromDiagnosisListDisabled;
 
+    /**
+     * True if all revisions should be completed
+     */
+    private boolean allRevisions;
+
+    /**
+     * Diagnosis revision to notify about
+     */
+    private DiagnosisRevision selectedRevision;
+
+    /**
+     * If true the task will be removed from diagnosis list
+     */
+    private boolean removeFromDiagnosisList;
+
+    /**
+     * If true the task will be removed from worklist
+     */
+    private boolean removeFromWorklist;
+
+    /**
+     * true = Notifcation <br>
+     * false = No Notification
+     */
+    private boolean performNotification;
+
     public DiagnosisPhaseExitDialog initAndPrepareBean(Task task) {
         return initAndPrepareBean(task, null, true);
     }
@@ -60,10 +84,6 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
     }
 
     public boolean initBean(Task task, DiagnosisRevision selectedRevision, boolean autoselect) {
-
-        data = new DiagnosisPhaseExitData();
-
-        data.setTask(task);
 
         // shoud not happen
         if (task.getDiagnosisRevisions().size() == 0)
@@ -82,10 +102,10 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
         if (selectedRevision == null) {
             // sets the last element as select, but also sets all revisions to true
             selectedRevision = HistoUtil.getLastElement(task.getDiagnosisRevisions());
-            data.setAllRevisions(true);
+            setAllRevisions(true);
         }
 
-        data.setSelectedRevision(selectedRevision);
+        setSelectedRevision(selectedRevision);
 
         updateDate();
 
@@ -95,39 +115,39 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
     public void updateDate() {
         logger.debug("Updating data");
 
-        int countDiagnosesToApprove = DiagnosisService.countRevisionToApprove(data.getTask());
+        int countDiagnosesToApprove = DiagnosisService.countRevisionToApprove(getTask());
 
-        if (data.isAllRevisions()) {
-            data.setNotification(countDiagnosesToApprove != 0);
-            data.setRemoveFromDiangosisList(true);
-            data.setRemoveFromWorklist(true);
+        if (isAllRevisions()) {
+            setPerformNotification(countDiagnosesToApprove != 0);
+            setRemoveFromDiagnosisList(true);
+            setRemoveFromWorklist(true);
             setRemoveFromDiagnosisListDisabled(false);
             setReApproveDiagnosis(false);
         } else {
 
             // last diagnoses
-            if (!data.selectedRevision.getCompleted() && countDiagnosesToApprove == 1) {
+            if (!selectedRevision.getCompleted() && countDiagnosesToApprove == 1) {
                 // only notify if not a council diagnoses
-                data.setNotification(data.selectedRevision.getType() != DiagnosisRevisionType.DIAGNOSIS_COUNCIL);
-                data.setRemoveFromDiangosisList(true);
-                data.setRemoveFromWorklist(true);
+                setPerformNotification(selectedRevision.getType() != DiagnosisRevisionType.DIAGNOSIS_COUNCIL);
+                setRemoveFromDiagnosisList(true);
+                setRemoveFromWorklist(true);
                 setReApproveDiagnosis(false);
                 setRemoveFromDiagnosisListDisabled(false);
                 // there are other diagnoses to approve
             } else if (countDiagnosesToApprove > 1) {
                 // only notify if not a council diagnoses
-                data.setNotification(data.selectedRevision.getType() != DiagnosisRevisionType.DIAGNOSIS_COUNCIL);
-                data.setRemoveFromDiangosisList(false);
-                data.setRemoveFromWorklist(false);
+                setPerformNotification(selectedRevision.getType() != DiagnosisRevisionType.DIAGNOSIS_COUNCIL);
+                setRemoveFromDiagnosisList(false);
+                setRemoveFromWorklist(false);
                 // reapprove if not approved jet
-                setReApproveDiagnosis(data.selectedRevision.getCompleted());
+                setReApproveDiagnosis(selectedRevision.getCompleted());
                 setRemoveFromDiagnosisListDisabled(true);
                 // only in list with all diangoses approved
             } else if (countDiagnosesToApprove == 0) {
-                data.setNotification(true);
-                data.setRemoveFromDiangosisList(TaskStatus.hasFavouriteLists(data.getTask(), PredefinedFavouriteList.DiagnosisList));
-                data.setRemoveFromWorklist(true);
-                data.setAllRevisions(false);
+                setPerformNotification(true);
+                setRemoveFromDiagnosisList(TaskStatus.hasFavouriteLists(getTask(), PredefinedFavouriteList.DiagnosisList));
+                setRemoveFromWorklist(true);
+                setAllRevisions(false);
                 setRemoveFromDiagnosisListDisabled(false);
                 setReApproveDiagnosis(true);
             }
@@ -136,43 +156,14 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
     }
 
     public void exitPhaseAndClose() {
-        hideDialog(data);
-    }
-
-    @Getter
-    @Setter
-    public static class DiagnosisPhaseExitData implements DialogReturnEvent {
-
-        /**
-         * Current Task
-         */
-        private Task task;
-
-        /**
-         * True if all revisions should be completed
-         */
-        private boolean allRevisions;
-
-        /**
-         * Diagnosis revision to notify about
-         */
-        private DiagnosisRevision selectedRevision;
-
-        /**
-         * If true the task will be removed from diagnosis list
-         */
-        private boolean removeFromDiangosisList;
-
-        /**
-         * If true the task will be removed from worklist
-         */
-        private boolean removeFromWorklist;
-
-        /**
-         * true = Notifcation <br>
-         * false = No Notification
-         */
-        private boolean notification;
+        if (allRevisions)
+            hideDialog(new DiagnosisPhaseExitEvent(task, null, removeFromDiagnosisList, removeFromWorklist, performNotification));
+        else if (selectedRevision != null)
+            hideDialog(new DiagnosisPhaseExitEvent(task, selectedRevision, removeFromDiagnosisList, removeFromWorklist, performNotification));
+        else {
+            //TODO Error
+            hideDialog();
+        }
 
     }
 }

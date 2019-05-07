@@ -768,7 +768,7 @@
                                          actionListener="#{dialog.diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, revision)}">
                             <p:ajax event="dialogReturn"
                                     oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"
-                                    listener="#{dialogReturnHandler.onDiagnosisPhaseExitReutrn}"
+                                    listener="#{dialogReturnHandler.onDiagnosisPhaseExitReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandButton>
 

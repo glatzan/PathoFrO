@@ -1,6 +1,8 @@
 package com.patho.main.util.event.dialog
 
+import com.patho.main.model.PDFContainer
 import com.patho.main.model.interfaces.ID
+import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.model.user.HistoUser
@@ -27,6 +29,11 @@ class TaskEntityDeleteEvent(entity: ID) : SelectEvent<ID>(entity)
  * Event for selecting a new worklist
  */
 class WorklistSelectEvent(worklist: Worklist) : SelectEvent<Worklist>(worklist)
+
+/**
+ * Event for selecting pdfs
+ */
+class PDFSelectEvent(pdf: PDFContainer) : SelectEvent<PDFContainer>(pdf)
 
 /**
  * Reload event
@@ -62,3 +69,8 @@ class UserReloadEvent(val user: HistoUser) : ReloadEvent()
  * Return event for the StaininPhaseExitDialog
  */
 class StainingPhaseExitEvent(val task: Task, val removeFromWorklist: Boolean = false, val removeFromStainingList: Boolean, val endStainingPhase: Boolean, val gotToDiagnosisPhase: Boolean)
+
+/**
+ * Return event for the DiagnosisPhaseExitDialog
+ */
+class DiagnosisPhaseExitEvent(val task: Task, val revision: DiagnosisRevision?, val removeFromDiagnosisList: Boolean, val removeFromWorklist: Boolean, val performNotification: Boolean)

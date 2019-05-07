@@ -14,7 +14,6 @@ import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import com.patho.main.util.event.dialog.WorklistSelectEvent as WorklistSelectEvent
 
 @Component
 @Scope(value = "session")
@@ -154,6 +153,34 @@ open class DialogReturnHandler @Autowired constructor(
             obj.obj ?: logger.debug("No Patient selected"); return;
 
             worklistHandler.addPatientToWorkList(obj.obj, true, true)
+            return
+        }
+        onDefaultReturn(event)
+    }
+
+    /**
+     * Event handler for StaininPhaseExitDialog
+     */
+    open fun onStainingPhaseExitReturn(event: SelectEvent) {
+        val obj = event.`object`
+        if (obj is StainingPhaseExitEvent) {
+            logger.debug("Staining phase exit event")
+            workPhaseHandler.endStainingPhase(obj.task, obj.endStainingPhase, obj.removeFromStainingList, obj.gotToDiagnosisPhase, obj.removeFromWorklist)
+            worklistHandler.replaceTaskInWorklist()
+            return
+        }
+        onDefaultReturn(event)
+    }
+
+    /**
+     * Event handler for DiagnosisPhaseExitDialog
+     */
+    open fun onDiagnosisPhaseExitReturn(event: SelectEvent) {
+        val obj = event.`object`
+        if(obj is DiagnosisPhaseExitEvent){
+            logger.debug("Diagnosis phase exit event")
+            workPhaseHandler.endDiagnosisPhase(obj.task,obj.revision,obj.removeFromDiagnosisList,obj.performNotification,obj.removeFromWorklist)
+            worklistHandler.replaceTaskInWorklist()
             return
         }
         onDefaultReturn(event)

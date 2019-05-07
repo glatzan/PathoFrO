@@ -6,7 +6,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.FavouriteListService;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
+import com.patho.main.util.event.dialog.StainingPhaseExitEvent;
 import com.patho.main.util.task.TaskStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,8 +23,6 @@ public class StainingPhaseExitDialog extends AbstractDialog {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private FavouriteListService favouriteListService;
-
-    private StainingPhaseExitData data;
 
     /**
      * If true the task will be removed from worklist
@@ -61,31 +59,25 @@ public class StainingPhaseExitDialog extends AbstractDialog {
 
     /**
      * Initializes all field of the object
-     *
-     * @param task
      */
     public boolean initBean(Task task, boolean autoCompleteStainings) {
 
-        data = new StainingPhaseExitData();
-
-        data.setTask(task);
-
         if (TaskStatus.hasFavouriteLists(task, PredefinedFavouriteList.NotificationList))
-            data.goToDiagnosisPhase = false;
+            goToDiagnosisPhase = false;
         else
-            data.goToDiagnosisPhase = true;
+            goToDiagnosisPhase = true;
 
         // all slides will be marked as completed by endStainingphase methode
         if (autoCompleteStainings) {
-            data.setRemoveFromStainingList(true);
-            data.setRemoveFromWorklist(true);
-            data.setEndStainingPhase(true);
+            setRemoveFromStainingList(true);
+            setRemoveFromWorklist(true);
+            setEndStainingPhase(true);
         } else {
             boolean stainingCompleted = TaskStatus.checkIfStainingCompleted(task);
 
-            data.setRemoveFromStainingList(stainingCompleted);
-            data.setRemoveFromWorklist(stainingCompleted);
-            data.setEndStainingPhase(stainingCompleted);
+            setRemoveFromStainingList(stainingCompleted);
+            setRemoveFromWorklist(stainingCompleted);
+            setEndStainingPhase(stainingCompleted);
         }
 
         //data.setGoToDiagnosisPhase(true);
@@ -94,18 +86,7 @@ public class StainingPhaseExitDialog extends AbstractDialog {
     }
 
     public void exitPhaseAndClose() {
-        hideDialog(data);
+        super.hideDialog(new StainingPhaseExitEvent(task, removeFromWorklist, removeFromStainingList, endStainingPhase, goToDiagnosisPhase));
     }
 
-    @Getter
-    @Setter
-    public static class StainingPhaseExitData implements DialogReturnEvent {
-
-        /**
-         * Current Task
-         */
-        private Task task;
-
-
-    }
 }

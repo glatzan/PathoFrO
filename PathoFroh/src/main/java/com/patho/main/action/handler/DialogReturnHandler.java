@@ -76,35 +76,4 @@ public class DialogReturnHandler {
         }
     }
 
-
-    public void onStatingPhaseExitReturn(SelectEvent event) {
-        if (event.getObject() instanceof StainingPhaseExitData) {
-            logger.debug("Staining phase exit dialog return");
-            StainingPhaseExitData data = (StainingPhaseExitData) event.getObject();
-
-            workPhaseHandler.endStainingPhase(data.getTask(), data.isEndStainingPhase(),
-                    data.isRemoveFromStainingList(), data.isGoToDiagnosisPhase(), data.isRemoveFromWorklist());
-
-            worklistHandler.replaceTaskInWorklist();
-
-            return;
-        }
-        onDefaultDialogReturn(event);
-    }
-
-    public void onDiagnosisPhaseExitReutrn(SelectEvent event) {
-        if (event.getObject() instanceof DiagnosisPhaseExitData) {
-            logger.debug("Diagnosis phase exit dialog return");
-
-            DiagnosisPhaseExitData data = (DiagnosisPhaseExitData) event.getObject();
-            workPhaseHandler.endDiagnosisPhase(data.getTask(),
-                    data.isAllRevisions() ? null : data.getSelectedRevision(), data.isRemoveFromDiangosisList(),
-                    data.isNotification(), data.isRemoveFromWorklist());
-
-            worklistHandler.replaceTaskInWorklist();
-            return;
-        }
-        onDefaultDialogReturn(event);
-    }
-
 }

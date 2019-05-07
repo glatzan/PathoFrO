@@ -11,6 +11,8 @@ import com.patho.main.model.patient.miscellaneous.BioBank;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.dialogReturn.ReloadTaskEvent;
+import com.patho.main.util.event.dialog.PDFSelectEvent;
+import com.patho.main.util.event.dialog.PatientReloadEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
@@ -353,7 +355,7 @@ public class PDFOrganizer extends AbstractDialog {
 	 */
 	@Override
 	public void hideDialog() {
-		super.hideDialog(new ReloadTaskEvent());
+		super.hideDialog(new PatientReloadEvent(task.getPatient(),null,false));
 	}
 
 	/**
@@ -361,18 +363,5 @@ public class PDFOrganizer extends AbstractDialog {
 	 */
 	public void selectAndHide() {
 		super.hideDialog(new PDFSelectEvent(getStreamContainer().getDisplayPDF()));
-	}
-
-	/**
-	 * Return object for selection mode
-	 * 
-	 * @author andi
-	 *
-	 */
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class PDFSelectEvent implements DialogReturnEvent {
-		private PDFContainer container;
 	}
 }

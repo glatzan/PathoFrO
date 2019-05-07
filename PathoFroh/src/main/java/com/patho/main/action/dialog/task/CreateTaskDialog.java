@@ -1,7 +1,6 @@
 package com.patho.main.action.dialog.task;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.media.PDFOrganizer.PDFSelectEvent;
 import com.patho.main.action.dialog.task.CreateTaskDialog.TaskTempData.SampleTempData;
 import com.patho.main.action.handler.CurrentUserHandler;
 import com.patho.main.action.handler.MessageHandler;
@@ -23,6 +22,7 @@ import com.patho.main.service.*;
 import com.patho.main.template.DocumentToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
+import com.patho.main.util.event.dialog.PDFSelectEvent;
 import com.patho.main.util.event.dialog.PatientReloadEvent;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
 import com.patho.main.util.helper.HistoUtil;
@@ -399,7 +399,7 @@ public class CreateTaskDialog extends AbstractDialog {
 
             public void onMediaSelectReturn(SelectEvent event) {
                 if (event.getObject() != null && event.getObject() instanceof PDFSelectEvent) {
-                    setContainer(((PDFSelectEvent) event.getObject()).getContainer());
+                    setContainer(((PDFSelectEvent) event.getObject()).getObj());
                     setInformedConsentType(InformedConsentType.FULL);
                 } else {
                     setInformedConsentType(InformedConsentType.NONE);

@@ -40,7 +40,7 @@
 				style="margin-left:10px;margin-top:10px;">
 				<!-- notify -->
 				<p:selectBooleanCheckbox
-					value="#{dialog.stainingPhaseExitDialog.data.goToDiagnosisPhase}">
+					value="#{dialog.stainingPhaseExitDialog.goToDiagnosisPhase}">
 					<p:ajax event="change" update="@form" process="@form" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
@@ -48,7 +48,7 @@
 
 				<!-- remove from staining list -->
 				<p:selectBooleanCheckbox
-					value="#{dialog.stainingPhaseExitDialog.data.removeFromStainingList}">
+					value="#{dialog.stainingPhaseExitDialog.removeFromStainingList}">
 					<p:ajax update="@form" process="@form" event="change" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
@@ -56,13 +56,13 @@
 
 				<!-- end phase -->
 				<p:selectBooleanCheckbox
-					value="#{dialog.stainingPhaseExitDialog.data.endStainingPhase}" />
+					value="#{dialog.stainingPhaseExitDialog.endStainingPhase}" />
 				<h:outputLabel
 					value="#{msg['dialog.staingingPhaseExit.checkBox.endStaining']}" />
 
 				<!-- remove from worklist -->
 				<p:selectBooleanCheckbox
-					value="#{dialog.stainingPhaseExitDialog.data.removeFromWorklist}" />
+					value="#{dialog.stainingPhaseExitDialog.removeFromWorklist}" />
 				<h:outputLabel
 					value="#{msg['dialog.staingingPhaseExit.checkBox.removeFromWorklist']}" />
 			</h:panelGrid>
