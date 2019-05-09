@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.info.info.headline']}"/>
+    </p:outputPanel>
+
+    <p:outputPanel styleClass="bodyPannel">
+        <h:panelGrid styleClass="defaultHistoTable" columns="2">
+            <ul>
+                <li>Benachrichtigung (strg + b)</li>
+                <li>Patient suchen (strg + s)</li>
+                <li>PDFs Verwalten (strg+ u)</li>
+                <li>Patienten zusamenführen (strg+ m)</li>
+                <li>Patienten bearbeiten (strg + e)</li>
+            </ul>
+            <ul>
+                <li>Patientenansicht (alt + o)</li>
+                <li>Auftrag erstellen (alt + t)</li>
+                <li>Probe erstellen (alt + s)</li>
+                <li>Färbung erstellen (alt + f)</li>
+            </ul>
+        </h:panelGrid>
+    </p:outputPanel>
+
+    <div class="buttonContainer">
+        <h:panelGrid columns="2" style="width:100%"
+                     styleClass="newTableContainer">
+
+            <h:panelGrid columns="1" styleClass="newTableContainer left">
+            </h:panelGrid>
+
+            <h:panelGrid columns="1" styleClass="newTableContainer right">
+                <!-- close -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 icon="fa fa-times-circle"
+                                 actionListener="#{dialog.programmVersionDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
+
+
+</ui:composition>

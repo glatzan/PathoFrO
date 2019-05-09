@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.patient;
 
+import com.patho.main.util.event.dialog.PatientDeleteEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -48,12 +49,5 @@ public class DeletePatientDialog extends AbstractDialog {
 		if (event.getObject() != null && event.getObject() instanceof ConfirmEvent) {
 			deleteAndHide();
 		}
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class PatientDeleteEvent implements DialogReturnEvent {
-		private Patient patient;
 	}
 }

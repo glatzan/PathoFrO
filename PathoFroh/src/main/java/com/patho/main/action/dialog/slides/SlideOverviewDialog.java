@@ -157,9 +157,6 @@ public class SlideOverviewDialog extends AbstractDialog {
 
 	/**
 	 * Saves task changes
-	 * 
-	 * @param resourcesKey
-	 * @param arr
 	 */
 	public void save(String resourcesKey, Object... arr) {
 		logger.debug("Saving task " + getTask().getTaskID());

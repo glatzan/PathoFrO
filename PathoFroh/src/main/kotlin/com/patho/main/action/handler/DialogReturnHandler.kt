@@ -204,4 +204,16 @@ open class DialogReturnHandler @Autowired constructor(
         }
         onDefaultReturn(event)
     }
+
+    /**
+     * Event handler for Patient delete dialog
+     */
+    open fun onPatientDeleteReturn(event: SelectEvent) {
+        val obj = event.`object`
+        if (obj is PatientDeleteEvent) {
+            // TODO implement logic
+            return
+        }
+        onDefaultReturn(event)
+    }
 }

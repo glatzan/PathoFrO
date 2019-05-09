@@ -26,6 +26,11 @@ class PatientSelectEvent(patient: Patient) : SelectEvent<Patient>(patient)
 class TaskEntityDeleteEvent(entity: ID) : SelectEvent<ID>(entity)
 
 /**
+ * Patient delete event
+ */
+class PatientDeleteEvent(patient: Patient) : SelectEvent<Patient>(patient)
+
+/**
  * Event for selecting a new worklist
  */
 class WorklistSelectEvent(worklist: Worklist) : SelectEvent<Worklist>(worklist)
