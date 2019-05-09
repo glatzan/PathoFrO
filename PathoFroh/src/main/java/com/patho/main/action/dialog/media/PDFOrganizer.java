@@ -355,7 +355,7 @@ public class PDFOrganizer extends AbstractDialog {
 	 */
 	@Override
 	public void hideDialog() {
-		super.hideDialog(new PatientReloadEvent(task.getPatient(),null,false));
+		super.hideDialog(new PatientReloadEvent(patient,null,false));
 	}
 
 	/**

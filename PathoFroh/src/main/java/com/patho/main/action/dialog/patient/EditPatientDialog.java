@@ -49,5 +49,6 @@ public class EditPatientDialog extends AbstractDialog {
 	 * @param event
 	 */
 	public void onMergeReturn(SelectEvent event) {
+		// TODO Handle event
 	}
 }

@@ -63,7 +63,7 @@ class StainingPhaseUpdateEvent(val task: Task) : ReloadEvent()
 /**
  * Event on user data change
  */
-class UserReloadEvent(val user: HistoUser) : ReloadEvent()
+class UserReloadEvent(val user: HistoUser? = null) : ReloadEvent()
 
 /**
  * Return event for the StaininPhaseExitDialog

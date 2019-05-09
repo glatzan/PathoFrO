@@ -23,7 +23,8 @@ open class DialogReturnHandler @Autowired constructor(
         private val slideService: SlideService,
         private val blockService: BlockService,
         private val sampleService: SampleService,
-        private val userService: UserService) : AbstractHandler() {
+        private val userService: UserService,
+        private val centralHandler: CentralHandler) : AbstractHandler() {
     override fun loadHandler() {
     }
 
@@ -40,10 +41,28 @@ open class DialogReturnHandler @Autowired constructor(
             //TODO Test SearchPatientDialog
             is PatientReloadEvent -> {
                 logger.debug("Patient reload event")
-                if (obj.task != null) {
-                    worklistHandler.addTaskToWorklist(obj.task, obj.select)
+
+                if (obj.select) {
+                    if (obj.task != null)
+                        centralHandler.onSelectTaskAndPatient(obj.task)
+                    else if (obj.patient != null)
+                        centralHandler.onSelectPatient(obj.patient)
+                    else
+                        centralHandler.onSelectPatient(worklistHandler.current.selectedPatient)
                 } else {
-                    worklistHandler.addPatientToWorkList(obj.patient, obj.select)
+                    if (obj.task != null)
+                        worklistHandler.replaceTaskInWorklist(obj.task)
+                    else if (obj.patient != null) {
+                        if (worklistHandler.isSelected(obj.patient.tasks))
+                            worklistHandler.replaceTaskInWorklist()
+                        else
+                            worklistHandler.replacePatientInWorklist(obj.patient)
+                    } else {
+                        if (worklistHandler.selectedTask != null)
+                            worklistHandler.replaceTaskInWorklist()
+                        else
+                            worklistHandler.replacePatientInWorklist()
+                    }
                 }
             }
             // Task reload event, optional replacing task
@@ -177,9 +196,9 @@ open class DialogReturnHandler @Autowired constructor(
      */
     open fun onDiagnosisPhaseExitReturn(event: SelectEvent) {
         val obj = event.`object`
-        if(obj is DiagnosisPhaseExitEvent){
+        if (obj is DiagnosisPhaseExitEvent) {
             logger.debug("Diagnosis phase exit event")
-            workPhaseHandler.endDiagnosisPhase(obj.task,obj.revision,obj.removeFromDiagnosisList,obj.performNotification,obj.removeFromWorklist)
+            workPhaseHandler.endDiagnosisPhase(obj.task, obj.revision, obj.removeFromDiagnosisList, obj.performNotification, obj.removeFromWorklist)
             worklistHandler.replaceTaskInWorklist()
             return
         }

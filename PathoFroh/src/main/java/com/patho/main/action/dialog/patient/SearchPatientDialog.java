@@ -265,7 +265,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
         public boolean initTab() {
             setDisabled(!userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN));
             setPatient(new Patient(new Person(new Contact())));
-            getPatient().getPerson().setGender(null);
+            getPatient().getPerson().setGender(Person.Gender.UNKNOWN);
             return true;
         }
 

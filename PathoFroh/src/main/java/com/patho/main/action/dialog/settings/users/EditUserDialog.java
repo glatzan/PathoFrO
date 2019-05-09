@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.patho.main.util.event.dialog.UserReloadEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractTabDialog;
-import com.patho.main.action.dialog.settings.UserSettingsDialog.ReloadUserEvent;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
 import com.patho.main.action.dialog.settings.users.ConfirmUserDeleteDialog.ConfirmUserDeleteEvent;
@@ -280,7 +280,7 @@ public class EditUserDialog extends AbstractTabDialog {
 	public void saveAndHide() {
 		logger.debug("Saving user Settings");
 		saveUser();
-		super.hideDialog(new ReloadUserEvent(getUser()));
+		super.hideDialog(new UserReloadEvent(getUser()));
 	}
 
 	/**
@@ -316,7 +316,7 @@ public class EditUserDialog extends AbstractTabDialog {
 			else
 				MessageHandler.sendGrowlMessagesAsResource("growl.user.archive");
 
-			hideDialog(new ReloadUserEvent());
+			hideDialog(new UserReloadEvent());
 		}
 	}
 

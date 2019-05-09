@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.patho.main.util.event.dialog.StainingPhaseExitEvent;
+import com.patho.main.util.event.dialog.TaskEntityDeleteEvent;
 import com.patho.main.util.task.TaskStatus;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.miscellaneous.DeleteDialog.DeleteEvent;
-import com.patho.main.action.dialog.slides.StainingPhaseExitDialog.StainingPhaseExitData;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.ListItem;
@@ -124,13 +124,13 @@ public class SlideOverviewDialog extends AbstractDialog {
 				
 				return;
 				// return of slide dialog 
-			} else if (event.getObject() instanceof DeleteEvent) {
+			} else if (event.getObject() instanceof TaskEntityDeleteEvent) {
 
-				DeleteEvent deleteEvent = (DeleteEvent) event.getObject();
+				TaskEntityDeleteEvent deleteEvent = (TaskEntityDeleteEvent) event.getObject();
 
 				logger.debug("Deleteing task entity object");
 
-				Task t = slideService.deleteSlideAndPersist((Slide) deleteEvent.getObject());
+				Task t = slideService.deleteSlideAndPersist((Slide) deleteEvent.getObj());
 
 				onDefaultDialogReturn(
 						new SelectEvent(event.getComponent(), event.getBehavior(), new StainingPhaseUpdateEvent(t)));
@@ -139,7 +139,7 @@ public class SlideOverviewDialog extends AbstractDialog {
 			} else if (event.getObject() instanceof ReloadTaskEvent) {
 				updateData();
 				// end staingphase confirmed, close dilaog and forward
-			} else if (event.getObject() instanceof StainingPhaseExitData) {
+			} else if (event.getObject() instanceof StainingPhaseExitEvent) {
 				logger.debug("Staining phase exit dialog return, forwarding to globalEditViewHandler");
 				hideDialog(event.getObject());
 				// unknown event, close dialog and reload

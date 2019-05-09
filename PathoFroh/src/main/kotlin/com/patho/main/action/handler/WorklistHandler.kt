@@ -65,6 +65,13 @@ open class WorklistHandler @Autowired @Lazy constructor(
     }
 
     /**
+     * Returns true if one of given task is selected
+     */
+    open fun isSelected(tasks: Set<Task>): Boolean {
+        return current.isSelected(tasks)
+    }
+
+    /**
      * Returns true if the worklist is the active worklist
      */
     open fun isSelected(worklist: Worklist): Boolean {
@@ -238,6 +245,14 @@ open class WorklistHandler @Autowired @Lazy constructor(
             centralHandler.goToNavigation()
         } else
             current.remove(patient)
+    }
+
+
+    /**
+     * Replaces the given patient within the worklist
+     */
+    open fun replacePatientInWorklist() {
+        replacePatientInWorklist(current.selectedPatient, true)
     }
 
     /**
