@@ -68,6 +68,16 @@ open class CentralHandler @Autowired constructor(
 
     }
 
+    /**
+     * Reloads all data for the user
+     */
+    open fun reloadAllData() {
+        logger.debug("Force Reload of all data")
+        genericViewData.loadView()
+        navigationData.updateData()
+        worklistHandler.current.updateWorklist(true)
+    }
+
     open fun goToNavigation() {
         goToNavigation(navigationData.currentView)
     }

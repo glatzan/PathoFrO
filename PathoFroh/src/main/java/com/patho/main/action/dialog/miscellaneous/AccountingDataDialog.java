@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.miscellaneous;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class AccountingDataDialog extends AbstractDialog {
 	@Setter(AccessLevel.NONE)
 	private AccountingDataRepository accountingDataRepository;
 
-	private Date fromDate;
-	private Date toDate;
+	private LocalDate fromDate;
+	private LocalDate toDate;
 
 	private List<AccountingData> accountingData;
 

@@ -33,9 +33,9 @@
 
 		<div class="dialogContent">
 			<h:panelGrid columns="6" styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.accounting.date.from']}"></h:outputLabel>
+				<h:outputLabel value="#{msg['dialog.accounting.date.from']}" />
 				<p:calendar value="#{dialog.accountingDataDialog.fromDate}"
-					autocomplete="off" locale="de" navigator="true"
+					autocomplete="off" locale="de" navigator="true" converter="localDateConverter"
 					pattern="dd.MM.yyyy">
 					<p:ajax event="dateSelect"
 						update="dialogContent:accountingTable dialogContent:leftBtn"
@@ -46,9 +46,9 @@
 						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
 				</p:calendar>
 
-				<h:outputLabel value="#{msg['dialog.accounting.date.to']}"></h:outputLabel>
+				<h:outputLabel value="#{msg['dialog.accounting.date.to']}" />
 				<p:calendar value="#{dialog.accountingDataDialog.toDate}"
-					autocomplete="off" locale="de" navigator="true"
+					autocomplete="off" locale="de" navigator="true" converter="localDateConverter"
 					pattern="dd.MM.yyyy">
 					<p:ajax event="dateSelect"
 						update="dialogContent:accountingTable dialogContent:leftBtn"
@@ -59,7 +59,7 @@
 						listener="#{dialog.accountingDataDialog.loadAccountingDate()}" />
 				</p:calendar>
 
-				<h:outputLabel value="Erweiterte Daten"></h:outputLabel>
+				<h:outputLabel value="Erweiterte Daten" />
 				<p:selectBooleanCheckbox
 					value="#{dialog.accountingDataDialog.advancedData}">
 					<p:ajax event="change" update="@form">
@@ -75,7 +75,7 @@
 					value="#{dialog.accountingDataDialog.accountingData}">
 					<p:column headerText="#{msg['dialog.accounting.table.date']}">
 						<h:outputText value="#{accountingData.date}">
-							<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+							<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" />
 						</h:outputText>
 					</p:column>
 

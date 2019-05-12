@@ -85,6 +85,8 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
 
     public boolean initBean(Task task, DiagnosisRevision selectedRevision, boolean autoselect) {
 
+        setTask(task);
+
         // shoud not happen
         if (task.getDiagnosisRevisions().size() == 0)
             return false;

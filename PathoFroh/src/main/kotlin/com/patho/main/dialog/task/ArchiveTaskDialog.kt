@@ -6,19 +6,22 @@ import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
 import com.patho.main.service.TaskService
 import com.patho.main.util.task.AdvancedTaskStatus
+import com.patho.main.util.task.ArchiveTaskStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
 @Component()
 @Scope(value = "session")
-class ArchiveTaskDialog : AbstractTaskDialog(Dialog.TASK_ARCHIVE) {
+open class ArchiveTaskDialog @Autowired constructor(
+        private val taskService: TaskService,
+        private val serviceSettings: ServiceSettings) : AbstractTaskDialog(Dialog.TASK_ARCHIVE) {
 
-    @Autowired
-    lateinit var taskService: TaskService
 
     @Autowired
     lateinit var serviceSettings: ServiceSettings
+
+    open lateinit var status: ArchiveTaskStatus
 
     var taskStatus: AdvancedTaskStatus? = null
 

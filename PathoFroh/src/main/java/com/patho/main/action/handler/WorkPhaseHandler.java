@@ -62,7 +62,7 @@ public class WorkPhaseHandler{
 
 	public void startStainingPhase(Task task) {
 		workPhaseService.startStainingPhase(task);
-		worklistHandler.replaceTaskInWorklist();
+		worklistHandler.replaceTaskInWorklist(task);
 	}
 
 	public Task endStainingPhase(Task task, boolean endPhase, boolean removeFromList, boolean startDiagnosisPhase,

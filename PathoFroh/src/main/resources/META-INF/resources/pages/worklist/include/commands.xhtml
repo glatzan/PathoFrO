@@ -1,7 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
 
@@ -12,17 +11,88 @@
     <!-- mergePatientData -> merge patient : ctrl + m-->
 
     <script>
-        $(document).off('keydown').on('keydown', function () {
-            console.debug(event.keyCode)
-            console.debug(event.ctrlKey)
-            if (event.ctrlKey &amp;&amp; event.keyCode == "b".charCodeAt(0)) {
-                PF('notificationPerformBtn').jq.click();
-                return false;
+        $(document.body).off('keydown').on('keydown', function () {
+            if (event.ctrlKey &amp;&amp; event.altKey) {
+                switch (event.keyCode) {
+                    case 'S'.charCodeAt(0): // settingsDialogBtn -> Settings
+                        PF('settingsDialogBtn').jq.click();
+                        return false;
+                    case 'A'.charCodeAt(0): // accountingDialogBtn -> Accounting
+                        PF('accountingDialogBtn').jq.click();
+                        return false;
+                    case 'U'.charCodeAt(0): // userSettingsDialogBtn
+                        PF('userSettingsDialogBtn').jq.click();
+                        return false;
+                    case 'I'.charCodeAt(0): // infoDialogBtn
+                        PF('infoDialogBtn').jq.click();
+                        return false;
+                }
+            } else if (event.ctrlKey) {
+                switch (event.keyCode) {
+                    case 'B'.charCodeAt(0): // notificationPerformBtn -> Notfication Perform Dialog
+                        PF('notificationPerformBtn').jq.click();
+                        return false;
+                    case 'S'.charCodeAt(0): // addPatientButton -> Search Patient dialog
+                        PF('addPatientButton').jq.click();
+                        return false;
+                    case 'U'.charCodeAt(0): // uploadBtn -> PDF Overview
+                        PF('uploadBtn').jq.click();
+                        return false;
+                    case 'M'.charCodeAt(0): // mergePatientData -> Merge Patient data
+                        PF('mergePatientData').jq.click();
+                        return false;
+                    case 'E'.charCodeAt(0): // editPatientData -> Edit patient data
+                        PF('editPatientData').jq.click();
+                        return false;
+                    case 'T'.charCodeAt(0): // newTaskBtn -> New Task Task button
+                        PF('newTaskBtn').jq.click();
+                        return false;
+                    case 'F'.charCodeAt(0): // stainingOverview -> New Staining
+                        PF('stainingOverview').jq.click();
+                        return false;
+                    case 'D'.charCodeAt(0): // newDiagnosisRevision -> New Diagnosis dialog
+                        PF('newDiagnosisRevision').jq.click();
+                        return false;
+                    case 'C'.charCodeAt(0): // councilBtn -> Council Dialog
+                        PF('councilBtn').jq.click();
+                        return false;
+                    case 'K'.charCodeAt(0): // editContactBtn -> Contact Dialog
+                        PF('editContactBtn').jq.click();
+                        return false;
+                    case 'P'.charCodeAt(0): // editContactBtn -> Contact Dialog
+                        PF('printBtnVar').jq.click();
+                        return false;
+                    case 'L'.charCodeAt(0): // editContactBtn -> Contact Dialog
+                        PF('logBtn').jq.click();
+                        return false;
+                }
+            } else if (event.altKey) {
+                switch (event.keyCode) {
+                    case 'O'.charCodeAt(0): // patient overview in main view
+                        PF('showPatientOverview').jq.click();
+                        return false;
+                    case 'S'.charCodeAt(0): // staining phase exit dialog from main view
+                        PF('stainingPhaseExit').jq.click();
+                        return false;
+                    case 'D'.charCodeAt(0): // diagnosisPhaseExit exit dialog from main view
+                        PF('diagnosisPhaseExit').jq.click();
+                        return false;
+                    case 'N'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
+                        PF('notificationPhaseExit').jq.click();
+                        return false;
+                    case 'A'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
+                        PF('archiveTaskBtn').jq.click();
+                        return false;
+                    case 'B'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
+                        PF('bioBankBtn').jq.click();
+                        return false;
+                }
             }
         })
     </script>
 
     <h:panelGroup styleClass="hiddenButton">
+        <!-- Notification dialog -->
         <p:commandButton id="notificationPerformBtn" widgetVar="notificationPerformBtn"
                          actionListener="#{notificationDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
@@ -31,8 +101,6 @@
         </p:commandButton>
 
         <!-- Search patient -->
-        <p:hotkey bind="ctrl+s"
-                  oncomplete=" PF('addPatientButton').jq.click();return false;"/>
         <p:commandButton id="addPatientButton" widgetVar="addPatientButton"
                          actionListener="#{dialog.searchPatientDialog.initAndPrepareBean().externalMode().persistPatient()}">
             <p:ajax event="dialogReturn"
@@ -42,15 +110,11 @@
         </p:commandButton>
 
         <!-- show patient data-->
-        <p:hotkey bind="alt+o"
-                  oncomplete="PF('showPatientOverview').jq.click();return false;"/>
         <p:commandButton id="showPatientOverview" widgetVar="showPatientOverview"
                          actionListener="#{centralHandler.onDeselectTas}"
                          update=" navigationForm:patientList contentForm:contentPanel headerForm"/>
 
         <!-- pdf handler -->
-        <p:hotkey bind="ctrl+u"
-                  oncomplete="PF('uploadBtn').jq.click();return false;"/>
         <p:commandButton id="uploadBtn" widgetVar="uploadBtn"
                          actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
             <p:ajax event="dialogReturn"
@@ -59,8 +123,6 @@
         </p:commandButton>
 
         <!-- Merge Patient  -->
-        <p:hotkey bind="ctrl+m"
-                  oncomplete="PF('mergePatientData').jq.click();return false;"/>
         <p:commandButton id="mergePatientData" widgetVar="mergePatientData"
                          actionListener="#{dialog.mergePatientDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
             <p:ajax event="dialogReturn"
@@ -69,8 +131,6 @@
         </p:commandButton>
 
         <!-- Edit Patient data -->
-        <p:hotkey bind="ctrl+e"
-                  oncomplete="PF('editPatientData').jq.click();return false;"/>
         <p:commandButton id="editPatientData" widgetVar="editPatientData"
                          actionListener="#{dialog.editPatientDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
             <p:ajax event="dialogReturn"
@@ -79,6 +139,7 @@
         </p:commandButton>
 
         <!-- Remove patient -->
+        <!-- no short key -->
         <p:commandButton id="removePatient"
                          actionListener="#{dialog.deletePatientDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
             <p:ajax event="dialogReturn"
@@ -88,8 +149,6 @@
         </p:commandButton>
 
         <!-- New Task Button -->
-        <p:hotkey bind="alt+t"
-                  oncomplete="PF('newTaskBtn').jq.click();return false;"/>
         <p:commandButton id="newTaskBtn" widgetVar="newTaskBtn"
                          actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
             <p:ajax event="dialogReturn"
@@ -99,8 +158,6 @@
         </p:commandButton>
 
         <!-- New Sample -->
-        <p:hotkey bind="alt+s"
-                  oncomplete="PF('newSampleBtn').jq.click();return false;"/>
         <p:commandButton id="newSampleBtn" widgetVar="newSampleBtn"
                          actionListener="#{dialog.createSampleDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
@@ -109,8 +166,6 @@
         </p:commandButton>
 
         <!-- Staining overview -->
-        <p:hotkey bind="alt+f"
-                  oncomplete="PF('stainingOverview').jq.click();return false;"/>
         <p:commandButton id="stainingOverview" widgetVar="stainingOverview"
                          actionListener="#{dialog.slideOverviewDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
@@ -126,84 +181,125 @@
                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
         </p:commandButton>
 
-    </h:panelGroup>
-
-    <h:panelGroup styleClass="hiddenButton">
-
-
         <!-- StainingPhase enter -->
-        <p:commandButton id="stainingPhaseEnter"
-                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                         update="navigationForm:patientList contentForm headerForm">
-            <f:actionListener
-                    binding="#{workPhaseHandler.startStainingPhase(worklistHandler.current.selectedTask)}"/>
+        <!-- no short key -->
+        <p:commandButton id="stainingPhaseEnter" widgetVar="stainingPhaseEnter"
+                         update="navigationForm:patientList contentForm headerForm"
+                         actionListener="#{workPhaseHandler.startStainingPhase(worklistHandler.current.selectedTask)}">
         </p:commandButton>
 
         <!-- Diagnosis List, new diagnosis revision -->
-        <p:commandButton id="newDiagnosisRevision"
+        <p:commandButton id="newDiagnosisRevision" widgetVar="newDiagnosisRevision"
                          actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
         </p:commandButton>
 
         <!-- DiagnosisPhase Exit -->
-        <p:commandButton id="diagnosisPhaseExit"
+        <p:commandButton id="diagnosisPhaseExit" widgetVar="diagnosisPhaseExit"
                          actionListener="#{dialog.diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
                     listener="#{dialogReturnHandler.onDiagnosisPhaseExitReturn}"
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
 
         <!-- DiagnosisPhase Enter -->
-        <p:commandButton id="diagnosisPhaseEnter"
-                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                         update="navigationForm:patientList contentForm headerForm">
-            <f:actionListener
-                    binding="#{diagnosisService.startDiagnosisPhase(worklistHandler.current.selectedTask)}"/>
-            <f:actionListener
-                    listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
+        <!-- no short key -->
+        <p:commandButton id="diagnosisPhaseEnter" widgetVar="diagnosisPhaseEnter"
+                         update="navigationForm:patientList contentForm headerForm"
+                         actionListener="#{workPhaseHandler.startDiagnosisPhase(worklistHandler.current.selectedTask)}">
         </p:commandButton>
 
         <!-- Council button -->
-        <p:commandButton id="councilBtn"
+        <p:commandButton id="councilBtn" widgetVar="councilBtn"
                          actionListener="#{dialog.councilDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onDefaultDialogReturn}"
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
 
-        <p:hotkey bind="shift+c"
-                  oncomplete="$('#headerForm\\:councilBtn').click();return false;"/>
-
         <!-- Contacts button -->
-        <p:commandButton id="editContactBtn"
+        <p:commandButton id="editContactBtn" widgetVar="editContactBtn"
                          actionListener="#{contactDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onDefaultDialogReturn}"
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
 
         <!-- Notification exit -->
-        <p:commandButton id="notificationPhaseExit"
-                         actionListener="#{dialogHandlerAction.notificationPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+        <p:commandButton id="notificationPhaseExit" widgetVar="notificationPhaseExit"
+                         actionListener="#{dialog.notificationPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                    update="navigationForm:patientList contentForm headerForm"
-                    listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"/>
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                    update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
 
         <!-- Archive Task -->
-        <p:commandButton id="archiveTaskBtn"
+        <p:commandButton id="archiveTaskBtn" widgetVar="archiveTaskBtn"
                          actionListener="#{archiveTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                    listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
+
+        <!-- Biobank button -->
+        <p:commandButton id="bioBankBtn" widgetVar="bioBankBtn"
+                         actionListener="#{dialog.bioBankDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+            <p:ajax event="dialogReturn"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                    update="navigationForm:patientList contentForm headerForm"/>
+        </p:commandButton>
+
+        <!-- Print button -->
+        <p:commandButton id="printBtn" widgetVar="printBtnVar"
+                         actionListener="#{printDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+            <p:ajax event="dialogReturn"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                    update="navigationForm:patientList contentForm headerForm"/>
+        </p:commandButton>
+
+        <p:commandButton id="logBtn" widgetVar="logBtn"
+                         actionListener="#{dialog.patientLogDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+            <p:ajax event="dialogReturn"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                    update="navigationForm:patientList contentForm headerForm"/>
+        </p:commandButton>
+
+        <!-- settings button -->
+        <p:commandButton id="settingsDialogBtn" partialSubmit="true" widgetVar="settingsDialogBtn"
+                         process="@this"
+                         actionListener="#{dialog.settingsDialog.initAndPrepareBean()}">
+            <p:ajax event="dialogReturn"
+                    listener="#{dialogReturnHandler.onSettingsReturn}"
+                    update="navigationForm:patientList contentForm"/>
+        </p:commandButton>
+
+        <!-- accounting button -->
+        <p:commandButton id="accountingDialogBtn" partialSubmit="true" widgetVar="accountingDialogBtn"
+                         process="@this"
+                         actionListener="#{dialog.accountingDataDialog.initAndPrepareBean()}">
+            <p:ajax event="dialogReturn"/>
+        </p:commandButton>
+
+        <!-- userSettings button -->
+        <p:commandButton id="userSettingsDialogBtn" widgetVar="userSettingsDialogBtn"
+                         actionListener="#{dialog.userSettingsDialog.initAndPrepareBean()}">
+            <p:ajax event="dialogReturn"
+                    listener="#{dialogReturnHandler.onUserSettingsReturn}"
+                    update="navigationForm:patientList contentForm"/>
+        </p:commandButton>
+
+        <!-- Info button -->
+        <p:commandButton id="infoDialogBtn" widgetVar="infoDialogBtn"
+                         actionListener="#{dialog.programmVersionDialog.initAndPrepareBean()}">
+            <p:ajax event="dialogReturn"
+                    update="navigationForm:patientList contentForm"/>
+        </p:commandButton>
+    </h:panelGroup>
+
+    <h:panelGroup styleClass="hiddenButton">
+
 
         <!-- restore Task -->
         <p:commandButton id="restoreTaskBtn"
@@ -213,74 +309,6 @@
                     listener="#{centralHandler.loadViews('RELOAD_TASK_STATUS', 'MENU_MODEL', 'RELOAD_MENU_MODEL_FAVOURITE_LISTS')}"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
-
-        <!-- Biobank button -->
-        <p:commandButton id="bioBankBtn"
-                         actionListener="#{dialog.bioBankDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
-            <p:ajax event="dialogReturn"
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                    update="navigationForm:patientList contentForm headerForm"/>
-        </p:commandButton>
-
-        <!-- Print button -->
-        <p:commandButton id="printBtn" widgetVar="printBtnVar"
-                         actionListener="#{printDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
-            <p:ajax event="dialogReturn"
-                    update="navigationForm:patientList contentForm headerForm"/>
-        </p:commandButton>
-
-        <p:hotkey bind="alt+p"
-                  oncomplete="$('#headerForm\\:printBtn').click();return false;"/>
-        <!-- *************** Task Menu *************** -->
-
-        <!-- *************** Log Menu *************** -->
-        <p:commandButton id="logBtn"
-                         actionListener="#{dialog.patientLogDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
-            <p:ajax event="dialogReturn" update="contentForm"/>
-        </p:commandButton>
-        <!-- *************** Log Menu *************** -->
-
-        <!-- settings button -->
-        <p:commandButton id="settingsDialogBtn" partialSubmit="true"
-                         process="@this"
-                         actionListener="#{dialog.settingsDialog.initAndPrepareBean()}">
-            <p:ajax event="dialogReturn"
-                    listener="#{globalEditViewHandler.reloadAllData()}"
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
-                    update="navigationForm:patientList contentForm"/>
-        </p:commandButton>
-
-        <p:hotkey bind="alt+shift+s"
-                  oncomplete="$('#headerForm\\:settingsDialogBtn').click();return false;"/>
-
-        <!-- accounting button -->
-        <p:commandButton id="accountingDialogBtn" partialSubmit="true"
-                         process="@this"
-                         actionListener="#{dialog.accountingDataDialog.initAndPrepareBean()}">
-            <p:ajax event="dialogReturn"/>
-        </p:commandButton>
-
-        <p:hotkey bind="alt+shift+a"
-                  oncomplete="$('#headerForm\\:accountingDialogBtn').click();return false;"/>
-
-        <!-- userSettings button -->
-        <p:commandButton id="userSettingsDialogBtn"
-                         actionListener="#{dialog.userSettingsDialog.initAndPrepareBean()}">
-            <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onUserSettingsReturn}"
-                    update="navigationForm:patientList contentForm"/>
-        </p:commandButton>
-
-        <p:hotkey bind="alt+shift+u"
-                  oncomplete="$('#headerForm\\:userSettingsDialogBtn').click();return false;"/>
-
-        <!-- Info button -->
-        <p:commandButton id="infoDialogBtn"
-                         actionListener="#{dialog.programmVersionDialog.initAndPrepareBean()}">
-            <p:ajax event="dialogReturn"
-                    update="navigationForm:patientList contentForm"/>
-        </p:commandButton>
-
 
     </h:panelGroup>
 </ui:composition>

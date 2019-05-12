@@ -39,6 +39,12 @@ Alt  + B: Notification
 Alt + Shift + S: Settings
 
 Tasks:
+-> fix council dialog
+-> notification exit dialog, archive dialog commands
+-> biobank dialog -> media dialog select mode is not initilized
+-> fix accounting dialog
+
+
 -> Add Sending Physicians in surgeon select dialog (!)  
 -> Make organizations choosable als suregons
 -> Task notification once all three month of tasks where samples should be returned
@@ -655,6 +661,13 @@ alter table reportintent add column deleteable boolean;
 alter table reportintent_aud add column deleteable boolean;
 update reportintent set deleteable = true;
 update reportintent_aud set deleteable = true;
+
+/* archived for FavouriteList update*/
+UPDATE favouriteList SET archived = false;
+Alter table favouriteList add blockTaskArchival boolean;
+UPDATE favouriteList SET blockTaskArchival = false;
+Alter table favouritelist add iconGroup character varying;
+UPDATE favouriteList SET iconGroup = '';
 
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien

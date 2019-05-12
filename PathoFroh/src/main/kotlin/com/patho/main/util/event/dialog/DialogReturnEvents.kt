@@ -71,6 +71,11 @@ class StainingPhaseUpdateEvent(val task: Task) : ReloadEvent()
 class UserReloadEvent(val user: HistoUser? = null) : ReloadEvent()
 
 /**
+ * Event after settings have been changed
+ */
+class SettingsReloadEvent : ReloadEvent()
+
+/**
  * Return event for the StaininPhaseExitDialog
  */
 class StainingPhaseExitEvent(val task: Task, val removeFromWorklist: Boolean = false, val removeFromStainingList: Boolean, val endStainingPhase: Boolean, val gotToDiagnosisPhase: Boolean)

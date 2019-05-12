@@ -149,6 +149,16 @@ open class DialogReturnHandler @Autowired constructor(
         onDefaultReturn(event)
     }
 
+
+    open fun onSettingsReturn(event: SelectEvent) {
+        if (event.`object` is SettingsReloadEvent) {
+            logger.debug("Settings return event")
+            centralHandler.reloadAllData()
+            return
+        }
+        onDefaultReturn(event)
+    }
+
     /**
      * Return event handler for selecting new worklists
      */

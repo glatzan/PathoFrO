@@ -115,7 +115,7 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
     public class DiagnosisRevisionStatus(diagnosisRevision: DiagnosisRevision) {
         val name = diagnosisRevision.name
         val completed: Boolean = diagnosisRevision.completed
-        val signature: Boolean = diagnosisRevision.signatureOne != null || diagnosisRevision.signatureTwo != null
+        val signature: Boolean = diagnosisRevision.signatureOne.physician != null || diagnosisRevision.signatureTwo.physician != null
 
         val notificationStatus: DiagnosisNotificationStatus = DiagnosisNotificationStatus(diagnosisRevision)
 

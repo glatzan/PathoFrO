@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.patho.main.model.log.Log_;
+import com.patho.main.util.event.dialog.SettingsReloadEvent;
 import org.primefaces.event.ReorderEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,10 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	public boolean initBean(String tabName) {
 		return super.initBean(null, Dialog.SETTINGS, tabName);
+	}
+
+	public void hideDialog() {
+		hideDialog(new SettingsReloadEvent());
 	}
 
 	public class ProgramParentTab extends AbstractTab {

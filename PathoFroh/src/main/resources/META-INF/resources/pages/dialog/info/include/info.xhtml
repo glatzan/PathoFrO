@@ -8,20 +8,43 @@
     </p:outputPanel>
 
     <p:outputPanel styleClass="bodyPannel">
-        <h:panelGrid styleClass="defaultHistoTable" columns="2">
-            <ul>
-                <li>Benachrichtigung (strg + b)</li>
-                <li>Patient suchen (strg + s)</li>
-                <li>PDFs Verwalten (strg+ u)</li>
-                <li>Patienten zusamenführen (strg+ m)</li>
-                <li>Patienten bearbeiten (strg + e)</li>
-            </ul>
-            <ul>
-                <li>Patientenansicht (alt + o)</li>
-                <li>Auftrag erstellen (alt + t)</li>
-                <li>Probe erstellen (alt + s)</li>
-                <li>Färbung erstellen (alt + f)</li>
-            </ul>
+        <h:panelGrid styleClass="defaultHistoTable" columns="2" columnClasses="columnTop, columnTop">
+            <h:panelGroup>
+                <h:outputLabel value="#{msg['dialog.info.info.dialog.text']}"/>
+                <ul>
+                    <li>#{msg['dialog.info.info.dialog.notification']} (strg + b)</li>
+                    <li>#{msg['dialog.info.info.dialog.searchPatient']} (strg + s)</li>
+                    <li>#{msg['dialog.info.info.dialog.pdf']} (strg+ u)</li>
+                    <li>#{msg['dialog.info.info.dialog.merge']} (strg+ m)</li>
+                    <li>#{msg['dialog.info.info.dialog.editPatient']} (strg + e)</li>
+                    <li>#{msg['dialog.info.info.dialog.task']} (strg + t)</li>
+                    <li>#{msg['dialog.info.info.dialog.sample']} (strg + f)</li>
+                    <li>#{msg['dialog.info.info.dialog.diagnosis']} (strg + d)</li>
+                    <li>#{msg['dialog.info.info.dialog.council']} (strg + c)</li>
+                    <li>#{msg['dialog.info.info.dialog.contact']}Kontakte (strg + k)</li>
+                    <li>#{msg['dialog.info.info.dialog.print']} (strg + d)</li>
+                    <li>#{msg['dialog.info.info.dialog.log']} (strg + l)</li>
+                </ul>
+
+                <h:outputLabel value="#{msg['dialog.info.info.main.text']}"/>
+                <ul>
+                    <li>#{msg['dialog.info.info.main.patientOverview']} (alt + o)</li>
+                    <li>#{msg['dialog.info.info.main.endStainingPhase']} (alt + s)</li>
+                    <li>#{msg['dialog.info.info.main.endDiagnosisPhase']} (alt+ D)</li>
+                    <li>#{msg['dialog.info.info.main.endNotificationPhase']} (alt+ n)</li>
+                    <li>#{msg['dialog.info.info.main.archiveTask']} (strg + a)</li>
+                    <li>#{msg['dialog.info.info.main.biobank']} (strg + b)</li>
+                </ul>
+            </h:panelGroup>
+            <h:panelGroup>
+                <h:outputLabel value="#{msg['dialog.info.info.miscellaneous.text']}"/>
+                <ul>
+                    <li>#{msg['dialog.info.info.miscellaneous.settings']} (alt + strg + s)</li>
+                    <li>#{msg['dialog.info.info.miscellaneous.accounting']} (alt + strg + a)</li>
+                    <li>#{msg['dialog.info.info.miscellaneous.userSettings']} (alt + strg + s)</li>
+                    <li>#{msg['dialog.info.info.miscellaneous.infos']} (alt + strg + i)</li>
+                </ul>
+            </h:panelGroup>
         </h:panelGrid>
     </p:outputPanel>
 

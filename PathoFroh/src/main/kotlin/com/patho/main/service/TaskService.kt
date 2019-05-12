@@ -7,7 +7,7 @@ import com.patho.main.repository.DiagnosisRevisionRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.helper.TimeUtil
-import com.patho.main.util.task.TaskArchiveStatus
+import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.task.TaskStatus
 import com.patho.main.util.task.TaskTreeTools
 import org.springframework.beans.factory.annotation.Autowired
@@ -127,8 +127,8 @@ open class TaskService @Autowired constructor(
      * Checks if task can be archived
      */
     @Transactional
-    open fun getTaskArchiveStatus(task: Task): TaskArchiveStatus {
-        var taskArchiveStatus = TaskArchiveStatus(task);
+    open fun getTaskArchiveStatus(task: Task): ArchiveTaskStatus {
+        var taskArchiveStatus = ArchiveTaskStatus(task);
 
         taskArchiveStatus.stainingPhaseCompleted = task.stainingCompleted
         taskArchiveStatus.stainingCompleted = TaskStatus.checkIfStainingCompleted(task)
