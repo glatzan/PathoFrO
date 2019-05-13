@@ -91,15 +91,53 @@ public class ArchiveTaskStatus(task: Task) {
          */
         val isValid = revisions.all { it.isValid }
 
+        /**
+         * Detailed status of ane diagnosis revision
+         */
         public class RevisionStatus(val diagnosisRevision: DiagnosisRevision) {
+            /**
+             * True if diagnosis is completed
+             */
             val isCompleted = diagnosisRevision.completed
-            val name = diagnosisRevision.name
-            val signatures = listOfNotNull<SignatureStatus>(getSignatureStatus(diagnosisRevision.signatureOne), getSignatureStatus(diagnosisRevision.signatureTwo))
-            val isSigned = signatures.isEmpty()
 
+            /**
+             *  Diagnosis name
+             */
+            val name = diagnosisRevision.name
+
+            /**
+             * date of completion
+             */
+            val dateOfCompletion = diagnosisRevision.completionDate
+
+            /**
+             * Signatures
+             */
+            val signatures = listOfNotNull<SignatureStatus>(getSignatureStatus(diagnosisRevision.signatureOne), getSignatureStatus(diagnosisRevision.signatureTwo))
+
+            /**
+             * True if at least one signature is present
+             */
+            val isSigned = signatures.isNotEmpty()
+
+            /**
+             * True if no notification should be performed
+             */
             val isNoNotification = diagnosisRevision.notificationStatus == com.patho.main.model.patient.NotificationStatus.NO_NOTFICATION
+
+            /**
+             * True if notification was performed
+             */
             val isNotificationPerformed = diagnosisRevision.notificationStatus == com.patho.main.model.patient.NotificationStatus.NOTIFICATION_COMPLETED || isNoNotification
 
+            /**
+             * Date of notification
+             */
+            val dateOfNotification = diagnosisRevision.notificationDate
+
+            /**
+             *  True if diagnosis is valid
+             */
             val isValid = isCompleted && (isSigned || isNoNotification)
 
             private fun getSignatureStatus(signature: Signature): SignatureStatus? {
@@ -107,6 +145,9 @@ public class ArchiveTaskStatus(task: Task) {
                 return if (signatureStatus.present) signatureStatus else null
             }
 
+            /**
+             * Signature status
+             */
             public class SignatureStatus(signature: Signature) {
                 val present = signature.physician != null
                 val name = signature?.physician?.person?.getFullName() ?: ""
