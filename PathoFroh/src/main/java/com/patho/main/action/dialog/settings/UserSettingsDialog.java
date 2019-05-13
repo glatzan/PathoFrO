@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.service.UserService;
 import com.patho.main.util.event.dialog.UserReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +15,18 @@ import com.patho.main.action.dialog.AbstractTabChangeEventHandler;
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.View;
-import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PrintService;
 import com.patho.main.ui.FavouriteListContainer;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Configurable

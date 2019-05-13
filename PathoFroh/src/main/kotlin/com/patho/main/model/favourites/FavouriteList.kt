@@ -16,7 +16,7 @@ open class FavouriteList() : AbstractPersistable() {
     @SequenceGenerator(name = "favouritelist_sequencegenerator", sequenceName = "favouritelist_sequence")
     @GeneratedValue(generator = "favouritelist_sequencegenerator")
     @Column(unique = true, nullable = false)
-    override open var id: Long = 0
+    override var id: Long = 0
 
     /**
      * Owner of the list, if null the systems owns the list
@@ -116,7 +116,7 @@ open class FavouriteList() : AbstractPersistable() {
      * TODO describe
      */
     @OneToMany(fetch = FetchType.LAZY)
-    open var hideListForUser: Set<HistoUser>? = null
+    open var hideListForUser: MutableSet<HistoUser> = mutableSetOf()
 
     /**
      * If true and an items is removed from this list, it will be copied to the dumplist

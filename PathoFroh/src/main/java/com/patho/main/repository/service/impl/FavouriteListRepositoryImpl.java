@@ -11,16 +11,11 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.patho.main.model.favourites.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.model.dto.FavouriteListMenuItem;
-import com.patho.main.model.favourites.FavouriteList;
-import com.patho.main.model.favourites.FavouriteList_;
-import com.patho.main.model.favourites.FavouritePermissionsGroup;
-import com.patho.main.model.favourites.FavouritePermissionsGroup_;
-import com.patho.main.model.favourites.FavouritePermissionsUser;
-import com.patho.main.model.favourites.FavouritePermissionsUser_;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.service.FavouriteListRepositoryCustom;

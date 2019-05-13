@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.patho.main.model.favourites.*;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.favourites.FavouriteList;
-import com.patho.main.model.favourites.FavouriteListItem;
-import com.patho.main.model.favourites.FavouritePermissions;
-import com.patho.main.model.favourites.FavouritePermissionsGroup;
-import com.patho.main.model.favourites.FavouritePermissionsUser;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
@@ -268,9 +264,6 @@ public class FavouriteListService extends AbstractService {
 	/**
 	 * Moves one Task from one List to an other list.
 	 * 
-	 * @param source
-	 * @param target
-	 * @param task
 	 */
 	public void moveTaskToList(long sourceID, long targetID, long taskID) {
 		moveTaskToList(sourceID, targetID, taskID, null);
@@ -278,10 +271,6 @@ public class FavouriteListService extends AbstractService {
 
 	/**
 	 * Moves one Task from one List to an other list.
-	 * 
-	 * @param source
-	 * @param target
-	 * @param task
 	 */
 	public void moveTaskToList(long sourceID, long targetID, long taskID, String commentary) {
 		Optional<Task> oTask = taskRepository.findOptionalById(taskID);

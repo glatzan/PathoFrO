@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.service.UserService;
 import com.patho.main.util.event.dialog.WorklistSelectEvent;
 import org.primefaces.event.SelectEvent;
@@ -19,7 +20,6 @@ import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.repository.DiagnosisPresetRepository;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.ListItemRepository;
@@ -27,7 +27,6 @@ import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
 import com.patho.main.util.worklist.Worklist;
 import com.patho.main.util.worklist.search.WorklistFavouriteSearch;
 import com.patho.main.util.worklist.search.WorklistSearchExtended;
@@ -35,7 +34,6 @@ import com.patho.main.util.worklist.search.WorklistSimpleSearch;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

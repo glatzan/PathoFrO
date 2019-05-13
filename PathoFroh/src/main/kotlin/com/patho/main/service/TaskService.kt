@@ -1,6 +1,5 @@
 package com.patho.main.service
 
-import com.patho.main.config.settings.ServiceSettings
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.DiagnosisRevisionRepository
@@ -18,8 +17,7 @@ import java.util.*
 @Service()
 open class TaskService @Autowired constructor(
         private val diagnosisRevisionRepository: DiagnosisRevisionRepository,
-        private val taskRepository: TaskRepository,
-        private val serviceSettings: ServiceSettings) : AbstractService() {
+        private val taskRepository: TaskRepository) : AbstractService() {
 
 
     /**
@@ -121,26 +119,6 @@ open class TaskService @Autowired constructor(
             taskRepository.save(task, resourceBundle.get("log.task.nameUpdate", task))
         else
             task
-    }
-
-    /**
-     * Checks if task can be archived
-     */
-    @Transactional
-    open fun getTaskArchiveStatus(task: Task): ArchiveTaskStatus {
-        var taskArchiveStatus = ArchiveTaskStatus(task);
-
-        taskArchiveStatus.stainingPhaseCompleted = task.stainingCompleted
-        taskArchiveStatus.stainingCompleted = TaskStatus.checkIfStainingCompleted(task)
-
-
-        taskArchiveStatus.diagnosisPhaseCompleted = TaskStatus.checkIfDiagnosisCompleted(task)
-        taskArchiveStatus.notificationPhaseCompleted = TaskStatus.checkIfNotificationIsCompleted(task)
-        // searching for blocking lists
-//        taskArchiveStatus.blockingFavouriteLists =
-//                task.favouriteLists?.filter { p -> serviceSettings.taskArchiveRules.blockingFavouriteLists.stream().anyMatch { c -> c.id == p.id } }) ?
-
-        return taskArchiveStatus
     }
 
     /**

@@ -21,7 +21,7 @@ public interface FavouriteListRepositoryCustom {
 			boolean loadList, boolean loadPermissions, boolean loadDumpList);
 
 	List<FavouriteList> findByUserAndWriteableAndReadable(HistoUser user, boolean writeable, boolean readable,
-			boolean loadItems, boolean loadOwner, boolean loadPermissions, boolean loadDumpList);
+														  boolean loadItems, boolean loadOwner, boolean loadPermissions, boolean loadDumpList);
 
 	List<FavouriteList> findAll();
 

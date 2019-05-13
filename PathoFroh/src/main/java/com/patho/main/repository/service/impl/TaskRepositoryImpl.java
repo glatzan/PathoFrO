@@ -37,230 +37,235 @@ import com.patho.main.util.worklist.search.WorklistSearchExtended;
 @Transactional
 public class TaskRepositoryImpl extends AbstractRepositoryCustom implements TaskRepositoryCustom {
 
-	public Optional<Task> findOptionalByIdAndInitialize(Long id, boolean loadCouncils, boolean loadDiangoses,
-			boolean loadPDFs, boolean loadContacts, boolean loadParent) {
+    public Optional<Task> findOptionalByIdAndInitialize(Task task, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
+                                                        boolean loadContacts, boolean loadParent) {
+        return findOptionalByIdAndInitialize(task.getId(), loadCouncils, loadDiangoses, loadPDFs, loadContacts, loadParent);
+    }
 
-		CriteriaBuilder qb = getCriteriaBuilder();
-		CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
-		Root<Task> root = criteria.from(Task.class);
+    public Optional<Task> findOptionalByIdAndInitialize(Long id, boolean loadCouncils, boolean loadDiangoses,
+                                                        boolean loadPDFs, boolean loadContacts, boolean loadParent) {
 
-		return find(criteria, root, Arrays.asList(qb.equal(root.get(Task_.id), id)), loadCouncils, loadDiangoses,
-				loadPDFs, loadContacts, loadParent);
-	}
+        CriteriaBuilder qb = getCriteriaBuilder();
+        CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
+        Root<Task> root = criteria.from(Task.class);
 
-	public Optional<Task> findOptionalByTaskId(String taskID) {
-		return findOptionalByTaskId(taskID, false, false, false, false, false);
-	}
+        return find(criteria, root, Arrays.asList(qb.equal(root.get(Task_.id), id)), loadCouncils, loadDiangoses,
+                loadPDFs, loadContacts, loadParent);
+    }
 
-	public Optional<Task> findOptionalByTaskId(String taskID, boolean loadCouncils, boolean loadDiangoses,
-			boolean loadPDFs, boolean loadContacts, boolean loadParent) {
-		CriteriaBuilder qb = getSession().getCriteriaBuilder();
+    public Optional<Task> findOptionalByTaskId(String taskID) {
+        return findOptionalByTaskId(taskID, false, false, false, false, false);
+    }
 
-		// Create CriteriaQuery
-		CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
-		Root<Task> root = criteria.from(Task.class);
-		criteria.select(root);
+    public Optional<Task> findOptionalByTaskId(String taskID, boolean loadCouncils, boolean loadDiangoses,
+                                               boolean loadPDFs, boolean loadContacts, boolean loadParent) {
+        CriteriaBuilder qb = getSession().getCriteriaBuilder();
 
-		return find(criteria, root, Arrays.asList(qb.like(root.get("taskID"), taskID)), loadCouncils, loadDiangoses,
-				loadPDFs, loadContacts, loadParent);
-	}
+        // Create CriteriaQuery
+        CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
+        Root<Task> root = criteria.from(Task.class);
+        criteria.select(root);
 
-	public Optional<Task> findOptionalBySlideID(String taskID, int uniqueSlideIDInBlock, boolean loadCouncils,
-			boolean loadDiangoses, boolean loadPDFs, boolean loadContacts, boolean loadParent) {
-		CriteriaBuilder qb = getSession().getCriteriaBuilder();
+        return find(criteria, root, Arrays.asList(qb.like(root.get("taskID"), taskID)), loadCouncils, loadDiangoses,
+                loadPDFs, loadContacts, loadParent);
+    }
 
-		// Create CriteriaQuery
-		CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
-		Root<Task> root = criteria.from(Task.class);
-		criteria.select(root);
+    public Optional<Task> findOptionalBySlideID(String taskID, int uniqueSlideIDInBlock, boolean loadCouncils,
+                                                boolean loadDiangoses, boolean loadPDFs, boolean loadContacts, boolean loadParent) {
+        CriteriaBuilder qb = getSession().getCriteriaBuilder();
 
-		Join<Task, Sample> sampleQuery = root.join("samples", JoinType.LEFT);
-		Join<Sample, Block> blockQuery = sampleQuery.join("blocks", JoinType.LEFT);
-		Join<Block, Slide> slideQuery = blockQuery.join("slides", JoinType.LEFT);
+        // Create CriteriaQuery
+        CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
+        Root<Task> root = criteria.from(Task.class);
+        criteria.select(root);
 
-		return find(criteria, root,
-				Arrays.asList(qb.and(qb.like(root.get("taskID"), taskID),
-						qb.equal(slideQuery.get("uniqueIDinTask"), uniqueSlideIDInBlock))),
-				loadCouncils, loadDiangoses, loadPDFs, loadContacts, loadParent);
-	}
+        Join<Task, Sample> sampleQuery = root.join("samples", JoinType.LEFT);
+        Join<Sample, Block> blockQuery = sampleQuery.join("blocks", JoinType.LEFT);
+        Join<Block, Slide> slideQuery = blockQuery.join("slides", JoinType.LEFT);
 
-	public Optional<Task> findOptinalByLastID(Calendar ofYear, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
-			boolean loadContacts, boolean loadParent) {
+        return find(criteria, root,
+                Arrays.asList(qb.and(qb.like(root.get("taskID"), taskID),
+                        qb.equal(slideQuery.get("uniqueIDinTask"), uniqueSlideIDInBlock))),
+                loadCouncils, loadDiangoses, loadPDFs, loadContacts, loadParent);
+    }
 
-		String currentYear = Integer.toString(TimeUtil.getYearAsInt(ofYear) - 2000) + "%";
+    public Optional<Task> findOptinalByLastID(Calendar ofYear, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
+                                              boolean loadContacts, boolean loadParent) {
 
-		// Create CriteriaBuilder
-		CriteriaBuilder qb = getSession().getCriteriaBuilder();
+        String currentYear = Integer.toString(TimeUtil.getYearAsInt(ofYear) - 2000) + "%";
 
-		// Create CriteriaQuery
-		CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
-		Root<Task> root = criteria.from(Task.class);
+        // Create CriteriaBuilder
+        CriteriaBuilder qb = getSession().getCriteriaBuilder();
 
-		Subquery<Task> subquery = criteria.subquery(Task.class);
-		Root<Task> subTaskRoot = subquery.from(Task.class);
-		subquery.where(qb.like(subTaskRoot.get("taskID"), currentYear));
-		subquery.select(qb.max((Expression) subTaskRoot.get("taskID")));
+        // Create CriteriaQuery
+        CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
+        Root<Task> root = criteria.from(Task.class);
 
-		return find(criteria, root, Arrays.asList(qb.equal(root.get("taskID"), subquery)), loadCouncils, loadDiangoses,
-				loadPDFs, loadContacts, loadParent);
-	}
+        Subquery<Task> subquery = criteria.subquery(Task.class);
+        Root<Task> subTaskRoot = subquery.from(Task.class);
+        subquery.where(qb.like(subTaskRoot.get("taskID"), currentYear));
+        subquery.select(qb.max((Expression) subTaskRoot.get("taskID")));
 
-	public List<Task> findByCriteria(WorklistSearchExtended worklistSearchExtended, boolean initParent) {
-		CriteriaBuilder qb = getSession().getCriteriaBuilder();
+        return find(criteria, root, Arrays.asList(qb.equal(root.get("taskID"), subquery)), loadCouncils, loadDiangoses,
+                loadPDFs, loadContacts, loadParent);
+    }
 
-		// Create CriteriaQuery
-		CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
-		Root<Task> root = criteria.from(Task.class);
-		criteria.select(root);
+    public List<Task> findByCriteria(WorklistSearchExtended worklistSearchExtended, boolean initParent) {
+        CriteriaBuilder qb = getSession().getCriteriaBuilder();
 
-		if (initParent)
-			root.fetch("parent", JoinType.LEFT);
+        // Create CriteriaQuery
+        CriteriaQuery<Task> criteria = qb.createQuery(Task.class);
+        Root<Task> root = criteria.from(Task.class);
+        criteria.select(root);
 
-		Join<Task, Sample> sampleQuery = root.join("samples", JoinType.LEFT);
-		Join<Sample, Block> blockQuery = sampleQuery.join("blocks", JoinType.LEFT);
-		Join<Block, Slide> slideQuery = blockQuery.join("slides", JoinType.LEFT);
-		Join<Slide, StainingPrototype> prototypeQuery = slideQuery.join("slidePrototype", JoinType.LEFT);
+        if (initParent)
+            root.fetch("parent", JoinType.LEFT);
 
-		Join<Task, DiagnosisRevision> diagnosisRevisionQuery = root.join("diagnosisRevisions", JoinType.LEFT);
-		Join<DiagnosisRevision, Diagnosis> diagnosesQuery = diagnosisRevisionQuery.join("diagnoses", JoinType.LEFT);
-		Join<DiagnosisRevision, Signature> signatureOneQuery = diagnosisRevisionQuery.join("signatureOne",
-				JoinType.LEFT);
-		Join<Signature, Physician> signatureOnePhysicianQuery = signatureOneQuery.join("physician", JoinType.LEFT);
-		Join<DiagnosisRevision, Signature> signatureTwoQuery = diagnosisRevisionQuery.join("signatureTwo",
-				JoinType.LEFT);
-		Join<Signature, Physician> signatureTwoPhysicianQuery = signatureTwoQuery.join("physician", JoinType.LEFT);
+        Join<Task, Sample> sampleQuery = root.join("samples", JoinType.LEFT);
+        Join<Sample, Block> blockQuery = sampleQuery.join("blocks", JoinType.LEFT);
+        Join<Block, Slide> slideQuery = blockQuery.join("slides", JoinType.LEFT);
+        Join<Slide, StainingPrototype> prototypeQuery = slideQuery.join("slidePrototype", JoinType.LEFT);
 
-		Join<ReportIntent, Task> contactQuery = root.join("contacts", JoinType.LEFT);
-		Join<Person, ReportIntent> personContactQuery = contactQuery.join("person", JoinType.LEFT);
+        Join<Task, DiagnosisRevision> diagnosisRevisionQuery = root.join("diagnosisRevisions", JoinType.LEFT);
+        Join<DiagnosisRevision, Diagnosis> diagnosesQuery = diagnosisRevisionQuery.join("diagnoses", JoinType.LEFT);
+        Join<DiagnosisRevision, Signature> signatureOneQuery = diagnosisRevisionQuery.join("signatureOne",
+                JoinType.LEFT);
+        Join<Signature, Physician> signatureOnePhysicianQuery = signatureOneQuery.join("physician", JoinType.LEFT);
+        Join<DiagnosisRevision, Signature> signatureTwoQuery = diagnosisRevisionQuery.join("signatureTwo",
+                JoinType.LEFT);
+        Join<Signature, Physician> signatureTwoPhysicianQuery = signatureTwoQuery.join("physician", JoinType.LEFT);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
+        Join<ReportIntent, Task> contactQuery = root.join("contacts", JoinType.LEFT);
+        Join<Person, ReportIntent> personContactQuery = contactQuery.join("person", JoinType.LEFT);
 
-		// searching for material
-		if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getMaterial())) {
-			predicates.add(qb.like(qb.lower(sampleQuery.get("material")),
-					"%" + worklistSearchExtended.getMaterial().toLowerCase() + "%"));
+        List<Predicate> predicates = new ArrayList<Predicate>();
 
-			logger.debug("Selecting material " + worklistSearchExtended.getMaterial());
-		}
+        // searching for material
+        if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getMaterial())) {
+            predicates.add(qb.like(qb.lower(sampleQuery.get("material")),
+                    "%" + worklistSearchExtended.getMaterial().toLowerCase() + "%"));
 
-		// getting surgeon
-		if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getSurgeons())) {
-			Expression<Long> exp = personContactQuery.get("id");
-			predicates
-					.add(qb.and(
-							exp.in(Arrays.asList(worklistSearchExtended.getSurgeons()).stream()
-									.map(p -> p.getPerson().getId()).collect(Collectors.toList())),
-							qb.equal(contactQuery.get("role"), ContactRole.SURGEON)));
-			logger.debug("Selecting surgeon");
-		}
+            logger.debug("Selecting material " + worklistSearchExtended.getMaterial());
+        }
 
-		// getting signature
-		if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getSignature())) {
-			Expression<Long> expphysicianOne = signatureOnePhysicianQuery.get("id");
-			Predicate physicianOne = expphysicianOne.in(Arrays.asList(worklistSearchExtended.getSignature()).stream()
-					.map(p -> p.getId()).collect(Collectors.toList()));
+        // getting surgeon
+        if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getSurgeons())) {
+            Expression<Long> exp = personContactQuery.get("id");
+            predicates
+                    .add(qb.and(
+                            exp.in(Arrays.asList(worklistSearchExtended.getSurgeons()).stream()
+                                    .map(p -> p.getPerson().getId()).collect(Collectors.toList())),
+                            qb.equal(contactQuery.get("role"), ContactRole.SURGEON)));
+            logger.debug("Selecting surgeon");
+        }
 
-			Expression<Long> expphysicianTwo = signatureTwoPhysicianQuery.get("id");
-			Predicate physicianTwo = expphysicianTwo.in(Arrays.asList(worklistSearchExtended.getSignature()).stream()
-					.map(p -> p.getId()).collect(Collectors.toList()));
+        // getting signature
+        if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getSignature())) {
+            Expression<Long> expphysicianOne = signatureOnePhysicianQuery.get("id");
+            Predicate physicianOne = expphysicianOne.in(Arrays.asList(worklistSearchExtended.getSignature()).stream()
+                    .map(p -> p.getId()).collect(Collectors.toList()));
 
-			predicates.add(qb.or(physicianOne, physicianTwo));
+            Expression<Long> expphysicianTwo = signatureTwoPhysicianQuery.get("id");
+            Predicate physicianTwo = expphysicianTwo.in(Arrays.asList(worklistSearchExtended.getSignature()).stream()
+                    .map(p -> p.getId()).collect(Collectors.toList()));
 
-			logger.debug("Selecting signature");
-		}
+            predicates.add(qb.or(physicianOne, physicianTwo));
 
-		// getting history
-		if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getCaseHistory())) {
-			predicates.add(qb.like(qb.lower(root.get("caseHistory")),
-					"%" + worklistSearchExtended.getCaseHistory().toLowerCase() + "%"));
+            logger.debug("Selecting signature");
+        }
 
-			logger.debug("Selecting history");
-		}
+        // getting history
+        if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getCaseHistory())) {
+            predicates.add(qb.like(qb.lower(root.get("caseHistory")),
+                    "%" + worklistSearchExtended.getCaseHistory().toLowerCase() + "%"));
 
-		// getting diagnosis text
-		if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getDiagnosisText())) {
-			predicates.add(qb.like(qb.lower(diagnosisRevisionQuery.get("text")),
-					"%" + worklistSearchExtended.getDiagnosisText().toLowerCase() + "%"));
+            logger.debug("Selecting history");
+        }
 
-			logger.debug("Selecting diagnosis text");
-		}
+        // getting diagnosis text
+        if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getDiagnosisText())) {
+            predicates.add(qb.like(qb.lower(diagnosisRevisionQuery.get("text")),
+                    "%" + worklistSearchExtended.getDiagnosisText().toLowerCase() + "%"));
 
-		// getting diagnosis
-		if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getDiagnosis())) {
-			predicates.add(qb.like(qb.lower(diagnosesQuery.get("diagnosis")),
-					"%" + worklistSearchExtended.getDiagnosis().toLowerCase() + "%"));
+            logger.debug("Selecting diagnosis text");
+        }
 
-			logger.debug("Selecting diagnosis");
-		}
+        // getting diagnosis
+        if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getDiagnosis())) {
+            predicates.add(qb.like(qb.lower(diagnosesQuery.get("diagnosis")),
+                    "%" + worklistSearchExtended.getDiagnosis().toLowerCase() + "%"));
 
-		// checking malign, 0 = not selected, 1 = true, 2 = false
-		if (!worklistSearchExtended.getMalign().equals("0")) {
-			predicates.add(qb.equal(diagnosesQuery.get("malign"),
-					worklistSearchExtended.getMalign().equals("1") ? true : false));
+            logger.debug("Selecting diagnosis");
+        }
 
-			logger.debug("Selecting malign");
-		}
+        // checking malign, 0 = not selected, 1 = true, 2 = false
+        if (!worklistSearchExtended.getMalign().equals("0")) {
+            predicates.add(qb.equal(diagnosesQuery.get("malign"),
+                    worklistSearchExtended.getMalign().equals("1") ? true : false));
 
-		// getting eye
-		if (worklistSearchExtended.getEye() != Eye.UNKNOWN) {
-			predicates.add(qb.equal(root.get("eye"), worklistSearchExtended.getEye()));
+            logger.debug("Selecting malign");
+        }
 
-			logger.debug("Selecting eye");
-		}
+        // getting eye
+        if (worklistSearchExtended.getEye() != Eye.UNKNOWN) {
+            predicates.add(qb.equal(root.get("eye"), worklistSearchExtended.getEye()));
 
-		// getting ward
-		if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getWard())) {
-			predicates.add(qb.like(qb.lower(diagnosesQuery.get("ward")),
-					"%" + worklistSearchExtended.getWard().toLowerCase() + "%"));
+            logger.debug("Selecting eye");
+        }
 
-			logger.debug("Selecting ward");
-		}
+        // getting ward
+        if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getWard())) {
+            predicates.add(qb.like(qb.lower(diagnosesQuery.get("ward")),
+                    "%" + worklistSearchExtended.getWard().toLowerCase() + "%"));
 
-		if (worklistSearchExtended.getStainings() != null && !worklistSearchExtended.getStainings().isEmpty()) {
-			Expression<Long> prototypeID = prototypeQuery.get("id");
-			Predicate stainings = prototypeID.in(
-					worklistSearchExtended.getStainings().stream().map(p -> p.getId()).collect(Collectors.toList()));
+            logger.debug("Selecting ward");
+        }
 
-			predicates.add(stainings);
-		}
+        if (worklistSearchExtended.getStainings() != null && !worklistSearchExtended.getStainings().isEmpty()) {
+            Expression<Long> prototypeID = prototypeQuery.get("id");
+            Predicate stainings = prototypeID.in(
+                    worklistSearchExtended.getStainings().stream().map(p -> p.getId()).collect(Collectors.toList()));
 
-		criteria.where(qb.and(predicates.toArray(new Predicate[predicates.size()])));
+            predicates.add(stainings);
+        }
 
-		criteria.distinct(true);
+        criteria.where(qb.and(predicates.toArray(new Predicate[predicates.size()])));
 
-		List<Task> tasks = getSession().createQuery(criteria).getResultList();
+        criteria.distinct(true);
 
-		return tasks;
-	}
+        List<Task> tasks = getSession().createQuery(criteria).getResultList();
 
-	public Optional<Task> find(CriteriaQuery<Task> criteria, Root<Task> root, List<Predicate> predicates,
-			boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs, boolean loadContacts, boolean loadParent) {
-		criteria.select(root);
+        return tasks;
+    }
 
-		if (loadCouncils)
-			root.fetch(Task_.councils, JoinType.LEFT);
+    public Optional<Task> find(CriteriaQuery<Task> criteria, Root<Task> root, List<Predicate> predicates,
+                               boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs, boolean loadContacts, boolean loadParent) {
+        criteria.select(root);
 
-		if (loadDiangoses)
-			root.fetch(Task_.diagnosisRevisions, JoinType.LEFT);
+        if (loadCouncils)
+            root.fetch(Task_.councils, JoinType.LEFT);
 
-		if (loadContacts)
-			root.fetch(Task_.contacts, JoinType.LEFT);
+        if (loadDiangoses)
+            root.fetch(Task_.diagnosisRevisions, JoinType.LEFT);
 
-		if (loadPDFs)
-			root.fetch(Task_.attachedPdfs, JoinType.LEFT);
+        if (loadContacts)
+            root.fetch(Task_.contacts, JoinType.LEFT);
 
-		criteria.where(getCriteriaBuilder().and(predicates.toArray(new Predicate[predicates.size()])));
-		criteria.distinct(true);
+        if (loadPDFs)
+            root.fetch(Task_.attachedPdfs, JoinType.LEFT);
 
-		List<Task> groups = getSession().createQuery(criteria).getResultList();
+        criteria.where(getCriteriaBuilder().and(predicates.toArray(new Predicate[predicates.size()])));
+        criteria.distinct(true);
 
-		Optional<Task> task = Optional.ofNullable(groups.size() > 0 ? groups.get(0) : null);
+        List<Task> groups = getSession().createQuery(criteria).getResultList();
 
-		if (loadParent && task.isPresent()) {
-			Hibernate.initialize(task.get().getParent().getTasks());
-			Hibernate.initialize(task.get().getParent().getAttachedPdfs());
-		}
+        Optional<Task> task = Optional.ofNullable(groups.size() > 0 ? groups.get(0) : null);
 
-		return task;
-	}
+        if (loadParent && task.isPresent()) {
+            Hibernate.initialize(task.get().getParent().getTasks());
+            Hibernate.initialize(task.get().getParent().getAttachedPdfs());
+        }
+
+        return task;
+    }
 }

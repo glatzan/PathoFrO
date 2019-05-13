@@ -17,23 +17,79 @@ public class ArchiveTaskStatus(task: Task) {
 
     val isArchiveAble = stainingStatus.isCompleted && diagnosisStatus.isCompleted && notificationStatus.isCompleted && councilStatus.isCompleted && !favouritesStatus.isArchivalBlocked
 
+    /**
+     * Status for all slides
+     */
     public class StainingStatus(task: Task) {
+        /**
+         * Staining phase is completed
+         */
         val isCompleted = task.stainingCompleted
+
+        /**
+         * Date of phase completion
+         */
         val dateOfCompletion = task.stainingCompletionDate
+
+        /**
+         * All slides with their statuses
+         */
         val slides = task.samples.flatMap { it.blocks.flatMap { it.slides.map { SlideStatus(it) } } }
 
+        /**
+         * True if all slides are marked als stained
+         */
+        val allSlidesCompleted = slides.all { it.isCompleted }
+
+        /**
+         * Status class for a single slide
+         */
         public class SlideStatus(val slide: Slide) {
+            /**
+             * True if completed
+             */
             val isCompleted = slide.stainingCompleted
+
+            /**
+             * date of completion
+             */
+            val dateOfCompletion = slide.completionDate
+
+            /**
+             * slide name
+             */
             val name = slide.slideID
+
+            /**
+             * true if slide is a restaining
+             */
             val isReStaining = slide.reStaining
         }
     }
 
+    /**
+     * Status of all diagnoses
+     */
     public class DiagnosisStatus(task: Task) {
+        /**
+         * True if diagnosis phase is completed
+         */
         val isCompleted = task.diagnosisCompleted
+
+        /**
+         * Completion date of diagnosis phase
+         */
         val dateOfCompletion = task.diagnosisCompletionDate
 
+        /**
+         * Details for all diagnosis revisions
+         */
         val revisions = task.diagnosisRevisions.map { RevisionStatus(it) }
+
+        /**
+         * True if all diagnoses are valid
+         */
+        val isValid = revisions.all { it.isValid }
 
         public class RevisionStatus(val diagnosisRevision: DiagnosisRevision) {
             val isCompleted = diagnosisRevision.completed
@@ -43,6 +99,8 @@ public class ArchiveTaskStatus(task: Task) {
 
             val isNoNotification = diagnosisRevision.notificationStatus == com.patho.main.model.patient.NotificationStatus.NO_NOTFICATION
             val isNotificationPerformed = diagnosisRevision.notificationStatus == com.patho.main.model.patient.NotificationStatus.NOTIFICATION_COMPLETED || isNoNotification
+
+            val isValid = isCompleted && (isSigned || isNoNotification)
 
             private fun getSignatureStatus(signature: Signature): SignatureStatus? {
                 val signatureStatus = SignatureStatus(signature)

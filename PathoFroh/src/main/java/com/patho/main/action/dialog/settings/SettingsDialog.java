@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.log.Log_;
 import com.patho.main.util.event.dialog.SettingsReloadEvent;
 import org.primefaces.event.ReorderEvent;
@@ -24,7 +25,6 @@ import com.patho.main.model.person.Organization;
 import com.patho.main.model.Physician;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototype.StainingType;
-import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.log.Log;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;

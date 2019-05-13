@@ -13,23 +13,26 @@ import com.patho.main.util.worklist.search.WorklistSearchExtended;
 
 public interface TaskRepositoryCustom {
 
-	public Optional<Task> findOptionalByIdAndInitialize(Long id, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
-			boolean loadContacts, boolean loadParent);
+    public Optional<Task> findOptionalByIdAndInitialize(Task task, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
+                                                        boolean loadContacts, boolean loadParent);
 
-	public Optional<Task> findOptionalByTaskId(String taskID);
-	
-	public Optional<Task> findOptionalByTaskId(String taskID, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
-			boolean loadContacts, boolean loadParent);
+    public Optional<Task> findOptionalByIdAndInitialize(Long id, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
+                                                        boolean loadContacts, boolean loadParent);
 
-	public Optional<Task> findOptionalBySlideID(String taskID, int uniqueSlideIDInBlock, boolean loadCouncils, boolean loadDiangoses,
-			boolean loadPDFs, boolean loadContacts, boolean loadParent);
+    public Optional<Task> findOptionalByTaskId(String taskID);
 
-	public Optional<Task> findOptinalByLastID(Calendar ofYear, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
-			boolean loadContacts, boolean loadParent);
+    public Optional<Task> findOptionalByTaskId(String taskID, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
+                                               boolean loadContacts, boolean loadParent);
 
-	public List<Task> findByCriteria(WorklistSearchExtended worklistSearchExtended, boolean initParent);
+    public Optional<Task> findOptionalBySlideID(String taskID, int uniqueSlideIDInBlock, boolean loadCouncils, boolean loadDiangoses,
+                                                boolean loadPDFs, boolean loadContacts, boolean loadParent);
 
-	public Optional<Task> find(CriteriaQuery<Task> criteria, Root<Task> root, List<Predicate> predicates, boolean loadCouncils,
-			boolean loadDiangoses, boolean loadPDFs, boolean loadContacts, boolean loadParent);
+    public Optional<Task> findOptinalByLastID(Calendar ofYear, boolean loadCouncils, boolean loadDiangoses, boolean loadPDFs,
+                                              boolean loadContacts, boolean loadParent);
+
+    public List<Task> findByCriteria(WorklistSearchExtended worklistSearchExtended, boolean initParent);
+
+    public Optional<Task> find(CriteriaQuery<Task> criteria, Root<Task> root, List<Predicate> predicates, boolean loadCouncils,
+                               boolean loadDiangoses, boolean loadPDFs, boolean loadContacts, boolean loadParent);
 
 }

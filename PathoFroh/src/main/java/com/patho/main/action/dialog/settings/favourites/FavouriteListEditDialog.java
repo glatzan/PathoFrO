@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.patho.main.model.favourites.*;
 import com.patho.main.service.UserService;
-import org.apache.catalina.User;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -15,11 +15,6 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.settings.groups.GroupListDialog.GroupSelectEvent;
 import com.patho.main.action.dialog.settings.users.UserListDialog.HistoUserSelectEvent;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.favourites.FavouriteList;
-import com.patho.main.model.favourites.FavouriteListItem;
-import com.patho.main.model.favourites.FavouritePermissions;
-import com.patho.main.model.favourites.FavouritePermissionsGroup;
-import com.patho.main.model.favourites.FavouritePermissionsUser;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.ui.FavouriteListContainer;
@@ -182,7 +177,7 @@ public class FavouriteListEditDialog extends AbstractDialog {
 	 * is no default commentary, the commentary is generated.
 	 */
 	public void onUseDumplist() {
-		if (favouriteList.isUseDumplist() && HistoUtil.isNullOrEmpty(favouriteList.getDumpCommentary())) {
+		if (favouriteList.getUseDumplist() && HistoUtil.isNullOrEmpty(favouriteList.getDumpCommentary())) {
 			String commentary = resourceBundle.get("dialog.favouriteListEdit.dumpList.default");
 			favouriteList.setDumpCommentary(commentary);
 		}
