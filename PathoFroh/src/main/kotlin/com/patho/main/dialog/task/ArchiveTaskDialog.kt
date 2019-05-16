@@ -5,6 +5,7 @@ import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.TaskService
+import com.patho.main.util.status.diagnosis.ReportIntentBearer
 import com.patho.main.util.task.AdvancedTaskStatus
 import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.task.TaskNotFoundException
@@ -20,8 +21,12 @@ open class ArchiveTaskDialog @Autowired constructor(
 
     open lateinit var status: ArchiveTaskStatus
 
-    var taskStatus: AdvancedTaskStatus? = null
+    /**
+     * Selected status for displaying infos
+     */
+    open var selectedReportIntentStatus: ReportIntentBearer? = null
 
+    var taskStatus: AdvancedTaskStatus? = null
 
     var commentary: String = ""
 

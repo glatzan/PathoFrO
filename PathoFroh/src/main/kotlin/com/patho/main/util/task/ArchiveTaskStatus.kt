@@ -5,7 +5,7 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.miscellaneous.Council
-import com.patho.main.util.status.ReportIntentStatusByReportIntentAndDiagnosis
+import com.patho.main.util.status.diagnosis.ReportIntentStatusByReportIntentAndDiagnosis
 
 public class ArchiveTaskStatus(task: Task) {
 

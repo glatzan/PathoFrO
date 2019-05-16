@@ -11,7 +11,8 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SlideService
 import com.patho.main.util.print.UnknownPrintingException
-import com.patho.main.util.status.ReportIntentStatusByReportIntentAndDiagnosis
+import com.patho.main.util.status.diagnosis.ReportIntentBearer
+import com.patho.main.util.status.diagnosis.ReportIntentStatusByReportIntentAndDiagnosis
 import freemarker.template.TemplateNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -50,7 +51,7 @@ open class ReceiptLogView @Autowired constructor(
     /**
      * Selectedd status for displaying infos
      */
-    open var selectedReportIntentStatus: ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer? = null
+    open var selectedReportIntentStatus: ReportIntentBearer? = null
 
     /**
      * Loads all task data
