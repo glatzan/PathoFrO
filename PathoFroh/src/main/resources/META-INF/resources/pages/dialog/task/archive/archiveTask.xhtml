@@ -274,22 +274,22 @@
                     <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
                         <p:accordionPanel activeIndex="-1"
                                           styleClass="contentAccordionPannel" style="width:450px">
-                            <p:tab title="#{msg['dialog.archiveTask.status.diagnoses.details.text']}">
+                            <p:tab title="#{msg['dialog.archiveTask.status.notification.details.text']}">
                                 <!-- contacts -->
-                                <p:dataTable var="reportIntent" scrollable="true" scrollHeight="90"
-                                             style="width:450px" styleClass="defaultHistoDataTable"
+                                <p:dataTable var="reportIntent" style="width:450px" styleClass="defaultHistoDataTable"
                                              value="#{archiveTaskDialog.status.notificationStatus.notification.reportIntentBearer}">
 
                                     <!-- name -->
                                     <p:column style="width:auto">
                                         <f:facet name="header">
-                                            <h:outputLabel value="#{msg['body.receiptlog.contact.name']}"/>
+                                            <h:outputLabel
+                                                    value="#{msg['dialog.archiveTask.status.notification.details.list.name']}"/>
                                         </f:facet>
-
                                         <h:outputLabel value="#{reportIntent.person.getFullName()}" id="test123"/>
-
                                     </p:column>
-                                    <p:column>
+
+                                    <!-- infos -->
+                                    <p:column style="width: 20px" styleClass="centerChildElements ">
                                         <p:commandLink
                                                 styleClass="contactInfoOverplayTrigger"
                                                 icon="pi pi-search"
@@ -301,15 +301,18 @@
                                             <i class="fa fa-info-circle"/>
                                         </p:commandLink>
                                     </p:column>
-                                    <p:column>
+
+                                    <!-- status -->
+                                    <p:column style="width: 20px"
+                                              styleClass="centerChildElements centerHeaderChildElements">
                                         <h:panelGroup id="notficationp">
                                             <i class="fa fa-fw #{reportIntent.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
                                             <p:tooltip for="notficationp">
                                                 <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.details.list.signature.completed']}"
+                                                        value="#{msg['dialog.archiveTask.status.notification.details.list.status.completed']}"
                                                         rendered="#{reportIntent.completed}"/>
                                                 <h:outputLabel
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.details.list.signature.notCompleted']}"
+                                                        value="#{msg['dialog.archiveTask.status.notification.details.list.status.notCompleted']}"
                                                         rendered="#{!reportIntent.completed}"/>
                                             </p:tooltip>
                                         </h:panelGroup>
@@ -318,15 +321,11 @@
                             </p:tab>
                         </p:accordionPanel>
 
-                        <script type="text/javascript">
-                            commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler("contactInfoOverlayPanel")
-                            commonFunctions.addShowDialogOnMouseEnter(".contactInfoOverplayTrigger", "contactInfoOverlayPanel")
-                        </script>
-
                         <!-- overlay -->
                         <histo:reportIntentStatusByReportIntentAndDiagnosisOverlay id="contactInfoOverlayBearer"
-                                reportIntentBearer="#{archiveTaskDialog.selectedReportIntentStatus}"
-                                wid="contactInfoOverlayPanel" triggerClass=".contactInfoOverplayTrigger"/>
+                                                                                   reportIntentBearer="#{archiveTaskDialog.selectedReportIntentStatus}"
+                                                                                   wid="contactInfoOverlayPanel"
+                                                                                   triggerClass="contactInfoOverplayTrigger"/>
 
                     </h:panelGrid>
 
@@ -336,11 +335,51 @@
                 <!-- right column -->
                 <h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer">
 
-
                     <!-- councils -->
                     <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-                        <p:separator/>
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses']}"/>
+                        <h:outputLabel value="#{msg['dialog.archiveTask.status.council.text']}"/>
+                    </h:panelGrid>
+
+                    <!-- councils completed -->
+                    <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
+                                 columnClasses="columnWidth250">
+                        <!-- coucil -->
+                        <h:outputLabel value="#{msg['dialog.archiveTask.status.council.phase.text']} "/>
+                        <h:panelGroup id="councilPhase">
+                            <i class="fa fa-fw #{archiveTaskDialog.status.councilStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+
+                            <p:tooltip for="councilPhase">
+                                <h:outputLabel value="#{msg['dialog.archiveTask.status.council.phase.completed']} "
+                                               rendered="#{archiveTaskDialog.status.councilStatus.completed}"/>
+
+                                <h:outputLabel
+                                        value="#{msg['dialog.archiveTask.status.council.phase.notCompleted']}"
+                                        rendered="#{!archiveTaskDialog.status.councilStatus.completed}"/>
+                            </p:tooltip>
+                        </h:panelGroup>
+                    </h:panelGrid>
+
+                    <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
+                        <p:accordionPanel activeIndex="-1"
+                                          styleClass="contentAccordionPannel" style="width:450px">
+                            <p:tab title="#{msg['dialog.archiveTask.status.council.details.text']}">
+
+                                <!-- contacts -->
+                                <p:dataTable var="council"
+                                             style="width:450px" styleClass="defaultHistoDataTable"
+                                             value="#{archiveTaskDialog.status.councilStatus.councils}">
+
+                                    <!-- name -->
+                                    <p:column style="width:auto">
+                                        <f:facet name="header">
+                                            <h:outputLabel
+                                                    value="#{msg['dialog.archiveTask.status.council.details.list.name']}"/>
+                                        </f:facet>
+                                        <h:outputLabel value="#{council.name}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                        </p:accordionPanel>
                     </h:panelGrid>
 
                     <!-- miscellaneous -->
@@ -349,6 +388,7 @@
                         <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses']}"/>
                     </h:panelGrid>
                 </h:panelGrid>
+
             </h:panelGrid>
         </div>
 

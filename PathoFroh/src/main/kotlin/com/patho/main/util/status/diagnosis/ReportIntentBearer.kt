@@ -8,7 +8,7 @@ import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.model.person.Contact
 import com.patho.main.service.impl.SpringContextBridge
 
-public open class ReportIntentBearer(val reportIntent: ReportIntent, val task: Task) {
+open class ReportIntentBearer(val reportIntent: ReportIntent, val task: Task) {
 
     val diagnosisBearers = mutableListOf<DiagnosisBearer>()
 

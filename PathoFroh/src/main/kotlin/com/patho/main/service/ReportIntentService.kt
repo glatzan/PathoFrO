@@ -446,7 +446,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transient
     open fun isNotificationPerformed(reportIntent: ReportIntent): Boolean {
-        return reportIntent.notifications.all { p -> isNotificationPerformed(p) }
+        return if(reportIntent.notifications.isNotEmpty()) reportIntent.notifications.all { p -> isNotificationPerformed(p) } else false
     }
 
     /**
@@ -454,7 +454,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transient
     open fun isNotificationPerformed(reportIntentNotification: ReportIntentNotification): Boolean {
-        return reportIntentNotification.history.all { p -> isNotificationPerformed(p) }
+        return if(reportIntentNotification.history.isNotEmpty()) reportIntentNotification.history.all { p -> isNotificationPerformed(p) } else false
     }
 
     /**
