@@ -2,20 +2,16 @@ package com.patho.main.action.handler;
 
 import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.views.*;
-import com.patho.main.common.ContactRole;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Signature;
 import com.patho.main.model.patient.*;
-import com.patho.main.model.patient.notification.ReportIntent;
-import com.patho.main.model.person.Person;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
-import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.worklist.Worklist;
@@ -23,7 +19,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.model.menu.MenuModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +29,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.component.html.HtmlPanelGroup;
 import java.util.Date;
 import java.util.Optional;
 
@@ -137,20 +131,6 @@ public class GlobalEditViewHandler {
      */
     private CurrentTaskFunctions ct = new CurrentTaskFunctions(this);
 
-    /**
-     * Search String for quick search
-     */
-    private String quickSearch;
-
-    /**
-     * Launch data for opening a patient add dialog from quick search
-     */
-    private PatientAddDialogLaunchData patientAddDialogLaunchData;
-
-    /**
-     * TODO: use
-     */
-    private boolean searchWorklist;
 
     /**
      * DataTable selection to change a material via overlay panel
@@ -205,119 +185,7 @@ public class GlobalEditViewHandler {
 //		}
     }
 
-    public void quickSearch() {
-        quickSearch(getQuickSearch(), userService.getCurrentUser().getSettings().getAlternatePatientAddMode());
-        setQuickSearch("");
-    }
 
-    public void quickSearch(String quickSerach, boolean alternateMode) {
-        logger.debug("Search for " + quickSerach + ", AlternateMode: " + alternateMode);
-        // search only in selected worklist
-        if (isSearchWorklist()) {
-            logger.debug("Search in worklist");
-            // TODO: implement
-        } else {
-            // removing spaces
-            quickSerach = quickSerach.trim();
-
-            if (quickSerach.matches("^\\d{6}$")) { // task
-                // serach for task (6 digits)
-
-                Optional<Task> task = taskRepository.findOptionalByTaskId(quickSerach, false, true, true, true, true);
-
-                if (task.isPresent()) {
-                    logger.debug("Task found, adding to worklist");
-                    worklistHandler.addTaskToWorklist(task.get(), true);
-                    MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.task",
-                            "growl.search.patient.task.text");
-                } else {
-                    // no task was found
-                    logger.debug("No task with the given id found");
-                    MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.notFound.task", "general.blank",
-                            FacesMessage.SEVERITY_ERROR);
-                }
-
-            } else if (quickSerach.matches("^\\d{8}$")) { // piz
-                // searching for piz (8 digits)
-                logger.debug("Search for piz: " + quickSerach);
-
-                // Searching for patient in pdv and local database
-                Optional<Patient> patient;
-                try {
-                    patient = patientService.findPatientByPizInDatabaseAndPDV(quickSerach,
-                            !userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_CLINIC), true,
-                            true);
-                } catch (Exception e) {
-                    patient = Optional.empty();
-                }
-
-                if (patient.isPresent()) {
-                    logger.debug("Found patient " + patient + " and adding to currentworklist");
-
-                    worklistHandler.addPatientToWorkList(patient.get(), true, true);
-                    MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.piz",
-                            "growl.search.patient.piz.text");
-
-                    // if alternate mode the create Task dialog will be
-                    // shown after the patient is added to the worklist
-                    if (alternateMode) {
-                        // starting task button from gui (return handler)
-                        MessageHandler.executeScript("clickButtonFromBean('headerForm:newTaskBtn')");
-                    }
-
-                } else {
-                    // no patient was found for piz
-                    logger.debug("No Patient found with piz " + quickSerach);
-
-                    MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.notFound.piz", "general.blank",
-                            FacesMessage.SEVERITY_ERROR);
-                }
-            } else if (quickSerach.matches("^\\d{9}$")) { // slide id
-                // searching for slide (9 digits)
-                logger.debug("Search for SlideID: " + quickSerach);
-
-                String taskId = quickSerach.substring(0, 6);
-                String uniqueSlideIDinTask = quickSerach.substring(6, 9);
-
-                Optional<Task> task = taskRepository.findOptionalBySlideID(taskId,
-                        Integer.parseInt(uniqueSlideIDinTask), false, true, true, true, true);
-
-                if (task.isPresent()) {
-                    logger.debug("Slide found");
-                    MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.slide",
-                            "growl.search.patient.slide");
-                    worklistHandler.addTaskToWorklist(task.get(), true);
-                } else {
-                    // no slide was found
-                    logger.debug("No slide with the given id found");
-                    MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.notFount.slide", "general.blank",
-                            FacesMessage.SEVERITY_ERROR);
-                }
-
-            } else if (quickSerach.matches("^(.+)(, )(.+)$")) {
-                logger.debug("Search for name, first name");
-                // name, surename; name surename
-                String[] arr = quickSerach.split(", ");
-                // setting data for launching dialog via gui element (return handler
-                setPatientAddDialogLaunchData(new PatientAddDialogLaunchData(arr[0], arr[1], "", null));
-                MessageHandler.executeScript("clickButtonFromBean('navigationForm:searchPatientButtonQuickSeach')");
-            } else if (quickSerach.matches("^(.+) (.+)$")) {
-                logger.debug("Search for firstname, name");
-                // name, surename; name surename
-                String[] arr = quickSerach.split(" ");
-                setPatientAddDialogLaunchData(new PatientAddDialogLaunchData(arr[1], arr[0], "", null));
-                MessageHandler.executeScript("clickButtonFromBean('navigationForm:searchPatientButtonQuickSeach')");
-            } else if (quickSerach.matches("^[\\p{Alpha}\\-]+")) {
-                logger.debug("Search for name");
-                setPatientAddDialogLaunchData(new PatientAddDialogLaunchData(quickSerach, "", "", null));
-                MessageHandler.executeScript("clickButtonFromBean('navigationForm:searchPatientButtonQuickSeach')");
-            } else {
-                logger.debug("No search match found");
-                MessageHandler.sendGrowlMessagesAsResource("growl.search.patient.notFount.general", "general.blank",
-                        FacesMessage.SEVERITY_ERROR);
-            }
-        }
-    }
 
     /**
      * Executes a dynamic command e.g. for opening a dialog
@@ -576,16 +444,6 @@ public class GlobalEditViewHandler {
 
     public static enum TaskInitilize {
         GENERATE_TASK_STATUS, GENERATE_MENU_MODEL, RELOAD_MENU_MODEL_FAVOURITE_LISTS, RELOAD;
-    }
-
-    @AllArgsConstructor
-    @Getter
-    @Setter
-    public static class PatientAddDialogLaunchData {
-        private String name;
-        private String surname;
-        private String piz;
-        private Date birthday;
     }
 
 }

@@ -23,6 +23,9 @@ open class Person : AbstractPersistable, FullName {
     @Column(unique = true, nullable = false)
     open override var id: Long = 0
 
+    @Version
+    open var version: Long = 0
+    
     @Enumerated(EnumType.ORDINAL)
     open override var gender = Gender.UNKNOWN
 

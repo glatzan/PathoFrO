@@ -16,7 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.patho.main.config.excepion.ToManyEntriesException;
-import com.patho.main.model.dto.json.JSONPatientMapper;
+import com.patho.main.model.json.JSONPatientMapper;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.JSONPatientRepository;
 import com.patho.main.util.helper.TimeUtil;

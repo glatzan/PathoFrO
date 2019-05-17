@@ -174,7 +174,7 @@
                                 rendered="#{userService.userHasPermission('TASK_EDIT_NEW')}"
                                 actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                             <p:ajax event="dialogReturn"
-                                    listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                                    listener="#{dialogReturnHandler.onDefaultReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                             <i class="fa fa-plus"/>
                         </p:commandLink>
@@ -258,7 +258,7 @@
                         rendered="#{userService.userHasPermission('TASK_EDIT_NEW')}"
                         actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                     <p:ajax event="dialogReturn"
-                            listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                            listener="#{dialogReturnHandler.onDefaultReturn}"
                             update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                 </p:commandButton>
 
@@ -269,7 +269,7 @@
                         rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
                         actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                     <p:ajax event="dialogReturn"
-                            listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                            listener="#{dialogReturnHandler.onDefaultReturn}"
                             update="navigationForm:patientList contentForm:contentPanel"/>
                 </p:commandButton>
             </h:panelGrid>

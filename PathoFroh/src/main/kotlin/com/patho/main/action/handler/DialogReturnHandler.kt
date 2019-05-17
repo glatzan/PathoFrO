@@ -179,7 +179,10 @@ open class DialogReturnHandler @Autowired constructor(
         if (obj is PatientSelectEvent) {
             logger.debug("Patient select event")
 
-            obj.obj ?: logger.debug("No Patient selected"); return;
+            if (obj.obj == null) {
+                logger.debug("No Patient selected")
+                return
+            }
 
             worklistHandler.addPatientToWorkList(obj.obj, true, true)
             return

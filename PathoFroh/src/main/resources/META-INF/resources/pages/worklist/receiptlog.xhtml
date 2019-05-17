@@ -395,7 +395,7 @@
                                        actionListener="#{contactDialog.initAndPrepareBean(receiptLogView.task)}">
                             <i class="fa fa-fw fa-cog"/>
                             <p:ajax event="dialogReturn"
-                                    listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                                    listener="#{dialogReturnHandler.onDefaultReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel"/>
                         </p:commandLink>
                     </h:panelGrid>
@@ -806,7 +806,7 @@
                             <i class="fa fa-wrench" style="float: right; margin-right: 5px"
                                title="#{msg['body.receiptlog.slide.headline.options.text']}"/>
                             <p:ajax event="dialogReturn"
-                                    listener="#{dialogReturnHandler.onDefaultDialogReturn}"
+                                    listener="#{dialogReturnHandler.onDefaultReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel"/>
                         </p:commandLink>
                     </f:facet>
@@ -989,11 +989,7 @@
                 <p:commandButton id="changeZone" widgetVar="performOnMay"
                                  style="display:none;"
                                  update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                 actionListener="#{receiptLogView.performActionOnMany(receiptLogView.actionOnMany)}">
-                    <p:ajax event="dialogReturn"
-                            listener="#{dialogReturnHandler.onDefaultDialogReturn}"
-                            oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll', 'contentForm:contentScrollPane')"
-                            update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                                 actionListener="#{receiptLogView.performActionOnSelectedSlides(receiptLogView.actionOnMany)}">
                 </p:commandButton>
 
             </h:panelGroup>
