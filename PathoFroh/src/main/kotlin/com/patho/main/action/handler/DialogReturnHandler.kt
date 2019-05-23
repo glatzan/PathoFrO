@@ -229,4 +229,14 @@ open class DialogReturnHandler @Autowired constructor(
         }
         onDefaultReturn(event)
     }
+
+    open fun onTaskPhaseChangeEvent(event: SelectEvent){
+        val obj = event.`object`
+        if (obj is RemovePatientFromWorklistEvent) {
+           worklistHandler.removePatientFromWorklist(obj.obj)
+            return
+        }
+
+        onDefaultReturn(event)
+    }
 }

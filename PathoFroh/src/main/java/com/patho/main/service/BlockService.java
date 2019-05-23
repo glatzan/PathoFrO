@@ -63,7 +63,7 @@ public class BlockService extends AbstractService {
 
         // saving task
         if (save)
-            return taskRepository.save(block.getTask(), resourceBundle.get("log.task.blok.new", block));
+            return taskRepository.save(block.getTask(), resourceBundle.get("log.task.block.new", block));
         return block.getTask();
     }
 
@@ -91,8 +91,8 @@ public class BlockService extends AbstractService {
         parent.getBlocks().forEach(p -> TaskTreeTools.updateNamesInTree(p, p.getTask().getUseAutoNomenclature(), false));
 
         if (save) {
-            t = taskRepository.save(block.getTask(), resourceBundle.get("log.task.blok.deleted", block));
-            blockRepository.delete(block, resourceBundle.get("log.task.blok.deleted", block));
+            t = taskRepository.save(block.getTask(), resourceBundle.get("log.task.block.deleted", block));
+            blockRepository.delete(block, resourceBundle.get("log.task.block.deleted", block));
         }
 
         return t;

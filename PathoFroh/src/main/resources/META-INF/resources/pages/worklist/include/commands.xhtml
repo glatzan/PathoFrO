@@ -239,7 +239,7 @@
         <p:commandButton id="archiveTaskBtn" widgetVar="archiveTaskBtn"
                          actionListener="#{archiveTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                    listener="#{dialogReturnHandler.onTaskPhaseChangeEvent}"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
 

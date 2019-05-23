@@ -1,12 +1,15 @@
 package com.patho.main.dialog.task
 
+import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.Dialog
+import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.TaskService
+import com.patho.main.util.event.dialog.PatientReloadEvent
+import com.patho.main.util.event.dialog.RemovePatientFromWorklistEvent
 import com.patho.main.util.status.diagnosis.ReportIntentBearer
-import com.patho.main.util.task.AdvancedTaskStatus
 import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.task.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,11 +29,26 @@ open class ArchiveTaskDialog @Autowired constructor(
      */
     open var selectedReportIntentStatus: ReportIntentBearer? = null
 
-    var taskStatus: AdvancedTaskStatus? = null
+    /**
+     * If true the archivation button will be rendered nevertheless archivation block favourite lists are present
+     */
+    open var forceArchivation = false
 
-    var commentary: String = ""
+    /**
+     * Commentary for task archivation
+     */
+    open var commentary: String = ""
 
-    var removeFromWorklist: Boolean = true
+    /**
+     * True if the patient containing the task should be removed from the current worklist
+     */
+    open var removeFromWorklist: Boolean = true
+
+    /**
+     * True if archivation is possible
+     */
+    open val isArchivationPossible
+        get() = forceArchivation || status.isArchiveAble
 
     override fun initBean(task: Task): Boolean {
         val tmp = taskRepository.findOptionalByIdAndInitialize(task, true, true, true, true, true)
@@ -40,23 +58,29 @@ open class ArchiveTaskDialog @Autowired constructor(
 
         status = ArchiveTaskStatus(tmp.get())
 
-        this.taskStatus = AdvancedTaskStatus(tmp.get()).generateStatus()
+        selectedReportIntentStatus = null
+
+        forceArchivation = false
+
+        commentary = ""
+
+        removeFromWorklist = !(task.patient?.tasks?.any { it.favouriteLists.any { it.id == PredefinedFavouriteList.NotificationList.id } }
+                ?: true)
 
         return super.initBean(tmp.get())
     }
 
-    fun hideAndArchive() {
-        // taskService.archiveTask(task)
+    /**
+     * Archives the task and hides the dialog
+     */
+    fun archiveAndHide() {
+        taskService.archiveTask(task)
 
-//		if (removeFromWorklist) {
-//			// only remove from worklist if patient has one active task
-//			if (task.getPatient().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
-//				mainHandlerAction.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
-//			} else {
-//				worklistViewHandler.removePatientFromWorklist(task.getPatient());
-//			}
-//		}
-//
-//		mainHandlerAction.sendGrowlMessagesAsResource("growl.task.archived", "growl.task.archived.text");
+        if (removeFromWorklist)
+            super.hideDialog(RemovePatientFromWorklistEvent(task.patient!!))
+        else
+            super.hideDialog(PatientReloadEvent(task.patient!!))
+
+        MessageHandler.sendGrowlMessages("growl.task.archived.headline", "growl.task.archived.text")
     }
 }

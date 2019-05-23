@@ -1,23 +1,24 @@
 package com.patho.main.service
 
+import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.DiagnosisRevisionRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.helper.TimeUtil
-import com.patho.main.util.task.ArchiveTaskStatus
-import com.patho.main.util.task.TaskStatus
 import com.patho.main.util.task.TaskTreeTools
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.util.*
 
 @Service()
 open class TaskService @Autowired constructor(
         private val diagnosisRevisionRepository: DiagnosisRevisionRepository,
-        private val taskRepository: TaskRepository) : AbstractService() {
+        private val taskRepository: TaskRepository,
+        private val favouriteListService: FavouriteListService) : AbstractService() {
 
 
     /**
@@ -108,7 +109,7 @@ open class TaskService @Autowired constructor(
      */
     @Transactional
     open fun updateNamesOfTaskEntities(task: Task, ignoreManuallyChangedEntities: Boolean, save: Boolean): Task {
-        logger.debug("Updating names, ignore manually altered: {}", ignoreManuallyChangedEntities)
+        logger.debug("Updating names, ignore manually altered: $ignoreManuallyChangedEntities")
 
         for (sample in task.samples) {
             TaskTreeTools.updateNamesInTree(sample, sample.task?.useAutoNomenclature
@@ -120,6 +121,30 @@ open class TaskService @Autowired constructor(
         else
             task
     }
+
+    /**
+     * Archives the given task and removes the task from all predefined favourite lists.
+     */
+    @Transactional
+    open fun archiveTask(task: Task, commentary: String = ""): Task {
+        // remove from all system lists
+        favouriteListService.removeTaskFromList(task, false, *PredefinedFavouriteList.values())
+
+        // finalizing task
+        task.finalizationDate = Instant.now()
+        task.finalized = true;
+
+        return taskRepository.save(task, resourceBundle.get("log.task.archived", task, commentary))
+    }
+
+    open fun dearchvieTask(task: Task, commentary: String = "") : Task {
+        // finalizing task
+        task.finalizationDate = null
+        task.finalized = false
+
+        return taskRepository.save(task, resourceBundle.get("log.task.dearchived", task, commentary))
+    }
+
 
     /**
      * Enum for retuning the taskID validity status

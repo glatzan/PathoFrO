@@ -15,7 +15,7 @@ public class ArchiveTaskStatus(task: Task) {
     val councilStatus = CouncilStatus(task)
     val favouritesStatus = FavouritesStatus(task)
 
-    val isArchiveAble = stainingStatus.isCompleted && diagnosisStatus.isCompleted && notificationStatus.isCompleted && councilStatus.isCompleted && !favouritesStatus.isArchivalBlocked
+    val isArchiveAble = stainingStatus.isCompleted && diagnosisStatus.isCompleted && notificationStatus.isCompleted && councilStatus.isCompleted && !favouritesStatus.isCompleted
 
     /**
      * Status for all slides
@@ -174,7 +174,6 @@ public class ArchiveTaskStatus(task: Task) {
 
     public class FavouritesStatus(task: Task) {
         val lists = task.favouriteLists
-        val blockingLists = task.favouriteLists.filter { it.blockTaskArchival }
-        val isArchivalBlocked = blockingLists.isEmpty()
+        val isCompleted = !lists.any { it.blockTaskArchival }
     }
 }

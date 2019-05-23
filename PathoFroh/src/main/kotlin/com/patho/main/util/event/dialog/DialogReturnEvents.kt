@@ -41,6 +41,11 @@ class WorklistSelectEvent(worklist: Worklist) : SelectEvent<Worklist>(worklist)
 class PDFSelectEvent(pdf: PDFContainer) : SelectEvent<PDFContainer>(pdf)
 
 /**
+ * Event for removing the given patient from the worklist
+ */
+class RemovePatientFromWorklistEvent(patient: Patient) : SelectEvent<Patient>(patient)
+
+/**
  * Reload event
  */
 open class ReloadEvent : DialogReturnEvent()

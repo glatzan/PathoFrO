@@ -68,7 +68,7 @@
                         <!-- slide status -->
                         <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.slides.text']}"/>
                         <h:panelGroup id="stainingCompleted">
-                            <i class="fa fa-fw #{archiveTaskDialog.taskStatus.stainingCompleted ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                            <i class="fa fa-fw #{archiveTaskDialog.status.stainingStatus.allSlidesCompleted ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
                             <p:tooltip for="stainingCompleted">
                                 <h:outputText
                                         value="#{msg['dialog.archiveTask.status.staining.slides.completed']}"
@@ -139,9 +139,9 @@
                             </h:outputFormat>
                             <p:tooltip for="diagnosisDate">
                                 <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.phase.completed']}"
-                                               rendered="#{archiveTaskDialog.taskStatus.diagnosisPhaseCompleted}"/>
+                                               rendered="#{archiveTaskDialog.status.diagnosisStatus.completed}"/>
                                 <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.phase.notCompleted']}"
-                                               rendered="#{!archiveTaskDialog.taskStatus.diagnosisPhaseCompleted}"/>
+                                               rendered="#{!archiveTaskDialog.status.diagnosisStatus.completed}"/>
                             </p:tooltip>
                         </h:panelGroup>
 
@@ -386,10 +386,74 @@
                         </p:accordionPanel>
                     </h:panelGrid>
 
-                    <!-- miscellaneous -->
+                    <!-- favourite lists -->
                     <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
                         <p:separator/>
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses']}"/>
+                        <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.text']}"/>
+                    </h:panelGrid>
+
+                    <!-- favourite lists blocking -->
+                    <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
+                                 columnClasses="columnWidth250">
+                        <!-- favourite list blocking archival -->
+                        <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.phase.text']} "/>
+                        <h:panelGroup id="favouritelistsBlocking">
+                            <i class="fa fa-fw #{archiveTaskDialog.status.favouritesStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+
+                            <p:tooltip for="favouritelistsBlocking">
+                                <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.phase.completed']} "
+                                               rendered="#{archiveTaskDialog.status.favouritesStatus.completed}"/>
+
+                                <h:outputLabel
+                                        value="#{msg['dialog.archiveTask.status.lists.phase.netCompleted']}"
+                                        rendered="#{!archiveTaskDialog.status.favouritesStatus.completed}"/>
+                            </p:tooltip>
+                        </h:panelGroup>
+                    </h:panelGrid>
+
+                    <!-- favouritelists -->
+                    <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
+                        <p:accordionPanel activeIndex="-1"
+                                          styleClass="contentAccordionPannel" style="width:450px">
+                            <p:tab title="#{msg['dialog.archiveTask.status.lists.details.text']}">
+
+                                <!-- lists -->
+                                <p:dataTable var="favouriteList"
+                                             style="width:450px" styleClass="defaultHistoDataTable"
+                                             value="#{archiveTaskDialog.status.favouritesStatus.lists}">
+
+                                    <!-- name -->
+                                    <p:column style="width:auto">
+                                        <f:facet name="header">
+                                            <h:outputLabel
+                                                    value="#{msg['dialog.archiveTask.status.lists.details.list.name']}"/>
+                                        </f:facet>
+                                        <h:outputLabel value="#{favouriteList.name}"/>
+                                    </p:column>
+
+                                    <!-- blocking -->
+                                    <p:column style="width:20px"
+                                              styleClass="centerChildElements centerHeaderChildElements">
+                                        <f:facet name="header">
+                                            <h:panelGroup id="favBlockingHeadline">
+                                                <i class="fa fa-fw fa-times-circle icon-red"/>
+                                                <p:tooltip for="favBlockingHeadline">
+                                                    <h:outputLabel
+                                                            value="#{msg['dialog.archiveTask.status.lists.details.block.headline']}"/>
+                                                </p:tooltip>
+                                            </h:panelGroup>
+                                        </f:facet>
+                                        <h:panelGroup id="favBlocking" rendered="#{favouriteList.blockTaskArchival}">
+                                            <i class="fa fa-fw fa-times-circle icon-red"/>
+                                            <p:tooltip for="favBlocking">
+                                                <h:outputText
+                                                        value="#{msg['dialog.archiveTask.status.lists.details.block.block']}"/>
+                                            </p:tooltip>
+                                        </h:panelGroup>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                        </p:accordionPanel>
                     </h:panelGrid>
                 </h:panelGrid>
 
@@ -399,7 +463,11 @@
         <div class="buttonContainer">
             <h:panelGrid columns="2">
 
-                <h:panelGrid columns="1" styleClass="left">
+                <h:panelGrid columns="2" styleClass="left">
+                    <h:outputLabel value="#{msg['dialog.archiveTask.forceArchive']}" />
+                    <p:selectBooleanCheckbox value="#{archiveTaskDialog.forceArchivation}">
+                        <p:ajax event="change" execute="@this" update="@form"/>
+                    </p:selectBooleanCheckbox>
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right">
@@ -408,7 +476,7 @@
                             value="#{msg['dialog.archiveTask.button.archive']}"
                             icon="fa fa-archive">
                         <f:actionListener
-                                binding="#{archiveTaskDialog.archiveTask()}"/>
+                                binding="#{archiveTaskDialog.archiveAndHide()}"/>
                         <f:actionListener
                                 binding="#{archiveTaskDialog.hideDialog()}"/>
                     </p:commandButton>
