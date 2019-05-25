@@ -316,7 +316,7 @@
 			<script>
 				$(document).ready(function() {
 					setMouseEnterEvents(true);
-					setScrollPanelScrollSpeed("dialogContent:scrollBody");
+					commonFunctions.initializeCustomScrollPanel("dialogContent:scrollBody");
 					
 					// disabling pdf selection in view mode
 					if(#{dialog.pdfOrganizer.viewOnly}){

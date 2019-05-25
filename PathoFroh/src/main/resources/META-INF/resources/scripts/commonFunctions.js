@@ -53,27 +53,6 @@ function updateGlobalGrowl(name) {
 }
 
 /**
- * Sets the scrollspeet to an custom scrollbar
- *
- * @param id
- * @param speed
- * @returns
- */
-function setScrollPanelScrollSpeed(id, speed) {
-
-    if (arguments.length == 1)
-        speed = 100;
-
-    var idDataTbl = getAlteredID(id);
-
-    $(idDataTbl).jScrollPane({
-        mouseWheelSpeed: speed,
-        resizeSensor: true
-        //autoReinitialise: true
-    });
-}
-
-/**
  * function is triggered by the backend to show a dialog, workaround
  *
  * @param btn
@@ -359,7 +338,7 @@ var commonFunctions = {
      * @param classID
      * @param overlayPanelID
      */
-    addShowDialogOnMouseEnter(classID, overlayPanelID) {
+    addShowDialogOnMouseEnter: function (classID, overlayPanelID) {
         var tmpSel = $(classID)
 
         tmpSel.mouseenter(function () {
@@ -369,5 +348,24 @@ var commonFunctions = {
         tmpSel.mouseleave(function () {
             commonFunctions.hideOverlayPanel(overlayPanelID)
         })
+    },
+    /**
+     * Sets the scrollspeet to an custom scrollbar
+     *
+     * @param id
+     * @param speed
+     * @param sensor
+     * @returns
+     */
+    initializeCustomScrollPanel: function (id, speed = 100, sensor = true) {
+
+        var idDataTbl = getAlteredID(id);
+
+        $(idDataTbl).jScrollPane({
+            mouseWheelSpeed: speed,
+            resizeSensor: sensor,
+            autoReinitialise: !sensor
+        });
     }
+
 }

@@ -30,432 +30,459 @@
         </div>
 
         <div class="dialogContent">
+            <p:scrollPanel styleClass="hiddenHistoScrollPanelStyle" id="scrollBody"
+                           style="height:450px;">
 
-            <h:panelGrid columns="2" columnClasses="columnWidthPercent50 columnTop, columnWidthPercent50 columnTop"
-                         styleClass="defaultHistoHiddenTableContainer" style="width: 100%">
+                <h:panelGrid columns="2" columnClasses="columnWidthPercent50 columnTop, columnWidthPercent50 columnTop"
+                             styleClass="defaultHistoHiddenTableContainer" style="width: 100%">
 
-                <!-- left column -->
-                <h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer" style="width: 100%;">
+                    <!-- left column -->
+                    <h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer" style="width: 100%;">
 
-                    <!-- staining -->
-                    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.text']}"/>
-                    </h:panelGrid>
+                        <!-- staining -->
+                        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.text']}"/>
+                        </h:panelGrid>
 
-                    <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
-                                 columnClasses="columnWidth250">
+                        <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
+                                     columnClasses="columnWidth250">
 
-                        <!-- stainingphase -->
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.phase.text']} "/>
-                        <h:panelGroup id="stainingDate">
-                            <i class="fa fa-fw #{archiveTaskDialog.status.stainingStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                            <h:outputFormat style="margin-left: 5px"
-                                            value="#{archiveTaskDialog.status.stainingStatus.dateOfCompletion}"
-                                            rendered="#{archiveTaskDialog.status.stainingStatus.completed}">
-                                <f:converter converterId="instantDateTimeConverter"/>
-                                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
-                            </h:outputFormat>
+                            <!-- stainingphase -->
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.phase.text']} "/>
+                            <h:panelGroup id="stainingDate">
+                                <i class="fa fa-fw #{archiveTaskDialog.status.stainingStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                <h:outputFormat style="margin-left: 5px"
+                                                value="#{archiveTaskDialog.status.stainingStatus.dateOfCompletion}"
+                                                rendered="#{archiveTaskDialog.status.stainingStatus.completed}">
+                                    <f:converter converterId="instantDateTimeConverter"/>
+                                    <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
+                                </h:outputFormat>
 
-                            <p:tooltip for="stainingDate">
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.phase.completed']} "
-                                               rendered="#{archiveTaskDialog.status.stainingStatus.completed}"/>
+                                <p:tooltip for="stainingDate">
+                                    <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.phase.completed']} "
+                                                   rendered="#{archiveTaskDialog.status.stainingStatus.completed}"/>
 
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.phase.notCompleted']}"
-                                               rendered="#{!archiveTaskDialog.status.stainingStatus.completed}"/>
-                            </p:tooltip>
-                        </h:panelGroup>
+                                    <h:outputLabel
+                                            value="#{msg['dialog.archiveTask.status.staining.phase.notCompleted']}"
+                                            rendered="#{!archiveTaskDialog.status.stainingStatus.completed}"/>
+                                </p:tooltip>
+                            </h:panelGroup>
 
-                        <!-- slide status -->
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.slides.text']}"/>
-                        <h:panelGroup id="stainingCompleted">
-                            <i class="fa fa-fw #{archiveTaskDialog.status.stainingStatus.allSlidesCompleted ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                            <p:tooltip for="stainingCompleted">
-                                <h:outputText
-                                        value="#{msg['dialog.archiveTask.status.staining.slides.completed']}"
-                                        rendered="#{archiveTaskDialog.status.stainingStatus.allSlidesCompleted}"/>
-                                <h:outputLabel
-                                        value="#{msg['dialog.archiveTask.status.staining.slides.notCompleted']}"
-                                        rendered="#{!archiveTaskDialog.status.stainingStatus.allSlidesCompleted}"/>
-                            </p:tooltip>
-                        </h:panelGroup>
-                    </h:panelGrid>
+                            <!-- slide status -->
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.slides.text']}"/>
+                            <h:panelGroup id="stainingCompleted">
+                                <i class="fa fa-fw #{archiveTaskDialog.status.stainingStatus.allSlidesCompleted ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                <p:tooltip for="stainingCompleted">
+                                    <h:outputText
+                                            value="#{msg['dialog.archiveTask.status.staining.slides.completed']}"
+                                            rendered="#{archiveTaskDialog.status.stainingStatus.allSlidesCompleted}"/>
+                                    <h:outputLabel
+                                            value="#{msg['dialog.archiveTask.status.staining.slides.notCompleted']}"
+                                            rendered="#{!archiveTaskDialog.status.stainingStatus.allSlidesCompleted}"/>
+                                </p:tooltip>
+                            </h:panelGroup>
+                        </h:panelGrid>
 
-                    <!-- slides -->
-                    <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
-                        <p:accordionPanel activeIndex="-1"
-                                          styleClass="contentAccordionPannel" style="width:450px">
+                        <!-- slides -->
+                        <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
+                            <p:accordionPanel activeIndex="-1"
+                                              styleClass="contentAccordionPannel" style="width:450px">
 
-                            <p:tab title="#{msg['dialog.archiveTask.status.staining.details.text']}">
-                                <p:dataTable styleClass="defaultHistoDataTable" style="width: auto"
-                                             value="#{archiveTaskDialog.status.stainingStatus.slides}" var="slide">
-                                    <!-- name -->
-                                    <p:column
-                                            headerText="#{msg['dialog.archiveTask.status.staining.details.list.name']}">
-                                        <h:outputText value="#{slide.name}"/>
-                                    </p:column>
+                                <p:tab title="#{msg['dialog.archiveTask.status.staining.details.text']}">
+                                    <p:dataTable styleClass="defaultHistoDataTable" style="width: auto"
+                                                 value="#{archiveTaskDialog.status.stainingStatus.slides}" var="slide">
+                                        <!-- name -->
+                                        <p:column
+                                                headerText="#{msg['dialog.archiveTask.status.staining.details.list.name']}">
+                                            <h:outputText value="#{slide.name}"/>
+                                        </p:column>
 
-                                    <p:column style="width:120px"
-                                              styleClass="centerChildElements centerHeaderChildElements"
-                                              headerText="#{msg['dialog.archiveTask.status.staining.details.list.status']}">
-                                        <h:panelGroup id="stainingStatus">
-                                            <i class="fa fa-fw #{slide.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                                            <h:outputFormat style="margin-left: 5px" rendered="#{slide.completed}"
-                                                            value="#{slide.dateOfCompletion}">
-                                                <f:convertDateTime type="date"/>
-                                            </h:outputFormat>
+                                        <p:column style="width:120px"
+                                                  styleClass="centerChildElements centerHeaderChildElements"
+                                                  headerText="#{msg['dialog.archiveTask.status.staining.details.list.status']}">
+                                            <h:panelGroup id="stainingStatus">
+                                                <i class="fa fa-fw #{slide.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                                <h:outputFormat style="margin-left: 5px" rendered="#{slide.completed}"
+                                                                value="#{slide.dateOfCompletion}">
+                                                    <f:convertDateTime type="date"/>
+                                                </h:outputFormat>
 
-                                            <p:tooltip for="stainingStatus">
-                                                <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.staining.details.list.completed']} "
-                                                        rendered="#{slide.completed}"/>
-                                                <h:outputLabel
-                                                        value="#{msg['dialog.archiveTask.status.staining.details.list.notCompleted']}"
-                                                        rendered="#{!slide.completed}"/>
-                                            </p:tooltip>
-                                        </h:panelGroup>
-                                    </p:column>
-                                </p:dataTable>
-                            </p:tab>
-                        </p:accordionPanel>
-                    </h:panelGrid>
-
-                    <!-- diangoses -->
-                    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-                        <p:separator/>
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.text']}"/>
-                    </h:panelGrid>
-
-                    <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
-                                 columnClasses="columnWidth250">
-                        <!-- diagnosis phase -->
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.phase.text']} "/>
-                        <h:panelGroup id="diagnosisDate">
-                            <i class="fa fa-fw #{archiveTaskDialog.status.diagnosisStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                            <h:outputFormat style="margin-left: 5px"
-                                            value="#{archiveTaskDialog.status.diagnosisStatus.dateOfCompletion}"
-                                            rendered="#{archiveTaskDialog.status.diagnosisStatus.completed}">
-                                <f:converter converterId="instantDateTimeConverter"/>
-                                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
-                            </h:outputFormat>
-                            <p:tooltip for="diagnosisDate">
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.phase.completed']}"
-                                               rendered="#{archiveTaskDialog.status.diagnosisStatus.completed}"/>
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.phase.notCompleted']}"
-                                               rendered="#{!archiveTaskDialog.status.diagnosisStatus.completed}"/>
-                            </p:tooltip>
-                        </h:panelGroup>
-
-                        <!-- diagnosis correct -->
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.status.text']}"/>
-                        <h:panelGroup id="diagnosisCompleted">
-                            <i class="fa fa-fw #{archiveTaskDialog.status.diagnosisStatus.valid ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                            <p:tooltip for="diagnosisCompleted">
-                                <h:outputText value="#{msg['dialog.archiveTask.status.diagnoses.status.completed']}"
-                                              rendered="#{archiveTaskDialog.status.diagnosisStatus.valid }"/>
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.status.notCompleted']}"
-                                               rendered="#{!archiveTaskDialog.status.diagnosisStatus.valid }"/>
-                            </p:tooltip>
-                        </h:panelGroup>
-                    </h:panelGrid>
-
-                    <!-- diagnoses -->
-                    <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
-                        <p:accordionPanel activeIndex="-1"
-                                          styleClass="contentAccordionPannel" style="width:450px">
-                            <p:tab title="#{msg['dialog.archiveTask.status.diagnoses.details.text']}">
-                                <p:dataTable styleClass="defaultHistoDataTable"
-                                             value="#{archiveTaskDialog.status.diagnosisStatus.revisions}"
-                                             var="diagnosis">
-                                    <!-- name -->
-                                    <p:column
-                                            headerText="#{msg['dialog.archiveTask.status.diagnoses.details.list.name']}">
-                                        <h:outputText value="#{diagnosis.name}"/>
-                                    </p:column>
-
-                                    <!-- completed -->
-                                    <p:column styleClass="centerChildElements centerHeaderChildElements"
-                                              headerText="#{msg['dialog.archiveTask.status.diagnoses.details.list.completed.text']}">
-                                        <h:panelGroup id="diangosisC">
-                                            <i class="fa fa-fw #{diagnosis.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                                            <h:outputFormat style="margin-left: 5px"
-                                                            value="#{diagnosis.dateOfCompletion}"
-                                                            rendered="#{diagnosis.completed}">
-                                                <f:converter converterId="instantDateTimeConverter"/>
-                                                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
-                                            </h:outputFormat>
-                                            <p:tooltip for="diangosisC">
-                                                <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.details.list.completed.completed']}"
-                                                        rendered="#{diagnosis.completed}"/>
-                                                <h:outputLabel
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.details.list.completed.notCompleted']}"
-                                                        rendered="#{!diagnosis.completed and !diagnosis.noNotification}"/>
-                                            </p:tooltip>
-                                        </h:panelGroup>
-                                    </p:column>
-
-                                    <!-- signature -->
-                                    <p:column styleClass="centerChildElements centerHeaderChildElements"
-                                              headerText="#{msg['dialog.archiveTask.status.diagnoses.details.list.signature.text']}">
-                                        <h:panelGroup id="diangosisS">
-                                            <i class="fa fa-fw #{diagnosis.signed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                                            <p:tooltip for="diangosisS">
-                                                <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.details.list.signature.completed']}"
-                                                        rendered="#{diagnosis.signed}"/>
-                                                <h:outputLabel
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.details.list.signature.notCompleted']}"
-                                                        rendered="#{!diagnosis.signed and !diagnosis.noNotification}"/>
-                                            </p:tooltip>
-                                        </h:panelGroup>
-                                    </p:column>
-
-                                    <!-- notification performed -->
-                                    <p:column styleClass="centerChildElements centerHeaderChildElements"
-                                              headerText="#{msg['dialog.archiveTask.status.diagnoses.details.list.notification.text']}">
-                                        <h:panelGroup id="diangosisNotification">
-                                            <h:panelGroup rendered="#{diagnosis.noNotification}">
-                                                <i class="fa fa-fw fa-check-circle'}"/>
+                                                <p:tooltip for="stainingStatus">
+                                                    <h:outputText
+                                                            value="#{msg['dialog.archiveTask.status.staining.details.list.completed']} "
+                                                            rendered="#{slide.completed}"/>
+                                                    <h:outputLabel
+                                                            value="#{msg['dialog.archiveTask.status.staining.details.list.notCompleted']}"
+                                                            rendered="#{!slide.completed}"/>
+                                                </p:tooltip>
                                             </h:panelGroup>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </h:panelGrid>
 
-                                            <h:panelGroup rendered="#{!diagnosis.noNotification}">
-                                                <i class="fa fa-fw #{diagnosis.notificationPerformed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                        <!-- diangoses -->
+                        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                            <p:separator/>
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.text']}"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
+                                     columnClasses="columnWidth250">
+                            <!-- diagnosis phase -->
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.phase.text']} "/>
+                            <h:panelGroup id="diagnosisDate">
+                                <i class="fa fa-fw #{archiveTaskDialog.status.diagnosisStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                <h:outputFormat style="margin-left: 5px"
+                                                value="#{archiveTaskDialog.status.diagnosisStatus.dateOfCompletion}"
+                                                rendered="#{archiveTaskDialog.status.diagnosisStatus.completed}">
+                                    <f:converter converterId="instantDateTimeConverter"/>
+                                    <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
+                                </h:outputFormat>
+                                <p:tooltip for="diagnosisDate">
+                                    <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.phase.completed']}"
+                                                   rendered="#{archiveTaskDialog.status.diagnosisStatus.completed}"/>
+                                    <h:outputLabel
+                                            value="#{msg['dialog.archiveTask.status.diagnoses.phase.notCompleted']}"
+                                            rendered="#{!archiveTaskDialog.status.diagnosisStatus.completed}"/>
+                                </p:tooltip>
+                            </h:panelGroup>
+
+                            <!-- diagnosis correct -->
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.status.text']}"/>
+                            <h:panelGroup id="diagnosisCompleted">
+                                <i class="fa fa-fw #{archiveTaskDialog.status.diagnosisStatus.valid ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                <p:tooltip for="diagnosisCompleted">
+                                    <h:outputText value="#{msg['dialog.archiveTask.status.diagnoses.status.completed']}"
+                                                  rendered="#{archiveTaskDialog.status.diagnosisStatus.valid }"/>
+                                    <h:outputLabel
+                                            value="#{msg['dialog.archiveTask.status.diagnoses.status.notCompleted']}"
+                                            rendered="#{!archiveTaskDialog.status.diagnosisStatus.valid }"/>
+                                </p:tooltip>
+                            </h:panelGroup>
+                        </h:panelGrid>
+
+                        <!-- diagnoses -->
+                        <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
+                            <p:accordionPanel activeIndex="-1"
+                                              styleClass="contentAccordionPannel" style="width:450px">
+                                <p:tab title="#{msg['dialog.archiveTask.status.diagnoses.details.text']}">
+                                    <p:dataTable styleClass="defaultHistoDataTable"
+                                                 value="#{archiveTaskDialog.status.diagnosisStatus.revisions}"
+                                                 var="diagnosis">
+                                        <!-- name -->
+                                        <p:column
+                                                headerText="#{msg['dialog.archiveTask.status.diagnoses.details.list.name']}">
+                                            <h:outputText value="#{diagnosis.name}"/>
+                                        </p:column>
+
+                                        <!-- completed -->
+                                        <p:column styleClass="centerChildElements centerHeaderChildElements"
+                                                  headerText="#{msg['dialog.archiveTask.status.diagnoses.details.list.completed.text']}">
+                                            <h:panelGroup id="diangosisC">
+                                                <i class="fa fa-fw #{diagnosis.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
                                                 <h:outputFormat style="margin-left: 5px"
-                                                                value="#{diagnosis.dateOfNotification}"
-                                                                rendered="#{diagnosis.notificationPerformed}">
+                                                                value="#{diagnosis.dateOfCompletion}"
+                                                                rendered="#{diagnosis.completed}">
                                                     <f:converter converterId="instantDateTimeConverter"/>
                                                     <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
                                                 </h:outputFormat>
-                                            </h:panelGroup>
-
-                                            <p:tooltip for="diangosisNotification">
-                                                <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.details.list.notification.completed']}"
-                                                        rendered="#{diagnosis.notificationPerformed and !diagnosis.noNotification}"/>
-                                                <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.status.list.ignore.true']}"
-                                                        rendered="#{diagnosis.notificationPerformed and !diagnosis.noNotification}"/>
-                                                <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.diagnoses.details.list.notification.notCompleted']}"
-                                                        rendered="#{diagnosis.noNotification}"/>
-                                            </p:tooltip>
-                                        </h:panelGroup>
-                                    </p:column>
-
-                                </p:dataTable>
-                            </p:tab>
-                        </p:accordionPanel>
-                    </h:panelGrid>
-
-                    <!-- notification -->
-                    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-                        <p:separator/>
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.notification.text']}"/>
-                    </h:panelGrid>
-
-                    <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
-                                 columnClasses="columnWidth250">
-
-                        <!-- notification phase -->
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.notification.phase.text']} "/>
-                        <h:panelGroup id="notificationDate">
-                            <i class="fa fa-fw #{archiveTaskDialog.status.notificationStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                            <p:tooltip for="notificationDate">
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.notification.phase.completed']}"
-                                               rendered="#{archiveTaskDialog.status.notificationStatus.completed}"/>
-                                <h:outputLabel
-                                        value="#{msg['dialog.archiveTask.status.notification.phase.notCompleted']}"
-                                        rendered="#{!archiveTaskDialog.status.notificationStatus.completed}"/>
-                            </p:tooltip>
-                        </h:panelGroup>
-                    </h:panelGrid>
-
-                    <!-- notification data -->
-                    <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
-                        <p:accordionPanel activeIndex="-1"
-                                          styleClass="contentAccordionPannel" style="width:450px">
-                            <p:tab title="#{msg['dialog.archiveTask.status.notification.details.text']}">
-                                <!-- contacts -->
-                                <p:dataTable var="reportIntent" style="width:450px" styleClass="defaultHistoDataTable"
-                                             value="#{archiveTaskDialog.status.notificationStatus.notification.reportIntentBearer}">
-
-                                    <!-- name -->
-                                    <p:column style="width:auto">
-                                        <f:facet name="header">
-                                            <h:outputLabel
-                                                    value="#{msg['dialog.archiveTask.status.notification.details.list.name']}"/>
-                                        </f:facet>
-                                        <h:outputLabel value="#{reportIntent.person.getFullName()}" id="test123"/>
-                                    </p:column>
-
-                                    <!-- infos -->
-                                    <p:column style="width: 20px" styleClass="centerChildElements ">
-                                        <p:commandLink
-                                                styleClass="contactInfoOverplayTrigger"
-                                                icon="pi pi-search"
-                                                actionListener="#{archiveTaskDialog.setSelectedReportIntentStatus(reportIntent)}"
-                                                partialSubmit="true"
-                                                process="@this"
-                                                update="dialogContent:contactInfoOverlayBearer:contactInfoOverlayPanel"
-                                                oncomplete="commonFunctions.showOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}');">
-                                            <i class="fa fa-info-circle"/>
-                                        </p:commandLink>
-                                    </p:column>
-
-                                    <!-- status -->
-                                    <p:column style="width: 20px"
-                                              styleClass="centerChildElements centerHeaderChildElements">
-                                        <h:panelGroup id="notficationp">
-                                            <i class="fa fa-fw #{reportIntent.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-                                            <p:tooltip for="notficationp">
-                                                <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.notification.details.list.status.completed']}"
-                                                        rendered="#{reportIntent.completed}"/>
-                                                <h:outputLabel
-                                                        value="#{msg['dialog.archiveTask.status.notification.details.list.status.notCompleted']}"
-                                                        rendered="#{!reportIntent.completed}"/>
-                                            </p:tooltip>
-                                        </h:panelGroup>
-                                    </p:column>
-                                </p:dataTable>
-                            </p:tab>
-                        </p:accordionPanel>
-
-                        <!-- overlay -->
-                        <histo:reportIntentStatusByReportIntentAndDiagnosisOverlay id="contactInfoOverlayBearer"
-                                                                                   reportIntentBearer="#{archiveTaskDialog.selectedReportIntentStatus}"
-                                                                                   wid="contactInfoOverlayPanel"
-                                                                                   triggerClass="contactInfoOverplayTrigger"/>
-
-                    </h:panelGrid>
-
-
-                </h:panelGrid>
-
-                <!-- right column -->
-                <h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer">
-
-                    <!-- councils -->
-                    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.council.text']}"/>
-                    </h:panelGrid>
-
-                    <!-- councils completed -->
-                    <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
-                                 columnClasses="columnWidth250">
-                        <!-- coucil -->
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.council.phase.text']} "/>
-                        <h:panelGroup id="councilPhase">
-                            <i class="fa fa-fw #{archiveTaskDialog.status.councilStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-
-                            <p:tooltip for="councilPhase">
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.council.phase.completed']} "
-                                               rendered="#{archiveTaskDialog.status.councilStatus.completed}"/>
-
-                                <h:outputLabel
-                                        value="#{msg['dialog.archiveTask.status.council.phase.notCompleted']}"
-                                        rendered="#{!archiveTaskDialog.status.councilStatus.completed}"/>
-                            </p:tooltip>
-                        </h:panelGroup>
-                    </h:panelGrid>
-
-                    <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
-                        <p:accordionPanel activeIndex="-1"
-                                          styleClass="contentAccordionPannel" style="width:450px">
-                            <p:tab title="#{msg['dialog.archiveTask.status.council.details.text']}">
-
-                                <!-- contacts -->
-                                <p:dataTable var="council"
-                                             style="width:450px" styleClass="defaultHistoDataTable"
-                                             value="#{archiveTaskDialog.status.councilStatus.councils}">
-
-                                    <!-- name -->
-                                    <p:column style="width:auto">
-                                        <f:facet name="header">
-                                            <h:outputLabel
-                                                    value="#{msg['dialog.archiveTask.status.council.details.list.name']}"/>
-                                        </f:facet>
-                                        <h:outputLabel value="#{council.name}"/>
-                                    </p:column>
-
-                                    <p:column>
-
-                                    </p:column>
-                                </p:dataTable>
-                            </p:tab>
-                        </p:accordionPanel>
-                    </h:panelGrid>
-
-                    <!-- favourite lists -->
-                    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-                        <p:separator/>
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.text']}"/>
-                    </h:panelGrid>
-
-                    <!-- favourite lists blocking -->
-                    <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
-                                 columnClasses="columnWidth250">
-                        <!-- favourite list blocking archival -->
-                        <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.phase.text']} "/>
-                        <h:panelGroup id="favouritelistsBlocking">
-                            <i class="fa fa-fw #{archiveTaskDialog.status.favouritesStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
-
-                            <p:tooltip for="favouritelistsBlocking">
-                                <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.phase.completed']} "
-                                               rendered="#{archiveTaskDialog.status.favouritesStatus.completed}"/>
-
-                                <h:outputLabel
-                                        value="#{msg['dialog.archiveTask.status.lists.phase.netCompleted']}"
-                                        rendered="#{!archiveTaskDialog.status.favouritesStatus.completed}"/>
-                            </p:tooltip>
-                        </h:panelGroup>
-                    </h:panelGrid>
-
-                    <!-- favouritelists -->
-                    <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
-                        <p:accordionPanel activeIndex="-1"
-                                          styleClass="contentAccordionPannel" style="width:450px">
-                            <p:tab title="#{msg['dialog.archiveTask.status.lists.details.text']}">
-
-                                <!-- lists -->
-                                <p:dataTable var="favouriteList"
-                                             style="width:450px" styleClass="defaultHistoDataTable"
-                                             value="#{archiveTaskDialog.status.favouritesStatus.lists}">
-
-                                    <!-- name -->
-                                    <p:column style="width:auto">
-                                        <f:facet name="header">
-                                            <h:outputLabel
-                                                    value="#{msg['dialog.archiveTask.status.lists.details.list.name']}"/>
-                                        </f:facet>
-                                        <h:outputLabel value="#{favouriteList.name}"/>
-                                    </p:column>
-
-                                    <!-- blocking -->
-                                    <p:column style="width:20px"
-                                              styleClass="centerChildElements centerHeaderChildElements">
-                                        <f:facet name="header">
-                                            <h:panelGroup id="favBlockingHeadline">
-                                                <i class="fa fa-fw fa-times-circle icon-red"/>
-                                                <p:tooltip for="favBlockingHeadline">
+                                                <p:tooltip for="diangosisC">
+                                                    <h:outputText
+                                                            value="#{msg['dialog.archiveTask.status.diagnoses.details.list.completed.completed']}"
+                                                            rendered="#{diagnosis.completed}"/>
                                                     <h:outputLabel
-                                                            value="#{msg['dialog.archiveTask.status.lists.details.block.headline']}"/>
+                                                            value="#{msg['dialog.archiveTask.status.diagnoses.details.list.completed.notCompleted']}"
+                                                            rendered="#{!diagnosis.completed and !diagnosis.noNotification}"/>
                                                 </p:tooltip>
                                             </h:panelGroup>
-                                        </f:facet>
-                                        <h:panelGroup id="favBlocking" rendered="#{favouriteList.blockTaskArchival}">
-                                            <i class="fa fa-fw fa-times-circle icon-red"/>
-                                            <p:tooltip for="favBlocking">
-                                                <h:outputText
-                                                        value="#{msg['dialog.archiveTask.status.lists.details.block.block']}"/>
-                                            </p:tooltip>
-                                        </h:panelGroup>
-                                    </p:column>
-                                </p:dataTable>
-                            </p:tab>
-                        </p:accordionPanel>
+                                        </p:column>
+
+                                        <!-- signature -->
+                                        <p:column styleClass="centerChildElements centerHeaderChildElements"
+                                                  headerText="#{msg['dialog.archiveTask.status.diagnoses.details.list.signature.text']}">
+                                            <h:panelGroup id="diangosisS">
+                                                <i class="fa fa-fw #{diagnosis.signed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                                <p:tooltip for="diangosisS">
+                                                    <h:outputText
+                                                            value="#{msg['dialog.archiveTask.status.diagnoses.details.list.signature.completed']}"
+                                                            rendered="#{diagnosis.signed}"/>
+                                                    <h:outputLabel
+                                                            value="#{msg['dialog.archiveTask.status.diagnoses.details.list.signature.notCompleted']}"
+                                                            rendered="#{!diagnosis.signed and !diagnosis.noNotification}"/>
+                                                </p:tooltip>
+                                            </h:panelGroup>
+                                        </p:column>
+
+                                        <!-- notification performed -->
+                                        <p:column styleClass="centerChildElements centerHeaderChildElements"
+                                                  headerText="#{msg['dialog.archiveTask.status.diagnoses.details.list.notification.text']}">
+                                            <h:panelGroup id="diangosisNotification">
+                                                <h:panelGroup rendered="#{diagnosis.noNotification}">
+                                                    <i class="fa fa-fw fa-check-circle'}"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup rendered="#{!diagnosis.noNotification}">
+                                                    <i class="fa fa-fw #{diagnosis.notificationPerformed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                                    <h:outputFormat style="margin-left: 5px"
+                                                                    value="#{diagnosis.dateOfNotification}"
+                                                                    rendered="#{diagnosis.notificationPerformed}">
+                                                        <f:converter converterId="instantDateTimeConverter"/>
+                                                        <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
+                                                    </h:outputFormat>
+                                                </h:panelGroup>
+
+                                                <p:tooltip for="diangosisNotification">
+                                                    <h:outputText
+                                                            value="#{msg['dialog.archiveTask.status.diagnoses.details.list.notification.completed']}"
+                                                            rendered="#{diagnosis.notificationPerformed and !diagnosis.noNotification}"/>
+                                                    <h:outputText
+                                                            value="#{msg['dialog.archiveTask.status.diagnoses.status.list.ignore.true']}"
+                                                            rendered="#{diagnosis.notificationPerformed and !diagnosis.noNotification}"/>
+                                                    <h:outputText
+                                                            value="#{msg['dialog.archiveTask.status.diagnoses.details.list.notification.notCompleted']}"
+                                                            rendered="#{diagnosis.noNotification}"/>
+                                                </p:tooltip>
+                                            </h:panelGroup>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </h:panelGrid>
+
+                        <!-- notification -->
+                        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                            <p:separator/>
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.notification.text']}"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
+                                     columnClasses="columnWidth250">
+
+                            <!-- notification phase -->
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.notification.phase.text']} "/>
+                            <h:panelGroup id="notificationDate">
+                                <i class="fa fa-fw #{archiveTaskDialog.status.notificationStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                <p:tooltip for="notificationDate">
+                                    <h:outputLabel
+                                            value="#{msg['dialog.archiveTask.status.notification.phase.completed']}"
+                                            rendered="#{archiveTaskDialog.status.notificationStatus.completed}"/>
+                                    <h:outputLabel
+                                            value="#{msg['dialog.archiveTask.status.notification.phase.notCompleted']}"
+                                            rendered="#{!archiveTaskDialog.status.notificationStatus.completed}"/>
+                                </p:tooltip>
+                            </h:panelGroup>
+                        </h:panelGrid>
+
+                        <!-- notification data -->
+                        <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
+                            <p:accordionPanel activeIndex="-1"
+                                              styleClass="contentAccordionPannel" style="width:450px">
+                                <p:tab title="#{msg['dialog.archiveTask.status.notification.details.text']}">
+                                    <!-- contacts -->
+                                    <p:dataTable var="reportIntent" style="width:450px"
+                                                 styleClass="defaultHistoDataTable"
+                                                 value="#{archiveTaskDialog.status.notificationStatus.notification.reportIntentBearer}">
+
+                                        <!-- name -->
+                                        <p:column style="width:auto">
+                                            <f:facet name="header">
+                                                <h:outputLabel
+                                                        value="#{msg['dialog.archiveTask.status.notification.details.list.name']}"/>
+                                            </f:facet>
+                                            <h:outputLabel value="#{reportIntent.person.getFullName()}" id="test123"/>
+                                        </p:column>
+
+                                        <!-- infos -->
+                                        <p:column style="width: 20px" styleClass="centerChildElements ">
+                                            <p:commandLink
+                                                    styleClass="contactInfoOverplayTrigger"
+                                                    icon="pi pi-search"
+                                                    actionListener="#{archiveTaskDialog.setSelectedReportIntentStatus(reportIntent)}"
+                                                    partialSubmit="true"
+                                                    process="@this"
+                                                    update="dialogContent:contactInfoOverlayBearer:contactInfoOverlayPanel"
+                                                    oncomplete="commonFunctions.showOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}');">
+                                                <i class="fa fa-info-circle"/>
+                                            </p:commandLink>
+                                        </p:column>
+
+                                        <!-- status -->
+                                        <p:column style="width: 20px"
+                                                  styleClass="centerChildElements centerHeaderChildElements">
+                                            <h:panelGroup id="notficationp">
+                                                <i class="fa fa-fw #{reportIntent.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+                                                <p:tooltip for="notficationp">
+                                                    <h:outputText
+                                                            value="#{msg['dialog.archiveTask.status.notification.details.list.status.completed']}"
+                                                            rendered="#{reportIntent.completed}"/>
+                                                    <h:outputLabel
+                                                            value="#{msg['dialog.archiveTask.status.notification.details.list.status.notCompleted']}"
+                                                            rendered="#{!reportIntent.completed}"/>
+                                                </p:tooltip>
+                                            </h:panelGroup>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:tab>
+                            </p:accordionPanel>
+
+                            <!-- overlay -->
+                            <histo:reportIntentStatusByReportIntentAndDiagnosisOverlay id="contactInfoOverlayBearer"
+                                                                                       reportIntentBearer="#{archiveTaskDialog.selectedReportIntentStatus}"
+                                                                                       wid="contactInfoOverlayPanel"
+                                                                                       triggerClass="contactInfoOverplayTrigger"/>
+
+                        </h:panelGrid>
+
+
                     </h:panelGrid>
+
+                    <!-- right column -->
+                    <h:panelGrid columns="1" styleClass="defaultHistoHiddenTableContainer">
+
+                        <!-- councils -->
+                        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.council.text']}"/>
+                        </h:panelGrid>
+
+                        <!-- councils completed -->
+                        <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
+                                     columnClasses="columnWidth250">
+                            <!-- coucil -->
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.council.phase.text']} "/>
+                            <h:panelGroup id="councilPhase">
+                                <i class="fa fa-fw #{archiveTaskDialog.status.councilStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+
+                                <p:tooltip for="councilPhase">
+                                    <h:outputLabel value="#{msg['dialog.archiveTask.status.council.phase.completed']} "
+                                                   rendered="#{archiveTaskDialog.status.councilStatus.completed}"/>
+
+                                    <h:outputLabel
+                                            value="#{msg['dialog.archiveTask.status.council.phase.notCompleted']}"
+                                            rendered="#{!archiveTaskDialog.status.councilStatus.completed}"/>
+                                </p:tooltip>
+                            </h:panelGroup>
+                        </h:panelGrid>
+
+                        <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
+                            <p:accordionPanel activeIndex="-1"
+                                              styleClass="contentAccordionPannel" style="width:450px">
+                                <p:tab title="#{msg['dialog.archiveTask.status.council.details.text']}">
+
+                                    <!-- contacts -->
+                                    <p:dataTable var="council"
+                                                 style="width:450px" styleClass="defaultHistoDataTable"
+                                                 value="#{archiveTaskDialog.status.councilStatus.councils}">
+
+                                        <!-- name -->
+                                        <p:column style="width:auto">
+                                            <f:facet name="header">
+                                                <h:outputLabel
+                                                        value="#{msg['dialog.archiveTask.status.council.details.list.name']}"/>
+                                            </f:facet>
+                                            <h:outputLabel value="#{council.name}"/>
+                                        </p:column>
+
+                                        <p:column>
+
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </h:panelGrid>
+
+                        <!-- favourite lists -->
+                        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                            <p:separator/>
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.text']}"/>
+                        </h:panelGrid>
+
+                        <!-- favourite lists blocking -->
+                        <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
+                                     columnClasses="columnWidth250">
+                            <!-- favourite list blocking archival -->
+                            <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.phase.text']} "/>
+                            <h:panelGroup id="favouritelistsBlocking">
+                                <i class="fa fa-fw #{archiveTaskDialog.status.favouritesStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
+
+                                <p:tooltip for="favouritelistsBlocking">
+                                    <h:outputLabel value="#{msg['dialog.archiveTask.status.lists.phase.completed']} "
+                                                   rendered="#{archiveTaskDialog.status.favouritesStatus.completed}"/>
+
+                                    <h:outputLabel
+                                            value="#{msg['dialog.archiveTask.status.lists.phase.netCompleted']}"
+                                            rendered="#{!archiveTaskDialog.status.favouritesStatus.completed}"/>
+                                </p:tooltip>
+                            </h:panelGroup>
+                        </h:panelGrid>
+
+                        <!-- favouritelists -->
+                        <h:panelGrid styleClass="defaultHistoTable" style="margin-left: 10px;">
+                            <p:accordionPanel activeIndex="-1"
+                                              styleClass="contentAccordionPannel" style="width:450px">
+                                <p:tab title="#{msg['dialog.archiveTask.status.lists.details.text']}">
+
+                                    <!-- lists -->
+                                    <p:dataTable var="favouriteList"
+                                                 style="width:450px" styleClass="defaultHistoDataTable"
+                                                 value="#{archiveTaskDialog.status.favouritesStatus.lists}">
+
+                                        <!-- name -->
+                                        <p:column style="width:auto">
+                                            <f:facet name="header">
+                                                <h:outputLabel
+                                                        value="#{msg['dialog.archiveTask.status.lists.details.list.name']}"/>
+                                            </f:facet>
+                                            <h:outputLabel value="#{favouriteList.name}"/>
+                                        </p:column>
+
+                                        <!-- blocking -->
+                                        <p:column style="width:20px"
+                                                  styleClass="centerChildElements centerHeaderChildElements">
+                                            <f:facet name="header">
+                                                <h:panelGroup id="favBlockingHeadline">
+                                                    <i class="fa fa-fw fa-times-circle icon-red"/>
+                                                    <p:tooltip for="favBlockingHeadline">
+                                                        <h:outputLabel
+                                                                value="#{msg['dialog.archiveTask.status.lists.details.block.headline']}"/>
+                                                    </p:tooltip>
+                                                </h:panelGroup>
+                                            </f:facet>
+                                            <h:panelGroup id="favBlocking"
+                                                          rendered="#{favouriteList.blockTaskArchival}">
+                                                <i class="fa fa-fw fa-times-circle icon-red"/>
+                                                <p:tooltip for="favBlocking">
+                                                    <h:outputText
+                                                            value="#{msg['dialog.archiveTask.status.lists.details.block.block']}"/>
+                                                </p:tooltip>
+                                            </h:panelGroup>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
                 </h:panelGrid>
+            </p:scrollPanel>
+            <script language="javascript" type="text/javascript">
+                $(document).ready(function () {
+                    commonFunctions.initializeCustomScrollPanel("dialogContent:scrollBody", 100, false);
+                });
+            </script>
+            <h:panelGrid columns="2" styleClass="defaultHistoTable" columnClasses="columnWidth200">
+                <h:outputLabel value="#{msg['dialog.archiveTask.forceArchive']}"/>
+                <p:selectBooleanCheckbox value="#{archiveTaskDialog.forceArchivation}">
+                    <p:ajax event="change" execute="@this" update="@form"/>
+                </p:selectBooleanCheckbox>
+
+
+                <h:outputLabel value="#{msg['dialog.archiveTask.removeFromWorklist']}"/>
+                <p:selectBooleanCheckbox value="#{archiveTaskDialog.removeFromWorklist}">
+                    <p:ajax event="change" execute="@this" update="@form"/>
+                </p:selectBooleanCheckbox>
 
             </h:panelGrid>
         </div>
@@ -464,21 +491,13 @@
             <h:panelGrid columns="2">
 
                 <h:panelGrid columns="2" styleClass="left">
-                    <h:outputLabel value="#{msg['dialog.archiveTask.forceArchive']}" />
-                    <p:selectBooleanCheckbox value="#{archiveTaskDialog.forceArchivation}">
-                        <p:ajax event="change" execute="@this" update="@form"/>
-                    </p:selectBooleanCheckbox>
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right">
                     <!-- Save button -->
-                    <p:commandButton
-                            value="#{msg['dialog.archiveTask.button.archive']}"
-                            icon="fa fa-archive">
-                        <f:actionListener
-                                binding="#{archiveTaskDialog.archiveAndHide()}"/>
-                        <f:actionListener
-                                binding="#{archiveTaskDialog.hideDialog()}"/>
+                    <p:commandButton disabled="#{!archiveTaskDialog.archivationPossible}"
+                            value="#{msg['dialog.archiveTask.button.archive.text']}"
+                            icon="fa fa-archive" actionListener="#{archiveTaskDialog.archiveAndHide()}">
                     </p:commandButton>
 
                     <!-- Close button -->

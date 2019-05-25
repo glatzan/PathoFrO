@@ -128,13 +128,13 @@ open class TaskService @Autowired constructor(
     @Transactional
     open fun archiveTask(task: Task, commentary: String = ""): Task {
         // remove from all system lists
-        favouriteListService.removeTaskFromList(task, false, *PredefinedFavouriteList.values())
+        val tTask = favouriteListService.removeTaskFromList(task, false, *PredefinedFavouriteList.values())
 
         // finalizing task
-        task.finalizationDate = Instant.now()
-        task.finalized = true;
+        tTask.finalizationDate = Instant.now()
+        tTask.finalized = true;
 
-        return taskRepository.save(task, resourceBundle.get("log.task.archived", task, commentary))
+        return taskRepository.save(tTask, resourceBundle.get("log.task.archived", tTask, commentary))
     }
 
     open fun dearchvieTask(task: Task, commentary: String = "") : Task {
