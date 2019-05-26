@@ -175,7 +175,7 @@
 
         <!-- StainingPhase Exit -->
         <p:commandButton id="stainingPhaseExit" widgetVar="stainingPhaseExit"
-                         actionListener="#{dialog.stainingPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, true)}">
+                         actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, true)}">
             <p:ajax event="dialogReturn"
                     listener="#{dialogReturnHandler.onStainingPhaseExitReturn}"
                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
@@ -229,7 +229,7 @@
 
         <!-- Notification exit -->
         <p:commandButton id="notificationPhaseExit" widgetVar="notificationPhaseExit"
-                         actionListener="#{dialog.notificationPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                         actionListener="#{notificationPhaseExitDialog.initAndPrepareBean(worklistHandler.selectedTask)}">
             <p:ajax event="dialogReturn"
                     listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm headerForm"/>

@@ -3,8 +3,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:histo="http://java.sun.com/jsf/composite/components/special/notificationDialog"
-                xmlns:pe="http://primefaces.org/ui/extensions">
+>
 
     <p:outputPanel styleClass="headerPannel">
         <h:outputLabel value="#{msg['dialog.notificationDialog.send.headline']}"/>
@@ -69,18 +68,12 @@
             </h:panelGrid>
 
             <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
-                <!-- performe -->
-                <p:commandButton value="#{msg['dialog.notificationDialog.send.button.perform.text']}"
-                                 icon="fa fa-volume-up"
-                                 actionListener="#{notificationDialog.sendTab.performNotifications()}"
-                                 rendered="#{!notificationDialog.sendTab.noNotifications}"
-                                 title="#{msg['dialog.notificationDialog.send.button.perform.info']}"/>
-
-                <!-- archive -->
-                <p:commandButton value="#{msg['dialog.notificationDialog.send.button.archive.text']}"
-                                 icon="fa fa-archive"
-                                 rendered="#{notificationDialog.sendTab.noNotifications}"
-                                 title="#{msg['dialog.notificationDialog.send.button.archive.info']}"/>
+                <!-- performe or archive-->
+                <p:commandButton
+                        value="#{msg[!notificationDialog.sendTab.noNotifications ? 'dialog.notificationDialog.send.button.perform.text' : 'dialog.notificationDialog.send.button.archive.text']}"
+                        icon="fa fa-volume-up"
+                        actionListener="#{notificationDialog.sendTab.performNotifications()}"
+                        title="#{msg[!notificationDialog.sendTab.noNotifications ? 'dialog.notificationDialog.send.button.perform.info' : 'dialog.notificationDialog.send.button.archive.info']}"/>
 
                 <!-- close -->
                 <p:commandButton value="#{msg['general.close']}"

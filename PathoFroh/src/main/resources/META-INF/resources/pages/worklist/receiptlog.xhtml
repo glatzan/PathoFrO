@@ -940,9 +940,9 @@
                     value="#{msg['body.statiningView.stainingPhaseEnd']}"
                     icon="fa fa-fw fa-image"
                     disabled="#{!receiptLogView.task.taskStatus.editable}"
-                    actionListener="#{dialog.stainingPhaseExitDialog.initAndPrepareBean(receiptLogView.task, true)}">
+                    actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(receiptLogView.task, true)}">
                 <p:ajax event="dialogReturn"
-                        listener="#{dialogReturnHandler.onStatingPhaseExitReturn}"
+                        listener="#{dialogReturnHandler.onDefaultReturn}"
                         update="navigationForm:patientList contentForm:contentPanel headerForm"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
             </p:commandButton>

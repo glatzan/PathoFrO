@@ -82,7 +82,7 @@
 				<!-- end diagnosis phase -->
 				<p:commandButton id="endNotificationPhase"
 					value="#{msg['dialog.notification.tab.sendReport.button.resend']}"
-					actionListener="#{dialogHandlerAction.notificationPhaseExitDialog.initAndPrepareBean(notificationDialog.task)}">
+					actionListener="#{notificationPhaseExitDialog.initAndPrepareBean(notificationDialog.task)}">
 					<p:ajax event="dialogReturn"
 						listener="#{notificationDialog.sendReportTab.onReturnDialog}" />
 				</p:commandButton>

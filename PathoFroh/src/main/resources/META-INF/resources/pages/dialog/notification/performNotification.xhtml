@@ -23,7 +23,7 @@
         <h:outputScript library="scripts" name="selectCheckboxMenuTop.js"/>
 
         <div class="dialogHeader">
-            <h:panelGrid style="width:100%;" columns="2">
+            <h:panelGrid style="width:100%;" columns="2" id="headerTable">
                 <h:panelGroup id="headerText">
                     <h:outputFormat value="#{msg['dialog.contactAddDialog.headline']}">
                         <f:param
@@ -78,7 +78,8 @@
             </h:panelGrid>
 
             <p:poll async="true" interval="1" widgetVar="progressPoll" autoStart="false"
-                    update="pollTable rightButtonContainer" stop="#{performNotificationDialog.completed}"/>
+                    update="pollTable rightButtonContainer leftButtonContainer headerTable"
+                    stop="#{performNotificationDialog.completed}"/>
 
             <p:remoteCommand autoRun="#{performNotificationDialog.delayedStart}" onstart="PF('progressPoll').start();"
                              async="true"
@@ -88,15 +89,14 @@
 
         <div class="buttonContainer">
             <h:panelGrid columns="2">
-                <h:panelGrid columns="3" styleClass="left">
-                </h:panelGrid>
-                <h:panelGrid columns="3" styleClass="right" id="rightButtonContainer">
-
-                    <!-- end notification -->
+                <h:panelGrid columns="1" styleClass="left" id="leftButtonContainer">
+                    <!-- send report -->
                     <p:commandButton value="Benachrichtigung abschließen"
                                      disabled="#{!performNotificationDialog.completed}"
                                      icon="fa fa-times-circle"
                                      actionListener="#{performNotificationDialog.hideDialog()}"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" styleClass="right" id="rightButtonContainer">
 
                     <!-- send report -->
                     <p:commandButton value="Sendebericht"

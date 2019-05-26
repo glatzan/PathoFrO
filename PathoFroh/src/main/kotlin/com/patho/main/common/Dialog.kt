@@ -56,7 +56,7 @@ enum class Dialog {
     PDF_UPLOAD("/pages/dialog/upload/upload", null, 640, 360, false, false, true),                                                                                            // OK
     PDF_EDIT("/pages/dialog/upload/editPDF", null, 640, 360, false, false, true),                                                                                            // OK
     PDF_DELETE("/pages/dialog/upload/deletePDF", null, 480, 272, false, false, true),                                                                                        // OK
-    STAINING_PHASE_EXIT("/pages/dialog/task/staining/stainingPhaseExit", null, 480, 272, false, false, true), // 16:9
+    STAINING_PHASE_EXIT("/pages/dialog/phase/stainingPhaseExit", null, 480, 272, false, false, true), // 16:9
     DIAGNOSIS_PHASE_EXIT("/pages/dialog/task/diagnosis/diagnosisPhaseExit", null, 480, 272, false, false, true), // 16:9
     NOTIFICATION_PHASE_EXIT("/pages/dialog/notification/notificationPhaseExit", null, 480, 272, false, false, true), // 16:9
     TASK_ARCHIVE("/pages/dialog/task/archive/archiveTask", null, 1024, 600, false, false, true), // 16:9

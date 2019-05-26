@@ -218,7 +218,7 @@
 			<!-- hidden command button for displaying end staining phase dialog -->
 			<p:commandButton id="stainingPhaseExitFromDialog"
 				style="display:none"
-				actionListener="#{dialog.stainingPhaseExitDialog.initAndPrepareBean(dialog.slideOverviewDialog.task)}">
+				actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(dialog.slideOverviewDialog.task)}">
 				<p:ajax event="dialogReturn"
 					listener="#{dialog.slideOverviewDialog.onDefaultDialogReturn}"
 					update="@form" />

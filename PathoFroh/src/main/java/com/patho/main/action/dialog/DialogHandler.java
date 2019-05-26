@@ -47,7 +47,6 @@ import com.patho.main.action.dialog.settings.users.UserListDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog;
 import com.patho.main.action.dialog.slides.SlideNamingDialog;
 import com.patho.main.action.dialog.slides.SlideOverviewDialog;
-import com.patho.main.action.dialog.slides.StainingPhaseExitDialog;
 import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
@@ -66,7 +65,6 @@ public class DialogHandler {
 	private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
 	private CreateSampleDialog createSampleDialog = new CreateSampleDialog();
 	private SlideNamingDialog slideNamingDialog = new SlideNamingDialog();
-	private StainingPhaseExitDialog stainingPhaseExitDialog = new StainingPhaseExitDialog();
 	private SlideOverviewDialog slideOverviewDialog = new SlideOverviewDialog();
 	private QuickAddDiangosisRevisionDialog quickAddDiangosisRevisionDialog = new QuickAddDiangosisRevisionDialog();
 	private CreateTaskDialog createTaskDialog = new CreateTaskDialog();
