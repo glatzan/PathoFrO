@@ -32,7 +32,7 @@ public class DiagnosisPresetService extends AbstractService {
 	}
 
 	/**
-	 * Tries to delete the diagnosis, if not possible the prototype will be archived
+	 * Tries to delete the reportIntent, if not possible the prototype will be archived
 	 * 
 	 * @param p
 	 */

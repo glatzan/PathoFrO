@@ -184,7 +184,7 @@ public open class PathoConfig @Autowired @Lazy constructor(
     class DefaultDocuments {
 
         /**
-         * Document-Template which is used on diagnosis phase exit.
+         * Document-Template which is used on reportIntent phase exit.
          */
         var diagnosisApprovedDocument: Long = 0
 
@@ -230,7 +230,7 @@ public open class PathoConfig @Autowired @Lazy constructor(
         var slideLabelDocument: Long = 0
 
         /**
-         * Template for diagnosis report for program users
+         * Template for reportIntent report for program users
          */
         var diagnosisReportForUsers: Long = 0
 

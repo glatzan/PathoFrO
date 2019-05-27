@@ -124,7 +124,7 @@ public class TaskUtil {
 	}
 
 	/**
-	 * Returns a name for a diagnosis revision
+	 * Returns a name for a reportIntent revision
 	 * 
 	 * @param revisions
 	 * @param revision
@@ -136,14 +136,14 @@ public class TaskUtil {
 
 		ResourceBundle resourceBundle = ResourceBundle.getResourceBundle();
 
-		// if default diagnosis
+		// if default reportIntent
 		if (revision.getType() == DiagnosisRevisionType.DIAGNOSIS) {
 			// if there are other diagnoses then the default one
 			if (revisions.size() > 1) {
 				logger.debug("DiagnosisRevision name {}", resourceBundle.get("enum.diagnosisType.DIAGNOSIS.temp"));
 				return resourceBundle.get("enum.diagnosisType.DIAGNOSIS.temp");
 			} else {
-				// default diagnosis only
+				// default reportIntent only
 				logger.debug("DiagnosisRevision name {}", resourceBundle.get("enum.diagnosisType.DIAGNOSIS"));
 				return resourceBundle.get("enum.diagnosisType.DIAGNOSIS");
 			}
@@ -151,7 +151,7 @@ public class TaskUtil {
 		} else {
 			int number = 0;
 			for (DiagnosisRevision diagnosisRevision : revisions) {
-				logger.debug("Found diagnosis {},{} == {},{}", diagnosisRevision.getName(), diagnosisRevision.getId(),
+				logger.debug("Found reportIntent {},{} == {},{}", diagnosisRevision.getName(), diagnosisRevision.getId(),
 						revision.getName(), revision.getId());
 				if (diagnosisRevision == revision)
 					break;

@@ -23,7 +23,7 @@
                          styleClass="defaultHistoTable">
                 <h:outputLabel value="#{msg['dialog.staingingPhaseExit.headline']}"/>
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
-                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                               onclick="PF('closeBtn').jq.click();return false;">
                     <i class="fa fa-fw fa-times"/>
                 </p:commandLink>
             </h:panelGrid>
@@ -35,11 +35,14 @@
             </h:panelGrid>
 
             <!-- complete stainings, only render if not all stainings are completed-->
-            <h:panelGrid styleClass="defaultHistoTable" columns="2"
-                         rendered="#{stainingPhaseExitDialog.renderCompleteStainings}">
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-top: 10px; margin-left: 5px"
+                         rendered="#{stainingPhaseExitDialog.renderCompleteStainings}" columnClasses="columnWidth50">
                 <!-- complete stainings -->
                 <p:selectBooleanCheckbox title="#{msg['dialog.staingingPhaseExit.completeStainings.info']}"
-                                         value="#{stainingPhaseExitDialog.competeStainings}"/>
+                                         value="#{stainingPhaseExitDialog.competeStainings}">
+                    <p:ajax event="change" listener="#{stainingPhaseExitDialog.onCompleteStainingsChange}"
+                            update="@form" process="@form"/>
+                </p:selectBooleanCheckbox>
                 <h:outputLabel title="#{msg['dialog.staingingPhaseExit.completeStainings.info']}"
                                value="#{msg['dialog.staingingPhaseExit.completeStainings.text']}"/>
 
@@ -49,35 +52,45 @@
                                styleClass="icon-red"/>
             </h:panelGrid>
 
-
-            <!-- remove from staining list -->
             <!-- remove from worklist -->
-            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-top: 5px;">
-
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
+                         columnClasses="columnWidth50">
                 <!-- remove from worklist -->
                 <p:selectBooleanCheckbox
-                        value="#{stainingPhaseExitDialog.removeFromFavouriteList}"/>
+                        value="#{stainingPhaseExitDialog.removeFromWorklist}"/>
                 <h:outputLabel
                         value="#{msg['dialog.staingingPhaseExit.worklist.text']}"/>
-                <!-- do diagnosis phase -->
-                <p:selectBooleanCheckbox
-                        value="#{stainingPhaseExitDialog.removeFromFavouriteList}"/>
-                <h:outputLabel
-                        value="#{msg['dialog.staingingPhaseExit.doDiagnosis.text']}"/>
             </h:panelGrid>
 
-            <!-- remove from staining list -->
+            <!-- go to reportIntent -->
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style=" margin-left: 5px"
+                         columnClasses="columnWidth50">
+                <!-- go to reportIntent -->
+                <p:selectBooleanCheckbox
+                        value="#{stainingPhaseExitDialog.goToDiagnosis}">
+                    <p:ajax event="change" listener="#{stainingPhaseExitDialog.onPhaseExitChange()}" update="@form"/>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value="#{msg['dialog.staingingPhaseExit.doDiagnosis.text']}"/>
+                <!-- info if got to reportIntent is not selected  -->
+                <h:outputLabel value=" " rendered="#{stainingPhaseExitDialog.renderDiagnosisPhaseInfoText}"/>
+                <h:outputLabel value="#{msg['dialog.staingingPhaseExit.doDiagnosis.textinfo']}"
+                               rendered="#{stainingPhaseExitDialog.renderDiagnosisPhaseInfoText}"
+                               styleClass="icon-red"/>
+            </h:panelGrid>
+
             <!-- end staining phase -->
-            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-top: 5px; margin-left: 5px"
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
                          columnClasses="columnWidth50">
                 <!-- end staining phase -->
                 <p:selectBooleanCheckbox title="#{msg['dialog.staingingPhaseExit.endPhase.info']}"
-                                         value="#{stainingPhaseExitDialog.exitPhase}"/>
+                                         disabled="#{stainingPhaseExitDialog.disableExitStainingPhase}"
+                                         value="#{stainingPhaseExitDialog.exitPhase}">
+                    <p:ajax event="change" listener="#{stainingPhaseExitDialog.onPhaseExitChange()}" update="@form"/>
+                </p:selectBooleanCheckbox>
                 <h:outputLabel title="#{msg['dialog.staingingPhaseExit.endPhase.info']}"
                                value="#{msg['dialog.staingingPhaseExit.endPhase.text']}"/>
-
             </h:panelGrid>
-
         </div>
 
         <div class="buttonContainer">
@@ -95,6 +108,7 @@
                     <!-- abort -->
                     <p:commandButton value="#{msg['general.abort']}"
                                      icon="fa fa-times-circle"
+                                     widgetVar="closeBtn"
                                      actionListener="#{stainingPhaseExitDialog.hideDialog()}"/>
                 </h:panelGrid>
             </h:panelGrid>

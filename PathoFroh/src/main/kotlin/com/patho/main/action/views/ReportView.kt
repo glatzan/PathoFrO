@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component
 open class ReportView : AbstractTaskView(), StreamedContentInterface {
 
     /**
-     * List of all diagnosis revisions with correspondending reports
+     * List of all reportIntent revisions with correspondending reports
      */
     open var data: MutableList<DiagnosisReportReturnHandler> = mutableListOf()
 

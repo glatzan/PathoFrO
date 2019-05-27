@@ -99,7 +99,7 @@ public class DiagnosisService extends AbstractService {
      */
     public DiagnosisRevision synchronizeDiagnosesAndSamples(DiagnosisRevision diagnosisRevision, List<Sample> samples,
                                                             boolean save) {
-        logger.info("Synchronize diagnosis list with samples");
+        logger.info("Synchronize reportIntent list with samples");
 
         List<Diagnosis> diagnosesInRevision = diagnosisRevision.getDiagnoses();
 
@@ -117,9 +117,9 @@ public class DiagnosisService extends AbstractService {
                     continue outerLoop;
                 }
             }
-            logger.trace("Diagnosis has no sample, removing diagnosis " + diagnosis.getId());
+            logger.trace("Diagnosis has no sample, removing reportIntent " + diagnosis.getId());
             // not found within samples, so sample was deleted, deleting
-            // diagnosis as well.
+            // reportIntent as well.
             toRemoveDiagnosis.add(diagnosis);
         }
 
@@ -130,7 +130,7 @@ public class DiagnosisService extends AbstractService {
 
         // adding new diagnoses if there are new samples
         for (Sample sample : samplesToAddDiagnosis) {
-            logger.trace("Adding new diagnosis for sample " + sample.getId());
+            logger.trace("Adding new reportIntent for sample " + sample.getId());
             createDiagnosis(diagnosisRevision, sample, false);
         }
         if (save)
@@ -141,14 +141,14 @@ public class DiagnosisService extends AbstractService {
     }
 
     /**
-     * Creates a new diagnosis and adds it to the given diagnosisRevision
+     * Creates a new reportIntent and adds it to the given diagnosisRevision
      *
      * @param revision
      * @param sample
      * @return
      */
     public Task createDiagnosis(DiagnosisRevision revision, Sample sample, boolean save) {
-        logger.info("Creating new diagnosis");
+        logger.info("Creating new reportIntent");
 
         Diagnosis diagnosis = new Diagnosis();
         diagnosis.setSample(sample);
@@ -163,13 +163,13 @@ public class DiagnosisService extends AbstractService {
     }
 
     /**
-     * Removes a diagnosis from the parent and deletes it.
+     * Removes a reportIntent from the parent and deletes it.
      *
      * @param diagnosis
      * @return
      */
     public void removeDiagnosis(Diagnosis diagnosis) {
-        logger.info("Removing diagnosis " + diagnosis.getName());
+        logger.info("Removing reportIntent " + diagnosis.getName());
 
         diagnosis.setSample(null);
 
@@ -214,7 +214,7 @@ public class DiagnosisService extends AbstractService {
     }
 
     /**
-     * Adds an diagnosis revision to the task
+     * Adds an reportIntent revision to the task
      */
     @Transactional
     public Task addDiagnosisRevision(Task task, DiagnosisRevision diagnosisRevision) {
@@ -229,7 +229,7 @@ public class DiagnosisService extends AbstractService {
         // resourceBundle.get("log.patient.task.diagnosisRevision.new",
         // diagnosisRevision));
 
-        // creating a diagnosis for every sample
+        // creating a reportIntent for every sample
         for (Sample sample : task.getSamples()) {
             task = createDiagnosis(diagnosisRevision, sample, false);
         }
@@ -285,7 +285,7 @@ public class DiagnosisService extends AbstractService {
     }
 
     /**
-     * Generated or updates the default diagnosis report for a diagnosis
+     * Generated or updates the default reportIntent report for a reportIntent
      *
      * @param task
      * @param diagnosisRevision
@@ -297,7 +297,7 @@ public class DiagnosisService extends AbstractService {
     }
 
     /**
-     * Updates a diagnosis with out a diagnosis prototype
+     * Updates a reportIntent with out a reportIntent prototype
      *
      * @param task
      * @param diagnosis
@@ -315,7 +315,7 @@ public class DiagnosisService extends AbstractService {
     }
 
     /**
-     * Updates a diagnosis with a diagnosispreset.
+     * Updates a reportIntent with a diagnosispreset.
      *
      * @param task
      * @param diagnosis
@@ -323,7 +323,7 @@ public class DiagnosisService extends AbstractService {
      * @return
      */
     public Task updateDiagnosisWithPrototype(Task task, Diagnosis diagnosis, DiagnosisPreset preset) {
-        logger.debug("Updating diagnosis with prototype");
+        logger.debug("Updating reportIntent with prototype");
 
         diagnosis.setDiagnosisPrototype(preset);
 
@@ -332,17 +332,17 @@ public class DiagnosisService extends AbstractService {
     }
 
     /**
-     * Updates a diagnosis with the given data. Also updates notification via letter
+     * Updates a reportIntent with the given data. Also updates notification via letter
      */
     public Task updateDiagnosis(Task task, Diagnosis diagnosis, String diagnosisAsText, String extendedDiagnosisText,
                                 boolean malign, String icd10) {
-        logger.debug("Updating diagnosis to " + diagnosisAsText);
+        logger.debug("Updating reportIntent to " + diagnosisAsText);
 
         diagnosis.setDiagnosis(diagnosisAsText);
         diagnosis.setMalign(malign);
         diagnosis.setIcd10(icd10);
 
-        // only setting diagnosis text if one sample and no text has been
+        // only setting reportIntent text if one sample and no text has been
         // added
         // jet
         if (diagnosis.getParent().getText() == null || diagnosis.getParent().getText().isEmpty()) {
@@ -350,7 +350,7 @@ public class DiagnosisService extends AbstractService {
             logger.debug("Updating revision extended text");
         }
 
-        // updating all contacts on diagnosis change, an determine if the
+        // updating all contacts on reportIntent change, an determine if the
         // contact should receive a physical case report
         task = reportIntentService.updateReportIntentNotificationHistoryWithDiagnoses(task, true);
 
@@ -418,7 +418,7 @@ public class DiagnosisService extends AbstractService {
 
     /**
      * Returns the next diagnosisrevision where the completion date is 0, if no
-     * diagnosis is found null is returned.
+     * reportIntent is found null is returned.
      *
      * @param task
      * @return

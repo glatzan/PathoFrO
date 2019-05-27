@@ -1,7 +1,7 @@
 package com.patho.main.common;
 
 /**
- * The status of a diagnosis, either performed, diagnosis needed or re diagnosis
+ * The status of a reportIntent, either performed, reportIntent needed or re reportIntent
  * needed.
  * 
  * @author andi

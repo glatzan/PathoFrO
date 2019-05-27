@@ -1,4 +1,4 @@
-package com.patho.main.util.status.diagnosis
+package com.patho.main.util.status.reportIntent
 
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.DiagnosisHistoryRecord
@@ -36,7 +36,7 @@ open class ReportIntentBearer(val reportIntent: ReportIntent, val task: Task) {
     }
 
     /**
-     * Adds a notification type record to the linked diagnosis bearer.
+     * Adds a notification type record to the linked reportIntent bearer.
      */
     private fun addType(diagnosisID: Long, type: NotificationTyp, diagnosisHistoryRecord: DiagnosisHistoryRecord) {
         val reportIntentNotificationBearer = DiagnosisBearer.ReportIntentNotificationBearer(type, diagnosisHistoryRecord)
@@ -44,7 +44,7 @@ open class ReportIntentBearer(val reportIntent: ReportIntent, val task: Task) {
     }
 
     /**
-     * This method searches for a diagnosis bearer in the diagnosisBearer list. If found the bearer will be returned, if not a
+     * This method searches for a reportIntent bearer in the diagnosisBearer list. If found the bearer will be returned, if not a
      * new bearer will be created.
      */
     private fun addDiagnosisBearer(diagnosisID: Long): DiagnosisBearer {
@@ -53,14 +53,14 @@ open class ReportIntentBearer(val reportIntent: ReportIntent, val task: Task) {
         if (diagnosisBearer == null) {
             diagnosisBearer = DiagnosisBearer(diagnosisID, task)
             diagnosisBearers.add(diagnosisBearer)
-            print("New diagnosis $diagnosisID")
+            print("New reportIntent $diagnosisID")
         }
 
         return diagnosisBearer
     }
 
     /**
-     * Container for a diagnosis revision.
+     * Container for a reportIntent revision.
      * The revision will be searched via its id. If not found the revision was deleted. This state will be marked.
      */
     open class DiagnosisBearer(val diagnosisID: Long, task: Task) {

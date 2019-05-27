@@ -138,13 +138,13 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
         get() = stainingCompletionDate != null
 
     /**
-     * Date of diagnosis finalization
+     * Date of reportIntent finalization
      */
     @Column
     open var diagnosisCompletionDate: Instant? = null
 
     /**
-     * Returns true if diagnosis completion date is set
+     * Returns true if reportIntent completion date is set
      */
     open val diagnosisCompleted: Boolean
         @Transient

@@ -87,7 +87,7 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 	}
 
 	/**
-	 * If rename is true no new diagnosis revision will be created
+	 * If rename is true no new reportIntent revision will be created
 	 */
 	public boolean initBean(Task task) {
 
@@ -157,7 +157,7 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 	 */
 	@Transactional
 	public void addDiagnosisAndHide() {
-		logger.debug("Creating new diagnosis revision " + newRevisionName);
+		logger.debug("Creating new reportIntent revision " + newRevisionName);
 
 		task = diagnosisService.renameDiagnosisRevisions(task, getRevisionList());
 		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName, null);

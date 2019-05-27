@@ -481,7 +481,7 @@ public class PDFService extends AbstractService {
 	}
 
 	/**
-	 * Searches for a matching diagnosis report by internal id.
+	 * Searches for a matching reportIntent report by internal id.
 	 * 
 	 * @param task
 	 * @param diagnosisRevision

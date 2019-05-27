@@ -10,7 +10,7 @@ public enum PredefinedFavouriteList {
 	 */
 	StainingList(1),
 	/**
-	 * List of tasks where a diagnosis is pending
+	 * List of tasks where a reportIntent is pending
 	 */
 	DiagnosisList(2),
 	/**

@@ -9,7 +9,7 @@
 
 	<p:outputPanel styleClass="headerPannel">
 		<h:outputLabel
-			value="#{msg['dialog.settings.diagnosis.list.headline']}" />
+			value="#{msg['dialog.settings.reportIntent.list.headline']}" />
 	</p:outputPanel>
 
 	<p:outputPanel styleClass="bodyPannelFull">
@@ -19,16 +19,16 @@
 			value="#{dialog.settingsDialog.diagnosisTab.diagnosisPresets}"
 			styleClass="defaultHistoDataTable">
 
-			<!-- diagnosis name -->
+			<!-- reportIntent name -->
 			<p:column sortBy="#{diagnosisPreset.diagnosisText}"
-				headerText="#{msg['dialog.settings.diagnosis.list.diagnosis']}"
+				headerText="#{msg['dialog.settings.reportIntent.list.reportIntent']}"
 				style="width:35%">
 				<h:outputText value="#{diagnosisPreset.diagnosis}" />
 			</p:column>
 
-			<!-- diagnosis category -->
+			<!-- reportIntent category -->
 			<p:column sortBy="#{diagnosisPreset.name}"
-				headerText="#{msg['dialog.settings.diagnosis.list.category']}"
+				headerText="#{msg['dialog.settings.reportIntent.list.category']}"
 				style="width:15%">
 				<h:outputLabel value="#{diagnosisPreset.category}"
 					title="#{diagnosisPreset.category}">
@@ -41,7 +41,7 @@
 
 			<!-- commentary -->
 			<p:column
-				headerText="#{msg['dialog.settings.diagnosis.list.commentary']}"
+				headerText="#{msg['dialog.settings.reportIntent.list.commentary']}"
 				style="width:atuo">
 				<h:outputLabel value="#{diagnosisPreset.commentary}">
 					<f:converter converterId="org.histo.ui.TruncateConverter"
@@ -53,13 +53,13 @@
 
 			<!-- archived -->
 			<p:column
-				headerText="#{msg['dialog.settings.diagnosis.list.archived']}"
+				headerText="#{msg['dialog.settings.reportIntent.list.archived']}"
 				styleClass="centerChildElements"
 				sortBy="#{diagnosisPreset.archived}" style="width:80px;"
 				rendered="#{dialog.settingsDialog.diagnosisTab.showArchived}">
 				<ui:fragment rendered="#{diagnosisPreset.archived}">
 					<i class="fa fa-archive icon-red"
-						title="#{msg['dialog.settings.diagnosis.list.archived.info']}" />
+						title="#{msg['dialog.settings.reportIntent.list.archived.info']}" />
 				</ui:fragment>
 			</p:column>
 
@@ -68,12 +68,12 @@
 				styleClass="centerChildElements centerHeaderChildElements">
 				<f:facet name="header">
 					<i class="fa fa-cog"
-						title="#{msg['dialog.settings.diagnosis.list.options']}" />
+						title="#{msg['dialog.settings.reportIntent.list.options']}" />
 				</f:facet>
 
 				<!-- edit -->
 				<p:commandLink
-					title="#{msg['dialog.settings.diagnosis.list.options.edit']}"
+					title="#{msg['dialog.settings.reportIntent.list.options.edit']}"
 					actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean(diagnosisPreset)}">
 					<i class="fa fa-fw fa-cog" />
 					<p:ajax event="dialogReturn"
@@ -83,7 +83,7 @@
 
 				<!-- archive -->
 				<p:commandLink
-					title="#{msg['dialog.settings.diagnosis.list.archive']}"
+					title="#{msg['dialog.settings.reportIntent.list.archive']}"
 					rendered="#{!diagnosisPreset.archived}"
 					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, true)}"
 					update="@form">
@@ -92,7 +92,7 @@
 
 				<!-- dearchive -->
 				<p:commandLink
-					title="#{msg['dialog.settings.diagnosis.list.dearchive']}"
+					title="#{msg['dialog.settings.reportIntent.list.dearchive']}"
 					rendered="#{diagnosisPreset.archived}"
 					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, false)}"
 					update="@form">
@@ -116,13 +116,13 @@
 						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
-					value="#{msg['dialog.settings.diagnosis.list.checkbox.archived']}" />
+					value="#{msg['dialog.settings.reportIntent.list.checkbox.archived']}" />
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right">
 				<!-- new -->
 				<p:commandButton
-					value="#{msg['dialog.settings.diagnosis.list.button.new']}"
+					value="#{msg['dialog.settings.reportIntent.list.button.new']}"
 					icon="fa fa-fw fa-plus-circle"
 					actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean()}">
 					<p:ajax event="dialogReturn"

@@ -62,7 +62,7 @@ public class SampleService extends AbstractService {
 
     /**
      * Creates a new sample and adds this sample to the given task. Creates a new
-     * diagnosis and a new block with slides as well.
+     * reportIntent and a new block with slides as well.
      *
      * @param task
      */
@@ -73,7 +73,7 @@ public class SampleService extends AbstractService {
 
     /**
      * Creates a new sample and adds this sample to the given task. Creates a new
-     * diagnosis and a new block with slides as well.
+     * reportIntent and a new block with slides as well.
      *
      * @param task
      */
@@ -95,7 +95,7 @@ public class SampleService extends AbstractService {
         if (naming)
             TaskTreeTools.updateNamesInTree(sample, sample.getTask().getUseAutoNomenclature(), false);
 
-        // creating first default diagnosis
+        // creating first default reportIntent
         diagnosisService.synchronizeDiagnosesAndSamples(task, false);
 
         if (save)
@@ -127,7 +127,7 @@ public class SampleService extends AbstractService {
         parent.getSamples().remove(sampel);
         TaskTreeTools.updateNamesInTree(parent, parent.getTask().getUseAutoNomenclature(), false);
 
-        // creating first default diagnosis
+        // creating first default reportIntent
         diagnosisService.synchronizeDiagnosesAndSamples(parent, false);
 
         if (save) {

@@ -216,7 +216,7 @@ open class CentralHandler @Autowired constructor(
                 genericViewData.loadView(worklistHandler.current.selectedTask)
             }
             View.WORKLIST_DIAGNOSIS -> {
-                logger.debug("Loading diagnosis view")
+                logger.debug("Loading reportIntent view")
                 diagnosisView.loadView(worklistHandler.current.selectedTask)
                 genericViewData.loadView(worklistHandler.current.selectedTask)
             }
@@ -333,7 +333,7 @@ open class CentralHandler @Autowired constructor(
 
         // task.setActive(true);
 
-        // change if is subview (diagnosis, receipt log or report view)
+        // change if is subview (reportIntent, receipt log or report view)
         if (!navigationData.currentView.isLastSubviewAble) {
             logger.debug("Setting subview ${navigationData.lastDefaultView}")
             changeView(navigationData.lastDefaultView)

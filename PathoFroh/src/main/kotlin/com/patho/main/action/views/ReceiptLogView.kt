@@ -11,8 +11,8 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SlideService
 import com.patho.main.util.print.UnknownPrintingException
-import com.patho.main.util.status.diagnosis.ReportIntentBearer
-import com.patho.main.util.status.diagnosis.ReportIntentStatusByReportIntentAndDiagnosis
+import com.patho.main.util.status.reportIntent.ReportIntentBearer
+import com.patho.main.util.status.reportIntent.ReportIntentStatusByReportIntentAndDiagnosis
 import freemarker.template.TemplateNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope

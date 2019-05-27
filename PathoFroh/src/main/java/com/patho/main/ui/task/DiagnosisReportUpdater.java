@@ -72,7 +72,7 @@ public class DiagnosisReportUpdater {
                 .findByTypeAndDefault(PrintDocumentType.DIAGNOSIS_REPORT);
 
         if (!printDocument.isPresent()) {
-            logger.error("No diagnosis print template found");
+            logger.error("No reportIntent print template found");
             return task;
         }
 

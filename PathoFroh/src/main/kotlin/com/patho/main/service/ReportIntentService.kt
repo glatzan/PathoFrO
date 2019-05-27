@@ -238,7 +238,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transactional
     open fun addDiagnosisHistoryRecord(task: Task, reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Pair<ReportIntentNotification, DiagnosisHistoryRecord> {
-        logger.debug("Adding history for diagnosis $diagnosisRevision")
+        logger.debug("Adding history for reportIntent $diagnosisRevision")
 
         val result = DiagnosisHistoryRecord(diagnosisRevision)
         reportIntentNotification.history.add(result)
@@ -305,7 +305,7 @@ open class ReportIntentService @Autowired constructor(
         for (diagnosisHistoryRecord in reportIntentNotification.history) {
             val diagnosisRevision = task.diagnosisRevisions.singleOrNull { p -> p.id == diagnosisHistoryRecord.diagnosisID }
 
-            // search if a corresponding diagnosis exists
+            // search if a corresponding reportIntent exists
             if (diagnosisRevision != null) {
                 foundRevisions.add(diagnosisRevision)
             } else {
@@ -416,7 +416,7 @@ open class ReportIntentService @Autowired constructor(
     }
 
     /**
-     * Searches for a history record with the given diagnosis id, returns last element
+     * Searches for a history record with the given reportIntent id, returns last element
      */
     @Transactional
     open fun findDiagnosisHistoryRecordByDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): DiagnosisHistoryRecord? {
@@ -424,7 +424,7 @@ open class ReportIntentService @Autowired constructor(
     }
 
     /**
-     * Searches for all history records with the given diagnosis id
+     * Searches for all history records with the given reportIntent id
      */
     @Transactional
     open fun findCompletedDiagnosisHistoryRecordByDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): List<DiagnosisHistoryRecord> {

@@ -9,7 +9,7 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.TaskService
 import com.patho.main.util.event.dialog.PatientReloadEvent
 import com.patho.main.util.event.dialog.RemovePatientFromWorklistEvent
-import com.patho.main.util.status.diagnosis.ReportIntentBearer
+import com.patho.main.util.status.reportIntent.ReportIntentBearer
 import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.task.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired

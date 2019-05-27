@@ -108,7 +108,7 @@ public class SlideOverviewDialog extends AbstractDialog {
 					// open end staining phase dialog
 					MessageHandler.executeScript("clickButtonFromBean('dialogContent:stainingPhaseExitFromDialog')");
 					// if staining phase does not end, check if restaining phase is entered, show
-					// dialog for creating a new diagnosis revision
+					// dialog for creating a new reportIntent revision
 				} else {
 					workPhaseService.startStainingPhase(task);
 					updateData();
@@ -116,7 +116,7 @@ public class SlideOverviewDialog extends AbstractDialog {
 					// dialog
 					if (TaskStatus.checkIfReStainingFlag(getTask()) && !TaskStatus.checkIfStainingCompleted(getTask())
 							&& getTask().getDiagnosisRevisions().size() == 1) {
-						logger.debug("Opening dialog for creating a diagnosis revision");
+						logger.debug("Opening dialog for creating a reportIntent revision");
 						MessageHandler
 								.executeScript("clickButtonFromBean('dialogContent:addDiagnosisRevisionFromDialog')");
 					}

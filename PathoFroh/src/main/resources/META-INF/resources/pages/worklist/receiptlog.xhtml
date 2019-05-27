@@ -82,7 +82,7 @@
                 </h:panelGrid>
 
                 <!-- ward -->
-                <h:outputLabel value="#{msg['body.diagnosis.ward']}"/>
+                <h:outputLabel value="#{msg['body.reportIntent.ward']}"/>
                 <p:selectOneMenu id="wards"
                                  value="#{receiptLogView.task.ward}"
                                  style="width: 80%;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor};"
@@ -117,7 +117,7 @@
                     <p:inputTextarea styleClass="customBackground"
                                      disabled="#{!receiptLogView.task.taskStatus.editable}"
                                      value="#{receiptLogView.task.caseHistory}"
-                                     title="#{msg['body.diagnosis.story.watermark']}"
+                                     title="#{msg['body.reportIntent.story.watermark']}"
                                      id="caseHistoryInput" style="width:90%"
                                      onclick="commonFunctions.showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
                                      onkeypress="PF('caseHistoryOverlayPanel').hide();">
@@ -186,7 +186,7 @@
                                  styleClass="listingHistoHiddenTableContainer"
                                  columnClasses="column75px,">
                         <h:outputLabel
-                                value="#{msg['body.diagnosis.sample']} #{sample.sampleID}"/>
+                                value="#{msg['body.reportIntent.sample']} #{sample.sampleID}"/>
                         <h:panelGroup>
                             <p:inputText value="#{sample.material}"
                                          id="materialInput#{loopCount.index}"
@@ -940,7 +940,7 @@
                     value="#{msg['body.statiningView.stainingPhaseEnd']}"
                     icon="fa fa-fw fa-image"
                     disabled="#{!receiptLogView.task.taskStatus.editable}"
-                    actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(receiptLogView.task, true)}">
+                    actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(receiptLogView.task)}">
                 <p:ajax event="dialogReturn"
                         listener="#{dialogReturnHandler.onDefaultReturn}"
                         update="navigationForm:patientList contentForm:contentPanel headerForm"

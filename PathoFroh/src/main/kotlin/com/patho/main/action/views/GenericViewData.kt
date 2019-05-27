@@ -43,7 +43,7 @@ open class GenericViewData @Autowired constructor(
     open var slideCommentary: MutableList<ListItem> = mutableListOf<ListItem>()
 
     /**
-     * List of all diagnosis presets
+     * List of all reportIntent presets
      */
     open var diagnosisPresets: MutableList<DiagnosisPreset> = mutableListOf<DiagnosisPreset>()
 

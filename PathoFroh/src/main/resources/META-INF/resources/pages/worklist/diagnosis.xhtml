@@ -28,7 +28,7 @@
     <p:panel style="width: 80%"
              styleClass="defaultHistoHiddenTableContainer">
 
-        <h:outputLabel value="#{msg['body.diagnosis.headline']}"
+        <h:outputLabel value="#{msg['body.reportIntent.headline']}"
                        style="font-size:1.5em;"/>
 
         <h:panelGrid columns="3" style="margin-top:10px;"
@@ -49,7 +49,7 @@
                                      columnClasses="columnWidth75,">
 
                             <h:outputLabel
-                                    value="#{msg['body.diagnosis.sample']} #{sample.sampleID}"/>
+                                    value="#{msg['body.reportIntent.sample']} #{sample.sampleID}"/>
 
                             <h:panelGroup>
                                 <!-- Material Name -->
@@ -108,7 +108,7 @@
 
                 <!-- Eye -->
                 <h:panelGrid columns="2" styleClass="defaultHistoTable">
-                    <h:outputLabel value="#{msg['body.diagnosis.eye']}"/>
+                    <h:outputLabel value="#{msg['body.reportIntent.eye']}"/>
                     <p:selectOneMenu styleClass="customBackground" tabindex="6"
                                      style="background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}"
                                      disabled="#{!diagnosisView.task.taskStatus.editable}"
@@ -126,12 +126,12 @@
 
                 <!-- history -->
                 <h:panelGrid columns="1" styleClass="defaultHistoTable">
-                    <h:outputLabel value="#{msg['body.diagnosis.story']}"/>
+                    <h:outputLabel value="#{msg['body.reportIntent.story']}"/>
 
                     <h:panelGroup>
                         <p:inputTextarea styleClass="customBackground"
                                          value="#{diagnosisView.task.caseHistory}"
-                                         title="#{msg['body.diagnosis.story.watermark']}"
+                                         title="#{msg['body.reportIntent.story.watermark']}"
                                          disabled="#{!diagnosisView.task.taskStatus.editable}"
                                          id="caseHistoryInput" style="width:90%"
                                          onclick="commonFunctions.showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
@@ -187,12 +187,12 @@
                 <h:panelGrid columns="2" styleClass="defaultHistoTable">
 
                     <!-- Task Number -->
-                    <h:outputLabel value="#{msg['body.diagnosis.taskNumber']}"/>
+                    <h:outputLabel value="#{msg['body.reportIntent.taskNumber']}"/>
                     <h:panelGrid columns="2"
                                  styleClass="listingHistoHiddenTableContainer">
                         <p:inputText disabled="true"
                                      value="#{diagnosisView.task.taskID}"/>
-                        <p:commandLink title="#{msg['body.diagnosis.taskNumber.change']}"
+                        <p:commandLink title="#{msg['body.reportIntent.taskNumber.change']}"
                                        rendered="#{userService.userHasPermission('TASK_EDIT_ID')}"
                                        disabled="#{!diagnosisView.task.taskStatus.editable}"
                                        actionListener="#{dialog.changeTaskIDDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
@@ -203,7 +203,7 @@
                     </h:panelGrid>
 
                     <!-- date of surgery -->
-                    <h:outputLabel value="#{msg['body.diagnosis.surgeryDate']}"/>
+                    <h:outputLabel value="#{msg['body.reportIntent.surgeryDate']}"/>
                     <p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="2" converter="localDateConverter"
                                 style="background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}"
                                 styleClass="customBackground"
@@ -216,7 +216,7 @@
                     </p:calendar>
 
                     <!-- date of receipt -->
-                    <h:outputLabel value="#{msg['body.diagnosis.taskEDate']}"/>
+                    <h:outputLabel value="#{msg['body.reportIntent.taskEDate']}"/>
                     <p:calendar pattern="dd.MM.yyyy" mask="true" tabindex="3" converter="localDateConverter"
                                 disabled="#{!diagnosisView.task.taskStatus.editable}"
                                 style="background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}"
@@ -229,7 +229,7 @@
                     </p:calendar>
 
                     <!-- insurance -->
-                    <h:outputLabel value="#{msg['body.diagnosis.insurance']}"/>
+                    <h:outputLabel value="#{msg['body.reportIntent.insurance']}"/>
                     <p:inputText
                             disabled="#{!diagnosisView.task.taskStatus.editable}"
                             value="#{diagnosisView.task.insurance}">
@@ -238,7 +238,7 @@
                     </p:inputText>
 
                     <!-- ward -->
-                    <h:outputLabel value="#{msg['body.diagnosis.ward']}"/>
+                    <h:outputLabel value="#{msg['body.reportIntent.ward']}"/>
                     <p:selectOneMenu id="wards"
                                      value="#{diagnosisView.task.ward}"
                                      editable="true"
@@ -255,7 +255,7 @@
 
                     <!-- surgeon -->
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
-                        <h:outputLabel value="#{msg['body.diagnosis.surgeon']}"/>
+                        <h:outputLabel value="#{msg['body.reportIntent.surgeon']}"/>
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
@@ -332,7 +332,7 @@
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
-                        <h:outputLabel value="#{msg['body.diagnosis.privatePhysician']}"/>
+                        <h:outputLabel value="#{msg['body.reportIntent.privatePhysician']}"/>
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
@@ -449,7 +449,7 @@
                         </p:overlayPanel>
 
                         <p:remoteCommand
-                                actionListener="#{globalEditViewHandler.ct.saveData('log.patient.task.diagnosisRevision.diagnosis.name',  revision.task,  revision, revision.name)}"
+                                actionListener="#{globalEditViewHandler.ct.saveData('log.patient.task.diagnosisRevision.reportIntent.name',  revision.task,  revision, revision.name)}"
                                 name="saveDiagnosisNameChange"
                                 update="navigationForm:patientList contentForm:contentPanel headerForm"/>
 
@@ -473,7 +473,7 @@
 
                         <c:choose>
                             <c:when test="#{varCounterInner.first}">
-                                <h:outputLabel value="#{msg['body.diagnosis.diagnoses']}" />
+                                <h:outputLabel value="#{msg['body.reportIntent.diagnoses']}" />
                             </c:when>
                             <c:otherwise>
                                 <h:outputLabel value=""/>
@@ -485,17 +485,17 @@
                             <c:choose>
                                 <c:when test="#{revision.diagnoses.size() ne 1}">
                                     <h:outputLabel
-                                            value="#{msg['body.diagnosis.sample']} #{diagnosis.sample.sampleID}"/>
+                                            value="#{msg['body.reportIntent.sample']} #{diagnosis.sample.sampleID}"/>
                                 </c:when>
                                 <c:otherwise>
                                     <h:outputLabel value=""/>
                                 </c:otherwise>
                             </c:choose>
                             <h:panelGroup>
-                                <!-- copy diagnosis text -->
+                                <!-- copy reportIntent text -->
                                 <p:commandLink style="margin-left:20px;"
                                                disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision) or diagnosis.diagnosisPrototype.extendedDiagnosisText eq ''}"
-                                               title="#{diagnosis.diagnosisPrototype.extendedDiagnosisText eq '' ? msg['body.diagnosis.histologicalRecordPreset.text.none'] : msg['body.diagnosis.histologicalRecordPreset.text']}"
+                                               title="#{diagnosis.diagnosisPrototype.extendedDiagnosisText eq '' ? msg['body.reportIntent.histologicalRecordPreset.text.none'] : msg['body.reportIntent.histologicalRecordPreset.text']}"
                                                rendered="#{diagnosis.diagnosisPrototype ne null}"
                                                process="@this"
                                                actionListener="#{globalEditViewHandler.ct.copyHistologicalRecord(diagnosis)}"
@@ -507,19 +507,19 @@
                             </h:panelGroup>
                             <!-- malign -->
                             <h:panelGrid columns="2" style="float:right;margin-right:20px;">
-                                <h:outputLabel value="#{msg['body.diagnosis.malign']}"/>
+                                <h:outputLabel value="#{msg['body.reportIntent.malign']}"/>
                                 <p:selectBooleanCheckbox value="#{diagnosis.malign}"
                                                          disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                                          style="margin:3px 0px 0px 3px;">
                                     <f:ajax event="change"
-                                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.sample.diagnosis.changed.malign',diagnosis.malign)}"/>
+                                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.sample.reportIntent.changed.malign',diagnosis.malign)}"/>
                                 </p:selectBooleanCheckbox>
                             </h:panelGrid>
                         </h:panelGroup>
 
                         <h:outputLabel/>
                         <h:panelGroup>
-                            <!-- diagnosis text -->
+                            <!-- reportIntent text -->
                             <p:inputTextarea value="#{diagnosis.diagnosis}"
                                              onkeypress="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"
                                              onclick="commonFunctions.showAndUpdateOverlayPanel('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}', '#{component.clientId}' , null, 'diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}', 'contentForm:diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}:diagnosisColumn:filter',submitNewCustomDiagnosis#{varCounterOuter.index}#{varCounterInner.index});"
@@ -531,7 +531,7 @@
                                         for="diagnosisText#{varCounterOuter.index}#{varCounterInner.index}"
                                         value="#{msg['body.receiptlog.tab.diangonsis.data.diangosis.watermark']}"/>
                                 <f:ajax event="change" execute="@this"
-                                        listener="#{globalEditViewHandler.ct.saveData('log.patient.task.sample.diagnosis.changed.diagnosis.text', diagnosis.diagnosis)}"/>
+                                        listener="#{globalEditViewHandler.ct.saveData('log.patient.task.sample.reportIntent.changed.reportIntent.text', diagnosis.diagnosis)}"/>
                             </p:inputTextarea>
 
 
@@ -582,7 +582,7 @@
                              id="diagnosisSpotContentSignature#{varCounterOuter.index}"
                              columnClasses="columnLabelContainer200 columnTop #{varCounterOuter.even ? '' : 'oddColumnColored' }, #{varCounterOuter.even ? '' : 'oddColumnColored'}, #{varCounterOuter.even ? '' : 'oddColumnColored'}, #{varCounterOuter.even ? '' : 'oddColumnColored'}, #{varCounterOuter.even ? '' : 'oddColumnColored'}, #{varCounterOuter.even ? '' : 'oddColumnColored'}">
 
-                    <h:outputLabel value="#{msg['body.diagnosis.signature.date']}" />
+                    <h:outputLabel value="#{msg['body.reportIntent.signature.date']}" />
                     <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
                                 disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                 value="#{revision.signatureDate}">
@@ -593,7 +593,7 @@
                     </p:calendar>
 
                     <!-- physician -->
-                    <h:outputLabel value="#{msg['body.diagnosis.signature.physician']}"/>
+                    <h:outputLabel value="#{msg['body.reportIntent.signature.physician']}"/>
                     <h:panelGroup>
                         <p:selectOneMenu
                                 disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
@@ -604,7 +604,7 @@
                                 filter="true" filterMatchMode="contains">
 
                             <f:selectItem
-                                    itemLabel="#{msg['body.diagnosis.signature.physician.select']}"
+                                    itemLabel="#{msg['body.reportIntent.signature.physician.select']}"
                                     itemValue="#{null}"/>
 
                             <f:selectItems
@@ -629,7 +629,7 @@
 
                     <!-- Consultant -->
                     <h:outputLabel
-                            value="#{msg['body.diagnosis.signature.consultant']}"/>
+                            value="#{msg['body.reportIntent.signature.consultant']}"/>
                     <h:panelGroup>
                         <p:selectOneMenu
                                 disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
@@ -639,7 +639,7 @@
                                 converter="#{genericViewData.physiciansToSignListTransformer}"
                                 filter="true" filterMatchMode="contains">
                             <f:selectItem
-                                    itemLabel="#{msg['body.diagnosis.signature.consultant.select']}"
+                                    itemLabel="#{msg['body.reportIntent.signature.consultant.select']}"
                                     itemValue="#{null}"/>
 
                             <f:selectItems
@@ -728,20 +728,20 @@
                     <h:panelGroup>
                         <p:splitButton
                                 rendered="#{revision.completed and !worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(revision)}"
-                                value="#{msg['body.diagnosis.diagnosis.amendment']}"
+                                value="#{msg['body.reportIntent.reportIntent.amendment']}"
                                 disabled="#{!diagnosisView.task.taskStatus.editable}"
                                 onclick="$('#contentForm\\:admendDiagnosisRevision#{varCounterOuter.index}').click();"
                                 icon="fa fa-edit">
 
-                            <!-- delete diagnosis -->
-                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.reend']}"
+                            <!-- delete reportIntent -->
+                            <p:menuitem value="#{msg['body.reportIntent.reportIntent.reend']}"
                                         icon="fa fa-eye-slash"
                                         onclick="$('#contentForm\\:endDiagnosisRevision#{varCounterOuter.index}').click();"/>
 
                         </p:splitButton>
 
                         <!-- save changes -->
-                        <p:commandButton value="#{msg['body.diagnosis.diagnosis.lock']}"
+                        <p:commandButton value="#{msg['body.reportIntent.reportIntent.lock']}"
                                          rendered="#{worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(revision) }"
                                          oncomplete="PF('diagnosisSpotBlocker#{varCounterOuter.index}').hide()"
                                          icon="fa fa-check-circle-o"
@@ -760,7 +760,7 @@
                         </p:commandButton>
 
                         <!-- end diangosis -->
-                        <p:commandButton value="#{msg['body.diagnosis.diagnosis.end']}"
+                        <p:commandButton value="#{msg['body.reportIntent.reportIntent.end']}"
                                          icon="fa fa-eye-slash"
                                          id="endDiagnosisRevision#{varCounterOuter.index}"
                                          style="#{(revision.completed) ? 'display:none' : ''}"
@@ -776,29 +776,29 @@
 
 
                     <h:panelGroup>
-                        <!-- rename diagnosis -->
-                        <p:splitButton value="#{msg['body.diagnosis.diagnosis.rename']}"
+                        <!-- rename reportIntent -->
+                        <p:splitButton value="#{msg['body.reportIntent.reportIntent.rename']}"
                                        disabled="#{!diagnosisView.task.taskStatus.editable}"
                                        onclick="$('#contentForm\\:editDiagnosisRevision#{varCounterOuter.index}').click();"
                                        icon="fa fa-pencil">
 
-                            <!-- delete diagnosis -->
-                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.delete']}"
+                            <!-- delete reportIntent -->
+                            <p:menuitem value="#{msg['body.reportIntent.reportIntent.delete']}"
                                         icon="fa fa-trash"
                                         onclick="$('#contentForm\\:deleteRevision#{varCounterOuter.index}').click();"/>
 
-                            <!-- print diagnosis -->
-                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.print']}"
+                            <!-- print reportIntent -->
+                            <p:menuitem value="#{msg['body.reportIntent.reportIntent.print']}"
                                         icon="fa fa-print" disabled="true"/>
                             <p:separator/>
 
-                            <!-- new diagnosis -->
-                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.new']}"
+                            <!-- new reportIntent -->
+                            <p:menuitem value="#{msg['body.reportIntent.reportIntent.new']}"
                                         icon="fa fa-plus-circle"
                                         onclick="$('#contentForm\\:newDiagnosisRevision#{varCounterOuter.index}').click();"/>
                         </p:splitButton>
 
-                        <!-- edit diagnosis revision -->
+                        <!-- edit reportIntent revision -->
                         <p:commandButton
                                 id="editDiagnosisRevision#{varCounterOuter.index}"
                                 style="display:none"
@@ -809,7 +809,7 @@
                                     oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
                         </p:commandButton>
 
-                        <!-- delete diagnosis revision -->
+                        <!-- delete reportIntent revision -->
                         <p:commandButton id="deleteRevision#{varCounterOuter.index}"
                                          style="display:none"
                                          actionListener="#{dialog.deleteDiagnosisRevisionDialog.initAndPrepareBean(revision)}">
@@ -819,7 +819,7 @@
                                     oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
                         </p:commandButton>
 
-                        <!-- new diagnosis revision -->
+                        <!-- new reportIntent revision -->
                         <p:commandButton id="newDiagnosisRevision#{varCounterOuter.index}"
                                          style="display:none"
                                          actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
@@ -834,7 +834,7 @@
                                title=""/>
                             <p:tooltip for="diagnosisCompleted#{varCounterOuter.index}">
                                 <h:outputLabel
-                                        value="#{revision.completed ? msg['body.diagnosis.diagnosis.approved'] : msg['body.diagnosis.diagnosis.approved.not']} "/>
+                                        value="#{revision.completed ? msg['body.reportIntent.reportIntent.approved'] : msg['body.reportIntent.reportIntent.approved.not']} "/>
                                 <h:outputText rendered="#{revision.completed}"
                                               value="#{revision.completionDate}">
                                     <f:converter converterId="instantDateTimeConverter"/>
@@ -851,7 +851,7 @@
                                    title=""/>
                                 <p:tooltip for="notificationsCompleted#{varCounterOuter.index}">
                                     <h:outputLabel
-                                            value="#{revision.notified ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} "/>
+                                            value="#{revision.notified ? msg['body.reportIntent.reportIntent.notification'] : msg['body.reportIntent.reportIntent.notification.not']} "/>
                                     <h:outputText rendered="#{revision.notified}"
                                                   value="#{revision.notificationDate}">
                                         <f:converter converterId="instantDateTimeConverter"/>

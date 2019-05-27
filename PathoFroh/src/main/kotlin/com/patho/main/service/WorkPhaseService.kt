@@ -83,15 +83,15 @@ open class WorkPhaseService @Autowired constructor(
     }
 
     /**
-     * Starts the diagnosis phase, sets the time of diagnosis completion to zero and
-     * adds the task to the diagnosis list.
+     * Starts the reportIntent phase, sets the time of reportIntent completion to zero and
+     * adds the task to the reportIntent list.
      */
     @Transactional
     open fun startDiagnosisPhase(task: Task): Task {
         var tmp = task
         tmp.diagnosisCompletionDate = null
 
-        tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.diagnosis.enter", tmp), tmp.patient)
+        tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.reportIntent.enter", tmp), tmp.patient)
 
         if (!TaskStatus.hasFavouriteLists(tmp, PredefinedFavouriteList.DiagnosisList,
                         PredefinedFavouriteList.ReDiagnosisList)) {
@@ -102,7 +102,7 @@ open class WorkPhaseService @Autowired constructor(
     }
 
     /**
-     * Ends the diagnosis phase, removes from diagnosis list and sets the diagnosis
+     * Ends the reportIntent phase, removes from reportIntent list and sets the reportIntent
      * time of completion.
      */
     @Transactional
@@ -110,7 +110,7 @@ open class WorkPhaseService @Autowired constructor(
         var tmp = task
 
         var change = false
-        // setting diagnosis completion date if not set jet
+        // setting reportIntent completion date if not set jet
         for (i in 0 until tmp.diagnosisRevisions.size) {
             val rev = HistoUtil.getNElement(tmp.diagnosisRevisions, i)
             if (!rev!!.completed) {
@@ -121,7 +121,7 @@ open class WorkPhaseService @Autowired constructor(
 
         if (change || !tmp.diagnosisCompleted) {
             tmp.diagnosisCompletionDate = Instant.now()
-            tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.diagnosis.end", tmp), tmp.patient)
+            tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.reportIntent.end", tmp), tmp.patient)
         }
 
         if (removeFromList)

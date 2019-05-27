@@ -345,7 +345,7 @@ public class CouncilDialog extends AbstractDialog {
 			case "council_reply":
 				return "inculde/reply.xhtml";
 			case "council_diagnosis":
-				return "inculde/diagnosis.xhtml";
+				return "inculde/reportIntent.xhtml";
 			case "pdf_node":
 				return "inculde/report.xhtml";
 			default:

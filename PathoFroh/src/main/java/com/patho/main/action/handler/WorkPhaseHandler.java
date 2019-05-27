@@ -81,7 +81,7 @@ public class WorkPhaseHandler{
 		}
 
 		if (startDiagnosisPhase) {
-			logger.debug("Adding Task to diagnosis list");
+			logger.debug("Adding Task to reportIntent list");
 			task = startDiagnosisPhase(task);
 		}
 
@@ -112,7 +112,7 @@ public class WorkPhaseHandler{
 	}
 
 	/**
-	 * Ends the notification pahse, if no diagnosis revision is passed, all
+	 * Ends the notification pahse, if no reportIntent revision is passed, all
 	 * diangoses will be ended.
 	 */
 	public void endDiagnosisPhase(Task task, DiagnosisRevision diagnosisRevision, boolean removeFromDiagnosisList,

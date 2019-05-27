@@ -9,7 +9,7 @@ import java.time.Instant
 import javax.persistence.Column
 
 /**
- * Class for one diagnosis and its reports
+ * Class for one reportIntent and its reports
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 open class DiagnosisHistoryRecord : Serializable {

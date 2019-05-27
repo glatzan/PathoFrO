@@ -1,0 +1,167 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+<composite:interface>
+    <!-- com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis -->
+    <composite:attribute name="reportIntents" required="true"
+                         type="com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis"/>
+
+    <!-- selection mode single or multi -->
+    <composite:attribute name="selection" required="true"
+                         type="com.patho.main.util.status.diagnosis.DiagnosisBearer"/>
+
+    <!-- controller class implementing com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData -->
+    <composite:attribute name="controller" required="true"
+                         type="com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData"/>
+</composite:interface>
+
+<composite:implementation>
+
+
+    <!-- importing enum for switch -->
+    <p:importEnum
+            type="com.patho.main.model.patient.NotificationStatus"
+            var="notificationStatus" allSuffix="ALL_ENUM_VALUES"/>
+
+    <p:dataTable var="diagnosisBearer" id="diangosisList"
+                 scrollHeight="100" styleClass="defaultHistoDataTable"
+                 scrollable="true" selectionMode="single"
+                 rowKey="#{diagnosisBearer.diagnosisRevision.id}"
+                 selection="#{cc.attrs.selection}"
+                 value="#{cc.attrs.reportIntents.diagnosisBearer}">
+
+        <!-- Name -->
+        <p:column
+                headerText="#{msg['dialog.notificationDialog.general.data.name']}"
+                style="width:auto">
+            <h:outputText value="#{diagnosisBearer.diagnosisRevision.name}"/>
+        </p:column>
+
+        <!-- info -->
+        <p:column style="width: 5%" styleClass="centerChildElements centerHeaderChildElements">
+            <f:facet name="header">
+                <i class="fa fa-info-circle"/>
+            </f:facet>
+            <p:commandLink
+                    styleClass="diagnosisOverlayPanelyTrigger"
+                    icon="pi pi-search"
+                    actionListener="#{cc.attrs.controller.setViewDiagnosisRevisionDetails(diagnosisBearer)}"
+                    partialSubmit="true"
+                    process="@this"
+                    update="adminForm:diagnosisOverlayPanel"
+                    oncomplete="commonFunctions.showOverlayPanel('diagnosisOverlayPanel', '#{component.clientId}');">
+                <i class="fa fa-info-circle"/>
+            </p:commandLink>
+        </p:column>
+
+        <!-- pending -->
+        <p:column style="width:10%" styleClass="centerChildElements"
+                  headerText="#{msg['dialog.notificationDialog.general.data.status.text']}">
+            <pe:switch value="#{diagnosisBearer.diagnosisRevision.notificationStatus}">
+                <pe:case value="#{notificationStatus.NOT_APPROVED}">
+                    <i class="fa fa-fw fa-volume-off icon-red"
+                       title="#{msg['dialog.notificationDialog.general.data.status.notApproved']}"/>
+                </pe:case>
+                <pe:case value="#{notificationStatus.NOTIFICATION_PENDING}">
+                    <i class="fa fa-fw fa-volume-up icon-orange"
+                       title="#{msg['dialog.notificationDialog.general.data.status.pending']}"/>
+                </pe:case>
+                <pe:case value="#{notificationStatus.NO_NOTFICATION}">
+                    <i class="fa fa-fw fa-circle icon-red"
+                       title="#{msg['dialog.notificationDialog.general.data.status.none']}"/>
+                </pe:case>
+                <pe:case value="#{notificationStatus.NOTIFICATION_COMPLETED}">
+                    <i class="fa fa-fw fa-check-circle icon-green"
+                       title="#{msg['dialog.notificationDialog.general.data.status.completed']}"/>
+                </pe:case>
+                <pe:defaultCase>
+                    <i class="fa fa-question icon-grey"/>
+                </pe:defaultCase>
+            </pe:switch>
+        </p:column>
+
+        <!-- performed -->
+        <p:column style="width:20%"
+                  headerText="#{msg['dialog.notificationDialog.general.data.performed']}">
+
+            <h:outputText value="#{diagnosisBearer.diagnosisRevision.notificationDate}"
+                          rendered="#{diagnosisBearer.diagnosisRevision.notified}">
+                <f:converter converterId="instantDateTimeConverter"/>
+                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
+            </h:outputText>
+
+        </p:column>
+
+        <p:ajax event="rowSelect" process="@form" update="@form"
+                listener="#{notificationDialog.generalTab.onDiagnosisSelect()}"/>
+    </p:dataTable>
+
+    <script type="text/javascript">
+        commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('diagnosisOverlayPanel')
+        commonFunctions.addShowDialogOnMouseEnter(".diagnosisOverlayPanelyTrigger", "diagnosisOverlayPanel")
+    </script>
+
+    <!-- overlay for contact notifications -->
+    <p:overlayPanel widgetVar="diagnosisOverlayPanel" hideEvent="null" showEvent="null"
+                    style="width: 500px;"
+                    dismissable="false" id="diagnosisOverlayPanel" styleClass="histoOverlayPanel">
+        <p:dataTable value="#{cc.attrs.controller.viewDiagnosisRevisionDetails.reportIntents}"
+                     var="reportIntent" styleClass="defaultHistoDataTable">
+            <!-- name -->
+            <p:column headerText="#{msg['dialog.notificationDialog.general.overlay.personName']}"
+                      style="width: auto">
+                <h:outputLabel value="#{reportIntent.reportIntent.person.fullName}"/>
+            </p:column>
+
+            <!-- mail status -->
+            <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+                <f:facet name="header">
+                    <i class="fa fa-envelope icon-grey"/>
+                </f:facet>
+                <h:panelGroup rendered="#{reportIntent.isMailRecord()}">
+                    <i class="fa fa-fw fa-envelope #{reportIntent.mailPerformed ? 'icon-green' : ''}"
+                       title="#{reportIntent.mailPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
+                </h:panelGroup>
+            </p:column>
+
+            <!-- fax status -->
+            <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+                <f:facet name="header">
+                    <i class="fa fa-fax icon-grey"/>
+                </f:facet>
+                <h:panelGroup rendered="#{reportIntent.isFaxRecord()}">
+                    <i class="fa fa-fax #{reportIntent.faxPerformed ? 'icon-green' : ''}"
+                       title="#{reportIntent.faxPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
+                </h:panelGroup>
+            </p:column>
+
+            <!-- letter -->
+            <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+                <f:facet name="header">
+                    <i class="fa fa-pencil-square-o icon-grey"/>
+                </f:facet>
+                <h:panelGroup rendered="#{reportIntent.isLetterRecord()}">
+                    <i class="fa fa-pencil-square-o #{reportIntent.letterPerformed ? 'icon-green' : ''}"
+                       title="#{reportIntent.letterPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
+                </h:panelGroup>
+            </p:column>
+
+            <!-- phone -->
+            <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+                <f:facet name="header">
+                    <i class="fa fa-phone icon-grey"/>
+                </f:facet>
+                <h:panelGroup rendered="#{reportIntent.isPhoneRecord()}">
+                    <i class="fa fa-phone #{reportIntent.letterPerformed ? 'icon-green' : ''}"
+                       title="#{reportIntent.letterPerformed ? msg['dialog.notificationDialog.general.overlay.performed'] : msg['dialog.notificationDialog.general.overlay.pending']}"/>
+                </h:panelGroup>
+            </p:column>
+        </p:dataTable>
+    </p:overlayPanel>
+
+</composite:implementation>
+</html>

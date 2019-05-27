@@ -32,7 +32,7 @@ open class AdvancedTaskStatus(task: Task) : TaskStatus(task) {
     var stainingsToComplete: List<SlideStatus> = ArrayList<SlideStatus>()
 
     /**
-     * True if diagnosis phase has ended
+     * True if reportIntent phase has ended
      */
     var diagnosisPhaseCompleted: Boolean = false
 

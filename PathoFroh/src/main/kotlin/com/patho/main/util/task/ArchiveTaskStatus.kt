@@ -5,7 +5,7 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.miscellaneous.Council
-import com.patho.main.util.status.diagnosis.ReportIntentStatusByReportIntentAndDiagnosis
+import com.patho.main.util.status.reportIntent.ReportIntentStatusByReportIntentAndDiagnosis
 
 public class ArchiveTaskStatus(task: Task) {
 
@@ -72,17 +72,17 @@ public class ArchiveTaskStatus(task: Task) {
      */
     public class DiagnosisStatus(task: Task) {
         /**
-         * True if diagnosis phase is completed
+         * True if reportIntent phase is completed
          */
         val isCompleted = task.diagnosisCompleted
 
         /**
-         * Completion date of diagnosis phase
+         * Completion date of reportIntent phase
          */
         val dateOfCompletion = task.diagnosisCompletionDate
 
         /**
-         * Details for all diagnosis revisions
+         * Details for all reportIntent revisions
          */
         val revisions = task.diagnosisRevisions.map { RevisionStatus(it) }
 
@@ -92,11 +92,11 @@ public class ArchiveTaskStatus(task: Task) {
         val isValid = revisions.all { it.isValid }
 
         /**
-         * Detailed status of ane diagnosis revision
+         * Detailed status of ane reportIntent revision
          */
         public class RevisionStatus(val diagnosisRevision: DiagnosisRevision) {
             /**
-             * True if diagnosis is completed
+             * True if reportIntent is completed
              */
             val isCompleted = diagnosisRevision.completed
 
@@ -136,7 +136,7 @@ public class ArchiveTaskStatus(task: Task) {
             val dateOfNotification = diagnosisRevision.notificationDate
 
             /**
-             *  True if diagnosis is valid
+             *  True if reportIntent is valid
              */
             val isValid = isCompleted && (isSigned || isNoNotification)
 

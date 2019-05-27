@@ -210,7 +210,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		private List<ListItem> caseHistoryList;
 
 		/**
-		 * List of all diagnosis presets
+		 * List of all reportIntent presets
 		 */
 		private List<DiagnosisPreset> diagnosisPresets;
 

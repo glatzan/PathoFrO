@@ -84,7 +84,7 @@ class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportU
         var diagnosesTransformer: DefaultTransformer<DiagnosisRevision> = DefaultTransformer(diagnoses)
 
         /**
-         * Selected diagnosis
+         * Selected reportIntent
          */
         var selectedDiagnosis: DiagnosisRevision? = null
 
@@ -105,7 +105,7 @@ class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportU
 
             diagnoses = task.diagnosisRevisions
 
-            // getting last diagnosis
+            // getting last reportIntent
             selectedDiagnosis = diagnoses.firstOrNull()
 
             return false

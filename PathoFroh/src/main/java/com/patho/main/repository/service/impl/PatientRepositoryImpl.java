@@ -241,20 +241,20 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
             logger.debug("Selecting history");
         }
 
-        // getting diagnosis text
+        // getting reportIntent text
         if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getDiagnosisText())) {
             predicates.add(builder.like(builder.lower(diagnosisRevisionQuery.get("text")),
                     "%" + worklistSearchExtended.getDiagnosisText().toLowerCase() + "%"));
 
-            logger.debug("Selecting diagnosis text");
+            logger.debug("Selecting reportIntent text");
         }
 
-        // getting diagnosis
+        // getting reportIntent
         if (HistoUtil.isNotNullOrEmpty(worklistSearchExtended.getDiagnosis())) {
-            predicates.add(builder.like(builder.lower(diagnosesQuery.get("diagnosis")),
+            predicates.add(builder.like(builder.lower(diagnosesQuery.get("reportIntent")),
                     "%" + worklistSearchExtended.getDiagnosis().toLowerCase() + "%"));
 
-            logger.debug("Selecting diagnosis");
+            logger.debug("Selecting reportIntent");
         }
 
         // checking malign, 0 = not selected, 1 = true, 2 = false

@@ -53,7 +53,7 @@ open class NotificationPhaseExitDialog @Autowired constructor(
         oTask = optionalTask.get()
         val status = ArchiveTaskStatus(oTask)
 
-        // remove from notification list in no notification for an other diagnosis should be performed
+        // remove from notification list in no notification for an other reportIntent should be performed
         removeFromFavouriteList = !oTask.diagnosisRevisions.any { it.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
         // render info text while not removing from notification list
         isRenderInfoTextFavouriteList = !removeFromFavouriteList

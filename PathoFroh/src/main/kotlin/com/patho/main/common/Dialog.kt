@@ -20,7 +20,7 @@ enum class Dialog {
     SLIDE_OVERVIEW("/pages/dialog/task/staining/slideOverview", null, 1024, 600, false, false, true),                                                                        // OK 				// TEST OK
     SLIDE_NAMING("/pages/dialog/task/staining/slideNaming", null, 430, 270, false, false, true),                                                                            // OK				// TEST OK
     SLIDE_CREATE("/pages/dialog/task/staining/addSlide", null, 858, 484, false, false, true),                                                                                // OK				// TEST OK
-    DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/task/diagnosis/diagnosisRecordOverwrite", null, 480, 272, false, false, true),                                                // OK				// TEST OK
+    DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/task/reportIntent/diagnosisRecordOverwrite", null, 480, 272, false, false, true),                                                // OK				// TEST OK
     CONTACTS("/pages/dialog/contact/contacts", null, 1024, 600, false, false, true),                                                                                        // OK				// TEST OK
     CONTACTS_NOTIFICATION("/pages/dialog/contact/contactNotification", null, 858, 484, false, false, true),                                                                // OK				// TEST OK
     CONTACTS_SELECT("/pages/dialog/contact/contactSelect", null, 858, 484, false, false, true),                                                                            // OK				// TEST OK
@@ -29,7 +29,7 @@ enum class Dialog {
     SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1280, 740, false, false, true),                                                        // OK
     SETTINGS_STAINING_EDIT("/pages/dialog/settings/staining/stainingEdit", null, 1024, 600, false, false, true),                                                            // OK
     SETTINGS_MATERIAL_EDIT("/pages/dialog/settings/material/materialEdit", null, 1024, 600, false, false, true),                                                            // OK
-    SETTINGS_DIAGNOSIS_EDIT("/pages/dialog/settings/diagnosis/diagnosisEdit", null, 1024, 600, false, false, true),                                                        // OK
+    SETTINGS_DIAGNOSIS_EDIT("/pages/dialog/settings/reportIntent/diagnosisEdit", null, 1024, 600, false, false, true),                                                        // OK
     SETTINGS_GROUP_LIST("/pages/dialog/settings/groups/groupList", null, 1024, 600, false, false, true),                                                                    // OK
     SETTINGS_GROUP_EDIT("/pages/dialog/settings/groups/groupEdit", null, 1024, 600, false, false, true),                                                                    // OK
     SETTINGS_USERS_LIST("/pages/dialog/settings/users/usersList", null, 1024, 600, false, false, true),                                                                    // OK
@@ -57,7 +57,7 @@ enum class Dialog {
     PDF_EDIT("/pages/dialog/upload/editPDF", null, 640, 360, false, false, true),                                                                                            // OK
     PDF_DELETE("/pages/dialog/upload/deletePDF", null, 480, 272, false, false, true),                                                                                        // OK
     STAINING_PHASE_EXIT("/pages/dialog/phase/stainingPhaseExit", null, 480, 272, false, false, true), // 16:9
-    DIAGNOSIS_PHASE_EXIT("/pages/dialog/task/diagnosis/diagnosisPhaseExit", null, 480, 272, false, false, true), // 16:9
+    DIAGNOSIS_PHASE_EXIT("/pages/dialog/task/phase/diagnosisPhaseExit", null, 480, 272, false, false, true), // 16:9
     NOTIFICATION_PHASE_EXIT("/pages/dialog/notification/notificationPhaseExit", null, 480, 272, false, false, true), // 16:9
     TASK_ARCHIVE("/pages/dialog/task/archive/archiveTask", null, 1024, 600, false, false, true), // 16:9
     TASK_RESTORE("/pages/dialog/task/archive/restoreTask", null, 480, 272, false, false, true), // 16:9

@@ -27,12 +27,12 @@ open class DiagnosisView @Autowired constructor(
     open var diagnosisFilter: Array<Array<String>> = arrayOf<Array<String>>()
 
     /**
-     * Array for selected diagnosis presets
+     * Array for selected reportIntent presets
      */
     open var selectedDiagnosisPresets: Array<Array<DiagnosisPreset?>> = arrayOf<Array<DiagnosisPreset?>>()
 
     override fun loadView(task: Task) {
-        logger.debug("Loading diagnosis data")
+        logger.debug("Loading reportIntent data")
         super.loadView(task)
 
         diagnosisViewData = task.diagnosisRevisions.map { p -> DiagnosisViewData(p) }
@@ -58,32 +58,32 @@ open class DiagnosisView @Autowired constructor(
     }
 
 //    /**
-//     * Updates a diagnosis with a preset
+//     * Updates a reportIntent with a preset
 //     *
-//     * @param diagnosis
+//     * @param reportIntent
 //     * @param preset
 //     */
-//    fun updateDiagnosisPrototype(diagnosis: Diagnosis, preset: DiagnosisPreset) {
-//        logger.debug("Updating diagnosis with prototype")
-//        val task = diagnosisService.updateDiagnosisWithPrototype(diagnosis.task, diagnosis, preset)
+//    fun updateDiagnosisPrototype(reportIntent: Diagnosis, preset: DiagnosisPreset) {
+//        logger.debug("Updating reportIntent with prototype")
+//        val task = diagnosisService.updateDiagnosisWithPrototype(reportIntent.task, reportIntent, preset)
 //
 //        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
 //    }
 //
 //    /**
-//     * Updates a diagnosis without a preset. (Removes the previously set preset)
+//     * Updates a reportIntent without a preset. (Removes the previously set preset)
 //     */
-//    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String) {
-//        updateDiagnosisPrototype(diagnosis, diagnosisAsText, "", diagnosis.malign, "")
+//    fun updateDiagnosisPrototype(reportIntent: Diagnosis, diagnosisAsText: String) {
+//        updateDiagnosisPrototype(reportIntent, diagnosisAsText, "", reportIntent.malign, "")
 //    }
 //
 //    /**
-//     * Updates a diagnosis without a preset. (Removes the previously set preset)
+//     * Updates a reportIntent without a preset. (Removes the previously set preset)
 //     */
-//    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String, extendedDiagnosisText: String,
+//    fun updateDiagnosisPrototype(reportIntent: Diagnosis, diagnosisAsText: String, extendedDiagnosisText: String,
 //                                 malign: Boolean, icd10: String) {
-//        logger.debug("Updating diagnosis to $diagnosisAsText")
-//        setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.task, diagnosis,
+//        logger.debug("Updating reportIntent to $diagnosisAsText")
+//        setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(reportIntent.task, reportIntent,
 //                diagnosisAsText, extendedDiagnosisText, malign, icd10))
 //        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
 //    }

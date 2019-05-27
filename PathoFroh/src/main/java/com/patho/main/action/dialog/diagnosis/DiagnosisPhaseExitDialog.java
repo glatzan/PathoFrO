@@ -23,12 +23,12 @@ import java.util.Set;
 public class DiagnosisPhaseExitDialog extends AbstractDialog {
 
     /**
-     * List of diagnosis revisions of the task
+     * List of reportIntent revisions of the task
      */
     private Set<DiagnosisRevision> diagnosisRevisions;
 
     /**
-     * Transformer for diagnosis revisions
+     * Transformer for reportIntent revisions
      */
     private DefaultTransformer<DiagnosisRevision> diagnosisRevisionTransformer;
 
@@ -53,7 +53,7 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
     private DiagnosisRevision selectedRevision;
 
     /**
-     * If true the task will be removed from diagnosis list
+     * If true the task will be removed from reportIntent list
      */
     private boolean removeFromDiagnosisList;
 
@@ -94,12 +94,12 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
         setDiagnosisRevisions(task.getDiagnosisRevisions());
         setDiagnosisRevisionTransformer(new DefaultTransformer<DiagnosisRevision>(getDiagnosisRevisions()));
 
-        // searching for first diagnosis of that the notification was not performed jet
+        // searching for first reportIntent of that the notification was not performed jet
         if (autoselect) {
             selectedRevision = DiagnosisService.getNextRevisionToApprove(task);
         }
 
-        // either no revision was passed or autoselect ding't find a diagnosis to
+        // either no revision was passed or autoselect ding't find a reportIntent to
         // approve
         if (selectedRevision == null) {
             // sets the last element as select, but also sets all revisions to true

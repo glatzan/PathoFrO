@@ -23,7 +23,7 @@ import javax.persistence.*
 open class DiagnosisRevision : AbstractPersistable, AuditAble, Parent<Task> {
 
     /**
-     * Internal marker for a diagnosis
+     * Internal marker for a reportIntent
      */
     companion object {
         const val MARKER_COUNCIL = "c:\$id"
@@ -66,7 +66,7 @@ open class DiagnosisRevision : AbstractPersistable, AuditAble, Parent<Task> {
     open override var audit: Audit? = null
 
     /**
-     * Date of diagnosis finalization.
+     * Date of reportIntent finalization.
      */
     @Column
     open var completionDate: Instant? = null

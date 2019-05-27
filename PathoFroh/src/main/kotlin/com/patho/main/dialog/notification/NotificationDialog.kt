@@ -24,14 +24,15 @@ import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.dialogReturn.ReloadTaskEvent
-import com.patho.main.util.print.LoadedPrintPDFBearer
 import com.patho.main.util.print.PrintPDFBearer
 import com.patho.main.util.report.MailNotificationExecuteData
 import com.patho.main.util.report.NotificationExecuteData
 import com.patho.main.util.report.ReportIntentExecuteData
 import com.patho.main.util.report.ui.ReportIntentNotificationUIContainer
-import com.patho.main.util.status.ReportIntentStatusByDiagnosis
 import com.patho.main.util.report.ui.ReportIntentUIContainer
+import com.patho.main.util.status.diagnosis.DiagnosisBearer
+import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
+import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
 import com.patho.main.util.task.TaskNotFoundException
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
@@ -167,9 +168,6 @@ class NotificationDialog @Autowired constructor(
         super.onSubDialogReturn(event)
     }
 
-
-
-
     /**
      * Class for notification tabs
      */
@@ -241,22 +239,22 @@ class NotificationDialog @Autowired constructor(
             "GeneralTab",
             "dialog.notificationDialog.general.navigationText",
             "generalTab",
-            "include/general.xhtml") {
+            "include/general.xhtml"), IReportIntentStatusByDiagnosisViewData {
 
         /**
-         * List of all diagnosis revisions with their status
+         * List of all reportIntent revisions with their status
          */
-        open var diagnosisRevisions: List<ReportIntentStatusByDiagnosis.DiagnosisBearer> = mutableListOf()
+        override lateinit var diagnosisRevisions: ReportIntentStatusByDiagnosis
 
         /**
-         * Selected diagnosis for that the notification will be performed
+         * Selected reportIntent for that the notification will be performed
          */
-        open var selectDiagnosisRevision: ReportIntentStatusByDiagnosis.DiagnosisBearer? = null
+        override var selectDiagnosisRevision: DiagnosisBearer? = null
 
         /**
          * Diagnosis bearer for displaying details in the datatable overlay panel
          */
-        open var viewDiagnosisRevisionDetails: ReportIntentStatusByDiagnosis.DiagnosisBearer? = null
+        override var viewDiagnosisRevisionDetails: DiagnosisBearer? = null
 
         /**
          * Count of additional prints
@@ -264,12 +262,12 @@ class NotificationDialog @Autowired constructor(
         open var printCount: Int = 0
 
         /**
-         * Selected diagnosis is not approved
+         * Selected reportIntent is not approved
          */
         open var selectedDiagnosisNotApproved: Boolean = false
 
         /**
-         * True if a diagnosis is selected
+         * True if a reportIntent is selected
          */
         open val diagnosisSelected
             get() = selectDiagnosisRevision != null
@@ -281,8 +279,8 @@ class NotificationDialog @Autowired constructor(
 
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing general data...")
-            diagnosisRevisions = ReportIntentStatusByDiagnosis(task).diagnosisBearer
-            selectDiagnosisRevision = diagnosisRevisions.firstOrNull { p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
+            diagnosisRevisions = ReportIntentStatusByDiagnosis(task)
+            selectDiagnosisRevision = diagnosisRevisions.diagnosisBearer.firstOrNull { p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
 
             // setting templates + transformer
             templates = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
@@ -299,13 +297,13 @@ class NotificationDialog @Autowired constructor(
         override fun updateData() {}
 
         /**
-         * Method is called on diagnosis change
+         * Method is called on reportIntent change
          */
         open fun onDiagnosisSelect() {
             // sets a not approved warning
             selectedDiagnosisNotApproved = selectDiagnosisRevision?.diagnosisRevision?.notificationStatus != NotificationStatus.NOTIFICATION_PENDING
 
-            // disable tabs if no diagnosis is selected.
+            // disable tabs if no reportIntent is selected.
             if (selectDiagnosisRevision == null)
                 disableTabs(false, true, true, true, true, true)
             else

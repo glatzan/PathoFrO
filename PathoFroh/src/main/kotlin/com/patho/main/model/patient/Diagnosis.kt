@@ -26,13 +26,13 @@ open class Diagnosis :  AbstractPersistable, Parent<DiagnosisRevision> {
     open var version: Long = 0
 
     /**
-     * Parent of the diagnosis, sample bject
+     * Parent of the reportIntent, sample bject
      */
     @ManyToOne
     open override var parent: DiagnosisRevision? = null
 
     /**
-     * Name of the diagnosis.
+     * Name of the reportIntent.
      */
     @Column
     open var name = ""
@@ -50,13 +50,13 @@ open class Diagnosis :  AbstractPersistable, Parent<DiagnosisRevision> {
     open var malign: Boolean = false
 
     /**
-     * ICD10 Number of this diagnosis
+     * ICD10 Number of this reportIntent
      */
     @Column
     open var icd10 = ""
 
     /**
-     * Protoype used for this diagnosis.
+     * Protoype used for this reportIntent.
      */
     @OneToOne
     @NotAudited

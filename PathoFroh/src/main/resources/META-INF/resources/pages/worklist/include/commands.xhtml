@@ -175,9 +175,9 @@
 
         <!-- StainingPhase Exit -->
         <p:commandButton id="stainingPhaseExit" widgetVar="stainingPhaseExit"
-                         actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, true)}">
+                         actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onStainingPhaseExitReturn}"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
         </p:commandButton>
 
@@ -188,7 +188,7 @@
                          actionListener="#{workPhaseHandler.startStainingPhase(worklistHandler.current.selectedTask)}">
         </p:commandButton>
 
-        <!-- Diagnosis List, new diagnosis revision -->
+        <!-- Diagnosis List, new reportIntent revision -->
         <p:commandButton id="newDiagnosisRevision" widgetVar="newDiagnosisRevision"
                          actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"

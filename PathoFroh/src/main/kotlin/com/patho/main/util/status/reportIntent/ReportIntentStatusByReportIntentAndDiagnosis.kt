@@ -1,13 +1,13 @@
-package com.patho.main.util.status.diagnosis
+package com.patho.main.util.status.reportIntent
 
 import com.patho.main.model.patient.Task
 
 /**
- * Klass listing notifications diagnosis focused
+ * Class listing notifications reportIntent focused
  * ReportIntent -> Diagnosis -> NotificationType -> History
  * Normal structure is: ReportIntent -> NotificationType -> Diagnosis -> History
  *
- * This list will contain all diagnoses, even if no notification record was created for that diagnosis!
+ * This list will contain all diagnoses, even if no notification record was created for that reportIntent!
  */
 class ReportIntentStatusByReportIntentAndDiagnosis(val task: Task) {
 

@@ -62,7 +62,7 @@ open class HistoSettings() : AbstractPersistable(), Cloneable {
     open var startView: View = View.LOGIN
 
     /**
-     * Default worklist to load, staining, diagnosis, notification, none
+     * Default worklist to load, staining, reportIntent, notification, none
      */
     @Enumerated(EnumType.STRING)
     open var worklistToLoad: WorklistSimpleSearch.SimpleSearchOption = WorklistSimpleSearch.SimpleSearchOption.EMPTY_LIST

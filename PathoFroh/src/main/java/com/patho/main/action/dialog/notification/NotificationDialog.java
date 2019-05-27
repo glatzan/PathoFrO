@@ -305,12 +305,12 @@ public class NotificationDialog extends AbstractTabDialog {
         private int printCount;
 
         /**
-         * No diagnosis is selected, selection by user is required
+         * No reportIntent is selected, selection by user is required
          */
         private boolean selectDiagnosisManually;
 
         /**
-         * Selected diagnosis is not approved
+         * Selected reportIntent is not approved
          */
         private boolean selectedDiagnosisNotApprovedy;
 
@@ -328,7 +328,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
         @Override
         public boolean initTab() {
-            // transforming diagnosis list
+            // transforming reportIntent list
             diagnosisRevisions = new ArrayList<DiagnosisRevision>(task.getDiagnosisRevisions());
 
             selectDiagnosisRevision = diagnosisRevisions.stream()
@@ -349,7 +349,7 @@ public class NotificationDialog extends AbstractTabDialog {
 
             completeNotification = false;
 
-            // if no diagnosis is pending setting last diagnosis
+            // if no reportIntent is pending setting last reportIntent
             onDiangosisSelect();
 
 

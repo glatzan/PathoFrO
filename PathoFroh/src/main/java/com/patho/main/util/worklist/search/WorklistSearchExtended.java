@@ -123,6 +123,6 @@ public class WorklistSearchExtended extends AbstractWorklistSearch {
 // private Date dateOfSurgery;
 // private Date dateOfSurgeryTo;
 //
-// private String diagnosis;
+// private String reportIntent;
 // private String category;
 // private String malign;

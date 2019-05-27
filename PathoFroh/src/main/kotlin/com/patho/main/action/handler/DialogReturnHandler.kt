@@ -191,20 +191,6 @@ open class DialogReturnHandler @Autowired constructor(
     }
 
     /**
-     * Event handler for StaininPhaseExitDialog
-     */
-    open fun onStainingPhaseExitReturn(event: SelectEvent) {
-        val obj = event.`object`
-        if (obj is StainingPhaseExitEvent) {
-            logger.debug("Staining phase exit event")
-            workPhaseHandler.endStainingPhase(obj.task, obj.endStainingPhase, obj.removeFromStainingList, obj.gotToDiagnosisPhase, obj.removeFromWorklist)
-            worklistHandler.replaceTaskInWorklist()
-            return
-        }
-        onDefaultReturn(event)
-    }
-
-    /**
      * Event handler for DiagnosisPhaseExitDialog
      */
     open fun onDiagnosisPhaseExitReturn(event: SelectEvent) {

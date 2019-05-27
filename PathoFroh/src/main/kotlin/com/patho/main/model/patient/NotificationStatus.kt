@@ -1,7 +1,7 @@
 package com.patho.main.model.patient
 
 /**
- * Notification status for a diagnosis revision
+ * Notification status for a reportIntent revision
  */
 enum class NotificationStatus {
     /**

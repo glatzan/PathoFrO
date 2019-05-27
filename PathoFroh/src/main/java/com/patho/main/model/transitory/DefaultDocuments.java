@@ -8,7 +8,7 @@ import lombok.Setter;
 public class DefaultDocuments {
 
 	/**
-	 * Document-Template which is used on diagnosis phase exit.
+	 * Document-Template which is used on reportIntent phase exit.
 	 */
 	private long diagnosisApprovedDocument;
 
@@ -54,7 +54,7 @@ public class DefaultDocuments {
 	private long slideLabelDocument;
 
 	/**
-	 * Template for diagnosis report for program users
+	 * Template for reportIntent report for program users
 	 */
 	private long diagnosisReportForUsers;
 

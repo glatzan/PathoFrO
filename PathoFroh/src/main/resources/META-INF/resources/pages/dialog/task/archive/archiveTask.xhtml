@@ -130,7 +130,7 @@
 
                         <h:panelGrid columns="2" styleClass="defaultHistoTable" style="margin-left: 10px;"
                                      columnClasses="columnWidth250">
-                            <!-- diagnosis phase -->
+                            <!-- reportIntent phase -->
                             <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.phase.text']} "/>
                             <h:panelGroup id="diagnosisDate">
                                 <i class="fa fa-fw #{archiveTaskDialog.status.diagnosisStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>
@@ -149,7 +149,7 @@
                                 </p:tooltip>
                             </h:panelGroup>
 
-                            <!-- diagnosis correct -->
+                            <!-- reportIntent correct -->
                             <h:outputLabel value="#{msg['dialog.archiveTask.status.diagnoses.status.text']}"/>
                             <h:panelGroup id="diagnosisCompleted">
                                 <i class="fa fa-fw #{archiveTaskDialog.status.diagnosisStatus.valid ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"/>

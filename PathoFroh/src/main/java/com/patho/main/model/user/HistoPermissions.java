@@ -76,7 +76,7 @@ public enum HistoPermissions {
 	USER_WORKLIST(USER),
 
 	/**
-	 * If set the diagnosis will always be rendered in WORKLIST_REPORT view. -> Used
+	 * If set the reportIntent will always be rendered in WORKLIST_REPORT view. -> Used
 	 * in
 	 */
 	USER_ALWAYS_SHOW_IN_WORKLIST_REPORT,

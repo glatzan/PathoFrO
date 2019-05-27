@@ -1,7 +1,7 @@
 package com.patho.main.common;
 
 /**
- * Type of a diagnosis, either a normal diagnosis or a revision.
+ * Type of a reportIntent, either a normal reportIntent or a revision.
  * 
  * @author andi
  *

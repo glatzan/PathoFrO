@@ -305,7 +305,7 @@ public class GlobalEditViewHandler {
         }
 
         /**
-         * Copies the diagnosis record to the diagnosis if no text was entered. If task
+         * Copies the reportIntent record to the reportIntent if no text was entered. If task
          * was provided bevore, a dialog will be opened.
          *
          * @param diagnosis
@@ -351,30 +351,30 @@ public class GlobalEditViewHandler {
         }
 
         /**
-         * Updates a diagnosis with a preset
+         * Updates a reportIntent with a preset
          *
          * @param diagnosis
          * @param preset
          */
         public void updateDiagnosisPrototype(Diagnosis diagnosis, DiagnosisPreset preset) {
-            logger.debug("Updating diagnosis with prototype");
+            logger.debug("Updating reportIntent with prototype");
             setSelectedTask(diagnosisService.updateDiagnosisWithPrototype(diagnosis.getTask(), diagnosis, preset));
             centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 
         /**
-         * Updates a diagnosis without a preset. (Removes the previously set preset)
+         * Updates a reportIntent without a preset. (Removes the previously set preset)
          */
         public void updateDiagnosisPrototype(Diagnosis diagnosis, String diagnosisAsText) {
             updateDiagnosisPrototype(diagnosis, diagnosisAsText, "", diagnosis.getMalign(), "");
         }
 
         /**
-         * Updates a diagnosis without a preset. (Removes the previously set preset)
+         * Updates a reportIntent without a preset. (Removes the previously set preset)
          */
         public void updateDiagnosisPrototype(Diagnosis diagnosis, String diagnosisAsText, String extendedDiagnosisText,
                                              boolean malign, String icd10) {
-            logger.debug("Updating diagnosis to " + diagnosisAsText);
+            logger.debug("Updating reportIntent to " + diagnosisAsText);
             setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.getTask(), diagnosis,
                     diagnosisAsText, extendedDiagnosisText, malign, icd10));
             centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);

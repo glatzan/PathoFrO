@@ -28,7 +28,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
- * Dialog for adding a diagnosis revision on creating a restaining
+ * Dialog for adding a reportIntent revision on creating a restaining
  * 
  * @author andi
  *

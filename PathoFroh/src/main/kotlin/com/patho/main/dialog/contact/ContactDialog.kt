@@ -16,7 +16,7 @@ import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.dialogReturn.ReloadTaskEvent
 import com.patho.main.util.exception.DuplicatedReportIntentException
-import com.patho.main.util.status.diagnosis.ReportIntentBearer
+import com.patho.main.util.status.reportIntent.ReportIntentBearer
 import com.patho.main.util.task.TaskNotFoundException
 import com.patho.main.util.ui.selector.UISelector
 import org.primefaces.event.SelectEvent
