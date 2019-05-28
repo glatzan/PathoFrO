@@ -1,4 +1,4 @@
-package com.patho.main.util.task
+package com.patho.main.util.exceptions
 
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.exception.DialogException

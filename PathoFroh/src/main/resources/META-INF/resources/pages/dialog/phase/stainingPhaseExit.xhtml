@@ -57,22 +57,24 @@
                          columnClasses="columnWidth50">
                 <!-- remove from worklist -->
                 <p:selectBooleanCheckbox
-                        value="#{stainingPhaseExitDialog.removeFromWorklist}"/>
+                        title="#{msg['dialog.staingingPhaseExit.worklist.info']}"
+                        value="#{stainingPhaseExitDialog.removeFromWorklist}" />
                 <h:outputLabel
+                        title="#{msg['dialog.staingingPhaseExit.worklist.info']}"
                         value="#{msg['dialog.staingingPhaseExit.worklist.text']}"/>
             </h:panelGrid>
 
-            <!-- go to reportIntent -->
+            <!-- go to diagnosis phase -->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style=" margin-left: 5px"
                          columnClasses="columnWidth50">
-                <!-- go to reportIntent -->
+                <!-- go to diagnosis phase -->
                 <p:selectBooleanCheckbox
                         value="#{stainingPhaseExitDialog.goToDiagnosis}">
-                    <p:ajax event="change" listener="#{stainingPhaseExitDialog.onPhaseExitChange()}" update="@form"/>
+                    <p:ajax event="change" process="@form" listener="#{stainingPhaseExitDialog.onPhaseExitChange()}" update="@form"/>
                 </p:selectBooleanCheckbox>
                 <h:outputLabel
                         value="#{msg['dialog.staingingPhaseExit.doDiagnosis.text']}"/>
-                <!-- info if got to reportIntent is not selected  -->
+                <!-- info if got to diagnosis phase is not selected  -->
                 <h:outputLabel value=" " rendered="#{stainingPhaseExitDialog.renderDiagnosisPhaseInfoText}"/>
                 <h:outputLabel value="#{msg['dialog.staingingPhaseExit.doDiagnosis.textinfo']}"
                                rendered="#{stainingPhaseExitDialog.renderDiagnosisPhaseInfoText}"
@@ -86,7 +88,7 @@
                 <p:selectBooleanCheckbox title="#{msg['dialog.staingingPhaseExit.endPhase.info']}"
                                          disabled="#{stainingPhaseExitDialog.disableExitStainingPhase}"
                                          value="#{stainingPhaseExitDialog.exitPhase}">
-                    <p:ajax event="change" listener="#{stainingPhaseExitDialog.onPhaseExitChange()}" update="@form"/>
+                    <p:ajax event="change"  process="@form" listener="#{stainingPhaseExitDialog.onPhaseExitChange()}" update="@form"/>
                 </p:selectBooleanCheckbox>
                 <h:outputLabel title="#{msg['dialog.staingingPhaseExit.endPhase.info']}"
                                value="#{msg['dialog.staingingPhaseExit.endPhase.text']}"/>

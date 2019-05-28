@@ -6,8 +6,8 @@ import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.SlideService
 import com.patho.main.util.dialogReturn.ReloadTaskEvent
+import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.task.ArchiveTaskStatus
-import com.patho.main.util.task.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -52,7 +52,7 @@ open class StainingPhaseExitDialog @Autowired constructor(
     override fun initBean(task: Task): Boolean {
         val optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, true, true, false, true, true)
 
-       if (!optionalTask.isPresent)
+        if (!optionalTask.isPresent)
             throw TaskNotFoundException()
 
         val oTask = optionalTask.get()
@@ -86,8 +86,10 @@ open class StainingPhaseExitDialog @Autowired constructor(
     open fun onCompleteStainingsChange() {
         isDisableExitStainingPhase = !competeStainings
         exitPhase = competeStainings
-        if (exitPhase)
+        if (exitPhase) {
             goToDiagnosis = true
+            removeFromWorklist = true
+        }
         onPhaseExitChange()
     }
 
@@ -102,10 +104,9 @@ open class StainingPhaseExitDialog @Autowired constructor(
      * Hides the dialog and removes the task from the staining lsit
      */
     open fun hideAndExitPhase() {
-        if (competeStainings)
-            slideService.completedStaining(task, true)
-        workPhaseHandler.endStainingPhase(task, exitPhase, exitPhase, goToDiagnosis, removeFromWorklist)
-        super.hideDialog(ReloadTaskEvent())
+        var task = if (competeStainings) slideService.completeStaining(task, true, true) else task
+        task = workPhaseHandler.endStainingPhase(task, exitPhase, goToDiagnosis, removeFromWorklist)
+        super.hideDialog(ReloadTaskEvent(task))
     }
 
     /**

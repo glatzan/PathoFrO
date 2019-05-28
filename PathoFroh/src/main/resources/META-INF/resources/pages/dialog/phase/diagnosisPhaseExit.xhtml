@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:histo="http://java.sun.com/jsf/composite/components/notification">
 <h:head>
     <title><h:outputFormat
             value="#{msg['dialog.diagnosisPhaseExit.headline']}"/></title>
@@ -26,103 +27,106 @@
         </div>
 
         <div class="dialogContent">
-
             <h:panelGrid columns="1" styleClass="defaultHistoTable">
                 <h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.text']}"/>
             </h:panelGrid>
 
-            <h:panelGrid columns="2" styleClass="defaultHistoTable"
-                         style="margin-left:10px; margin-top:10px"
-                         columnClasses="columnWidth25">
-                <!-- notify -->
+            <h:panelGrid styleClass="defaultHistoTable" columns="1" style="width: 80%">
+                <histo:reportIntentStatusByDiagnosisDatatable formID=":dialogContent:diagnosisTable"
+                                                              controller="#{diagnosisPhaseExitDialog}"
+                                                              disableSelection="#{diagnosisPhaseExitDialog.disableDiagnosisSelection}"
+                                                              id="diagnosisTable"/>
+            </h:panelGrid>
+            <!-- approve all diagnoses-->
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-top: 10px; margin-left: 5px"
+                         columnClasses="columnWidth50">
+                <!-- approve all diagnoses-->
                 <p:selectBooleanCheckbox
-                        value="#{dialog.diagnosisPhaseExitDialog.allRevisions}">
-                    <p:ajax event="change" update="@form" process="@form"
-                            listener="#{dialog.diagnosisPhaseExitDialog.updateDate()}"/>
+                        title="#{msg['dialog.diagnosisPhaseExit.approveAll.info']}"
+                        value="#{diagnosisPhaseExitDialog.competeAllDiagnoses}">
+                    <p:ajax update="@form" process="@form" event="change"
+                            listener="#{diagnosisPhaseExitDialog.onCompleteAllDiagnosesChange()}"/>
                 </p:selectBooleanCheckbox>
-                <h:outputLabel
-                        value="#{msg['dialog.diagnosisPhaseExit.checkBox.endAll']}"/>
+                <h:outputLabel title="#{msg['dialog.diagnosisPhaseExit.approveAll.info']}"
+                               value="#{msg['dialog.diagnosisPhaseExit.approveAll.text']}"/>
 
+                <!-- info approve all -->
+                <h:outputLabel value=" " rendered="#{diagnosisPhaseExitDialog.competeAllDiagnoses}"/>
+                <h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.approveAll.textinfo']}"
+                               rendered="#{diagnosisPhaseExitDialog.competeAllDiagnoses}"
+                               styleClass="icon-red"/>
             </h:panelGrid>
 
-            <h:panelGrid columns="2" styleClass="defaultHistoTable"
-                         style="margin-left:10px" columnClasses="columnWidth50">
-                <h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.notify']}"/>
-                <p:selectOneMenu
-                        disabled="#{dialog.diagnosisPhaseExitDialog.allRevisions}"
-                        converter="#{dialog.diagnosisPhaseExitDialog.diagnosisRevisionTransformer}"
-                        style="width:80%"
-                        value="#{dialog.diagnosisPhaseExitDialog.selectedRevision}">
-
-                    <f:selectItems
-                            value="#{dialog.diagnosisPhaseExitDialog.diagnosisRevisions}"
-                            var="diagnosis" itemLabel="#{diagnosis.name}"
-                            itemValue="#{diagnosis}"/>
-
-                    <p:ajax event="change" update="@form" process="@form"
-                            listener="#{dialog.diagnosisPhaseExitDialog.updateDate()}"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
-
-            <h:panelGrid columns="2" styleClass="defaultHistoTable"
-                         style="margin-left:10px; margin-top:5px"
-                         columnClasses="columnWidth25">
-
-                <!-- remove from reportIntent list -->
+            <!-- perform notification-->
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
+                         columnClasses="columnWidth50">
+                <!-- perform notification-->
                 <p:selectBooleanCheckbox
-                        disabled="#{dialog.diagnosisPhaseExitDialog.removeFromDiagnosisListDisabled}"
-                        value="#{dialog.diagnosisPhaseExitDialog.removeFromDiagnosisList}">
-                    <p:ajax update="@form" process="@form" event="change"/>
+                        disabled="#{diagnosisPhaseExitDialog.selectDiagnosis}"
+                        title="#{msg['dialog.diagnosisPhaseExit.notification.info']}"
+                        value="#{diagnosisPhaseExitDialog.goToNotification}">
+                    <p:ajax event="change" process="@form" update="@form"
+                            listener="#{diagnosisPhaseExitDialog.onNotificationChange()}"/>
                 </p:selectBooleanCheckbox>
                 <h:outputLabel
-                        value="#{msg['dialog.diagnosisPhaseExit.checkBox.removeFromDiagnosisList']}"/>
+                        title="#{msg['dialog.diagnosisPhaseExit.notification.info']}"
+                        value="#{msg['dialog.diagnosisPhaseExit.notification.text']}"/>
 
-                <!-- notify -->
-                <p:selectBooleanCheckbox
-                        value="#{dialog.diagnosisPhaseExitDialog.performNotification}">
-                    <p:ajax update="@form" process="@form" event="change"/>
-                </p:selectBooleanCheckbox>
-                <h:panelGroup>
-                    <h:outputLabel
-                            value="#{msg['dialog.diagnosisPhaseExit.checkBox.notificationPhase']}"/>
-                    <h:outputLabel
-                            rendered="#{!dialog.diagnosisPhaseExitDialog.performNotification}"
-                            value="#{msg['dialog.diagnosisPhaseExit.checkBox.noNotificationPhase']}"/>
-                </h:panelGroup>
+                <!-- info warning for no notification -->
+                <h:outputLabel value=" " rendered="#{diagnosisPhaseExitDialog.renderNotificationInfo}"/>
+                <h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.notification.textinfo']}"
+                               rendered="#{diagnosisPhaseExitDialog.renderNotificationInfo}"
+                               styleClass="icon-red"/>
+            </h:panelGrid>
 
+            <!-- remove from worklist -->
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
+                         columnClasses="columnWidth50">
                 <!-- remove from worklist -->
                 <p:selectBooleanCheckbox
-                        value="#{dialog.diagnosisPhaseExitDialog.removeFromWorklist}"/>
+                        disabled="#{diagnosisPhaseExitDialog.selectDiagnosis}"
+                        title="#{msg['dialog.diagnosisPhaseExit.worklist.text']}"
+                        value="#{diagnosisPhaseExitDialog.removeFromWorklist}"/>
                 <h:outputLabel
-                        value=" #{msg['dialog.diagnosisPhaseExit.checkBox.removeFromWorklist']}"/>
+                        title="#{msg['dialog.diagnosisPhaseExit.worklist.info']}"
+                        value="#{msg['dialog.diagnosisPhaseExit.worklist.text']}"/>
             </h:panelGrid>
 
-            <h:panelGrid columns="1" styleClass="defaultHistoTable"
-                         style="margin-left:10px"
-                         rendered="#{dialog.diagnosisPhaseExitDialog.reApproveDiagnosis}">
-                <h:outputLabel
-                        value="#{msg['dialog.diagnosisPhaseExit.reApproved']}" styleClass="icon-red"/>
+            <!-- end diagnosis phase -->
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
+                         columnClasses="columnWidth50">
+                <!-- end diagnosis phase -->
+                <p:selectBooleanCheckbox title="#{msg['dialog.diagnosisPhaseExit.endPhase.info']}"
+                                         disabled="#{diagnosisPhaseExitDialog.disableExitDiagnosisPhase}"
+                                         value="#{diagnosisPhaseExitDialog.exitPhase}"/>
+                <h:outputLabel title="#{msg['dialog.diagnosisPhaseExit.endPhase.info']}"
+                               value="#{msg['dialog.diagnosisPhaseExit.endPhase.text']}"/>
             </h:panelGrid>
+
         </div>
 
         <div class="buttonContainer">
             <h:panelGrid columns="2">
 
                 <h:panelGrid columns="1" styleClass="left">
+                    <h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.noDiagnosisSelected']}"
+                                   rendered="#{diagnosisPhaseExitDialog.selectDiagnosis}"
+                                   styleClass="icon-red"/>
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
                     <p:commandButton
-                            value="#{msg['dialog.diagnosisPhaseExit.button.notify']}"
+                            disabled="#{diagnosisPhaseExitDialog.selectDiagnosis}"
+                            value="#{msg['general.ok']}"
                             icon="fa fa-check-circle-o">
                         <f:actionListener
-                                binding="#{dialog.diagnosisPhaseExitDialog.exitPhaseAndClose()}"/>
+                                binding="#{diagnosisPhaseExitDialog.hideAndExitPhase()}"/>
                     </p:commandButton>
 
                     <!-- Abort button -->
                     <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
                                      icon="fa fa-times-circle"
-                                     actionListener="#{dialog.diagnosisPhaseExitDialog.hideDialog()}"/>
+                                     actionListener="#{diagnosisPhaseExitDialog.hideDialog()}"/>
                 </h:panelGrid>
             </h:panelGrid>
         </div>

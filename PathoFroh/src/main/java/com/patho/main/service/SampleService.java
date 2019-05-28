@@ -27,21 +27,6 @@ public class SampleService extends AbstractService {
     @Autowired
     private SampleRepository sampleRepository;
 
-    /**
-     * Completes Staining, returns true if a change was made
-     */
-    public boolean completedStaining(Sample sample, boolean completed) {
-
-        boolean changed = false;
-
-        for (Block block : sample.getBlocks()) {
-            if (blockService.completedStaining(block, completed))
-                changed = true;
-        }
-
-        return changed;
-    }
-
     public void createSampleAndPersist(Task task, MaterialPreset material) {
         createSample(task, material, material == null ? "" : material.getName(), true, true, true);
     }

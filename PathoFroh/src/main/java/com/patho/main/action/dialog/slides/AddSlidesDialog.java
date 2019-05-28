@@ -162,8 +162,8 @@ public class AddSlidesDialog extends AbstractDialog {
         List<StainingPrototypeHolder> prototpyes = getSelectedPrototypeHolders();
 
         if (!prototpyes.isEmpty()) {
-            Task task = slideService.createSlidesXTimesAndPersist(prototpyes, block, slideLabelText, commentary, restaining, true,
-                    asCompleted);
+            Task task = slideService.createSlidesXTimes(prototpyes, block, slideLabelText, commentary, restaining, true,
+                    asCompleted, true);
             hideDialog(new StainingPhaseUpdateEvent(task));
         }
     }

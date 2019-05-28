@@ -98,19 +98,4 @@ public class BlockService extends AbstractService {
         return t;
     }
 
-    /**
-     * Completes Staining, returns true if a change was made
-     */
-    public boolean completedStaining(Block block, boolean completed) {
-
-        boolean changed = false;
-
-        for (Slide slide : block.getSlides()) {
-            if (slideService.completedStaining(slide, completed))
-                changed = true;
-        }
-
-        return changed;
-    }
-
 }

@@ -101,7 +101,15 @@ open class DiagnosisRevision : AbstractPersistable, AuditAble, Parent<Task> {
      * Returns true if notification is necessary (pending or not approved)
      */
     open val isNotificationNecessary: Boolean
+        @Transient
         get() = notificationStatus != NotificationStatus.NO_NOTFICATION && notificationStatus != NotificationStatus.NOTIFICATION_COMPLETED
+
+    /**
+     * Returns true if the diagnosis is not approved
+     */
+    open val isNotApproved: Boolean
+        @Transient
+        get() = notificationStatus == NotificationStatus.NOT_APPROVED
 
     /**
      * Date of the signature

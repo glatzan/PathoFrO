@@ -33,7 +33,7 @@ import com.patho.main.util.report.ui.ReportIntentUIContainer
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
 import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
-import com.patho.main.util.task.TaskNotFoundException
+import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -289,7 +289,7 @@ class NotificationDialog @Autowired constructor(
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultPrintDocument).orElse(null)
             printCount = 2
 
-            onDiagnosisSelect();
+            onDiagnosisSelection();
 
             return super.initTab(force)
         }
@@ -299,7 +299,7 @@ class NotificationDialog @Autowired constructor(
         /**
          * Method is called on reportIntent change
          */
-        open fun onDiagnosisSelect() {
+        override fun onDiagnosisSelection() {
             // sets a not approved warning
             selectedDiagnosisNotApproved = selectDiagnosisRevision?.diagnosisRevision?.notificationStatus != NotificationStatus.NOTIFICATION_PENDING
 

@@ -8,7 +8,7 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.WorkPhaseService
 import com.patho.main.util.dialogReturn.ReloadTaskEvent
 import com.patho.main.util.task.ArchiveTaskStatus
-import com.patho.main.util.task.TaskNotFoundException
+import com.patho.main.util.exceptions.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component

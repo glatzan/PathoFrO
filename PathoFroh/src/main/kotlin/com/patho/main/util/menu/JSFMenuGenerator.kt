@@ -184,19 +184,19 @@ class JSFMenuGenerator {
             // reportIntent menu
             if (!taskIsNull) {
                 val diagnosisSubMenu = DefaultSubMenu(
-                        resourceBundle.get("pages.header.menu.sample.reportIntent.headline"))
+                        resourceBundle.get("pages.header.menu.sample.diagnosis.headline"))
                 diagnosisSubMenu.icon = "fa fa-search"
                 taskSubMenu.addElement(diagnosisSubMenu)
 
                 // new reportIntent
-                item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.reportIntent.add"))
+                item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.diagnosis.add"))
                 item.onclick = "$('#headerForm\\\\:newDiagnosisRevision').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
                 item.icon = "fa fa-pencil-square-o"
                 item.isDisabled = !taskIsEditable
                 diagnosisSubMenu.addElement(item)
 
                 // council
-                item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.reportIntent.concils"))
+                item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.diagnosis.concils"))
                 item.onclick = "$('#headerForm\\\\:councilBtn').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
                 item.icon = "fa fa-comment-o"
                 diagnosisSubMenu.addElement(item)
@@ -207,7 +207,7 @@ class JSFMenuGenerator {
                 diagnosisSubMenu.addElement(seperator)
 
                 // Leave reportIntent phase if in phase an not complete
-                item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.reportIntent.endPhase"))
+                item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.diagnosis.endPhase"))
                 item.onclick = "$('#headerForm\\\\:diagnosisPhaseExit').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
                 item.icon = "fa fa-eye-slash"
                 item.isRendered = task.taskStatus.listStatus.inListDiagnosis || task.taskStatus.listStatus.inListReDiagnosis
@@ -216,7 +216,7 @@ class JSFMenuGenerator {
 
                 // Leave phase if stay in phase
                 item = DefaultMenuItem(
-                        resourceBundle.get("pages.header.menu.sample.reportIntent.endStayInPhase"))
+                        resourceBundle.get("pages.header.menu.sample.diagnosis.endStayInPhase"))
                 item.command = ("#{globalEditViewHandler.removeTaskFromFavouriteList(worklistHandler.selectedTask, "
                         + PredefinedFavouriteList.StayInDiagnosisList.id + ")}")
                 item.isRendered = task.taskStatus.listStatus.inListStayInDiagnosis
@@ -226,7 +226,7 @@ class JSFMenuGenerator {
                 diagnosisSubMenu.addElement(item)
 
                 // enter reportIntent pahse
-                item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.reportIntent.enterStayInPhase"))
+                item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.diagnosis.enterStayInPhase"))
                 item.onclick = "$('#headerForm\\\\:diagnosisPhaseEnter').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
                 item.isRendered = !(task.taskStatus.listStatus.inListDiagnosis || task.taskStatus.listStatus.inListReDiagnosis
                         || task.taskStatus.listStatus.inListStayInDiagnosis) && task.taskStatus.editable

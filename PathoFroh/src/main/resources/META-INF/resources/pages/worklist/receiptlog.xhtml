@@ -82,7 +82,7 @@
                 </h:panelGrid>
 
                 <!-- ward -->
-                <h:outputLabel value="#{msg['body.reportIntent.ward']}"/>
+                <h:outputLabel value="#{msg['body.diagnosis.ward']}"/>
                 <p:selectOneMenu id="wards"
                                  value="#{receiptLogView.task.ward}"
                                  style="width: 80%;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor};"
@@ -117,7 +117,7 @@
                     <p:inputTextarea styleClass="customBackground"
                                      disabled="#{!receiptLogView.task.taskStatus.editable}"
                                      value="#{receiptLogView.task.caseHistory}"
-                                     title="#{msg['body.reportIntent.story.watermark']}"
+                                     title="#{msg['body.diagnosis.story.watermark']}"
                                      id="caseHistoryInput" style="width:90%"
                                      onclick="commonFunctions.showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
                                      onkeypress="PF('caseHistoryOverlayPanel').hide();">
@@ -186,7 +186,7 @@
                                  styleClass="listingHistoHiddenTableContainer"
                                  columnClasses="column75px,">
                         <h:outputLabel
-                                value="#{msg['body.reportIntent.sample']} #{sample.sampleID}"/>
+                                value="#{msg['body.diagnosis.sample']} #{sample.sampleID}"/>
                         <h:panelGroup>
                             <p:inputText value="#{sample.material}"
                                          id="materialInput#{loopCount.index}"
@@ -819,7 +819,7 @@
                                        disabled="#{!receiptLogView.task.taskStatus.editable}"
                                        update="navigationForm:patientList contentForm:contentPanel headerForm"
                                        oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
-                                       actionListener="#{globalEditViewHandler.ct.createNewBlock(stainingRow.entity)}">
+                                       actionListener="#{receiptLogView.createNewBlock(stainingRow.entity)}">
                             <i class="fa fa-fw fa-stop"/>
                         </p:commandLink>
                         <!-- ********** Delete Button ********** -->
@@ -876,7 +876,7 @@
                         </p:commandLink>
                         <!-- complete Button -->
                         <p:commandLink
-                                actionListener="#{globalEditViewHandler.ct.completeSlide(stainingRow.entity,true)}"
+                                actionListener="#{receiptLogView.completeSlide(stainingRow.entity,true)}"
                                 title="#{msg['body.statiningView.stainingCompleted']}"
                                 oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                 update="navigationForm:patientList contentForm:contentPanel headerForm">

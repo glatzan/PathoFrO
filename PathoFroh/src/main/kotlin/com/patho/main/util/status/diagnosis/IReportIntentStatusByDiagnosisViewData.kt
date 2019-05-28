@@ -18,4 +18,10 @@ interface IReportIntentStatusByDiagnosisViewData {
      * Diagnosis bearer for displaying details in the datatable overlay panel
      */
     open var viewDiagnosisRevisionDetails: DiagnosisBearer?
+
+    /**
+     * Method is fired on diagnosis selection
+     */
+    fun onDiagnosisSelection() {
+    }
 }

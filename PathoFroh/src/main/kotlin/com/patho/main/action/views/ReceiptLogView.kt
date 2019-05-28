@@ -2,12 +2,14 @@ package com.patho.main.action.views
 
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorkPhaseHandler
+import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
+import com.patho.main.service.BlockService
 import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SlideService
 import com.patho.main.util.print.UnknownPrintingException
@@ -24,6 +26,8 @@ open class ReceiptLogView @Autowired constructor(
         private val slideService: SlideService,
         private val workPhaseHandler: WorkPhaseHandler,
         private val taskRepository: TaskRepository,
+        private val blockService: BlockService,
+        private val worklistHandler: WorklistHandler,
         private val printExecutorService: PrintExecutorService) : AbstractEditTaskView() {
 
     /**
@@ -104,8 +108,10 @@ open class ReceiptLogView @Autowired constructor(
             // set slided to performed
             StainingListAction.PERFORMED, StainingListAction.NOT_PERFORMED -> {
                 logger.debug("Setting staining status of selected slides")
-                slideRows.forEach { p -> slideService.completedStaining(p.entity as Slide, action == StainingListAction.PERFORMED) }
-                workPhaseHandler.updateStainingPhase(taskRepository.save(task, resourceBundle.get("log.task.slide.completed", task), task.patient))
+                slideRows.forEach { p -> slideService.completeStaining(p.entity as Slide, action == StainingListAction.PERFORMED, false) }
+                var ntask = taskRepository.save(task, resourceBundle.get("log.task.slide.completedStack", task), task.patient)
+                ntask = workPhaseHandler.updateStainingPhase(ntask)
+                worklistHandler.replaceTaskInWorklist(ntask)
             }
             // archive slides
             StainingListAction.ARCHIVE -> {
@@ -120,6 +126,24 @@ open class ReceiptLogView @Autowired constructor(
 
             }
         }
+    }
+
+    /**
+     * Creates a block and updtes the staining phase
+     */
+    open fun createNewBlock(sample : Sample){
+        var task = blockService.createBlock(sample)
+        task = workPhaseHandler.updateStainingPhase(task)
+        worklistHandler.replaceTaskInWorklist(task)
+    }
+
+    /**
+     * Completes a slide and updates the stating phase
+     */
+    open fun completeSlide(slide: Slide, complete: Boolean) {
+        var task = slideService.completeStaining(slide, complete)
+        task = workPhaseHandler.updateStainingPhase(task)
+        worklistHandler.replaceTaskInWorklist(task)
     }
 
     open fun printAllLabels() {

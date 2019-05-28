@@ -8,7 +8,6 @@ import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Signature;
 import com.patho.main.model.patient.*;
-import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
@@ -16,7 +15,6 @@ import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.worklist.Worklist;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -27,10 +25,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.faces.application.FacesMessage;
-import java.util.Date;
-import java.util.Optional;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -184,7 +178,6 @@ public class GlobalEditViewHandler {
 //			worklistViewHandler.replacePatientInWorklist(task.getPatient(), true);
 //		}
     }
-
 
 
     /**
@@ -395,24 +388,6 @@ public class GlobalEditViewHandler {
 
                 save("log.patient.task.idManuallyAltered", chooser.getEntity().toString());
             }
-        }
-
-        /**
-         * Creates a block by using the gui
-         *
-         * @param sample
-         */
-        public void createNewBlock(Sample sample) {
-            workPhaseHandler.updateStainingPhase(blockService.createBlockAndPersist(sample));
-        }
-
-        /**
-         * Sets a slide as stating status completed
-         *
-         * @param slide
-         */
-        public void completeSlide(Slide slide, boolean complete) {
-            workPhaseHandler.updateStainingPhase(slideService.completedStainingAndPersist(slide, complete));
         }
 
         /**

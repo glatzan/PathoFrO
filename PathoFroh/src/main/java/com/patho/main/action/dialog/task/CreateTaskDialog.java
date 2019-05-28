@@ -209,7 +209,8 @@ public class CreateTaskDialog extends AbstractDialog {
 
                     Block block = HistoUtil.getLastElement(sample.getBlocks());
 
-                    slideService.createSlidesXTimes(sampleTempData.getStainings(), block);
+                    slideService.createSlidesXTimes(sampleTempData.getStainings(), block,"","", false, true, false, false);
+
                 }
 
                 // creating standard diagnoses

@@ -198,9 +198,9 @@
 
         <!-- DiagnosisPhase Exit -->
         <p:commandButton id="diagnosisPhaseExit" widgetVar="diagnosisPhaseExit"
-                         actionListener="#{dialog.diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                         actionListener="#{diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onDiagnosisPhaseExitReturn}"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
 

@@ -39,7 +39,7 @@ open class TaskService @Autowired constructor(
         } else
             task.taskID = getNextTaskID()
 
-        return if (save) taskRepository.save(task, resourceBundle.get("log.patient.task.new", task), patient) else task
+        return if (save) taskRepository.save(task, resourceBundle.get("log.task.new", task), patient) else task
     }
 
     /**

@@ -4,7 +4,7 @@ import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
-import com.patho.main.util.helper.HistoUtil
+import com.patho.main.util.exceptions.StainingsNotCompletedException
 import com.patho.main.util.task.TaskStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -17,26 +17,6 @@ open class WorkPhaseService @Autowired constructor(
         private val favouriteListService: FavouriteListService,
         private val slideService: SlideService,
         private val diagnosisService: DiagnosisService) : AbstractService() {
-
-    /**
-     * Updates the status of the stating phase, if the phase has ended, true will be
-     * returned.
-     */
-    @Transactional
-    open fun updateStainigPhase(task: Task): Boolean {
-        // removing from staining list and showing the dialog for ending
-        // staining phase
-        return if (TaskStatus.checkIfStainingCompleted(task)) {
-            logger.trace("Staining phase of task (" + task.taskID
-                    + ") completed removing from staing list, adding to diagnosisList")
-            // do nothin is done manual via dialog
-            true
-        } else {
-            // reentering the staining phase, adding task to staining or
-            // restaining list
-            false
-        }
-    }
 
     /**
      * Start the staining phase, adds the task to the staining or restaining phase,
@@ -70,9 +50,12 @@ open class WorkPhaseService @Autowired constructor(
     @Transactional
     open fun endStainingPhase(task: Task, removeFromList: Boolean): Task {
         var tmp = task
-        slideService.completedStaining(tmp, true)
-        tmp.stainingCompletionDate = Instant.now()
 
+        // throws error if not all staings are completed
+        if (!TaskStatus.checkIfStainingCompleted(task))
+            throw  StainingsNotCompletedException()
+
+        tmp.stainingCompletionDate = Instant.now()
         tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.staining.end", tmp), tmp.patient)
 
         if (removeFromList)
@@ -103,26 +86,18 @@ open class WorkPhaseService @Autowired constructor(
 
     /**
      * Ends the reportIntent phase, removes from reportIntent list and sets the reportIntent
-     * time of completion.
+     * time of completion. If not all stainigs had been marked as completed a StainingsNotCompletedException is
+     * thrown
      */
     @Transactional
     open fun endDiagnosisPhase(task: Task, removeFromList: Boolean, status: NotificationStatus): Task {
         var tmp = task
 
-        var change = false
-        // setting reportIntent completion date if not set jet
-        for (i in 0 until tmp.diagnosisRevisions.size) {
-            val rev = HistoUtil.getNElement(tmp.diagnosisRevisions, i)
-            if (!rev!!.completed) {
-                tmp = diagnosisService.approveDiangosis(tmp, rev, status)
-                change = true
-            }
-        }
+        if (tmp.diagnosisRevisions.any { !it.completed })
+            throw  StainingsNotCompletedException()
 
-        if (change || !tmp.diagnosisCompleted) {
-            tmp.diagnosisCompletionDate = Instant.now()
-            tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.reportIntent.end", tmp), tmp.patient)
-        }
+        tmp.diagnosisCompletionDate = Instant.now()
+        tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.reportIntent.end", tmp), tmp.patient)
 
         if (removeFromList)
             tmp = favouriteListService.removeTaskFromList(tmp, PredefinedFavouriteList.DiagnosisList,

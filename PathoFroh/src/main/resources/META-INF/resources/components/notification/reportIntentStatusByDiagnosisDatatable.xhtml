@@ -6,17 +6,14 @@
       xmlns:pe="http://primefaces.org/ui/extensions">
 
 <composite:interface>
-    <!-- com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis -->
-    <composite:attribute name="reportIntents" required="true"
-                         type="com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis"/>
-
-    <!-- selection mode single or multi -->
-    <composite:attribute name="selection" required="true"
-                         type="com.patho.main.util.status.diagnosis.DiagnosisBearer"/>
-
     <!-- controller class implementing com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData -->
     <composite:attribute name="controller" required="true"
                          type="com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData"/>
+    <!-- id of the form and id path to the component-->
+    <composite:attribute name="formID" required="true"/>
+
+    <!-- disable selection of diagnoses-->
+    <composite:attribute name="disableSelection" required="false" default="true"/>
 </composite:interface>
 
 <composite:implementation>
@@ -29,10 +26,10 @@
 
     <p:dataTable var="diagnosisBearer" id="diangosisList"
                  scrollHeight="100" styleClass="defaultHistoDataTable"
-                 scrollable="true" selectionMode="single"
+                 scrollable="true" selectionMode="single" disabledSelection="#{cc.attrs.disableSelection}"
                  rowKey="#{diagnosisBearer.diagnosisRevision.id}"
-                 selection="#{cc.attrs.selection}"
-                 value="#{cc.attrs.reportIntents.diagnosisBearer}">
+                 selection="#{cc.attrs.controller.selectDiagnosisRevision}"
+                 value="#{cc.attrs.controller.diagnosisRevisions.diagnosisBearer}">
 
         <!-- Name -->
         <p:column
@@ -47,12 +44,12 @@
                 <i class="fa fa-info-circle"/>
             </f:facet>
             <p:commandLink
-                    styleClass="diagnosisOverlayPanelyTrigger"
+                    styleClass="diagnosisOverlayPanelTrigger"
                     icon="pi pi-search"
                     actionListener="#{cc.attrs.controller.setViewDiagnosisRevisionDetails(diagnosisBearer)}"
                     partialSubmit="true"
                     process="@this"
-                    update="adminForm:diagnosisOverlayPanel"
+                    update="#{cc.attrs.formID}:diagnosisOverlayPanel"
                     oncomplete="commonFunctions.showOverlayPanel('diagnosisOverlayPanel', '#{component.clientId}');">
                 <i class="fa fa-info-circle"/>
             </p:commandLink>
@@ -97,17 +94,17 @@
         </p:column>
 
         <p:ajax event="rowSelect" process="@form" update="@form"
-                listener="#{notificationDialog.generalTab.onDiagnosisSelect()}"/>
+                listener="#{cc.attrs.controller.onDiagnosisSelection()}"/>
     </p:dataTable>
 
     <script type="text/javascript">
         commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('diagnosisOverlayPanel')
-        commonFunctions.addShowDialogOnMouseEnter(".diagnosisOverlayPanelyTrigger", "diagnosisOverlayPanel")
+        commonFunctions.addShowDialogOnMouseEnter(".diagnosisOverlayPanelTrigger", "diagnosisOverlayPanel")
     </script>
 
     <!-- overlay for contact notifications -->
     <p:overlayPanel widgetVar="diagnosisOverlayPanel" hideEvent="null" showEvent="null"
-                    style="width: 500px;"
+                    style="width: 400px;"
                     dismissable="false" id="diagnosisOverlayPanel" styleClass="histoOverlayPanel">
         <p:dataTable value="#{cc.attrs.controller.viewDiagnosisRevisionDetails.reportIntents}"
                      var="reportIntent" styleClass="defaultHistoDataTable">
@@ -118,7 +115,7 @@
             </p:column>
 
             <!-- mail status -->
-            <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+            <p:column style="width:7%" styleClass="centerChildElements centerHeaderChildElements">
                 <f:facet name="header">
                     <i class="fa fa-envelope icon-grey"/>
                 </f:facet>
@@ -129,7 +126,7 @@
             </p:column>
 
             <!-- fax status -->
-            <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+            <p:column style="width:7%" styleClass="centerChildElements centerHeaderChildElements">
                 <f:facet name="header">
                     <i class="fa fa-fax icon-grey"/>
                 </f:facet>
@@ -140,7 +137,7 @@
             </p:column>
 
             <!-- letter -->
-            <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+            <p:column style="width:7%" styleClass="centerChildElements centerHeaderChildElements">
                 <f:facet name="header">
                     <i class="fa fa-pencil-square-o icon-grey"/>
                 </f:facet>
@@ -151,7 +148,7 @@
             </p:column>
 
             <!-- phone -->
-            <p:column style="width:10%" styleClass="centerChildElements centerHeaderChildElements">
+            <p:column style="width:7%" styleClass="centerChildElements centerHeaderChildElements">
                 <f:facet name="header">
                     <i class="fa fa-phone icon-grey"/>
                 </f:facet>
