@@ -3,13 +3,14 @@ package com.patho.main.action.handler;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.exception.DialogException;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 
 public class MessageHandler {
@@ -77,7 +78,7 @@ public class MessageHandler {
 	public static void sendGrowlMessagesAsResource(String headline, String message, FacesMessage.Severity servertiy,
 			Object... params) {
 
-		ResourceBundle bundle = ResourceBundle.getResourceBundle();
+		ResourceBundle bundle = SpringContextBridge.services().getResourceBundle();
 		sendGrowlMessages(bundle.get(headline), bundle.get(message, params), servertiy);
 	}
 

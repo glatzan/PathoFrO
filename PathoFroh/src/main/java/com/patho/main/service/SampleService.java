@@ -1,7 +1,6 @@
 package com.patho.main.service;
 
 import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.SampleRepository;
@@ -125,30 +124,25 @@ public class SampleService extends AbstractService {
 
     /**
      * Changes the material of an sample
-     */
-    public Task updateMaterialOfSampleWithoutPrototype(Sample sample, String name) {
-        sample.setMaterialPreset(null);
-        return updateMaterialOfSample(sample, name);
-    }
-
-    /**
-     * Changes the material of an sample
      *
      * @param sample
      * @param materialPreset
      */
-    public Task updateMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
-        sample.setMaterialPreset(materialPreset);
-        return updateMaterialOfSample(sample, materialPreset.getName());
+    public Task updateMaterialOfSample(Sample sample, MaterialPreset materialPreset, boolean save) {
+        return updateMaterialOfSample(sample, materialPreset.getName(), materialPreset, save);
     }
 
     /**
      * Changes the material of an sample
      */
-    public Task updateMaterialOfSample(Sample sample, String name) {
+    public Task updateMaterialOfSample(Sample sample, String name, MaterialPreset materialPreset, boolean save) {
         sample.setMaterial(name);
-        return taskRepository.save(sample.getTask(),
-                resourceBundle.get("log.patient.task.sample.material.update", sample.getTask(), sample, name),
-                sample.getTask().getPatient());
+        sample.setMaterialPreset(materialPreset);
+        if (save)
+            return taskRepository.save(sample.getTask(),
+                    resourceBundle.get("log.patient.task.sample.material.update", sample.getTask(), sample, name),
+                    sample.getTask().getPatient());
+        else
+            return sample.getTask();
     }
 }

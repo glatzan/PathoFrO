@@ -13,7 +13,8 @@
 			timeout="#{session.maxInactiveInterval * 1000 - 125000}"
 			onidle="startIdleMonitor()" onactive="PF('timeoutDialog').hide();" />
 
-		<p:dialog id="timeoutSession" header="#{msg['session.expire']}"
+		<!-- TODO: session expired-->
+		<p:dialog id="timeoutSession" header="Session abgelaufen"
 			widgetVar="timeoutDialog" showEffect="fade" hideEffect="fade"
 			modal="true" width="400" height="130" closable="false"
 			draggable="false" resizable="false" appendToBody="true"

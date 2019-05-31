@@ -5,6 +5,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
+import com.patho.main.util.event.dialog.TaskReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -57,9 +58,7 @@ public class ChangeTaskIDDialog extends AbstractDialog {
 
 	public void changeAndHide() {
 		logger.debug("Changing task id form " + task.getId() + " to " + newID);
-		taskService.changeTaskID(task, newID);
-
-		hideDialog(new ReloadEvent());
+		hideDialog(new TaskReloadEvent(taskService.changeTaskID(task, newID)));
 	}
 
 	public void validateTaskID(FacesContext context, UIComponent componentToValidate, Object value)

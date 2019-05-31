@@ -42,15 +42,15 @@
                 <!-- Receipt Date -->
                 <h:outputLabel value="#{msg['body.receiptlog.taskEDate']}"/>
                 <p:calendar pattern="dd.MM.yyyy" mask="true" id="receiptDate" converter="localDateConverter"
-                            style="width: 80%;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}"
+                            style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}"
                             styleClass="customBackground"
                             disabled="#{!receiptLogView.task.taskStatus.editable}"
                             value="#{receiptLogView.task.receiptDate}">
                     <p:ajax event="dateSelect"
-                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',receiptLogView.task, 'date:'.concat(receiptLogView.task.receiptDate))}"
+                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.receiptDate',receiptLogView.task.receiptDate)}"
                             update="receiptDate"/>
                     <f:ajax event="change" execute="@this" render="receiptDate"
-                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.receiptDate',receiptLogView.task,'date:'.concat(receiptLogView.task.receiptDate))}"/>
+                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.receiptDate',receiptLogView.task.receiptDate)}"/>
                 </p:calendar>
 
                 <!-- Termin Date -->
@@ -64,20 +64,21 @@
                                              value="#{receiptLogView.task.dueDateSelected}">
                         <p:ajax event="change" execute="@this"
                                 update="navigationForm:patientList contentForm:contentPanel"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate',receiptLogView.task, receiptLogView.task.dueDateSelected)}">
+                                listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.use',receiptLogView.task.dueDateSelected)}">
                         </p:ajax>
+
                     </p:selectBooleanCheckbox>
 
                     <p:calendar pattern="dd.MM.yyyy" mask="true" id="dueDate"
-                                style="width: 80%;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor};"
+                                style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
                                 styleClass="customBackground" converter="localDateConverter"
                                 value="#{receiptLogView.task.dueDate}"
                                 disabled="#{!receiptLogView.task.dueDateSelected or !receiptLogView.task.taskStatus.editable}">
                         <p:ajax event="dateSelect"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate.date',receiptLogView.task,'date:'.concat(receiptLogView.task.dueDate))}"
+                                listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.date',receiptLogView.task.dueDate)}"
                                 update="dueDate"/>
                         <f:ajax event="change" execute="@this" render="dueDate"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.dueDate.date',receiptLogView.task, 'date:'.concat(receiptLogView.task.dueDate))}"/>
+                                listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.date',receiptLogView.task.dueDate)}"/>
                     </p:calendar>
                 </h:panelGrid>
 
@@ -85,21 +86,21 @@
                 <h:outputLabel value="#{msg['body.diagnosis.ward']}"/>
                 <p:selectOneMenu id="wards"
                                  value="#{receiptLogView.task.ward}"
-                                 style="width: 80%;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor};"
+                                 style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
                                  styleClass="customBackground" editable="true"
                                  disabled="#{!receiptLogView.task.taskStatus.editable}">
                     <f:selectItems
                             value="#{genericViewData.wardList}"
                             itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward"/>
                     <p:ajax event="change" execute="@this"
-                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.ward', receiptLogView.task, receiptLogView.task.ward)}"/>
+                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.ward',receiptLogView.task.ward)}"/>
                 </p:selectOneMenu>
 
 
                 <!-- EYE -->
                 <h:outputLabel value="#{msg['body.receiptlog.eye']}"/>
                 <p:selectOneMenu
-                        style="width: 80%;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor};"
+                        style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
                         styleClass="customBackground"
                         value="#{receiptLogView.task.eye}"
                         disabled="#{!receiptLogView.task.taskStatus.editable}">
@@ -108,7 +109,7 @@
                                    itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}"/>
 
                     <p:ajax event="change" execute="@this"
-                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.eye',receiptLogView.task,receiptLogView.task.eye)}"/>
+                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.eye',receiptLogView.task.eye)}"/>
                 </p:selectOneMenu>
 
                 <!-- History -->
@@ -122,7 +123,7 @@
                                      onclick="commonFunctions.showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
                                      onkeypress="PF('caseHistoryOverlayPanel').hide();">
                         <p:ajax event="change"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.caseHistory',receiptLogView.task,receiptLogView.task.caseHistory)}"> </p:ajax>
+                                listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.caseHistory',receiptLogView.task.caseHistory)}"> </p:ajax>
                     </p:inputTextarea>
 
                     <p:overlayPanel id="caseHistoryOverlayPanel"
@@ -142,18 +143,17 @@
                                       id="valueColumn">
                                 <h:outputText value="#{item.value}"/>
                             </p:column>
-
                             <p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
                                     process="contentForm:caseHistoryOverlayPanel"
                                     partialSubmit="true"
-                                    listener="#{globalEditViewHandler.ct.updateCaseHistory(receiptLogView.selectedCaseHistoryItem)}"
+                                    listener="#{receiptLogView.updateCaseHistoryWithName(receiptLogView.task, receiptLogView.selectedCaseHistoryItem.value,'log.task.edit.caseHistory',receiptLogView.selectedCaseHistoryItem.value)}"
                                     oncomplete="PF('caseHistoryOverlayPanel').hide();"/>
                         </p:dataTable>
                     </p:overlayPanel>
 
                     <p:remoteCommand name="submitNewCustomCaseHistory"
                                      update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                     actionListener="#{globalEditViewHandler.ct.updateCaseHistoryWithName(receiptLogView.caseHistoryFilter)}"
+                                     actionListener="#{receiptLogView.updateCaseHistoryWithName(receiptLogView.task, receiptLogView.caseHistoryFilter,'log.task.edit.caseHistory',receiptLogView.caseHistoryFilter)}"
                                      oncomplete="PF('caseHistoryOverlayPanel').hide();"/>
                 </h:panelGroup>
 
@@ -164,7 +164,7 @@
                                  value="#{receiptLogView.task.commentary}"
                                  style="width:90%">
                     <p:ajax event="change"
-                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.commentary',receiptLogView.task, receiptLogView.task.commentary)}"></p:ajax>
+                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.commentary',receiptLogView.task.commentary)}"/>
                 </p:inputTextarea>
 
             </h:panelGrid>
@@ -193,11 +193,10 @@
                                          disabled="#{!receiptLogView.task.taskStatus.editable}"
                                          tabindex="1" styleClass="customBackground"
                                          onclick="commonFunctions.showAndUpdateOverlayPanel('materialOverlayPanel#{loopCount.index}', '#{component.clientId}' ,null, 'materialOverlayPanelDataTable#{loopCount.index}', 0, submitUpdateMaterial#{loopCount.index});"
-                                         style="width:200px;float:right;background:##{currentUserService.currentUser.settings.inputFieldColor};color:##{currentUserService.currentUser.settings.inputFieldFontColor}">
+                                         style="width:200px;float:right;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}">
 
                                 <p:ajax event="change" execute="@this"
-                                        listener="#{globalEditViewHandler.ct.saveData('log.patient.task.change.material', sample.task, sample,sample.material)}"/>
-
+                                        listener="#{receiptLogView.save(sample.task, 'log.sample.edit.material',sample,sample.material)}"/>
                             </p:inputText>
 
                             <p:overlayPanel id="materialOverlayPanel#{loopCount.index}"
@@ -224,7 +223,7 @@
                                             process="contentForm:materialOverlayPanel#{loopCount.index}"
                                             partialSubmit="true"
                                             update="contentForm:materialInput#{loopCount.index}"
-                                            listener="#{globalEditViewHandler.ct.updateMaterialOfSample(sample, receiptLogView.selectedMaterialPresets[loopCount.index])}"
+                                            listener="#{receiptLogView.updateMaterialOfSample(sample, receiptLogView.selectedMaterialPresets[loopCount.index],receiptLogView.selectedMaterialPresets[loopCount.index].name,'log.patient.task.sample.material.update',sample, receiptLogView.selectedMaterialPresets[loopCount.index].name)}"
                                             oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();"/>
                                 </p:dataTable>
 
@@ -233,7 +232,7 @@
                             <p:remoteCommand name="submitUpdateMaterial#{loopCount.index}"
                                              partialSubmit="true"
                                              update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                             actionListener="#{globalEditViewHandler.ct.updateMaterialOfSampleWithName(sample, receiptLogView.selectedMaterialPresetFilter[loopCount.index])}"
+                                             actionListener="#{receiptLogView.updateMaterialOfSample(sample, null, receiptLogView.selectedMaterialPresetFilter[loopCount.index],'log.patient.task.sample.material.update',sample, receiptLogView.selectedMaterialPresetFilter[loopCount.index])}"
                                              oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();"/>
                         </h:panelGroup>
                     </h:panelGrid>
@@ -297,12 +296,12 @@
                                     <p:column style="width:5%; text-align:center;">
                                         <f:facet name="header">
                                             <i class="fa fa-check-square-o"
-                                               title="#{msg['dialog.selectContact.table.added']}"/>
+                                            />
                                         </f:facet>
 
                                         <ui:fragment rendered="#{physicianSelector.contactOfTask}">
                                             <i class="fa fa-check icon-green"
-                                               title="#{msg['dialog.selectContact.table.added']}"/>
+                                            />
                                         </ui:fragment>
 
                                     </p:column>
@@ -367,12 +366,12 @@
                                     <p:column style="width:5%; text-align:center;">
                                         <f:facet name="header">
                                             <i class="fa fa-check-square-o"
-                                               title="#{msg['dialog.selectContact.table.added']}"/>
+                                            />
                                         </f:facet>
 
                                         <ui:fragment rendered="#{physicianSelector.contactOfTask}">
                                             <i class="fa fa-check icon-green"
-                                               title="#{msg['dialog.selectContact.table.added']}"/>
+                                            />
                                         </ui:fragment>
 
                                     </p:column>
@@ -614,7 +613,7 @@
 
                                 <!-- saving if overlay panel is already shown and something was changed -->
                                 <f:ajax
-                                        listener="#{globalEditViewHandler.ct.entityNameChange(receiptLogView.selectedRow)}"/>
+                                        listener="#{receiptLogView.entityNameChange(receiptLogView.selectedRow, 'log.task.edit.idManuallyAltered', receiptLogView.selectedRow.entity.toString())}"/>
 
                                 <!-- showing panel with new data -->
                                 <f:ajax
@@ -645,7 +644,7 @@
 
                                 <!-- saving if overlay panel is already shown and something was changed -->
                                 <f:ajax
-                                        listener="#{globalEditViewHandler.ct.entityNameChange(receiptLogView.selectedRow)}"/>
+                                        listener="#{receiptLogView.entityNameChange(receiptLogView.selectedRow, 'log.task.edit.idManuallyAltered', receiptLogView.selectedRow.entity.toString())}"/>
                                 <!-- showing panel with new data -->
                                 <f:ajax
                                         listener="#{receiptLogView.setSelectedRow(stainingRow)}"/>
@@ -699,7 +698,7 @@
 
                                 <!-- saving if overlay panel is already shown and something was changed -->
                                 <f:ajax
-                                        listener="#{globalEditViewHandler.ct.entityNameChange(receiptLogView.selectedRow)}"/>
+                                        listener="#{receiptLogView.entityNameChange(receiptLogView.selectedRow, 'log.task.edit.idManuallyAltered', stainingRow.entity.toString())}"/>
                                 <!-- showing panel with new data -->
                                 <f:ajax
                                         listener="#{receiptLogView.setSelectedRow(stainingRow)}"/>
@@ -727,7 +726,7 @@
                                     itemValue="#{slideLabelText.value}"/>
 
                             <p:ajax event="change" execute="@this"
-                                    listener="#{globalEditViewHandler.ct.saveData(stainingRow.entity,'log.settings.staining.update')}"/>
+                                    listener="#{receiptLogView.save(stainingRow.entity.task, 'log.slide.edit.textUpdate',stainingRow.entity, stainingRow.IDText)}"/>
                         </p:selectOneMenu>
 
                     </h:panelGroup>
@@ -818,18 +817,16 @@
                         <p:commandLink title="#{msg['body.statiningView.newBlock']}"
                                        disabled="#{!receiptLogView.task.taskStatus.editable}"
                                        update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                       oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                        actionListener="#{receiptLogView.createNewBlock(stainingRow.entity)}">
                             <i class="fa fa-fw fa-stop"/>
                         </p:commandLink>
                         <!-- ********** Delete Button ********** -->
                         <p:commandLink title="#{msg['body.statiningView.archiveSample']}"
                                        disabled="#{!receiptLogView.task.taskStatus.editable}"
-                                       actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.sample.text',stainingRow.entity.sampleID).ctext('dialog.delete.sample.text',stainingRow.entity.sampleID)}">
+                                       actionListener="#{deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity).advancedHeader('dialog.delete.sample.text',stainingRow.entity.sampleID).advancedText('dialog.delete.sample.text',stainingRow.entity.sampleID)}">
                             <i class="fa fa-fw fa-times-circle"/>
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDeleteTaskEntityReturn}"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandLink>
                     </h:panelGroup>
@@ -846,17 +843,16 @@
                                 <p:ajax event="dialogReturn"
                                         update="navigationForm:patientList contentForm:contentPanel headerForm"
                                         listener="#{dialogReturnHandler.onStainingPhaseUpdateReturn}"
-                                        oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane');"/>
+                                />
                             </p:commandLink>
                         </h:panelGroup>
                         <!-- ********** Delete Button ********** -->
                         <p:commandLink
                                 disabled="#{!receiptLogView.task.taskStatus.editable}"
                                 title="#{msg['body.statiningView.archiveBlock']}"
-                                actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.block.headline',stainingRow.entity.blockID).ctext('dialog.delete.block.text',stainingRow.entity.blockID)}">
+                                actionListener="#{deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity).advancedHeader('dialog.delete.block.headline',stainingRow.entity.blockID).advancedText('dialog.delete.block.text',stainingRow.entity.blockID)}">
                             <i class="fa fa-fw fa-times-circle"/>
                             <p:ajax event="dialogReturn"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                     listener="#{dialogReturnHandler.onDeleteTaskEntityReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandLink>
@@ -871,14 +867,12 @@
                                 title="#{msg['body.statiningView.printStaining']}">
                             <i class="fa fa-fw fa-print"/>
                             <p:ajax event="dialogReturn"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandLink>
                         <!-- complete Button -->
                         <p:commandLink
                                 actionListener="#{receiptLogView.completeSlide(stainingRow.entity,true)}"
                                 title="#{msg['body.statiningView.stainingCompleted']}"
-                                oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                 update="navigationForm:patientList contentForm:contentPanel headerForm">
                             <i class="fa fa-fw fa-check-circle"/>
                         </p:commandLink>
@@ -887,14 +881,13 @@
                                        disabled="true">
                             <i class="fa fa-fw fa-file-photo-o"/>
                             <p:ajax event="dialogReturn"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandLink>
                         <!-- ********** Delete Button ********** -->
                         <p:commandLink
                                 disabled="#{!receiptLogView.task.taskStatus.editable}"
                                 title="#{msg['body.statiningView.archiveStaining']}"
-                                actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.slide.headline',stainingRow.entity.slideID).ctext('dialog.delete.slide.text',stainingRow.entity.slideID)}">
+                                actionListener="#{deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity).advancedHeader('dialog.delete.slide.headline',stainingRow.entity.slideID).advancedText('dialog.delete.slide.text',stainingRow.entity.slideID)}">
                             <i class="fa fa-fw fa-times-circle"/>
                             <p:ajax event="dialogReturn"
                                     oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
@@ -925,7 +918,7 @@
             </p:overlayPanel>
 
             <p:remoteCommand
-                    actionListener="#{globalEditViewHandler.ct.entityNameChange(receiptLogView.selectedRow)}"
+                    actionListener="#{receiptLogView.entityNameChange(receiptLogView.selectedRow, 'log.task.edit.idManuallyAltered', stainingRow.entity.toString())}"
                     name="saveNameChange" update="@(.updateName_js_Class)"/>
 
         </h:panelGrid>
@@ -943,8 +936,7 @@
                     actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(receiptLogView.task)}">
                 <p:ajax event="dialogReturn"
                         listener="#{dialogReturnHandler.onDefaultReturn}"
-                        update="navigationForm:patientList contentForm:contentPanel headerForm"
-                        oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
+                        update="navigationForm:patientList contentForm:contentPanel headerForm"/>
             </p:commandButton>
 
             <!-- New sample -->
@@ -954,7 +946,6 @@
                              actionListener="#{dialog.createSampleDialog.initAndPrepareBean(receiptLogView.task)}">
                 <p:ajax event="dialogReturn"
                         listener="#{dialogReturnHandler.onStainingPhaseUpdateReturn}"
-                        oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                         update="navigationForm:patientList contentForm:contentPanel"/>
             </p:commandButton>
 

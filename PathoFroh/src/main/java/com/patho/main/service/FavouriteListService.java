@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.favourites.*;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;

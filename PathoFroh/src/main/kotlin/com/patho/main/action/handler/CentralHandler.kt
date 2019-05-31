@@ -213,12 +213,14 @@ open class CentralHandler @Autowired constructor(
             View.WORKLIST_RECEIPTLOG -> {
                 logger.debug("Loading receiptlog")
                 receiptLogView.loadView(worklistHandler.current.selectedTask)
-                genericViewData.loadView(worklistHandler.current.selectedTask)
+                if (!loads.contains(Load.GENERIC_DATA))
+                    genericViewData.loadView(worklistHandler.current.selectedTask, !loads.contains(Load.NO_GENERIC_DATA))
             }
             View.WORKLIST_DIAGNOSIS -> {
                 logger.debug("Loading reportIntent view")
                 diagnosisView.loadView(worklistHandler.current.selectedTask)
-                genericViewData.loadView(worklistHandler.current.selectedTask)
+                if (!loads.contains(Load.GENERIC_DATA))
+                    genericViewData.loadView(worklistHandler.current.selectedTask, !loads.contains(Load.NO_GENERIC_DATA))
             }
             View.WORKLIST_PATIENT -> {
                 logger.debug("Loading patient view")
@@ -354,7 +356,30 @@ open class CentralHandler @Autowired constructor(
     }
 
     enum class Load {
-        RELOAD_TASK_STATUS, MENU_MODEL, RELOAD_MENU_MODEL_FAVOURITE_LISTS, RELOAD_TASK, GENERIC_DATA
+        /**
+         * If set the task status will be reloaded
+         */
+        RELOAD_TASK_STATUS,
+        /**
+         * IF set the menu model will be generated
+         */
+        MENU_MODEL,
+        /**
+         *
+         */
+        RELOAD_MENU_MODEL_FAVOURITE_LISTS,
+        /**
+         * If set the task will be reloaded
+         */
+        RELOAD_TASK,
+        /**
+         * IF set all generic data will be reloaded
+         */
+        GENERIC_DATA,
+        /**
+         * If set the generic data are not reloaded
+         */
+        NO_GENERIC_DATA
     }
 
 

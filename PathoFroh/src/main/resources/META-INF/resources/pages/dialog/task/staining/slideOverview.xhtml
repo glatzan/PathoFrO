@@ -1,250 +1,243 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.slideOverview.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.slideOverview.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.slideOverview.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.slideOverview.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
+        <div class="dialogContent">
 
-			<p:dataTable var="stainingRow"
-				styleClass="noBackgroundHistoDataTable"
-				value="#{dialog.slideOverviewDialog.flatTaskEntityList}"
-				scrollable="true" scrollHeight="480" rowIndexVar="index">
+            <p:dataTable var="stainingRow"
+                         styleClass="noBackgroundHistoDataTable"
+                         value="#{slideOverviewDialog.flatTaskEntityList}"
+                         scrollable="true" scrollHeight="480" rowIndexVar="index">
 
-				<!-- sample -->
-				<p:column
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
-					style="width: 12%;"
-					headerText="#{msg['body.receiptlog.slide.headline.sample']}">
-					<h:panelGroup rendered="#{stainingRow.sampleType}">
+                <!-- sample -->
+                <p:column
+                        styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
+                        style="width: 12%;"
+                        headerText="#{msg['dialog.slideOverview.list.sample.headline']}">
+                    <h:panelGroup rendered="#{stainingRow.sampleType}">
 
-						<h:panelGroup layout="block" style="width: 90%; min-height:20px">
-							<h:outputLabel
-								value="#{msg['body.receiptlog.slide.sample']} #{stainingRow.entity.sampleID}" />
+                        <h:panelGroup layout="block" style="width: 90%; min-height:20px">
+                            <h:outputLabel
+                                    value="#{msg['dialog.slideOverview.list.sample.text']} #{stainingRow.entity.sampleID}"/>
 
-							<h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
-								<i class="fa fa-fw fa-chain"
-									title="#{msg['body.statiningView.idManuallyAltered']}" />
-							</h:panelGroup>
-						</h:panelGroup>
+                            <h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
+                                <i class="fa fa-fw fa-chain"
+                                   title="#{msg['dialog.slideOverview.list.sample.idManuallyAltered']}"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
 
-					</h:panelGroup>
-				</p:column>
+                    </h:panelGroup>
+                </p:column>
 
-				<!-- Block -->
-				<p:column style="width: 12%;"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
-					headerText="#{msg['body.receiptlog.slide.headline.block']}">
-					<h:panelGroup rendered="#{stainingRow.blockType}">
-						<h:panelGroup layout="block" style="width: 90%; min-height:20px">
-							<h:outputLabel
-								value="#{msg['body.receiptlog.slide.block']} #{stainingRow.entity.blockID}" />
-							<h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
-								<i class="fa fa-fw fa-chain"
-									title="#{msg['body.statiningView.idManuallyAltered']}" />
-							</h:panelGroup>
-						</h:panelGroup>
-					</h:panelGroup>
-				</p:column>
+                <!-- Block -->
+                <p:column style="width: 12%;"
+                          styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
+                          headerText="#{msg['dialog.slideOverview.list.block.headline']}">
+                    <h:panelGroup rendered="#{stainingRow.blockType}">
+                        <h:panelGroup layout="block" style="width: 90%; min-height:20px">
+                            <h:outputLabel
+                                    value="#{msg['dialog.slideOverview.list.block.text']} #{stainingRow.entity.blockID}"/>
+                            <h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
+                                <i class="fa fa-fw fa-chain"
+                                   title="#{msg['dialog.slideOverview.list.sample.idManuallyAltered']}"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </p:column>
 
-				<!-- staining - name -->
-				<p:column style="width: 19%;"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
-					headerText="#{msg['body.receiptlog.slide.headline.staining.id']}">
-					<h:panelGroup rendered="#{stainingRow.stainingType}">
-						<h:panelGroup layout="block" style="width: 90%; min-height:20px">
-							<h:outputLabel value="#{stainingRow.entity.slideID}" />
+                <!-- staining - name -->
+                <p:column style="width: 19%;"
+                          styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
+                          headerText="#{msg['dialog.slideOverview.list.slide.headline']}">
+                    <h:panelGroup rendered="#{stainingRow.stainingType}">
+                        <h:panelGroup layout="block" style="width: 90%; min-height:20px">
+                            <h:outputLabel value="#{stainingRow.entity.slideID}"/>
 
-							<h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
-								<i class="fa fa-fw fa-chain"
-									title="#{msg['body.statiningView.idManuallyAltered']}" />
-							</h:panelGroup>
-						</h:panelGroup>
-					</h:panelGroup>
-				</p:column>
+                            <h:panelGroup rendered="#{stainingRow.entity.idManuallyAltered}">
+                                <i class="fa fa-fw fa-chain"
+                                   title="#{msg['dialog.slideOverview.list.sample.idManuallyAltered']}"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </p:column>
 
-				<!-- staining slide text -->
-				<p:column style="width: auto%;"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
-					headerText="#{msg['body.receiptlog.slide.headline.staining.slideLabelText']}">
-					<h:panelGroup rendered="#{stainingRow.stainingType}">
-						<p:selectOneMenu style="width: 90%"
-							value="#{stainingRow.entity.slideLabelText}" editable="true"
-							disabled="#{!dialog.slideOverviewDialog.task.taskStatus.editable or stainingRow.entity.stainingCompleted}">
+                <!-- staining slide text -->
+                <p:column style="width: auto%;"
+                          styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
+                          headerText="#{msg['dialog.slideOverview.list.slideLabel.headline']}">
+                    <h:panelGroup rendered="#{stainingRow.stainingType}">
+                        <p:selectOneMenu style="width: 90%"
+                                         value="#{stainingRow.entity.slideLabelText}" editable="true"
+                                         disabled="#{!slideOverviewDialog.task.taskStatus.editable or stainingRow.entity.stainingCompleted}">
 
-							<f:selectItems
-								value="#{dialog.slideOverviewDialog.slideCommentary}"
-								var="slideLabelText" itemLabel="#{slideLabelText.value}"
-								itemValue="#{slideLabelText.value}" />
+                            <f:selectItems
+                                    value="#{slideOverviewDialog.slideCommentary}"
+                                    var="slideLabelText" itemLabel="#{slideLabelText.value}"
+                                    itemValue="#{slideLabelText.value}"/>
 
-							<p:ajax event="change" execute="@this"
-								listener="#{dialog.slideOverviewDialog.save('log.settings.staining.update', stainingRow.entity.slideLabelText)}" />
-						</p:selectOneMenu>
-					</h:panelGroup>
-				</p:column>
+                            <p:ajax event="change" execute="@this"
+                                    listener="#{slideOverviewDialog.save('log.slide.edit.textUpdate', stainingRow.entity.slideLabelText)}"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                </p:column>
 
-				<!-- commentary -->
-				<p:column style="width: 4%"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''} centerChildElements"
-					headerText="#{msg['body.receiptlog.slide.headline.staining.commentary']}">
-					<h:panelGroup
-						rendered="#{stainingRow.stainingType and not empty stainingRow.entity.commentary}">
-						<i class="fa fa-fw fa-exclamation-triangle icon-red"
-							title="#{stainingRow.entity.commentary}" />
-					</h:panelGroup>
-				</p:column>
-
-
-				<!-- Staining staining -->
-				<p:column style="width: 8%;"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
-					headerText="#{msg['body.receiptlog.slide.headline.staining.staining']}">
-					<h:panelGroup rendered="#{stainingRow.stainingType}">
-						<h:outputText value="#{stainingRow.entity.slidePrototype.name}" />
-					</h:panelGroup>
-				</p:column>
-
-				<p:column style="width: 5%;"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''} centerChildElements">
-					<!-- Sample status -->
-					<h:panelGroup rendered="#{stainingRow.sampleType}">
-						<!-- ********** Staining performed ********** -->
-						<h:panelGroup
-							rendered="#{dialog.slideOverviewDialog.task.taskStatus.checkIfStainingCompleted(stainingRow.entity)}">
-							<i class="fa fa-fw fa-check-circle icon-green"
-								title="#{msg['body.statiningView.status.performed']}" />
-						</h:panelGroup>
-					</h:panelGroup>
-					<!-- Block status -->
-					<h:panelGroup rendered="#{stainingRow.blockType}">
-						<!-- ********** Staining performed ********** -->
-						<h:panelGroup
-							rendered="#{dialog.slideOverviewDialog.task.taskStatus.checkIfStainingCompleted(stainingRow.entity)}">
-							<i class="fa fa-fw fa-check-circle icon-green"
-								title="#{msg['body.statiningView.status.performed']}" />
-						</h:panelGroup>
-					</h:panelGroup>
-
-					<!-- Slide status -->
-					<h:panelGroup rendered="#{stainingRow.stainingType}">
-						<!-- ********** Staining performed ********** -->
-						<h:panelGroup rendered="#{stainingRow.entity.stainingCompleted}">
-							<i class="fa fa-fw fa-check-circle icon-green"
-								title="#{msg['body.statiningView.status.performed']}" />
-						</h:panelGroup>
-
-						<h:panelGroup rendered="#{stainingRow.entity.reStaining}">
-							<i class="fa fa-fw fa-th-list icon-orange"
-								title="#{msg['body.statiningView.status.restaining']}" />
-						</h:panelGroup>
-					</h:panelGroup>
-				</p:column>
-
-				<!-- options -->
-				<p:column style="width: 10%;"
-					styleClass="#{stainingRow.even ? 'manual-column-color' : ''}">
-					<f:facet name="header">
-						<h:outputLabel
-							value="#{msg['body.receiptlog.slide.headline.options']}"></h:outputLabel>
-					</f:facet>
-
-					<!-- Block -->
-					<h:panelGroup rendered="#{stainingRow.blockType}"
-						style="float: right">
-						<!-- ********** New Staining Button ********** -->
-						<p:commandLink title="#{msg['body.statiningView.newStaining']}"
-							disabled="#{!dialog.slideOverviewDialog.task.taskStatus.editable}"
-							actionListener="#{dialog.addSlidesDialog.initAndPrepareBean(stainingRow.entity)}">
-							<i class="fa fa-fw fa-paint-brush"></i>
-							<p:ajax event="dialogReturn" update="@form"
-								listener="#{dialog.slideOverviewDialog.onDefaultDialogReturn}" />
-						</p:commandLink>
-					</h:panelGroup>
-
-					<!-- Staining -->
-					<h:panelGroup rendered="#{stainingRow.stainingType}"
-						style="float: right">
-						<!-- ********** Delete Button ********** -->
-						<p:commandLink
-							disabled="#{!dialog.slideOverviewDialog.task.taskStatus.editable}"
-							title="#{msg['body.statiningView.archiveStaining']}"
-							actionListener="#{dialog.deleteDialog.initAndPrepareBean(stainingRow.entity).header('dialog.delete.slide.headline',stainingRow.entity.slideID).ctext('dialog.delete.slide.text',stainingRow.entity.slideID)}">
-							<i class="fa fa-fw fa-times-circle" />
-							<p:ajax event="dialogReturn"
-								listener="#{dialog.slideOverviewDialog.onDefaultDialogReturn}"
-								update="@form" />
-						</p:commandLink>
+                <!-- commentary -->
+                <p:column style="width: 4%"
+                          styleClass="#{stainingRow.even ? 'manual-column-color' : ''} centerChildElements"
+                          headerText="#{msg['dialog.slideOverview.list.commentary.headline']}">
+                    <h:panelGroup
+                            rendered="#{stainingRow.stainingType and not empty stainingRow.entity.commentary}">
+                        <i class="fa fa-fw fa-exclamation-triangle icon-red"
+                           title="#{stainingRow.entity.commentary}"/>
+                    </h:panelGroup>
+                </p:column>
 
 
-					</h:panelGroup>
-				</p:column>
-			</p:dataTable>
+                <!-- Staining staining -->
+                <p:column style="width: 8%;"
+                          styleClass="#{stainingRow.even ? 'manual-column-color' : ''}"
+                          headerText="#{msg['dialog.slideOverview.list.staining.headline']}">
+                    <h:panelGroup rendered="#{stainingRow.stainingType}">
+                        <h:outputText value="#{stainingRow.entity.slidePrototype.name}"/>
+                    </h:panelGroup>
+                </p:column>
 
-			<!-- hidden command button for displaying end staining phase dialog -->
-			<p:commandButton id="addDiagnosisRevisionFromDialog"
-				style="display:none"
-				actionListener="#{dialog.quickAddDiangosisRevisionDialog.initAndPrepareBean(dialog.slideOverviewDialog.task,'DIAGNOSIS_REVISION')}">
-				<p:ajax event="dialogReturn"
-					listener="#{dialog.slideOverviewDialog.onDefaultDialogReturn}"
-					update="@form" />
-			</p:commandButton>
+                <!-- status -->
+                <p:column style="width: 5%;" headerText="#{msg['dialog.slideOverview.list.status.headline']}"
+                          styleClass="#{stainingRow.even ? 'manual-column-color' : ''} centerChildElements">
+                    <!-- Sample status -->
+                    <h:panelGroup rendered="#{stainingRow.sampleType}">
+                        <!-- ********** Staining performed ********** -->
+                        <h:panelGroup
+                                rendered="#{slideOverviewDialog.task.taskStatus.checkIfStainingCompleted(stainingRow.entity)}">
+                            <i class="fa fa-fw fa-check-circle icon-green"
+                               title="#{msg['dialog.slideOverview.list.status.performed']}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <!-- Block status -->
+                    <h:panelGroup rendered="#{stainingRow.blockType}">
+                        <!-- ********** Staining performed ********** -->
+                        <h:panelGroup
+                                rendered="#{slideOverviewDialog.task.taskStatus.checkIfStainingCompleted(stainingRow.entity)}">
+                            <i class="fa fa-fw fa-check-circle icon-green"
+                               title="#{msg['dialog.slideOverview.list.status.performed']}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
 
-			<!-- hidden command button for displaying end staining phase dialog -->
-			<p:commandButton id="stainingPhaseExitFromDialog"
-				style="display:none"
-				actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(dialog.slideOverviewDialog.task)}">
-				<p:ajax event="dialogReturn"
-					listener="#{dialog.slideOverviewDialog.onDefaultDialogReturn}"
-					update="@form" />
-			</p:commandButton>
+                    <!-- Slide status -->
+                    <h:panelGroup rendered="#{stainingRow.stainingType}">
+                        <!-- ********** Staining performed ********** -->
+                        <h:panelGroup rendered="#{stainingRow.entity.stainingCompleted}">
+                            <i class="fa fa-fw fa-check-circle icon-green"
+                               title="#{msg['dialog.slideOverview.list.status.performed']}"/>
+                        </h:panelGroup>
 
-		</div>
+                        <h:panelGroup rendered="#{stainingRow.entity.reStaining}">
+                            <i class="fa fa-fw fa-th-list icon-orange"
+                               title="#{msg['dialog.slideOverview.list.status.restaining']}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </p:column>
+
+                <!-- options -->
+                <p:column style="width: 10%;"
+                          styleClass="#{stainingRow.even ? 'manual-column-color' : ''}">
+                    <f:facet name="header">
+                        <h:outputLabel
+                                value="#{msg['dialog.slideOverview.list.options.headline']}"/>
+                    </f:facet>
+
+                    <!-- Block -->
+                    <h:panelGroup rendered="#{stainingRow.blockType}"
+                                  style="float: right">
+                        <!-- ********** New Staining Button ********** -->
+                        <p:commandLink title="#{msg['dialog.slideOverview.list.options.newStaining']}"
+                                       disabled="#{!slideOverviewDialog.task.taskStatus.editable}"
+                                       actionListener="#{dialog.addSlidesDialog.initAndPrepareBean(stainingRow.entity)}">
+                            <i class="fa fa-fw fa-paint-brush"/>
+                            <p:ajax event="dialogReturn" update="@form"
+                                    listener="#{slideOverviewDialog.onStainingPhaseUpdateReturn}"/>
+                        </p:commandLink>
+                    </h:panelGroup>
+
+                    <!-- Staining -->
+                    <h:panelGroup rendered="#{stainingRow.stainingType}"
+                                  style="float: right">
+                        <!-- ********** Delete Button ********** -->
+                        <p:commandLink
+                                disabled="#{!slideOverviewDialog.task.taskStatus.editable}"
+                                title="#{msg['dialog.slideOverview.list.options.archiveStaining']}"
+                                actionListener="#{deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity).advancedHeader('dialog.delete.slide.headline',stainingRow.entity.slideID).advancedText('dialog.delete.slide.text',stainingRow.entity.slideID)}">
+                            <i class="fa fa-fw fa-times-circle"/>
+                            <p:ajax event="dialogReturn"
+                                    listener="#{slideOverviewDialog.onTaskEntityDeleteReturn}"
+                                    update="@form"/>
+                        </p:commandLink>
+                    </h:panelGroup>
+                </p:column>
+            </p:dataTable>
+
+            <!-- hidden command button for displaying end staining phase dialog -->
+            <p:commandButton id="addDiagnosisRevisionFromDialog"
+                             style="display:none"
+                             actionListener="#{dialog.quickAddDiangosisRevisionDialog.initAndPrepareBean(slideOverviewDialog.task,'DIAGNOSIS_REVISION')}">
+                <p:ajax event="dialogReturn"
+                        listener="#{slideOverviewDialog.onSubDialogReturn}"
+                        update="@form"/>
+            </p:commandButton>
+
+            <!-- hidden command button for displaying end staining phase dialog -->
+            <p:commandButton id="stainingPhaseExitFromDialog"
+                             style="display:none"
+                             actionListener="#{stainingPhaseExitDialog.initAndPrepareBean(slideOverviewDialog.task)}">
+                <p:ajax event="dialogReturn"
+                        listener="#{slideOverviewDialog.onStainingPhaseExitReturn}"
+                        update="@form"/>
+            </p:commandButton>
+
+        </div>
 
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="right" id="buttonContainer">
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.close']}" id="closeBtn"
+                                     icon="fa fa-check-circle-o" actionListener="#{slideOverviewDialog.hideDialog()}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
 
-				<h:panelGrid columns="1" styleClass="right" id="buttonContainer">
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
-						icon="fa fa-check-circle-o">
-						<f:actionListener
-							binding="#{dialog.slideOverviewDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-
-
-	</h:form>
+    </h:form>
 </h:body>
 </html>

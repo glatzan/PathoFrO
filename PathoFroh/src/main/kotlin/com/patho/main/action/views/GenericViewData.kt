@@ -1,5 +1,6 @@
 package com.patho.main.action.views
 
+import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.SortOrder
 import com.patho.main.model.DiagnosisPreset
@@ -7,10 +8,7 @@ import com.patho.main.model.ListItem
 import com.patho.main.model.MaterialPreset
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.DiagnosisPresetRepository
-import com.patho.main.repository.ListItemRepository
-import com.patho.main.repository.MaterialPresetRepository
-import com.patho.main.repository.PhysicianRepository
+import com.patho.main.repository.*
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.bearer.SimplePhysicianBearer
 import org.primefaces.model.menu.MenuModel
@@ -25,7 +23,9 @@ open class GenericViewData @Autowired constructor(
         private val listItemRepository: ListItemRepository,
         private val diagnosisPresetRepository: DiagnosisPresetRepository,
         private val physicianRepository: PhysicianRepository,
-        private val materialPresetRepository: MaterialPresetRepository) : AbstractTaskView() {
+        private val materialPresetRepository: MaterialPresetRepository,
+        private val taskRepository: TaskRepository,
+        private val worklistHandler: WorklistHandler) : AbstractTaskView() {
 
     /**
      * H:pannelgrid for dynamic command buttons
@@ -40,47 +40,47 @@ open class GenericViewData @Autowired constructor(
     /**
      * Contains all available case histories
      */
-    open var slideCommentary: MutableList<ListItem> = mutableListOf<ListItem>()
+    open var slideCommentary: MutableList<ListItem> = mutableListOf()
 
     /**
      * List of all reportIntent presets
      */
-    open var diagnosisPresets: MutableList<DiagnosisPreset> = mutableListOf<DiagnosisPreset>()
+    open var diagnosisPresets: MutableList<DiagnosisPreset> = mutableListOf()
 
     /**
      * List of physicians which have the role signature
      */
-    open var physiciansToSignList: List<Physician> = listOf<Physician>()
+    open var physiciansToSignList: List<Physician> = listOf()
 
     /**
-     * Transfomer for physiciansToSign
+     * Transformer for physiciansToSign
      */
-    open var physiciansToSignListTransformer: DefaultTransformer<Physician> = DefaultTransformer<Physician>(physiciansToSignList)
+    open var physiciansToSignListTransformer: DefaultTransformer<Physician> = DefaultTransformer(listOf())
 
     /**
      * List of available materials
      */
-    open var materialList: List<MaterialPreset> = mutableListOf<MaterialPreset>()
+    open var materialList: List<MaterialPreset> = mutableListOf()
 
     /**
      * Contains all available case histories
      */
-    open var caseHistoryList: MutableList<ListItem> = mutableListOf<ListItem>()
+    open var caseHistoryList: MutableList<ListItem> = mutableListOf()
 
     /**
      * Contains all available wards
      */
-    open var wardList: MutableList<ListItem> = mutableListOf<ListItem>()
+    open var wardList: MutableList<ListItem> = mutableListOf()
 
     /**
      * List of all surgeons
      */
-    open var surgeons: List<SimplePhysicianBearer> = listOf<SimplePhysicianBearer>()
+    open var surgeons: List<SimplePhysicianBearer> = listOf()
 
     /**
      * List of all surgeons
      */
-    open var privatePhysicians: List<SimplePhysicianBearer> = listOf<SimplePhysicianBearer>()
+    open var privatePhysicians: List<SimplePhysicianBearer> = listOf()
 
     /**
      * Loads generic data for all views
@@ -109,7 +109,7 @@ open class GenericViewData @Autowired constructor(
      * Loads generic data for all views
      */
     override fun loadView(task: Task) {
-        loadView(task, true);
+        loadView(task, true)
     }
 
     open fun loadView(task: Task, loadGeneric: Boolean) {

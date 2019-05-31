@@ -3,6 +3,7 @@ package com.patho.main.action.views
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.action.handler.WorklistHandler
+import com.patho.main.model.MaterialPreset
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
@@ -11,10 +12,13 @@ import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.BlockService
 import com.patho.main.service.PrintExecutorService
+import com.patho.main.service.SampleService
 import com.patho.main.service.SlideService
+import com.patho.main.ui.StainingTableChooser
 import com.patho.main.util.print.UnknownPrintingException
 import com.patho.main.util.status.reportIntent.ReportIntentBearer
 import com.patho.main.util.status.reportIntent.ReportIntentStatusByReportIntentAndDiagnosis
+import com.patho.main.util.task.TaskTreeTools
 import freemarker.template.TemplateNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -28,7 +32,8 @@ open class ReceiptLogView @Autowired constructor(
         private val taskRepository: TaskRepository,
         private val blockService: BlockService,
         private val worklistHandler: WorklistHandler,
-        private val printExecutorService: PrintExecutorService) : AbstractEditTaskView() {
+        private val printExecutorService: PrintExecutorService,
+        private val sampleService: SampleService) : AbstractEditTaskView() {
 
     /**
      * Currently selected task entity in table form, transient, used for gui
@@ -110,7 +115,7 @@ open class ReceiptLogView @Autowired constructor(
                 logger.debug("Setting staining status of selected slides")
                 slideRows.forEach { p -> slideService.completeStaining(p.entity as Slide, action == StainingListAction.PERFORMED, false) }
                 var ntask = taskRepository.save(task, resourceBundle.get("log.task.slide.completedStack", task), task.patient)
-                ntask = workPhaseHandler.updateStainingPhase(ntask)
+                ntask = workPhaseHandler.updateStainingPhase(ntask).first
                 worklistHandler.replaceTaskInWorklist(ntask)
             }
             // archive slides
@@ -131,9 +136,9 @@ open class ReceiptLogView @Autowired constructor(
     /**
      * Creates a block and updtes the staining phase
      */
-    open fun createNewBlock(sample : Sample){
-        var task = blockService.createBlock(sample)
-        task = workPhaseHandler.updateStainingPhase(task)
+    open fun createNewBlock(sample: Sample) {
+        var task = blockService.createBlock(sample, true, true, true)
+        task = workPhaseHandler.updateStainingPhase(task).first
         worklistHandler.replaceTaskInWorklist(task)
     }
 
@@ -142,7 +147,7 @@ open class ReceiptLogView @Autowired constructor(
      */
     open fun completeSlide(slide: Slide, complete: Boolean) {
         var task = slideService.completeStaining(slide, complete)
-        task = workPhaseHandler.updateStainingPhase(task)
+        task = workPhaseHandler.updateStainingPhase(task).first
         worklistHandler.replaceTaskInWorklist(task)
     }
 
@@ -176,7 +181,7 @@ open class ReceiptLogView @Autowired constructor(
     open class TaskEntityRow<T : IdManuallyAltered>(var entity: T, val even: Boolean = false) {
         open var selected: Boolean = false
 
-        private var idChanged: Boolean = false
+        open var idChanged: Boolean = false
 
         /**
          * Children of this enitity
@@ -262,6 +267,22 @@ open class ReceiptLogView @Autowired constructor(
                 }
                 return result
             }
+        }
+    }
+
+    /**
+     * Saves the manually altered flag, if the sample/block/ or slide id was
+     * manually altered.
+     */
+    fun entityNameChange(chooser: TaskEntityRow<out IdManuallyAltered>?, resourcesKey: String, vararg arr: Any) {
+        // checking if something was altered, if not do nothing
+        if (chooser != null && chooser.idChanged) {
+            logger.debug("Text changed and saved: " + chooser.getIDText())
+            chooser.idChanged = false
+            chooser.entity.idManuallyAltered = true
+            TaskTreeTools.updateNamesInTree(chooser.entity);
+            val t = chooser.entity.task ?: return
+            save(t, resourcesKey, *arr)
         }
     }
 

@@ -68,7 +68,7 @@ enum class Dialog {
     PRINT_SELECT_PRINTER("/pages/dialog/selectPrinter", null, 640, 360, false, false, true),
     ACCOUNTING_DATA("/pages/dialog/miscellaneous/accounting", null, 1024, 600, false, false, true),                                                                        // OK
     CONFIRM_CHANGE("/pages/dialog/miscellaneous/confirm", null, 320, 180, false, false, true),                                                                                // OK
-    DELETE_ID_OBJECT("/pages/dialog/miscellaneous/delete", null, 320, 180, false, false, true);                                                                                // OK
+    DELETE_ID_OBJECT("/pages/dialog/task/delete/deleteTaskEntity", null, 320, 180, false, false, true);                                                                                // OK
 
     val path: String
     val useOptions: Boolean

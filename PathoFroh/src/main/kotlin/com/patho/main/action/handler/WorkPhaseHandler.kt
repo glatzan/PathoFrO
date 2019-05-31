@@ -28,16 +28,18 @@ class WorkPhaseHandler @Autowired constructor(
     /**
      * Updates the stating phase. If staings are completed and the phase has not ended the exit phase dialog will be opened.
      * If slides have to be stained, the staining phase is started
+     *
+     * This methode returns the new task and true if the end phase dialog is shown, false if not
      */
-    fun updateStainingPhase(task: Task, exitDialogCommand: String = GuiCommands.OPEN_STAINING_PHASE_EXIT_DIALOG): Task {
+    fun updateStainingPhase(task: Task, exitDialogCommand: String = GuiCommands.OPEN_STAINING_PHASE_EXIT_DIALOG): Pair<Task, Boolean> {
         // checks if stainigs are completed
         if (TaskStatus.checkIfStainingCompleted(task)) {
             if (!task.stainingCompleted) {
-                MessageHandler.executeScript(GuiCommands.OPEN_STAINING_PHASE_EXIT_DIALOG)
+                MessageHandler.executeScript(exitDialogCommand)
             }
-            return task
+            return Pair(task, true)
         } else {
-            return workPhaseService.startStainingPhase(task)
+            return Pair(workPhaseService.startStainingPhase(task), false)
         }
     }
 

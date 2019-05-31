@@ -26,7 +26,7 @@ public class StainingPrototypeService extends AbstractService {
 	public StainingPrototype addOrUpdate(StainingPrototype p, List<StainingPrototypeDetails> removeDetails) {
 
 		p = stainingPrototypeRepository.save(p,
-				resourceBundle.get(p.getId() == 0 ? "log.settings.staining.new" : "log.settings.staining.update", p));
+				resourceBundle.get(p.getId() == 0 ? "log.settings.staining.new" : "log.slide.edit.textUpdate", p));
 
 		for (StainingPrototypeDetails stainingPrototypeDetails : removeDetails) {
 			stainingPrototypeDetailsRepository.delete(stainingPrototypeDetails);

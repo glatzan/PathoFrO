@@ -2,14 +2,17 @@ package com.patho.main.service.impl
 
 import com.patho.main.action.handler.CentralHandler
 import com.patho.main.action.handler.CurrentUserHandler
+import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
 import com.patho.main.repository.FavouriteListRepository
 import com.patho.main.repository.ListItemRepository
 import com.patho.main.repository.MediaRepository
+import com.patho.main.repository.TaskRepository
 import com.patho.main.service.*
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.MessageSource
 import org.springframework.stereotype.Component
 
 
@@ -29,10 +32,10 @@ class SpringContextBridge : SpringContextBridgedServices {
     override lateinit var currentUserHandler: CurrentUserHandler
 
     @Autowired
-    override lateinit var  resourceBundle : ResourceBundle
+    override lateinit var resourceBundle: ResourceBundle
 
     @Autowired
-    override lateinit var organizationService : OrganizationService
+    override lateinit var organizationService: OrganizationService
 
     @Autowired
     override lateinit var pathoConfig: PathoConfig
@@ -44,16 +47,28 @@ class SpringContextBridge : SpringContextBridgedServices {
     override lateinit var physicianService: PhysicianService
 
     @Autowired
-    override lateinit var listItemRepository : ListItemRepository
+    override lateinit var listItemRepository: ListItemRepository
 
     @Autowired
     override lateinit var userService: UserService
 
     @Autowired
-    override lateinit var favouriteListRepository : FavouriteListRepository
+    override lateinit var favouriteListRepository: FavouriteListRepository
 
     @Autowired
     override lateinit var centralHandler: CentralHandler
+
+    @Autowired
+    override lateinit var messageSource: MessageSource
+
+    @Autowired
+    override lateinit var taskRepository: TaskRepository
+
+    @Autowired
+    override lateinit var worklistHandler: WorklistHandler
+
+    @Autowired
+    override lateinit var sampleService: SampleService
 
     companion object {
         @JvmStatic

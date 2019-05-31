@@ -109,7 +109,7 @@ open class SlideService @Autowired constructor(
      */
     @Transactional
     open fun completeStaining(task: Task, complete: Boolean = true, save: Boolean = true): Task {
-        task.samples.forEach { completeStaining(it, false) }
+        task.samples.forEach { completeStaining(it, complete) }
 
         if (save)
             return taskRepository.save(task, resourceBundle.get("log.task.slide.completedTask", task, task), task.patient)
@@ -121,7 +121,7 @@ open class SlideService @Autowired constructor(
      */
     @Transactional
     open fun completeStaining(sample: Sample, complete: Boolean = true, save: Boolean = true): Task {
-        sample.blocks.forEach { completeStaining(it, false) }
+        sample.blocks.forEach { completeStaining(it, complete) }
 
         if (save)
             return taskRepository.save(sample.task!!, resourceBundle.get("log.task.slide.completedSample", sample.task, sample), sample.patient)
@@ -133,7 +133,7 @@ open class SlideService @Autowired constructor(
      */
     @Transactional
     open fun completeStaining(block: Block, complete: Boolean = true, save: Boolean = true): Task {
-        block.slides.forEach { completeStaining(it, false) }
+        block.slides.forEach { completeStaining(it, complete) }
 
         if (save)
             return taskRepository.save(block.task!!, resourceBundle.get("log.task.slide.completedBlock", block.task, block), block.patient)

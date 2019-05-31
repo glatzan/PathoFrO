@@ -6,6 +6,7 @@ import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.SlideService
 import com.patho.main.util.dialogReturn.ReloadTaskEvent
+import com.patho.main.util.event.dialog.StainingPhaseExitEvent
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.task.ArchiveTaskStatus
 import org.springframework.beans.factory.annotation.Autowired
@@ -76,7 +77,8 @@ open class StainingPhaseExitDialog @Autowired constructor(
 
         // only render reportIntent info if exitPhase and not goToDiagnosis
         isRenderDiagnosisPhaseInfoText = exitPhase && !goToDiagnosis
-
+println("--------")
+        oTask.samples.forEach { it.blocks.forEach { it.slides.forEach { println("$it ${it.completionDate}") } } }
         return super.initBean(oTask)
     }
 
@@ -106,7 +108,7 @@ open class StainingPhaseExitDialog @Autowired constructor(
     open fun hideAndExitPhase() {
         var task = if (competeStainings) slideService.completeStaining(task, true, true) else task
         task = workPhaseHandler.endStainingPhase(task, exitPhase, goToDiagnosis, removeFromWorklist)
-        super.hideDialog(ReloadTaskEvent(task))
+        super.hideDialog(StainingPhaseExitEvent())
     }
 
     /**

@@ -28,8 +28,8 @@ abstract class AbstractDialog_(val dialog: Dialog) {
     /**
      * Initializes and displays the dialog
      */
-    open fun initAndPrepareBean(dialog: Dialog = this.dialog): AbstractDialog_ {
-        if (initBean(dialog))
+    open fun initAndPrepareBean(): AbstractDialog_ {
+        if (initBean())
             prepareDialog()
         return this
     }
@@ -37,14 +37,14 @@ abstract class AbstractDialog_(val dialog: Dialog) {
     /**
      * Initializes the dialog
      */
-    open fun initBean(dialog: Dialog): Boolean {
-        return initBean(dialog, false)
+    open fun initBean(): Boolean {
+        return initBean(false)
     }
 
     /**
      * Initializes the dialog
      */
-    open fun initBean(dialog: Dialog = this.dialog, uniqueRequestEnabled: Boolean = false): Boolean {
+    open fun initBean(uniqueRequestEnabled: Boolean = false): Boolean {
         this.uniqueRequestID.enabled = uniqueRequestEnabled
 
         if (uniqueRequestEnabled)

@@ -3,11 +3,12 @@ package com.patho.main.util.helper;
 import java.util.List;
 import java.util.Set;
 
+import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.service.impl.SpringContextBridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.patho.main.common.DiagnosisRevisionType;
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
@@ -134,7 +135,7 @@ public class TaskUtil {
 	 */
 	public static final String getDiagnosisRevisionName(Set<DiagnosisRevision> revisions, DiagnosisRevision revision) {
 
-		ResourceBundle resourceBundle = ResourceBundle.getResourceBundle();
+		ResourceBundle resourceBundle = SpringContextBridge.services().getResourceBundle();
 
 		// if default reportIntent
 		if (revision.getType() == DiagnosisRevisionType.DIAGNOSIS) {

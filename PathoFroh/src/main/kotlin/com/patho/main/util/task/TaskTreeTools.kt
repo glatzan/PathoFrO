@@ -1,5 +1,6 @@
 package com.patho.main.util.task
 
+import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Slide
@@ -8,6 +9,19 @@ import com.patho.main.util.helper.TaskUtil
 
 class TaskTreeTools {
     companion object {
+
+
+        @JvmStatic
+        fun updateNamesInTree(entity: IdManuallyAltered, useAutoNomenclature: Boolean = entity.task?.useAutoNomenclature == true, ignoreManuallyNamedItems: Boolean = false) {
+            when (entity) {
+                is Task -> Companion.updateNamesInTree(entity as Task, useAutoNomenclature, ignoreManuallyNamedItems)
+                is Sample -> Companion.updateNamesInTree(entity, useAutoNomenclature, ignoreManuallyNamedItems)
+                is Block -> Companion.updateNamesInTree(entity, useAutoNomenclature, ignoreManuallyNamedItems)
+                is Slide -> Companion.updateNamesInTree(entity, useAutoNomenclature, ignoreManuallyNamedItems)
+                else -> {
+                }
+            }
+        }
 
         @JvmStatic
         fun updateNamesInTree(task: Task, useAutoNomenclature: Boolean = task.useAutoNomenclature, ignoreManuallyNamedItems: Boolean = false) {

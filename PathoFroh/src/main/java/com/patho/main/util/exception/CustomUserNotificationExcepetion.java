@@ -1,9 +1,8 @@
 package com.patho.main.util.exception;
 
+import com.patho.main.config.util.ResourceBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-
-import com.patho.main.config.util.ResourceBundle;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -294,7 +294,7 @@ public class GlobalEditViewHandler {
         public void updateCaseHistoryWithName(String caseHistory) {
             logger.debug("Updating Case History to " + caseHistory);
             getSelectedTask().setCaseHistory(caseHistory);
-            save("log.patient.task.change.caseHistory", getSelectedTask(), caseHistory);
+            save("log.task.edit.caseHistory", getSelectedTask(), caseHistory);
         }
 
         /**
@@ -313,9 +313,8 @@ public class GlobalEditViewHandler {
 
                 return;
             } else if (diagnosis.getDiagnosisPrototype() != null) {
-                logger.debug("Extended diagnosistext found, showing confing dialog");
+                logger.debug("Extended diagnosis text found, showing config dialog");
                 MessageHandler.executeScript("clickButtonFromBean('dialogContent:stainingPhaseExitFromDialog')");
-                dialogHandler.getCopyHistologicalRecordDialog().initAndPrepareBean(diagnosis);
             }
         }
 
@@ -327,7 +326,7 @@ public class GlobalEditViewHandler {
          */
         public void updateMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
             logger.debug("Change maerial of sample with preset");
-            setSelectedTask(sampleService.updateMaterialOfSample(sample, materialPreset));
+            setSelectedTask(sampleService.updateMaterialOfSample(sample, materialPreset,false));
             centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 
@@ -339,7 +338,7 @@ public class GlobalEditViewHandler {
          */
         public void updateMaterialOfSampleWithName(Sample sample, String materialPreset) {
             logger.debug("Change maerial of sample");
-            setSelectedTask(sampleService.updateMaterialOfSampleWithoutPrototype(sample, materialPreset));
+//            setSelectedTask(sampleService.updateMaterialOfSampleWithoutPrototype(sample, materialPreset, false));
             centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 
@@ -386,7 +385,7 @@ public class GlobalEditViewHandler {
                 //TaskTreeTools.updateNamesInTree(chooser.getEntity(),chooser.getEntity().getTask(), false);
                 chooser.setIdChanged(false);
 
-                save("log.patient.task.idManuallyAltered", chooser.getEntity().toString());
+                save("log.task.edit.idManuallyAltered", chooser.getEntity().toString());
             }
         }
 

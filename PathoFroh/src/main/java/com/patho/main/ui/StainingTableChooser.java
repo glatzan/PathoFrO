@@ -5,14 +5,10 @@ import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 public class StainingTableChooser<T extends IdManuallyAltered > {
 
     private boolean choosen;
@@ -133,5 +129,41 @@ public class StainingTableChooser<T extends IdManuallyAltered > {
 
         }
         return result;
+    }
+
+    public boolean isChoosen() {
+        return this.choosen;
+    }
+
+    public boolean isEven() {
+        return this.even;
+    }
+
+    public boolean isIdChanged() {
+        return this.idChanged;
+    }
+
+    public T getEntity() {
+        return this.entity;
+    }
+
+    public List<StainingTableChooser<?>> getChildren() {
+        return this.children;
+    }
+
+    public void setChoosen(boolean choosen) {
+        this.choosen = choosen;
+    }
+
+    public void setEven(boolean even) {
+        this.even = even;
+    }
+
+    public void setIdChanged(boolean idChanged) {
+        this.idChanged = idChanged;
+    }
+
+    public void setEntity(T entity) {
+        this.entity = entity;
     }
 }

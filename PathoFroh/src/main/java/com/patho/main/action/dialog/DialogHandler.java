@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import com.patho.main.action.dialog.biobank.BioBankDialog;
 import com.patho.main.action.dialog.council.CouncilDialog;
-import com.patho.main.action.dialog.diagnosis.CopyHistologicalRecordDialog;
 import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog;
 import com.patho.main.action.dialog.diagnosis.DeleteDiagnosisRevisionDialog;
 import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog;
@@ -17,7 +16,6 @@ import com.patho.main.action.dialog.media.PDFOrganizer;
 import com.patho.main.action.dialog.media.UploadDialog;
 import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
 import com.patho.main.action.dialog.miscellaneous.ConfirmDialog;
-import com.patho.main.action.dialog.miscellaneous.DeleteDialog;
 import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.notification.NotificationDialog;
@@ -46,7 +44,6 @@ import com.patho.main.action.dialog.settings.users.EditUserDialog;
 import com.patho.main.action.dialog.settings.users.UserListDialog;
 import com.patho.main.action.dialog.slides.AddSlidesDialog;
 import com.patho.main.action.dialog.slides.SlideNamingDialog;
-import com.patho.main.action.dialog.slides.SlideOverviewDialog;
 import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
@@ -65,7 +62,6 @@ public class DialogHandler {
 	private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
 	private CreateSampleDialog createSampleDialog = new CreateSampleDialog();
 	private SlideNamingDialog slideNamingDialog = new SlideNamingDialog();
-	private SlideOverviewDialog slideOverviewDialog = new SlideOverviewDialog();
 	private QuickAddDiangosisRevisionDialog quickAddDiangosisRevisionDialog = new QuickAddDiangosisRevisionDialog();
 	private CreateTaskDialog createTaskDialog = new CreateTaskDialog();
 	private SearchPatientDialog searchPatientDialog = new SearchPatientDialog();
@@ -82,7 +78,6 @@ public class DialogHandler {
 	private AccountingDataDialog accountingDataDialog = new AccountingDataDialog();
 	private ContactDialog contactDialog = new ContactDialog();
 	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
-	private CopyHistologicalRecordDialog copyHistologicalRecordDialog = new CopyHistologicalRecordDialog();
 	private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();
 	private CustomAddressDialog customAddressDialog = new CustomAddressDialog();
 	private CouncilDialog councilDialog = new CouncilDialog();
@@ -112,6 +107,5 @@ public class DialogHandler {
 	private EditPatientDialog editPatientDialog = new EditPatientDialog();
 	private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
 	private ConfirmDialog confirmDialog = new ConfirmDialog();
-	private DeleteDialog deleteDialog = new DeleteDialog();
 	private RestoreTaskDialog restoreTaskDialog = new RestoreTaskDialog();
 }

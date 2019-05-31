@@ -51,6 +51,8 @@ open class WorkPhaseService @Autowired constructor(
     open fun endStainingPhase(task: Task, removeFromList: Boolean): Task {
         var tmp = task
 
+        task.samples.forEach { it.blocks.forEach { it.slides.forEach { println("$it ${it.completionDate}") } } }
+
         // throws error if not all staings are completed
         if (!TaskStatus.checkIfStainingCompleted(task))
             throw  StainingsNotCompletedException()

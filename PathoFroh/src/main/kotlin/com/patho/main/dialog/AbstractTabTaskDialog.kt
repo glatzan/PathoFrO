@@ -19,7 +19,7 @@ abstract class AbstractTabTaskDialog(dialog: Dialog) : AbstractTabDialog_(dialog
         return this
     }
 
-    open fun initBean(): Boolean {
+    override fun initBean(): Boolean {
         return initBean(task, forceInitialization = true)
     }
 

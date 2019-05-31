@@ -87,7 +87,9 @@ open class DialogReturnHandler @Autowired constructor(
     open fun onStainingPhaseUpdateReturn(event: SelectEvent) {
         if (event.`object` is StainingPhaseUpdateEvent) {
             logger.debug("Staining phase update event")
-            workPhaseHandler.updateStainingPhase((event.`object` as StainingPhaseUpdateEvent).task)
+            val t = (event.`object` as StainingPhaseUpdateEvent).task
+            workPhaseHandler.updateStainingPhase(t)
+            worklistHandler.replaceTaskInWorklist(t)
             return
         }
         onDefaultReturn(event)

@@ -10,10 +10,11 @@ import com.patho.main.util.worklist.search.AbstractWorklistSearch
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.context.annotation.Scope
+import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Controller
 
 @Controller
-@Scope("session")
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 open class WorklistHandler @Autowired @Lazy constructor(
         private val centralHandler: CentralHandler,
         private val userService: UserService,
@@ -192,7 +193,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Replaces the task in the current worklist, if the task is the selected task
      */
-    open fun replaceTaskInWorklist(task: Task, reload: Boolean) {
+    open fun replaceTaskInWorklist(task: Task, reload: Boolean, reloadStaticData : Boolean = true) {
         var reloadedTask = task
 
         if (reload) {
@@ -206,7 +207,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
 
         if (current.isSelected(reloadedTask)) {
             // generating task data, taskstatus is generated previously
-            centralHandler.loadViews(CentralHandler.Load.MENU_MODEL)
+            centralHandler.loadViews(*listOfNotNull(CentralHandler.Load.MENU_MODEL, if(reloadStaticData) null else CentralHandler.Load.NO_GENERIC_DATA).toTypedArray())
         }
 
     }

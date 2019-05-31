@@ -167,7 +167,7 @@
 
         <!-- Staining overview -->
         <p:commandButton id="stainingOverview" widgetVar="stainingOverview"
-                         actionListener="#{dialog.slideOverviewDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                         actionListener="#{slideOverviewDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
                     listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm headerForm"/>

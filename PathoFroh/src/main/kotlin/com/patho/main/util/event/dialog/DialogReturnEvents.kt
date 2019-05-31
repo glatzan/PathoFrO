@@ -6,6 +6,7 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.model.user.HistoUser
+import com.patho.main.util.dialogReturn.ReloadTaskEvent
 import com.patho.main.util.worklist.Worklist
 
 open class DialogReturnEvent
@@ -53,7 +54,7 @@ open class ReloadEvent : DialogReturnEvent()
 /**
  * Task reload event
  */
-class TaskReloadEvent(var task: org.apache.tools.ant.Task) : ReloadEvent()
+class TaskReloadEvent(var task: Task) : ReloadEvent()
 
 /**
  * Reload event for patient.
@@ -83,7 +84,7 @@ class SettingsReloadEvent : ReloadEvent()
 /**
  * Return event for the StaininPhaseExitDialog
  */
-class StainingPhaseExitEvent(val task: Task, val removeFromWorklist: Boolean = false, val removeFromStainingList: Boolean, val endStainingPhase: Boolean, val gotToDiagnosisPhase: Boolean)
+class StainingPhaseExitEvent : ReloadTaskEvent()
 
 /**
  * Return event for the DiagnosisPhaseExitDialog

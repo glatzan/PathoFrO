@@ -5,10 +5,10 @@ import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.model.ListItem
 import com.patho.main.model.MaterialPreset
+import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Task
 import com.patho.main.model.person.Person
 import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.ui.selectors.PhysicianSelector
 import com.patho.main.util.bearer.SimplePhysicianBearer
 
 abstract class AbstractEditTaskView : AbstractTaskView() {
@@ -87,6 +87,34 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
         }
 
         // reloading task
-        SpringContextBridge.services().centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK)
+        SpringContextBridge.services().worklistHandler.replaceTaskInWorklist(task, true, false)
+    }
+
+    /**
+     * Saves dynamic name changes of task entities
+     */
+    open fun save(task: Task, resourcesKey: String, vararg arr: Any) {
+        logger.debug("Saving task " + task.taskID)
+        val t = SpringContextBridge.services().taskRepository.save(task, resourceBundle.get(resourcesKey, task, *arr), task.patient)
+        SpringContextBridge.services().worklistHandler.replaceTaskInWorklist(t, true, false)
+    }
+
+    /**
+     * Updates the case history and saves the task
+     */
+    open fun updateCaseHistoryWithName(task: Task, caseHistory: String, resourcesKey: String, vararg arr: Any) {
+        logger.debug("Updating case History setting to $caseHistory")
+        task.caseHistory = caseHistory
+        save(task, resourcesKey, *arr)
+    }
+
+
+    /**
+     * Changes the material of the sample.
+     */
+    fun updateMaterialOfSample(sample: Sample, materialPreset: MaterialPreset?, materialPresetString: String, resourcesKey: String, vararg arr: Any) {
+        logger.debug("Change material of sample with preset")
+        val t = SpringContextBridge.services().sampleService.updateMaterialOfSample(sample, materialPresetString, materialPreset, false)
+        save(t, resourcesKey, *arr)
     }
 }

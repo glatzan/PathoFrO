@@ -375,7 +375,7 @@ public class DiagnosisService extends AbstractService {
 
         if (changed)
             task = taskRepository.save(task,
-                    resourceBundle.get("log.patient.task.diagnosisRevision.diagnosis.name.update", task));
+                    resourceBundle.get("log.diagnosisRevision.edit.name.update", task));
 
         return task;
     }
