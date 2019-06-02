@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import com.patho.main.action.handler.WorkPhaseHandler;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
+import com.patho.main.util.dialog.event.TaskReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -19,7 +19,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.DiagnosisService;
 import com.patho.main.util.helper.TaskUtil;
 
 import lombok.AccessLevel;
@@ -163,7 +162,7 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName, null);
 		task = workPhaseHandler.updateDiagnosisPhase(task);
 
-		super.hideDialog(new ReloadTaskEvent(task));
+		super.hideDialog(new TaskReloadEvent(task));
 	}
 
 	/**

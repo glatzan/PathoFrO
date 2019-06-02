@@ -12,7 +12,7 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.ReportIntentService;
 import com.patho.main.ui.selectors.AssociatedContactSelector;
-import com.patho.main.util.dialogReturn.ReloadEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

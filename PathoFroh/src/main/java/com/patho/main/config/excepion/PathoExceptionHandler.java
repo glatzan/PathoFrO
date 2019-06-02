@@ -13,6 +13,7 @@ import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
 import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,6 @@ import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;

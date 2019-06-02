@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.diagnosis;
 
+import com.patho.main.util.dialog.event.TaskReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -7,8 +8,6 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.service.DiagnosisService;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 
 import lombok.AccessLevel;
@@ -46,6 +45,6 @@ public class DeleteDiagnosisRevisionDialog extends AbstractDialog {
 		} catch (CustomUserNotificationExcepetion e) {
 			MessageHandler.sendGrowlMessagesAsResource(e);
 		}
-		hideDialog(new ReloadTaskEvent());
+		hideDialog(new TaskReloadEvent());
 	}
 }

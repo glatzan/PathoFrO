@@ -5,7 +5,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.Task;
 import com.patho.main.util.dialog.UniqueRequestID;
-import com.patho.main.util.dialogReturn.ReloadEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
 import lombok.AccessLevel;
 import lombok.Getter;

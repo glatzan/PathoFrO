@@ -10,7 +10,7 @@ import com.patho.main.model.person.Person
 import com.patho.main.repository.AssociatedContactRepository
 import com.patho.main.repository.ReportIntentNotificationRepository
 import com.patho.main.repository.TaskRepository
-import com.patho.main.util.exception.DuplicatedReportIntentException
+import com.patho.main.util.exceptions.DuplicatedReportIntentException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant

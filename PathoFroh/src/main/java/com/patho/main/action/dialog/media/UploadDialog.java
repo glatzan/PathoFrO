@@ -6,6 +6,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 
 import com.patho.main.template.PrintDocumentType;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

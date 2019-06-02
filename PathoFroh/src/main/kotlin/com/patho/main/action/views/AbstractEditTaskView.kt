@@ -96,7 +96,7 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
     open fun save(task: Task, resourcesKey: String, vararg arr: Any) {
         logger.debug("Saving task " + task.taskID)
         val t = SpringContextBridge.services().taskRepository.save(task, resourceBundle.get(resourcesKey, task, *arr), task.patient)
-        SpringContextBridge.services().worklistHandler.replaceTaskInWorklist(t, true, false)
+        SpringContextBridge.services().worklistHandler.replaceTaskInWorklist(t, true, reloadStaticData = false)
     }
 
     /**
@@ -107,7 +107,6 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
         task.caseHistory = caseHistory
         save(task, resourcesKey, *arr)
     }
-
 
     /**
      * Changes the material of the sample.

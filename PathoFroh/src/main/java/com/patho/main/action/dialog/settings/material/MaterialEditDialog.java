@@ -1,17 +1,17 @@
 package com.patho.main.action.dialog.settings.material;
 
+import com.patho.main.util.dialog.event.ReloadEvent;
+import com.patho.main.util.dialog.event.SlideSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.service.MaterialPresetService;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -60,13 +60,12 @@ public class MaterialEditDialog extends AbstractDialog {
 	/**
 	 * On dialog return, reload data
 	 * 
-	 * @param event
 	 */
 	public void onDefaultDialogReturn(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
-		} else if (event.getObject() != null && event.getObject() instanceof SlideSelectResult) {
-			SlideSelectResult result = (SlideSelectResult) event.getObject();
-			for (StainingPrototypeHolder prototype : result.getPrototpyes()) {
+		} else if (event.getObject() != null && event.getObject() instanceof SlideSelectEvent) {
+			SlideSelectEvent result = (SlideSelectEvent) event.getObject();
+			for (StainingPrototypeHolder prototype : result.getObj()) {
 				for (int i = 0; i < prototype.getCount(); i++) {
 					materialPreset.getStainingPrototypes().add(prototype.getPrototype());
 				}

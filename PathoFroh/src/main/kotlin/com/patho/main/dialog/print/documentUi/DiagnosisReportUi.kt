@@ -6,6 +6,7 @@ import com.patho.main.model.patient.Task
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.print.DiagnosisReport
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.dialog.event.CustomAddressSelectEvent
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
 
@@ -33,9 +34,9 @@ class DiagnosisReportUi : AbstractTaskReportUi<DiagnosisReport, DiagnosisReportU
         logger.debug("Returning from custom address dialog")
         val returnObject = event.`object`
 
-        if (returnObject is CustomAddressDialog.CustomAddressReturn) {
-            returnObject.contactSelector.manuallyAltered = true
-            returnObject.contactSelector.customAddress = returnObject.customAddress
+        if (returnObject is CustomAddressSelectEvent) {
+            returnObject.obj.manuallyAltered = true
+            returnObject.obj.customAddress = returnObject.customAddress
             logger.debug("Custom address set to ${returnObject.customAddress}")
         }
     }

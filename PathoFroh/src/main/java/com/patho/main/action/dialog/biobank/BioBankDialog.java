@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Optional;
 
 import com.patho.main.model.patient.miscellaneous.BioBank;
+import com.patho.main.util.dialog.event.ReloadEvent;
+import com.patho.main.util.dialog.event.TaskReloadEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -14,8 +16,6 @@ import com.patho.main.common.InformedConsentType;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.BioBankRepository;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.util.dialogReturn.ReloadEvent;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -62,7 +62,7 @@ public class BioBankDialog extends AbstractDialog {
 
 	public void saveAndHide() {
 		saveData();
-		super.hideDialog(new ReloadTaskEvent());
+		super.hideDialog(new TaskReloadEvent());
 	}
 
 	/**

@@ -28,6 +28,6 @@ class GuiCommands {
          * Opens the copy histological record dialog from diagnosis view
          */
         @JvmStatic
-        val OPEN_COPY_HISTOLOGICAL_RECORD_DIALOG_FROM_DIAGNOSIS_VIEW: String = "clickButtonFromBean('contentForm:contentPanel:penCopyHistologicalRecordDialog')"
+        val OPEN_COPY_HISTOLOGICAL_RECORD_DIALOG_FROM_DIAGNOSIS_VIEW: String = "clickButtonFromBean('contentForm:openDiagnosisRecordDialog')"
     }
 }

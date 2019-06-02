@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.patho.main.util.event.dialog.UserReloadEvent;
+import com.patho.main.util.dialog.event.HistoUserDeleteEvent;
+import com.patho.main.util.dialog.event.PhysicianSelectEvent;
+import com.patho.main.util.dialog.event.UserReloadEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
-import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog.PhysicianReturnEvent;
-import com.patho.main.action.dialog.settings.users.ConfirmUserDeleteDialog.ConfirmUserDeleteEvent;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -308,10 +308,10 @@ public class EditUserDialog extends AbstractTabDialog {
 	 * @param event
 	 */
 	public void onDeleteDialogReturn(SelectEvent event) {
-		if (event.getObject() instanceof ConfirmUserDeleteEvent
-				&& ((ConfirmUserDeleteEvent) event.getObject()).isDelete()) {
+		if (event.getObject() instanceof HistoUserDeleteEvent
+				&& ((HistoUserDeleteEvent) event.getObject()).isDelete()) {
 			if (userService.deleteOrDisable(getUser(),
-					((ConfirmUserDeleteEvent) event.getObject()).isDeletePhysician()))
+					((HistoUserDeleteEvent) event.getObject()).isDeletePhysician()))
 				MessageHandler.sendGrowlMessagesAsResource("growl.user.deleted");
 			else
 				MessageHandler.sendGrowlMessagesAsResource("growl.user.archive");
@@ -321,23 +321,23 @@ public class EditUserDialog extends AbstractTabDialog {
 	}
 
 	public void onSelectPerson(SelectEvent event) {
-		if (event.getObject() instanceof PhysicianReturnEvent) {
-			PhysicianReturnEvent returnEv = ((PhysicianReturnEvent) event.getObject());
+		if (event.getObject() instanceof PhysicianSelectEvent) {
+			PhysicianSelectEvent returnEv = ((PhysicianSelectEvent) event.getObject());
 
 			if (returnEv.isExtern()) {
-				setUser(new HistoUser(returnEv.getPhysician(), new HistoSettings()));
+				setUser(new HistoUser(returnEv.getObj(), new HistoSettings()));
 				getUser().setLocalUser(true);
 				userService.updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
 			} else {
 				Optional<HistoUser> oPhysician = userRepository
-						.findOptionalByPhysicianUid(returnEv.getPhysician().getUid());
+						.findOptionalByPhysicianUid(returnEv.getObj().getUid());
 
 				if (oPhysician.isPresent()) {
 					setUser(oPhysician.get());
 					setNewUser(false);
 					MessageHandler.sendGrowlMessages("User exsis!", "");
 				} else {
-					setUser(new HistoUser(returnEv.getPhysician(), new HistoSettings()));
+					setUser(new HistoUser(returnEv.getObj(), new HistoSettings()));
 					userService.updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
 				}
 			}

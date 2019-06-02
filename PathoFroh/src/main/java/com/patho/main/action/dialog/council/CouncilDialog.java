@@ -12,6 +12,9 @@ import com.patho.main.dialog.print.PrintDialog;
 import com.patho.main.dialog.print.documentUi.AbstractDocumentUi;
 import com.patho.main.dialog.print.documentUi.CouncilReportUi;
 import com.patho.main.model.patient.miscellaneous.Council;
+import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
+import com.patho.main.util.dialog.event.TaskReloadEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -23,7 +26,6 @@ import org.springframework.context.annotation.Lazy;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.DialogHandler;
-import com.patho.main.action.dialog.diagnosis.QuickAddDiangosisRevisionDialog.QuickDiangosisAddReturn;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -45,8 +47,6 @@ import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.ui.pdf.PDFStreamContainerImpl;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.dialogReturn.ReloadEvent;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
@@ -405,7 +405,7 @@ public class CouncilDialog extends AbstractDialog {
 	}
 
 	public void onEndRequestState(SelectEvent event) {
-		if (event.getObject() instanceof QuickDiangosisAddReturn) {
+		if (event.getObject() instanceof QuickDiagnosisAddEvent) {
 			// reloading
 			logger.debug("Ending request phase");
 			councilService.endCouncilRequest(getTask(), getSelectedCouncil().getCouncil());
@@ -558,7 +558,7 @@ public class CouncilDialog extends AbstractDialog {
 
 	@Override
 	public void hideDialog() {
-		super.hideDialog(new ReloadTaskEvent());
+		super.hideDialog(new TaskReloadEvent());
 	}
 
 	@Getter

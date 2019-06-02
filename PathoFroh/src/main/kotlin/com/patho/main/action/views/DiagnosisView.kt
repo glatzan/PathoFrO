@@ -4,6 +4,7 @@ import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.common.GuiCommands
 import com.patho.main.model.DiagnosisPreset
+import com.patho.main.model.Signature
 import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
@@ -36,7 +37,7 @@ open class DiagnosisView @Autowired constructor(
     /**
      * Diagnosis for copyFing the diagnosis text
      */
-    open var selectedDiagnosis : Diagnosis? = null
+    open var selectedDiagnosis: Diagnosis? = null
 
     override fun loadView(task: Task) {
         logger.debug("Loading reportIntent data")
@@ -75,7 +76,7 @@ open class DiagnosisView @Autowired constructor(
         if (diagnosis.parent!!.text.isEmpty() && diagnosis.diagnosisPrototype != null) {
             logger.debug("No extended diagnosis text found, text copied")
             val t = diagnosisService.copyHistologicalRecord(diagnosis, true)
-            worklistHandler.replaceTaskInWorklist(t,true, false)
+            worklistHandler.replaceTaskInWorklist(t, true, false)
             return
         } else if (diagnosis.diagnosisPrototype != null) {
             logger.debug("Extended diagnosis text found, showing dialog")
@@ -83,38 +84,30 @@ open class DiagnosisView @Autowired constructor(
         }
     }
 
+    /**
+     * Updates a diagnosis with a prototype
+     */
+    fun updateDiagnosisPrototype(diagnosis: Diagnosis, preset: DiagnosisPreset) {
+        logger.debug("Updating reportIntent with prototype")
+        val t = diagnosisService.updateDiagnosisWithPrototype(diagnosis.task!!, diagnosis, preset)
+        worklistHandler.replaceTaskInWorklist(t, true, false)
+    }
 
-//    /**
-//     * Updates a reportIntent with a preset
-//     *
-//     * @param reportIntent
-//     * @param preset
-//     */
-//    fun updateDiagnosisPrototype(reportIntent: Diagnosis, preset: DiagnosisPreset) {
-//        logger.debug("Updating reportIntent with prototype")
-//        val task = diagnosisService.updateDiagnosisWithPrototype(reportIntent.task, reportIntent, preset)
-//
-//        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
-//    }
-//
-//    /**
-//     * Updates a reportIntent without a preset. (Removes the previously set preset)
-//     */
-//    fun updateDiagnosisPrototype(reportIntent: Diagnosis, diagnosisAsText: String) {
-//        updateDiagnosisPrototype(reportIntent, diagnosisAsText, "", reportIntent.malign, "")
-//    }
-//
-//    /**
-//     * Updates a reportIntent without a preset. (Removes the previously set preset)
-//     */
-//    fun updateDiagnosisPrototype(reportIntent: Diagnosis, diagnosisAsText: String, extendedDiagnosisText: String,
-//                                 malign: Boolean, icd10: String) {
-//        logger.debug("Updating reportIntent to $diagnosisAsText")
-//        setSelectedTask(diagnosisService.updateDiagnosisWithoutPrototype(reportIntent.task, reportIntent,
-//                diagnosisAsText, extendedDiagnosisText, malign, icd10))
-//        globalEditViewHandler.generateViewData(TaskInitilize.GENERATE_TASK_STATUS)
-//    }
+    /**
+     * Updates a reportIntent without a preset. (Removes the previously set preset)
+     */
+    fun updateDiagnosisPrototype(diagnosis: Diagnosis, diagnosisAsText: String) {
+        val t = diagnosisService.updateDiagnosisWithoutPrototype(diagnosis.task!!, diagnosis, diagnosisAsText, "", diagnosis.malign, "")
+        worklistHandler.replaceTaskInWorklist(t, true, false)
+    }
 
+    /**
+     * Updates the signatures role
+     */
+    fun updatePhysiciansSignature(task: Task, signature: Signature, resourcesKey: String, vararg arr: Any) {
+        signature.role = signature?.physician?.clinicRole ?: ""
+        save(task, resourcesKey, *arr)
+    }
 
     open class DiagnosisViewData(diagnosisRevision: DiagnosisRevision) {
         open val diagnosisRevision = diagnosisRevision

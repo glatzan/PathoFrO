@@ -12,7 +12,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.service.SampleService;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.event.dialog.StainingPhaseUpdateEvent;
+import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -7,19 +7,19 @@ import java.util.Set;
 
 import com.patho.main.model.favourites.*;
 import com.patho.main.service.UserService;
+import com.patho.main.util.dialog.event.GroupSelectEvent;
+import com.patho.main.util.dialog.event.HistoUserSelectEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.settings.groups.GroupListDialog.GroupSelectEvent;
-import com.patho.main.action.dialog.settings.users.UserListDialog.HistoUserSelectEvent;
 import com.patho.main.common.Dialog;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.helper.HistoUtil;
 
 import lombok.AccessLevel;
@@ -140,7 +140,7 @@ public class FavouriteListEditDialog extends AbstractDialog {
 	 */
 	public void onReturnSelectOwner(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof HistoUserSelectEvent)
-			favouriteList.setOwner(((HistoUserSelectEvent) event.getObject()).getUser());
+			favouriteList.setOwner(((HistoUserSelectEvent) event.getObject()).getObj());
 	}
 
 	/**
@@ -152,10 +152,10 @@ public class FavouriteListEditDialog extends AbstractDialog {
 	public void onPermissionSelectEvent(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof HistoUserSelectEvent) {
 			favouriteListService.addUserPermission(getFavouriteList(),
-					((HistoUserSelectEvent) event.getObject()).getUser(), true, false);
+					((HistoUserSelectEvent) event.getObject()).getObj(), true, false);
 		} else if (event.getObject() != null && event.getObject() instanceof GroupSelectEvent) {
 			favouriteListService.addGroupPermission(getFavouriteList(),
-					((GroupSelectEvent) event.getObject()).getGroup(), true, false);
+					((GroupSelectEvent) event.getObject()).getObj(), true, false);
 		}
 	}
 

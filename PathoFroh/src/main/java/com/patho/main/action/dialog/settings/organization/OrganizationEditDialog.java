@@ -3,11 +3,12 @@ package com.patho.main.action.dialog.settings.organization;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.patho.main.util.dialog.event.OrganizationSelectEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.person.Contact;
 import com.patho.main.model.person.Organization;
@@ -15,7 +16,6 @@ import com.patho.main.model.person.Person;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PersonRepository;
 import com.patho.main.service.OrganizationService;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -77,7 +77,7 @@ public class OrganizationEditDialog extends AbstractDialog {
 
 	public void selectAndHide() {
 		save();
-		hideDialog(new OrganizationSelectReturnEvent(organization));
+		hideDialog(new OrganizationSelectEvent(organization));
 	}
 
 	public void saveAndHide() {
@@ -87,8 +87,6 @@ public class OrganizationEditDialog extends AbstractDialog {
 
 	/**
 	 * Saves an edited physician to the database
-	 * 
-	 * @param physician
 	 */
 	private void save() {
 		organization = organizationService.addOrUpdate(organization);

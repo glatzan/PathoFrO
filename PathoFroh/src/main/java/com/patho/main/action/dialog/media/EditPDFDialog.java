@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.media;
 
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -8,7 +9,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.PDFRepository;
 import com.patho.main.template.PrintDocumentType;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;

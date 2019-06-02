@@ -8,11 +8,10 @@ import java.util.Optional;
 import javax.faces.application.FacesMessage;
 
 import com.patho.main.model.patient.miscellaneous.BioBank;
-import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
-import com.patho.main.util.event.dialog.PDFSelectEvent;
-import com.patho.main.util.event.dialog.PatientReloadEvent;
+import com.patho.main.util.dialog.event.PDFSelectEvent;
+import com.patho.main.util.dialog.event.PatientReloadEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
@@ -39,11 +38,8 @@ import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.ui.pdf.PDFStreamContainerImpl;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

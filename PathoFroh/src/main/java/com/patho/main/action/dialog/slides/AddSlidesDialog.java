@@ -11,8 +11,8 @@ import com.patho.main.repository.ListItemRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.service.SlideService;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
-import com.patho.main.util.event.dialog.StainingPhaseUpdateEvent;
+import com.patho.main.util.dialog.event.SlideSelectEvent;
+import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent;
 import com.patho.main.util.task.TaskStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -172,7 +172,7 @@ public class AddSlidesDialog extends AbstractDialog {
         // adding all selected prototypes to the result
         List<StainingPrototypeHolder> prototpyes = getSelectedPrototypeHolders();
 
-        hideDialog(new SlideSelectResult(prototpyes));
+        hideDialog(new SlideSelectEvent(prototpyes));
     }
 
     /**
@@ -194,19 +194,4 @@ public class AddSlidesDialog extends AbstractDialog {
         }
     }
 
-    /**
-     * Return result, as a single object for passing via select event
-     *
-     * @author andi
-     */
-    @Getter
-    @Setter
-    public class SlideSelectResult implements DialogReturnEvent {
-        private List<StainingPrototypeHolder> prototpyes;
-
-        public SlideSelectResult(List<StainingPrototypeHolder> prototypes) {
-            this.prototpyes = prototypes;
-
-        }
-    }
 }

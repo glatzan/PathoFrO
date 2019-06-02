@@ -6,7 +6,8 @@ import java.util.List;
 
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.log.Log_;
-import com.patho.main.util.event.dialog.SettingsReloadEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
+import com.patho.main.util.dialog.event.SettingsReloadEvent;
 import org.primefaces.event.ReorderEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,6 @@ import com.patho.main.service.OrganizationService;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.StainingPrototypeService;
 import com.patho.main.service.UserService;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;

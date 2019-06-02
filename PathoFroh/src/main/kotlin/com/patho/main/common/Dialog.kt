@@ -20,7 +20,7 @@ enum class Dialog {
     SLIDE_OVERVIEW("/pages/dialog/task/staining/slideOverview", null, 1024, 600, false, false, true),                                                                        // OK 				// TEST OK
     SLIDE_NAMING("/pages/dialog/task/staining/slideNaming", null, 430, 270, false, false, true),                                                                            // OK				// TEST OK
     SLIDE_CREATE("/pages/dialog/task/staining/addSlide", null, 858, 484, false, false, true),                                                                                // OK				// TEST OK
-    DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/task/reportIntent/diagnosisRecordOverwrite", null, 480, 272, false, false, true),                                                // OK				// TEST OK
+    DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/task/diagnosis/diagnosisRecordOverwrite", null, 480, 272, false, false, true),                                                // OK				// TEST OK
     CONTACTS("/pages/dialog/contact/contacts", null, 1024, 600, false, false, true),                                                                                        // OK				// TEST OK
     CONTACTS_NOTIFICATION("/pages/dialog/contact/contactNotification", null, 858, 484, false, false, true),                                                                // OK				// TEST OK
     CONTACTS_SELECT("/pages/dialog/contact/contactSelect", null, 858, 484, false, false, true),                                                                            // OK				// TEST OK

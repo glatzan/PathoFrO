@@ -2,6 +2,8 @@ package com.patho.main.action.dialog.settings.organization;
 
 import java.util.List;
 
+import com.patho.main.util.dialog.event.OrganizationSelectEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -11,8 +13,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.person.Organization;
 import com.patho.main.model.person.Person;
 import com.patho.main.repository.OrganizationRepository;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -62,19 +62,12 @@ public class OrganizationListDialog extends AbstractDialog {
 	 * Selects an hides the dialog
 	 */
 	public void selectAndHide() {
-		hideDialog(new OrganizationSelectReturnEvent(getSelectedOrganization()));
+		hideDialog(new OrganizationSelectEvent(getSelectedOrganization()));
 	}
 
 	public void onDefaultDialogReturn(SelectEvent event) {
-		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
+		if (event.getObject() instanceof ReloadEvent) {
 			update();
 		}
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class OrganizationSelectReturnEvent implements DialogReturnEvent {
-		private Organization organization;
 	}
 }

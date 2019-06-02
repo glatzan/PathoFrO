@@ -8,8 +8,7 @@ import com.patho.main.service.BlockService
 import com.patho.main.service.SampleService
 import com.patho.main.service.SlideService
 import com.patho.main.service.UserService
-import com.patho.main.util.dialogReturn.ReloadTaskEvent
-import com.patho.main.util.event.dialog.*
+import com.patho.main.util.dialog.event.*
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -67,10 +66,11 @@ open class DialogReturnHandler @Autowired constructor(
             }
             // Task reload event, optional replacing task
             //Todo Test CreateDiagnosisRevisionDialog
-            is ReloadTaskEvent -> {
+            is TaskReloadEvent -> {
                 logger.debug("Task reload event")
-                if (obj is Task)
-                    worklistHandler.replaceTaskInWorklist(obj)
+                val t = obj.task
+                if (t != null)
+                    worklistHandler.replaceTaskInWorklist(t)
                 else
                     worklistHandler.replaceTaskInWorklist()
             }

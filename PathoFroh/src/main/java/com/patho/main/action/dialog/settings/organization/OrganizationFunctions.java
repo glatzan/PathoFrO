@@ -1,9 +1,9 @@
 package com.patho.main.action.dialog.settings.organization;
 
 import com.patho.main.service.impl.SpringContextBridge;
+import com.patho.main.util.dialog.event.OrganizationSelectEvent;
 import org.primefaces.event.SelectEvent;
 
-import com.patho.main.action.dialog.settings.organization.OrganizationListDialog.OrganizationSelectReturnEvent;
 import com.patho.main.model.person.Organization;
 import com.patho.main.model.person.Person;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -23,8 +23,8 @@ public interface OrganizationFunctions {
 	 */
 	public default void onReturnOrganizationDialog(SelectEvent event) {
 		// ReloadEvent should not be thrown by the select dialog
-		if (event.getObject() != null && event.getObject() instanceof OrganizationSelectReturnEvent) {
-			SpringContextBridge.services().getOrganizationService().addOrganizationToPerson(getPerson(),((OrganizationSelectReturnEvent) event.getObject()).getOrganization());
+		if (event.getObject() != null && event.getObject() instanceof OrganizationSelectEvent) {
+			SpringContextBridge.services().getOrganizationService().addOrganizationToPerson(getPerson(),((OrganizationSelectEvent) event.getObject()).getObj());
 			updateOrganizationSelection();
 		}
 	}

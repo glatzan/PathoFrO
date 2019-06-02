@@ -206,6 +206,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
         current.add(reloadedTask)
 
         if (current.isSelected(reloadedTask)) {
+            val t = listOfNotNull(CentralHandler.Load.MENU_MODEL, if(reloadStaticData) null else CentralHandler.Load.NO_GENERIC_DATA).toTypedArray()
             // generating task data, taskstatus is generated previously
             centralHandler.loadViews(*listOfNotNull(CentralHandler.Load.MENU_MODEL, if(reloadStaticData) null else CentralHandler.Load.NO_GENERIC_DATA).toTypedArray())
         }

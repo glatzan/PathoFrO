@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.service.UserService;
-import com.patho.main.util.event.dialog.UserReloadEvent;
+import com.patho.main.util.dialog.event.UserReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 

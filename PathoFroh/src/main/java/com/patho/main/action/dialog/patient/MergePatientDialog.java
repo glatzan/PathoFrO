@@ -5,15 +5,15 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.patho.main.util.event.dialog.PatientMergeEvent;
-import com.patho.main.util.event.dialog.PatientReloadEvent;
+import com.patho.main.util.dialog.event.ConfirmEvent;
+import com.patho.main.util.dialog.event.PatientMergeEvent;
+import com.patho.main.util.dialog.event.PatientReloadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.miscellaneous.ConfirmDialog.ConfirmEvent;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Patient;
@@ -149,7 +149,7 @@ public class MergePatientDialog extends AbstractDialog {
 	 */
 	public void onMergePatientReturn(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof ConfirmEvent
-				&& ((ConfirmEvent) event.getObject()).isConfirm()) {
+				&& ((ConfirmEvent) event.getObject()).getObj()) {
 			if (source != null && target != null) {
 				patientService.moveTaskBetweenPatients(source, target, taskLists.getSource(), taskLists.getTarget());
 

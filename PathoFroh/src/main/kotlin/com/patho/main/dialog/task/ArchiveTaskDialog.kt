@@ -7,8 +7,8 @@ import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.TaskService
-import com.patho.main.util.event.dialog.PatientReloadEvent
-import com.patho.main.util.event.dialog.RemovePatientFromWorklistEvent
+import com.patho.main.util.dialog.event.PatientReloadEvent
+import com.patho.main.util.dialog.event.RemovePatientFromWorklistEvent
 import com.patho.main.util.status.reportIntent.ReportIntentBearer
 import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.exceptions.TaskNotFoundException

@@ -13,10 +13,10 @@ import com.patho.main.repository.ListItemRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.SlideService
 import com.patho.main.ui.StainingTableChooser
-import com.patho.main.util.dialogReturn.ReloadTaskEvent
-import com.patho.main.util.event.dialog.StainingPhaseExitEvent
-import com.patho.main.util.event.dialog.StainingPhaseUpdateEvent
-import com.patho.main.util.event.dialog.TaskEntityDeleteEvent
+import com.patho.main.util.dialog.event.StainingPhaseExitEvent
+import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent
+import com.patho.main.util.dialog.event.TaskEntityDeleteEvent
+import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.task.TaskStatus
 import org.primefaces.event.SelectEvent
@@ -146,7 +146,7 @@ open class SlideOverviewDialog @Autowired constructor(
      * Subdialog return event
      */
     override fun onSubDialogReturn(event: SelectEvent) {
-        if (event.`object` is ReloadTaskEvent) {
+        if (event.`object` is TaskReloadEvent) {
             logger.debug("Reload task event, reloading")
             update(true)
         } else {
@@ -159,7 +159,7 @@ open class SlideOverviewDialog @Autowired constructor(
      * Hides the dialog an fires a task reload event
      */
     override fun hideDialog() {
-        super.hideDialog(ReloadTaskEvent())
+        super.hideDialog(TaskReloadEvent())
     }
 
     /**

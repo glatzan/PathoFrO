@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -13,7 +14,6 @@ import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.service.StainingPrototypeService;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;

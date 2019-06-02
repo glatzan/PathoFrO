@@ -24,10 +24,11 @@ JPA MEtamodel
 -> Projekt Settings -> Java Compiler -> Annotation Processing -> Enable prject specific settings, source direcotry: target\generated-sources\annotations, test source directory target\generated-test-sources\test-annotations
 -> Projekt Settings -> Java Compiler -> Annotation Processing -> Factory Path -> .m2\repository\org\hibernate\hibernate-jpamodelgen\5.2.17.Final
 
+
+
 Handel Version Erros in Dialoges 
 -> new ReloadEvent() is fired
 -> if nested dialog, parent should catch ReloadEvent() 
-
 
 UserHandlerAction
 -> requestUnlock()
@@ -43,3 +44,7 @@ DataBaseConverter
 
 WorklistSearchExtended
 -> getPatients
+
+
+-> printdialog dos not show physicians
+-> custom address for physician will not work -> printDialog.selectedTemplate.onCustomAddressReturn

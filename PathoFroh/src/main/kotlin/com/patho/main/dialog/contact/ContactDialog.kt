@@ -14,10 +14,11 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.PhysicianService
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.util.dialogReturn.ReloadTaskEvent
-import com.patho.main.util.exception.DuplicatedReportIntentException
-import com.patho.main.util.status.reportIntent.ReportIntentBearer
+import com.patho.main.util.dialog.event.PhysicianSelectEvent
+import com.patho.main.util.dialog.event.TaskReloadEvent
+import com.patho.main.util.exceptions.DuplicatedReportIntentException
 import com.patho.main.util.exceptions.TaskNotFoundException
+import com.patho.main.util.status.reportIntent.ReportIntentBearer
 import com.patho.main.util.ui.selector.UISelector
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -117,10 +118,10 @@ open class ContactDialog @Autowired constructor(
      *
      */
     override fun onSubDialogReturn(event: SelectEvent) {
-        if (event.`object` is ContactAddDialog.SelectPhysicianReturnEvent) {
+        val tmp = event.`object`
+        if (tmp is PhysicianSelectEvent) {
             logger.debug("Return from contactAddDialog, reloading!")
-            val tmp = (event.`object` as ContactAddDialog.SelectPhysicianReturnEvent)
-            addPhysician(tmp.physician, tmp.role)
+            addPhysician(tmp.obj, tmp.role)
             update(true)
             return;
         }
@@ -129,7 +130,7 @@ open class ContactDialog @Autowired constructor(
     }
 
     override fun hideDialog() {
-        super.hideDialog(ReloadTaskEvent())
+        super.hideDialog(TaskReloadEvent())
     }
 
     private fun addPhysician(physician: Physician, role: ContactRole) {

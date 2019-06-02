@@ -1,10 +1,10 @@
 package com.patho.main.action.dialog.miscellaneous;
 
+import com.patho.main.util.dialog.event.ConfirmEvent;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,12 +55,4 @@ public class ConfirmDialog extends AbstractDialog {
 	public void confirmAndHide() {
 		hideDialog(new ConfirmEvent(true));
 	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class ConfirmEvent implements DialogReturnEvent {
-		private boolean confirm;
-	}
-
 }

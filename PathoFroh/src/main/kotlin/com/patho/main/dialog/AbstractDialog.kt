@@ -3,7 +3,7 @@ package com.patho.main.dialog
 import com.patho.main.common.Dialog
 import com.patho.main.config.util.ResourceBundle
 import com.patho.main.util.dialog.UniqueRequestID
-import com.patho.main.util.dialogReturn.ReloadEvent
+import com.patho.main.util.dialog.event.ReloadEvent
 import org.primefaces.PrimeFaces
 import org.primefaces.event.SelectEvent
 import org.slf4j.LoggerFactory

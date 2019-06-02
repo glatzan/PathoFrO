@@ -4,6 +4,7 @@ import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
+import com.patho.main.util.exceptions.DiagnosisRevisionsNotCompletedException
 import com.patho.main.util.exceptions.StainingsNotCompletedException
 import com.patho.main.util.task.TaskStatus
 import org.springframework.beans.factory.annotation.Autowired
@@ -51,8 +52,6 @@ open class WorkPhaseService @Autowired constructor(
     open fun endStainingPhase(task: Task, removeFromList: Boolean): Task {
         var tmp = task
 
-        task.samples.forEach { it.blocks.forEach { it.slides.forEach { println("$it ${it.completionDate}") } } }
-
         // throws error if not all staings are completed
         if (!TaskStatus.checkIfStainingCompleted(task))
             throw  StainingsNotCompletedException()
@@ -87,19 +86,19 @@ open class WorkPhaseService @Autowired constructor(
     }
 
     /**
-     * Ends the reportIntent phase, removes from reportIntent list and sets the reportIntent
-     * time of completion. If not all stainigs had been marked as completed a StainingsNotCompletedException is
+     * Ends the diagnosis phase, removes from diagnosis list and sets the diagnosis
+     * time of completion. If not all diagnoses had been marked as completed a DiagnosisRevisionsNotCompletedException is
      * thrown
      */
     @Transactional
-    open fun endDiagnosisPhase(task: Task, removeFromList: Boolean, status: NotificationStatus): Task {
+    open fun endDiagnosisPhase(task: Task, removeFromList: Boolean): Task {
         var tmp = task
 
         if (tmp.diagnosisRevisions.any { !it.completed })
-            throw  StainingsNotCompletedException()
+            throw  DiagnosisRevisionsNotCompletedException()
 
         tmp.diagnosisCompletionDate = Instant.now()
-        tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.reportIntent.end", tmp), tmp.patient)
+        tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.diagnosis.end", tmp), tmp.patient)
 
         if (removeFromList)
             tmp = favouriteListService.removeTaskFromList(tmp, PredefinedFavouriteList.DiagnosisList,

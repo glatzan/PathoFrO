@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.service.UserService;
-import com.patho.main.util.event.dialog.WorklistSelectEvent;
+import com.patho.main.util.dialog.event.SlideSelectEvent;
+import com.patho.main.util.dialog.event.WorklistSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractTabDialog;
-import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.DiagnosisPreset;
@@ -274,7 +274,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		public void onSelectStainingDialogReturn(SelectEvent event) {
 			logger.debug("On select staining dialog return " + event.getObject());
 
-			if (event.getObject() != null && event.getObject() instanceof SlideSelectResult) {
+			if (event.getObject() != null && event.getObject() instanceof SlideSelectEvent) {
 
 				if (worklistSearch.getStainings() == null)
 					worklistSearch.setStainings(new ArrayList<StainingPrototype>());

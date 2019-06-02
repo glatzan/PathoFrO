@@ -6,7 +6,7 @@ import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.WorkPhaseService
-import com.patho.main.util.dialogReturn.ReloadTaskEvent
+import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.exceptions.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
@@ -101,6 +101,6 @@ open class NotificationPhaseExitDialog @Autowired constructor(
      * Hides the dialog and fires a task reload event
      */
     override fun hideDialog() {
-        super.hideDialog(ReloadTaskEvent())
+        super.hideDialog(TaskReloadEvent())
     }
 }

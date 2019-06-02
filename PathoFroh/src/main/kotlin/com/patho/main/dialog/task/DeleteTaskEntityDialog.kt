@@ -3,7 +3,7 @@ package com.patho.main.dialog.task
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractDialog_
 import com.patho.main.model.interfaces.ID
-import com.patho.main.util.event.dialog.TaskEntityDeleteEvent
+import com.patho.main.util.dialog.event.TaskEntityDeleteEvent
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 

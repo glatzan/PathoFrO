@@ -1,12 +1,17 @@
-package com.patho.main.util.event.dialog
+package com.patho.main.util.dialog.event
 
+import com.patho.main.common.ContactRole
 import com.patho.main.model.PDFContainer
+import com.patho.main.model.Physician
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
+import com.patho.main.model.person.Organization
+import com.patho.main.model.user.HistoGroup
 import com.patho.main.model.user.HistoUser
-import com.patho.main.util.dialogReturn.ReloadTaskEvent
+import com.patho.main.ui.selectors.StainingPrototypeHolder
+import com.patho.main.util.ui.selector.ReportIntentSelector
 import com.patho.main.util.worklist.Worklist
 
 open class DialogReturnEvent
@@ -47,6 +52,54 @@ class PDFSelectEvent(pdf: PDFContainer) : SelectEvent<PDFContainer>(pdf)
 class RemovePatientFromWorklistEvent(patient: Patient) : SelectEvent<Patient>(patient)
 
 /**
+ * Return event for die ContactAddDialog dialog with a selected physician
+ */
+open class PhysicianSelectEvent(physician: Physician, val role: ContactRole = ContactRole.NONE, val isExtern: Boolean = false) : SelectEvent<Physician>(physician)
+
+/**
+ * Organization select event for the OrganizationListDialog
+ */
+open class OrganizationSelectEvent(organization: Organization) : SelectEvent<Organization>(organization)
+
+/**
+ * Delete event for ConfirmUserDeleteDialog
+ */
+open class HistoUserDeleteEvent(histoUser: HistoUser, val isDelete: Boolean, val isDeletePhysician: Boolean) : SelectEvent<HistoUser>(histoUser)
+
+/**
+ * Select event for AddSlidesDialog
+ */
+open class SlideSelectEvent(prototypes: List<StainingPrototypeHolder>) : SelectEvent<List<StainingPrototypeHolder>>(prototypes)
+
+/**
+ * Select event for the CustomAddressDialog
+ */
+// TODO test
+// @java.beans.ConstructorProperties({"customAddress", "contactSelector"})
+open class CustomAddressSelectEvent(val customAddress: String, contactSelector: ReportIntentSelector) : SelectEvent<ReportIntentSelector>(contactSelector)
+//CustomAddressReturn
+
+/**
+ * Select event for the GroupListDialog
+ */
+open class GroupSelectEvent(histoGroup: HistoGroup) : SelectEvent<HistoGroup>(histoGroup)
+
+/**
+ * Select event for UserListDialog
+ */
+open class HistoUserSelectEvent(histoUser: HistoUser) : SelectEvent<HistoUser>(histoUser)
+
+/**
+ * Confirm event from ConfirmDialog
+ */
+open class ConfirmEvent(confirm: Boolean) : SelectEvent<Boolean>(confirm)
+
+/**
+ * Event for diagnosis creation
+ */
+open class QuickDiagnosisAddEvent(diagnosisCreated : Boolean): SelectEvent<Boolean>(diagnosisCreated)
+
+/**
  * Reload event
  */
 open class ReloadEvent : DialogReturnEvent()
@@ -54,7 +107,7 @@ open class ReloadEvent : DialogReturnEvent()
 /**
  * Task reload event
  */
-class TaskReloadEvent(var task: Task) : ReloadEvent()
+open class TaskReloadEvent(var task: Task? = null) : ReloadEvent()
 
 /**
  * Reload event for patient.
@@ -84,7 +137,7 @@ class SettingsReloadEvent : ReloadEvent()
 /**
  * Return event for the StaininPhaseExitDialog
  */
-class StainingPhaseExitEvent : ReloadTaskEvent()
+class StainingPhaseExitEvent : TaskReloadEvent()
 
 /**
  * Return event for the DiagnosisPhaseExitDialog

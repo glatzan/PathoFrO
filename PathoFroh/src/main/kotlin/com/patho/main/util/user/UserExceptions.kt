@@ -1,6 +1,6 @@
 package com.patho.main.util.user
 
-import com.patho.main.util.exception.DialogException
+import com.patho.main.util.exceptions.DialogException
 
 /**
  * Exception is thrown if histo group could not be found

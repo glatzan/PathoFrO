@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.settings.users;
 
 import java.util.List;
 
+import com.patho.main.util.dialog.event.HistoUserSelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -9,7 +10,6 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.UserRepository;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -51,12 +51,5 @@ public class UserListDialog extends AbstractDialog {
 
 	public void selectAndHide() {
 		super.hideDialog(new HistoUserSelectEvent(getSelectedUser()));
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class HistoUserSelectEvent implements DialogReturnEvent {
-		private HistoUser user;
 	}
 }

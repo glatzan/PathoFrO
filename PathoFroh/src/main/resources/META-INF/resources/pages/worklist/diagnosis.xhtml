@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -325,7 +322,7 @@
                                             process="contentForm:surgeonPhysicianOverlayPanelDataTable"
                                             partialSubmit=""
                                             listener="#{diagnosisView.addReportIntentToTask(diagnosisView.selectedSurgeon.physician.person, 'SURGEON')}"
-                                            oncomplete="PF('surgeonPhysicianOverlayPanel#{loopCount.index}').hide();"/>
+                                            oncomplete="PF('surgeonPhysicianOverlayPanel').hide();"/>
 
                                 </p:dataTable>
                             </p:overlayPanel>
@@ -401,7 +398,7 @@
                                             process="contentForm:privatePhysicianPhysicianOverlayPanel"
                                             partialSubmit="true"
                                             listener="#{diagnosisView.addReportIntentToTask(diagnosisView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
-                                            oncomplete="PF('privatePhysicianPhysicianOverlayPanel#{loopCount.index}').hide();"/>
+                                            oncomplete="PF('privatePhysicianPhysicianOverlayPanel').hide();"/>
 
                                 </p:dataTable>
                             </p:overlayPanel>
@@ -432,6 +429,7 @@
                              columnClasses="columnWidth200 columnTop #{varCounterOuter.even ? '' : 'oddColumnColored' }, #{varCounterOuter.even ? '' : 'oddColumnColored'}">
 
                     <!-- Extended Diagnosis Text -->
+                    <!-- diagonsis name-->
                     <h:panelGroup layout="block" id="pPannel"
                                   style="width: 90%; min-height:16px; #{revision.name == '' ? 'background: #fcf1b8' : ''}"
                                   onclick="PF('diagnosisNamePannel#{varCounterOuter.index}').show()">
@@ -454,17 +452,15 @@
 
                     </h:panelGroup>
 
+                    <!-- extende text input -->
                     <h:panelGroup id="extendedTextParent">
                         <p:inputTextarea style="width:99%" id="extendedText" rows="15"
                                          disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                          value="#{revision.text}">
                             <p:ajax event="keyup" execute="@this" delay="1000"
                                     listener="#{diagnosisView.save(revision.task, 'log.diagnosisRevision.edit.histologicalRecord',revision,revision.text)}"/>
-                            <p:ajax event="change" execute="@this"
-                                    listener="#{diagnosisView.save(revision.task, 'log.diagnosisRevision.edit.histologicalRecord',revision,revision.text)}"/>
                         </p:inputTextarea>
                     </h:panelGroup>
-                    <!-- Extended Diagnosis Text -->
 
                     <!-- Diagnosis for sample -->
                     <c:forEach items="#{revision.diagnoses}"
@@ -500,9 +496,11 @@
                                                actionListener="#{diagnosisView.setSelectedDiagnosis(diagnosis)}"
                                                oncomplete="copyHistologicalRecordCommand()">
                                     <i class="fa fa-copy"/>
-                                    <p:ajax event="dialogReturn" update="contentForm:contentPanel"
-                                            listener="#{dialogReturnHandler.onDefaultReturn}"/>
                                 </p:commandLink>
+                                <!-- commandlink will set the selected diagnosis, this will call the function -->
+                                <p:remoteCommand
+                                        actionListener="#{diagnosisView.copyHistologicalRecord(diagnosisView.selectedDiagnosis)}"
+                                        update="contentForm:contentPanel" name="copyHistologicalRecordCommand"/>
                             </h:panelGroup>
                             <!-- malign -->
                             <h:panelGrid columns="2" style="float:right;margin-right:20px;">
@@ -511,7 +509,7 @@
                                                          disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                                          style="margin:3px 0px 0px 3px;">
                                     <f:ajax event="change"
-                                            listener="#{globalEditViewHandler.ct.saveData('log.patient.task.sample.diagnosis.changed.malign',diagnosis.malign)}"/>
+                                            listener="#{diagnosisView.save(diagnosis.task, 'log.diagnosis.edit.malign',diagnosis,diagnosis.malign)}"/>
                                 </p:selectBooleanCheckbox>
                             </h:panelGrid>
                         </h:panelGroup>
@@ -530,15 +528,15 @@
                                         for="diagnosisText#{varCounterOuter.index}#{varCounterInner.index}"
                                         value="#{msg['body.receiptlog.tab.diangonsis.data.diangosis.watermark']}"/>
                                 <f:ajax event="change" execute="@this"
-                                        listener="#{globalEditViewHandler.ct.saveData('log.patient.task.sample.diagnosis.changed.diagnosis.text', diagnosis.diagnosis)}"/>
+                                        listener="#{diagnosisView.save(diagnosis.task, 'log.diagnosis.edit.diagnosisText',diagnosis,diagnosis.diagnosis)}"/>
                             </p:inputTextarea>
-
 
                             <p:overlayPanel
                                     widgetVar="diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}"
                                     id="diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}"
                                     styleClass="histoOverlayPanel" hideEffect="fade"
                                     style="width:500px" hideEvent="mousedown" showEvent="none">
+
                                 <p:dataTable
                                         id="diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}"
                                         widgetVar="diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}"
@@ -558,7 +556,7 @@
                                             process="contentForm:diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}"
                                             partialSubmit="true"
                                             update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                            listener="#{globalEditViewHandler.ct.updateDiagnosisPrototype(diagnosis,diagnosisView.selectedDiagnosisPresets[varCounterOuter.index][varCounterInner.index])}"
+                                            listener="#{diagnosisView.updateDiagnosisPrototype(diagnosis,diagnosisView.selectedDiagnosisPresets[varCounterOuter.index][varCounterInner.index])}"
                                             oncomplete="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"/>
 
                                 </p:dataTable>
@@ -567,7 +565,7 @@
                                                  process="contentForm:diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}"
                                                  name="submitNewCustomDiagnosis#{varCounterOuter.index}#{varCounterInner.index}"
                                                  update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                                 actionListener="#{globalEditViewHandler.ct.updateDiagnosisPrototype(diagnosis,diagnosisView.diagnosisFilter[varCounterOuter.index][varCounterInner.index])}"
+                                                 actionListener="#{diagnosisView.updateDiagnosisPrototype(diagnosis,diagnosisView.diagnosisFilter[varCounterOuter.index][varCounterInner.index])}"
                                                  oncomplete="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"/>
 
                             </p:overlayPanel>
@@ -586,9 +584,9 @@
                                 disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                 value="#{revision.signatureDate}">
                         <p:ajax event="dateSelect"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.diagnosisRevision.signautre.date', revision.task, revision, 'date:'.concat(revision.signatureDate))}"/>
+                                listener="#{diagnosisView.save(revision.task, 'log.diagnosisRevision.edit.signautreDate',revision,revision.signatureDate)}"/>
                         <f:ajax event="change" execute="@this"
-                                listener="#{globalEditViewHandler.ct.saveData('log.patient.task.diagnosisRevision.signautre.date', revision.task, revision, 'date:'.concat(revision.signatureDate))}"/>
+                                listener="#{diagnosisView.save(revision.task, 'log.diagnosisRevision.edit.signautreDate',revision,revision.signatureDate)}"/>
                     </p:calendar>
 
                     <!-- physician -->
@@ -612,18 +610,15 @@
                                     itemValue="#{physician}"/>
 
                             <p:ajax event="change"
-                                    onstart="$('#contentForm\\:submitPhysicianChange').click();"/>
+                                    onstart="PF('submitPhysicianChange').jq.click()"/>
 
                         </p:selectOneMenu>
 
-                        <p:commandButton style="display:none"
+                        <!-- on consultant change -->
+                        <p:commandButton style="display: none"
+                                         actionListener="#{diagnosisView.updatePhysiciansSignature(revision.task,revision.signatureOne,'log.diagnosisRevision.edit.signatureOne.update', revision, revision.signatureOne.physician.person.getFullName(), revision.signatureOne.role)}"
                                          update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                         id="submitPhysicianChange">
-                            <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.changePhysiciansSignature(revision.signatureOne)}"/>
-                            <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.saveData('log.patient.task.diagnosisRevision.signature.one',revision.task, revision, revision.signatureOne.physician.person.getFullName(), revision.signatureOne.role)}"/>
-                        </p:commandButton>
+                                         widgetVar="submitPhysicianChange"/>
                     </h:panelGroup>
 
                     <!-- Consultant -->
@@ -647,21 +642,14 @@
                                     itemValue="#{physician}"/>
 
                             <p:ajax event="change"
-                                    oncomplete="$('#contentForm\\:submitConsultantChange').click();"/>
+                                    oncomplete="PF('submitConsultantChange').jq.click()"/>
                         </p:selectOneMenu>
 
-                        <!-- hidden button for updating on consultant change -->
-
-                        <p:commandButton style="display:none"
+                        <!-- on consultant change -->
+                        <p:commandButton style="display: none"
+                                         actionListener="#{diagnosisView.updatePhysiciansSignature(revision.task,revision.signatureTwo,'log.diagnosisRevision.edit.signatureTwo.update', revision, revision.signatureTwo.physician.person.getFullName(), revision.signatureTwo.role)}"
                                          update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                         id="submitConsultantChange">
-                            <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.changePhysiciansSignature(revision.signatureTwo)}"/>
-                            <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.saveData('log.patient.task.diagnosisRevision.signature.two',revision.task, revision, revision.signatureTwo.physician.person.getFullName(), revision.signatureTwo.role)}"/>
-
-                        </p:commandButton>
-
+                                         widgetVar="submitConsultantChange"/>
                     </h:panelGroup>
 
                     <h:panelGroup/>
@@ -679,17 +667,14 @@
                                            itemLabel="#{msg['enum.signatureRole.'.concat(signatureRole)]}"
                                            itemValue="#{msg['enum.signatureRole.'.concat(signatureRole)]}"/>
                             <p:ajax event="change"
-                                    onstart="$('#contentForm\\:submitPhysicianRoleChange').click();"/>
+                                    onstart="PF('submitPhysicianRoleChange').jq.click()"/>
                         </p:selectOneMenu>
 
-                        <!-- hidden button for updating on physician role change -->
-
-                        <p:commandButton style="display:none"
+                        <!-- on physician role change -->
+                        <p:commandButton style="display: none"
+                                         actionListener="#{diagnosisView.save(revision.task,'log.diagnosisRevision.edit.signatureOne.role',revision, revision.signatureOne.role.toString())}"
                                          update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                         id="submitPhysicianRoleChange">
-                            <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.saveData('log.patient.task.diagnosisRevision.signature.one.role',revision.task, revision, revision.signatureOne.role)}"/>
-                        </p:commandButton>
+                                         widgetVar="submitPhysicianRoleChange"/>
                     </h:panelGroup>
 
                     <h:panelGroup/>
@@ -705,16 +690,14 @@
                                            itemLabel="#{msg['enum.signatureRole.'.concat(signatureRole)]}"
                                            itemValue="#{msg['enum.signatureRole.'.concat(signatureRole)]}"/>
                             <p:ajax event="change"
-                                    oncomplete="$('#contentForm\\:submitConsultantRoleChange').click();"/>
+                                    oncomplete="PF('submitConsultantRoleChange').jq.click()"/>
                         </p:selectOneMenu>
 
-                        <!-- hidden button for updating on consultant role change -->
-                        <p:commandButton style="display:none"
+                        <!-- on consultant role change -->
+                        <p:commandButton style="display: none"
+                                         actionListener="#{diagnosisView.save(revision.task,'log.diagnosisRevision.edit.signatureTwo.role',revision, revision.signatureTwo.role)}"
                                          update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                         id="submitConsultantRoleChange">
-                            <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.saveData('log.patient.task.diagnosisRevision.signature.two.role',revision.task, revision, revision.signatureTwo.role)}"/>
-                        </p:commandButton>
+                                         widgetVar="submitConsultantRoleChange"/>
                     </h:panelGroup>
                 </h:panelGrid>
 
@@ -766,7 +749,6 @@
                                          disabled="#{!diagnosisView.task.taskStatus.editable}"
                                          actionListener="#{diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, revision)}">
                             <p:ajax event="dialogReturn"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"
                                     listener="#{dialogReturnHandler.onDefaultReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandButton>
@@ -778,13 +760,13 @@
                         <!-- rename diagnosis -->
                         <p:splitButton value="#{msg['body.diagnosis.diagnosis.rename']}"
                                        disabled="#{!diagnosisView.task.taskStatus.editable}"
-                                       onclick="$('#contentForm\\:editDiagnosisRevision#{varCounterOuter.index}').click();"
+                                       onclick="PF('editDiagnosisRevision#{varCounterOuter.index}').jq.click();"
                                        icon="fa fa-pencil">
 
                             <!-- delete diagnosis -->
                             <p:menuitem value="#{msg['body.diagnosis.diagnosis.delete']}"
                                         icon="fa fa-trash"
-                                        onclick="$('#contentForm\\:deleteRevision#{varCounterOuter.index}').click();"/>
+                                        onclick="PF('deleteRevision#{varCounterOuter.index}').jq.click();"/>
 
                             <!-- print diagnosis -->
                             <p:menuitem value="#{msg['body.diagnosis.diagnosis.print']}"
@@ -794,12 +776,12 @@
                             <!-- new diagnosis -->
                             <p:menuitem value="#{msg['body.diagnosis.diagnosis.new']}"
                                         icon="fa fa-plus-circle"
-                                        onclick="$('#contentForm\\:newDiagnosisRevision#{varCounterOuter.index}').click();"/>
+                                        onclick="PF('newDiagnosisRevision#{varCounterOuter.index}').jq.click();"/>
                         </p:splitButton>
 
                         <!-- edit diagnosis revision -->
                         <p:commandButton
-                                id="editDiagnosisRevision#{varCounterOuter.index}"
+                                widgetVar="editDiagnosisRevision#{varCounterOuter.index}"
                                 style="display:none"
                                 actionListener="#{dialog.editDiagnosisRevisionsDialog.initAndPrepareBean(worklistHandler.current.selectedTask,revision)}">
                             <p:ajax event="dialogReturn"
@@ -809,7 +791,7 @@
                         </p:commandButton>
 
                         <!-- delete diagnosis revision -->
-                        <p:commandButton id="deleteRevision#{varCounterOuter.index}"
+                        <p:commandButton widgetVar="deleteRevision#{varCounterOuter.index}"
                                          style="display:none"
                                          actionListener="#{dialog.deleteDiagnosisRevisionDialog.initAndPrepareBean(revision)}">
                             <p:ajax event="dialogReturn"
@@ -819,7 +801,7 @@
                         </p:commandButton>
 
                         <!-- new diagnosis revision -->
-                        <p:commandButton id="newDiagnosisRevision#{varCounterOuter.index}"
+                        <p:commandButton widgetVar="newDiagnosisRevision#{varCounterOuter.index}"
                                          style="display:none"
                                          actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
                             <p:ajax event="dialogReturn"
@@ -876,15 +858,10 @@
         </c:forEach>
         <!-- commands -->
         <h:panelGroup>
-            <!-- commandlink will set the selected diagnosis, this will call the function -->
-            <p:remoteCommand
-                    actionListener="#{diagnosisView.copyHistologicalRecord(diagnosisView.selectedDiagnosis)}"
-                    update="contentForm:contentPanel" name="copyHistologicalRecordCommand"/>
-
             <!-- command to open the copy histological record dialog from bean-->
-            <p:commandButton id="openCopyHistologicalRecordDialog" style="display: none" onclick="alert()"
-                             actionListener="#{copyHistologicalRecordDialog.initAndPrepareBean(diagnosisView.selectedDiagnosis)}"
-                             widgetVar="openCopyHistologicalRecordDialog">
+            <p:commandButton id="openDiagnosisRecordDialog" style="display: none"
+                             actionListener="#{diagnosisRecordDialog.initAndPrepareBean(diagnosisView.selectedDiagnosis)}"
+                             widgetVar="openDiagnosisRecordDialog">
                 <p:ajax event="dialogReturn" listener="#{dialogReturnHandler.onDefaultReturn}"
                         update="contentForm:contentPanel"/>
             </p:commandButton>

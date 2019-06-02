@@ -5,7 +5,7 @@ import javax.faces.context.FacesContext;
 
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.service.impl.SpringContextBridge;
-import com.patho.main.util.exception.DialogException;
+import com.patho.main.util.exceptions.DialogException;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.Constants;
 import org.slf4j.Logger;

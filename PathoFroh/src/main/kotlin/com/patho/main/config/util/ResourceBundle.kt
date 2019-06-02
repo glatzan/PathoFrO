@@ -27,7 +27,15 @@ class ResourceBundle @Autowired constructor(private val messageSource: MessageSo
             Locale.GERMAN
 
     override operator fun get(key: Any): String {
-        return messageSource.getMessage(key.toString(), null, local)
+        return try {
+            return messageSource.getMessage(key.toString(), null, local)
+        } catch (e: MissingResourceException) {
+            System.err.println("Key $key not found")
+            "???$key???"
+        } catch (e: NoSuchMessageException) {
+            System.err.println("Key $key not found")
+            "???$key???"
+        }
     }
 
     operator fun get(key: Any, vararg params: Any?): String {

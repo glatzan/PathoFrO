@@ -1,12 +1,13 @@
 package com.patho.main.dialog.phase
 
+import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.common.Dialog
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
-import com.patho.main.util.dialogReturn.ReloadTaskEvent
+import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.DiagnosisRevisionNotFoundException
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
@@ -64,6 +65,13 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
     open var isDisableExitDiagnosisPhase = false
 
     open var isRenderExitDiagnosisInfo = false
+
+    open fun initAndPrepareBean(task: Task, diagnosisRevision: DiagnosisRevision?): DiagnosisPhaseExitDialog {
+        if (initBean(task, diagnosisRevision))
+            prepareDialog()
+
+        return this
+    }
 
     override fun initBean(task: Task): Boolean {
         return initBean(task, null)
@@ -170,14 +178,49 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
 
     open fun hideAndExitPhase() {
         workPhaseHandler.endDiagnosisPhase(task, selectDiagnosisRevision?.diagnosisRevision, exitPhase, goToNotification, removeFromWorklist)
-        super.hideDialog(ReloadTaskEvent())
+        super.hideDialog(TaskReloadEvent())
+
+
+        // all diagnoses wil be approved
+        if (diagnosisRevision == null) {
+            task = workPhaseService.endDiagnosisPhase(task, true,
+                    if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+            MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
+                    if (goToNotification) "growl.diagnosis.endAll.text.true" else "growl.diagnosis.endAll.text.false")
+        } else {
+            task = diagnosisService.approveDiangosis(task, diagnosisRevision,
+                    if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+
+            MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved",
+                    if (goToNotification) "growl.diagnosis.endAll.text.true" else "growl.diagnosis.endAll.text.false")
+
+            // only remove from list if no diagnosis is left
+            if (endPhase) {
+                if (task.diagnosisRevisions.all { !it.isNotificationNecessary }) {
+                    task = workPhaseService.endDiagnosisPhase(task, true,
+                            if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+                } else {
+                    MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.removeFromDiagnosisList.failed",
+                            "growl.diagnosis.removeFromDiagnosisList.failed.text")
+                }
+            }
+        }
+
+//        if (allRevisions)
+//            hideDialog(new DiagnosisPhaseExitEvent(task, null, removeFromDiagnosisList, removeFromWorklist, performNotification));
+//        else if (selectedRevision != null)
+//            hideDialog(new DiagnosisPhaseExitEvent(task, selectedRevision, removeFromDiagnosisList, removeFromWorklist, performNotification));
+//        else {
+//            //TODO Error
+//            hideDialog();
+//        }
     }
 
     /**
      * Hides the dialog, fires a task reloadTaskEvent
      */
     override fun hideDialog() {
-        super.hideDialog(ReloadTaskEvent())
+        super.hideDialog(TaskReloadEvent())
     }
 
 }

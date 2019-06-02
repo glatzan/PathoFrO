@@ -23,7 +23,7 @@ import com.patho.main.template.MailTemplate
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.transformer.DefaultTransformer
-import com.patho.main.util.dialogReturn.ReloadTaskEvent
+import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.print.PrintPDFBearer
 import com.patho.main.util.report.MailNotificationExecuteData
 import com.patho.main.util.report.NotificationExecuteData
@@ -80,7 +80,7 @@ class NotificationDialog @Autowired constructor(
      * Reloads the task if dialog is closed
      */
     override fun hideDialog() {
-        super.hideDialog(ReloadTaskEvent())
+        super.hideDialog(TaskReloadEvent())
     }
 
     /**

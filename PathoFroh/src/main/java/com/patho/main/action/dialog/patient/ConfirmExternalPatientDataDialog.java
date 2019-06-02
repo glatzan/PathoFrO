@@ -1,6 +1,6 @@
 package com.patho.main.action.dialog.patient;
 
-import com.patho.main.util.event.dialog.PatientSelectEvent;
+import com.patho.main.util.dialog.event.PatientSelectEvent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

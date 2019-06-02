@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.TransactionStatus;
@@ -18,11 +19,8 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.DiagnosisService;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -97,17 +95,11 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog {
 		});
 
 		MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.create.rediagnosis");
-		hideDialog(new QuickDiangosisAddReturn(true));
+		hideDialog(new QuickDiagnosisAddEvent(true));
 	}
 
 	public void hideDialog() {
-		hideDialog(new QuickDiangosisAddReturn(false));
+		hideDialog(new QuickDiagnosisAddEvent(false));
 	}
 
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class QuickDiangosisAddReturn extends ReloadTaskEvent {
-		private boolean created;
-	}
 }

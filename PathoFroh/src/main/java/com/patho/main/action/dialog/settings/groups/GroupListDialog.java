@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.settings.groups;
 
 import java.util.List;
 
+import com.patho.main.util.dialog.event.GroupSelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -9,7 +10,6 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.repository.GroupRepository;
-import com.patho.main.util.dialogReturn.DialogReturnEvent;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -51,13 +51,6 @@ public class GroupListDialog extends AbstractDialog {
 
 	public void selectAndHide() {
 		super.hideDialog(new GroupSelectEvent(getSelectedGroup()));
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class GroupSelectEvent implements DialogReturnEvent {
-		private HistoGroup group;
 	}
 
 }

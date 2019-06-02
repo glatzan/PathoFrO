@@ -2,6 +2,7 @@ package com.patho.main.action.dialog.task;
 
 import java.util.List;
 
+import com.patho.main.util.dialog.event.TaskReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -12,7 +13,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.service.TaskService;
 import com.patho.main.ui.interfaces.ListItemsAutoCompete;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -66,7 +66,7 @@ public class RestoreTaskDialog extends AbstractDialog implements ListItemsAutoCo
 
 	public void hideAndRestore() {
 		//taskService.restoreTask(getTask(), getCommentary());
-		hideDialog(new ReloadTaskEvent());
+		hideDialog(new TaskReloadEvent());
 	}
 
 	public boolean isSubmitable() {

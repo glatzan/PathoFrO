@@ -1,16 +1,16 @@
 package com.patho.main.action.dialog.settings.diagnosis;
 
+import com.patho.main.util.dialog.event.ReloadEvent;
+import com.patho.main.util.dialog.event.SlideSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.slides.AddSlidesDialog.SlideSelectResult;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.service.DiagnosisPresetService;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -64,7 +64,7 @@ public class DiagnosisPresetEditDialog extends AbstractDialog {
 	 */
 	public void onDefaultDialogReturn(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
-		} else if (event.getObject() != null && event.getObject() instanceof SlideSelectResult) {
+		} else if (event.getObject() != null && event.getObject() instanceof SlideSelectEvent) {
 		}
 	}
 }

@@ -12,7 +12,7 @@ import com.patho.main.repository.PhysicianRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.util.dialogReturn.DialogReturnEvent
+import com.patho.main.util.dialog.event.PhysicianSelectEvent
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.ui.selector.PhysicianSelector
 import org.springframework.beans.factory.annotation.Autowired
@@ -153,7 +153,7 @@ open class ContactAddDialog @Autowired constructor(
     fun selectAndHide() {
         logger.debug("Hiding contactAddDialog width $selectedContact")
         if (selectedContact != null)
-            super.hideDialog(SelectPhysicianReturnEvent(selectedContact?.physician
+            super.hideDialog(PhysicianSelectEvent(selectedContact?.physician
                     ?: Physician(), getDynamicRoleForContact(selectedContact?.physician
                     ?: Physician())))
         else
@@ -174,11 +174,6 @@ open class ContactAddDialog @Autowired constructor(
 
         MessageHandler.sendGrowlMessagesAsResource("growl.contact.removed.headline", "growl.contact.removed.success", arrayOf(reportIntent.person?.getFullName()))
     }
-
-    /**
-     * Return event object of this dialog
-     */
-    open class SelectPhysicianReturnEvent(val physician: Physician, val role: ContactRole) : DialogReturnEvent
 
     /**
      * Special class for displaying the contacts and marking already selected contacts

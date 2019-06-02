@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.patho.main.util.dialog.event.ReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -18,7 +19,6 @@ import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoSettings;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.service.GroupService;
-import com.patho.main.util.dialogReturn.ReloadEvent;
 import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;

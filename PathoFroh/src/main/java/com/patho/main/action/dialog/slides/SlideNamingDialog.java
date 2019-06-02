@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.slides;
 
+import com.patho.main.util.dialog.event.TaskReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -9,7 +10,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.TaskService;
-import com.patho.main.util.dialogReturn.ReloadTaskEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -50,13 +50,13 @@ public class SlideNamingDialog extends AbstractDialog {
 
 	public void saveAndHide() {
 		task.setUseAutoNomenclature(isUseAutoNomeclature());
-		hideDialog(new ReloadTaskEvent(taskRepository.save(task, resourceBundle.get("log.patient.task.update"))));
+		hideDialog(new TaskReloadEvent(taskRepository.save(task, resourceBundle.get("log.patient.task.update"))));
 		MessageHandler.sendGrowlMessagesAsResource("growl.task.saved", "growl.task.saved.text");
 	}
 
 	public void renameAndHide(boolean ignoreManuallyChangedEntities) {
 		hideDialog(
-				new ReloadTaskEvent(taskService.updateNamesOfTaskEntities(task, ignoreManuallyChangedEntities, true)));
+				new TaskReloadEvent(taskService.updateNamesOfTaskEntities(task, ignoreManuallyChangedEntities, true)));
 		MessageHandler.sendGrowlMessagesAsResource("growl.task.updateNaming", "growl.task.updateNaming.text");
 	}
 }

@@ -2,8 +2,6 @@ package com.patho.main.action.handler
 
 import com.patho.main.common.GuiCommands
 import com.patho.main.common.PredefinedFavouriteList
-import com.patho.main.model.patient.DiagnosisRevision
-import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.service.DiagnosisService
@@ -54,7 +52,7 @@ class WorkPhaseHandler @Autowired constructor(
             // ending staining pahse
             task = workPhaseService.endStainingPhase(task, true)
 
-            MessageHandler.sendGrowlMessagesAsResource("growl.staining.endAll",
+            MessageHandler.sendGrowlMessagesAsResource("growl.staining.endAll.headline",
                     if (startDiagnosisPhase) "growl.staining.endAll.text.true" else "growl.staining.endAll.text.false")
         }
 
@@ -80,42 +78,19 @@ class WorkPhaseHandler @Autowired constructor(
     }
 
     fun endDiagnosisPhase(task: Task, endPhase: Boolean,
-                          goToNotification: Boolean, removeFromCurrentWorklist: Boolean) {
-        return endDiagnosisPhase(task, null, endPhase, goToNotification, removeFromCurrentWorklist)
-    }
-
-    fun endDiagnosisPhase(task: Task, diagnosisRevision: DiagnosisRevision?, endPhase: Boolean,
-                          goToNotification: Boolean, removeFromCurrentWorklist: Boolean) {
+                          startNotificationPhase: Boolean, removeFromCurrentWorklist: Boolean) {
         var task = task
 
-        // all diagnoses wil be approved
-        if (diagnosisRevision == null) {
-            task = workPhaseService.endDiagnosisPhase(task, true,
-                    if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+        if (endPhase) {
+            workPhaseService.endDiagnosisPhase(task, startNotificationPhase)
             MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
-                    if (goToNotification) "growl.diagnosis.endAll.text.true" else "growl.diagnosis.endAll.text.false")
-        } else {
-            task = diagnosisService.approveDiangosis(task, diagnosisRevision,
-                    if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
-
-            MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved",
-                    if (goToNotification) "growl.diagnosis.endAll.text.true" else "growl.diagnosis.endAll.text.false")
-
-            // only remove from list if no diagnosis is left
-            if (endPhase) {
-                if (task.diagnosisRevisions.all { !it.isNotificationNecessary }) {
-                    task = workPhaseService.endDiagnosisPhase(task, true,
-                            if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
-                } else {
-                    MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.removeFromDiagnosisList.failed",
-                            "growl.diagnosis.removeFromDiagnosisList.failed.text")
-                }
-            }
+                    if (startNotificationPhase) "growl.diagnosis.endAll.text.true" else "growl.diagnosis.endAll.text.false")
         }
 
-        // adding to notification phase
-        if (goToNotification)
+        if (startNotificationPhase) {
+            logger.debug("Adding task to notification list")
             task = startNotificationPhase(task)
+        }
 
         if (removeFromCurrentWorklist)
             removeFromWorklist(task.patient!!, PredefinedFavouriteList.DiagnosisList)
