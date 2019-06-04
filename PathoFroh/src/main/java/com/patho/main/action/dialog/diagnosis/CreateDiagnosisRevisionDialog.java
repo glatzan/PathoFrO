@@ -1,31 +1,26 @@
 package com.patho.main.action.dialog.diagnosis;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transactional;
-
+import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.WorkPhaseHandler;
+import com.patho.main.common.DiagnosisRevisionType;
+import com.patho.main.common.Dialog;
+import com.patho.main.model.Signature;
+import com.patho.main.model.patient.*;
+import com.patho.main.model.util.audit.Audit;
+import com.patho.main.repository.TaskRepository;
+import com.patho.main.service.DiagnosisService;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
+import com.patho.main.util.helper.TaskUtil;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.common.DiagnosisRevisionType;
-import com.patho.main.common.Dialog;
-import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Task;
-import com.patho.main.repository.TaskRepository;
-import com.patho.main.util.helper.TaskUtil;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Delegate;
+import javax.transaction.Transactional;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.*;
 
 @Configurable
 @Setter
@@ -159,7 +154,7 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 		logger.debug("Creating new reportIntent revision " + newRevisionName);
 
 		task = diagnosisService.renameDiagnosisRevisions(task, getRevisionList());
-		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName, null);
+		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName, "");
 		task = workPhaseHandler.updateDiagnosisPhase(task);
 
 		super.hideDialog(new TaskReloadEvent(task));
@@ -171,15 +166,16 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 	 * @author andi
 	 *
 	 */
-	@Getter
-	@Setter
-	@AllArgsConstructor
 	public static class DiagnosisRevisionContainer extends DiagnosisRevision {
 
-		@Delegate
 		private DiagnosisRevision revision;
 
 		private String newName;
+
+		public DiagnosisRevisionContainer(DiagnosisRevision revision, String newName) {
+			this.revision = revision;
+			this.newName = newName;
+		}
 
 		public static List<DiagnosisRevisionContainer> factory(Task task, List<DiagnosisRevision> newRevisions,
 				boolean generateNames) {
@@ -198,6 +194,170 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 			}
 
 			return result;
+		}
+
+		public DiagnosisRevision getRevision() {
+			return this.revision;
+		}
+
+		public String getNewName() {
+			return this.newName;
+		}
+
+		public void setRevision(DiagnosisRevision revision) {
+			this.revision = revision;
+		}
+
+		public void setNewName(String newName) {
+			this.newName = newName;
+		}
+
+		public String getName() {
+			return this.revision.getName();
+		}
+
+		public void setNotificationStatus(NotificationStatus notificationStatus) {
+			this.revision.setNotificationStatus(notificationStatus);
+		}
+
+		public void setSignatureDate(LocalDate localDate) {
+			this.revision.setSignatureDate(localDate);
+		}
+
+		public void setAudit(Audit audit) {
+			this.revision.setAudit(audit);
+		}
+
+		public Patient getPatient() {
+			return this.revision.getPatient();
+		}
+
+		public Task getTask() {
+			return this.revision.getTask();
+		}
+
+		public LocalDate getSignatureDate() {
+			return this.revision.getSignatureDate();
+		}
+
+		public void setSignatureTwo(Signature signature) {
+			this.revision.setSignatureTwo(signature);
+		}
+
+		public void setNotificationDate(Instant instant) {
+			this.revision.setNotificationDate(instant);
+		}
+
+		public void setDiagnoses(List<Diagnosis> list) {
+			this.revision.setDiagnoses(list);
+		}
+
+		public void setType(DiagnosisRevisionType diagnosisRevisionType) {
+			this.revision.setType(diagnosisRevisionType);
+		}
+
+		public boolean isNotificationNecessary() {
+			return this.revision.isNotificationNecessary();
+		}
+
+		public void setVersion(long l) {
+			this.revision.setVersion(l);
+		}
+
+		public Instant getNotificationDate() {
+			return this.revision.getNotificationDate();
+		}
+
+		public void setName(String s) {
+			this.revision.setName(s);
+		}
+
+		public void setId(long l) {
+			this.revision.setId(l);
+		}
+
+		public boolean getCompleted() {
+			return this.revision.getCompleted();
+		}
+
+		public Signature getSignatureOne() {
+			return this.revision.getSignatureOne();
+		}
+
+		public Signature getSignatureTwo() {
+			return this.revision.getSignatureTwo();
+		}
+
+		public void setSignatureOne(Signature signature) {
+			this.revision.setSignatureOne(signature);
+		}
+
+		public void setCompletionDate(Instant instant) {
+			this.revision.setCompletionDate(instant);
+		}
+
+		public long getVersion() {
+			return this.revision.getVersion();
+		}
+
+		public Instant getCompletionDate() {
+			return this.revision.getCompletionDate();
+		}
+
+		public void setIntern(String s) {
+			this.revision.setIntern(s);
+		}
+
+		public String getIntern() {
+			return this.revision.getIntern();
+		}
+
+		public DiagnosisRevisionType getType() {
+			return this.revision.getType();
+		}
+
+		public NotificationStatus getNotificationStatus() {
+			return this.revision.getNotificationStatus();
+		}
+
+		public void setText(String s) {
+			this.revision.setText(s);
+		}
+
+		public String getText() {
+			return this.revision.getText();
+		}
+
+		public long getId() {
+			return this.revision.getId();
+		}
+
+		public boolean isNotApproved() {
+			return this.revision.isNotApproved();
+		}
+
+		public Task getParent() {
+			return this.revision.getParent();
+		}
+
+		public boolean isNotified() {
+			return this.revision.isNotified();
+		}
+
+		public boolean isMalign() {
+			return this.revision.isMalign();
+		}
+
+		public void setParent(Task task) {
+			this.revision.setParent(task);
+		}
+
+		public Audit getAudit() {
+			return this.revision.getAudit();
+		}
+
+		public List<Diagnosis> getDiagnoses() {
+			return this.revision.getDiagnoses();
 		}
 	}
 

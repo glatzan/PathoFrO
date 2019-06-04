@@ -53,12 +53,12 @@ open class DialogReturnHandler @Autowired constructor(
                         worklistHandler.replaceTaskInWorklist(obj.task)
                     else if (obj.patient != null) {
                         if (worklistHandler.isSelected(obj.patient.tasks))
-                            worklistHandler.replaceTaskInWorklist()
+                            worklistHandler.replaceTaskInWorklist(false)
                         else
                             worklistHandler.replacePatientInWorklist(obj.patient)
                     } else {
                         if (worklistHandler.selectedTask != null)
-                            worklistHandler.replaceTaskInWorklist()
+                            worklistHandler.replaceTaskInWorklist(false)
                         else
                             worklistHandler.replacePatientInWorklist()
                     }

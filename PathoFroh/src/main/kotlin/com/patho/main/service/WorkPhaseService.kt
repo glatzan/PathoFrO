@@ -75,7 +75,7 @@ open class WorkPhaseService @Autowired constructor(
         var tmp = task
         tmp.diagnosisCompletionDate = null
 
-        tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.reportIntent.enter", tmp), tmp.patient)
+        tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.diagnosis.enter", tmp), tmp.patient)
 
         if (!TaskStatus.hasFavouriteLists(tmp, PredefinedFavouriteList.DiagnosisList,
                         PredefinedFavouriteList.ReDiagnosisList)) {

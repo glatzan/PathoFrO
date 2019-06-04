@@ -53,7 +53,6 @@ open class ReportIntentBearer(val reportIntent: ReportIntent, val task: Task) {
         if (diagnosisBearer == null) {
             diagnosisBearer = DiagnosisBearer(diagnosisID, task)
             diagnosisBearers.add(diagnosisBearer)
-            print("New reportIntent $diagnosisID")
         }
 
         return diagnosisBearer

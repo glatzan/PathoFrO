@@ -9,6 +9,7 @@ import com.patho.main.util.dialog.event.StainingPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.task.ArchiveTaskStatus
+import com.patho.main.util.ui.backend.CheckBoxStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -24,32 +25,18 @@ open class StainingPhaseExitDialog @Autowired constructor(
         private val slideService: SlideService) : AbstractPhaseExitDialog(Dialog.STAINING_PHASE_EXIT) {
 
     /**
-     * If true the checkbox for complete all stainings is rendered
-     * Only rendered if not all stainings are completed.
+     * Checkbox backend for completeStainings
      */
-    open var isRenderCompleteStainings: Boolean = false
+    open lateinit var completeStainings: CheckBoxStatus
 
     /**
-     * If true all stainigns are completed
+     * Checkbox backend for goToDiagnosis
      */
-    open var competeStainings: Boolean = false
+    open lateinit var goToDiagnosis: CheckBoxStatus
 
     /**
-     * If true the task will be added to the reportIntent list
+     * Initializes the dialog
      */
-    open var goToDiagnosis: Boolean = false
-
-    /**
-     * If true the exit staining phase checkbox is disabled
-     */
-    open var isDisableExitStainingPhase = false
-
-    /**
-     * If true the additional info for not adding the task to the reportIntent list is displayed
-     * !goToDiagnosis and exitPhase
-     */
-    open var isRenderDiagnosisPhaseInfoText = false
-
     override fun initBean(task: Task): Boolean {
         val optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, true, true, false, true, true)
 
@@ -60,53 +47,45 @@ open class StainingPhaseExitDialog @Autowired constructor(
 
         val status = ArchiveTaskStatus(oTask)
 
-        // complete stainings if not all completed
-        competeStainings = true
-        // only render is not all staings are completed
-        isRenderCompleteStainings = !status.stainingStatus.allSlidesCompleted
-
-        // disable exit staining phase if not all stagings are completed
-        isDisableExitStainingPhase = !competeStainings
-        // only exit if all stainings are completed
-        exitPhase = competeStainings
-
-        // always go to notification phase
-        goToDiagnosis = true
-        // always remove from worklist
-        removeFromWorklist = true
-
-        // only render reportIntent info if exitPhase and not goToDiagnosis
-        isRenderDiagnosisPhaseInfoText = exitPhase && !goToDiagnosis
-        oTask.samples.forEach { it.blocks.forEach { it.slides.forEach { println("$it ${it.completionDate}") } } }
-        return super.initBean(oTask)
-    }
-
-    /**
-     * Function called on checkbox complete stainings change
-     */
-    open fun onCompleteStainingsChange() {
-        isDisableExitStainingPhase = !competeStainings
-        exitPhase = competeStainings
-        if (exitPhase) {
-            goToDiagnosis = true
-            removeFromWorklist = true
+        // complete checkbox
+        completeStainings = object : CheckBoxStatus() {
+            override fun onClick() {
+                exitPhase.set(completeStainings.value, true, !completeStainings.value, false)
+                goToDiagnosis.set(true, true, false, false)
+                removeFromWorklist.set(completeStainings.value,true,false,false)
+            }
         }
-        onPhaseExitChange()
-    }
 
-    /**
-     * Function is called on checkbox end phase change
-     */
-    open fun onPhaseExitChange() {
-        isRenderDiagnosisPhaseInfoText = exitPhase && !goToDiagnosis
+        // diagnosis checkbox
+        goToDiagnosis = object : CheckBoxStatus() {
+            override fun onClick() {
+                isInfo = exitPhase.value && !goToDiagnosis.value
+            }
+        }
+
+        println(!status.stainingStatus.allSlidesCompleted)
+
+        // complete stainings if not all completed
+        completeStainings.set(true, !status.stainingStatus.allSlidesCompleted, false, false)
+
+        // remove from list
+        removeFromWorklist.set(true, true, false, false)
+
+        // goto diagnosis pahse
+        goToDiagnosis.set(true, true, false, false)
+
+        // exit phase
+        exitPhase.set(completeStainings.value, true, !completeStainings.value, false)
+
+        return super.initBean(oTask)
     }
 
     /**
      * Hides the dialog and removes the task from the staining lsit
      */
     open fun hideAndExitPhase() {
-        var task = if (competeStainings) slideService.completeStaining(task, true, true) else task
-        task = workPhaseHandler.endStainingPhase(task, exitPhase, goToDiagnosis, removeFromWorklist)
+        var task = if (completeStainings.value) slideService.completeStaining(task, true, true) else task
+        task = workPhaseHandler.endStainingPhase(task, exitPhase.value, goToDiagnosis.value, removeFromWorklist.value)
         super.hideDialog(StainingPhaseExitEvent())
     }
 

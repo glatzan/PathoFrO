@@ -84,12 +84,12 @@
 				<!-- archived -->
 				<p:selectBooleanCheckbox
 					value="#{dialog.settingsDialog.histoGroupTab.showArchived}"
-					title="#{msg['dialog.settings.group.checkbox.archive.text']}">
+					title="#{msg['dialog.settings.group.backend.archive.text']}">
 					<p:ajax event="change" update="@form"
 						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}" />
 				</p:selectBooleanCheckbox>
 				<h:outputLabel
-					value="#{msg['dialog.settings.group.checkbox.archive']}" />
+					value="#{msg['dialog.settings.group.backend.archive']}" />
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" styleClass="right">

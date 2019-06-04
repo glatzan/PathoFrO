@@ -1,6 +1,5 @@
 package com.patho.main.util;
 
-import com.patho.main.common.ContactRole;
 import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.common.Eye;
 import com.patho.main.common.TaskPriority;
@@ -35,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

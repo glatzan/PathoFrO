@@ -10,10 +10,12 @@ import com.patho.main.repository.DiagnosisRevisionRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.ui.task.DiagnosisReportUpdater
 import com.patho.main.util.exceptions.LastDiagnosisCanNotBeDeletedException
+import com.patho.main.util.helper.TaskUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.util.*
+
 
 @Service
 open class DiagnosisService constructor(
@@ -126,7 +128,27 @@ open class DiagnosisService constructor(
      * needed diagnoses
      */
     @Transactional
-    open fun createDiagnosisRevision(task: Task, type: DiagnosisRevisionType, name: String, interalReference: String): Task {
+    open fun createDiagnosisRevision(task: Task, type: DiagnosisRevisionType): Task {
+        return createDiagnosisRevision(task, type, "");
+    }
+
+    /**
+     * Creates a diagnosisRevision, adds it to the given task and creates also all
+     * needed diagnoses
+     */
+    @Transactional
+    open fun createDiagnosisRevision(task: Task, type: DiagnosisRevisionType, internalReference: String): Task {
+        return createDiagnosisRevision(task, type,
+                TaskUtil.getDiagnosisRevisionName(task.diagnosisRevisions, DiagnosisRevision("", type)),
+                internalReference)
+    }
+
+    /**
+     * Creates a diagnosisRevision, adds it to the given task and creates also all
+     * needed diagnoses
+     */
+    @Transactional
+    open fun createDiagnosisRevision(task: Task, type: DiagnosisRevisionType, name: String, internalReference: String): Task {
         logger.info("Creating new diagnosisRevision")
 
         val diagnosisRevision = DiagnosisRevision()
@@ -134,6 +156,7 @@ open class DiagnosisService constructor(
         diagnosisRevision.signatureOne = Signature()
         diagnosisRevision.signatureTwo = Signature()
         diagnosisRevision.name = name
+        diagnosisRevision.intern = internalReference
 
         return addDiagnosisRevision(task, diagnosisRevision)
     }
@@ -190,19 +213,31 @@ open class DiagnosisService constructor(
     }
 
     /**
+     * Approves all diagnoses
+     */
+    @Transactional
+    open fun approveAllDiagnoses(task: Task, notificationStatus: NotificationStatus): Task {
+        var tmp = task
+        for (diagnosisRevsion in task.diagnosisRevisions)
+            tmp = approveDiagnosis(task, diagnosisRevsion, notificationStatus)
+
+        return tmp
+    }
+
+    /**
      * Sets a diagnosis as completed
      */
     @Transactional
     open fun approveDiagnosis(task: Task, diagnosisRevision: DiagnosisRevision,
                               notificationStatus: NotificationStatus): Task {
-        var task = task
+        var tmp = task
 
         diagnosisRevision.completionDate = Instant.now()
         diagnosisRevision.notificationStatus = notificationStatus
 
-        task = taskRepository.save(task, resourceBundle["log.diagnosisRevision.approved", diagnosisRevision], task.patient)
+        tmp = taskRepository.save(tmp, resourceBundle["log.diagnosisRevision.approved", diagnosisRevision], tmp.patient)
 
-        return generateDefaultDiagnosisReport(task, diagnosisRevision)
+        return generateDefaultDiagnosisReport(tmp, diagnosisRevision)
     }
 
     /**

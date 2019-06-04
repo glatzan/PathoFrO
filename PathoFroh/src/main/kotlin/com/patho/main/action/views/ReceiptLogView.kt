@@ -228,7 +228,7 @@ open class ReceiptLogView @Autowired constructor(
             /**
              * Creates linear list of all slides of the given task. The StainingTableChosser
              * is used as holder class in order to offer an option to select the slides by
-             * clicking on a checkbox. Archived elements will not be shown if showArchived
+             * clicking on a backend. Archived elements will not be shown if showArchived
              * is false.
              *
              * @param showArchived

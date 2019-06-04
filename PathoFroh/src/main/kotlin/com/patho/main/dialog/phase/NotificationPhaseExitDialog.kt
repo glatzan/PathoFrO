@@ -54,17 +54,17 @@ open class NotificationPhaseExitDialog @Autowired constructor(
         val status = ArchiveTaskStatus(oTask)
 
         // remove from notification list in no notification for an other reportIntent should be performed
-        removeFromFavouriteList = !oTask.diagnosisRevisions.any { it.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
+//        removeFromFavouriteList = !oTask.diagnosisRevisions.any { it.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
         // render info text while not removing from notification list
-        isRenderInfoTextFavouriteList = !removeFromFavouriteList
+//        isRenderInfoTextFavouriteList = !removeFromFavouriteList
 
         // only remove from notification list if no more notifications need do be done
         removeFromWorklist = removeFromFavouriteList
 
         // true if all notifications had been performed
-        exitPhase = oTask.diagnosisRevisions.any { it.isNotificationNecessary }
+//        exitPhase = oTask.diagnosisRevisions.any { it.isNotificationNecessary }
         // info text only if no phase exit should be done
-        isRenderInfoTextExit = !exitPhase
+//        isRenderInfoTextExit = !exitPhase
 
         // status for archiving task after phase has ended
         archiveTask = status.isArchiveAble

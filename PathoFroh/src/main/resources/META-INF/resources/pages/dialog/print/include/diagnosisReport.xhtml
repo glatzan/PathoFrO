@@ -57,7 +57,7 @@
                 <!-- select -->
                 <p:column>
 
-                    <!-- select boolean checkbox for not changing the pdf -->
+                    <!-- select boolean backend for not changing the pdf -->
                     <p:selectBooleanCheckbox value="#{chooser.selected}"
                                              rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
                         <p:ajax event="change" process="printSettingsTable"
@@ -65,7 +65,7 @@
                                 update="printSettingsTable"/>
                     </p:selectBooleanCheckbox>
 
-                    <!-- select boolean checkbox for changing the pdf -->
+                    <!-- select boolean backend for changing the pdf -->
                     <h:panelGroup
                             rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
                         <p:selectBooleanCheckbox value="#{chooser.selected}">
@@ -124,7 +124,7 @@
                 <p:column>
                     <h:panelGroup rendered="#{!chooser.emptyAddress}">
 
-                        <!-- select boolean checkbox for not changing the pdf -->
+                        <!-- select boolean backend for not changing the pdf -->
                         <p:commandLink
                                 rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}"
                                 title="#{msg['dialog.printDialog.individualAddress']}"
@@ -137,7 +137,7 @@
 
                         <h:panelGroup
                                 rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
-                            <!-- select boolean checkbox for changing the pdf -->
+                            <!-- select boolean backend for changing the pdf -->
                             <p:commandLink title="#{msg['dialog.printDialog.individualAddress']}"
                                            actionListener="#{dialog.customAddressDialog.initAndPrepareBean(printDialog.selectedTemplate.task,chooser)}">
                                 <i class="fa fa-gear" style="margin-left: 2px"/>
@@ -166,7 +166,7 @@
                     </p:column>
                     <p:column style="text-align: center;">
 
-                        <!-- select boolean checkbox for not changing the pdf -->
+                        <!-- select boolean backend for not changing the pdf -->
                         <p:selectBooleanCheckbox value="#{organizazion.selected}"
                                                  rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
                             <p:ajax event="change" process="@form"
@@ -175,7 +175,7 @@
                         </p:selectBooleanCheckbox>
 
 
-                        <!-- select boolean checkbox for changing the pdf -->
+                        <!-- select boolean backend for changing the pdf -->
                         <h:panelGroup
                                 rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
                             <p:selectBooleanCheckbox value="#{organizazion.selected}">

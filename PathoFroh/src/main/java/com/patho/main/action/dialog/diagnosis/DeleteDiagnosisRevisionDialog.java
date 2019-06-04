@@ -1,5 +1,6 @@
 package com.patho.main.action.dialog.diagnosis;
 
+import com.patho.main.service.DiagnosisService;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;

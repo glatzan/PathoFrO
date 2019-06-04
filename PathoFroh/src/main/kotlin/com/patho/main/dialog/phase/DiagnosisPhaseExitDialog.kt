@@ -7,12 +7,14 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
+import com.patho.main.service.DiagnosisService
 import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.DiagnosisRevisionNotFoundException
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
 import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
+import com.patho.main.util.ui.backend.CheckBoxStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -24,7 +26,8 @@ import org.springframework.stereotype.Component
 @Scope(value = "session")
 open class DiagnosisPhaseExitDialog @Autowired constructor(
         private val taskRepository: TaskRepository,
-        private val workPhaseHandler: WorkPhaseHandler) : AbstractPhaseExitDialog(Dialog.DIAGNOSIS_PHASE_EXIT), IReportIntentStatusByDiagnosisViewData {
+        private val workPhaseHandler: WorkPhaseHandler,
+        private val diagosisService: DiagnosisService) : AbstractPhaseExitDialog(Dialog.DIAGNOSIS_PHASE_EXIT), IReportIntentStatusByDiagnosisViewData {
 
     /**
      * List of all reportIntent revisions with their status
@@ -41,30 +44,30 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
      */
     override var viewDiagnosisRevisionDetails: DiagnosisBearer? = null
 
-    open val isSelectDiagnosis
-        get() = selectDiagnosisRevision == null && !competeAllDiagnoses
+    /**
+     * Checkbox backend value for completeAllDiagnoses
+     */
+    open lateinit var competeAllDiagnoses: CheckBoxStatus
 
     /**
-     * If true all diagnoses are completed
+     * Checkbox backend value for goToNotification
      */
-    open var competeAllDiagnoses: Boolean = false
+    open lateinit var goToNotification: CheckBoxStatus
 
     /**
      * If true no single diagnosis can be selected.
      * This is in case completeAllDiagnoses is true
      */
-    open var isDisableDiagnosisSelection = false
+    open val isDisableDiagnosisSelection
+        get() = competeAllDiagnoses.value
 
     /**
-     * If true the notification phase will set on the given task
+     * If true the submit button is disabled. This is the case if no diagnosis is selected and the
+     * completeAllDiagnoses checkbox is not set
      */
-    open var goToNotification: Boolean = false
+    open val isSubmitButtonDisabled
+        get() = !(selectDiagnosisRevision != null || competeAllDiagnoses.value)
 
-    open var isRenderNotificationInfo = false
-
-    open var isDisableExitDiagnosisPhase = false
-
-    open var isRenderExitDiagnosisInfo = false
 
     open fun initAndPrepareBean(task: Task, diagnosisRevision: DiagnosisRevision?): DiagnosisPhaseExitDialog {
         if (initBean(task, diagnosisRevision))
@@ -73,10 +76,16 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
         return this
     }
 
+    /**
+     * Initializes the bean and sets the first diagnosis that is not approved as the selected diagnosis
+     */
     override fun initBean(task: Task): Boolean {
         return initBean(task, null)
     }
 
+    /**
+     * Initializes the dialog
+     */
     open fun initBean(task: Task, diagnosisRevision: DiagnosisRevision?): Boolean {
         val optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, true, true, false, true, true)
 
@@ -87,6 +96,7 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
 
         diagnosisRevisions = ReportIntentStatusByDiagnosis(oTask)
 
+        // sets the first diagnosis that is not approved if  diagnosisRevision is null
         selectDiagnosisRevision = if (diagnosisRevision != null)
             diagnosisRevisions.diagnosisBearer.firstOrNull { it.diagnosisRevision == diagnosisRevision }
                     ?: throw DiagnosisRevisionNotFoundException()
@@ -94,126 +104,110 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
             diagnosisRevisions.diagnosisBearer.firstOrNull { it.diagnosisRevision.notificationStatus == NotificationStatus.NOT_APPROVED }
         }
 
-        // set complete all to false
-        competeAllDiagnoses = false
-        // selection within the datatable will be disabled
-        isDisableDiagnosisSelection = competeAllDiagnoses
-
-        // setting go to notification phase
-        updateGoToNotification()
-
-        // sets the notification warning
-        onNotificationChange()
-
-        // sets the flag for worklist removal
-        updateRemoveFromWorklist()
-
-        // sets the exit phase flag
-        updateExitPhase()
-
-        updateDisableExitDiagnosis()
-
-        return super.initBean(task)
-    }
-
-
-    private fun updateRemoveFromWorklist() {
-        removeFromWorklist = competeAllDiagnoses || diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotApproved } == 1
-    }
-
-    private fun updateExitPhase() {
-        exitPhase = competeAllDiagnoses ||
-                (diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotApproved } == 1 && selectDiagnosisRevision?.diagnosisRevision?.isNotApproved == true)
-    }
-
-    /**
-     * If a notification for the selected diagnosis should be performed, or if all diagnoses should be completed and at least one diagnosis needs a notification
-     */
-    private fun updateGoToNotification() {
-        goToNotification = (selectDiagnosisRevision?.diagnosisRevision?.isNotificationNecessary == true) || (competeAllDiagnoses && diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotificationNecessary } > 0)
-    }
-
-    private fun updateDisableExitDiagnosis() {
-        println(competeAllDiagnoses)
-        println((selectDiagnosisRevision?.diagnosisRevision?.isNotApproved == true && diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotApproved } == 1))
-        println((diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotApproved } > 1))
-        isDisableExitDiagnosisPhase = !(competeAllDiagnoses ||
-                (selectDiagnosisRevision?.diagnosisRevision?.isNotApproved == true && diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotApproved } == 1) ||
-                (diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotApproved } == 0))
-    }
-
-    open fun onCompleteAllDiagnosesChange() {
-        isDisableDiagnosisSelection = competeAllDiagnoses
-        updateExitPhase()
-        if (competeAllDiagnoses) {
-            removeFromWorklist = true
-            selectDiagnosisRevision = null
-            updateGoToNotification()
-        } else {
-            removeFromWorklist = false
-            goToNotification = false
-        }
-
-        updateDisableExitDiagnosis()
-    }
-
-    /**
-     * Setting info for notification phase. Either if the selected diagnosis need a notification or all diagnoses should be completed and at least on diagnosis needs a notification
-     */
-    open fun onNotificationChange() {
-        isRenderNotificationInfo = if (!goToNotification) {
-            ((selectDiagnosisRevision?.diagnosisRevision?.isNotificationNecessary == true) ||
-                    (competeAllDiagnoses && diagnosisRevisions.diagnosisBearer.any { it.diagnosisRevision.isNotificationNecessary }))
-        } else
-            false
-    }
-
-    override fun onDiagnosisSelection() {
-        updateRemoveFromWorklist()
-        updateExitPhase()
-        updateGoToNotification()
-        onNotificationChange()
-        updateDisableExitDiagnosis()
-    }
-
-    open fun hideAndExitPhase() {
-        workPhaseHandler.endDiagnosisPhase(task, selectDiagnosisRevision?.diagnosisRevision, exitPhase, goToNotification, removeFromWorklist)
-        super.hideDialog(TaskReloadEvent())
-
-
-        // all diagnoses wil be approved
-        if (diagnosisRevision == null) {
-            task = workPhaseService.endDiagnosisPhase(task, true,
-                    if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
-            MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
-                    if (goToNotification) "growl.diagnosis.endAll.text.true" else "growl.diagnosis.endAll.text.false")
-        } else {
-            task = diagnosisService.approveDiangosis(task, diagnosisRevision,
-                    if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
-
-            MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved",
-                    if (goToNotification) "growl.diagnosis.endAll.text.true" else "growl.diagnosis.endAll.text.false")
-
-            // only remove from list if no diagnosis is left
-            if (endPhase) {
-                if (task.diagnosisRevisions.all { !it.isNotificationNecessary }) {
-                    task = workPhaseService.endDiagnosisPhase(task, true,
-                            if (goToNotification) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+        // complete checkbox
+        competeAllDiagnoses = object : CheckBoxStatus() {
+            override fun onClick() {
+                if (value) {
+                    // only set if at least one notification is necessary
+                    goToNotification.set(diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotificationNecessary } > 0, true, false, false)
+                    removeFromWorklist.set(true, true, false, false)
+                    exitPhase.set(true, true, false, false)
+                    selectDiagnosisRevision = null
                 } else {
-                    MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.removeFromDiagnosisList.failed",
-                            "growl.diagnosis.removeFromDiagnosisList.failed.text")
+                    onDiagnosisSelection()
                 }
             }
         }
 
-//        if (allRevisions)
-//            hideDialog(new DiagnosisPhaseExitEvent(task, null, removeFromDiagnosisList, removeFromWorklist, performNotification));
-//        else if (selectedRevision != null)
-//            hideDialog(new DiagnosisPhaseExitEvent(task, selectedRevision, removeFromDiagnosisList, removeFromWorklist, performNotification));
-//        else {
-//            //TODO Error
-//            hideDialog();
-//        }
+        // go to notification checkbox
+        goToNotification = object : CheckBoxStatus() {
+            override fun onClick() {
+                // set only if notification for the current diagnosis is necessary or if all should be approved, at least for one diagnosis a notification is pending
+                goToNotification.isInfo = if (!value) {
+                    ((selectDiagnosisRevision?.diagnosisRevision?.isNotificationNecessary == true) || (competeAllDiagnoses.value && diagnosisRevisions.diagnosisBearer.any { it.diagnosisRevision.isNotificationNecessary }))
+                } else
+                    false
+            }
+        }
+
+        removeFromWorklist = object : CheckBoxStatus() {
+            override fun onClick() {
+            }
+        }
+
+        exitPhase = object : CheckBoxStatus() {
+            override fun onClick() {
+            }
+        }
+
+        // true if selectDiagnosisRevision == null
+        competeAllDiagnoses.set(selectDiagnosisRevision == null, true, false, false)
+
+        // true if selectDiagnosisRevision is the last not approved diagnosis or all should be approved
+        removeFromWorklist.set(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast, true, false, false)
+
+        // true if notification should be performed for the selected diagnosis, or if all should be approved, at least for one diagnosis a notification is pending
+        goToNotification.set((competeAllDiagnoses.value && isNotificationNecessary) || isCurrentDiagnosisNotificationNecessary, true, false, false)
+
+        // true if selectDiagnosisRevision is the last not approved diagnosis or all should be approved
+        exitPhase.set(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast, true, !(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast), !(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast))
+
+        return super.initBean(oTask)
+    }
+
+    /**
+     * On diagnosis change
+     */
+    override fun onDiagnosisSelection() {
+        competeAllDiagnoses.set(false, true, false, false)
+        if (selectDiagnosisRevision != null) {
+            removeFromWorklist.set(isCurrentDiagnosisNotApprovedAndLast, true, false, false)
+            goToNotification.set(isCurrentDiagnosisNotificationNecessary, true, false, false)
+            exitPhase.set(isCurrentDiagnosisNotApprovedAndLast, true, !isCurrentDiagnosisNotApprovedAndLast, !isCurrentDiagnosisNotApprovedAndLast)
+        } else {
+            removeFromWorklist.set(false, true, false, false)
+            goToNotification.set(false, true, false, false)
+            exitPhase.set(false, true, true, true)
+        }
+    }
+
+    /**
+     * Returns true if a notification for the current diagnosis is mandatory
+     */
+    private val isCurrentDiagnosisNotificationNecessary
+        get() = selectDiagnosisRevision?.diagnosisRevision?.isNotificationNecessary == true
+
+    /**
+     * Returns true if the selected diagnosis is the last one that is not approved
+     */
+    private val isCurrentDiagnosisNotApprovedAndLast
+        get() = selectDiagnosisRevision?.diagnosisRevision?.isNotApproved == true && diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotApproved } == 1
+
+
+    /**
+     * Returns true is any diagnosis is missing a notification
+     */
+    private val isNotificationNecessary
+        get() = diagnosisRevisions.diagnosisBearer.any { it.diagnosisRevision.isNotificationNecessary }
+
+    /**
+     * Hides the dialog, and performs the phase exit action
+     */
+    open fun hideAndExitPhase() {
+        var tmp = task
+
+        if (competeAllDiagnoses.value)
+            tmp = diagosisService.approveAllDiagnoses(tmp, if (goToNotification.value) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+        else if (selectDiagnosisRevision != null) {
+            val diagnosis = selectDiagnosisRevision?.diagnosisRevision ?: return
+            MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved.headline",
+                    if (goToNotification.value) "growl.diagnosis.approved.goToNotification" else "growl.diagnosis.approved.noNotification")
+            tmp = diagosisService.approveDiagnosis(tmp, diagnosis, if (goToNotification.value) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+        }
+
+        tmp = workPhaseHandler.endDiagnosisPhase(tmp, exitPhase.value, goToNotification.value, removeFromWorklist.value)
+
+        hideDialog()
     }
 
     /**

@@ -6,6 +6,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
+import com.patho.main.service.DiagnosisService;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.DiagnosisPhaseExitEvent;
 import com.patho.main.util.helper.HistoUtil;

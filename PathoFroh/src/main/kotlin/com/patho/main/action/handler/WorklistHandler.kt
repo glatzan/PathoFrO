@@ -184,6 +184,13 @@ open class WorklistHandler @Autowired @Lazy constructor(
     }
 
     /**
+     * Replaces the current task in the current worklist
+     */
+    open fun replaceTaskInWorklist(reloadStaticData : Boolean = true) {
+        replaceTaskInWorklist(current.selectedTask, true, reloadStaticData)
+    }
+
+    /**
      * Replaces the task in the current worklist, if the task is the selected task
      */
     open fun replaceTaskInWorklist(task: Task) {

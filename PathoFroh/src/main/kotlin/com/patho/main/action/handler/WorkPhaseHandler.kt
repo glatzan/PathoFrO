@@ -10,11 +10,12 @@ import com.patho.main.util.task.TaskStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Controller
+import org.springframework.transaction.annotation.Transactional
 
 
 @Controller
 @Scope("session")
-class WorkPhaseHandler @Autowired constructor(
+open class WorkPhaseHandler @Autowired constructor(
         private val workPhaseService: WorkPhaseService,
         private val diagnosisService: DiagnosisService,
         private val worklistHandler: WorklistHandler) : AbstractHandler() {
@@ -29,7 +30,8 @@ class WorkPhaseHandler @Autowired constructor(
      *
      * This methode returns the new task and true if the end phase dialog is shown, false if not
      */
-    fun updateStainingPhase(task: Task, exitDialogCommand: String = GuiCommands.OPEN_STAINING_PHASE_EXIT_DIALOG): Pair<Task, Boolean> {
+    @Transactional
+    open fun updateStainingPhase(task: Task, exitDialogCommand: String = GuiCommands.OPEN_STAINING_PHASE_EXIT_DIALOG): Pair<Task, Boolean> {
         // checks if stainigs are completed
         if (TaskStatus.checkIfStainingCompleted(task)) {
             if (!task.stainingCompleted) {
@@ -41,11 +43,14 @@ class WorkPhaseHandler @Autowired constructor(
         }
     }
 
-    fun startStainingPhase(task: Task): Task {
+    @Transactional
+    open fun startStainingPhase(task: Task): Task {
         return workPhaseService.startStainingPhase(task)
     }
 
-    fun endStainingPhase(task: Task, endPhase: Boolean, startDiagnosisPhase: Boolean, removeFromWorklist: Boolean): Task {
+
+    @Transactional
+    open fun endStainingPhase(task: Task, endPhase: Boolean, startDiagnosisPhase: Boolean, removeFromWorklist: Boolean): Task {
         var task = task
 
         if (endPhase) {
@@ -67,36 +72,42 @@ class WorkPhaseHandler @Autowired constructor(
         return task
     }
 
-    fun startDiagnosisPhase(task: Task) {
-        workPhaseService.startDiagnosisPhase(task)
+    @Transactional
+    open fun startDiagnosisPhase(task: Task): Task {
+        return workPhaseService.startDiagnosisPhase(task)
     }
 
-    fun updateDiagnosisPhase(task: Task): Task {
+    @Transactional
+    open fun updateDiagnosisPhase(task: Task): Task {
         if (task.diagnosisRevisions.any { !it.completed })
             return startNotificationPhase(task)
         return task
     }
 
-    fun endDiagnosisPhase(task: Task, endPhase: Boolean,
-                          startNotificationPhase: Boolean, removeFromCurrentWorklist: Boolean) {
-        var task = task
+    @Transactional
+    open fun endDiagnosisPhase(task: Task, endPhase: Boolean,
+                               startNotificationPhase: Boolean, removeFromCurrentWorklist: Boolean): Task {
+        var tmp = task
 
         if (endPhase) {
-            workPhaseService.endDiagnosisPhase(task, startNotificationPhase)
-            MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll",
-                    if (startNotificationPhase) "growl.diagnosis.endAll.text.true" else "growl.diagnosis.endAll.text.false")
+            tmp = workPhaseService.endDiagnosisPhase(tmp, startNotificationPhase)
+            MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll.headline",
+                    if (startNotificationPhase) "growl.diagnosis.endAll.goToNotification" else "growl.diagnosis.endAll.noNotification")
         }
 
         if (startNotificationPhase) {
             logger.debug("Adding task to notification list")
-            task = startNotificationPhase(task)
+            tmp = startNotificationPhase(tmp)
         }
 
         if (removeFromCurrentWorklist)
-            removeFromWorklist(task.patient!!, PredefinedFavouriteList.DiagnosisList)
+            removeFromWorklist(tmp.patient!!, PredefinedFavouriteList.DiagnosisList)
+
+        return tmp
     }
 
-    fun startNotificationPhase(task: Task): Task {
+    @Transactional
+    open fun startNotificationPhase(task: Task): Task {
         return workPhaseService.startNotificationPhase(task)
     }
 
