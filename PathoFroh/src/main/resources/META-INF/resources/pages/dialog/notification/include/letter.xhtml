@@ -4,7 +4,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:histo="http://java.sun.com/jsf/composite/components/special/notificationDialog"
-                xmlns:pe="http://primefaces.org/ui/extensions">
+>
 
 
     <p:outputPanel styleClass="headerPannel">
@@ -84,6 +84,6 @@
     </p:outputPanel>
 
     <!-- navigation bar -->
-    <histo:navigationBar/>
+    <histo:navigationBar controller="#{notificationDialog.letterTab}"/>
 
 </ui:composition>

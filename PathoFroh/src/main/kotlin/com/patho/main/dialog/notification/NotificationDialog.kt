@@ -3,6 +3,7 @@ package com.patho.main.dialog.notification
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
+import com.patho.main.common.GuiCommands
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTabTaskDialog
 import com.patho.main.dialog.print.PrintDialog
@@ -23,7 +24,9 @@ import com.patho.main.template.MailTemplate
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.dialog.event.NotificationPerformedEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
+import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.print.PrintPDFBearer
 import com.patho.main.util.report.MailNotificationExecuteData
 import com.patho.main.util.report.NotificationExecuteData
@@ -33,7 +36,7 @@ import com.patho.main.util.report.ui.ReportIntentUIContainer
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
 import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
-import com.patho.main.util.exceptions.TaskNotFoundException
+import com.patho.main.util.ui.backend.CommandButtonStatus
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -156,9 +159,6 @@ class NotificationDialog @Autowired constructor(
         val container = event.component.attributes["container"]
         val returnObject = event.`object`
 
-        println(container)
-        println(returnObject)
-
         if (returnObject is PrintPDFBearer && container is ReportIntentNotificationUIContainer) {
             logger.debug("Setting custom pdf for container $container.reportIntent.person?.getFullName()}")
             container.printPDF = returnObject
@@ -174,7 +174,7 @@ class NotificationDialog @Autowired constructor(
     abstract inner class NotificationTab(tabName: String,
                                          name: String,
                                          viewID: String,
-                                         centerInclude: String) : AbstractTab(tabName, name, viewID, centerInclude) {
+                                         centerInclude: String) : AbstractTab(tabName, name, viewID, centerInclude) , IContactReturnUpdate{
 
         /**
          * True if notification method should be used
@@ -199,6 +199,10 @@ class NotificationDialog @Autowired constructor(
          * The selected template
          */
         open var selectedTemplate: PrintDocument? = null
+
+        override fun onContactDialogReturn(event: SelectEvent) {
+            update()
+        }
     }
 
     /**
@@ -227,8 +231,17 @@ class NotificationDialog @Autowired constructor(
          * Initializes the useNotification value and calls the parent method
          */
         override fun initTab(force: Boolean): Boolean {
-            useNotification = reportIntentStatus.size > 0
+            useNotification = reportIntentStatus.hasActiveNotifications
             return super.initTab(force)
+        }
+
+        /**
+         * Updates the tab usages on dialog return
+         */
+        override fun onContactDialogReturn(event: SelectEvent) {
+            logger.debug("Contact dialog return")
+            super.onContactDialogReturn(event)
+            useNotification = reportIntentStatus.hasActiveNotifications
         }
     }
 
@@ -438,16 +451,21 @@ class NotificationDialog @Autowired constructor(
         /**
          * Only active notifications
          */
-        var activeNotifications: MutableList<ReportIntentSummaryEntry> = mutableListOf()
+        open var activeNotifications: MutableList<ReportIntentSummaryEntry> = mutableListOf()
 
-        /**
-         * True if no notifications are available
-         */
-        val noNotifications
-            get() = activeNotifications.isEmpty()
+
+        open lateinit var performButton: CommandButtonStatus
 
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing letter data...")
+
+            performButton = object : CommandButtonStatus() {
+                override fun onClick() {
+                    this.isDisabled = true
+                    disableTabs(true, true, true, true, true, true)
+                    performNotifications()
+                }
+            }
 
             updateData()
 
@@ -460,11 +478,12 @@ class NotificationDialog @Autowired constructor(
             if (faxTab.useNotification) activeNotifications.addAll(faxTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.FAX, it) })
             if (letterTab.useNotification) activeNotifications.addAll(letterTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.LETTER, it) })
             if (phoneTab.useNotification) activeNotifications.addAll(phoneTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.PHONE, it) })
+
+            performButton.set(true, true, activeNotifications.isEmpty())
         }
 
         inner class ReportIntentSummaryEntry(val notificationTyp: NotificationTyp,
                                              var notificationBearer: ReportIntentNotificationUIContainer)
-
 
         /**
          * Starting perform notification dialog
@@ -472,6 +491,7 @@ class NotificationDialog @Autowired constructor(
         open fun performNotifications() {
             val diagnosis = generalTab.selectDiagnosisRevision?.diagnosisRevision
             if (diagnosis != null) {
+
                 var report = ReportIntentExecuteData(task, diagnosis)
                 // general
                 report.additionalReports.applyReport = generalTab.useNotification
@@ -523,5 +543,18 @@ class NotificationDialog @Autowired constructor(
                 MessageHandler.sendGrowlMessagesAsResource("growl.headline.error", "growl.notification.notDiagnosisSelected")
             }
         }
+
+        /**
+         * Default return function for sub dialogs
+         */
+        open fun onSubDialogReturn(event: SelectEvent) {
+            if (event.getObject() is NotificationPerformedEvent) {
+                println("Exit diagnosis")
+                MessageHandler.executeScript(GuiCommands.OPEN_END_STAINING_PHASE_FROM_NOTIFICATION_DIALOG)
+            } else {
+                hideDialog(event.`object` ?: TaskReloadEvent())
+            }
+        }
+
     }
 }

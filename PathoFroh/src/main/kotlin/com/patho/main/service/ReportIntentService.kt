@@ -58,7 +58,7 @@ open class ReportIntentService @Autowired constructor(
 
         if (save)
             reportIntent = associatedContactRepository.save(reportIntent,
-                    resourceBundle.get("log.contact.add", task, reportIntent),
+                    resourceBundle.get("log.reportIntent.add", task, reportIntent),
                     reportIntent.task!!.patient)
 
         return Pair(task, reportIntent)

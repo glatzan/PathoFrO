@@ -1,20 +1,21 @@
 package com.patho.main.service;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.patho.main.config.PathoConfig;
+import com.patho.main.model.PDFContainer;
+import com.patho.main.model.interfaces.DataList;
+import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.miscellaneous.BioBank;
 import com.patho.main.model.patient.miscellaneous.Council;
+import com.patho.main.repository.*;
+import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
+import com.patho.main.util.helper.HistoUtil;
+import com.patho.main.util.pdf.LazyPDFReturnHandler;
+import com.patho.main.util.pdf.PDFCreator;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -23,25 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.PDFContainer;
-import com.patho.main.model.interfaces.DataList;
-import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.patient.Task;
-import com.patho.main.repository.BioBankRepository;
-import com.patho.main.repository.CouncilRepository;
-import com.patho.main.repository.MediaRepository;
-import com.patho.main.repository.PDFRepository;
-import com.patho.main.repository.PatientRepository;
-import com.patho.main.repository.TaskRepository;
-import com.patho.main.template.PrintDocument;
-import com.patho.main.util.helper.HistoUtil;
-import com.patho.main.util.pdf.LazyPDFReturnHandler;
-import com.patho.main.util.pdf.PDFCreator;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -503,12 +491,30 @@ public class PDFService extends AbstractService {
 	 * @author dvk-glatza
 	 *
 	 */
-	@Getter
-	@Setter
-	@AllArgsConstructor
 	public static class PDFReturn {
 		DataList dataList;
 		PDFContainer container;
+
+		public PDFReturn(DataList dataList, PDFContainer container) {
+			this.dataList = dataList;
+			this.container = container;
+		}
+
+		public DataList getDataList() {
+			return this.dataList;
+		}
+
+		public PDFContainer getContainer() {
+			return this.container;
+		}
+
+		public void setDataList(DataList dataList) {
+			this.dataList = dataList;
+		}
+
+		public void setContainer(PDFContainer container) {
+			this.container = container;
+		}
 	}
 
 	/**

@@ -1,29 +1,17 @@
 package com.patho.main.action.dialog;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.patho.main.action.dialog.biobank.BioBankDialog;
 import com.patho.main.action.dialog.council.CouncilDialog;
-import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog;
-import com.patho.main.action.dialog.diagnosis.DeleteDiagnosisRevisionDialog;
-import com.patho.main.action.dialog.diagnosis.DiagnosisPhaseExitDialog;
-import com.patho.main.action.dialog.diagnosis.EditDiagnosisRevisionsDialog;
-import com.patho.main.action.dialog.diagnosis.QuickAddDiangosisRevisionDialog;
+import com.patho.main.action.dialog.diagnosis.*;
 import com.patho.main.action.dialog.media.DeletePDFDialog;
 import com.patho.main.action.dialog.media.EditPDFDialog;
-import com.patho.main.action.dialog.media.PDFOrganizer;
 import com.patho.main.action.dialog.media.UploadDialog;
 import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
 import com.patho.main.action.dialog.miscellaneous.ConfirmDialog;
 import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.notification.NotificationDialog;
-import com.patho.main.action.dialog.patient.DeletePatientDialog;
-import com.patho.main.action.dialog.patient.EditPatientDialog;
-import com.patho.main.action.dialog.patient.MergePatientDialog;
-import com.patho.main.action.dialog.patient.PatientLogDialog;
-import com.patho.main.action.dialog.patient.SearchPatientDialog;
+import com.patho.main.action.dialog.patient.*;
 import com.patho.main.action.dialog.print.CustomAddressDialog;
 import com.patho.main.action.dialog.print.FaxDocumentDialog;
 import com.patho.main.action.dialog.settings.SettingsDialog;
@@ -51,11 +39,10 @@ import com.patho.main.action.dialog.task.RestoreTaskDialog;
 import com.patho.main.action.dialog.worklist.WorklistSearchDialog;
 import com.patho.main.action.dialog.worklist.WorklistSettingsDialog;
 import com.patho.main.action.dialog.worklist.WorklistSortDialog;
-
-import lombok.Getter;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Component("dialog")
-@Getter
 @Scope(value = "session")
 public class DialogHandler {
 
@@ -65,7 +52,6 @@ public class DialogHandler {
 	private QuickAddDiangosisRevisionDialog quickAddDiangosisRevisionDialog = new QuickAddDiangosisRevisionDialog();
 	private CreateTaskDialog createTaskDialog = new CreateTaskDialog();
 	private SearchPatientDialog searchPatientDialog = new SearchPatientDialog();
-	private PDFOrganizer pdfOrganizer = new PDFOrganizer();
 	private UploadDialog uploadDialog = new UploadDialog();
 	private EditPDFDialog editPDFDialog = new EditPDFDialog();
 	private DeletePDFDialog deletePDFDialog = new DeletePDFDialog();
@@ -108,4 +94,196 @@ public class DialogHandler {
 	private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
 	private ConfirmDialog confirmDialog = new ConfirmDialog();
 	private RestoreTaskDialog restoreTaskDialog = new RestoreTaskDialog();
+
+	public AddSlidesDialog getAddSlidesDialog() {
+		return this.addSlidesDialog;
+	}
+
+	public CreateSampleDialog getCreateSampleDialog() {
+		return this.createSampleDialog;
+	}
+
+	public SlideNamingDialog getSlideNamingDialog() {
+		return this.slideNamingDialog;
+	}
+
+	public QuickAddDiangosisRevisionDialog getQuickAddDiangosisRevisionDialog() {
+		return this.quickAddDiangosisRevisionDialog;
+	}
+
+	public CreateTaskDialog getCreateTaskDialog() {
+		return this.createTaskDialog;
+	}
+
+	public SearchPatientDialog getSearchPatientDialog() {
+		return this.searchPatientDialog;
+	}
+
+	public UploadDialog getUploadDialog() {
+		return this.uploadDialog;
+	}
+
+	public EditPDFDialog getEditPDFDialog() {
+		return this.editPDFDialog;
+	}
+
+	public DeletePDFDialog getDeletePDFDialog() {
+		return this.deletePDFDialog;
+	}
+
+	public DiagnosisPhaseExitDialog getDiagnosisPhaseExitDialog() {
+		return this.diagnosisPhaseExitDialog;
+	}
+
+	public CreateDiagnosisRevisionDialog getCreateDiagnosisRevisionDialog() {
+		return this.createDiagnosisRevisionDialog;
+	}
+
+	public EditDiagnosisRevisionsDialog getEditDiagnosisRevisionsDialog() {
+		return this.editDiagnosisRevisionsDialog;
+	}
+
+	public DeleteDiagnosisRevisionDialog getDeleteDiagnosisRevisionDialog() {
+		return this.deleteDiagnosisRevisionDialog;
+	}
+
+	public PatientLogDialog getPatientLogDialog() {
+		return this.patientLogDialog;
+	}
+
+	public ChangeTaskIDDialog getChangeTaskIDDialog() {
+		return this.changeTaskIDDialog;
+	}
+
+	public AccountingDataDialog getAccountingDataDialog() {
+		return this.accountingDataDialog;
+	}
+
+	public ContactDialog getContactDialog() {
+		return this.contactDialog;
+	}
+
+	public ContactNotificationDialog getContactNotificationDialog() {
+		return this.contactNotificationDialog;
+	}
+
+	public ProgrammVersionDialog getProgrammVersionDialog() {
+		return this.programmVersionDialog;
+	}
+
+	public CustomAddressDialog getCustomAddressDialog() {
+		return this.customAddressDialog;
+	}
+
+	public CouncilDialog getCouncilDialog() {
+		return this.councilDialog;
+	}
+
+	public SettingsDialog getSettingsDialog() {
+		return this.settingsDialog;
+	}
+
+	public FavouriteListEditDialog getFavouriteListEditDialog() {
+		return this.favouriteListEditDialog;
+	}
+
+	public NotificationDialog getNotificationDialog() {
+		return this.notificationDialog;
+	}
+
+	public FaxDocumentDialog getFaxDocumentDialog() {
+		return this.faxDocumentDialog;
+	}
+
+	public BioBankDialog getBioBankDialog() {
+		return this.bioBankDialog;
+	}
+
+	public EditUserDialog getEditUserDialog() {
+		return this.editUserDialog;
+	}
+
+	public OrganizationListDialog getOrganizationListDialog() {
+		return this.organizationListDialog;
+	}
+
+	public OrganizationEditDialog getOrganizationEditDialog() {
+		return this.organizationEditDialog;
+	}
+
+	public PhysicianEditDialog getPhysicianEditDialog() {
+		return this.physicianEditDialog;
+	}
+
+	public PhysicianSearchDialog getPhysicianSearchDialog() {
+		return this.physicianSearchDialog;
+	}
+
+	public ListItemEditDialog getListItemEditDialog() {
+		return this.listItemEditDialog;
+	}
+
+	public StainingEditDialog getStainingEditDialog() {
+		return this.stainingEditDialog;
+	}
+
+	public MaterialEditDialog getMaterialEditDialog() {
+		return this.materialEditDialog;
+	}
+
+	public DiagnosisPresetEditDialog getDiagnosisPresetEditDialog() {
+		return this.diagnosisPresetEditDialog;
+	}
+
+	public GroupEditDialog getGroupEditDialog() {
+		return this.groupEditDialog;
+	}
+
+	public UserListDialog getUserListDialog() {
+		return this.userListDialog;
+	}
+
+	public GroupListDialog getGroupListDialog() {
+		return this.groupListDialog;
+	}
+
+	public UserSettingsDialog getUserSettingsDialog() {
+		return this.userSettingsDialog;
+	}
+
+	public ConfirmUserDeleteDialog getConfirmUserDeleteDialog() {
+		return this.confirmUserDeleteDialog;
+	}
+
+	public WorklistSearchDialog getWorklistSearchDialog() {
+		return this.worklistSearchDialog;
+	}
+
+	public WorklistSettingsDialog getWorklistSettingsDialog() {
+		return this.worklistSettingsDialog;
+	}
+
+	public WorklistSortDialog getWorklistSortDialog() {
+		return this.worklistSortDialog;
+	}
+
+	public MergePatientDialog getMergePatientDialog() {
+		return this.mergePatientDialog;
+	}
+
+	public EditPatientDialog getEditPatientDialog() {
+		return this.editPatientDialog;
+	}
+
+	public DeletePatientDialog getDeletePatientDialog() {
+		return this.deletePatientDialog;
+	}
+
+	public ConfirmDialog getConfirmDialog() {
+		return this.confirmDialog;
+	}
+
+	public RestoreTaskDialog getRestoreTaskDialog() {
+		return this.restoreTaskDialog;
+	}
 }

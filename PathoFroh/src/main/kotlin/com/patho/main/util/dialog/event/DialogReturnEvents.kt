@@ -143,3 +143,13 @@ class StainingPhaseExitEvent : TaskReloadEvent()
  * Return event for the DiagnosisPhaseExitDialog
  */
 class DiagnosisPhaseExitEvent(val task: Task, val revision: DiagnosisRevision?, val removeFromDiagnosisList: Boolean, val removeFromWorklist: Boolean, val performNotification: Boolean)
+
+/**
+ * Return event for the ExitNotification Dialog
+ */
+class NotificationPhaseExitEvent() : TaskReloadEvent()
+
+/**
+ * Return event for the NotificationPerforme dialog
+ */
+class NotificationPerformedEvent() : TaskReloadEvent()

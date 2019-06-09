@@ -55,7 +55,7 @@ open class TaskStatus {
     val isTaskEditable: Boolean
         get() {
             // task is editable
-            // users and guest can't edit anything
+            // users and guest can'special.pdfOrganizerDialog edit anything
             if (!SpringContextBridge.services().userService.userHasPermission(HistoPermissions.TASK_EDIT)) {
                 return false
             }

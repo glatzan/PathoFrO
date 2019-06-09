@@ -230,6 +230,17 @@ var commonFunctions = {
         }
     },
 
+    showOverlayPanelParentByID: function (panelID, parentClass) {
+        console.log(parentClass+"---")
+        var tmpSel = $(parentClass)
+        console.log(tmpSel.length)
+        if(tmpSel.length == 1){
+            console.log(tmpSel[0].id)
+            this.showOverlayPanel(panelID,tmpSel[0].id)
+        }
+        console.log(tmpSel)
+    },
+
     /**
      *  Shows
      * @param panelID
@@ -338,7 +349,7 @@ var commonFunctions = {
      * @param classID
      * @param overlayPanelID
      */
-    addShowDialogOnMouseEnter: function (classID, overlayPanelID) {
+    addShowDialogOnMouseEnterByCommandClick: function (classID, overlayPanelID) {
         var tmpSel = $(classID)
 
         tmpSel.mouseenter(function () {
@@ -347,6 +358,31 @@ var commonFunctions = {
 
         tmpSel.mouseleave(function () {
             commonFunctions.hideOverlayPanel(overlayPanelID)
+        })
+    },
+    addShowDialogOnMouseEnterByCommand: function (classID, overlayPanelID, identifierClass) {
+        var tmpSel = $(classID)
+
+        tmpSel.mouseenter(function () {
+            var classes = this.className.split(' ');
+            for(i = 0; i < classes.length; i++){
+                if(classes[i].startsWith("triggerCommand_")){
+                    var ex = classes[i].replace("triggerCommand_", "");
+                    var fn = window[ex];
+                    if (typeof fn === "function"){
+                        console.log(identifierClass)
+                        this.className = this.className + " " + identifierClass;
+                        console.log(this.className)
+                        fn();
+                    }
+                    break;
+                }
+            }
+        })
+
+        tmpSel.mouseleave(function () {
+            commonFunctions.hideOverlayPanel(overlayPanelID)
+            this.className = this.className.replace(identifierClass,"")
         })
     },
     /**

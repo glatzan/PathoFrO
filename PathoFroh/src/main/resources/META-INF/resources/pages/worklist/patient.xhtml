@@ -231,7 +231,7 @@
                     <f:facet name="header">
                         <p:commandLink id="upload"
                                        rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-                                       actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                                       actionListener="#{pdfOrganizerDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                             <p:ajax event="dialogReturn"
                                     update="navigationForm:patientList contentForm:contentPanel"/>
                             <i class="fa fa-plus"></i>
@@ -239,7 +239,7 @@
                     </f:facet>
                     <p:commandLink
                             rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-                            actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient).setPDFToDisplay(attachedPdf)}">
+                            actionListener="#{pdfOrganizerDialog.initAndPrepareBean(worklistHandler.current.selectedPatient).setPDFToDisplay(attachedPdf)}">
                         <p:ajax event="dialogReturn"
                                 update="navigationForm:patientList contentForm:contentPanel"/>
                         <i class="fa fa-search"/>
@@ -267,7 +267,7 @@
                         value="#{msg['body.worklist.patient.button.uplaod']}"
                         icon="fa fa-cloud-upload"
                         rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-                        actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                        actionListener="#{pdfOrganizerDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                     <p:ajax event="dialogReturn"
                             listener="#{dialogReturnHandler.onDefaultReturn}"
                             update="navigationForm:patientList contentForm:contentPanel"/>

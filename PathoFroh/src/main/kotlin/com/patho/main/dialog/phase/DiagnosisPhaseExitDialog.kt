@@ -130,16 +130,6 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
             }
         }
 
-        removeFromWorklist = object : CheckBoxStatus() {
-            override fun onClick() {
-            }
-        }
-
-        exitPhase = object : CheckBoxStatus() {
-            override fun onClick() {
-            }
-        }
-
         // true if selectDiagnosisRevision == null
         competeAllDiagnoses.set(selectDiagnosisRevision == null, true, false, false)
 

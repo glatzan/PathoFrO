@@ -63,7 +63,7 @@ open class HistoGroup : AbstractPersistable, GrantedAuthority {
     open var commentary: String = ""
 
     /**
-     * If true, members of this groups are deactivated (are per default hidden and can't login)
+     * If true, members of this groups are deactivated (are per default hidden and can'special.pdfOrganizerDialog login)
      */
     @Column
     open var userDeactivated: Boolean = false

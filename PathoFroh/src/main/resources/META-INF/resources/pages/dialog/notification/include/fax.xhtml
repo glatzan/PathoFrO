@@ -4,7 +4,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:histo="http://java.sun.com/jsf/composite/components/special/notificationDialog"
-                xmlns:pe="http://primefaces.org/ui/extensions">
+>
 
     <p:outputPanel styleClass="headerPannel">
         <h:outputLabel value="#{msg['dialog.notificationDialog.fax.headline']}"/>
@@ -87,11 +87,12 @@
                            styleClass="bigFont"/>
 
             <!-- receiver datatable -->
-            <histo:reportIntentTable reportIntentStatus="#{notificationDialog.faxTab.reportIntentStatus}" task="#{notificationDialog.task}" />
+            <histo:reportIntentTable reportIntentStatus="#{notificationDialog.faxTab.reportIntentStatus}"
+                                     task="#{notificationDialog.task}"/>
 
         </h:panelGrid>
     </p:outputPanel>
 
     <!-- navigation bar -->
-    <histo:navigationBar/>
+    <histo:navigationBar controller="#{notificationDialog.faxTab}"/>
 </ui:composition>

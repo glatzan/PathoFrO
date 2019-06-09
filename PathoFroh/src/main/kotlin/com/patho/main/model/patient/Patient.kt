@@ -78,7 +78,7 @@ open class Patient : AbstractPersistable, DataList {
     override var attachedPdfs = mutableSetOf<PDFContainer>()
 
     /**
-     * If true the patient is archived. Thus he won't be displayed.
+     * If true the patient is archived. Thus he won'special.pdfOrganizerDialog be displayed.
      */
     @Column
     open var archived = false

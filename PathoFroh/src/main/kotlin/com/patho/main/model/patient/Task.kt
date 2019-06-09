@@ -170,7 +170,7 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
     open var finalizationDate: Instant? = null
 
     /**
-     * True if the task can't is completed
+     * True if the task can'special.pdfOrganizerDialog is completed
      */
     @Column
     open var finalized: Boolean = false

@@ -90,6 +90,7 @@ open class ContactDialog @Autowired constructor(
         val task = reportIntent?.task
 
         if (reportIntent != null && task != null) {
+            reportIntent.active = true
             reportIntentService.addReportIntentNotification(task, reportIntent, notificationTyp, save = true)
             update(true)
         }
@@ -166,7 +167,7 @@ open class ContactDialog @Autowired constructor(
         var showDetails = false
 
         /**
-         * True is details ar present, for older task pre version 2.0 there aren't any details
+         * True is details ar present, for older task pre version 2.0 there aren'special.pdfOrganizerDialog any details
          */
         val detailsPresent = reportIntentStatus.diagnosisBearers.isNotEmpty()
 

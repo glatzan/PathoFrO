@@ -36,7 +36,7 @@
 
             <!-- complete stainings, only render if not all stainings are completed-->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style=" margin-left: 5px"
-                         columnClasses="columnWidth50" rendered="#{stainingPhaseExitDialog.completeStainings.rendered}">
+                         columnClasses="columnWidth25" rendered="#{stainingPhaseExitDialog.completeStainings.rendered}">
                 <!-- complete stainings -->
                 <p:selectBooleanCheckbox title="#{msg['dialog.staingingPhaseExit.completeStainings.info']}"
                                          value="#{stainingPhaseExitDialog.completeStainings.value}"
@@ -56,7 +56,7 @@
 
             <!-- remove from worklist -->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
-                         columnClasses="columnWidth50">
+                         columnClasses="columnWidth25">
                 <!-- remove from worklist -->
                 <p:selectBooleanCheckbox
                         title="#{msg['dialog.staingingPhaseExit.worklist.info']}"
@@ -70,7 +70,7 @@
 
             <!-- go to diagnosis phase -->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style=" margin-left: 5px"
-                         columnClasses="columnWidth50">
+                         columnClasses="columnWidth25">
                 <!-- go to diagnosis phase -->
                 <p:selectBooleanCheckbox
                         value="#{stainingPhaseExitDialog.goToDiagnosis.value}"
@@ -90,7 +90,7 @@
 
             <!-- end staining phase -->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
-                         columnClasses="columnWidth50">
+                         columnClasses="columnWidth25">
                 <!-- end staining phase -->
                 <p:selectBooleanCheckbox title="#{msg['dialog.staingingPhaseExit.endPhase.info']}"
                                          value="#{stainingPhaseExitDialog.exitPhase.value}"

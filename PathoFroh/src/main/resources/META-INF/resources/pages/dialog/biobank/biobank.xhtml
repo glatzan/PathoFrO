@@ -108,7 +108,7 @@
 					<p:commandButton
 						value="#{msg['dialog.biobank.button.addInformetConsent']}"
 						icon="fa fa-upload"
-						actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(dialog.bioBankDialog.task.patient).setUploadDocumentType('BIOBANK_INFORMED_CONSENT').setUploadTarget(dialog.bioBankDialog.bioBank)}">
+						actionListener="#{pdfOrganizerDialog.initAndPrepareBean(dialog.bioBankDialog.task.patient).uploadDocumentType('BIOBANK_INFORMED_CONSENT').uploadTarget(dialog.bioBankDialog.bioBank)}">
 						<p:ajax event="dialogReturn"
 							listener="#{dialog.bioBankDialog.onDefaultDialogReturn}"
 							update="@form" />
@@ -119,7 +119,7 @@
 					<!-- Close button -->
 					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
 						icon="fa fa-check-circle-o">
-						<f:actionListener binding="#{dialog.bioBankDialog.saveAndHide()}"></f:actionListener>
+						<f:actionListener binding="#{dialog.bioBankDialog.saveAndHide()}" />
 					</p:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>

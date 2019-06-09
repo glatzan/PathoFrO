@@ -87,7 +87,7 @@
                     title="#{msg['dialog.notificationDialog.component.reportIntentTable.pdf.view']}"
                     execute="@this"
                     disabled="#{!cc.attrs.useNotification}"
-                    actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(cc.attrs.task.patient).viewMode().setPDFToDisplay(reportIntentNotificationBearer.pdf)}">
+                    actionListener="#{pdfOrganizerDialog.initAndPrepareBean(cc.attrs.task.patient).viewMode().setPDFToDisplay(reportIntentNotificationBearer.pdf)}">
 
                 <i class="fa fa-search icon-grey"/>
             </p:commandLink>

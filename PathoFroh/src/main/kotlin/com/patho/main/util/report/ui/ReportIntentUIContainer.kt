@@ -24,14 +24,23 @@ open class ReportIntentUIContainer(var task: Task, val notificationTyp: Notifica
         get() = reportNotificationIntents.filter { it.performNotification }
 
     /**
+     * Returns true if the reportintent has active notifications
+     */
+    val hasActiveNotifications
+        get() = activeNotifications.isNotEmpty()
+
+    /**
      * Updates the reportNotificationIntents list. New notification intents will be added, old ones will be updated and
      * removed intents will be removed form the list.
      */
     fun update(task: Task) {
         this.task = task
 
+        println("update")
+
         var tmpList: MutableList<ReportIntentNotificationUIContainer> = getReportIntentNotificationBearerList(task)
 
+        tmpList.forEach { println(it) }
         // copy of the current container, all remaining container had been deleted
         val toDeleteContainer: MutableList<ReportIntentNotificationUIContainer> = reportNotificationIntents.toMutableList()
 
@@ -40,7 +49,7 @@ open class ReportIntentUIContainer(var task: Task, val notificationTyp: Notifica
             val toUpdate = reportNotificationIntents.firstOrNull { it.reportIntentNotification == p.reportIntentNotification }
             if (toUpdate != null) {
                 toUpdate.update(p)
-                // removing found container, so that these won't be deleted
+                // removing found container, so that these won'special.pdfOrganizerDialog be deleted
                 toDeleteContainer.remove(toUpdate)
             } else {
                 reportNotificationIntents.add(p)

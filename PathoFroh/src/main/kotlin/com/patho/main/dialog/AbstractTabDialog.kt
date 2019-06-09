@@ -82,13 +82,13 @@ abstract class AbstractTabDialog_(dialog: Dialog) : AbstractDialog_(dialog) {
      * Selects the next tab
      */
     open fun nextTab() {
-        logger.trace("Next tab")
+        logger.debug("Next tab")
         var selectedTabIndex = tabs.indexOf(selectedTab)
 
-        if (selectedTabIndex == -1)
+        if (selectedTabIndex == -1 || selectedTabIndex+1 >= tabs.size)
             return
 
-        for (n in selectedTabIndex until tabs.size) {
+        for (n in selectedTabIndex+1 until tabs.size) {
             if (!tabs[n].disabled) {
                 onTabChange(tabs[n])
                 return
@@ -100,13 +100,13 @@ abstract class AbstractTabDialog_(dialog: Dialog) : AbstractDialog_(dialog) {
      * Selects the previous tab
      */
     open fun previousTab() {
-        logger.trace("Previous tab")
+        logger.debug("Previous tab")
         var selectedTabIndex = tabs.indexOf(selectedTab)
 
-        if (selectedTabIndex == -1)
+        if (selectedTabIndex == -1 || selectedTabIndex-1 < 0)
             return
 
-        for (n in selectedTabIndex downTo 0) {
+        for (n in selectedTabIndex-1 downTo 0) {
             if (!tabs[n].disabled) {
                 onTabChange(tabs[n])
                 return

@@ -39,7 +39,7 @@ public class TaskInfo {
 
 	public boolean isTaksEditable() {
 		// task is editable
-		// users and guest can't edit anything
+		// users and guest can'special.pdfOrganizerDialog edit anything
 		if (!userService.userHasPermission(HistoPermissions.TASK_EDIT)) {
 			return false;
 		}

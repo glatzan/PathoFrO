@@ -78,9 +78,9 @@ open class ReportService @Autowired constructor(
             success.and(phoneReports(execute.phoneReports.receivers, execute, feedback))
         }
 
-        taskRepository.save(execute.task, resourceBundle.get("t"), execute.task.parent)
+        taskRepository.save(execute.task, resourceBundle.get("special.pdfOrganizerDialog"), execute.task.parent)
 
-        generateSendReport(execute, containerList, success)
+        generateSendReport(execute, containerList, success, feedback)
         feedback.progress()
         feedback.end(success)
     }
@@ -107,7 +107,7 @@ open class ReportService @Autowired constructor(
      * Sends a report mail to the given person
      */
     private fun sendMail(container: MailNotificationExecuteData, execute: ReportIntentExecuteData, feedback: NotificationFeedback): Boolean {
-        feedback.setFeedback("report.feedback.mail.sending", container.contactAddress)
+        feedback.setFeedback("report.feedback.mail.sending", container.contactAddress.toString())
         logger.debug("Sending mail to {}", container.contactAddress)
 
         if (!generatePrintPDf(execute, execute.mailReports, container)) {
@@ -139,10 +139,10 @@ open class ReportService @Autowired constructor(
 
         // feedback message
         if (execute.faxReports.sendFax) {
-            feedback.setFeedback("report.feedback.fax.sending", container.contactAddress)
+            feedback.setFeedback("report.feedback.fax.sending", container.contactAddress.toString())
             logger.debug("Sending fax to {}", container.contactAddress)
         } else if (execute.faxReports.printFax) {
-            feedback.setFeedback("report.feedback.fax.sending", container.contactAddress)
+            feedback.setFeedback("report.feedback.fax.sending", container.contactAddress.toString())
             logger.debug("Print fax for person {}", container.notification.contact?.person?.getFullName())
         }
 
@@ -182,7 +182,7 @@ open class ReportService @Autowired constructor(
      * Prints the report for sending via mail
      */
     private fun letterReports(container: NotificationExecuteData, execute: ReportIntentExecuteData, feedback: NotificationFeedback): Boolean {
-        feedback.setFeedback("report.feedback.print.printing")
+        feedback.setFeedback("report.feedback.print.printing".toString())
         logger.debug("Printing report for person {}", container.notification.contact?.person?.getFullName())
 
         if (!generatePrintPDf(execute, execute.letterReports, container)) {
@@ -215,7 +215,7 @@ open class ReportService @Autowired constructor(
         return true;
     }
 
-    private fun generateSendReport(execute: ReportIntentExecuteData, reportIntentNotificationBearers: HashMap<String, List<NotificationExecuteData>>, success: Boolean): PDFContainer? {
+    private fun generateSendReport(execute: ReportIntentExecuteData, reportIntentNotificationBearers: HashMap<String, List<NotificationExecuteData>>, success: Boolean, feedback: NotificationFeedback): PDFContainer? {
         val document = printDocumentRepository
                 .findByID(pathoConfig.defaultDocuments.notificationSendReport)
 
@@ -238,6 +238,7 @@ open class ReportService @Autowired constructor(
         document.get().initialize(tmpMap)
 
         try {
+            feedback.setFeedback("report.feedback.report.feedback.generationSendReport")
             logger.debug("Creating send report")
             val pdfReturn = pdfService.createAndAttachPDF(execute.diagnosisRevision.task, document.get(), true)
             return pdfReturn.container
@@ -280,8 +281,6 @@ open class ReportService @Autowired constructor(
 
             return true
         }
-
-        return false
     }
 
     /**

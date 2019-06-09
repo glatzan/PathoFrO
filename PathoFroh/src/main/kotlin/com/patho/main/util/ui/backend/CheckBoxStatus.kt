@@ -3,10 +3,7 @@ package com.patho.main.util.ui.backend
 /**
  * Backend bean status class for primefaces checkboxes
  */
-open class CheckBoxStatus : GuiEntity() {
-
-    var value: Boolean = false
-    var isInfo: Boolean = false
+open class CheckBoxStatus(var value: Boolean = false, rendered: Boolean = true, disabled: Boolean = false, var isInfo: Boolean = false) : GuiEntity(rendered,disabled) {
 
     override fun reset() {
         super.reset()

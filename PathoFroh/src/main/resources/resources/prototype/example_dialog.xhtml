@@ -36,11 +36,11 @@
 
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg[' ']}" />
+						 styleClass="defaultHistoTable">
+				<h:outputLabel value="#{msg['dialog.notificationPhaseExit.headline']}"/>
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
+							   onclick="PF('closeBtn').jq.click();return false;">
+					<i class="fa fa-fw fa-times"/>
 				</p:commandLink>
 			</h:panelGrid>
 		</div>

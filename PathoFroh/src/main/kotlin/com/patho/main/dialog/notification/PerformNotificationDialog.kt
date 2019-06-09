@@ -4,6 +4,8 @@ import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
 import com.patho.main.service.ReportService
+import com.patho.main.util.dialog.event.NotificationPerformedEvent
+import com.patho.main.util.dialog.event.NotificationPhaseExitEvent
 import com.patho.main.util.report.NotificationFeedback
 import com.patho.main.util.report.ReportIntentExecuteData
 import org.springframework.beans.factory.annotation.Autowired
@@ -58,4 +60,7 @@ open class PerformNotificationDialog @Autowired constructor(
             reportService.executeReportNotification(data, this)
     }
 
+    open fun endPhaseAndHide(){
+        super.hideDialog(NotificationPerformedEvent())
+    }
 }

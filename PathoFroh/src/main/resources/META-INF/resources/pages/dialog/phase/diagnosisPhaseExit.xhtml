@@ -40,7 +40,7 @@
 
             <!-- approve all diagnoses-->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-top: 10px; margin-left: 5px"
-                         columnClasses="columnWidth50">
+                         columnClasses="columnWidth25">
                 <!-- approve all diagnoses-->
                 <p:selectBooleanCheckbox
                         title="#{msg['dialog.diagnosisPhaseExit.approveAll.info']}"
@@ -62,7 +62,7 @@
 
             <!-- perform notification-->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
-                         columnClasses="columnWidth50">
+                         columnClasses="columnWidth25">
                 <!-- perform notification-->
                 <p:selectBooleanCheckbox
                         disabled="#{diagnosisPhaseExitDialog.goToNotification.disabled}"
@@ -85,7 +85,7 @@
 
             <!-- remove from worklist -->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
-                         columnClasses="columnWidth50">
+                         columnClasses="columnWidth25">
                 <!-- remove from worklist -->
                 <p:selectBooleanCheckbox
                         disabled="#{diagnosisPhaseExitDialog.removeFromWorklist.disabled}"
@@ -99,7 +99,7 @@
 
             <!-- end diagnosis phase -->
             <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
-                         columnClasses="columnWidth50">
+                         columnClasses="columnWidth25">
                 <!-- end diagnosis phase -->
                 <p:selectBooleanCheckbox title="#{msg['dialog.diagnosisPhaseExit.endPhase.info']}"
                                          disabled="#{diagnosisPhaseExitDialog.exitPhase.disabled}"

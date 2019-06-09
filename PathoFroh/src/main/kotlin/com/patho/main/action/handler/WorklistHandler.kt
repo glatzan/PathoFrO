@@ -222,7 +222,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
 
     /**
      * Adds a patient to the worklist. If the patient was already added it is check if the patient
-     * should be selected. If so, the patient will be selected. The patient isn't
+     * should be selected. If so, the patient will be selected. The patient isn'special.pdfOrganizerDialog
      * added twice. The patient will not be reloaded.
      */
     open fun addPatientToWorkList(patient: Patient, changeView: Boolean) {
@@ -231,7 +231,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
 
     /**
      * Adds a patient to the worklist. If the patient was already added it is check if the patient
-     * should be selected. If so, the patient will be selected. The patient isn't
+     * should be selected. If so, the patient will be selected. The patient isn'special.pdfOrganizerDialog
      * added twice.
      */
     open fun addPatientToWorkList(patient: Patient, changeView: Boolean, reload: Boolean) {

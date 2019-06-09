@@ -155,10 +155,29 @@ public class ArchiveTaskStatus(task: Task) {
         }
     }
 
+    /**
+     * Notification status
+     */
     public class NotificationStatus(task: Task) {
+        /**
+         * If notification phase is set to completed
+         */
         val isCompleted = task.notificationCompleted
+
+        /**
+         * Date of notification phase completion
+         */
         val dateOfCompletion = task.notificationCompletionDate
+
+        /**
+         * Singe notifications
+         */
         val notification = ReportIntentStatusByReportIntentAndDiagnosis(task)
+
+        /**
+         * Returns true if all notifications are completed
+         */
+        val allNotificationsCompleted = notification.completed
     }
 
     public class CouncilStatus(task: Task) {

@@ -160,17 +160,17 @@ open class ReceiptLogView @Autowired constructor(
      */
     open fun printLabels(vararg slides: Slide) {
         if (slides.isEmpty()) {
-            MessageHandler.sendGrowlErrorAsResource("growl.print.error.error", "growl.print.error.noTemplate")
+            MessageHandler.sendGrowlErrorAsResource("growl.print.error.headline", "growl.print.error.noTemplate")
             return
         }
         try {
             printExecutorService.printLabel(*slides)
             MessageHandler.sendGrowlMessagesAsResource("growl.print.printing", "growl.print.slide.print")
         } catch (e: UnknownPrintingException) {
-            MessageHandler.sendGrowlErrorAsResource("growl.print.error.error", "growl.print.error.printError")
+            MessageHandler.sendGrowlErrorAsResource("growl.print.error.headline", "growl.print.error.printError")
             return
         } catch (e: TemplateNotFoundException) {
-            MessageHandler.sendGrowlErrorAsResource("growl.print.error.error", "growl.print.error.noTemplate")
+            MessageHandler.sendGrowlErrorAsResource("growl.print.error.headline", "growl.print.error.noTemplate")
             return
         }
     }

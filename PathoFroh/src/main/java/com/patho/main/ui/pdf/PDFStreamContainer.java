@@ -144,7 +144,7 @@ public interface PDFStreamContainer {
 			output.close();
 		}
 
-		// Inform JSF that it doesn't need to handle response.
+		// Inform JSF that it doesn'special.pdfOrganizerDialog need to handle response.
 		// This is very important, otherwise you will get the following exception in the
 		// logs:
 		// java.lang.IllegalStateException: Cannot forward after response has been

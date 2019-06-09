@@ -113,7 +113,7 @@ abstract class AbstractDialog_(val dialog: Dialog) {
      */
     open fun onSubDialogReturn(event: SelectEvent) {
         logger.debug("Default Dialog return function object: ${if (event.`object` != null) event.`object`.javaClass else "empty"}")
-        if (event.getObject() != null && event.getObject() is ReloadEvent) {
+        if (event.getObject() is ReloadEvent) {
             update(true);
         }
     }

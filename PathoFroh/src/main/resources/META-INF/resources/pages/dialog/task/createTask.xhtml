@@ -108,7 +108,7 @@
                         <h:outputLabel
                                 value="#{msg['dialog.createTask.bioBank.informedConsent.signed']}"/>
                         <p:commandLink style="margin-left:5px;"
-                                       actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(dialog.createTaskDialog.patient).selectMode()}">
+                                       actionListener="#{pdfOrganizerDialog.initAndPrepareBean(dialog.createTaskDialog.patient).selectMode()}">
                             <p:ajax event="dialogReturn" update="@form" process="@form"
                                     listener="#{dialog.createTaskDialog.taskData.bioBank.onMediaSelectReturn}"/>
                             <i class="fa fa-search icon-grey"></i>
@@ -123,7 +123,7 @@
                                  styleClass="listingHistoHiddenTableContainer">
                         <p:commandLink
                                 rendered="#{dialog.createTaskDialog.taskData.bioBank.isPDFSelected()}"
-                                actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(dialog.createTaskDialog.patient).selectMode().setPDFToDisplay(dialog.createTaskDialog.taskData.bioBank.container)}">
+                                actionListener="#{pdfOrganizerDialog.initAndPrepareBean(dialog.createTaskDialog.patient).selectMode().setPDFToDisplay(dialog.createTaskDialog.taskData.bioBank.container)}">
                             <p:ajax event="dialogReturn" update="@form" process="@form"
                                     listener="#{dialog.createTaskDialog.taskData.bioBank.onMediaSelectReturn}"/>
                             <h:outputLabel

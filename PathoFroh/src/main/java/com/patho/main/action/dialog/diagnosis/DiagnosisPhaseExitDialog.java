@@ -99,7 +99,7 @@ public class DiagnosisPhaseExitDialog extends AbstractDialog {
             selectedRevision = DiagnosisService.getNextRevisionToApprove(task);
         }
 
-        // either no revision was passed or autoselect ding't find a reportIntent to
+        // either no revision was passed or autoselect ding'special.pdfOrganizerDialog find a reportIntent to
         // approve
         if (selectedRevision == null) {
             // sets the last element as select, but also sets all revisions to true

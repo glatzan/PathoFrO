@@ -216,7 +216,7 @@ class PrintDialog @Autowired constructor(
                 pdf = PDFCreator().createPDF(container!!.documentTemplate)
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
-                MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.failed.creatingPDF")
+                MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.error.creatingPDF")
                 continue
             }
 
@@ -238,7 +238,7 @@ class PrintDialog @Autowired constructor(
             logger.debug("Printing next order ")
         }
 
-        MessageHandler.sendGrowlMessagesAsResource("growl.print.printing", "growl.print.success",
+        MessageHandler.sendGrowlMessagesAsResource("growl.print.printing", "growl.print.success.amount",
                 arrayOf<Any>(printedDocuments))
 
         logger.debug("Printing completed")

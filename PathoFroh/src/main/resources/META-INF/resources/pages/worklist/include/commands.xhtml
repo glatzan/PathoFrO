@@ -116,7 +116,7 @@
 
         <!-- pdf handler -->
         <p:commandButton id="uploadBtn" widgetVar="uploadBtn"
-                         actionListener="#{dialog.pdfOrganizer.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                         actionListener="#{pdfOrganizerDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
             <p:ajax event="dialogReturn"
                     listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>

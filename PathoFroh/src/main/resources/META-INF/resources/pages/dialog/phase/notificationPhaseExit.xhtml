@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:histo="http://java.sun.com/jsf/composite/components/notification">
 
 
 <h:head>
@@ -23,99 +23,125 @@
         <h:outputScript library="scripts" name="selectCheckboxMenuTop.js"/>
 
         <div class="dialogHeader">
-            <h:panelGrid style="width:100%;" columns="2" id="headerTable">
-                <h:panelGroup id="headerText">
-                    <h:outputFormat value="#{msg['dialog.notificationPhaseExit.headline']}">
-                        <f:param
-                                value="#{msg['enum.contactRole.'.concat(contactAddDialog.addContactAsRole)]}"/>
-                    </h:outputFormat>
-                </h:panelGroup>
-
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.notificationPhaseExit.headline']}"/>
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
-                               disabled="#{!performNotificationDialog.completed}"
-                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                               onclick="PF('closeBtn').jq.click();return false;">
                     <i class="fa fa-fw fa-times"/>
                 </p:commandLink>
             </h:panelGrid>
         </div>
 
         <div class="dialogContent">
-            <h:panelGrid styleClass="defaultHistoTable" columns="1" style="width: 100%">
+            <h:panelGrid styleClass="defaultHistoTable" columns="1" style="margin-bottom: 10px">
                 <h:outputLabel value="#{msg['dialog.notificationPhaseExit.text']}"/>
             </h:panelGrid>
 
-            <!-- remove from notification list -->
-            <!-- remove from worklist list -->
-            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="width: 100%">
-                <!-- remove from notification list -->
+            <h:panelGrid styleClass="defaultHistoTable" columns="1" style="width: 80%">
+                <histo:reportIntentStatusByDiagnosisDatatable formID=":dialogContent:diagnosisTable"
+                                                              controller="#{notificationPhaseExitDialog}"
+                                                              disableSelection="true"
+                                                              id="diagnosisTable"/>
+            </h:panelGrid>
+
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style=" margin-left: 5px"
+                         columnClasses="columnWidth25">
+                <!-- complete phase  -->
                 <p:selectBooleanCheckbox
-                        value="#{notificationPhaseExitDialog.removeFromFavouriteList}"/>
+                        title="#{msg['dialog.notificationPhaseExit.endAll.info']}"
+                        value="#{notificationPhaseExitDialog.competeAllNotifications.value}"
+                        rendered="#{notificationPhaseExitDialog.competeAllNotifications.rendered}"
+                        disabled="#{notificationPhaseExitDialog.competeAllNotifications.disabled}">
+                    <p:ajax event="change" listener="#{notificationPhaseExitDialog.competeAllNotifications.onClick()}"
+                            update="@form" process="@form"/>
+                </p:selectBooleanCheckbox>
                 <h:outputLabel
-                        value="#{msg['dialog.notificationPhaseExit.notificationList.text']}"/>
-                <!-- remove from worklist list -->
+                        value="#{msg['dialog.notificationPhaseExit.endAll.text']}"
+                        title="#{msg['dialog.notificationPhaseExit.endAll.info']}"/>
+
+                <!-- info for exit phase-->
+                <h:outputLabel value=" " rendered="#{notificationPhaseExitDialog.competeAllNotifications.info}"/>
+                <h:outputLabel value="#{msg['dialog.notificationPhaseExit.endAll.infotext']}"
+                               rendered="#{notificationPhaseExitDialog.competeAllNotifications.info}"
+                               styleClass="icon-red"/>
+            </h:panelGrid>
+
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style=" margin-left: 5px"
+                         columnClasses="columnWidth25">
+                <!-- phase exit -->
                 <p:selectBooleanCheckbox
-                        value="#{notificationPhaseExitDialog.removeFromFavouriteList}"/>
+                        title="#{msg['dialog.notificationPhaseExit.exitPhase.info']}"
+                        value="#{notificationPhaseExitDialog.exitPhase.value}"
+                        rendered="#{notificationPhaseExitDialog.exitPhase.rendered}"
+                        disabled="#{notificationPhaseExitDialog.exitPhase.disabled}">
+                    <p:ajax event="change" listener="#{notificationPhaseExitDialog.exitPhase.onClick()}"
+                            update="@form" process="@form"/>
+                </p:selectBooleanCheckbox>
                 <h:outputLabel
+                        value="#{msg['dialog.notificationPhaseExit.exitPhase.text']}"
+                        title="#{msg['dialog.notificationPhaseExit.exitPhase.info']}"/>
+
+                <!-- info for exit phase-->
+                <h:outputLabel value=" " rendered="#{notificationPhaseExitDialog.exitPhase.info}"/>
+                <h:outputLabel value="#{msg['dialog.notificationPhaseExit.exitPhase.infotext']}"
+                               rendered="#{notificationPhaseExitDialog.exitPhase.info}" styleClass="icon-red"/>
+            </h:panelGrid>
+
+            <!-- remove from worklist -->
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
+                         columnClasses="columnWidth25">
+                <!-- remove from worklist -->
+                <p:selectBooleanCheckbox
+                        title="#{msg['dialog.notificationPhaseExit.worklist.info']}"
+                        value="#{notificationPhaseExitDialog.removeFromWorklist.value}"
+                        disabled="#{notificationPhaseExitDialog.removeFromWorklist.disabled}"
+                        rendered="#{notificationPhaseExitDialog.removeFromWorklist.rendered}">
+                    <p:ajax event="change" listener="#{notificationPhaseExitDialog.removeFromWorklist.onClick()}"
+                            update="@form" process="@form"/>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        title="#{msg['dialog.notificationPhaseExit.worklist.info']}"
                         value="#{msg['dialog.notificationPhaseExit.worklist.text']}"/>
             </h:panelGrid>
 
-            <!-- info for no removal from notification list-->
-            <h:panelGrid styleClass="defaultHistoTable" columns="1" style="width: 100%"
-                         rendered="#{notificationPhaseExitDialog.isRenderInfoTextFavouriteList}">
-                <h:outputLabel value="#{msg['dialog.notificationPhaseExit.notificationList.noRemovalInfo']}"
-                               styleClass="icon-red"/>
-            </h:panelGrid>
-
-            <!-- phase exit -->
-            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="width: 100%">
-                <p:selectBooleanCheckbox
-                        value="#{notificationPhaseExitDialog.exitPhase}"/>
-                <h:outputLabel
-                        value="#{msg['dialog.notificationPhaseExit.exitPhase.text']}"/>
-            </h:panelGrid>
-
-            <!-- info for no phase exit -->
-            <h:panelGrid styleClass="defaultHistoTable" columns="1" style="width: 100%"
-                         rendered="#{notificationPhaseExitDialog.isRenderInfoTextExit}">
-                <h:outputLabel value="#{msg['dialog.notificationPhaseExit.exitPhase.noExit']}"
-                               styleClass="icon-red"/>
-            </h:panelGrid>
-
             <!-- task archive -->
-            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="width: 100%">
+            <h:panelGrid styleClass="defaultHistoTable" columns="2" style="margin-left: 5px"
+                         columnClasses="columnWidth25">
                 <p:selectBooleanCheckbox
-                        value="#{notificationPhaseExitDialog.archiveTask}"/>
+                        title="#{msg['dialog.notificationPhaseExit.archiveTask.info']}"
+                        value="#{notificationPhaseExitDialog.archiveTask.value}"
+                        rendered="#{notificationPhaseExitDialog.archiveTask.rendered}"
+                        disabled="#{notificationPhaseExitDialog.archiveTask.disabled}">
+                    <p:ajax event="change" listener="#{notificationPhaseExitDialog.archiveTask.onClick()}"
+                            update="@form" process="@form"/>
+                </p:selectBooleanCheckbox>
                 <h:outputLabel
+                        title="#{msg['dialog.notificationPhaseExit.archiveTask.info']}"
                         value="#{msg['dialog.notificationPhaseExit.archiveTask.text']}"/>
-            </h:panelGrid>
 
-            <!-- info for no task archive -->
-            <h:panelGrid styleClass="defaultHistoTable" columns="1" style="width: 100%"
-                         rendered="#{notificationPhaseExitDialog.isRenderInfoTextExit}">
-                <h:outputLabel value="#{msg['dialog.notificationPhaseExit.archiveTask.noArchival']}"
+                <!-- info for no task archive -->
+                <h:outputLabel value=" " rendered="#{notificationPhaseExitDialog.archiveTask.info}"/>
+                <h:outputLabel rendered="#{notificationPhaseExitDialog.archiveTask.info}"
+                               value="#{msg['dialog.notificationPhaseExit.archiveTask.infotext']}"
                                styleClass="icon-red"/>
             </h:panelGrid>
-
         </div>
 
         <div class="buttonContainer">
             <h:panelGrid columns="2">
                 <h:panelGrid columns="1" styleClass="left" id="leftButtonContainer">
-                    <!-- send report -->
-                    <p:commandButton value="Benachrichtigung abschließen"
-                                     disabled="#{!performNotificationDialog.completed}"
-                                     icon="fa fa-times-circle"
-                                     actionListener="#{performNotificationDialog.hideDialog()}"/>
                 </h:panelGrid>
                 <h:panelGrid columns="3" styleClass="right" id="rightButtonContainer">
 
                     <!-- Exit button -->
-                    <p:commandButton value="#{msg['general.ok']}" id="closeBtn"
+                    <p:commandButton value="#{msg['general.ok']}"
                                      icon="fa fa-check-circle-o"
+                                     disabled="#{notificationPhaseExitDialog.disableOKButton}"
                                      actionListener="#{notificationPhaseExitDialog.hideAndExitPhase}"/>
 
                     <!-- abort -->
-                    <p:commandButton value="#{msg['general.abort']}"
+                    <p:commandButton value="#{msg['general.abort']}" widgetVar="closeBtn"
                                      icon="fa fa-times-circle"
                                      actionListener="#{notificationPhaseExitDialog.hideDialog()}"/>
                 </h:panelGrid>

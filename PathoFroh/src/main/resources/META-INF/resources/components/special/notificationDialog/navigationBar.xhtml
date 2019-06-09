@@ -9,6 +9,7 @@
     <composite:attribute name="renderClose" required="false" default="true"/>
     <composite:attribute name="disableNavigation" required="false" default="false"/>
     <composite:attribute name="renderContact" required="false" default="true"/>
+    <composite:attribute name="controller" required="true" type="com.patho.main.dialog.notification.IContactReturnUpdate"/>
 </composite:interface>
 
 <composite:implementation>
@@ -23,7 +24,7 @@
                                  title="#{msg['dialog.notificationDialog.component.navigationBar.button.select.info']}"
                                  actionListener="#{contactDialog.initAndPrepareBean(notificationDialog.task)}">
                     <p:ajax event="dialogReturn" update="@form"
-                            listener="#{notificationDialog.update}"/>
+                            listener="#{cc.attrs.controller.onContactDialogReturn}"/>
                 </p:commandButton>
             </h:panelGrid>
 

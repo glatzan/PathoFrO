@@ -9,6 +9,8 @@ import com.patho.main.service.impl.SpringContextBridge
 
 open class DiagnosisBearer(task: Task, val diagnosisRevision: DiagnosisRevision) {
 
+    val id = diagnosisRevision.id
+
     val reportIntents = mutableListOf<NotificationBearer>()
 
     val activeReportIntents: List<NotificationBearer>

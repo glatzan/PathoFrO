@@ -3,8 +3,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
-      xmlns:histo="http://java.sun.com/jsf/composite/components/special.pdfOrganizerDialog">
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
     <title><h:outputFormat
@@ -89,19 +88,99 @@
                                     </p:treeNode>
 
                                     <!-- pdfs -->
-                                    <p:treeNode type="pdf" icon="fa fa-file-pdf-o"
-                                                styleClass="pdfInfoOverlayPanelTrigger triggerCommand_showOVerlay#{node.id}">
+                                    <p:treeNode type="pdf" icon="fa fa-file-pdf-o">
+                                        <h:panelGrid columns="1" styleClass="mouseEntryEventElemnt"
+                                                     id="bine">
+                                            <f:passThroughAttribute name="tvalue" value="#{node.id}"/>
 
-                                        <h:outputText value="#{node.name}" id="treeNode">
-                                            <f:converter converterId="org.histo.ui.TruncateConverter"/>
-                                            <f:attribute name="truncateAt" value="25"/>
-                                            <f:attribute name="continuationMark" value="..."/>
-                                        </h:outputText>
+                                            <!-- name -->
+                                            <h:outputText value="#{node.name}" id="treeNode">
+                                                <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                                                <f:attribute name="truncateAt" value="25"/>
+                                                <f:attribute name="continuationMark" value="..."/>
+                                            </h:outputText>
+                                        </h:panelGrid>
 
-                                        <p:remoteCommand name="showOVerlay#{node.id}"
-                                                         update=":dialogContent:pdfInfoOverlayPanelBearer:pdfInfoOverlayPanel"
-                                                         actionListener="#{pdfOrganizerDialog.streamContainer.setTooltip(node)}"
-                                                         oncomplete="commonFunctions.showOverlayPanelParentByID('pdfInfoOverlayPanel', '.test1235466')"/>
+                                        <!-- tooltip -->
+                                        <pe:tooltip for="bine" onShow="updatef1#{node.id}()"
+                                                    mouseTracking="true" myPosition="top left" adjustX="10"
+                                                    adjustY="10">
+
+                                            <p:remoteCommand name="updatef1#{node.id}" update="bild2"/>
+
+                                            <h:panelGrid columns="2"
+                                                         columnClasses="columnTop, columnLeft" id="bild2"
+                                                         style="width:100%"
+                                                         styleClass="defaultHistoHiddenTableContainer">
+                                                <h:panelGrid columns="2" styleClass="defaultHistoTable">
+                                                    <!-- name -->
+                                                    <h:outputText
+                                                            value="#{msg['dialog.pdfOrganizer.files.name']}"/>
+                                                    <h:outputText value="#{node.name}">
+                                                        <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                                                        <f:attribute name="truncateAt" value="35"/>
+                                                        <f:attribute name="continuationMark" value="..."/>
+                                                    </h:outputText>
+
+                                                    <!-- created date-->
+                                                    <h:outputText
+                                                            value="#{msg['component.auditTable.createdOn']}"/>
+                                                    <h:outputText value="#{node.audit.createdOn}">
+                                                        <f:convertDateTime type="date"
+                                                                           pattern="dd.MM.yyyy HH:mm:ss"/>
+                                                    </h:outputText>
+
+                                                    <!-- created name-->
+                                                    <h:outputText
+                                                            value="#{msg['component.auditTable.createdBy']}"/>
+                                                    <h:outputText value="#{node.audit.createdBy}">
+                                                    </h:outputText>
+
+                                                    <!-- updated date-->
+                                                    <h:outputText
+                                                            value="#{msg['component.auditTable.updatedOn']}"/>
+                                                    <h:outputText
+                                                            style="#{node.audit.updatedOn eq 0 ? 'display:none' : ''}"
+                                                            value="#{node.audit.updatedOn}">
+                                                        <f:convertDateTime type="date"
+                                                                           pattern="dd.MM.yyyy HH:mm:ss"/>
+                                                    </h:outputText>
+
+                                                    <!-- updated name-->
+                                                    <h:outputText
+                                                            value="#{msg['component.auditTable.updatedBy']}"/>
+                                                    <h:outputText value="#{node.audit.updatedBy}">
+                                                    </h:outputText>
+
+                                                    <!-- type -->
+                                                    <h:outputText
+                                                            value="#{msg['dialog.pdfOrganizer.files.type']}"/>
+                                                    <h:outputLabel
+                                                            value="#{msg['enum.documentType.'.concat(node.type)]}"/>
+
+                                                    <!-- commentary -->
+                                                    <h:outputText
+                                                            value="#{msg['dialog.pdfOrganizer.files.commentary']}"/>
+                                                    <h:outputText value="#{node.commentary}"
+                                                                  title="#{node.commentary}">
+                                                        <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                                                        <f:attribute name="truncateAt" value="35"/>
+                                                        <f:attribute name="continuationMark" value="..."/>
+                                                    </h:outputText>
+                                                </h:panelGrid>
+
+                                                <!-- preview image -->
+                                                <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                                                    <p:graphicImage
+                                                            value="#{pdfOrganizerDialog.streamContainer.getThumbnail()}"
+                                                            style="border: 1px solid black; float: right;"
+                                                            width="200px" cache="false" alt="unable to load image"/>
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+                                        </pe:tooltip>
+
+                                        <p:remoteCommand name="updateToolTip#{node.id}"
+                                                         actionListener="#{pdfOrganizerDialog.streamContainer.setTooltip(node)}"/>
 
                                     </p:treeNode>
                                 </p:tree>
@@ -236,9 +315,37 @@
             <p:blockUI block="dialogContent:navigationTable"
                        widgetVar="viewModeBlock"/>
 
-            <histo:pdfInfoOverlay wid="pdfInfoOverlayPanel" triggerClass="pdfInfoOverlayPanelTrigger"
-                                  id="pdfInfoOverlayPanelBearer"
-                                  controller="#{pdfOrganizerDialog.streamContainer}"/>
+            <script>
+                $(document).ready(function () {
+                    setMouseEnterEvents(true);
+                    commonFunctions.initializeCustomScrollPanel("dialogContent:scrollBody");
+
+                    // disabling pdf selection in view mode
+                    if (#{pdfOrganizerDialog.viewOnly}) {
+                        PF('viewModeBlock').show();
+                    }
+                });
+
+                // mouse entry event for tree nodes
+                function setMouseEnterEvents() {
+                    $(".mouseEntryEventElemnt").each(
+                        function (index) {
+
+                            $(this).mouseenter(
+                                function () {
+                                    eval("updateToolTip"
+                                        + $(this).attr("tvalue")
+                                        + "()");
+                                    //PF('tooltipOverlay').show($(this).attr("id"));
+                                });
+
+                            $(this).mouseleave(function () {
+                                //PF('tooltipOverlay').hide();
+                            });
+
+                        });
+                }
+            </script>
 
         </div>
 

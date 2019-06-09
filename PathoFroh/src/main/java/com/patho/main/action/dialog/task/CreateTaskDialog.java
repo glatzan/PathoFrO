@@ -273,7 +273,7 @@ public class CreateTaskDialog extends AbstractDialog {
                     container = new PDFCreator().createPDF(printDocument.get());
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.failed.creatingPDF");
+                    MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.error.creatingPDF");
                     return;
                 }
 

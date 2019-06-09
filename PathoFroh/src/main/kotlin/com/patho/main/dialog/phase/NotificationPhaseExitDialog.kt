@@ -6,9 +6,13 @@ import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.WorkPhaseService
+import com.patho.main.util.dialog.event.NotificationPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
-import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.exceptions.TaskNotFoundException
+import com.patho.main.util.status.diagnosis.DiagnosisBearer
+import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
+import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
+import com.patho.main.util.ui.backend.CheckBoxStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -21,27 +25,26 @@ import org.springframework.stereotype.Component
 open class NotificationPhaseExitDialog @Autowired constructor(
         private val phaseService: WorkPhaseService,
         private val worklistHandler: WorklistHandler,
-        private val taskRepository: TaskRepository) : AbstractPhaseExitDialog(Dialog.NOTIFICATION_PHASE_EXIT) {
+        private val taskRepository: TaskRepository) : AbstractPhaseExitDialog(Dialog.NOTIFICATION_PHASE_EXIT), IReportIntentStatusByDiagnosisViewData {
 
     /**
-     * True if info text for not removing the task form the notification list should be displayed
+     * List of all reportIntent revisions with their status
      */
-    open var isRenderInfoTextFavouriteList: Boolean = false
+    override lateinit var diagnosisRevisions: ReportIntentStatusByDiagnosis
 
     /**
-     * True if info text for not completing the notification phase should be displayed
+     * Selected reportIntent for that the notification will be performed
      */
-    open var isRenderInfoTextExit: Boolean = false
+    override var selectDiagnosisRevision: DiagnosisBearer? = null
 
     /**
-     * True if info text for not archving the task should be displayed
+     * Diagnosis bearer for displaying details in the datatable overlay panel
      */
-    open var isRenderInfoTaskArchive: Boolean = false
+    override var viewDiagnosisRevisionDetails: DiagnosisBearer? = null
 
-    /**
-     * True if task should be archived (will trigger the archiveTask dialog)
-     */
-    open var archiveTask: Boolean = false
+    open lateinit var competeAllNotifications: CheckBoxStatus
+
+    open lateinit var archiveTask: CheckBoxStatus
 
     override fun initBean(task: Task): Boolean {
 
@@ -51,28 +54,54 @@ open class NotificationPhaseExitDialog @Autowired constructor(
             throw TaskNotFoundException()
 
         oTask = optionalTask.get()
-        val status = ArchiveTaskStatus(oTask)
 
-        // remove from notification list in no notification for an other reportIntent should be performed
-//        removeFromFavouriteList = !oTask.diagnosisRevisions.any { it.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
-        // render info text while not removing from notification list
-//        isRenderInfoTextFavouriteList = !removeFromFavouriteList
+        diagnosisRevisions = ReportIntentStatusByDiagnosis(oTask)
 
-        // only remove from notification list if no more notifications need do be done
-        removeFromWorklist = removeFromFavouriteList
+        archiveTask = object : CheckBoxStatus() {
+            override fun onClick() {
+            }
+        }
 
-        // true if all notifications had been performed
-//        exitPhase = oTask.diagnosisRevisions.any { it.isNotificationNecessary }
-        // info text only if no phase exit should be done
-//        isRenderInfoTextExit = !exitPhase
+        competeAllNotifications = object : CheckBoxStatus(false, isNotificationNecessary, false, false) {
+            override fun onClick() {
+                this.isInfo = this.value
+                if (this.value) {
+                    exitPhase.set(true, true, false, false)
+                    removeFromWorklist.set(true, true, false, false)
+                } else {
+                    exitPhase.set(!isNotificationPending, true, isNotificationPending, isNotificationPending)
+                    removeFromWorklist.set(!isNotificationPending, true, false, false)
+                }
+            }
+        }
 
-        // status for archiving task after phase has ended
-        archiveTask = status.isArchiveAble
+        // setting exit phase
+        exitPhase = object : CheckBoxStatus(!isNotificationPending, true, isNotificationPending, isNotificationPending) {
+            override fun onClick() {
+            }
+        }
 
-        isRenderInfoTextExit = !archiveTask
+        removeFromWorklist.set(!isNotificationPending, true, false, false)
+
+        archiveTask = object : CheckBoxStatus(isNotificationCompleted, true, !isNotificationCompleted, !isNotificationCompleted) {
+            override fun onClick() {
+            }
+        }
 
         return super.initBean(oTask)
     }
+
+    private val isNotificationPending: Boolean
+        get() = diagnosisRevisions.diagnosisBearer.any { it.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
+
+    private val isNotificationNecessary: Boolean
+        get() = diagnosisRevisions.diagnosisBearer.all { it.diagnosisRevision.isNotificationNecessary }
+
+    private val isNotificationCompleted: Boolean
+        get() = !isNotificationNecessary
+
+    val disableOKButton
+        get() = !(competeAllNotifications.value || exitPhase.value || removeFromWorklist.value)
 
     /**
      * Hides the dialog an exits the notification phase
@@ -95,6 +124,7 @@ open class NotificationPhaseExitDialog @Autowired constructor(
 //		}
 //
 //		setExitSuccessful(true);
+        super.hideDialog(NotificationPhaseExitEvent())
     }
 
     /**

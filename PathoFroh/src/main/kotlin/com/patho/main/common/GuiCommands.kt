@@ -29,5 +29,11 @@ class GuiCommands {
          */
         @JvmStatic
         val OPEN_COPY_HISTOLOGICAL_RECORD_DIALOG_FROM_DIAGNOSIS_VIEW: String = "clickButtonFromBean('contentForm:openDiagnosisRecordDialog')"
+
+        /**
+         * Opens the end staining phase dialog from the notification dialog
+         */
+        @JvmStatic
+        val OPEN_END_STAINING_PHASE_FROM_NOTIFICATION_DIALOG: String = "clickButtonFromBean('adminForm:openEndStainingPhaseBtn')"
     }
 }
