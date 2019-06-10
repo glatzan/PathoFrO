@@ -22,7 +22,7 @@
         <h:outputScript library="scripts" name="selectCheckboxMenuTop.js"/>
 
         <div class="dialogHeader">
-            <h:panelGrid style="width:100%;" columns="2"
+            <h:panelGrid style="width:100%;" columns="2" id="headerTable"
                          styleClass="defaultHistoTable">
                 <h:outputLabel value="#{msg['dialog.notificationPerform.headline']}"/>
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
@@ -88,16 +88,18 @@
                     <!-- send report -->
                     <p:commandButton value="#{msg['dialog.notificationPerform.sendReport.text']}"
                                      title="#{msg['dialog.notificationPerform.sendReport.info']}"
-                                     disabled="#{!performNotificationDialog.fa-search}"
-                                     icon="fa fa-times-circle"
-                                     actionListener="#{performNotificationDialog.hideDialog()}"/>
+                                     disabled="#{performNotificationDialog.sendReportButton.disabled}"
+                                     rendered="#{performNotificationDialog.sendReportButton.rendered}"
+                                     icon="fa fa-file-text-o"
+                                     actionListener="#{pdfOrganizerDialog.initAndPrepareBean(performNotificationDialog.task.patient,performNotificationDialog.sendReport).viewMode()}"/>
                 </h:panelGrid>
                 <h:panelGrid columns="3" styleClass="right" id="rightButtonContainer">
 
-                    <!-- send report -->
+                    <!-- end phase -->
                     <p:commandButton value="#{msg['dialog.notificationPerform.end.text']}"
                                      title="#{msg['dialog.notificationPerform.end.info']}"
-                                     disabled="#{!performNotificationDialog.completed}"
+                                     disabled="#{performNotificationDialog.endPhaseButton.disabled}"
+                                     rendered="#{performNotificationDialog.endPhaseButton.rendered}"
                                      icon="fa fa-mail-forward"
                                      actionListener="#{performNotificationDialog.endPhaseAndHide()}"/>
 

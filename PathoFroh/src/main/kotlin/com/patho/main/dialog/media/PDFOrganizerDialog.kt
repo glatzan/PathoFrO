@@ -72,13 +72,25 @@ open class PDFOrganizerDialog @Autowired constructor(
 
         this.selectedNode = null
 
-        update(true)
-
         this.enablePDFSelection = false
         this.viewOnly = false
 
         uploadDocumentType = PrintDocumentType.OTHER
         uploadTarget = patient
+
+        update(true)
+
+        // selecting pdf if pdf is passed
+        if (selectedContainer != null) {
+            val node = findParentNodeOfContainer(selectedContainer)
+
+            if (node != null) {
+                node.isSelected = true
+                this.selectedNode = node
+                if (node.data is PDFContainer)
+                    this.stream.displayPDF = node.data as PDFContainer
+            }
+        }
 
         return super.initBean()
     }
@@ -139,6 +151,19 @@ open class PDFOrganizerDialog @Autowired constructor(
                 b.get().attachedPdfs.forEach { DefaultTreeNode("pdf", it, bioBankNode) }
             }
         }
+    }
+
+    private fun findParentNodeOfContainer(pdfContainer: PDFContainer, node: TreeNode = root): TreeNode? {
+        if (node.data is PDFContainer && node.data == pdfContainer)
+            return node
+
+        for (childNode in node.children) {
+            val tmp = findParentNodeOfContainer(pdfContainer, childNode)
+            if (tmp != null)
+                return tmp
+        }
+
+        return null
     }
 
     /**
@@ -274,13 +299,19 @@ open class PDFOrganizerDialog @Autowired constructor(
 
     /**
      * On dialog return, reload data (delete, edit and updload=
-     *
-     * @param event
      */
     fun onDefaultDialogReturn(event: SelectEvent) {
         if (event.getObject() is ReloadEvent) {
             update(true)
         }
+    }
+
+    /**
+     * Sets the view mode for this dialog
+     */
+    fun viewMode(): PDFOrganizerDialog {
+        this.viewOnly = true
+        return this
     }
 
     /**

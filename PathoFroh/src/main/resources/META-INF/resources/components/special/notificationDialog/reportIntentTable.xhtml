@@ -5,9 +5,17 @@
       xmlns:composite="http://java.sun.com/jsf/composite">
 
 <composite:interface>
-    <composite:attribute name="reportIntentStatus" required="true" type="com.patho.main.util.report.ui.ReportIntentUIContainer"/>
+
+    <!-- report intent list-->
+    <composite:attribute name="reportIntentStatus" required="true"
+                         type="com.patho.main.util.report.ui.ReportIntentUIContainer"/>
+
+    <!-- true if use notification -->
     <composite:attribute name="useNotification" required="false" default="true"/>
-    <composite:attribute name="task" required="true" />
+
+    <!-- current task -->
+    <composite:attribute name="task" required="true"/>
+
 </composite:interface>
 
 <composite:implementation>
@@ -33,10 +41,11 @@
             </f:facet>
 
             <p:selectBooleanCheckbox
-                    disabled="#{!cc.attrs.useNotification or !reportIntentNotificationBearer.renderInactiveButton}"
+                    disabled="#{!cc.attrs.useNotification }"
                     title="#{msg['dialog.notificationDialog.component.reportIntentTable.perform']}"
                     value="#{reportIntentNotificationBearer.performNotification}">
-                <p:ajax event="change" update="@form"/>
+                <p:ajax event="change" update="@form" process="@form"
+                        listener="#{reportIntentNotificationBearer.onPerformNotificationChange()}"/>
             </p:selectBooleanCheckbox>
         </p:column>
 

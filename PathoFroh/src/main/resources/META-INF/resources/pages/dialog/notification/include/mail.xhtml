@@ -4,7 +4,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:histo="http://java.sun.com/jsf/composite/components/special/notificationDialog"
-                xmlns:pe="http://primefaces.org/ui/extensions">
+>
 
     <p:outputPanel styleClass="headerPannel">
         <h:outputLabel value="#{msg['dialog.notificationDialog.mail.headline']}"/>
@@ -84,7 +84,8 @@
                     styleClass="bigFont"/>
 
             <!-- receiver datatable -->
-            <histo:reportIntentTable reportIntentStatus="#{notificationDialog.mailTab.reportIntentStatus}" task="#{notificationDialog.task}" />
+            <histo:reportIntentTable reportIntentStatus="#{notificationDialog.mailTab.reportIntentStatus}"
+                                     task="#{notificationDialog.task}"/>
 
         </h:panelGrid>
     </p:outputPanel>

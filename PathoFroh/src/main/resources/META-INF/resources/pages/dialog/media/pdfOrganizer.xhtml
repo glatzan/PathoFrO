@@ -197,7 +197,7 @@
 
                     <!-- print -->
                     <p:commandButton value="#{msg['dialog.pdfOrganizer.button.print']}"
-                                     disabled="#{pdfOrganizerDialog.stream.renderPDF}"
+                                     disabled="#{!pdfOrganizerDialog.stream.renderPDF}"
                                      icon="fa fa-print"
                                      actionListener="#{pdfOrganizerDialog.displayPrintNotification(currentUserHandler.printer.print(pdfOrganizerDialog.stream.displayPDF))}"/>
 
@@ -215,7 +215,7 @@
                     <!-- download button -->
                     <p:commandButton value="#{msg['dialog.pdfOrganizer.button.open']}"
                                      icon="fa fa-download" ajax="false"
-                                     disabled="#{pdfOrganizerDialog.stream.renderPDF}">
+                                     disabled="#{!pdfOrganizerDialog.stream.renderPDF}">
                         <p:fileDownload
                                 value="#{pdfOrganizerDialog.stream.getPDFStream()}"/>
                     </p:commandButton>

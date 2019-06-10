@@ -1,6 +1,8 @@
 package com.patho.main.util.report.ui
 
+import com.patho.main.dialog.notification.NotificationDialog
 import com.patho.main.model.PDFContainer
+import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
@@ -10,7 +12,7 @@ import com.patho.main.util.print.PrintPDFBearer
 /**
  * Bearer for the notification intent
  */
-open class ReportIntentNotificationUIContainer(var reportIntent: ReportIntent, var reportIntentNotification: ReportIntentNotification) {
+open class ReportIntentNotificationUIContainer(var reportIntent: ReportIntent, var reportIntentNotification: ReportIntentNotification, var diagnosisRevision: DiagnosisRevision, private val contactTab: NotificationDialog.ContactTab) {
 
     /**
      * Conatct address, if reportIntentNotification has no contact address set, a new one will be generated
@@ -23,8 +25,8 @@ open class ReportIntentNotificationUIContainer(var reportIntent: ReportIntent, v
     val status: ReportIntentUIContainer.ReportIntentBearerStatus
         get() = if (reportIntentNotification.active) {
             // status is active, check if history is present, if so check if the notification was successful
-            if (SpringContextBridge.services().reportIntentService.isHistoryPresent(reportIntentNotification)) {
-                if (SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportIntentNotification))
+            if (SpringContextBridge.services().reportIntentService.isHistoryPresentForDiagnosis(reportIntentNotification, diagnosisRevision)) {
+                if (SpringContextBridge.services().reportIntentService.isNotificationPerformedForDiagnosis(reportIntentNotification, diagnosisRevision))
                     ReportIntentUIContainer.ReportIntentBearerStatus.SUCCESS
                 else
                     ReportIntentUIContainer.ReportIntentBearerStatus.FAILED
@@ -41,9 +43,14 @@ open class ReportIntentNotificationUIContainer(var reportIntent: ReportIntent, v
     var performNotification: Boolean = status == ReportIntentUIContainer.ReportIntentBearerStatus.ACTIVE
 
     /**
+     * If the performNotification status was altered manually
+     */
+    var performNotificationManuallyAltered: Boolean = false
+
+    /**
      * Custom pdf and template for contact
      */
-    var printPDF : PrintPDFBearer? = null
+    var printPDF: PrintPDFBearer? = null
 
     /**
      * Custom pdf for contact
@@ -64,9 +71,24 @@ open class ReportIntentNotificationUIContainer(var reportIntent: ReportIntent, v
 
 
     fun update(update: ReportIntentNotificationUIContainer) {
+        val revisionChange = update.diagnosisRevision != this.diagnosisRevision
         this.reportIntent = update.reportIntent
+        this.diagnosisRevision = update.diagnosisRevision
         this.reportIntentNotification = update.reportIntentNotification
-        this.performNotification = status == ReportIntentUIContainer.ReportIntentBearerStatus.ACTIVE
+
+        // do nothing if the status was altered manually
+        if (!performNotificationManuallyAltered || revisionChange) {
+            this.performNotification = status == ReportIntentUIContainer.ReportIntentBearerStatus.ACTIVE
+            this.performNotificationManuallyAltered = false
+        }
+    }
+
+    /**
+     * Action listener for manually change perform notification status
+     */
+    fun onPerformNotificationChange() {
+        performNotificationManuallyAltered = true
+        contactTab.onPerformNotificationChange()
     }
 
     /**

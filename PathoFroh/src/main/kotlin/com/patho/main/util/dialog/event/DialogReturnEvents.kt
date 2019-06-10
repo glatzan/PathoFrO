@@ -97,7 +97,7 @@ open class ConfirmEvent(confirm: Boolean) : SelectEvent<Boolean>(confirm)
 /**
  * Event for diagnosis creation
  */
-open class QuickDiagnosisAddEvent(diagnosisCreated : Boolean): SelectEvent<Boolean>(diagnosisCreated)
+open class QuickDiagnosisAddEvent(diagnosisCreated: Boolean) : SelectEvent<Boolean>(diagnosisCreated)
 
 /**
  * Reload event
@@ -152,4 +152,4 @@ class NotificationPhaseExitEvent() : TaskReloadEvent()
 /**
  * Return event for the NotificationPerforme dialog
  */
-class NotificationPerformedEvent() : TaskReloadEvent()
+class NotificationPerformedEvent(val endPhase: Boolean) : TaskReloadEvent()

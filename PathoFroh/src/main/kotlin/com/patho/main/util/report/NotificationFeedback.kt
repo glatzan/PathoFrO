@@ -37,7 +37,7 @@ interface NotificationFeedback {
      * Loads the feedback from the message file
      */
     fun setFeedback(key: String, vararg insert: String) {
-        status = SpringContextBridge.services().resourceBundle.get(key, insert)
+        status = SpringContextBridge.services().resourceBundle.get(key, *insert)
     }
 
     /**

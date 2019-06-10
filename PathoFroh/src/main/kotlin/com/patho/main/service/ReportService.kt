@@ -110,7 +110,7 @@ open class ReportService @Autowired constructor(
      */
     private fun sendMail(container: MailNotificationExecuteData, execute: ReportIntentExecuteData, feedback: NotificationFeedback): Boolean {
         feedback.setFeedback("report.feedback.mail.sending", container.contactAddress.toString())
-        logger.debug("Sending mail to {}", container.contactAddress)
+        logger.debug("Sending mail to ${container.contactAddress}")
 
         if (!generatePrintPDf(execute, execute.mailReports, container)) {
             container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.mail.reportGenerationFailed"), save = true).first
@@ -240,7 +240,7 @@ open class ReportService @Autowired constructor(
         document.get().initialize(tmpMap)
 
         try {
-            feedback.setFeedback("report.feedback.report.feedback.generationSendReport")
+            feedback.setFeedback("report.feedback.generationSendReport")
             logger.debug("Creating send report")
             val pdfReturn = pdfService.createAndAttachPDF(execute.diagnosisRevision.task, document.get(), true)
             return pdfReturn.container

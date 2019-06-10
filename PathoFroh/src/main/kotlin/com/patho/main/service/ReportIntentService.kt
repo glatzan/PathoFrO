@@ -375,13 +375,28 @@ open class ReportIntentService @Autowired constructor(
                 ?: addDiagnosisHistoryRecord(task, reportIntentNotification, diagnosisRevision, false).second).data.add(reportData)
 
         if (save) {
-            var tmp =  reportIntentNotificationRepository.save(reportIntentNotification, resourceBundle.get("log.reportIntent.notification.diagnosisRecord.record.add", task, reportIntentNotification.contact?.person), task!!.patient)
+            var tmp = reportIntentNotificationRepository.save(reportIntentNotification, resourceBundle.get("log.reportIntent.notification.diagnosisRecord.record.add", task, reportIntentNotification.contact?.person), task!!.patient)
             return Pair(tmp, reportData)
         }
 
         return Pair(reportIntentNotification, reportData)
     }
 
+    /**
+     * Checks if a notification was performed for a diagnosisRevision
+     */
+    @Transactional
+    open fun isHistoryPresentForDiagnosis(reportIntent: ReportIntent, diagnosisRevision: DiagnosisRevision): Boolean {
+        return reportIntent.notifications.any { p -> isHistoryPresentForDiagnosis(p, diagnosisRevision) }
+    }
+
+    /**
+     * Checks if a notification was performed for a diagnosisRevision
+     */
+    @Transactional
+    open fun isHistoryPresentForDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): Boolean {
+        return reportIntentNotification.history.any { it.diagnosisID == diagnosisRevision.id && isHistoryPresent(it) }
+    }
 
     /**
      * Checks if a notification was performed
@@ -440,13 +455,37 @@ open class ReportIntentService @Autowired constructor(
         return contactRoles.any { p -> reportIntent.role == p }
     }
 
+    /**
+     * Checks if  notifications are performed for the given diagnosis
+     */
+    @Transient
+    open fun isNotificationPerformedForDiagnosis(reportIntent: ReportIntent, diagnosisRevision: DiagnosisRevision): Boolean {
+        return reportIntent.notifications.any { isNotificationPerformedForDiagnosis(it, diagnosisRevision) }
+    }
+
+    /**
+     * Checks if  notifications are performed for the given diagnosis
+    */
+    @Transient
+    open fun isNotificationPerformedForDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): Boolean {
+        return reportIntentNotification.history.any { it.diagnosisID == diagnosisRevision.id && isNotificationPerformed(it) }
+    }
+
+    /**
+     * Checks if the notifications of the given type were performed
+     */
+    @Transient
+    open fun isNotificationPerformedForDiagnosis(reportIntent: ReportIntent, type: NotificationTyp): Boolean {
+        val tmp = findReportIntentNotificationByType(reportIntent, type)
+        return if (tmp != null) isNotificationPerformed(tmp) else false
+    }
 
     /**
      * Checks if all notifications are performed
      */
     @Transient
     open fun isNotificationPerformed(reportIntent: ReportIntent): Boolean {
-        return if(reportIntent.notifications.isNotEmpty()) reportIntent.notifications.all { p -> isNotificationPerformed(p) } else false
+        return if (reportIntent.notifications.isNotEmpty()) reportIntent.notifications.all { p -> isNotificationPerformed(p) } else false
     }
 
     /**
@@ -454,7 +493,7 @@ open class ReportIntentService @Autowired constructor(
      */
     @Transient
     open fun isNotificationPerformed(reportIntentNotification: ReportIntentNotification): Boolean {
-        return if(reportIntentNotification.history.isNotEmpty()) reportIntentNotification.history.all { p -> isNotificationPerformed(p) } else false
+        return if (reportIntentNotification.history.isNotEmpty()) reportIntentNotification.history.all { p -> isNotificationPerformed(p) } else false
     }
 
     /**

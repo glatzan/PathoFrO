@@ -174,7 +174,7 @@ class NotificationDialog @Autowired constructor(
     abstract inner class NotificationTab(tabName: String,
                                          name: String,
                                          viewID: String,
-                                         centerInclude: String) : AbstractTab(tabName, name, viewID, centerInclude) , IContactReturnUpdate{
+                                         centerInclude: String) : AbstractTab(tabName, name, viewID, centerInclude), IContactReturnUpdate {
 
         /**
          * True if notification method should be used
@@ -224,7 +224,13 @@ class NotificationDialog @Autowired constructor(
         open lateinit var reportIntentStatus: ReportIntentUIContainer
 
         override fun updateData() {
-            reportIntentStatus.update(task)
+            val diagnosis = generalTab.selectDiagnosisRevision?.diagnosisRevision
+            if (diagnosis != null) {
+                if (!::reportIntentStatus.isInitialized)
+                    reportIntentStatus = ReportIntentUIContainer(task, notificationTyp, diagnosis, this)
+                else
+                    reportIntentStatus.update(task, diagnosis)
+            }
         }
 
         /**
@@ -241,6 +247,13 @@ class NotificationDialog @Autowired constructor(
         override fun onContactDialogReturn(event: SelectEvent) {
             logger.debug("Contact dialog return")
             super.onContactDialogReturn(event)
+            useNotification = reportIntentStatus.hasActiveNotifications
+        }
+
+        /**
+         * This function is triggered when the user changes the perform notification checkbox for a reportIntent
+         */
+        fun onPerformNotificationChange() {
             useNotification = reportIntentStatus.hasActiveNotifications
         }
     }
@@ -353,7 +366,7 @@ class NotificationDialog @Autowired constructor(
                     DocumentToken("task", task),
                     DocumentToken("contact", null))
 
-            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp)
+            updateData()
 
             return super.initTab(force)
         }
@@ -390,7 +403,7 @@ class NotificationDialog @Autowired constructor(
 
             printFax = false
 
-            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp)
+            updateData()
 
             return super.initTab(force)
         }
@@ -420,7 +433,7 @@ class NotificationDialog @Autowired constructor(
 
             printLetter = true
 
-            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp)
+            updateData()
 
             return super.initTab(force)
         }
@@ -436,7 +449,7 @@ class NotificationDialog @Autowired constructor(
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing phone data...")
 
-            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp)
+            updateData()
 
             return super.initTab(force)
         }
@@ -548,9 +561,16 @@ class NotificationDialog @Autowired constructor(
          * Default return function for sub dialogs
          */
         open fun onSubDialogReturn(event: SelectEvent) {
-            if (event.getObject() is NotificationPerformedEvent) {
-                println("Exit diagnosis")
-                MessageHandler.executeScript(GuiCommands.OPEN_END_STAINING_PHASE_FROM_NOTIFICATION_DIALOG)
+            val obj = event.getObject()
+            if (obj is NotificationPerformedEvent) {
+                // end phase, show end phase dialog
+                if (obj.endPhase) {
+                    println("End phase ")
+                    MessageHandler.executeScript(GuiCommands.OPEN_END_STAINING_PHASE_FROM_NOTIFICATION_DIALOG)
+                } else {
+                    MessageHandler.sendGrowlMessagesAsResource("growl.notification.endWithoutPhaseEnd.headline", "growl.notification.endWithoutPhaseEnd.text")
+                    hideDialog(TaskReloadEvent())
+                }
             } else {
                 hideDialog(event.`object` ?: TaskReloadEvent())
             }
