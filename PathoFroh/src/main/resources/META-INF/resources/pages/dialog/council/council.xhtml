@@ -174,7 +174,7 @@
 
 											<!-- download -->
 											<p:commandLink
-												action="#{dialog.councilDialog.streamContainer.openPDFinNewWindow()}"
+												action="#{dialog.councilDialog.stream.openPDFinNewWindow()}"
 												ajax="false" title="#{msg['dialog.print.button.open.text']}"
 												oncomplete="return false;" target="_blank">
 												<i class="fa fa-eye" title="" />
@@ -197,7 +197,7 @@
 												<h:panelGrid columns="2" styleClass="defaultHistoTable">
 													<!-- name -->
 													<h:outputText
-														value="#{msg['dialog.pdfOrganizer.files.name']}" />
+														value="#{msg['component.pdfAuditInfo.name']}" />
 													<h:outputText value="#{node.container.name}">
 														<f:converter converterId="org.histo.ui.TruncateConverter" />
 														<f:attribute name="truncateAt" value="35" />
@@ -206,7 +206,7 @@
 
 													<!-- created date-->
 													<h:outputText
-														value="#{msg['component.auditTable.createdOn']}"></h:outputText>
+														value="#{msg['component.pdfAuditInfo.createdOn']}"></h:outputText>
 													<h:outputText value="#{node.container.audit.createdOn}">
 														<f:convertDateTime type="date"
 															pattern="dd.MM.yyyy HH:mm:ss" />
@@ -214,13 +214,13 @@
 
 													<!-- created name-->
 													<h:outputText
-														value="#{msg['component.auditTable.createdBy']}"></h:outputText>
+														value="#{msg['component.pdfAuditInfo.createdBy']}"></h:outputText>
 													<h:outputText value="#{node.container.audit.createdBy}">
 													</h:outputText>
 
 													<!-- updated date-->
 													<h:outputText
-														value="#{msg['component.auditTable.updatedOn']}"></h:outputText>
+														value="#{msg['component.pdfAuditInfo.updatedOn']}"></h:outputText>
 													<h:outputText
 														style="#{node.container.audit.updatedOn eq 0 ? 'display:none' : ''}"
 														value="#{node.container.audit.updatedOn}">
@@ -230,19 +230,19 @@
 
 													<!-- updated name-->
 													<h:outputText
-														value="#{msg['component.auditTable.updatedBy']}"></h:outputText>
+														value="#{msg['component.pdfAuditInfo.updatedBy']}"></h:outputText>
 													<h:outputText value="#{node.container.audit.updatedBy}">
 													</h:outputText>
 
 													<!-- type -->
 													<h:outputText
-														value="#{msg['dialog.pdfOrganizer.files.type']}"></h:outputText>
+														value="#{msg['component.pdfAuditInfo.type']}"></h:outputText>
 													<h:outputLabel
 														value="#{msg['enum.documentType.'.concat(node.container.type)]}" />
 
 													<!-- commentary -->
 													<h:outputText
-														value="#{msg['dialog.pdfOrganizer.files.commentary']}"></h:outputText>
+														value="#{msg['component.pdfAuditInfo.commentary']}"></h:outputText>
 													<h:outputText value="#{node.container.commentary}"
 														title="#{node.container.commentary}">
 														<f:converter converterId="org.histo.ui.TruncateConverter" />
@@ -254,7 +254,7 @@
 												<!-- preview image -->
 												<h:panelGrid columns="1" styleClass="defaultHistoTable">
 													<p:graphicImage
-														value="#{dialog.councilDialog.streamContainer.getThumbnail()}"
+														value="#{dialog.councilDialog.stream.getThumbnailStream()}"
 														style="border: 1px solid black; float: right;"
 														width="200px" cache="false" alt="unable to load image" />
 												</h:panelGrid>
@@ -262,7 +262,7 @@
 										</pe:tooltip>
 
 										<p:remoteCommand name="updateToolTip#{node.container.id}"
-											actionListener="#{dialog.councilDialog.streamContainer.setTooltip(node.container)}" />
+											actionListener="#{dialog.councilDialog.stream.renderThumbnail(node.container)}" />
 									</p:treeNode>
 								</p:tree>
 							</p:scrollPanel>

@@ -8,9 +8,9 @@ import com.patho.main.repository.PrintDocumentRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.PrintDocument
-import com.patho.main.util.pdf.PDFCreationFailedException
+import com.patho.main.util.exceptions.PDFCreationFailedException
+import com.patho.main.util.exceptions.TemplateNotFoundException
 import com.patho.main.util.pdf.PDFCreator
-import com.patho.main.util.pdf.TemplateNotFoundException
 import com.patho.main.util.print.PrintPDFBearer
 import com.patho.main.util.report.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,7 +32,7 @@ open class ReportService @Autowired constructor(
         private val taskRepository: TaskRepository) : AbstractService() {
 
 
-    open fun executeReportNotification(execute: ReportIntentExecuteData, feedback: NotificationFeedback) {
+    open fun executeReportNotification(execute: ReportIntentExecuteData, feedback: NotificationFeedback): PDFContainer? {
         feedback.initializeFeedback(calculateSteps(execute))
         feedback.setFeedback("report.feedback.generatingReport")
 
@@ -80,9 +80,11 @@ open class ReportService @Autowired constructor(
 
         taskRepository.save(execute.task, resourceBundle.get("special.pdfOrganizerDialog"), execute.task.parent)
 
-        generateSendReport(execute, containerList, success, feedback)
+        val result = generateSendReport(execute, containerList, success, feedback)
         feedback.progress()
         feedback.end(success)
+
+        return result
     }
 
     /**

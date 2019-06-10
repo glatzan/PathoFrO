@@ -10,7 +10,6 @@ import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
 import com.patho.main.action.dialog.miscellaneous.ConfirmDialog;
 import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
-import com.patho.main.action.dialog.notification.NotificationDialog;
 import com.patho.main.action.dialog.patient.*;
 import com.patho.main.action.dialog.print.CustomAddressDialog;
 import com.patho.main.action.dialog.print.FaxDocumentDialog;
@@ -69,7 +68,6 @@ public class DialogHandler {
 	private CouncilDialog councilDialog = new CouncilDialog();
 	private SettingsDialog settingsDialog = new SettingsDialog();
 	private FavouriteListEditDialog favouriteListEditDialog = new FavouriteListEditDialog();
-	private NotificationDialog notificationDialog = new NotificationDialog();
 	private FaxDocumentDialog faxDocumentDialog = new FaxDocumentDialog();
 	private BioBankDialog bioBankDialog = new BioBankDialog();
 	private EditUserDialog editUserDialog = new EditUserDialog();
@@ -185,10 +183,6 @@ public class DialogHandler {
 
 	public FavouriteListEditDialog getFavouriteListEditDialog() {
 		return this.favouriteListEditDialog;
-	}
-
-	public NotificationDialog getNotificationDialog() {
-		return this.notificationDialog;
 	}
 
 	public FaxDocumentDialog getFaxDocumentDialog() {

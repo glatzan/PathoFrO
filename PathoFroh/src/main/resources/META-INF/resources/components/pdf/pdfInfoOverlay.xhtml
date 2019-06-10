@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:histo="http://java.sun.com/jsf/composite/components/pdf">
+
+<!-- trigger class with triggerCommand_showOVerlay#{node.id}-->
+<!-- remote command with showOVerlay#{node.id}-->
+<!--<p:treeNode type="pdf" icon="fa fa-file-pdf-o"-->
+<!--styleClass="pdfInfoOverlayPanelTrigger triggerCommand_showOVerlay#{node.id}">-->
+
+<!--<h:outputText value="#{node.name}" id="treeNode">-->
+<!--<f:converter converterId="org.histo.ui.TruncateConverter"/>-->
+<!--<f:attribute name="truncateAt" value="25"/>-->
+<!--<f:attribute name="continuationMark" value="..."/>-->
+<!--</h:outputText>-->
+
+<!--<p:remoteCommand name="showOVerlay#{node.id}"-->
+<!--update=":dialogContent:pdfInfoOverlayPanelBearer:pdfInfoOverlayPanel"-->
+<!--actionListener="#{pdfOrganizerDialog.stream.renderThumbnail(node)}"-->
+<!--oncomplete="commonFunctions.showOverlayPanelParentByClass('pdfInfoOverlayPanel', 'pdfInfoOverlayParent')"/>-->
+<!--</p:treeNode>-->
+
+<composite:interface>
+    <!-- com.patho.main.util.status.reportIntentent.ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer -->
+    <composite:attribute name="pdf" required="true"
+                         type="com.patho.main.model.PDFContainer"/>
+
+    <!-- stream for dynmaic thumbnail loading -->
+    <!-- method-signature="org.primefaces.model.StreamedContent stream(void)" (not working)-->
+    <composite:attribute name="stream" required="true"/>
+
+    <!-- id and widgetvar of the overlaypanel -->
+    <composite:attribute name="wid" required="true" default="false"/>
+
+    <!-- custom class of trigger button, to add the trigger event -->
+    <composite:attribute name="triggerClass" required="true" default="false"/>
+
+    <!-- unique class that is used to finde the current component at which the overlaypanel is displayed -->
+    <composite:attribute name="displayClass" required="true" default="false"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <script type="text/javascript">
+        commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler("#{cc.attrs.wid}")
+        commonFunctions.addShowDialogOnMouseEnterForCommand(".#{cc.attrs.triggerClass}", "#{cc.attrs.wid}", "#{cc.attrs.displayClass}")
+    </script>
+
+    <!-- overlay for contact notifications -->
+    <p:overlayPanel widgetVar="#{cc.attrs.wid}" hideEvent="null" showEvent="null" style="padding-bottom: 5px;"
+                    dismissable="false" id="#{cc.attrs.wid}" styleClass="histoOverlayPanel">
+
+        <h:panelGrid columns="2"
+                     columnClasses="columnTop, columnLeft" id="bild2"
+                     style="width:100%"
+                     styleClass="defaultHistoHiddenTableContainer">
+
+            <!-- pdf infos-->
+            <histo:pdfAuditInfo pdf="#{cc.attrs.pdf}"/>
+
+            <!-- preview image -->
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                <p:graphicImage
+                        value="#{cc.attrs.stream}"
+                        style="border: 1px solid black; float: right;"
+                        width="200px" cache="false" alt="unable to load image"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </p:overlayPanel>
+
+</composite:implementation>
+</html>

@@ -40,9 +40,9 @@ public enum HistoPermissions {
 	PATIENT_EDIT_ALTER_DATA(PATIENT_EDIT),
 
 	/**
-	 * User can upload pdfs for a patient <br>
+	 * User can media pdfs for a patient <br>
 	 * -> Used in <br>
-	 * --> worklist/patient (patient.xhtml) for hiding the pdf upload button <br>
+	 * --> worklist/patient (patient.xhtml) for hiding the pdf media button <br>
 	 * --> pdfTable.xhtml (component) to display updalog button <br>
 	 * --> JSFMenuGenerator to display or hide dialog button
 	 */

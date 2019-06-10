@@ -4,7 +4,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:pe="http://primefaces.org/ui/extensions"
-      xmlns:histo="http://java.sun.com/jsf/composite/components/special.pdfOrganizerDialog">
+      xmlns:histo="http://java.sun.com/jsf/composite/components/pdf">
 
 <h:head>
     <title><h:outputFormat
@@ -46,7 +46,7 @@
                         <p:column styleClass="columnTop">
                             <!-- scrolling -->
                             <p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody"
-                                           style="height:400px;">
+                                           style="height:400px;margin-bottom: 5px">
                                 <!-- navigation tree -->
                                 <p:tree value="#{pdfOrganizerDialog.root}" var="node"
                                         styleClass="histoTree" style="width:99%" id="menuTree"
@@ -98,23 +98,23 @@
                                             <f:attribute name="continuationMark" value="..."/>
                                         </h:outputText>
 
-                                        <p:remoteCommand name="showOVerlay#{node.id}"
-                                                         update=":dialogContent:pdfInfoOverlayPanelBearer:pdfInfoOverlayPanel"
-                                                         actionListener="#{pdfOrganizerDialog.streamContainer.setTooltip(node)}"
-                                                         oncomplete="commonFunctions.showOverlayPanelParentByID('pdfInfoOverlayPanel', '.test1235466')"/>
-
+                                        <p:remoteCommand name="showOVerlay#{node.id}" process="@form"
+                                                         partialSubmit="true"
+                                                         update="dialogContent:pdfInfoOverlayPanelBearer:pdfInfoOverlayPanel dialogContent:pdfInfo"
+                                                         actionListener="#{pdfOrganizerDialog.stream.renderThumbnail(node)}"
+                                                         oncomplete="commonFunctions.showOverlayPanelParentByClass('pdfInfoOverlayPanel', 'pdfInfoOverlayParent')"/>
                                     </p:treeNode>
                                 </p:tree>
 
                                 <!-- content menu for navigation tree -->
                                 <p:contextMenu for="menuTree" nodeType="pdf">
                                     <p:menuitem
-                                            disabled="#{pdfOrganizerDialog.streamContainer.displayPDF.restricted}"
+                                            disabled="#{pdfOrganizerDialog.stream.displayPDF.restricted}"
                                             value="#{msg['dialog.pdfOrganizer.tree.menu.edit']}"
                                             onclick="$('#dialogContent\\:editBTN').click();"
                                             icon="fa fa-pencil"/>
                                     <p:menuitem
-                                            disabled="#{pdfOrganizerDialog.streamContainer.displayPDF.restricted}"
+                                            disabled="#{pdfOrganizerDialog.stream.displayPDF.restricted}"
                                             value="#{msg['dialog.pdfOrganizer.tree.menu.delete']}"
                                             update="@form"
                                             actionListener="#{pdfOrganizerDialog.deletePDFContainer()}"
@@ -142,74 +142,19 @@
                                     </p:commandButton>
 
                                 </h:panelGroup>
-
                             </p:scrollPanel>
 
                             <!-- PDF INFO -->
                             <h:panelGroup id="pdfInfo">
-                                <h:panelGrid columns="2" styleClass="defaultHistoTable"
-                                             style="margin-top:5px;"
-                                             rendered="#{pdfOrganizerDialog.streamContainer.displayPDF ne null}">
-                                    <!-- name -->
-                                    <h:outputText value="#{msg['dialog.pdfOrganizer.files.name']}"/>
-                                    <h:outputText
-                                            value="#{pdfOrganizerDialog.streamContainer.displayPDF.name}"
-                                            title="#{pdfOrganizerDialog.streamContainer.displayPDF.name}">
-                                        <f:converter converterId="org.histo.ui.TruncateConverter"/>
-                                        <f:attribute name="truncateAt" value="35"/>
-                                        <f:attribute name="continuationMark" value="..."/>
-                                    </h:outputText>
-
-                                    <!-- created date-->
-                                    <h:outputText value="#{msg['component.auditTable.createdOn']}"/>
-                                    <h:outputText
-                                            value="#{pdfOrganizerDialog.streamContainer.displayPDF.audit.createdOn}">
-                                        <f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
-                                    </h:outputText>
-
-                                    <!-- created name-->
-                                    <h:outputText value="#{msg['component.auditTable.createdBy']}"/>
-                                    <h:outputText
-                                            value="#{pdfOrganizerDialog.streamContainer.displayPDF.audit.createdBy}">
-                                    </h:outputText>
-
-                                    <!-- updated date-->
-                                    <h:outputText value="#{msg['component.auditTable.updatedOn']}"/>
-                                    <h:outputText
-                                            style="#{pdfOrganizerDialog.streamContainer.displayPDF.audit.updatedOn eq 0 ? 'display:none' : ''}"
-                                            value="#{pdfOrganizerDialog.streamContainer.displayPDF.audit.updatedOn}">
-                                        <f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
-                                    </h:outputText>
-
-                                    <!-- updated name-->
-                                    <h:outputText value="#{msg['component.auditTable.updatedBy']}"/>
-                                    <h:outputText
-                                            value="#{pdfOrganizerDialog.streamContainer.displayPDF.audit.updatedBy}">
-                                    </h:outputText>
-
-                                    <!-- type -->
-                                    <h:outputText value="#{msg['dialog.pdfOrganizer.files.type']}"/>
-                                    <h:outputLabel
-                                            value="#{msg['enum.documentType.'.concat(pdfOrganizerDialog.streamContainer.displayPDF.type)]}"/>
-
-                                    <!-- commentary -->
-                                    <h:outputText
-                                            value="#{msg['dialog.pdfOrganizer.files.commentary']}"/>
-
-                                    <h:outputText
-                                            value="#{pdfOrganizerDialog.streamContainer.displayPDF.commentary}"
-                                            title="#{pdfOrganizerDialog.streamContainer.displayPDF.commentary}">
-                                        <f:converter converterId="org.histo.ui.TruncateConverter"/>
-                                        <f:attribute name="truncateAt" value="35"/>
-                                        <f:attribute name="continuationMark" value="..."/>
-                                    </h:outputText>
-                                </h:panelGrid>
+                                <!-- pdf infos-->
+                                <histo:pdfAuditInfo pdf="#{pdfOrganizerDialog.stream.displayPDF}"
+                                                    rendered="#{pdfOrganizerDialog.stream.renderPDF}"/>
                             </h:panelGroup>
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column styleClass="columnBottom">
-                            <!-- upload -->
+                            <!-- media -->
                             <h:outputLabel value="#{msg['dialog.pdfOrganizer.upload']}"/>
                             <p:fileUpload style="width:300px;" update="@form"
                                           fileUploadListener="#{pdfOrganizerDialog.handleFileUpload}"
@@ -225,9 +170,9 @@
                              style="width:calc(100% - 5px)">
                     <pe:documentViewer height="650" style="margin-left:5px;"
                                        class="noupdate"
-                                       rendered="#{pdfOrganizerDialog.streamContainer.renderPDF()}"
-                                       value="#{pdfOrganizerDialog.streamContainer.getPDF()}"
-                                       download="#{pdfOrganizerDialog.streamContainer.displayPDF.name}"/>
+                                       rendered="#{pdfOrganizerDialog.stream.renderPDF}"
+                                       value="#{pdfOrganizerDialog.stream.getPDFStream()}"
+                                       download="#{pdfOrganizerDialog.stream.displayPDF.name}"/>
                 </h:panelGrid>
 
             </h:panelGrid>
@@ -236,10 +181,13 @@
             <p:blockUI block="dialogContent:navigationTable"
                        widgetVar="viewModeBlock"/>
 
-            <histo:pdfInfoOverlay wid="pdfInfoOverlayPanel" triggerClass="pdfInfoOverlayPanelTrigger"
+            <!-- overlay for preview info-->
+            <histo:pdfInfoOverlay wid="pdfInfoOverlayPanel"
+                                  triggerClass="pdfInfoOverlayPanelTrigger"
+                                  pdf="#{pdfOrganizerDialog.stream.thumbnail}"
+                                  stream="#{pdfOrganizerDialog.stream.thumbnailStream()}"
                                   id="pdfInfoOverlayPanelBearer"
-                                  controller="#{pdfOrganizerDialog.streamContainer}"/>
-
+                                  displayClass="pdfInfoOverlayParent"/>
         </div>
 
         <div class="buttonContainer">
@@ -249,9 +197,9 @@
 
                     <!-- print -->
                     <p:commandButton value="#{msg['dialog.pdfOrganizer.button.print']}"
-                                     disabled="#{pdfOrganizerDialog.streamContainer.displayPDF eq null}"
+                                     disabled="#{pdfOrganizerDialog.stream.renderPDF}"
                                      icon="fa fa-print"
-                                     actionListener="#{pdfOrganizerDialog.displayPrintNotification(currentUserHandler.printer.print(pdfOrganizerDialog.streamContainer.displayPDF))}"/>
+                                     actionListener="#{pdfOrganizerDialog.displayPrintNotification(currentUserHandler.printer.print(pdfOrganizerDialog.stream.displayPDF))}"/>
 
                     <!-- select printer -->
                     <p:selectOneMenu
@@ -267,16 +215,16 @@
                     <!-- download button -->
                     <p:commandButton value="#{msg['dialog.pdfOrganizer.button.open']}"
                                      icon="fa fa-download" ajax="false"
-                                     disabled="#{pdfOrganizerDialog.streamContainer.displayPDF eq null}">
+                                     disabled="#{pdfOrganizerDialog.stream.renderPDF}">
                         <p:fileDownload
-                                value="#{pdfOrganizerDialog.streamContainer.getPDF()}"/>
+                                value="#{pdfOrganizerDialog.stream.getPDFStream()}"/>
                     </p:commandButton>
 
                     <!-- edit button -->
                     <p:commandButton value="#{msg['dialog.pdfOrganizer.button.edit']}"
                                      icon="fa fa-pencil" rendered="#{!pdfOrganizerDialog.viewOnly}"
-                                     disabled="#{pdfOrganizerDialog.streamContainer.displayPDF eq null or pdfOrganizerDialog.streamContainer.displayPDF.restricted}"
-                                     actionListener="#{pdfOrganizerDialog.editPDFContainer(pdfOrganizerDialog.streamContainer.displayPDF)}">
+                                     disabled="#{!pdfOrganizerDialog.stream.renderPDF or pdfOrganizerDialog.stream.displayPDF.restricted}"
+                                     actionListener="#{pdfOrganizerDialog.editPDFContainer(pdfOrganizerDialog.stream.displayPDF)}">
 
                         <p:ajax event="dialogReturn"
                                 listener="#{pdfOrganizerDialog.onDefaultDialogReturn}"
@@ -286,9 +234,9 @@
                     <!-- delete button -->
                     <p:commandButton rendered="#{!pdfOrganizerDialog.viewOnly}"
                                      value="#{msg['dialog.pdfOrganizer.button.delete']}"
-                                     disabled="#{pdfOrganizerDialog.streamContainer.displayPDF eq null or pdfOrganizerDialog.streamContainer.displayPDF.restricted}"
+                                     disabled="#{!pdfOrganizerDialog.stream.renderPDF or pdfOrganizerDialog.stream.displayPDF.restricted}"
                                      icon="fa fa-trash"
-                                     actionListener="#{pdfOrganizerDialog.deletePDFContainer(pdfOrganizerDialog.streamContainer.displayPDF)}">
+                                     actionListener="#{pdfOrganizerDialog.deletePDFContainer(pdfOrganizerDialog.stream.displayPDF)}">
 
                         <p:ajax event="dialogReturn"
                                 listener="#{pdfOrganizerDialog.onDefaultDialogReturn}"
@@ -299,7 +247,7 @@
 
                 <h:panelGrid columns="3" styleClass="right" id="buttonBtnContainer">
 
-                    <!-- upload button -->
+                    <!-- media button -->
                     <p:commandButton rendered="#{!pdfOrganizerDialog.viewOnly}"
                                      value="#{msg['dialog.pdfOrganizer.button.upload']}"
                                      icon="fa fa-cloud-upload"
@@ -315,7 +263,7 @@
                             value="#{msg['dialog.pdfOrganizer.button.select']}"
                             icon="fa fa-pencil"
                             rendered="#{pdfOrganizerDialog.enablePDFSelection and !pdfOrganizerDialog.viewOnly}"
-                            disabled="#{pdfOrganizerDialog.streamContainer.displayPDF eq null}"
+                            disabled="#{!pdfOrganizerDialog.stream.renderPDF}"
                             actionListener="#{pdfOrganizerDialog.selectAndHide()}">
 
                     </p:commandButton>

@@ -24,19 +24,19 @@
 		rendered="#{cc.attrs.rendered}">
 
 		<!-- created date-->
-		<h:outputText value="#{msg['component.auditTable.createdOn']}"></h:outputText>
+		<h:outputText value="#{msg['component.auditTable.createdOn']}" />
 		<h:outputText value="#{cc.attrs.auditElement.createdOn}"
 			style="#{cc.attrs.auditElement.createdOn eq 0 ? 'display:none' : ''}">
 			<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
 		</h:outputText>
 
 		<!-- created name-->
-		<h:outputText value="#{msg['component.auditTable.createdBy']}"></h:outputText>
+		<h:outputText value="#{msg['component.auditTable.createdBy']}" />
 		<h:outputText value="#{cc.attrs.auditElement.createdBy}">
 		</h:outputText>
 
 		<!-- updated date-->
-		<h:outputText value="#{msg['component.auditTable.updatedOn']}"></h:outputText>
+		<h:outputText value="#{msg['component.auditTable.updatedOn']}" />
 		<h:outputText
 			style="#{cc.attrs.auditElement.updatedOn eq 0 ? 'display:none' : ''}"
 			value="#{cc.attrs.auditElement.updatedOn}">
@@ -44,7 +44,7 @@
 		</h:outputText>
 
 		<!-- updated name-->
-		<h:outputText value="#{msg['component.auditTable.updatedBy']}"></h:outputText>
+		<h:outputText value="#{msg['component.auditTable.updatedBy']}" />
 		<h:outputText value="#{cc.attrs.auditElement.updatedBy}" />
 
 	</h:panelGrid>

@@ -23,9 +23,9 @@
 			style="width:calc(100% - 5px)">
 			<pe:documentViewer height="610" style="margin-left:5px;"
 				class="noupdate"
-				rendered="#{dialog.councilDialog.streamContainer.renderPDF()}"
-				value="#{dialog.councilDialog.streamContainer.getPDF()}"
-				download="#{dialog.councilDialog.streamContainer.getDisplayPDF().name}" />
+				rendered="#{dialog.councilDialog.stream.renderPDF}"
+				value="#{dialog.councilDialog.stream.getPDFStream()}"
+				download="#{dialog.councilDialog.stream.getDisplayPDF.name}" />
 		</h:panelGrid>
 	</p:outputPanel>
 

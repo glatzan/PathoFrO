@@ -248,7 +248,7 @@ class PrintDialog @Autowired constructor(
      * Hides the dialog. If a rendered pdf is available and a template was selected a LoadedPrintPDFBearer is returned.
      */
     fun hideAndSelect() {
-        val pdf = guiManager.pdfContainerToRender
+        val pdf = guiManager.displayPDF
         val template = selectedTemplate?.getDefaultTemplateConfiguration()?.documentTemplate
 
         if (pdf != null && template != null) {

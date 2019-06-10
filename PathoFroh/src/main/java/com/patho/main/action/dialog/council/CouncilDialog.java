@@ -21,12 +21,12 @@ import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
-import com.patho.main.ui.pdf.PDFStreamContainerImpl;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
 import com.patho.main.util.helper.HistoUtil;
+import com.patho.main.util.pdf.PDFThumbnailStreamContainerImpl;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -156,7 +156,7 @@ public class CouncilDialog extends AbstractDialog {
     /**
      * Container for PDF display
      */
-    private PDFStreamContainerImpl streamContainer;
+    private PDFThumbnailStreamContainerImpl stream = new PDFThumbnailStreamContainerImpl();
 
     /**
      * True if editable
@@ -184,12 +184,10 @@ public class CouncilDialog extends AbstractDialog {
 
         super.initBean(task, Dialog.COUNCIL);
 
-        setStreamContainer(new PDFStreamContainerImpl());
-
         setSelectedNode(null);
         setSelectedCouncil(null);
 
-        getStreamContainer().reset();
+        stream.reset();
 
         // reload task in order to load councils
         update(true);
@@ -363,7 +361,7 @@ public class CouncilDialog extends AbstractDialog {
 
             if (node.getData() instanceof CouncilPDFContainer) {
                 logger.debug("Is pdf container, render pdf");
-                getStreamContainer().setDisplayPDF(((CouncilPDFContainer) node.getData()).getContainer());
+                stream.render(((CouncilPDFContainer) node.getData()).getContainer());
             }
 
         } else
@@ -426,7 +424,7 @@ public class CouncilDialog extends AbstractDialog {
     }
 
     /**
-     * Handels file upload
+     * Handels file media
      *
      * @param event
      */

@@ -6,17 +6,21 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.service.PDFService
-import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.task.DiagnosisReportUpdater
+import com.patho.main.util.pdf.IPDFThumbnailListStreamContainer
 import com.patho.main.util.pdf.LazyPDFReturnHandler
-import com.patho.main.util.pdf.StreamedContentInterface
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
 @Component
 @Scope(value = "session")
-open class ReportView : AbstractTaskView(), StreamedContentInterface {
+open class ReportView : AbstractTaskView(), IPDFThumbnailListStreamContainer {
+
+    /**
+     * The selected PDF container
+     */
+    override var displayPDF: PDFContainer? = null
 
     /**
      * List of all reportIntent revisions with correspondending reports
@@ -27,11 +31,6 @@ open class ReportView : AbstractTaskView(), StreamedContentInterface {
      * The data which are displayed
      */
     open var selectedData: DiagnosisReportReturnHandler? = null
-
-    /**
-     * The selected PDF container
-     */
-    override var selectedContainer: PDFContainer? = null
 
     /**
      * If true the update poll will be started
@@ -62,9 +61,10 @@ open class ReportView : AbstractTaskView(), StreamedContentInterface {
         data = mutableListOf()
 
         generatingPDFs = false
-        selectedContainer = null
         generatingSelectedPDF = false
         generationCompleted = false
+
+        reset()
 
         for ((i, revision) in task.diagnosisRevisions.withIndex()) {
 
@@ -93,8 +93,6 @@ open class ReportView : AbstractTaskView(), StreamedContentInterface {
 
         }
 
-        println(data +" ---- ")
-
         if (data.size > 0) {
             selectedData
             setSelectedPDF(data[0])
@@ -119,15 +117,15 @@ open class ReportView : AbstractTaskView(), StreamedContentInterface {
      * Sets the selected PDF if it is available
      */
     open fun setSelectedPDF(data: DiagnosisReportReturnHandler?) {
-        logger.debug("Setting pdf " + data!!)
+        logger.debug("Setting pdf $data")
         if (data != null) {
             selectedData = data
             if (data.loading) {
                 generatingSelectedPDF = true
-                selectedContainer = null
+                displayPDF = null
             } else {
                 generatingSelectedPDF = false
-                selectedContainer = data.pdf
+                displayPDF = data.pdf
             }
         }
     }

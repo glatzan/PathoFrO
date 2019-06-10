@@ -52,10 +52,10 @@ enum class Dialog {
     NOTIFICATION_PERFORM("/pages/dialog/notification/performNotification", null, 640, 360, false, false, true),  // 16:9
     NOTIFICATION_PREVIEW("/pages/dialog/notification/notification_preview", null, 1024, 600, false, false, true), //  16:9
     INFO("/pages/dialog/info/info", null, 1024, 600, false, false, true),                                                                                                    // OK
-    PDF_ORGANIZER("/pages/dialog/upload/pdfOrganizer", null, 1280, 720, false, false, true),                                                                                // OK
-    PDF_UPLOAD("/pages/dialog/upload/upload", null, 640, 360, false, false, true),                                                                                            // OK
-    PDF_EDIT("/pages/dialog/upload/editPDF", null, 640, 360, false, false, true),                                                                                            // OK
-    PDF_DELETE("/pages/dialog/upload/deletePDF", null, 480, 272, false, false, true),                                                                                        // OK
+    PDF_ORGANIZER("/pages/dialog/media/pdfOrganizer", null, 1280, 720, false, false, true),                                                                                // OK
+    PDF_UPLOAD("/pages/dialog/media/media", null, 640, 360, false, false, true),                                                                                            // OK
+    PDF_EDIT("/pages/dialog/media/editPDF", null, 640, 360, false, false, true),                                                                                            // OK
+    PDF_DELETE("/pages/dialog/media/deletePDF", null, 480, 272, false, false, true),                                                                                        // OK
     STAINING_PHASE_EXIT("/pages/dialog/phase/stainingPhaseExit", null, 480, 272, false, false, true), // 16:9
     DIAGNOSIS_PHASE_EXIT("/pages/dialog/phase/diagnosisPhaseExit", null, 640, 360, false, false, true), // 16:9
     NOTIFICATION_PHASE_EXIT("/pages/dialog/phase/notificationPhaseExit", null, 640, 370, false, false, true), // 16:9

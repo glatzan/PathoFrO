@@ -230,19 +230,20 @@ var commonFunctions = {
         }
     },
 
-    showOverlayPanelParentByID: function (panelID, parentClass) {
-        console.log(parentClass+"---")
-        var tmpSel = $(parentClass)
-        console.log(tmpSel.length)
-        if(tmpSel.length == 1){
-            console.log(tmpSel[0].id)
-            this.showOverlayPanel(panelID,tmpSel[0].id)
+    /**
+     * Searches for an element with the parentClass and shows the
+     * overlaypanel at that element'S position
+     */
+    showOverlayPanelParentByClass: function (panelID, parentClass) {
+        parentClass = "."+parentClass;
+        var tmpSel = $(parentClass);
+        if (tmpSel.length >= 1) {
+            this.showOverlayPanel(panelID, tmpSel[0].id)
         }
-        console.log(tmpSel)
     },
 
     /**
-     *  Shows
+     *  Shows the overlaypanel at the parentID
      * @param panelID
      *      ID and widget var of the overlay panel
      * @param parentID
@@ -324,7 +325,7 @@ var commonFunctions = {
                                 if (test.get(0).id == PF(overlayPanelID).id) {
                                     return;
                                 }
-                            } while ((test = test.parent()).length != 0 && i++ < 40)
+                            } while ((test = test.parent()).length != 0 && i++ < 40);
                             PF(overlayPanelID).hide();
 
                         } else {
@@ -335,7 +336,7 @@ var commonFunctions = {
     },
 
     addHandler: function (componentID, event, handlerFunction) {
-        var hideNS = event + "." + componentID
+        var hideNS = event + "." + componentID;
         $(document.body)
             .off(hideNS)
             .on(hideNS, function (e) {
@@ -345,44 +346,53 @@ var commonFunctions = {
 
     /**
      * This will alter an element to show an overlay panel on mouse enter.
-     * On mouse out the panel will be closed.
+     * On mouse out the panel will be closed. This is applicable for e.g. buttons or command links.
+     *
      * @param classID
      * @param overlayPanelID
      */
-    addShowDialogOnMouseEnterByCommandClick: function (classID, overlayPanelID) {
-        var tmpSel = $(classID)
+    addShowDialogOnMouseEnterForClickable: function (classID, overlayPanelID) {
+        var tmpSel = $(classID);
 
         tmpSel.mouseenter(function () {
             this.click();
-        })
+        });
 
         tmpSel.mouseleave(function () {
             commonFunctions.hideOverlayPanel(overlayPanelID)
         })
     },
-    addShowDialogOnMouseEnterByCommand: function (classID, overlayPanelID, identifierClass) {
-        var tmpSel = $(classID)
+
+    /**
+     * This function will search for the element with the trigger class and will display the
+     * overlay panel at the posion of the first found element.
+     * This is applicable for e.g. treeNodes. (Links can not be used this treeNodes)
+     * @param classID
+     * @param overlayPanelID
+     * @param identifierClass
+     */
+    addShowDialogOnMouseEnterForCommand: function (classID, overlayPanelID, identifierClass) {
+        var tmpSel = $(classID);
 
         tmpSel.mouseenter(function () {
             var classes = this.className.split(' ');
-            for(i = 0; i < classes.length; i++){
-                if(classes[i].startsWith("triggerCommand_")){
+            for (i = 0; i < classes.length; i++) {
+                if (classes[i].startsWith("triggerCommand_")) {
                     var ex = classes[i].replace("triggerCommand_", "");
                     var fn = window[ex];
-                    if (typeof fn === "function"){
-                        console.log(identifierClass)
+                    if (typeof fn === "function") {
                         this.className = this.className + " " + identifierClass;
-                        console.log(this.className)
                         fn();
                     }
                     break;
                 }
             }
-        })
+        });
 
         tmpSel.mouseleave(function () {
-            commonFunctions.hideOverlayPanel(overlayPanelID)
-            this.className = this.className.replace(identifierClass,"")
+            commonFunctions.hideOverlayPanel(overlayPanelID);
+            // removing the identifier class on mouse out
+            this.className = this.className.replace(identifierClass, "").trim()
         })
     },
     /**

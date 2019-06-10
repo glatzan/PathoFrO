@@ -4,8 +4,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
->
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
 
 <h:head>
@@ -107,12 +106,12 @@
 
                         <pe:documentViewer
                                 style="margin-left:5px;height:calc(100vh - 75px)"
-                                rendered="#{printDialog.guiManager.renderPDF.get()}"
-                                value="#{printDialog.guiManager.getPdfContent()}"
-                                download="#{printDialog.guiManager.getPDFContainerToRender().name}"/>
+                                rendered="#{printDialog.guiManager.SRenderPDF.get()}"
+                                value="#{printDialog.guiManager.getPDFStream()}"
+                                download="#{printDialog.guiManager.displayPDF.name}"/>
 
                         <h:panelGrid columns="1"
-                                     rendered="#{!printDialog.guiManager.renderPDF.get()}"
+                                     rendered="#{!printDialog.guiManager.SRenderPDF.get()}"
                                      styleClass="defaultHistoHiddenTableContainer"
                                      style="width: 100% !important;height: calc(100vh - 75px) !important;"
                                      columnClasses="columnMiddle">
@@ -147,7 +146,7 @@
                     <!-- select -->
                     <p:commandButton value="#{msg['dialog.printDialog.button.select']}"
                                      icon="fa fa-print" id="selectBtn"
-                                     disabled="#{!printDialog.guiManager.renderPDF.get()}"
+                                     disabled="#{!printDialog.guiManager.SRenderPDF.get()}"
                                      rendered="#{printDialog.selectMode}"
                                      actionListener="#{printDialog.hideAndSelect()}"/>
 
@@ -155,7 +154,7 @@
                                  rendered="#{!printDialog.selectMode}">
                         <!-- print button -->
                         <p:commandButton value="#{msg['dialog.printDialog.button.print.text']}"
-                                         disabled="#{!printDialog.guiManager.renderPDF.get()}"
+                                         disabled="#{!printDialog.guiManager.SRenderPDF.get()}"
                                          icon="fa fa-print" onstart="PF('blockUIWidget').block()"
                                          oncomplete="PF('blockUIWidget').unblock()"
                                          title="#{msg['dialog.printDialog.button.print.info']}"
@@ -178,18 +177,17 @@
 
                     <!-- fax -->
                     <p:commandButton value="#{msg['dialog.printDialog.button.fax.text']}"
-                                     disabled="#{!printDialog.guiManager.renderPDF.get()}"
+                                     disabled="#{!printDialog.guiManager.SRenderPDF.get()}"
                                      icon="fa fa-fax" title="#{msg['dialog.printDialog.button.fax.info']}"
                                      rendered="#{printDialog.faxMode}"
-                                     actionListener="#{dialog.faxDocumentDialog.initAndPrepareBean(printDialog.task, printDialog.selectedTemplate.getFirstSelectedContact(),printDialog.guiManager.getPDFContainerToRender())}"/>
+                                     actionListener="#{dialog.faxDocumentDialog.initAndPrepareBean(printDialog.task, printDialog.selectedTemplate.getFirstSelectedContact(),printDialog.guiManager.displayPDF)}"/>
 
                     <!-- download -->
                     <p:commandButton
-                            disabled="#{!printDialog.guiManager.renderPDF.get()}"
                             value="#{msg['dialog.printDialog.button.download.text']}" icon="fa fa-download"
                             ajax="false" title="#{msg['dialog.printDialog.button.download.info']}">
                         <p:fileDownload
-                                value="#{printDialog.guiManager.getPdfContent()}"/>
+                                value="#{printDialog.guiManager.getPDFStream()}"/>
                     </p:commandButton>
 
                     <!-- Abort button -->

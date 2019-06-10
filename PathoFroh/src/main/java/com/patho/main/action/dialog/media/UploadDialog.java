@@ -41,7 +41,7 @@ public class UploadDialog extends AbstractDialog {
     private String uploadedFileCommentary;
 
     /**
-     * Datalists to upload pfds to
+     * Datalists to media pfds to
      */
     private DataListContainer[] dataLists;
 
@@ -120,7 +120,7 @@ public class UploadDialog extends AbstractDialog {
     }
 
     /**
-     * Hadels viewl upload
+     * Hadels viewl media
      *
      * @param event
      */

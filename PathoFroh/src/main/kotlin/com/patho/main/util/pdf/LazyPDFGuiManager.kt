@@ -5,7 +5,6 @@ import com.patho.main.model.PDFContainer
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
-import com.patho.main.ui.interfaces.PdfStreamProvider
 import lombok.Synchronized
 import org.primefaces.model.DefaultStreamedContent
 import org.primefaces.model.StreamedContent
@@ -13,12 +12,22 @@ import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.locks.ReentrantLock
 import javax.faces.context.FacesContext
 import javax.faces.event.PhaseId
 
-class LazyPDFGuiManager() : PdfStreamProvider, LazyPDFReturnHandler {
+/**
+ * Lazy implementation for the PDFStreamContainer
+ */
+class LazyPDFGuiManager() : IPDFStreamContainer, LazyPDFReturnHandler {
 
     val logger = LoggerFactory.getLogger(this.javaClass)
+
+    private val lock = ReentrantLock()
+    /**
+     * PDF container
+     */
+    override var displayPDF: PDFContainer? = null
 
     /**
      * If true the component wil be rendered.
@@ -38,12 +47,7 @@ class LazyPDFGuiManager() : PdfStreamProvider, LazyPDFReturnHandler {
     /**
      * If true the pdf will be rendered
      */
-    var renderPDF = AtomicBoolean(false)
-
-    /**
-     * pdf container
-     */
-    var pdfContainerToRender: PDFContainer? = null
+    var sRenderPDF = AtomicBoolean(false)
 
     /**
      * Thread id of the last pdf generating thread
@@ -53,8 +57,8 @@ class LazyPDFGuiManager() : PdfStreamProvider, LazyPDFReturnHandler {
     /**
      * Resets render state
      */
-    fun reset() {
-        renderPDF.set(false)
+    override fun reset() {
+        sRenderPDF.set(false)
         stopPoll.set(true)
         autoStartPoll.set(false)
         currentTaskUuid = ""
@@ -64,8 +68,8 @@ class LazyPDFGuiManager() : PdfStreamProvider, LazyPDFReturnHandler {
      * If the pdf was created manually is can be set using this method.
      */
     fun setManuallyCreatedPDF(container: PDFContainer) {
-        setPDFContainerToRender(container)
-        renderPDF.set(true)
+        render(container)
+        sRenderPDF.set(true)
         stopPoll.set(true)
         autoStartPoll.set(false)
     }
@@ -95,52 +99,18 @@ class LazyPDFGuiManager() : PdfStreamProvider, LazyPDFReturnHandler {
 
             if (container != null && SpringContextBridge.services().mediaRepository.isFile(container.path)) {
                 logger.debug("Setting PDf for rendering. Path: {}", container)
-                setPDFContainerToRender(container)
+                render(container)
             } else {
-                setPDFContainerToRender(
+                render(
                         PDFContainer(PrintDocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.RENDER_ERROR_PDF, ""))
             }
 
-            renderPDF.set(true)
+            sRenderPDF.set(true)
             stopPoll.set(true)
             autoStartPoll.set(false)
 
         } else {
             logger.debug("More then one Thread! Old Thread")
         }
-    }
-
-    /**
-     * Returns the pdf as stream
-     */
-    override fun getPdfContent(): StreamedContent {
-        val context = FacesContext.getCurrentInstance()
-        if (context.currentPhaseId === PhaseId.RENDER_RESPONSE || pdfContainerToRender == null) {
-            // So, we're rendering the HTML. Return a stub StreamedContent so
-            // that it will generate right URL.
-            return DefaultStreamedContent()
-        } else {
-
-            val pdf: ByteArray
-
-            if (SpringContextBridge.services().mediaRepository.isFile(pdfContainerToRender!!.path))
-                pdf = SpringContextBridge.services().mediaRepository.getBytes(pdfContainerToRender!!.path)
-            else
-                pdf = SpringContextBridge.services().mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF)
-
-            return DefaultStreamedContent(ByteArrayInputStream(pdf), "application/pdf",
-                    pdfContainerToRender!!.name)
-        }
-    }
-
-
-    @Synchronized
-    override fun getPDFContainerToRender(): PDFContainer? {
-        return pdfContainerToRender
-    }
-
-    @Synchronized
-    fun setPDFContainerToRender(container: PDFContainer) {
-        this.pdfContainerToRender = container
     }
 }

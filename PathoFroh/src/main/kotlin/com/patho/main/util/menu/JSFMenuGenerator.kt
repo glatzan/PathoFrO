@@ -95,10 +95,10 @@ class JSFMenuGenerator {
             item.isRendered = permissionMerge
             administerSubMenu.addElement(item)
 
-            // patient upload pdf
+            // patient media pdf
             item = DefaultMenuItem(resourceBundle.get("pages.header.menu.patient.upload"))
             item.onclick = "$('#headerForm\\\\:uploadBtn').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
-            item.icon = "fa fa-cloud-upload"
+            item.icon = "fa fa-cloud-media"
             item.isRendered = permissionPDF
             patientSubMenu.addElement(item)
 
@@ -410,10 +410,10 @@ class JSFMenuGenerator {
             item.isDisabled = !taskIsEditable
             taskSubMenu.addElement(item)
 
-            // upload
+            // media
             item = DefaultMenuItem(resourceBundle.get("pages.header.menu.task.upload"))
             item.onclick = "$('#headerForm\\\\:uploadBtn').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
-            item.icon = "fa fa-cloud-upload"
+            item.icon = "fa fa-cloud-media"
 
             taskSubMenu.addElement(item)
 

@@ -7,16 +7,15 @@ import com.patho.main.dialog.AbstractDialog_
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.patient.Patient
-import com.patho.main.model.patient.Task
 import com.patho.main.repository.BioBankRepository
 import com.patho.main.repository.PatientRepository
 import com.patho.main.service.PDFService
 import com.patho.main.template.PrintDocumentType
-import com.patho.main.ui.pdf.PDFStreamContainerImpl
 import com.patho.main.util.dialog.event.PDFSelectEvent
 import com.patho.main.util.dialog.event.PatientReloadEvent
 import com.patho.main.util.dialog.event.ReloadEvent
 import com.patho.main.util.exceptions.PatientNotFoundException
+import com.patho.main.util.pdf.PDFThumbnailStreamContainerImpl
 import org.primefaces.event.FileUploadEvent
 import org.primefaces.event.SelectEvent
 import org.primefaces.event.TreeDragDropEvent
@@ -38,7 +37,7 @@ open class PDFOrganizerDialog @Autowired constructor(
 
     open lateinit var patient: Patient
 
-    open var streamContainer: PDFStreamContainerImpl = PDFStreamContainerImpl()
+    open var stream: PDFThumbnailStreamContainerImpl = PDFThumbnailStreamContainerImpl()
 
     open var root: TreeNode = DefaultTreeNode("Root", null)
 
@@ -60,16 +59,16 @@ open class PDFOrganizerDialog @Autowired constructor(
         return this
     }
 
-    open fun initAndPrepareBean(patient: Patient, task: Task? = null): PDFOrganizerDialog {
-        if (initBean(patient))
+    open fun initAndPrepareBean(patient: Patient, selectedContainer: PDFContainer? = null): PDFOrganizerDialog {
+        if (initBean(patient, selectedContainer))
             prepareDialog()
         return this
     }
 
-    fun initBean(patient: Patient): Boolean {
+    fun initBean(patient: Patient, selectedContainer: PDFContainer? = null): Boolean {
         this.patient = patient
 
-        streamContainer.reset()
+        stream.reset()
 
         this.selectedNode = null
 
@@ -98,9 +97,9 @@ open class PDFOrganizerDialog @Autowired constructor(
         updateTree()
 
         // unloading pdf is it was selected
-        if (streamContainer.displayPDF != null && PDFService.getParentOfPDF(dataLists, streamContainer.getDisplayPDF()) == null) {
+        if (stream.displayPDF != null && PDFService.getParentOfPDF(dataLists, stream.displayPDF) == null) {
             selectedNode = null
-            streamContainer.setDisplayPDF(null)
+            stream.resetPDF()
         }
     }
 
@@ -149,9 +148,9 @@ open class PDFOrganizerDialog @Autowired constructor(
         logger.debug("Display selected container")
         val tmp = selectedNode
         if (tmp != null && tmp.data != null)
-            streamContainer.displayPDF = tmp.data as PDFContainer
+            stream.displayPDF = tmp.data as PDFContainer
         else
-            streamContainer.displayPDF = null
+            stream.displayPDF = null
     }
 
     /**
@@ -184,7 +183,7 @@ open class PDFOrganizerDialog @Autowired constructor(
     }
 
     /**
-     * Handles file upload
+     * Handles file media
      */
     fun handleFileUpload(event: FileUploadEvent) {
         val file = event.file
@@ -194,18 +193,18 @@ open class PDFOrganizerDialog @Autowired constructor(
             val uploadList = PDFService.getDatalistFromDatalists(dataLists, uploadTarget)
 
             if (uploadList == null) {
-                MessageHandler.sendGrowlMessagesAsResource("growl.upload.noUpload.headline", "growl.upload.noUpload.text", FacesMessage.SEVERITY_ERROR)
+                MessageHandler.sendGrowlMessagesAsResource("growl.media.noUpload.headline", "growl.media.noUpload.text", FacesMessage.SEVERITY_ERROR)
                 return
             }
 
             val res = pdfService.createAndAttachPDF(uploadList,
                     PDFService.PDFInfo(file.fileName, uploadDocumentType), file.contents, true)
 
-            MessageHandler.sendGrowlMessagesAsResource("growl.upload.success.headline", "growl.upload.success.text", FacesMessage.SEVERITY_INFO, { res.container.name })
+            MessageHandler.sendGrowlMessagesAsResource("growl.media.success.headline", "growl.media.success.text", FacesMessage.SEVERITY_INFO, { res.container.name })
         } catch (e: IllegalAccessError) {
-            MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed.headline", "growl.upload.failed.text", FacesMessage.SEVERITY_ERROR)
+            MessageHandler.sendGrowlMessagesAsResource("growl.media.failed.headline", "growl.media.failed.text", FacesMessage.SEVERITY_ERROR)
         } catch (e: FileNotFoundException) {
-            MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed.headline", "growl.upload.failed.text", FacesMessage.SEVERITY_ERROR)
+            MessageHandler.sendGrowlMessagesAsResource("growl.media.failed.headline", "growl.media.failed.text", FacesMessage.SEVERITY_ERROR)
         }
 
         update(true)
@@ -295,7 +294,8 @@ open class PDFOrganizerDialog @Autowired constructor(
      * Hies the dialog an returns the selected pdf as an event
      */
     fun selectAndHide() {
-        super.hideDialog(PDFSelectEvent(streamContainer.displayPDF))
+        val t = stream.displayPDF ?: return
+        super.hideDialog(PDFSelectEvent(t))
     }
 
 }

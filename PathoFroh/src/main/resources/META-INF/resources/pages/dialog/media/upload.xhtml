@@ -8,7 +8,7 @@
 	xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 <h:head>
-	<title><h:outputFormat value="#{msg['dialog.upload.headline']}" /></title>
+	<title><h:outputFormat value="#{msg['dialog.media.headline']}" /></title>
 	<h:outputStylesheet name="style.css" value="style.css" library="css" />
 	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
 		library="css" />
@@ -22,7 +22,7 @@
 		<div class="dialogHeader">
 			<h:panelGrid style="width:100%;" columns="2"
 				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.upload.headline']}" />
+				<h:outputLabel value="#{msg['dialog.media.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					onclick="$('#dialogContent\\:closeBtn').click();return false;">
 					<i class="fa fa-fw fa-times" />
@@ -34,7 +34,7 @@
 			<h:panelGrid styleClass="defaultHistoTable" columns="2"
 				columnClasses="columnWidth125">
 				<!-- save place -->
-				<h:outputLabel value="#{msg['dialog.upload.save']}"></h:outputLabel>
+				<h:outputLabel value="#{msg['dialog.media.save']}"></h:outputLabel>
 				<p:selectOneMenu 
 					panelStyleClass="searchSelectMenuPanel"
 					converter="#{dialog.uploadDialog.dataListTransformer}"
@@ -50,14 +50,14 @@
 				</p:selectOneMenu>
 
 				<!-- commentary -->
-				<h:outputLabel value="#{msg['dialog.upload.commentary']}"></h:outputLabel>
+				<h:outputLabel value="#{msg['dialog.media.commentary']}"></h:outputLabel>
 				<p:inputTextarea style="width: 80%"
 					value="#{dialog.uploadDialog.uploadedFileCommentary}">
 					<p:ajax event="change" process="@form" />
 				</p:inputTextarea>
 
 				<!-- types -->
-				<h:outputLabel value="#{msg['dialog.upload.type']}"></h:outputLabel>
+				<h:outputLabel value="#{msg['dialog.media.type']}"></h:outputLabel>
 				<p:selectOneMenu 
 					panelStyleClass="searchSelectMenuPanel"
 					value="#{dialog.uploadDialog.fileType}" filter="true"
@@ -70,8 +70,8 @@
 					<p:ajax event="change" process="@form" />
 				</p:selectOneMenu>
 
-				<!-- upload -->
-				<h:outputLabel value="#{msg['dialog.upload.data']}"></h:outputLabel>
+				<!-- media -->
+				<h:outputLabel value="#{msg['dialog.media.data']}"></h:outputLabel>
 				<p:fileUpload style="width:83%"
 					fileUploadListener="#{dialog.uploadDialog.handleFileUpload}"
 					mode="advanced" dragDropSupport="false" multiple="true"

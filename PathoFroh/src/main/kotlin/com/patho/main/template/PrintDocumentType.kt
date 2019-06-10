@@ -7,8 +7,8 @@ package com.patho.main.template
  * DIAGNOSIS_REPORT = Report for internal diagnoses, multiple can exist for printing <br>
  * DIAGNOSIS_REPORT_EXTERN = Report for external diagnoses, multiple can exist for printing
  * LABLE = Labels for printing with zebra printers <br>
- * BIOBANK_INFORMED_CONSENT = upload of informed consent for biobank <br>
- * CASE_CONFERENCE = upload and printing of case confernces <br>
+ * BIOBANK_INFORMED_CONSENT = media of informed consent for biobank <br>
+ * CASE_CONFERENCE = media and printing of case confernces <br>
  * OTHER
  *
  * @author andi
