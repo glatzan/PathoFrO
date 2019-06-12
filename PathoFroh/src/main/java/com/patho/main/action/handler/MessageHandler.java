@@ -71,7 +71,7 @@ public class MessageHandler {
 		sendGrowlMessagesAsResource(headline, message, FacesMessage.SEVERITY_INFO);
 	}
 
-	public static void sendGrowlMessagesAsResource(String headline, String message, Object[] params) {
+	public static void sendGrowlMessagesAsResource(String headline, String message, Object... params) {
 		sendGrowlMessagesAsResource(headline, message, FacesMessage.SEVERITY_INFO, params);
 	}
 

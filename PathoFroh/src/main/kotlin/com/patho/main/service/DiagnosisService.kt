@@ -245,6 +245,7 @@ open class DiagnosisService constructor(
      */
     @Transactional
     open fun completeNotification(task: Task, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Task {
+        logger.debug("Notification completed")
         var tmp = task
 
         diagnosisRevision.notificationStatus = NotificationStatus.NOTIFICATION_COMPLETED

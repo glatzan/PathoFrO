@@ -1,6 +1,7 @@
 package com.patho.main.service
 
 import com.patho.main.action.handler.CurrentUserHandler
+import com.patho.main.action.handler.MessageHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.DiagnosisRevision
@@ -9,6 +10,7 @@ import com.patho.main.repository.PrintDocumentRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.PrintDocument
+import com.patho.main.util.exceptions.DiagnosisRevisionNotFoundException
 import com.patho.main.util.exceptions.PDFCreationFailedException
 import com.patho.main.util.exceptions.TemplateNotFoundException
 import com.patho.main.util.pdf.PDFCreator
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service
 import java.io.FileNotFoundException
 import java.time.Instant
 import java.util.*
+import javax.faces.application.FacesMessage
 import kotlin.collections.HashMap
 
 @Service()
@@ -80,17 +83,24 @@ open class ReportService @Autowired constructor(
             success.and(phoneReports(execute.phoneReports.receivers, execute, feedback))
         }
 
-        execute.task
-
         execute.task = taskRepository.save(execute.task, resourceBundle.get("special.pdfOrganizerDialog"), execute.task.parent)
 
         val result = generateSendReport(execute, containerList, success, feedback)
-        feedback.progress()
-        feedback.end(success)
 
         if (success) {
-            return Pair(diagnosisService.completeNotification(result.first, execute.diagnosisRevision), result.second)
+            if (execute.diagnosisRevision.isNotificationNecessary)
+                MessageHandler.sendGrowlMessagesAsResource("growl.notification.noAutoEndPossible.headline", "growl.notification.noAutoEndPossible.text")
+            else {
+                MessageHandler.sendGrowlMessagesAsResource("growl.notification.autoEnd.headline", "growl.notification.autoEnd.text", execute.diagnosisRevision.name)
+                val d = result.first.diagnosisRevisions.firstOrNull { it == execute.diagnosisRevision } ?: throw DiagnosisRevisionNotFoundException()
+                execute.task = diagnosisService.completeNotification(result.first, d)
+            }
+        } else {
+            MessageHandler.sendGrowlMessagesAsResource("growl.notification.notificationFailed.headline", "growl.notification.notificationFailed.text", FacesMessage.SEVERITY_WARN)
         }
+
+        feedback.progress()
+        feedback.end(success)
 
         return result
     }

@@ -41,7 +41,7 @@
             <h:panelGrid styleClass="defaultHistoTable" columns="1" style="width: 80%">
                 <histo:reportIntentStatusByDiagnosisDatatable formID=":dialogContent:diagnosisTable"
                                                               controller="#{notificationPhaseExitDialog}"
-                                                              disableSelection="true"
+                                                              disableSelection="#{notificationPhaseExitDialog.disableDiagnosisSelection}"
                                                               id="diagnosisTable"/>
             </h:panelGrid>
 
@@ -131,13 +131,16 @@
         <div class="buttonContainer">
             <h:panelGrid columns="2">
                 <h:panelGrid columns="1" styleClass="left" id="leftButtonContainer">
+                    <h:outputLabel value="#{msg['dialog.notificationPhaseExit.noDiagnosisSelected']}"
+                                   rendered="#{notificationPhaseExitDialog.submitButtonDisabled}"
+                                   styleClass="icon-red"/>
                 </h:panelGrid>
                 <h:panelGrid columns="3" styleClass="right" id="rightButtonContainer">
 
                     <!-- Exit button -->
                     <p:commandButton value="#{msg['general.ok']}"
+                                     disabled="#{notificationPhaseExitDialog.submitButtonDisabled}"
                                      icon="fa fa-check-circle-o"
-                                     disabled="#{notificationPhaseExitDialog.disableOKButton}"
                                      actionListener="#{notificationPhaseExitDialog.hideAndExitPhase}"/>
 
                     <!-- abort -->

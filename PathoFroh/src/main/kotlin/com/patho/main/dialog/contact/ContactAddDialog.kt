@@ -172,7 +172,7 @@ open class ContactAddDialog @Autowired constructor(
         if (selectedContact != null && selectedContact?.reportIntentOfTask == reportIntent)
             selectedContact = null
 
-        MessageHandler.sendGrowlMessagesAsResource("growl.contact.removed.headline", "growl.contact.removed.success", arrayOf(reportIntent.person?.getFullName()))
+        MessageHandler.sendGrowlMessagesAsResource("growl.contact.removed.headline", "growl.contact.removed.success", reportIntent.person?.getFullName())
     }
 
     /**

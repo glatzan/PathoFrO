@@ -2,12 +2,14 @@ package com.patho.main.dialog.phase
 
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.common.Dialog
+import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.WorkPhaseService
 import com.patho.main.util.dialog.event.NotificationPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
+import com.patho.main.util.exceptions.DiagnosisRevisionNotFoundException
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
@@ -44,18 +46,39 @@ open class NotificationPhaseExitDialog @Autowired constructor(
 
     open lateinit var competeAllNotifications: CheckBoxStatus
 
+    open val isDisableDiagnosisSelection
+        get() = competeAllNotifications.value
+
+
     open lateinit var archiveTask: CheckBoxStatus
 
-    override fun initBean(task: Task): Boolean {
+    open fun initAndPrepareBean(task: Task, diagnosisRevision: DiagnosisRevision?): NotificationPhaseExitDialog {
+        if (initBean(task, diagnosisRevision))
+            prepareDialog()
 
-        var oTask = task
+        return this
+    }
+
+    override fun initBean(task: Task): Boolean {
+        return initBean(task, null)
+    }
+
+    fun initBean(task: Task, diagnosisRevision: DiagnosisRevision?): Boolean {
         val optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, true, true, false, true, true)
         if (!optionalTask.isPresent)
             throw TaskNotFoundException()
 
-        oTask = optionalTask.get()
+        val oTask = optionalTask.get()
 
         diagnosisRevisions = ReportIntentStatusByDiagnosis(oTask)
+
+        // sets the first diagnosis that is not approved if  diagnosisRevision is null
+        selectDiagnosisRevision = if (diagnosisRevision != null)
+            diagnosisRevisions.diagnosisBearer.firstOrNull { it.diagnosisRevision == diagnosisRevision }
+                    ?: throw DiagnosisRevisionNotFoundException()
+        else {
+            null
+        }
 
         archiveTask = object : CheckBoxStatus() {
             override fun onClick() {
@@ -68,11 +91,9 @@ open class NotificationPhaseExitDialog @Autowired constructor(
                 if (this.value) {
                     exitPhase.set(true, true, false, false)
                     removeFromWorklist.set(true, true, false, false)
-                    archiveTask.set(true,true,false,false)
+                    archiveTask.set(true, true, false, false)
                 } else {
-                    exitPhase.set(!isNotificationPending, true, isNotificationPending, isNotificationPending)
-                    removeFromWorklist.set(!isNotificationPending, true, false, false)
-                    archiveTask.set(isNotificationCompleted, true, !isNotificationCompleted, !isNotificationCompleted)
+                    onDiagnosisSelection()
                 }
             }
         }
@@ -102,8 +123,27 @@ open class NotificationPhaseExitDialog @Autowired constructor(
     private val isNotificationCompleted: Boolean
         get() = !isNotificationNecessary
 
-    val disableOKButton
-        get() = !(competeAllNotifications.value || exitPhase.value || removeFromWorklist.value)
+    open val isSubmitButtonDisabled
+        get() = !(selectDiagnosisRevision != null || competeAllNotifications.value)
+
+    /**
+     * On diagnosis change
+     */
+    override fun onDiagnosisSelection() {
+        competeAllNotifications.set(false, true, false, false)
+        if (selectDiagnosisRevision != null) {
+//            removeFromWorklist.set(isCurrentDiagnosisNotApprovedAndLast, true, false, false)
+//            goToNotification.set(isCurrentDiagnosisNotificationNecessary, true, false, false)
+//            exitPhase.set(isCurrentDiagnosisNotApprovedAndLast, true, !isCurrentDiagnosisNotApprovedAndLast, !isCurrentDiagnosisNotApprovedAndLast)
+        } else {
+//            removeFromWorklist.set(false, true, false, false)
+//            goToNotification.set(false, true, false, false)
+//            exitPhase.set(false, true, true, true)
+            exitPhase.set(!isNotificationPending, true, isNotificationPending, isNotificationPending)
+            removeFromWorklist.set(!isNotificationPending, true, false, false)
+            archiveTask.set(isNotificationCompleted, true, !isNotificationCompleted, !isNotificationCompleted)
+        }
+    }
 
     /**
      * Hides the dialog an exits the notification phase

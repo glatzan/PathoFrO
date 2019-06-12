@@ -133,7 +133,7 @@ public class UploadDialog extends AbstractDialog {
                     new PDFInfo(file.getFileName(), getFileType()), file.getContents(), true);
 
             getSelectedDatalist().setDataList(res.getDataList());
-            MessageHandler.sendGrowlMessagesAsResource("growl.upload.success.headline", "growl.upload.success.text", FacesMessage.SEVERITY_INFO, res.getContainer().getName());
+            MessageHandler.sendGrowlMessagesAsResource("growl.upload.success.headline", "growl.upload.success.text", res.getContainer().getName());
         } catch (IllegalAccessError e) {
             MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed.headline", "growl.upload.failed.text", FacesMessage.SEVERITY_ERROR);
         } catch (FileNotFoundException e) {

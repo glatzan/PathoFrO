@@ -67,7 +67,7 @@ open class ContactDialog @Autowired constructor(
     open fun removeContact(reportIntent: ReportIntent) {
         reportIntentService.removeReportIntent(task, reportIntent)
         update(true)
-        MessageHandler.sendGrowlMessagesAsResource("growl.contact.removed.headline", "growl.contact.removed.success", arrayOf(reportIntent.person?.getFullName()))
+        MessageHandler.sendGrowlMessagesAsResource("growl.contact.removed.headline", "growl.contact.removed.success", reportIntent.person?.getFullName())
 
     }
 

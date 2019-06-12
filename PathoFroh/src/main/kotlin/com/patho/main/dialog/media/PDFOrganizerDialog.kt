@@ -225,7 +225,7 @@ open class PDFOrganizerDialog @Autowired constructor(
             val res = pdfService.createAndAttachPDF(uploadList,
                     PDFService.PDFInfo(file.fileName, uploadDocumentType), file.contents, true)
 
-            MessageHandler.sendGrowlMessagesAsResource("growl.media.success.headline", "growl.media.success.text", FacesMessage.SEVERITY_INFO, { res.container.name })
+            MessageHandler.sendGrowlMessagesAsResource("growl.media.success.headline", "growl.media.success.text", res.container.name)
         } catch (e: IllegalAccessError) {
             MessageHandler.sendGrowlMessagesAsResource("growl.media.failed.headline", "growl.media.failed.text", FacesMessage.SEVERITY_ERROR)
         } catch (e: FileNotFoundException) {

@@ -436,7 +436,7 @@ public class CouncilDialog extends AbstractDialog {
             PDFService.PDFReturn res = pdfService.createAndAttachPDF(getSelectedCouncil().getCouncil(),
                     new PDFInfo(file.getFileName(), PrintDocumentType.COUNCIL_REPLY), file.getContents(), true);
 
-            MessageHandler.sendGrowlMessagesAsResource("growl.upload.success.headline", "growl.upload.success.text", FacesMessage.SEVERITY_INFO, res.getContainer().getName());
+            MessageHandler.sendGrowlMessagesAsResource("growl.upload.success.headline", "growl.upload.success.text", res.getContainer().getName());
         } catch (IllegalAccessError e) {
             MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed.headline", "growl.upload.failed.text", FacesMessage.SEVERITY_ERROR);
         } catch (FileNotFoundException e) {
