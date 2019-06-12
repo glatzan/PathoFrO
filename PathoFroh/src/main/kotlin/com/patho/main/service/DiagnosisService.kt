@@ -241,6 +241,23 @@ open class DiagnosisService constructor(
     }
 
     /**
+     * Sets the notification status of a diagnosis revision as completed
+     */
+    @Transactional
+    open fun completeNotification(task: Task, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Task {
+        var tmp = task
+
+        diagnosisRevision.notificationStatus = NotificationStatus.NOTIFICATION_COMPLETED
+        diagnosisRevision.notificationDate = Instant.now()
+
+        if (save)
+            tmp = taskRepository.save(tmp, resourceBundle["log.diagnosisRevision.notificationCompleted", diagnosisRevision], tmp.patient)
+
+        return tmp
+    }
+
+
+    /**
      * Generated or updates the default reportIntent report for a reportIntent
      */
     @Transactional

@@ -20,9 +20,9 @@
                            title="#{msg['dialog.notificationDialog.fax.use.info']}"
                            styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    value="#{notificationDialog.faxTab.useNotification}"
+                    value="#{notificationDialog.faxTab.useNotification.value}"
                     title="#{msg['dialog.notificationDialog.fax.use.info']}">
-                <p:ajax event="change" process="@form" update="@form"/>
+                <p:ajax event="change" process="@form" update="@form" listener="#{notificationDialog.faxTab.useNotification.onChange()}"/>
             </p:selectBooleanCheckbox>
 
             <!-- Send fax -->
@@ -32,7 +32,7 @@
             <p:selectBooleanCheckbox
                     value="#{notificationDialog.faxTab.sendFax}"
                     title="#{msg['dialog.notificationDialog.fax.send.info']}"
-                    disabled="#{!notificationDialog.faxTab.useNotification}">
+                    disabled="#{!notificationDialog.faxTab.useNotification.value}">
                 <p:ajax event="change" process="@form" update="@form"/>
             </p:selectBooleanCheckbox>
 
@@ -41,7 +41,7 @@
                            title="#{msg['dialog.notificationDialog.fax.print.info']}"
                            styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    disabled="#{!notificationDialog.faxTab.useNotification}"
+                    disabled="#{!notificationDialog.faxTab.useNotification.value}"
                     value="#{notificationDialog.faxTab.printFax}"
                     title="#{msg['dialog.notificationDialog.fax.print.info']}">
                 <p:ajax event="change" process="@form" update="@form"/>
@@ -53,7 +53,7 @@
                     title="#{msg['dialog.notificationDialog.fax.individualAddress.info']}"
                     styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    disabled="#{!notificationDialog.faxTab.useNotification}"
+                    disabled="#{!notificationDialog.faxTab.useNotification.value}"
                     value="#{notificationDialog.faxTab.individualAddresses}"
                     title="#{msg['dialog.notificationDialog.fax.individualAddress.info']}">
                 <p:ajax event="change" process="@this" update="@form"/>
@@ -69,7 +69,7 @@
                     title="#{msg['dialog.notificationDialog.fax.template.info']}"
                     value="#{notificationDialog.faxTab.selectedTemplate}"
                     converter="#{notificationDialog.faxTab.templatesTransformer}"
-                    disabled="#{!notificationDialog.faxTab.useNotification}">
+                    disabled="#{!notificationDialog.faxTab.useNotification.value}">
 
 
                 <f:selectItem itemValue="#{null}"

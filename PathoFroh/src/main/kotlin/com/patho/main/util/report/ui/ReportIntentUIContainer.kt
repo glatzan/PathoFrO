@@ -9,7 +9,7 @@ import com.patho.main.service.impl.SpringContextBridge
 /**
  * Listing for notification types, used by ui
  */
-open class ReportIntentUIContainer(var task: Task, val notificationTyp: NotificationTyp, var diagnosisRevision: DiagnosisRevision, private val contactTab: NotificationDialog.ContactTab, val ignoreActive: Boolean = false) {
+open class ReportIntentUIContainer(var task: Task, val notificationTyp: NotificationTyp, private val contactTab: NotificationDialog.ContactTab, var diagnosisRevision: DiagnosisRevision? = null, val ignoreActive: Boolean = false) {
 
     var reportNotificationIntents: MutableList<ReportIntentNotificationUIContainer> = getReportIntentNotificationBearerList()
 
@@ -35,13 +35,12 @@ open class ReportIntentUIContainer(var task: Task, val notificationTyp: Notifica
      * Updates the reportNotificationIntents list. New notification intents will be added, old ones will be updated and
      * removed intents will be removed form the list.
      */
-    fun update(task: Task, diagnosisRevision: DiagnosisRevision) {
+    fun update(task: Task, diagnosisRevision: DiagnosisRevision? = null) {
         this.task = task
         this.diagnosisRevision = diagnosisRevision
 
         var tmpList: MutableList<ReportIntentNotificationUIContainer> = getReportIntentNotificationBearerList(task, diagnosisRevision)
 
-        tmpList.forEach { println(it) }
         // copy of the current container, all remaining container had been deleted
         val toDeleteContainer: MutableList<ReportIntentNotificationUIContainer> = reportNotificationIntents.toMutableList()
 
@@ -66,8 +65,8 @@ open class ReportIntentUIContainer(var task: Task, val notificationTyp: Notifica
     /**
      * Returns a filtered list auf reportintentnotification bearers. In default mode only active container will be returned
      */
-    private fun getReportIntentNotificationBearerList(task: Task = this.task, diagnosisRevision: DiagnosisRevision = this.diagnosisRevision): MutableList<ReportIntentNotificationUIContainer> {
-        return task.contacts.filter { p -> p.active || ignoreActive }.mapNotNull { p -> SpringContextBridge.services().reportIntentService.findReportIntentNotificationByType(p, notificationTyp)?.let { ReportIntentNotificationUIContainer(p, it, diagnosisRevision, contactTab) } }.toMutableList()
+    private fun getReportIntentNotificationBearerList(task: Task = this.task, diagnosisRevision: DiagnosisRevision? = this.diagnosisRevision): MutableList<ReportIntentNotificationUIContainer> {
+        return task.contacts.filter { p -> p.active || ignoreActive }.mapNotNull { p -> SpringContextBridge.services().reportIntentService.findReportIntentNotificationByType(p, notificationTyp)?.let { ReportIntentNotificationUIContainer(p, it, contactTab, diagnosisRevision) } }.toMutableList()
     }
 
     /**
@@ -81,6 +80,8 @@ open class ReportIntentUIContainer(var task: Task, val notificationTyp: Notifica
         // notification was successfully performed
         SUCCESS,
         // notification process failed
-        FAILED
+        FAILED,
+        // no diagnosis selected
+        NO_DIAGNOSIS_SELECTED
     }
 }

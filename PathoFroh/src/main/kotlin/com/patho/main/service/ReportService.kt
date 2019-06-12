@@ -4,6 +4,7 @@ import com.patho.main.action.handler.CurrentUserHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.DiagnosisRevision
+import com.patho.main.model.patient.Task
 import com.patho.main.repository.PrintDocumentRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.template.DocumentToken
@@ -29,10 +30,11 @@ open class ReportService @Autowired constructor(
         private val printDocumentRepository: PrintDocumentRepository,
         private val pathoConfig: PathoConfig,
         private val pdfService: PDFService,
-        private val taskRepository: TaskRepository) : AbstractService() {
+        private val taskRepository: TaskRepository,
+        private val diagnosisService: DiagnosisService) : AbstractService() {
 
 
-    open fun executeReportNotification(execute: ReportIntentExecuteData, feedback: NotificationFeedback): PDFContainer? {
+    open fun executeReportNotification(execute: ReportIntentExecuteData, feedback: NotificationFeedback): Pair<Task, PDFContainer?> {
         feedback.initializeFeedback(calculateSteps(execute))
         feedback.setFeedback("report.feedback.generatingReport")
 
@@ -78,11 +80,17 @@ open class ReportService @Autowired constructor(
             success.and(phoneReports(execute.phoneReports.receivers, execute, feedback))
         }
 
-        taskRepository.save(execute.task, resourceBundle.get("special.pdfOrganizerDialog"), execute.task.parent)
+        execute.task
+
+        execute.task = taskRepository.save(execute.task, resourceBundle.get("special.pdfOrganizerDialog"), execute.task.parent)
 
         val result = generateSendReport(execute, containerList, success, feedback)
         feedback.progress()
         feedback.end(success)
+
+        if (success) {
+            return Pair(diagnosisService.completeNotification(result.first, execute.diagnosisRevision), result.second)
+        }
 
         return result
     }
@@ -217,7 +225,7 @@ open class ReportService @Autowired constructor(
         return true;
     }
 
-    private fun generateSendReport(execute: ReportIntentExecuteData, reportIntentNotificationBearers: HashMap<String, List<NotificationExecuteData>>, success: Boolean, feedback: NotificationFeedback): PDFContainer? {
+    private fun generateSendReport(execute: ReportIntentExecuteData, reportIntentNotificationBearers: HashMap<String, List<NotificationExecuteData>>, success: Boolean, feedback: NotificationFeedback): Pair<Task, PDFContainer?> {
         val document = printDocumentRepository
                 .findByID(pathoConfig.defaultDocuments.notificationSendReport)
 
@@ -243,10 +251,10 @@ open class ReportService @Autowired constructor(
             feedback.setFeedback("report.feedback.generationSendReport")
             logger.debug("Creating send report")
             val pdfReturn = pdfService.createAndAttachPDF(execute.diagnosisRevision.task, document.get(), true)
-            return pdfReturn.container
+            return Pair(pdfReturn.dataList as Task, pdfReturn.container)
         } catch (e: FileNotFoundException) {
             logger.debug("Creating send report failed")
-            return null
+            return Pair(execute.task, null)
         }
     }
 

@@ -36,6 +36,7 @@ import com.patho.main.util.report.ui.ReportIntentUIContainer
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
 import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
+import com.patho.main.util.ui.backend.CheckBoxStatus
 import com.patho.main.util.ui.backend.CommandButtonStatus
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import org.primefaces.event.SelectEvent
@@ -179,7 +180,7 @@ class NotificationDialog @Autowired constructor(
         /**
          * True if notification method should be used
          */
-        open var useNotification: Boolean = false
+        open var useNotification: CheckBoxStatus = CheckBoxStatus()
 
         /**
          * List of templates to select from
@@ -213,6 +214,7 @@ class NotificationDialog @Autowired constructor(
                                     viewID: String,
                                     centerInclude: String,
                                     val notificationTyp: NotificationTyp) : NotificationTab(tabName, name, viewID, centerInclude) {
+
         /**
          * If true individual addresses will be used in the reports
          */
@@ -224,20 +226,20 @@ class NotificationDialog @Autowired constructor(
         open lateinit var reportIntentStatus: ReportIntentUIContainer
 
         override fun updateData() {
-            val diagnosis = generalTab.selectDiagnosisRevision?.diagnosisRevision
-            if (diagnosis != null) {
-                if (!::reportIntentStatus.isInitialized)
-                    reportIntentStatus = ReportIntentUIContainer(task, notificationTyp, diagnosis, this)
-                else
-                    reportIntentStatus.update(task, diagnosis)
-            }
+            logger.debug("Updating $tabName")
+            reportIntentStatus.update(task, generalTab.selectDiagnosisRevision?.diagnosisRevision)
+
+            // only updating notification status if no manually change had been made
+            if (!useNotification.manuallyAltered)
+                useNotification.value = reportIntentStatus.hasActiveNotifications
         }
 
         /**
          * Initializes the useNotification value and calls the parent method
          */
         override fun initTab(force: Boolean): Boolean {
-            useNotification = reportIntentStatus.hasActiveNotifications
+            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp, this, generalTab.selectDiagnosisRevision?.diagnosisRevision)
+            useNotification.value = reportIntentStatus.hasActiveNotifications
             return super.initTab(force)
         }
 
@@ -247,14 +249,14 @@ class NotificationDialog @Autowired constructor(
         override fun onContactDialogReturn(event: SelectEvent) {
             logger.debug("Contact dialog return")
             super.onContactDialogReturn(event)
-            useNotification = reportIntentStatus.hasActiveNotifications
+            useNotification.value = reportIntentStatus.hasActiveNotifications
         }
 
         /**
          * This function is triggered when the user changes the perform notification checkbox for a reportIntent
          */
         fun onPerformNotificationChange() {
-            useNotification = reportIntentStatus.hasActiveNotifications
+            useNotification.value = reportIntentStatus.hasActiveNotifications
         }
     }
 
@@ -298,13 +300,11 @@ class NotificationDialog @Autowired constructor(
         open val diagnosisSelected
             get() = selectDiagnosisRevision != null
 
-        /**
-         * This tab should always be used
-         */
-        override var useNotification: Boolean = true
-
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing general data...")
+            // This tab should always be used
+            useNotification.value = true
+
             diagnosisRevisions = ReportIntentStatusByDiagnosis(task)
             selectDiagnosisRevision = diagnosisRevisions.diagnosisBearer.firstOrNull { p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
 
@@ -366,9 +366,9 @@ class NotificationDialog @Autowired constructor(
                     DocumentToken("task", task),
                     DocumentToken("contact", null))
 
+            val result = super.initTab(force)
             updateData()
-
-            return super.initTab(force)
+            return result
         }
     }
 
@@ -403,9 +403,9 @@ class NotificationDialog @Autowired constructor(
 
             printFax = false
 
+            val result = super.initTab(force)
             updateData()
-
-            return super.initTab(force)
+            return result
         }
     }
 
@@ -433,9 +433,9 @@ class NotificationDialog @Autowired constructor(
 
             printLetter = true
 
+            val result = super.initTab(force)
             updateData()
-
-            return super.initTab(force)
+            return result
         }
     }
 
@@ -449,9 +449,9 @@ class NotificationDialog @Autowired constructor(
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing phone data...")
 
+            val result = super.initTab(force)
             updateData()
-
-            return super.initTab(force)
+            return result
         }
     }
 
@@ -487,10 +487,10 @@ class NotificationDialog @Autowired constructor(
 
         override fun updateData() {
             activeNotifications.clear()
-            if (mailTab.useNotification) activeNotifications.addAll(mailTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.EMAIL, it) })
-            if (faxTab.useNotification) activeNotifications.addAll(faxTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.FAX, it) })
-            if (letterTab.useNotification) activeNotifications.addAll(letterTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.LETTER, it) })
-            if (phoneTab.useNotification) activeNotifications.addAll(phoneTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.PHONE, it) })
+            if (mailTab.useNotification.value) activeNotifications.addAll(mailTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.EMAIL, it) })
+            if (faxTab.useNotification.value) activeNotifications.addAll(faxTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.FAX, it) })
+            if (letterTab.useNotification.value) activeNotifications.addAll(letterTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.LETTER, it) })
+            if (phoneTab.useNotification.value) activeNotifications.addAll(phoneTab.reportIntentStatus.activeNotifications.map { ReportIntentSummaryEntry(NotificationTyp.PHONE, it) })
 
             performButton.set(true, true, activeNotifications.isEmpty())
         }
@@ -507,17 +507,17 @@ class NotificationDialog @Autowired constructor(
 
                 var report = ReportIntentExecuteData(task, diagnosis)
                 // general
-                report.additionalReports.applyReport = generalTab.useNotification
+                report.additionalReports.applyReport = generalTab.useNotification.value
                 report.additionalReports.printAdditionalReportsCount = generalTab.printCount
                 report.additionalReports.reportTemplate = generalTab.selectedTemplate
 
                 // mail
-                report.mailReports.applyReport = mailTab.useNotification
+                report.mailReports.applyReport = mailTab.useNotification.value
                 report.mailReports.individualAddress = mailTab.individualAddresses
                 report.mailReports.mailTemplate = mailTab.mailTemplate
                 report.mailReports.reportTemplate = mailTab.selectedTemplate
 
-                if (mailTab.useNotification) {
+                if (mailTab.useNotification.value) {
                     val mailTemplate = mailTab.mailTemplate
                     if (mailTemplate == null) {
                         MessageHandler.sendGrowlMessagesAsResource("growl.headline.error", "growl.notification.noMailTemplateSelected")
@@ -528,26 +528,26 @@ class NotificationDialog @Autowired constructor(
                 }
 
                 // fax
-                report.faxReports.applyReport = faxTab.useNotification
+                report.faxReports.applyReport = faxTab.useNotification.value
                 report.faxReports.individualAddress = faxTab.individualAddresses
                 report.faxReports.sendFax = faxTab.sendFax
                 report.faxReports.printFax = faxTab.printFax
                 report.faxReports.reportTemplate = faxTab.selectedTemplate
 
-                if (faxTab.useNotification)
+                if (faxTab.useNotification.value)
                     report.faxReports.receivers = faxTab.reportIntentStatus.activeNotifications.map { NotificationExecuteData(it.reportIntent, it.reportIntentNotification, true, it.contactAddress, it.printPDF) }
 
                 // letter
-                report.letterReports.applyReport = letterTab.useNotification
+                report.letterReports.applyReport = letterTab.useNotification.value
                 report.letterReports.individualAddress = letterTab.individualAddresses
                 report.letterReports.reportTemplate = letterTab.selectedTemplate
 
-                if (letterTab.useNotification)
+                if (letterTab.useNotification.value)
                     report.letterReports.receivers = letterTab.reportIntentStatus.activeNotifications.map { NotificationExecuteData(it.reportIntent, it.reportIntentNotification, true, it.contactAddress, it.printPDF) }
 
                 // phone
-                report.phoneReports.applyReport = phoneTab.useNotification
-                if (phoneTab.useNotification)
+                report.phoneReports.applyReport = phoneTab.useNotification.value
+                if (phoneTab.useNotification.value)
                     report.phoneReports.receivers = phoneTab.reportIntentStatus.activeNotifications.map { NotificationExecuteData(it.reportIntent, it.reportIntentNotification, true, it.contactAddress, it.printPDF) }
 
                 performNotificationDialog.initAndPrepareBean(task, report).startNotification(true)

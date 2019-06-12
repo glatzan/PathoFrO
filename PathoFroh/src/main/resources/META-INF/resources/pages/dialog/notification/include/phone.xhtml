@@ -19,9 +19,9 @@
                            title="#{msg['dialog.notificationDialog.phone.use.info']}"
                            styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    value="#{notificationDialog.phoneTab.useNotification}"
+                    value="#{notificationDialog.phoneTab.useNotification.value}"
                     title="#{msg['dialog.notificationDialog.phone.use.info']}">
-                <p:ajax event="change" process="@form" update="@form"/>
+                <p:ajax event="change" process="@form" update="@form" listener="#{notificationDialog.phoneTab.useNotification.onChange()}"/>
             </p:selectBooleanCheckbox>
 
             <!-- pdf template -->

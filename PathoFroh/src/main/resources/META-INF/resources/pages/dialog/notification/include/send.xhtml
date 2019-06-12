@@ -43,7 +43,7 @@
         <h:panelGrid columns="1" styleClass="defaultHistoTable">
             <h:outputLabel value="#{msg['dialog.notificationDialog.send.noNotification']}"
                            styleClass="icon-red bigFont"
-                           rendered="#{!notificationDialog.sendTab.performButton.alternativeButtonText}"/>
+                           rendered="#{!notificationDialog.sendTab.performButton.alternativeText}"/>
         </h:panelGrid>
 
     </p:outputPanel>
@@ -70,11 +70,11 @@
             <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
                 <!-- performe or archive-->
                 <p:commandButton
-                        value="#{msg[notificationDialog.sendTab.performButton.alternativeButtonText ? 'dialog.notificationDialog.send.button.perform.text' : 'dialog.notificationDialog.send.button.archive.text']}"
+                        value="#{msg[notificationDialog.sendTab.performButton.alternativeText ? 'dialog.notificationDialog.send.button.perform.text' : 'dialog.notificationDialog.send.button.archive.text']}"
                         icon="fa fa-volume-up"
                         update="@form" process="@form"
                         actionListener="#{notificationDialog.sendTab.performButton.onClick()}"
-                        title="#{msg[notificationDialog.sendTab.performButton.alternativeButtonText  ? 'dialog.notificationDialog.send.button.perform.info' : 'dialog.notificationDialog.send.button.archive.info']}">
+                        title="#{msg[notificationDialog.sendTab.performButton.alternativeText  ? 'dialog.notificationDialog.send.button.perform.info' : 'dialog.notificationDialog.send.button.archive.info']}">
                     <p:ajax event="dialogReturn" listener="#{notificationDialog.sendTab.onSubDialogReturn}"/>
                 </p:commandButton>
 

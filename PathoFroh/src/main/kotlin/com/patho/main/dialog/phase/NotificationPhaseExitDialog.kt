@@ -68,9 +68,11 @@ open class NotificationPhaseExitDialog @Autowired constructor(
                 if (this.value) {
                     exitPhase.set(true, true, false, false)
                     removeFromWorklist.set(true, true, false, false)
+                    archiveTask.set(true,true,false,false)
                 } else {
                     exitPhase.set(!isNotificationPending, true, isNotificationPending, isNotificationPending)
                     removeFromWorklist.set(!isNotificationPending, true, false, false)
+                    archiveTask.set(isNotificationCompleted, true, !isNotificationCompleted, !isNotificationCompleted)
                 }
             }
         }

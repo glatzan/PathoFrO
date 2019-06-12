@@ -66,7 +66,7 @@ open class DiagnosisRevision : AbstractPersistable, AuditAble, Parent<Task> {
     open override var audit: Audit? = null
 
     /**
-     * Date of reportIntent finalization.
+     * Date of diagnosis approval.
      */
     @Column
     open var completionDate: Instant? = null

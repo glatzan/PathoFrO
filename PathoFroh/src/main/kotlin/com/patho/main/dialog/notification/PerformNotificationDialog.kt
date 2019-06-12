@@ -10,6 +10,7 @@ import com.patho.main.util.dialog.event.NotificationPerformedEvent
 import com.patho.main.util.report.NotificationFeedback
 import com.patho.main.util.report.ReportIntentExecuteData
 import com.patho.main.util.ui.backend.CommandButtonStatus
+import com.patho.main.util.ui.backend.CommandLinkStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -75,7 +76,16 @@ open class PerformNotificationDialog @Autowired constructor(
     /**
      * Endphase button
      */
-    var endPhaseButton: CommandButtonStatus = object : CommandButtonStatus() {
+    val endPhaseButton: CommandButtonStatus = object : CommandButtonStatus() {
+        override var isDisabled: Boolean
+            get() = !completed
+            set(value) {}
+    }
+
+    /**
+     * Exit dialog button and link
+     */
+    val closeLink: CommandLinkStatus = object : CommandLinkStatus() {
         override var isDisabled: Boolean
             get() = !completed
             set(value) {}
@@ -111,16 +121,12 @@ open class PerformNotificationDialog @Autowired constructor(
         this.delayedStart = delayedStart
 
         if (!delayedStart)
-            sendReport = reportService.executeReportNotification(data, this)
+            sendReport = reportService.executeReportNotification(data, this).second
     }
 
     override fun end(success: Boolean) {
         this.success = success
         this.completed = true
-
-        if(success){
-            data.diagnosisRevision
-        }
     }
 
     /**

@@ -26,6 +26,7 @@
                          styleClass="defaultHistoTable">
                 <h:outputLabel value="#{msg['dialog.notificationPerform.headline']}"/>
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               disabled="#{performNotificationDialog.closeLink.disabled}"
                                onclick="PF('closeBtn').jq.click();return false;">
                     <i class="fa fa-fw fa-times"/>
                 </p:commandLink>
@@ -105,7 +106,7 @@
 
                     <!-- abort -->
                     <p:commandButton value="#{msg['general.close']}" id="closeBtn" widgetVar="closeBtn"
-                                     disabled="#{!performNotificationDialog.completed}"
+                                     disabled="#{performNotificationDialog.closeLink.disabled}"
                                      icon="fa fa-times-circle"
                                      actionListener="#{performNotificationDialog.hideDialog()}"/>
                 </h:panelGrid>

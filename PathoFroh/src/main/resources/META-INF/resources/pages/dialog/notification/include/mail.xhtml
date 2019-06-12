@@ -19,9 +19,9 @@
                            title="#{msg['dialog.notificationDialog.mail.use.info']}"
                            styleClass=" bigFont"/>
             <p:selectBooleanCheckbox
-                    value="#{notificationDialog.mailTab.useNotification}"
+                    value="#{notificationDialog.mailTab.useNotification.value}"
                     title="#{msg['dialog.notificationDialog.mail.use.info']}">
-                <p:ajax event="change" process="@this" update="@form"/>
+                <p:ajax event="change" process="@this" update="@form" listener="#{notificationDialog.mailTab.useNotification.onChange()}"/>
             </p:selectBooleanCheckbox>
 
             <!-- subject -->
@@ -32,7 +32,7 @@
                     value="#{notificationDialog.mailTab.mailTemplate.finalSubject}"
                     title="#{msg['dialog.notificationDialog.mail.subject.info']}"
                     style="width:95%"
-                    disabled="#{!notificationDialog.mailTab.useNotification}"/>
+                    disabled="#{!notificationDialog.mailTab.useNotification.value}"/>
 
             <!-- Text -->
             <h:outputLabel value="#{msg['dialog.notificationDialog.mail.text.text']}"
@@ -42,7 +42,7 @@
                              value="#{notificationDialog.mailTab.mailTemplate.finalBody}"
                              title="#{msg['dialog.notificationDialog.mail.text.info']}"
                              style="width:95%"
-                             disabled="#{!notificationDialog.mailTab.useNotification}"
+                             disabled="#{!notificationDialog.mailTab.useNotification.value}"
                              rows="10"/>
 
             <!-- Individual address -->
@@ -51,7 +51,7 @@
                     title="#{msg['dialog.notificationDialog.mail.individualAddress.info']}"
                     styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    disabled="#{!notificationDialog.mailTab.useNotification}"
+                    disabled="#{!notificationDialog.mailTab.useNotification.value}"
                     value="#{notificationDialog.mailTab.individualAddresses}"
                     title="#{msg['dialog.notificationDialog.mail.individualAddress.info']}">
                 <p:ajax event="change" process="@this" update="@form"/>
@@ -66,7 +66,7 @@
                     value="#{notificationDialog.mailTab.selectedTemplate}"
                     title="#{msg['dialog.notificationDialog.mail.template.info']}"
                     converter="#{notificationDialog.mailTab.templatesTransformer}"
-                    disabled="#{!notificationDialog.mailTab.useNotification}">
+                    disabled="#{!notificationDialog.mailTab.useNotification.value}">
 
                 <f:selectItem itemValue="#{null}"
                               itemLabel="#{msg['dialog.notificationDialog.mail.template.none']}"/>

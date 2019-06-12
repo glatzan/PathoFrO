@@ -56,7 +56,7 @@
             <h:outputLabel value="#{msg['dialog.notificationDialog.general.additionalPrints.use.text']}"
                            styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    value="#{notificationDialog.generalTab.useNotification}"
+                    value="#{notificationDialog.generalTab.useNotification.value}"
                     title="#{msg['dialog.notificationDialog.general.additionalPrints.use.info']}">
                 <p:ajax event="change" process="@form" update="@form"/>
             </p:selectBooleanCheckbox>
@@ -66,7 +66,7 @@
                            value="#{msg['dialog.notificationDialog.general.additionalPrints.template.text']}"/>
             <p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
                              title="#{msg['dialog.notificationDialog.general.additionalPrints.template.info']}"
-                             disabled="#{!notificationDialog.generalTab.useNotification}"
+                             disabled="#{!notificationDialog.generalTab.useNotification.value}"
                              value="#{notificationDialog.generalTab.selectedTemplate}"
                              converter="#{notificationDialog.generalTab.templatesTransformer}">
 
@@ -86,7 +86,7 @@
                            value="#{msg['dialog.notificationDialog.general.additionalPrints.count.text']} "
                            title="#{msg['dialog.notificationDialog.general.additionalPrints.count.info']}"/>
             <p:spinner title="#{msg['dialog.notificationDialog.general.additionalPrints.count.info']}"
-                       disabled="#{!notificationDialog.generalTab.useNotification}"
+                       disabled="#{!notificationDialog.generalTab.useNotification.value}"
                        value="#{notificationDialog.generalTab.printCount}"
                        styleClass="oneNumberSpinner" min="0" max="9"/>
         </h:panelGrid>

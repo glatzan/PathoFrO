@@ -12,7 +12,7 @@ import com.patho.main.util.print.PrintPDFBearer
 /**
  * Bearer for the notification intent
  */
-open class ReportIntentNotificationUIContainer(var reportIntent: ReportIntent, var reportIntentNotification: ReportIntentNotification, var diagnosisRevision: DiagnosisRevision, private val contactTab: NotificationDialog.ContactTab) {
+open class ReportIntentNotificationUIContainer(var reportIntent: ReportIntent, var reportIntentNotification: ReportIntentNotification, private val contactTab: NotificationDialog.ContactTab, var diagnosisRevision: DiagnosisRevision? = null) {
 
     /**
      * Conatct address, if reportIntentNotification has no contact address set, a new one will be generated
@@ -23,19 +23,22 @@ open class ReportIntentNotificationUIContainer(var reportIntent: ReportIntent, v
      * Status of the reportintentNotification
      */
     val status: ReportIntentUIContainer.ReportIntentBearerStatus
-        get() = if (reportIntentNotification.active) {
-            // status is active, check if history is present, if so check if the notification was successful
-            if (SpringContextBridge.services().reportIntentService.isHistoryPresentForDiagnosis(reportIntentNotification, diagnosisRevision)) {
-                if (SpringContextBridge.services().reportIntentService.isNotificationPerformedForDiagnosis(reportIntentNotification, diagnosisRevision))
-                    ReportIntentUIContainer.ReportIntentBearerStatus.SUCCESS
-                else
-                    ReportIntentUIContainer.ReportIntentBearerStatus.FAILED
+        get() =
+            if (diagnosisRevision == null) {
+                ReportIntentUIContainer.ReportIntentBearerStatus.NO_DIAGNOSIS_SELECTED
+            } else if (reportIntentNotification.active) {
+                // status is active, check if history is present, if so check if the notification was successful
+                if (SpringContextBridge.services().reportIntentService.isHistoryPresentForDiagnosis(reportIntentNotification, diagnosisRevision as DiagnosisRevision)) {
+                    if (SpringContextBridge.services().reportIntentService.isNotificationPerformedForDiagnosis(reportIntentNotification, diagnosisRevision as DiagnosisRevision))
+                        ReportIntentUIContainer.ReportIntentBearerStatus.SUCCESS
+                    else
+                        ReportIntentUIContainer.ReportIntentBearerStatus.FAILED
 
+                } else
+                    ReportIntentUIContainer.ReportIntentBearerStatus.ACTIVE
+                // is inactive
             } else
-                ReportIntentUIContainer.ReportIntentBearerStatus.ACTIVE
-            // is inactive
-        } else
-            ReportIntentUIContainer.ReportIntentBearerStatus.INACTIVE
+                ReportIntentUIContainer.ReportIntentBearerStatus.INACTIVE
 
     /**
      * If true a notification is performed

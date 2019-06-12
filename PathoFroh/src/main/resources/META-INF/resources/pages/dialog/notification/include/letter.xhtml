@@ -22,9 +22,9 @@
                            title="#{msg['dialog.notificationDialog.letter.use.info']}"
                            styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    value="#{notificationDialog.letterTab.useNotification}"
+                    value="#{notificationDialog.letterTab.useNotification.value}"
                     title="#{msg['dialog.notificationDialog.letter.use.info']}">
-                <p:ajax event="change" process="@form" update="@form"/>
+                <p:ajax event="change" process="@form" update="@form" listener="#{notificationDialog.letterTab.useNotification.onChange()}"/>
             </p:selectBooleanCheckbox>
 
             <!-- print -->
@@ -32,7 +32,7 @@
                            title="#{msg['dialog.notificationDialog.letter.print.info']}"
                            styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    disabled="#{!notificationDialog.letterTab.useNotification}"
+                    disabled="#{!notificationDialog.letterTab.useNotification.value}"
                     value="#{notificationDialog.letterTab.printLetter}"
                     title="#{msg['dialog.notificationDialog.letter.print.info']}">
                 <p:ajax event="change" process="@form" update="@form"/>
@@ -44,7 +44,7 @@
                     title="#{msg['dialog.notificationDialog.letter.individualAddress.info']}"
                     styleClass="bigFont"/>
             <p:selectBooleanCheckbox
-                    disabled="#{!notificationDialog.letterTab.useNotification}"
+                    disabled="#{!notificationDialog.letterTab.useNotification.value}"
                     value="#{notificationDialog.letterTab.individualAddresses}"
                     title="#{msg['dialog.notificationDialog.letter.individualAddress.info']}">
                 <p:ajax event="change" process="@this" update="@form"/>
@@ -59,7 +59,7 @@
                     title="#{msg['dialog.notificationDialog.letter.template.info']}"
                     value="#{notificationDialog.letterTab.selectedTemplate}"
                     converter="#{notificationDialog.letterTab.templatesTransformer}"
-                    disabled="#{!notificationDialog.letterTab.useNotification}">
+                    disabled="#{!notificationDialog.letterTab.useNotification.value}">
 
                 <f:selectItem itemValue="#{null}"
                               itemLabel="#{msg['dialog.notificationDialog.letter.template.none']}"/>
