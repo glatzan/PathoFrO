@@ -131,15 +131,21 @@
         <div class="buttonContainer">
             <h:panelGrid columns="2">
                 <h:panelGrid columns="1" styleClass="left" id="leftButtonContainer">
+                    <!-- no diagnosis selected -->
                     <h:outputLabel value="#{msg['dialog.notificationPhaseExit.noDiagnosisSelected']}"
-                                   rendered="#{notificationPhaseExitDialog.submitButtonDisabled}"
+                                   rendered="#{notificationPhaseExitDialog.selectDiagnosisLabel.rendered}"
+                                   styleClass="icon-red"/>
+
+                    <!-- notification not performed warning -->
+                    <h:outputLabel value="#{msg['dialog.notificationPhaseExit.notificationNotPerformd']}"
+                                   rendered="#{notificationPhaseExitDialog.notificationNotPerformed.rendered}"
                                    styleClass="icon-red"/>
                 </h:panelGrid>
                 <h:panelGrid columns="3" styleClass="right" id="rightButtonContainer">
 
                     <!-- Exit button -->
                     <p:commandButton value="#{msg['general.ok']}"
-                                     disabled="#{notificationPhaseExitDialog.submitButtonDisabled}"
+                                     disabled="#{notificationPhaseExitDialog.submitButton.disabled}"
                                      icon="fa fa-check-circle-o"
                                      actionListener="#{notificationPhaseExitDialog.hideAndExitPhase}"/>
 

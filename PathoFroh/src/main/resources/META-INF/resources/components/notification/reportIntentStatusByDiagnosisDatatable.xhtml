@@ -64,12 +64,20 @@
                        title="#{msg['dialog.notificationDialog.general.data.status.notApproved']}"/>
                 </pe:case>
                 <pe:case value="#{notificationStatus.NOTIFICATION_PENDING}">
-                    <i class="fa fa-fw fa-volume-up icon-orange"
+                    <i class="fa fa-fw fa-volume-down icon-orange"
                        title="#{msg['dialog.notificationDialog.general.data.status.pending']}"/>
                 </pe:case>
                 <pe:case value="#{notificationStatus.NO_NOTFICATION}">
-                    <i class="fa fa-fw fa-circle icon-red"
+                    <i class="fa fa-fw fa-circle"
                        title="#{msg['dialog.notificationDialog.general.data.status.none']}"/>
+                </pe:case>
+                <pe:case value="#{notificationStatus.NOTIFICATION_PERFORMED}">
+                    <i class="fa fa-fw fa-volume-up icon-blue"
+                       title="#{msg['dialog.notificationDialog.general.data.status.completed']}"/>
+                </pe:case>
+                <pe:case value="#{notificationStatus.NOTIFICATION_FAILED}">
+                    <i class="fa fa-fw fa-volume-up icon-red"
+                       title="#{msg['dialog.notificationDialog.general.data.status.completed']}"/>
                 </pe:case>
                 <pe:case value="#{notificationStatus.NOTIFICATION_COMPLETED}">
                     <i class="fa fa-fw fa-check-circle icon-green"

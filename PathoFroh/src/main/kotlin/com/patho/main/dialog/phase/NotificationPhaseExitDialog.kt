@@ -15,9 +15,12 @@ import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
 import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
 import com.patho.main.util.ui.backend.CheckBoxStatus
+import com.patho.main.util.ui.backend.CommandButtonStatus
+import com.patho.main.util.ui.backend.LabelStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import javax.management.Notification
 
 /**
  * Dialog for exiting the notification phase
@@ -49,8 +52,40 @@ open class NotificationPhaseExitDialog @Autowired constructor(
     open val isDisableDiagnosisSelection
         get() = competeAllNotifications.value
 
-
     open lateinit var archiveTask: CheckBoxStatus
+
+    /**
+     * Status for label "select diagnosis text", if diagnosis is null and complete All notifications is not set
+     */
+    open var selectDiagnosisLabel = object : LabelStatus() {
+        override var isRendered: Boolean
+            get() = selectDiagnosisRevision == null && !competeAllNotifications.value
+            @Suppress("UNUSED_PARAMETER")
+            set(value) {
+            }
+    }
+
+    /**
+     * Status for warning label "notification for diagnosis was not performed"
+     */
+    open var notificationNotPerformed = object : LabelStatus() {
+        override var isRendered: Boolean
+            get() = selectDiagnosisRevision != null && selectDiagnosisRevision?.diagnosisRevision?.notificationStatus != NotificationStatus.NOTIFICATION_PERFORMED && !competeAllNotifications.value
+            @Suppress("UNUSED_PARAMETER")
+            set(value) {
+            }
+    }
+
+    /**
+     * Status for submit button, only enable if a diagnosis is selected or complete all notifications is set
+     */
+    open var submitButton = object : CommandButtonStatus() {
+        override var isDisabled: Boolean
+            get() = selectDiagnosisRevision == null && !competeAllNotifications.value
+            @Suppress("UNUSED_PARAMETER")
+            set(value) {
+            }
+    }
 
     open fun initAndPrepareBean(task: Task, diagnosisRevision: DiagnosisRevision?): NotificationPhaseExitDialog {
         if (initBean(task, diagnosisRevision))
@@ -77,12 +112,7 @@ open class NotificationPhaseExitDialog @Autowired constructor(
             diagnosisRevisions.diagnosisBearer.firstOrNull { it.diagnosisRevision == diagnosisRevision }
                     ?: throw DiagnosisRevisionNotFoundException()
         else {
-            null
-        }
-
-        archiveTask = object : CheckBoxStatus() {
-            override fun onClick() {
-            }
+            diagnosisRevisions.diagnosisBearer.firstOrNull { it.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PERFORMED }
         }
 
         competeAllNotifications = object : CheckBoxStatus(false, isNotificationNecessary, false, false) {
@@ -99,12 +129,12 @@ open class NotificationPhaseExitDialog @Autowired constructor(
         }
 
         // setting exit phase
-        exitPhase = object : CheckBoxStatus(!isNotificationPending, true, isNotificationPending, isNotificationPending) {
+        exitPhase = object : CheckBoxStatus(!isMoreThenOneNotificationNecessary, true, isMoreThenOneNotificationNecessary, isMoreThenOneNotificationNecessary) {
             override fun onClick() {
             }
         }
 
-        removeFromWorklist.set(!isNotificationPending, true, false, false)
+        removeFromWorklist.set(!isMoreThenOneNotificationPerformedOrPendingException, true, false, false)
 
         archiveTask = object : CheckBoxStatus(isNotificationCompleted, true, !isNotificationCompleted, !isNotificationCompleted) {
             override fun onClick() {
@@ -114,33 +144,40 @@ open class NotificationPhaseExitDialog @Autowired constructor(
         return super.initBean(oTask)
     }
 
+    private val isMoreThenOneNotificationNecessary
+        get() = (selectDiagnosisRevision?.diagnosisRevision?.isNotificationNecessary == true && countNotificationNecessary > 1) || (selectDiagnosisRevision?.diagnosisRevision?.isNotificationNecessary == false && countNotificationNecessary > 0)
+
+    private val countNotificationNecessary
+        get() = diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotificationNecessary }
+
+    private val isNotificationCompleted: Boolean
+        get() = diagnosisRevisions.diagnosisBearer.all { !it.diagnosisRevision.isNotificationNecessary }
+
+    private val isMoreThenOneNotificationPerformedOrPendingException
+        get() = (selectDiagnosisRevision?.diagnosisRevision?.isNotificationPerformedOrPending == true && countNotificationsPerformedOrPending > 1) || (selectDiagnosisRevision?.diagnosisRevision?.isNotificationPerformedOrPending  == false && countNotificationsPerformedOrPending > 0)
+
+    private val countNotificationsPerformedOrPending
+        get() = diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotificationPerformedOrPending }
+
+
+
+
     private val isNotificationPending: Boolean
         get() = diagnosisRevisions.diagnosisBearer.any { it.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
 
     private val isNotificationNecessary: Boolean
         get() = diagnosisRevisions.diagnosisBearer.all { it.diagnosisRevision.isNotificationNecessary }
 
-    private val isNotificationCompleted: Boolean
-        get() = !isNotificationNecessary
-
-    open val isSubmitButtonDisabled
-        get() = !(selectDiagnosisRevision != null || competeAllNotifications.value)
-
-    /**
-     * On diagnosis change
-     */
     override fun onDiagnosisSelection() {
         competeAllNotifications.set(false, true, false, false)
         if (selectDiagnosisRevision != null) {
-//            removeFromWorklist.set(isCurrentDiagnosisNotApprovedAndLast, true, false, false)
-//            goToNotification.set(isCurrentDiagnosisNotificationNecessary, true, false, false)
-//            exitPhase.set(isCurrentDiagnosisNotApprovedAndLast, true, !isCurrentDiagnosisNotApprovedAndLast, !isCurrentDiagnosisNotApprovedAndLast)
+            competeAllNotifications.value = false
+            exitPhase.set(!isMoreThenOneNotificationNecessary, true, isMoreThenOneNotificationNecessary, isMoreThenOneNotificationNecessary)
+            removeFromWorklist.set(!isMoreThenOneNotificationPerformedOrPendingException, true, false, false)
+            archiveTask.set(!isMoreThenOneNotificationNecessary, true, isMoreThenOneNotificationNecessary, isMoreThenOneNotificationNecessary)
         } else {
-//            removeFromWorklist.set(false, true, false, false)
-//            goToNotification.set(false, true, false, false)
-//            exitPhase.set(false, true, true, true)
-            exitPhase.set(!isNotificationPending, true, isNotificationPending, isNotificationPending)
-            removeFromWorklist.set(!isNotificationPending, true, false, false)
+            exitPhase.set(!isMoreThenOneNotificationNecessary, true, isMoreThenOneNotificationNecessary, isMoreThenOneNotificationNecessary)
+            removeFromWorklist.set(!isMoreThenOneNotificationPerformedOrPendingException, true, false, false)
             archiveTask.set(isNotificationCompleted, true, !isNotificationCompleted, !isNotificationCompleted)
         }
     }

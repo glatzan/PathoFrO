@@ -17,6 +17,14 @@ enum class NotificationStatus {
      */
     NO_NOTFICATION,
     /**
+     * This status is used if a notification has been performed
+     */
+    NOTIFICATION_PERFORMED,
+    /**
+     * This status is used if a notification failed
+     */
+    NOTIFICATION_FAILED,
+    /**
      * Notification was performed
      */
     NOTIFICATION_COMPLETED

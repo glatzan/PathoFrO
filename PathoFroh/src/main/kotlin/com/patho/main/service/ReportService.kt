@@ -87,17 +87,16 @@ open class ReportService @Autowired constructor(
 
         val result = generateSendReport(execute, containerList, success, feedback)
 
-        if (success) {
-            if (execute.diagnosisRevision.isNotificationNecessary)
-                MessageHandler.sendGrowlMessagesAsResource("growl.notification.noAutoEndPossible.headline", "growl.notification.noAutoEndPossible.text")
-            else {
-                MessageHandler.sendGrowlMessagesAsResource("growl.notification.autoEnd.headline", "growl.notification.autoEnd.text", execute.diagnosisRevision.name)
-                val d = result.first.diagnosisRevisions.firstOrNull { it == execute.diagnosisRevision } ?: throw DiagnosisRevisionNotFoundException()
-                execute.task = diagnosisService.completeNotification(result.first, d)
-            }
-        } else {
+        if (success)
+            MessageHandler.sendGrowlMessagesAsResource("growl.notification.notificationPerformed.headline", "growl.notification.notificationPerformed.text", execute.diagnosisRevision.name)
+        else
             MessageHandler.sendGrowlMessagesAsResource("growl.notification.notificationFailed.headline", "growl.notification.notificationFailed.text", FacesMessage.SEVERITY_WARN)
-        }
+
+
+        execute.diagnosisRevision = result.first.diagnosisRevisions.firstOrNull { it == execute.diagnosisRevision }
+                ?: throw DiagnosisRevisionNotFoundException()
+        execute.task = diagnosisService.performNotification(result.first, execute.diagnosisRevision, success)
+
 
         feedback.progress()
         feedback.end(success)

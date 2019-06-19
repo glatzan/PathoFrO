@@ -244,15 +244,15 @@ open class DiagnosisService constructor(
      * Sets the notification status of a diagnosis revision as completed
      */
     @Transactional
-    open fun completeNotification(task: Task, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Task {
+    open fun performNotification(task: Task, diagnosisRevision: DiagnosisRevision, success: Boolean = true, save: Boolean = true): Task {
         logger.debug("Notification completed")
         var tmp = task
 
-        diagnosisRevision.notificationStatus = NotificationStatus.NOTIFICATION_COMPLETED
+        diagnosisRevision.notificationStatus = if (success) NotificationStatus.NOTIFICATION_PERFORMED else NotificationStatus.NOTIFICATION_FAILED
         diagnosisRevision.notificationDate = Instant.now()
 
         if (save)
-            tmp = taskRepository.save(tmp, resourceBundle["log.diagnosisRevision.notificationCompleted", diagnosisRevision], tmp.patient)
+            tmp = taskRepository.save(tmp, resourceBundle["log.diagnosisRevision.notificationPerformed", diagnosisRevision], tmp.patient)
 
         return tmp
     }
