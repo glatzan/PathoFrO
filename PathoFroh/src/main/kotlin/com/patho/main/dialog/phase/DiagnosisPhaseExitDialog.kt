@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component
 open class DiagnosisPhaseExitDialog @Autowired constructor(
         private val taskRepository: TaskRepository,
         private val workPhaseHandler: WorkPhaseHandler,
-        private val diagosisService: DiagnosisService) : AbstractPhaseExitDialog(Dialog.DIAGNOSIS_PHASE_EXIT), IReportIntentStatusByDiagnosisViewData {
+        private val diagnosisService: DiagnosisService) : AbstractPhaseExitDialog(Dialog.DIAGNOSIS_PHASE_EXIT), IReportIntentStatusByDiagnosisViewData {
 
     /**
      * List of all reportIntent revisions with their status
@@ -187,12 +187,12 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
         var tmp = task
 
         if (competeAllDiagnoses.value)
-            tmp = diagosisService.approveAllDiagnoses(tmp, if (goToNotification.value) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+            tmp = diagnosisService.approveAllDiagnoses(tmp, if (goToNotification.value) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
         else if (selectDiagnosisRevision != null) {
             val diagnosis = selectDiagnosisRevision?.diagnosisRevision ?: return
             MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.approved.headline",
                     if (goToNotification.value) "growl.diagnosis.approved.goToNotification" else "growl.diagnosis.approved.noNotification")
-            tmp = diagosisService.approveDiagnosis(tmp, diagnosis, if (goToNotification.value) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
+            tmp = diagnosisService.approveDiagnosis(tmp, diagnosis, if (goToNotification.value) NotificationStatus.NOTIFICATION_PENDING else NotificationStatus.NO_NOTFICATION)
         }
 
         tmp = workPhaseHandler.endDiagnosisPhase(tmp, exitPhase.value, goToNotification.value, removeFromWorklist.value)

@@ -43,12 +43,17 @@ open class WorkPhaseHandler @Autowired constructor(
         }
     }
 
+    /**
+     * Starts the staining phase
+     */
     @Transactional
     open fun startStainingPhase(task: Task): Task {
         return workPhaseService.startStainingPhase(task)
     }
 
-
+    /**
+     * Ends the stating phase
+     */
     @Transactional
     open fun endStainingPhase(task: Task, endPhase: Boolean, startDiagnosisPhase: Boolean, removeFromWorklist: Boolean): Task {
         var task = task
@@ -72,18 +77,27 @@ open class WorkPhaseHandler @Autowired constructor(
         return task
     }
 
+    /**
+     * Starts the diagnosis phase
+     */
     @Transactional
     open fun startDiagnosisPhase(task: Task): Task {
         return workPhaseService.startDiagnosisPhase(task)
     }
 
+    /**
+     * Checks if any diagnosis is not completed, if so the diagnosis phase will be restarted.
+     */
     @Transactional
     open fun updateDiagnosisPhase(task: Task): Task {
         if (task.diagnosisRevisions.any { !it.completed })
-            return startNotificationPhase(task)
+            return startDiagnosisPhase(task)
         return task
     }
 
+    /**
+     * Ends the diagnosis phase
+     */
     @Transactional
     open fun endDiagnosisPhase(task: Task, endPhase: Boolean,
                                startNotificationPhase: Boolean, removeFromCurrentWorklist: Boolean): Task {
@@ -106,12 +120,37 @@ open class WorkPhaseHandler @Autowired constructor(
         return tmp
     }
 
+    /**
+     * Starts the notification phase
+     */
     @Transactional
     open fun startNotificationPhase(task: Task): Task {
         return workPhaseService.startNotificationPhase(task)
     }
 
-    private fun removeFromWorklist(patient: Patient, vararg lists: PredefinedFavouriteList) {
+    /**
+     * End the notification pahse
+     */
+    @Transactional
+    open fun endNotificationPhase(task: Task, endPhase: Boolean,
+                                  removeFromCurrentWorklist: Boolean): Task {
+        var tmp = task
+        if (endPhase) {
+            tmp = workPhaseService.endNotificationPhase(task, true)
+            MessageHandler.sendGrowlMessagesAsResource("growl.notification.endPhase.headline", "growl.notification.endPhase.text")
+        }
+
+        if (removeFromCurrentWorklist)
+            removeFromWorklist(tmp.patient!!, PredefinedFavouriteList.NotificationList)
+
+        return tmp
+    }
+
+    /**
+     * Removes a task from the current worklist if the task is not listed in the passed favourite lists
+     */
+    @Transactional
+    protected open fun removeFromWorklist(patient: Patient, vararg lists: PredefinedFavouriteList) {
         // only remove from worklist if patient has one active task
         if (patient.tasks.any { it.favouriteLists.any { p -> lists.any { p.id == it.id } } }) {
             MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive")

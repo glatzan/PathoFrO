@@ -218,8 +218,8 @@ open class DiagnosisService constructor(
     @Transactional
     open fun approveAllDiagnoses(task: Task, notificationStatus: NotificationStatus): Task {
         var tmp = task
-        for (diagnosisRevsion in task.diagnosisRevisions)
-            tmp = approveDiagnosis(task, diagnosisRevsion, notificationStatus)
+        for (diagnosisRevision in task.diagnosisRevisions)
+            tmp = approveDiagnosis(task, diagnosisRevision, notificationStatus)
 
         return tmp
     }
@@ -257,6 +257,33 @@ open class DiagnosisService constructor(
         return tmp
     }
 
+    /**
+     * Sets the notification status to completed, does not alter the notificationDate if that is already set.
+     */
+    @Transactional
+    open fun completeAllNotifications(task: Task, save: Boolean = true): Task {
+        var tmp = task
+        for (diagnosisRevision in task.diagnosisRevisions)
+            tmp = completeNotification(task, diagnosisRevision, true)
+
+        return tmp
+    }
+
+    /**
+     * Sets the notification status to completed
+     */
+    @Transactional
+    open fun completeNotification(task: Task, diagnosisRevision: DiagnosisRevision, save: Boolean = true): Task {
+        var tmp = task
+
+        if (diagnosisRevision.notificationDate == null) diagnosisRevision.notificationDate = Instant.now()
+        diagnosisRevision.notificationStatus = NotificationStatus.NOTIFICATION_COMPLETED
+
+        if (save)
+            tmp = taskRepository.save(tmp, resourceBundle["log.diagnosisRevision.notificationCompleted", diagnosisRevision], tmp.patient)
+
+        return tmp
+    }
 
     /**
      * Generated or updates the default reportIntent report for a reportIntent

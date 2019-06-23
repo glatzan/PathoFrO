@@ -1,11 +1,14 @@
 package com.patho.main.dialog.phase
 
+import com.patho.main.action.handler.MessageHandler
+import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.common.Dialog
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
+import com.patho.main.service.DiagnosisService
 import com.patho.main.service.WorkPhaseService
 import com.patho.main.util.dialog.event.NotificationPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
@@ -30,7 +33,9 @@ import javax.management.Notification
 open class NotificationPhaseExitDialog @Autowired constructor(
         private val phaseService: WorkPhaseService,
         private val worklistHandler: WorklistHandler,
-        private val taskRepository: TaskRepository) : AbstractPhaseExitDialog(Dialog.NOTIFICATION_PHASE_EXIT), IReportIntentStatusByDiagnosisViewData {
+        private val taskRepository: TaskRepository,
+        private val diagnosisService: DiagnosisService,
+        private val workPhaseHandler: WorkPhaseHandler) : AbstractPhaseExitDialog(Dialog.NOTIFICATION_PHASE_EXIT), IReportIntentStatusByDiagnosisViewData {
 
     /**
      * List of all reportIntent revisions with their status
@@ -154,19 +159,11 @@ open class NotificationPhaseExitDialog @Autowired constructor(
         get() = diagnosisRevisions.diagnosisBearer.all { !it.diagnosisRevision.isNotificationNecessary }
 
     private val isMoreThenOneNotificationPerformedOrPendingException
-        get() = (selectDiagnosisRevision?.diagnosisRevision?.isNotificationPerformedOrPending == true && countNotificationsPerformedOrPending > 1) || (selectDiagnosisRevision?.diagnosisRevision?.isNotificationPerformedOrPending  == false && countNotificationsPerformedOrPending > 0)
+        get() = (selectDiagnosisRevision?.diagnosisRevision?.isNotificationPerformedOrPending == true && countNotificationsPerformedOrPending > 1) || (selectDiagnosisRevision?.diagnosisRevision?.isNotificationPerformedOrPending == false && countNotificationsPerformedOrPending > 0)
 
     private val countNotificationsPerformedOrPending
         get() = diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotificationPerformedOrPending }
 
-
-
-
-    private val isNotificationPending: Boolean
-        get() = diagnosisRevisions.diagnosisBearer.any { it.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
-
-    private val isNotificationNecessary: Boolean
-        get() = diagnosisRevisions.diagnosisBearer.all { it.diagnosisRevision.isNotificationNecessary }
 
     override fun onDiagnosisSelection() {
         competeAllNotifications.set(false, true, false, false)
@@ -186,24 +183,19 @@ open class NotificationPhaseExitDialog @Autowired constructor(
      * Hides the dialog an exits the notification phase
      */
     open fun hideAndExitPhase() {
-//        if (endNotificationPhase && removeFromNotificationList) {
-//			notificationService.endNotificationPhase(getTask());
-//		} else {
-//			if (removeFromNotificationList)
-//				favouriteListService.removeTaskFromList(task.getId(), PredefinedFavouriteList.NotificationList);
-//		}
-//
-//		if (removeFromWorklist) {
-//			// only remove from worklist if patient has one active task
-//			if (task.getPatient().getTasks().stream().filter(p -> !p.isFinalized()).count() > 1) {
-//				mainHandlerAction.sendGrowlMessagesAsResource("growl.error", "growl.error.worklist.remove.moreActive");
-//			} else {
-//				worklistViewHandler.removePatientFromWorklist(task.getPatient());
-//			}
-//		}
-//
-//		setExitSuccessful(true);
-        super.hideDialog(NotificationPhaseExitEvent())
+        var tmp = task
+
+        if (competeAllNotifications.value) {
+            tmp = diagnosisService.completeAllNotifications(tmp)
+        } else if (selectDiagnosisRevision != null) {
+            val diagnosis = selectDiagnosisRevision?.diagnosisRevision ?: return
+            MessageHandler.sendGrowlMessagesAsResource("growl.notification.notificationCompleted.headline", "growl.notification.notificationCompleted.text", diagnosis)
+            tmp = diagnosisService.completeNotification(tmp, diagnosis)
+        }
+
+        tmp = workPhaseHandler.endNotificationPhase(tmp, exitPhase.value, removeFromWorklist.value)
+
+        super.hideDialog(NotificationPhaseExitEvent(archiveTask.value))
     }
 
     /**

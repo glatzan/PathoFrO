@@ -5,6 +5,7 @@ import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.util.exceptions.DiagnosisRevisionsNotCompletedException
+import com.patho.main.util.exceptions.NotificationNotCompletedException
 import com.patho.main.util.exceptions.StainingsNotCompletedException
 import com.patho.main.util.task.TaskStatus
 import org.springframework.beans.factory.annotation.Autowired
@@ -107,7 +108,8 @@ open class WorkPhaseService @Autowired constructor(
     }
 
     /**
-     * Starting notification phase
+     * Starting notification phase and sets the notificationCompletionDate to null. The task is also added to the
+     * notification list.
      */
     @Transactional
     open fun startNotificationPhase(task: Task): Task {
@@ -118,13 +120,23 @@ open class WorkPhaseService @Autowired constructor(
     }
 
     /**
-     * Ends the notification phase
+     * Ends the notification phase. If not all notification are marked as completed, a NotificationNotCompletedException
+     * is thrown.
      */
     @Transactional
-    open fun endNotificationPhase(task: Task): Task {
+    open fun endNotificationPhase(task: Task, removeFromList: Boolean): Task {
         var tmp = task
+
+        if (tmp.diagnosisRevisions.any { !it.isNotified })
+            throw NotificationNotCompletedException()
+
         tmp.notificationCompletionDate = Instant.now()
         tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.notification.end", tmp), tmp.patient)
-        return favouriteListService.removeTaskFromList(tmp, PredefinedFavouriteList.NotificationList)
+
+        if (removeFromList)
+            tmp = favouriteListService.removeTaskFromList(tmp, PredefinedFavouriteList.NotificationList,
+                    PredefinedFavouriteList.ReDiagnosisList)
+
+        return tmp
     }
 }
