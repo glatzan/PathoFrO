@@ -5,6 +5,8 @@ import com.patho.main.model.patient.Task
 import com.patho.main.repository.PatientRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.UserService
+import com.patho.main.util.search.settings.EmptySearch
+import com.patho.main.util.search.settings.SearchSettings
 import com.patho.main.util.worklist.Worklist
 import com.patho.main.util.worklist.search.AbstractWorklistSearch
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,7 +35,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Current worklist
      */
-    open var current: Worklist = Worklist(DEFAULT_WORKLIST_NAME, AbstractWorklistSearch())
+    open var current: Worklist = Worklist(DEFAULT_WORKLIST_NAME, EmptySearch())
 
     /**
      * Returns the current patient
@@ -82,7 +84,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Adds a worklist with the default user settings
      */
-    open fun addWorklist(worklistSearch: AbstractWorklistSearch, name: String, selected: Boolean = true) {
+    open fun addWorklist(worklistSearch: SearchSettings, name: String, selected: Boolean = true) {
         addWorklist(Worklist(name, worklistSearch,
                 userService.currentUser.settings.worklistHideNoneActiveTasks,
                 userService.currentUser.settings.worklistSortOrder,
@@ -115,7 +117,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
     open fun removeWorklist(worklist: Worklist) {
         worklists.remove(worklist)
         if (isSelected(worklist)) {
-            current = Worklist(DEFAULT_WORKLIST_NAME, AbstractWorklistSearch())
+            current = Worklist(DEFAULT_WORKLIST_NAME, EmptySearch())
             centralHandler.goToNavigation()
         }
     }

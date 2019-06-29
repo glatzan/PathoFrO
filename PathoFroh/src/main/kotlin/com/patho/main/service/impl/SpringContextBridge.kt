@@ -6,14 +6,12 @@ import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
-import com.patho.main.repository.FavouriteListRepository
-import com.patho.main.repository.ListItemRepository
-import com.patho.main.repository.MediaRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.*
 import com.patho.main.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Component
+import javax.persistence.EntityManager
 
 
 /**
@@ -69,6 +67,12 @@ class SpringContextBridge : SpringContextBridgedServices {
 
     @Autowired
     override lateinit var sampleService: SampleService
+
+    @Autowired
+    override lateinit var entityManager: EntityManager
+
+    @Autowired
+    override lateinit var patientRepository: PatientRepository
 
     companion object {
         @JvmStatic

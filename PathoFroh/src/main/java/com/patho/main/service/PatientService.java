@@ -74,7 +74,6 @@ public class PatientService extends AbstractService {
 		if (patient.getId() == 0) {
 			logger.debug("Adding patient (" + patient.getPiz() + ") to database");
 			// set add date
-			patient.setCreationDate(System.currentTimeMillis());
 			patient.setInDatabase(true);
 			// setting external patient if piz is null
 			patient.setExternalPatient(HistoUtil.isNullOrEmpty(patient.getPiz()));

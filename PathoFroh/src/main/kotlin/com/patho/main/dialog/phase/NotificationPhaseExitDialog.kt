@@ -164,6 +164,8 @@ open class NotificationPhaseExitDialog @Autowired constructor(
     private val countNotificationsPerformedOrPending
         get() = diagnosisRevisions.diagnosisBearer.count { it.diagnosisRevision.isNotificationPerformedOrPending }
 
+    private val isNotificationNecessary: Boolean
+        get() = diagnosisRevisions.diagnosisBearer.all { it.diagnosisRevision.isNotificationNecessary }
 
     override fun onDiagnosisSelection() {
         competeAllNotifications.set(false, true, false, false)

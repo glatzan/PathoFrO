@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.patho.main.util.dialog.event.ReloadEvent;
+import com.patho.main.util.search.settings.SimpleListSearchOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -19,7 +20,6 @@ import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoSettings;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.service.GroupService;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -128,7 +128,7 @@ public class GroupEditDialog extends AbstractTabDialog {
 	public class GeneralTab extends AbstractTab {
 
 		private View[] allViews;
-		private SimpleSearchOption[] allWorklistOptions;
+		private SimpleListSearchOption[] allWorklistOptions;
 
 		public GeneralTab() {
 			setTabName("GeneralTab");
@@ -142,8 +142,8 @@ public class GroupEditDialog extends AbstractTabDialog {
 					View.WORKLIST_RECEIPTLOG, View.WORKLIST_REPORT });
 
 			setAllWorklistOptions(
-					new SimpleSearchOption[] { SimpleSearchOption.DIAGNOSIS_LIST, SimpleSearchOption.STAINING_LIST,
-							SimpleSearchOption.NOTIFICATION_LIST, SimpleSearchOption.EMPTY_LIST });
+					new SimpleListSearchOption[] { SimpleListSearchOption.DIAGNOSIS_LIST, SimpleListSearchOption.STAINING_LIST,
+							SimpleListSearchOption.NOTIFICATION_LIST, SimpleListSearchOption.EMPTY_LIST });
 
 			return true;
 		}

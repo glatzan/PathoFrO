@@ -11,6 +11,8 @@ import com.patho.main.model.person.Person;
 import com.patho.main.model.util.audit.Audit_;
 import com.patho.main.repository.service.PatientRepositoryCustom;
 import com.patho.main.util.helper.HistoUtil;
+import com.patho.main.util.helper.TimeUtil;
+import com.patho.main.util.search.settings.SimpleListSearchCriterion;
 import com.patho.main.util.worklist.search.WorklistSearchExtended;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,12 +96,12 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
     }
 
     @Override
-    public List<Patient> findByDateAndCriterion(FindCriterion findCriterion, long startDate, long endDate) {
-        return findByDateAndCriterion(findCriterion, startDate, endDate, false, false, true);
+    public List<Patient> findByDateAndCriterion(SimpleListSearchCriterion simpleListSearchCriterion, Instant startDate, Instant endDate) {
+        return findByDateAndCriterion(simpleListSearchCriterion, startDate, endDate, false, false, true);
     }
 
     @Override
-    public List<Patient> findByDateAndCriterion(FindCriterion findCriterion, long startDate, long endDate,
+    public List<Patient> findByDateAndCriterion(SimpleListSearchCriterion simpleListSearchCriterion, Instant startDate, Instant endDate,
                                                 boolean initializeTasks, boolean initializeFiles, boolean irgnoreArchived) {
         CriteriaBuilder builder = getCriteriaBuilder();
         List<Predicate> predicates = new ArrayList<Predicate>();
@@ -108,31 +110,31 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
         Root<Patient> root = criteria.from(Patient.class);
         Join<Patient, Task> taskQuery = root.join(Patient_.tasks, JoinType.LEFT);
 
-        switch (findCriterion) {
+        switch (simpleListSearchCriterion) {
             case NoTasks:
-                predicates.add(builder.ge(root.get(Patient_.creationDate), startDate));
-                predicates.add(builder.le(root.get(Patient_.creationDate), endDate));
+                predicates.add(builder.ge(root.get(Patient_.audit).get(Audit_.createdOn), TimeUtil.toUnixTime(startDate)));
+                predicates.add(builder.le(root.get(Patient_.audit).get(Audit_.createdOn), TimeUtil.toUnixTime(endDate)));
                 predicates.add(builder.isEmpty(root.get(Patient_.tasks)));
                 break;
-            case StainingComplteted:
-                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.stainingCompletionDate), Instant.ofEpochMilli(startDate)));
-                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.stainingCompletionDate), Instant.ofEpochMilli(endDate)));
+            case StainingCompleted:
+                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.stainingCompletionDate), startDate));
+                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.stainingCompletionDate), endDate));
                 break;
             case DiagnosisCompleted:
-                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.diagnosisCompletionDate), Instant.ofEpochMilli(startDate)));
-                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.diagnosisCompletionDate), Instant.ofEpochMilli(endDate)));
+                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.diagnosisCompletionDate), startDate));
+                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.diagnosisCompletionDate), endDate));
                 break;
             case NotificationComplteted:
-                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.notificationCompletionDate), Instant.ofEpochMilli(startDate)));
-                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.notificationCompletionDate), Instant.ofEpochMilli(endDate)));
+                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.notificationCompletionDate), startDate));
+                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.notificationCompletionDate), endDate));
                 break;
             case TaskCompleted:
-                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.finalizationDate), Instant.ofEpochMilli(startDate)));
-                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.finalizationDate), Instant.ofEpochMilli(endDate)));
+                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.finalizationDate), startDate));
+                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.finalizationDate), endDate));
                 break;
             case TaskCreated:
-                predicates.add(builder.ge(taskQuery.get(Task_.audit).get(Audit_.createdOn), startDate));
-                predicates.add(builder.le(taskQuery.get(Task_.audit).get(Audit_.createdOn), endDate));
+                predicates.add(builder.ge(taskQuery.get(Task_.audit).get(Audit_.createdOn), TimeUtil.toUnixTime(startDate)));
+                predicates.add(builder.le(taskQuery.get(Task_.audit).get(Audit_.createdOn), TimeUtil.toUnixTime(endDate)));
                 break;
             default:
                 break;

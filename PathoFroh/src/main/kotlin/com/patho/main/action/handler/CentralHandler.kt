@@ -9,9 +9,10 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.UserService
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.menu.JSFMenuGenerator
+import com.patho.main.util.search.settings.EmptySearch
+import com.patho.main.util.search.settings.SimpleListSearch
+import com.patho.main.util.search.settings.SimpleListSearchOption
 import com.patho.main.util.worklist.Worklist
-import com.patho.main.util.worklist.search.AbstractWorklistSearch
-import com.patho.main.util.worklist.search.WorklistSimpleSearch
 import org.primefaces.PrimeFaces
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -40,10 +41,10 @@ open class CentralHandler @Autowired constructor(
         val settings = userService.currentUser.settings
         val worklistToLoad = settings.worklistToLoad
         // if a default to load was provided
-        val worklist: Worklist = if (worklistToLoad != null && worklistToLoad != WorklistSimpleSearch.SimpleSearchOption.EMPTY_LIST) {
-            Worklist("Default", WorklistSimpleSearch(worklistToLoad), settings)
+        val worklist: Worklist = if (worklistToLoad != null && worklistToLoad != SimpleListSearchOption.EMPTY_LIST) {
+            Worklist("Default", SimpleListSearch(worklistToLoad), settings)
         } else
-            Worklist("Default", AbstractWorklistSearch())
+            Worklist("Default", EmptySearch())
 
         logger.debug("2. Setting navigation data")
 

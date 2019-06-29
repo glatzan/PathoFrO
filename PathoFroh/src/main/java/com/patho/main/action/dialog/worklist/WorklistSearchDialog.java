@@ -30,8 +30,6 @@ import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.worklist.Worklist;
 import com.patho.main.util.worklist.search.WorklistFavouriteSearch;
 import com.patho.main.util.worklist.search.WorklistSearchExtended;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -74,7 +72,6 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 	@Setter
 	public class SimpleSearchTab extends AbstractTab {
 
-		private WorklistSimpleSearch worklistSearch;
 
 		public SimpleSearchTab() {
 			setTabName("SimpleSearchTab");
@@ -85,16 +82,15 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		@Override
 		public boolean initTab() {
-			setWorklistSearch(new WorklistSimpleSearch());
 			return true;
 		}
 
 		public void onChangeWorklistSelection() {
-			worklistSearch.setSearchIndex(SimpleSearchOption.CUSTOM_LIST);
+
 		}
 
 		public Worklist getWorklist() {
-			Worklist worklist = new Worklist("Default", worklistSearch,
+			Worklist worklist = new Worklist("Default", null,
 					userService.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
 					userService.getCurrentUser().getSettings().getWorklistSortOrder(),
 					userService.getCurrentUser().getSettings().getWorklistAutoUpdate(), false,
@@ -141,7 +137,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		}
 
 		public Worklist getWorklist() {
-			Worklist worklist = new Worklist("Default", worklistSearch,
+			Worklist worklist = new Worklist("Default", null,
 					userService.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
 					userService.getCurrentUser().getSettings().getWorklistSortOrder(),
 					userService.getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
@@ -254,7 +250,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 		}
 
 		public Worklist getWorklist() {
-			Worklist worklist = new Worklist("Default", worklistSearch,
+			Worklist worklist = new Worklist("Default", null,
 					userService.getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
 					userService.getCurrentUser().getSettings().getWorklistSortOrder(),
 					userService.getCurrentUser().getSettings().getWorklistAutoUpdate(), true,

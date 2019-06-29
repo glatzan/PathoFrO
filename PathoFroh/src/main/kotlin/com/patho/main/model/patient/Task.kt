@@ -63,7 +63,7 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
      * Audit Data
      */
     @Embedded
-    open override var audit: Audit? = null
+    override var audit: Audit? = null
 
     /**
      * The date of the sugery

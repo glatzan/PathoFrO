@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.patho.main.util.dialog.event.HistoUserDeleteEvent;
 import com.patho.main.util.dialog.event.PhysicianSelectEvent;
 import com.patho.main.util.dialog.event.UserReloadEvent;
+import com.patho.main.util.search.settings.SimpleListSearchOption;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -32,7 +33,6 @@ import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -180,7 +180,7 @@ public class EditUserDialog extends AbstractTabDialog {
 		private PrintService printService;
 
 		private View[] allViews;
-		private SimpleSearchOption[] allWorklistOptions;
+		private SimpleListSearchOption[] allWorklistOptions;
 
 		private ClinicPrinter clinicPrinter;
 		private LabelPrinter labelPrinter;
@@ -198,8 +198,8 @@ public class EditUserDialog extends AbstractTabDialog {
 						View.WORKLIST_DIAGNOSIS, View.WORKLIST_RECEIPTLOG, View.WORKLIST_REPORT });
 
 				setAllWorklistOptions(
-						new SimpleSearchOption[] { SimpleSearchOption.DIAGNOSIS_LIST, SimpleSearchOption.STAINING_LIST,
-								SimpleSearchOption.NOTIFICATION_LIST, SimpleSearchOption.EMPTY_LIST });
+						new SimpleListSearchOption[] { SimpleListSearchOption.DIAGNOSIS_LIST, SimpleListSearchOption.STAINING_LIST,
+								SimpleListSearchOption.NOTIFICATION_LIST, SimpleListSearchOption.EMPTY_LIST });
 
 				setLabelPrinter(printService.getCurrentLabelPrinter(getUser()));
 				setClinicPrinter(printService.getCurrentPrinter(getUser()));

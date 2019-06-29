@@ -1,6 +1,8 @@
 package com.patho.main.util.helper;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -109,5 +111,12 @@ public class TimeUtil {
 			System.out.println(ex);
 		}
 		return dateString;
+	}
+
+	public static long toUnixTime(Instant i){
+		BigDecimal nanos = BigDecimal.valueOf(i.getNano(), 9);
+		BigDecimal seconds = BigDecimal.valueOf(i.getEpochSecond());
+		BigDecimal total = seconds.add(nanos);
+		return total.longValue();
 	}
 }

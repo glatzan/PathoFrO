@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.service.UserService;
 import com.patho.main.util.dialog.event.UserReloadEvent;
+import com.patho.main.util.search.settings.SimpleListSearchOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -23,7 +24,6 @@ import com.patho.main.service.PrintService;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -110,7 +110,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 
 		private List<View> availableViews;
 
-		private List<SimpleSearchOption> availableWorklistsToLoad;
+		private List<SimpleListSearchOption> availableWorklistsToLoad;
 
 		public GeneralTab() {
 			setTabName("GeneralTab");

@@ -1,0 +1,79 @@
+package com.patho.main.dialog.search
+
+import com.patho.main.common.Dialog
+import com.patho.main.dialog.AbstractTabDialog_
+import com.patho.main.service.UserService
+import com.patho.main.util.dialog.event.WorklistSelectEvent
+import com.patho.main.util.search.settings.SearchSettings
+import com.patho.main.util.search.settings.SimpleListSearch
+import com.patho.main.util.search.settings.SimpleListSearchOption
+import com.patho.main.util.worklist.Worklist
+import org.springframework.beans.factory.annotation.Autowired
+
+open class SearchWorklistDialog @Autowired constructor(
+        private val userService: UserService) : AbstractTabDialog_(Dialog.PATIENT_ADD) {
+
+    val simpleSearchTab: SimpleSearchTab = SimpleSearchTab()
+    val favouriteSearchTab: FavouriteSearchTab = FavouriteSearchTab()
+    val extendedSearchTab: ExtendedSearchTab = ExtendedSearchTab()
+
+    init {
+        tabs = arrayOf(simpleSearchTab, favouriteSearchTab, extendedSearchTab)
+    }
+
+    override fun initBean(): Boolean {
+        logger.debug("Initializing search worklist dialog")
+        return super.initBean(true, simpleSearchTab)
+    }
+
+    open inner class SearchTab<T : SearchSettings>(tabName: String, name: String, viewID: String, centerInclude: String)
+        : AbstractTabDialog_.AbstractTab(tabName, name, viewID, centerInclude) {
+
+        lateinit var search: T
+
+        private fun getWorklist(): Worklist {
+            return Worklist("Default", null,
+                    userService.currentUser.settings.worklistHideNoneActiveTasks,
+                    userService.currentUser.settings.worklistSortOrder,
+                    userService.currentUser.settings.worklistAutoUpdate, false,
+                    userService.currentUser.settings.worklistSortOrderAsc)
+        }
+
+        fun selectAndHide() {
+            hideDialog(WorklistSelectEvent(getWorklist()))
+        }
+    }
+
+    open inner class SimpleSearchTab : SearchTab<SimpleListSearch>(
+            "SimpleSearchTab",
+            "dialog.worklistsearch.simple",
+            "simpleSearch",
+            "include/simpleSearch.xhtml") {
+
+        override fun updateData() {
+            super.updateData()
+        }
+
+        override fun initTab(): Boolean {
+            search = SimpleListSearch(userService.currentUser.settings.worklistToLoad)
+
+            return super.initTab()
+        }
+    }
+
+    open inner class FavouriteSearchTab : SearchTab<SimpleListSearch>(
+            "FavouriteSearchTab",
+            "dialog.worklistsearch.favouriteList",
+            "favouriteListSearch",
+            "include/favouriteSearch.xhtml") {
+    }
+
+    open inner class ExtendedSearchTab : SearchTab<SimpleListSearch>(
+            "ExtendedSearchTab",
+            "dialog.worklistsearch.scifi",
+            "extendedSearch",
+            "include/extendedSearch.xhtml") {
+    }
+
+
+}

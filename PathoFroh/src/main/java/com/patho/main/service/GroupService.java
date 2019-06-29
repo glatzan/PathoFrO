@@ -2,6 +2,7 @@ package com.patho.main.service;
 
 import java.util.ArrayList;
 
+import com.patho.main.util.search.settings.SimpleListSearchOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -11,7 +12,6 @@ import com.patho.main.common.View;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.GroupRepository;
-import com.patho.main.util.worklist.search.WorklistSimpleSearch.SimpleSearchOption;
 
 @Service
 @Transactional
@@ -83,7 +83,7 @@ public class GroupService extends AbstractService {
 			user.getSettings().setInputFieldFontColor(group.getSettings().getInputFieldFontColor());
 
 		user.getSettings()
-				.setAvailableWorklists(new ArrayList<SimpleSearchOption>(group.getSettings().getAvailableWorklists()));
+				.setAvailableWorklists(new ArrayList<SimpleListSearchOption>(group.getSettings().getAvailableWorklists()));
 
 		user.getSettings().setWorklistToLoad(group.getSettings().getWorklistToLoad());
 
@@ -111,7 +111,7 @@ public class GroupService extends AbstractService {
 		user.getSettings().setStartView(group.getSettings().getStartView());
 
 		user.getSettings()
-				.setAvailableWorklists(new ArrayList<SimpleSearchOption>(group.getSettings().getAvailableWorklists()));
+				.setAvailableWorklists(new ArrayList<SimpleListSearchOption>(group.getSettings().getAvailableWorklists()));
 
 		user.getSettings().setWorklistToLoad(group.getSettings().getWorklistToLoad());
 	}

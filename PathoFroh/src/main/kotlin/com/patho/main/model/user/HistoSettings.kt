@@ -5,7 +5,7 @@ import com.patho.main.common.WorklistSortOrder
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.util.printer.ClinicPrinter
 import com.patho.main.util.printer.LabelPrinter
-import com.patho.main.util.worklist.search.WorklistSimpleSearch
+import com.patho.main.util.search.settings.SimpleListSearchOption
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
@@ -65,7 +65,7 @@ open class HistoSettings() : AbstractPersistable(), Cloneable {
      * Default worklist to load, staining, reportIntent, notification, none
      */
     @Enumerated(EnumType.STRING)
-    open var worklistToLoad: WorklistSimpleSearch.SimpleSearchOption = WorklistSimpleSearch.SimpleSearchOption.EMPTY_LIST
+    open var worklistToLoad: SimpleListSearchOption = SimpleListSearchOption.EMPTY_LIST
 
     /**
      * Default sortorder of worklist
@@ -136,7 +136,7 @@ open class HistoSettings() : AbstractPersistable(), Cloneable {
     @Fetch(value = FetchMode.SUBSELECT)
     @Cascade(value = [org.hibernate.annotations.CascadeType.ALL])
     @OrderColumn(name = "position")
-    open var availableWorklists: MutableList<WorklistSimpleSearch.SimpleSearchOption> = mutableListOf()
+    open var availableWorklists: MutableList<SimpleListSearchOption> = mutableListOf()
 
     /**
      * List of contact Role as an array, used by gui

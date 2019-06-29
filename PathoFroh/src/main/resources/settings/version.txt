@@ -209,7 +209,6 @@ UPDATE stainingprototype SET priorityCount = 0;
 Alter table stainingprototype drop indexInList;
 
 /* Adding field for biobank*/
-/* audit for task container */
 Alter table biobank add createdOn bigint;
 Alter table biobank add createdBy character varying(10);
 Alter table biobank add updatedOn bigint;
@@ -673,6 +672,24 @@ UPDATE favouriteList SET iconGroup = '';
 
 /* blocking lists */
 update favouritelist set blockTaskArchival = true where id in (1,2,3,4,5,6,7,8,9,10,11,12,14,15,16)
+
+/* audit for patient */
+Alter table patient add createdOn bigint;
+Alter table patient add createdBy character varying(10);
+Alter table patient add updatedOn bigint;
+Alter table patient add updatedBy character varying(10);
+UPDATE patient SET createdOn = creationDate;
+update patient set updatedOn = 0;
+alter table patient drop column creationDate;
+
+/* audit for patient_aud */
+Alter table patient_aud add createdOn bigint;
+Alter table patient_aud add createdBy character varying(10);
+Alter table patient_aud add updatedOn bigint;
+Alter table patient_aud add updatedBy character varying(10);
+UPDATE patient_aud SET createdOn = creationDate;
+update patient_aud set updatedOn = 0;
+alter table patient_aud drop column creationDate;
 
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien

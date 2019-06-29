@@ -5,11 +5,9 @@ import com.patho.main.action.handler.CurrentUserHandler
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ResourceBundle
-import com.patho.main.repository.FavouriteListRepository
-import com.patho.main.repository.ListItemRepository
-import com.patho.main.repository.MediaRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.*
 import org.springframework.context.MessageSource
+import javax.persistence.EntityManager
 
 /**
  * Briding service for getting spring beans within non spring managed objects
@@ -31,4 +29,6 @@ interface SpringContextBridgedServices {
     var taskRepository: TaskRepository
     var worklistHandler: WorklistHandler
     var sampleService: SampleService
+    var entityManager: EntityManager
+    var patientRepository : PatientRepository
 }

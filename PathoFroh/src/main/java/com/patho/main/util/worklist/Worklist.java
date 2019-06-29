@@ -8,7 +8,7 @@ import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.ui.task.TaskInfo;
 import com.patho.main.util.helper.TaskUtil;
-import com.patho.main.util.worklist.search.AbstractWorklistSearch;
+import com.patho.main.util.search.settings.SearchSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +71,7 @@ public class Worklist {
     /**
      * Search criteria
      */
-    private AbstractWorklistSearch worklistSearch;
+    private SearchSettings worklistSearch;
 
     /**
      * Selected Patient
@@ -88,20 +88,20 @@ public class Worklist {
      */
     private TaskInfo selectedTaskInfo;
 
-    public Worklist(String name, AbstractWorklistSearch worklistSearch) {
+    public Worklist(String name, SearchSettings worklistSearch) {
         this(name, worklistSearch, true, WorklistSortOrder.TASK_ID, false);
     }
 
-    public Worklist(String name, AbstractWorklistSearch worklistSearch, HistoSettings settings) {
+    public Worklist(String name, SearchSettings worklistSearch, HistoSettings settings) {
         this(name, worklistSearch, true, WorklistSortOrder.TASK_ID, false);
     }
 
-    public Worklist(String name, AbstractWorklistSearch worklistSearch, boolean showNoneActiveTasks,
+    public Worklist(String name, SearchSettings worklistSearch, boolean showNoneActiveTasks,
                     WorklistSortOrder worklistSortOrder, boolean autoUpdate) {
         this(name, worklistSearch, showNoneActiveTasks, worklistSortOrder, autoUpdate, false, false);
     }
 
-    public Worklist(String name, AbstractWorklistSearch worklistSearch, boolean showNoneActiveTasks,
+    public Worklist(String name, SearchSettings worklistSearch, boolean showNoneActiveTasks,
                     WorklistSortOrder worklistSortOrder, boolean autoUpdate, boolean showActiveTasksExplicit,
                     boolean sortAscending) {
         this.name = name;
@@ -616,7 +616,7 @@ public class Worklist {
         return this.udpateInterval;
     }
 
-    public AbstractWorklistSearch getWorklistSearch() {
+    public SearchSettings getWorklistSearch() {
         return this.worklistSearch;
     }
 
@@ -664,7 +664,7 @@ public class Worklist {
         this.udpateInterval = udpateInterval;
     }
 
-    public void setWorklistSearch(AbstractWorklistSearch worklistSearch) {
+    public void setWorklistSearch(SearchSettings worklistSearch) {
         this.worklistSearch = worklistSearch;
     }
 

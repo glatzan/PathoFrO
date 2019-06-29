@@ -2,9 +2,12 @@ package com.patho.main.model.patient
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.PDFContainer
+import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.person.Person
 import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.interfaces.ID
+import com.patho.main.model.util.audit.Audit
+import com.patho.main.model.util.audit.AuditListener
 import org.hibernate.annotations.*
 import org.hibernate.envers.Audited
 import org.hibernate.envers.NotAudited
@@ -16,12 +19,12 @@ import javax.persistence.OrderBy
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
-@DynamicUpdate(true)
-@SequenceGenerator(name = "patient_sequencegenerator", sequenceName = "patient_sequence")
-open class Patient : AbstractPersistable, DataList {
+@EntityListeners(AuditListener::class)
+open class Patient : AbstractPersistable, AuditAble, DataList {
 
     @Id
     @GeneratedValue(generator = "patient_sequencegenerator")
+    @SequenceGenerator(name = "patient_sequencegenerator", sequenceName = "patient_sequence")
     @Column(unique = true, nullable = false)
     open override var id: Long = 0
 
@@ -41,10 +44,10 @@ open class Patient : AbstractPersistable, DataList {
     open var insurance = ""
 
     /**
-     * Date of adding to the database
+     * Audit Data
      */
-    @Column
-    open var creationDate: Long = 0
+    @Embedded
+    override var audit: Audit? = null
 
     /**
      * Person data
