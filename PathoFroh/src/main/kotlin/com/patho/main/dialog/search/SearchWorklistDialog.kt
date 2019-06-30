@@ -9,9 +9,13 @@ import com.patho.main.util.search.settings.SimpleListSearch
 import com.patho.main.util.search.settings.SimpleListSearchOption
 import com.patho.main.util.worklist.Worklist
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Component
 
+@Component()
+@Scope(value = "session")
 open class SearchWorklistDialog @Autowired constructor(
-        private val userService: UserService) : AbstractTabDialog_(Dialog.PATIENT_ADD) {
+        private val userService: UserService) : AbstractTabDialog_(Dialog.WORKLIST_SEARCH) {
 
     val simpleSearchTab: SimpleSearchTab = SimpleSearchTab()
     val favouriteSearchTab: FavouriteSearchTab = FavouriteSearchTab()
@@ -32,7 +36,7 @@ open class SearchWorklistDialog @Autowired constructor(
         lateinit var search: T
 
         private fun getWorklist(): Worklist {
-            return Worklist("Default", null,
+            return Worklist("Default", search,
                     userService.currentUser.settings.worklistHideNoneActiveTasks,
                     userService.currentUser.settings.worklistSortOrder,
                     userService.currentUser.settings.worklistAutoUpdate, false,
@@ -54,10 +58,9 @@ open class SearchWorklistDialog @Autowired constructor(
             super.updateData()
         }
 
-        override fun initTab(): Boolean {
+        override fun initTab(force: Boolean): Boolean {
             search = SimpleListSearch(userService.currentUser.settings.worklistToLoad)
-
-            return super.initTab()
+            return super.initTab(force)
         }
     }
 

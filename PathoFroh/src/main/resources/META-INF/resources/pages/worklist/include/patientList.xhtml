@@ -131,7 +131,7 @@
             <p:commandLink partialSubmit="true" process="@this"
                            rendered="#{userService.userHasPermission('USER_WORKLIST')}"
                            title="#{msg['body.worklist.navigation.button.changelist']}"
-                           actionListener="#{dialog.worklistSearchDialog.initAndPrepareBean()}">
+                           actionListener="#{searchWorklistDialog.initAndPrepareBean()}">
                 <i class="fa fa-search"></i>
                 <p:ajax event="dialogReturn"
                         listener="#{dialogReturnHandler.onWorklistSelectReturn}"

@@ -23,7 +23,7 @@
 				<h:outputLabel value="#{msg['dialog.worklistsearch.headline']}" />
 				<p:commandLink title="#{msg['general.close']}" style="float:right;"
 					immediate="true" styleClass="noUnderlineAtLink">
-					<f:actionListener binding="#{dialog.worklistSearchDialog.hideDialog()}" />
+					<f:actionListener binding="#{searchWorklistDialog.hideDialog()}" />
 					<i class="fa fa-fw fa-times icon-grey" />
 				</p:commandLink>
 			</h:panelGrid>
@@ -31,17 +31,17 @@
 
 		<h:panelGrid columns="2" styleClass="dialogContainer">
 			<p:outputPanel id="navigationTable" styleClass="navigationTable">
-				<c:forEach items="#{dialog.worklistSearchDialog.tabs}" var="tab"
+				<c:forEach items="#{searchWorklistDialog.tabs}" var="tab"
 					varStatus="loop">
 					<p:commandButton value="#{msg[tab.name]}"
 						disabled="#{tab.disabled}"
 						styleClass="#{tab eq dialog.userSettingsDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
-						actionListener="#{dialog.worklistSearchDialog.onTabChange(tab)}"
+						actionListener="#{searchWorklistDialog.onTabChange(tab)}"
 						update="navigationTable dialogContent" />
 				</c:forEach>
 			</p:outputPanel>
 			<p:outputPanel id="dialogContent" styleClass="dialogContent">
-				<ui:include src="#{dialog.worklistSearchDialog.selectedTab.centerInclude}" />
+				<ui:include src="#{searchWorklistDialog.selectedTab.centerInclude}" />
 			</p:outputPanel>
 		</h:panelGrid>
 	</h:form>

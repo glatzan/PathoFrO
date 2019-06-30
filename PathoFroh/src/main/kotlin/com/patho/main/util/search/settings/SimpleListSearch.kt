@@ -1,26 +1,16 @@
 package com.patho.main.util.search.settings
 
-import com.patho.main.common.Month
 import com.patho.main.common.PredefinedFavouriteList
-import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.Patient
-import com.patho.main.model.patient.Task
-import com.patho.main.repository.service.PatientRepositoryCustom
 import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.util.helper.TimeUtil
-import org.apache.commons.collections.map.LinkedMap
-import org.slf4j.LoggerFactory
 import java.time.*
-import java.util.*
-import java.util.stream.Collectors
-import javax.persistence.criteria.JoinType
 import kotlin.collections.HashMap
 
 open class SimpleListSearch : SearchSettings {
 
-    var lists: Array<out PredefinedFavouriteList> = arrayOf()
+    var lists: Array<out PredefinedFavouriteList> = arrayOf(PredefinedFavouriteList.NotificationList, PredefinedFavouriteList.DiagnosisList, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.ReDiagnosisList, PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.StayInDiagnosisList, PredefinedFavouriteList.StayInStainingList, PredefinedFavouriteList.StayInNotificationList, PredefinedFavouriteList.ScannList, PredefinedFavouriteList.Council)
 
-    var selectedLists: Array<PredefinedFavouriteList>? = null
+    var selectedLists: Array<out PredefinedFavouriteList>? = null
 
     var newPatients: Boolean = false
 
@@ -30,7 +20,7 @@ open class SimpleListSearch : SearchSettings {
 
     var searchTo: LocalDate = LocalDate.now()
 
-    var month: LocalDate = LocalDate.now()
+    var month: Month = LocalDate.now().month
 
     var year: Int = LocalDate.now().year
 
@@ -38,7 +28,7 @@ open class SimpleListSearch : SearchSettings {
 
     lateinit var simpleSearchOption: SimpleListSearchOption
 
-    var simpleListSearchCriterion: SimpleListSearchCriterion = SimpleListSearchCriterion.StainingCompleted
+    var simpleListSearchCriterion: SimpleListSearchCriterion = SimpleListSearchCriterion.TaskCreated
 
     init {
         val cYear = LocalDate.now().year
@@ -46,6 +36,8 @@ open class SimpleListSearch : SearchSettings {
             val dYear = LocalDate.ofYearDay(cYear - i, 1)
             years.put(dYear.year.toString(), dYear.year)
         }
+
+        years = years.toSortedMap()
     }
 
     constructor()
@@ -54,9 +46,14 @@ open class SimpleListSearch : SearchSettings {
         updateWithSearchOptions(settings)
     }
 
+    fun updateWithSearchOptions() {
+        updateWithSearchOptions(simpleSearchOption)
+    }
+
     fun updateWithSearchOptions(settings: SimpleListSearchOption) {
+        logger.debug("Updating search options")
         simpleSearchOption = settings
-        lists = settings.lists
+        selectedLists = settings.lists
         newPatients = settings.newPatient
     }
 
@@ -140,8 +137,8 @@ open class SimpleListSearch : SearchSettings {
             SimpleListSearchOption.MONTH -> {
                 logger.debug("Month selected")
                 result.addAll(rep.findByDateAndCriterion(simpleListSearchCriterion,
-                        month.atStartOfDay().withDayOfMonth(1).toInstant(ZoneOffset.UTC),
-                        month.atStartOfDay().plusMonths(1).withDayOfMonth(1).toInstant(ZoneOffset.UTC),
+                        LocalDate.of(year, month.value, 1).atStartOfDay().toInstant(ZoneOffset.UTC),
+                        LocalDate.of(year, month.value, 1).plusMonths(1).atStartOfDay().toInstant(ZoneOffset.UTC),
                         true, false, true))
             }
             SimpleListSearchOption.TIME -> {

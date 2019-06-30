@@ -84,7 +84,6 @@ public class DialogHandler {
 	private GroupListDialog groupListDialog = new GroupListDialog();
 	private UserSettingsDialog userSettingsDialog = new UserSettingsDialog();
 	private ConfirmUserDeleteDialog confirmUserDeleteDialog = new ConfirmUserDeleteDialog();
-	private WorklistSearchDialog worklistSearchDialog = new WorklistSearchDialog();
 	private WorklistSettingsDialog worklistSettingsDialog = new WorklistSettingsDialog();
 	private WorklistSortDialog worklistSortDialog = new WorklistSortDialog();
 	private MergePatientDialog mergePatientDialog = new MergePatientDialog();
@@ -247,10 +246,6 @@ public class DialogHandler {
 
 	public ConfirmUserDeleteDialog getConfirmUserDeleteDialog() {
 		return this.confirmUserDeleteDialog;
-	}
-
-	public WorklistSearchDialog getWorklistSearchDialog() {
-		return this.worklistSearchDialog;
 	}
 
 	public WorklistSettingsDialog getWorklistSettingsDialog() {
