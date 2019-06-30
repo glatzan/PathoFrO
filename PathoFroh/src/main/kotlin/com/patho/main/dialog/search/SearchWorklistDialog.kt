@@ -2,8 +2,11 @@ package com.patho.main.dialog.search
 
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTabDialog_
+import com.patho.main.repository.FavouriteListRepository
 import com.patho.main.service.UserService
+import com.patho.main.ui.FavouriteListContainer
 import com.patho.main.util.dialog.event.WorklistSelectEvent
+import com.patho.main.util.search.settings.FavouriteListSearch
 import com.patho.main.util.search.settings.SearchSettings
 import com.patho.main.util.search.settings.SimpleListSearch
 import com.patho.main.util.search.settings.SimpleListSearchOption
@@ -11,11 +14,13 @@ import com.patho.main.util.worklist.Worklist
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import java.util.stream.Collectors
 
 @Component()
 @Scope(value = "session")
 open class SearchWorklistDialog @Autowired constructor(
-        private val userService: UserService) : AbstractTabDialog_(Dialog.WORKLIST_SEARCH) {
+        private val userService: UserService,
+        private val favouriteListRepository: FavouriteListRepository) : AbstractTabDialog_(Dialog.WORKLIST_SEARCH) {
 
     val simpleSearchTab: SimpleSearchTab = SimpleSearchTab()
     val favouriteSearchTab: FavouriteSearchTab = FavouriteSearchTab()
@@ -54,21 +59,39 @@ open class SearchWorklistDialog @Autowired constructor(
             "simpleSearch",
             "include/simpleSearch.xhtml") {
 
-        override fun updateData() {
-            super.updateData()
-        }
-
         override fun initTab(force: Boolean): Boolean {
             search = SimpleListSearch(userService.currentUser.settings.worklistToLoad)
             return super.initTab(force)
         }
     }
 
-    open inner class FavouriteSearchTab : SearchTab<SimpleListSearch>(
+    open inner class FavouriteSearchTab : SearchTab<FavouriteListSearch>(
             "FavouriteSearchTab",
             "dialog.worklistsearch.favouriteList",
             "favouriteListSearch",
             "include/favouriteSearch.xhtml") {
+
+        var containers: List<FavouriteListContainer> = listOf()
+
+        var selectedContainer: FavouriteListContainer? = null
+            set(value) {
+                field = value
+                if (value != null)
+                    search.favouriteList = value.favouriteList
+            }
+
+
+        override fun initTab(force: Boolean): Boolean {
+            search = FavouriteListSearch()
+            selectedContainer = null
+            return super.initTab(force)
+        }
+
+        override fun updateData() {
+            val list = favouriteListRepository.findByUserAndWriteableAndReadable(
+                    userService.currentUser, false, true, false, true, true, false)
+            containers = list.map { FavouriteListContainer(it, userService.currentUser) }
+        }
     }
 
     open inner class ExtendedSearchTab : SearchTab<SimpleListSearch>(

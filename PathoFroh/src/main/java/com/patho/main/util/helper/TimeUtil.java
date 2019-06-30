@@ -119,4 +119,11 @@ public class TimeUtil {
 		BigDecimal total = seconds.add(nanos);
 		return total.longValue();
 	}
+
+	public static long toUnixTimeMillis(Instant i){
+		BigDecimal nanos = BigDecimal.valueOf(i.getNano(), 9);
+		BigDecimal seconds = BigDecimal.valueOf(i.getEpochSecond());
+		BigDecimal total = seconds.add(nanos);
+		return total.longValue()*1000;
+	}
 }

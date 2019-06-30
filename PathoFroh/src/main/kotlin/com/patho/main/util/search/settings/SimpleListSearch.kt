@@ -8,7 +8,7 @@ import kotlin.collections.HashMap
 
 open class SimpleListSearch : SearchSettings {
 
-    var lists: Array<out PredefinedFavouriteList> = arrayOf(PredefinedFavouriteList.NotificationList, PredefinedFavouriteList.DiagnosisList, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.ReDiagnosisList, PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.StayInDiagnosisList, PredefinedFavouriteList.StayInStainingList, PredefinedFavouriteList.StayInNotificationList, PredefinedFavouriteList.ScannList, PredefinedFavouriteList.Council)
+    var lists: Array<out PredefinedFavouriteList> = arrayOf(PredefinedFavouriteList.NotificationList, PredefinedFavouriteList.DiagnosisList, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.ReDiagnosisList, PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.StayInDiagnosisList, PredefinedFavouriteList.StayInStainingList, PredefinedFavouriteList.StayInNotificationList, PredefinedFavouriteList.ScannList)
 
     var selectedLists: Array<out PredefinedFavouriteList>? = null
 
@@ -28,7 +28,7 @@ open class SimpleListSearch : SearchSettings {
 
     lateinit var simpleSearchOption: SimpleListSearchOption
 
-    var simpleListSearchCriterion: SimpleListSearchCriterion = SimpleListSearchCriterion.TaskCreated
+    var simpleListSearchCriterion: SimpleListSearchCriterion? = SimpleListSearchCriterion.TaskCreated
 
     init {
         val cYear = LocalDate.now().year

@@ -5,11 +5,6 @@ import com.patho.main.model.favourites.FavouritePermissionsGroup;
 import com.patho.main.model.favourites.FavouritePermissionsUser;
 import com.patho.main.model.user.HistoUser;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class FavouriteListContainer {
 
 	public static final int PERMISSION_GLOBAL = 0;
@@ -73,5 +68,77 @@ public class FavouriteListContainer {
 	
 	public boolean isOwnerOrAdmin() {
 		return admin || owner;
+	}
+
+	public FavouriteList getFavouriteList() {
+		return this.favouriteList;
+	}
+
+	public boolean isOwner() {
+		return this.owner;
+	}
+
+	public boolean isGlobal() {
+		return this.global;
+	}
+
+	public boolean isUserPermission() {
+		return this.userPermission;
+	}
+
+	public boolean isGroupPermission() {
+		return this.groupPermission;
+	}
+
+	public boolean isEditable() {
+		return this.editable;
+	}
+
+	public boolean isReadable() {
+		return this.readable;
+	}
+
+	public boolean isAdmin() {
+		return this.admin;
+	}
+
+	public int getType() {
+		return this.type;
+	}
+
+	public void setFavouriteList(FavouriteList favouriteList) {
+		this.favouriteList = favouriteList;
+	}
+
+	public void setOwner(boolean owner) {
+		this.owner = owner;
+	}
+
+	public void setGlobal(boolean global) {
+		this.global = global;
+	}
+
+	public void setUserPermission(boolean userPermission) {
+		this.userPermission = userPermission;
+	}
+
+	public void setGroupPermission(boolean groupPermission) {
+		this.groupPermission = groupPermission;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+
+	public void setReadable(boolean readable) {
+		this.readable = readable;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 }

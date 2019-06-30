@@ -7,7 +7,7 @@ import com.patho.main.util.task.TaskStatus
 
 class FavouriteListSearch : SearchSettings() {
 
-    private val favouriteList: FavouriteList? = null
+    var favouriteList: FavouriteList? = null
 
     override fun getPatients(): List<Patient> {
         val rep = SpringContextBridge.services().patientRepository

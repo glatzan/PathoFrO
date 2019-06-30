@@ -112,8 +112,8 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
 
         switch (simpleListSearchCriterion) {
             case NoTasks:
-                predicates.add(builder.ge(root.get(Patient_.audit).get(Audit_.createdOn), TimeUtil.toUnixTime(startDate)));
-                predicates.add(builder.le(root.get(Patient_.audit).get(Audit_.createdOn), TimeUtil.toUnixTime(endDate)));
+                predicates.add(builder.greaterThanOrEqualTo(root.get(Patient_.audit).get(Audit_.createdOn), TimeUtil.toUnixTimeMillis(startDate)));
+                predicates.add(builder.lessThanOrEqualTo(root.get(Patient_.audit).get(Audit_.createdOn), TimeUtil.toUnixTimeMillis(endDate)));
                 predicates.add(builder.isEmpty(root.get(Patient_.tasks)));
                 break;
             case StainingCompleted:
@@ -133,8 +133,8 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
                 predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.finalizationDate), endDate));
                 break;
             case TaskCreated:
-                predicates.add(builder.ge(taskQuery.get(Task_.audit).get(Audit_.createdOn), TimeUtil.toUnixTime(startDate)));
-                predicates.add(builder.le(taskQuery.get(Task_.audit).get(Audit_.createdOn), TimeUtil.toUnixTime(endDate)));
+                predicates.add(builder.greaterThanOrEqualTo(taskQuery.get(Task_.audit).get(Audit_.createdOn), TimeUtil.toUnixTimeMillis(startDate)));
+                predicates.add(builder.lessThanOrEqualTo(taskQuery.get(Task_.audit).get(Audit_.createdOn), TimeUtil.toUnixTimeMillis(endDate)));
                 break;
             default:
                 break;
@@ -301,9 +301,6 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
 
         EntityGraph<Patient> graph = getSession().createEntityGraph(Patient.class);
 
-//		if (loadTasks)
-//			root.fetch(Patient_.tasks, JoinType.LEFT);
-
         if (loadTasks)
             graph.addAttributeNodes("tasks");
 
@@ -312,9 +309,6 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
 
         if (irgnoreArchived)
             predicates.add(getCriteriaBuilder().equal(root.get("archived"), false));
-
-//		Map<String, Object> hints = new HashMap<String, Object>();
-//		hints.put("javax.persistence.loadgraph", graph);
 
         criteria.where(getCriteriaBuilder().and(predicates.toArray(new Predicate[predicates.size()])));
         criteria.distinct(true);
