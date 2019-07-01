@@ -1,15 +1,16 @@
 package com.patho.main.dialog.search
 
+import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTabDialog_
+import com.patho.main.model.Physician
 import com.patho.main.repository.FavouriteListRepository
+import com.patho.main.repository.PhysicianRepository
 import com.patho.main.service.UserService
 import com.patho.main.ui.FavouriteListContainer
+import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.dialog.event.WorklistSelectEvent
-import com.patho.main.util.search.settings.FavouriteListSearch
-import com.patho.main.util.search.settings.SearchSettings
-import com.patho.main.util.search.settings.SimpleListSearch
-import com.patho.main.util.search.settings.SimpleListSearchOption
+import com.patho.main.util.search.settings.*
 import com.patho.main.util.worklist.Worklist
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -20,7 +21,8 @@ import java.util.stream.Collectors
 @Scope(value = "session")
 open class SearchWorklistDialog @Autowired constructor(
         private val userService: UserService,
-        private val favouriteListRepository: FavouriteListRepository) : AbstractTabDialog_(Dialog.WORKLIST_SEARCH) {
+        private val favouriteListRepository: FavouriteListRepository,
+        private val physicianRepository: PhysicianRepository) : AbstractTabDialog_(Dialog.WORKLIST_SEARCH) {
 
     val simpleSearchTab: SimpleSearchTab = SimpleSearchTab()
     val favouriteSearchTab: FavouriteSearchTab = FavouriteSearchTab()
@@ -92,13 +94,32 @@ open class SearchWorklistDialog @Autowired constructor(
                     userService.currentUser, false, true, false, true, true, false)
             containers = list.map { FavouriteListContainer(it, userService.currentUser) }
         }
+
+
     }
 
-    open inner class ExtendedSearchTab : SearchTab<SimpleListSearch>(
+    open inner class ExtendedSearchTab : SearchTab<ExtendedSearch>(
             "ExtendedSearchTab",
             "dialog.worklistsearch.scifi",
             "extendedSearch",
             "include/extendedSearch.xhtml") {
+
+        lateinit var allPhysicians: List<Physician>
+        lateinit var allPhysiciansTransformer : DefaultTransformer<Physician>
+
+        lateinit var signaturePhysicians: List<Physician>
+        lateinit var signaturePhysiciansTransformer: DefaultTransformer<Physician>
+
+        override fun initTab(force: Boolean): Boolean {
+            search = ExtendedSearch()
+            allPhysicians = physicianRepository.findAllByRole(arrayOf<ContactRole>(ContactRole.CLINIC_PHYSICIAN, ContactRole.EXTERNAL_SURGEON, ContactRole.FAMILY_PHYSICIAN, ContactRole.OTHER_PHYSICIAN, ContactRole.SURGEON, ContactRole.SIGNATURE), true)
+            allPhysiciansTransformer = DefaultTransformer(allPhysicians)
+
+            signaturePhysicians = physicianRepository.findAllByRole(arrayOf<ContactRole>(ContactRole.SIGNATURE), true)
+            signaturePhysiciansTransformer = DefaultTransformer(signaturePhysicians)
+            return super.initTab(force)
+        }
+
     }
 
 

@@ -9,28 +9,48 @@ import java.time.LocalDate
 
 class ExtendedSearch : SearchSettings() {
 
+    var isUsePatientName = false
     var patientName: String = ""
+
+    var isUsePatientSurname = false
     var patientSurname: String = ""
-    var patientBirthday: LocalDate? = null
-    var patientGender: Person.Gender = Person.Gender.UNKNOWN
 
+    var isUsePatientBirthdayFrom = false
+    var patientBirthdayFrom: LocalDate? = null
 
-    var material: Array<String> = arrayOf<String>()
-    var caseHistory: Array<String> = arrayOf<String>()
+    var isUsePatientBirthdayTo = false
+    var patientBirthdayTo: LocalDate? = null
 
-    var physician: Array<Physician> = arrayOf<Physician>()
-    var signature: Array<Physician> = arrayOf<Physician>()
+    var isUsePatientGender = false
+    var patientGender: Person.Gender? = Person.Gender.UNKNOWN
 
-    var eye: Eye = Eye.UNKNOWN
+    var isUseMaterial = false
+    var material: ArrayList<String>? = ArrayList<String>()
 
+    var isUseCaseHistory = false
+    var caseHistory: ArrayList<String>? = ArrayList<String>()
+
+    var isUsePhysicians = false
+    var physicians: Array<Physician>? = null
+
+    var isUseSignatures = false
+    var signatures: Array<Physician>? = null
+
+    var isUseEye = false
+    var eye: Eye? = Eye.UNKNOWN
+
+    var isUseWard = false
     var ward: String = ""
 
-    var malign: String = ""
+    var malign: String = "0"
 
-    var diagnosis: Array<String> = arrayOf<String>()
+    var isUseDiagnosis = false
+    var diagnosis: ArrayList<String>? = ArrayList<String>()
 
+    var isUseDiagnosisText = false
     var diagnosisText: String = ""
 
+    var isUseDate = false
     var from: LocalDate = LocalDate.now()
     var to: LocalDate = LocalDate.now()
 

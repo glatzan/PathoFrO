@@ -1,155 +1,383 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.worklistsearch.scifi.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.headline']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel">
-		<h:panelGrid columns="2" id="favouriteContent"
-			styleClass="newStyleListingTable">
-			<p:outputLabel value="Probe" />
-			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
-				filterMatchMode="startsWith"
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.material}">
-				<f:selectItems
-					value="#{searchWorklistDialog.extendedSearchTab.materialList}"
-					var="material" itemLabel="#{material.name}"
-					itemValue="#{material.name}" />
-			</p:selectOneMenu>
+    <p:outputPanel styleClass="bodyPannel">
+        <h:panelGrid columns="1" styleClass="defaultHistoTable">
+            <h:outputLabel value="Patient"
+                           styleClass="headline"/>
+        </h:panelGrid>
+        <h:panelGrid columns="4" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth125, columnWidth300, columnWidth125,">
+            <!-- name -->
+            <h:outputLabel value="Name"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.usePatientName}">
+                            <p:ajax event="change" update="patientName"/>
+                        </p:selectBooleanCheckbox>
+                    </span>
+                    <p:inputText value="#{searchWorklistDialog.extendedSearchTab.search.patientName}"
+                                 id="patientName"
+                                 disabled="#{!searchWorklistDialog.extendedSearchTab.search.usePatientName}"/>
+                </div>
+            </h:panelGroup>
 
-			<p:outputLabel value="Operateur" />
-			<p:selectCheckboxMenu id="roleSelectCheckbox" multiple="true"
-				filter="true" filterMatchMode="startsWith" label="Auswhälen"
-				panelStyle="width:250px"
-				converter="#{searchWorklistDialog.extendedSearchTab.allPhysicianTransformer}"
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.surgeons}">
+            <!-- surname -->
+            <h:outputLabel value="Vorname"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.usePatientSurname}">
+                            <p:ajax event="change" update="patientSurname"/>
+                        </p:selectBooleanCheckbox>
+                    </span>
+                    <p:inputText value="#{searchWorklistDialog.extendedSearchTab.search.patientSurname}"
+                                 id="patientSurname"
+                                 disabled="#{!searchWorklistDialog.extendedSearchTab.search.usePatientName}"/>
+                </div>
+            </h:panelGroup>
 
-				<f:selectItems var="physician"
-					value="#{searchWorklistDialog.extendedSearchTab.allPhysicians}"
-					itemValue="#{physician}" itemLabel="#{physician.person.fullName}" />
+            <!-- gender -->
+            <h:outputLabel value="Geschlecht"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.usePatientGender}">
+                            <p:ajax event="change" update="sex"/>
+                        </p:selectBooleanCheckbox>
+                    </span>
+                    <p:selectOneMenu style="width:100px" id="sex" autocomplete="sex"
+                                     disabled="#{!searchWorklistDialog.extendedSearchTab.search.usePatientGender}"
+                                     value="#{searchWorklistDialog.extendedSearchTab.search.patientGender}">
+                        <f:selectItem
+                                itemLabel="#{msg['component.personSettingsGeneral.gender.unknown']}"
+                                itemValue="UNKNOWN"/>
+                        <f:selectItem
+                                itemLabel="#{msg['component.personSettingsGeneral.gender.male']}"
+                                itemValue="MALE"/>
+                        <f:selectItem
+                                itemLabel="#{msg['component.personSettingsGeneral.gender.female']}"
+                                itemValue="FEMALE"/>
+                    </p:selectOneMenu>
+                </div>
+            </h:panelGroup>
 
-			</p:selectCheckboxMenu>
+        </h:panelGrid>
 
-			<p:outputLabel value="Unterschrift" />
-			<p:selectCheckboxMenu multiple="true" filter="true"
-				filterMatchMode="startsWith" label="Auswhälen"
-				panelStyle="width:250px"
-				converter="#{searchWorklistDialog.extendedSearchTab.allPhysicianTransformer}"
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.signature}">
+        <!-- birthday -->
+        <h:panelGrid columns="3" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth125,columnWidth300 , ,,">
 
-				<f:selectItems var="physician"
-					value="#{searchWorklistDialog.extendedSearchTab.allPhysicians}"
-					itemValue="#{physician}" itemLabel="#{physician.person.fullName}" />
-
-			</p:selectCheckboxMenu>
-
-			<p:outputLabel value="Vorgeschichte" />
-			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
-				filterMatchMode="startsWith"
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.caseHistory}">
-				<f:selectItems
-					value="#{searchWorklistDialog.extendedSearchTab.caseHistoryList}"
-					var="history" itemLabel="#{history.value}"
-					itemValue="#{history.value}" />
-			</p:selectOneMenu>
-
-			<p:outputLabel value="Befund" />
-			<p:inputText
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.diagnosisText}"></p:inputText>
-
-			<p:outputLabel value="Diagnose" />
-			<p:selectOneMenu editable="true" autoWidth="false" filter="true"
-				filterMatchMode="startsWith"
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.diagnosis}">
-				<f:selectItems
-					value="#{searchWorklistDialog.extendedSearchTab.diagnosisPresets}"
-					var="diagnosis" itemLabel="#{diagnosis.diagnosis}"
-					itemValue="#{diagnosis.diagnosis}" />
-			</p:selectOneMenu>
-
-			<p:outputLabel value="Malign" />
-
-			<p:triStateCheckbox
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.malign}" />
+            <h:outputLabel value="Geburtzdatum"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.usePatientBirthdayFrom}">
+                            <p:ajax event="change" update="bdayFrom"/>
+                        </p:selectBooleanCheckbox>
+                    </span>
+                    <span class="ui-inputgroup-addon middleElement">von</span>
+                    <p:calendar id="bdayFrom" autocomplete="bday"
+                                disabled="#{!searchWorklistDialog.extendedSearchTab.search.usePatientBirthdayFrom}"
+                                value="#{searchWorklistDialog.extendedSearchTab.search.patientBirthdayFrom}" locale="de"
+                                converter="localDateConverter"
+                                navigator="true" pattern="dd.MM.yyyy" mask="true"/>
+                </div>
+            </h:panelGroup>
 
 
-			<p:outputLabel value="Auge" />
-			<p:selectOneMenu
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.eye}">
-				<f:selectItems value="#{enumProvider.eyes}" var="eye"
-					itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}" />
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.usePatientBirthdayTo}">
+                            <p:ajax event="change" update="bdayTo"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <span class="ui-inputgroup-addon middleElement">bis</span>
+                    <p:calendar id="bdayTo" autocomplete="bday"
+                                disabled="#{!searchWorklistDialog.extendedSearchTab.search.usePatientBirthdayTo}"
+                                value="#{searchWorklistDialog.extendedSearchTab.search.patientBirthdayTo}" locale="de"
+                                converter="localDateConverter"
+                                navigator="true" pattern="dd.MM.yyyy" mask="true"/>
+                </div>
+            </h:panelGroup>
 
-			</p:selectOneMenu>
+        </h:panelGrid>
 
-			<p:outputLabel value="Station" />
-			<p:selectOneMenu id="wards"
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.ward}"
-				editable="true">
-				<f:selectItems
-					value="#{searchWorklistDialog.extendedSearchTab.wardList}"
-					itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward" />
-			</p:selectOneMenu>
 
-			<h:panelGroup>
-				<p:outputLabel value="Staining" />
-				<p:commandLink title="#{msg['body.statiningView.newStaining']}"
-					actionListener="#{dialog.addSlidesDialog.initAndPrepareBean()}">
-					<i class="fa fa-fw fa-paint-brush"></i>
-					<p:ajax event="dialogReturn"
-						listener="#{searchWorklistDialog.extendedSearchTab.onSelectStainingDialogReturn}"
-						update="@form" />
-				</p:commandLink>
-			</h:panelGroup>
-			<p:dataTable var="staining" styleClass="defaultHistoDataTable"
-				value="#{searchWorklistDialog.extendedSearchTab.worklistSearch.stainings}">
-				<f:facet name="header">
-					<h:outputLabel value="Färbung"></h:outputLabel>
-				</f:facet>
+        <!-- Separator -->
+        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+            <p:separator/>
+            <h:outputLabel
+                    value="Autrag"/>
+        </h:panelGrid>
 
-				<p:column>
-					<h:outputLabel value="#{staining.name}"></h:outputLabel>
-				</p:column>
-			</p:dataTable>
-		</h:panelGrid>
-	</p:outputPanel>
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth125, ">
+            <h:outputLabel value="Material"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.useMaterial}">
+                            <p:ajax event="change" update="material"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <p:chips id="material" value="#{searchWorklistDialog.extendedSearchTab.search.material}"
+                             disabled="#{!searchWorklistDialog.extendedSearchTab.search.useMaterial}"
+                             styleClass="middleElement"/>
+                </div>
+            </h:panelGroup>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
+            <h:outputLabel value="Vorgeschichte"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.useCaseHistory}">
+                            <p:ajax event="change" update="caseHistory"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <p:chips id="caseHistory" value="#{searchWorklistDialog.extendedSearchTab.search.caseHistory}"
+                             disabled="#{!searchWorklistDialog.extendedSearchTab.search.useCaseHistory}"
+                             styleClass="middleElement"/>
+                </div>
+            </h:panelGroup>
 
-			<h:panelGrid columns="1" styleClass="newTableContainer left">
-			</h:panelGrid>
 
-			<h:panelGrid columns="3" styleClass="newTableContainer right">
-				<p:commandButton value="#{msg['general.select']}"
-					icon="fa fa-search" widgetVar="serachBtn"
-					onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
-					process="@form">
-					<f:actionListener
-						binding="#{searchWorklistDialog.extendedSearchTab.selectAsWorklist()}" />
-					<f:actionListener
-						binding="#{searchWorklistDialog.hideDialog()}" />
-				</p:commandButton>
+            <h:outputLabel value="Einsender/Operateure"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.usePhysicians}">
+                            <p:ajax event="change" update="physicians"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <p:selectCheckboxMenu styleClass="middleElement"
+                                          id="physicians"
+                                          disabled="#{!searchWorklistDialog.extendedSearchTab.search.usePhysicians}"
+                                          panelStyleClass="customSelectCheckboxMenuContactDialogPannel"
+                                          label="#{msg['dialog.contactAddDialog.roles']}"
+                                          converter="#{searchWorklistDialog.extendedSearchTab.allPhysiciansTransformer}"
+                                          panelStyle="width:250px" updateLabel="true" multiple="true"
+                                          value="#{searchWorklistDialog.extendedSearchTab.search.physicians}">
 
-				<p:commandButton value="#{msg['general.export']}" icon="fa fa-copy"
-					widgetVar="exportBtn"
-					onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
-					process="@form">
-					<f:actionListener
-						binding="#{searchWorklistDialog.extendedSearchTab.exportWorklist()}" />
-				</p:commandButton>
+                        <f:selectItems var="physician"
+                                       value="#{searchWorklistDialog.extendedSearchTab.allPhysicians}"
+                                       itemValue="#{physician}"
+                                       itemLabel="#{physician.person.getFullNameAndTitle()}"/>
 
-				<p:commandButton value="#{msg['general.close']}" immediate="true"
-					widgetVar="closeBtn" icon="fa fa-times-circle">
-					<f:actionListener
-						binding="#{searchWorklistDialog.hideDialog()}" />
-				</p:commandButton>
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                        <p:ajax event="change"
+                                partialSubmit="true" process="@this"/>
+
+                        <p:ajax event="toggleSelect"
+                                partialSubmit="true" process="@this"/>
+                    </p:selectCheckboxMenu>
+                </div>
+            </h:panelGroup>
+
+
+            <h:outputLabel value="Unterschrift durch"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.useSignatures}">
+                            <p:ajax event="change" update="signature"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <p:selectCheckboxMenu updateLabel="true" multiple="true" styleClass="middleElement"
+                                          id="signature"
+                                          disabled="#{!searchWorklistDialog.extendedSearchTab.search.useSignatures}"
+                                          panelStyleClass="customSelectCheckboxMenuContactDialogPannel"
+                                          label="#{msg['dialog.contactAddDialog.roles']}"
+                                          panelStyle="width:250px"
+                                          converter="#{searchWorklistDialog.extendedSearchTab.signaturePhysiciansTransformer}"
+                                          value="#{searchWorklistDialog.extendedSearchTab.search.signatures}">
+
+                        <f:selectItems var="physician"
+                                       value="#{searchWorklistDialog.extendedSearchTab.signaturePhysicians}"
+                                       itemValue="#{physician}"
+                                       itemLabel="#{physician.person.getFullNameAndTitle()}"/>
+                    </p:selectCheckboxMenu>
+                </div>
+            </h:panelGroup>
+
+
+            <h:outputLabel value="Auge"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.useEye}">
+                            <p:ajax event="change" update="eye"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <p:selectOneMenu
+                            id="eye"
+                            disabled="#{!searchWorklistDialog.extendedSearchTab.search.useEye}"
+                            value="#{searchWorklistDialog.extendedSearchTab.search.eye}">
+
+                        <f:selectItems value="#{enumProvider.eyes}" var="eye"
+                                       itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}"/>
+                    </p:selectOneMenu>
+
+                </div>
+            </h:panelGroup>
+
+            <h:outputLabel value="Station"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                      <p:selectBooleanCheckbox
+                              value="#{searchWorklistDialog.extendedSearchTab.search.useWard}">
+                            <p:ajax event="change" update="ward"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <p:inputText
+                            id="ward"
+                            disabled="#{!searchWorklistDialog.extendedSearchTab.search.useWard}"
+                            value="#{searchWorklistDialog.extendedSearchTab.search.ward}"/>
+                </div>
+            </h:panelGroup>
+
+        </h:panelGrid>
+
+
+        <!-- Separator -->
+        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+            <p:separator/>
+            <h:outputLabel
+                    value="Diagnose"/>
+        </h:panelGrid>
+
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth125, ">
+            <h:outputLabel value="Bösartig"/>
+            <p:triStateCheckbox value="#{searchWorklistDialog.extendedSearchTab.search.malign}"/>
+
+            <h:outputLabel value="Diagnose"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.useDiagnosis}">
+                            <p:ajax event="change" update="diagnosis"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <p:chips id="diagnosis"
+                             disabled="#{!searchWorklistDialog.extendedSearchTab.search.useDiagnosis}"
+                             value="#{searchWorklistDialog.extendedSearchTab.search.diagnosis}"
+                             styleClass="middleElement"/>
+                </div>
+            </h:panelGroup>
+
+            <h:outputLabel value="Ausführlicher Diagnose Text"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.useDiagnosisText}">
+                            <p:ajax event="change" update="diagnosisText"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <p:inputText
+                            id="diagnosisText"
+                            disabled="#{!searchWorklistDialog.extendedSearchTab.search.useDiagnosisText}"
+                            value="#{searchWorklistDialog.extendedSearchTab.search.diagnosisText}"/>
+                </div>
+            </h:panelGroup>
+        </h:panelGrid>
+
+        <!-- Separator -->
+        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+            <p:separator/>
+            <h:outputLabel
+                    value="Datum"/>
+        </h:panelGrid>
+
+        <h:panelGrid columns="3" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth125,columnWidth300 , ,,">
+
+            <h:outputLabel value="Zeit"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon-checkbox">
+                        <p:selectBooleanCheckbox
+                                value="#{searchWorklistDialog.extendedSearchTab.search.useDate}">
+                            <p:ajax event="change" update="timeFrom timeTo"/>
+                       </p:selectBooleanCheckbox>
+                    </span>
+                    <span class="ui-inputgroup-addon middleElement">von</span>
+                    <p:calendar id="timeFrom" autocomplete="bday"
+                                disabled="#{!searchWorklistDialog.extendedSearchTab.search.useDate}"
+                                value="#{searchWorklistDialog.extendedSearchTab.search.from}" locale="de"
+                                converter="localDateConverter"
+                                navigator="true" pattern="dd.MM.yyyy" mask="true"/>
+                </div>
+            </h:panelGroup>
+
+
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon leftElement">bis</span>
+                    <p:calendar id="timeTo" autocomplete="bday"
+                                disabled="#{!searchWorklistDialog.extendedSearchTab.search.useDate}"
+                                value="#{searchWorklistDialog.extendedSearchTab.search.to}" locale="de"
+                                converter="localDateConverter"
+                                navigator="true" pattern="dd.MM.yyyy" mask="true"/>
+                </div>
+            </h:panelGroup>
+
+        </h:panelGrid>
+    </p:outputPanel>
+
+    <div class="buttonContainer">
+        <h:panelGrid columns="2" style="width:100%">
+
+            <h:panelGrid columns="1" styleClass="left">
+            </h:panelGrid>
+
+            <h:panelGrid columns="3" styleClass="right">
+                <p:commandButton value="#{msg['general.select']}"
+                                 icon="fa fa-search" widgetVar="serachBtn"
+                                 onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
+                                 process="@form">
+                    <f:actionListener
+                            binding="#{searchWorklistDialog.extendedSearchTab.selectAndHide()}"/>
+                    <f:actionListener
+                            binding="#{searchWorklistDialog.hideDialog()}"/>
+                </p:commandButton>
+
+                <p:commandButton value="#{msg['general.export']}" icon="fa fa-copy"
+                                 widgetVar="exportBtn"
+                                 onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
+                                 process="@form">
+                    <f:actionListener
+                            binding="#{searchWorklistDialog.extendedSearchTab.exportWorklist()}"/>
+                </p:commandButton>
+
+                <p:commandButton value="#{msg['general.close']}" immediate="true"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle">
+                    <f:actionListener
+                            binding="#{searchWorklistDialog.hideDialog()}"/>
+                </p:commandButton>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 </ui:composition>

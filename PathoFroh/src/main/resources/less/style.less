@@ -87,6 +87,38 @@ body {
     .histo_font();
   }
 
+  /**
+  * small primefaces chip
+  */
+
+  ul.ui-chips-container {
+    padding: 0px !important;
+  }
+
+  /**
+  * Style for input groups
+   */
+  .ui-inputgroup {
+    .ui-inputgroup-addon-checkbox {
+      border-color: @table_header_color !important;
+      border-radius: 4px 0 0 4px !important;
+    }
+
+    .ui-inputgroup-addon {
+      border-color: @table_header_color !important;
+    }
+
+    .middleElement, .middleElement .ui-chips-container, .middleElement .ui-chips-container{
+      border-left: none !important;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0  !important;
+    }
+
+    .leftElement, .leftElement .ui-chips-container, .leftElement .ui-chips-container{
+      border-radius: 4px 0 0 4px !important;
+    }
+  }
+
   // generating icon colors, icon-green
   .generate-incon-colors(@icon-names, @icon-colors, @icon-length);
 
@@ -224,7 +256,7 @@ body {
     }
 
     .ui-selectcheckboxmenu-multiple-container {
-      padding: 0px !important;
+      padding: 2px !important;
       min-height: 16px;
 
       .ui-selectcheckboxmenu-token {
