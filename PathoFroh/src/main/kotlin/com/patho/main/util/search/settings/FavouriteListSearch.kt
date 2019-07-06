@@ -2,6 +2,7 @@ package com.patho.main.util.search.settings
 
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.Patient
+import com.patho.main.model.patient.Task
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.task.TaskStatus
 
@@ -23,5 +24,9 @@ class FavouriteListSearch : SearchSettings() {
             res
         } else
             listOf()
+    }
+
+    override fun getTasks(): List<Task> {
+        return listOf()
     }
 }

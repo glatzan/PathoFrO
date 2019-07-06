@@ -93,10 +93,7 @@ class NotificationDialog @Autowired constructor(
     override fun update(reload: Boolean) {
         logger.debug("Updating content, reload task $reload")
         if (reload) {
-            var optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, false, true, false, true, true)
-            if (!optionalTask.isPresent)
-                throw TaskNotFoundException()
-            task = optionalTask.get()
+            task = taskRepository.findByID(task.id, false, true, false, true, true)
         }
 
         tabs.forEach { it.updateData() }

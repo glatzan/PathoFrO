@@ -81,7 +81,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 	 */
 	public void update(boolean reload) {
 		if (reload) {
-			setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), false, false, false, true, true).get());
+			setTask(taskRepository.findByID(task.getId(), false, false, false, true, true));
 			for (ReportIntent contact : task.getContacts()) {
 				if (contact.equals(getAssociatedContact())) {
 					setAssociatedContact(contact);

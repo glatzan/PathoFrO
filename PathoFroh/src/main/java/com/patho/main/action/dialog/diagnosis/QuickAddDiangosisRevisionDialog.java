@@ -69,7 +69,7 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog {
 	}
 
 	public boolean initBean(Task task, DiagnosisRevisionType type) {
-		task = taskRepository.findOptionalByIdAndInitialize(task.getId(), false, true, false, false, false).get();
+		task = taskRepository.findByID(task.getId(), false, true, false, false, false);
 
 		super.initBean(task, Dialog.DIAGNOSIS_REVISION_ADD);
 		setType(type);

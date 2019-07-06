@@ -54,11 +54,7 @@ open class ContactDialog @Autowired constructor(
     override fun update(reload: Boolean) {
 
         if (reload) {
-            var optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, false, false, false, true, true)
-            if (!optionalTask.isPresent)
-                throw TaskNotFoundException()
-
-            task = optionalTask.get()
+            task = taskRepository.findByID(task.id, false, false, false, true, true)
         }
 
         reportIntents = task.contacts.mapIndexed { index, p -> ReportIntentSelector(p, task, index.toLong()) }

@@ -91,7 +91,7 @@ public class ContactDialog extends AbstractDialog {
      */
     public void update(boolean reload) {
         if (reload) {
-            setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), false, false, false, true, true).get());
+            setTask(taskRepository.findByID(task.getId(), false, false, false, true, true));
         }
 
         updateContactHolders();

@@ -5,6 +5,7 @@ import com.patho.main.model.user.HistoPermissions
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.PatientService
 import com.patho.main.service.UserService
+import com.patho.main.util.exceptions.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Controller
@@ -59,20 +60,18 @@ class QuickSearchHandler @Autowired constructor(
             if (quickSerach.matches("^\\d{6}$".toRegex())) { // task
                 // search for task (6 digits)
 
-                val task = taskRepository.findOptionalByTaskId(quickSerach, false, true, true, true, true)
-
-                if (task.isPresent) {
+                try {
+                    val task = taskRepository.findByTaskID(quickSerach, false, true, true, true, true)
                     logger.debug("Task found, adding to worklist")
-                    worklistHandler.addTaskToWorklist(task.get(), true)
+                    worklistHandler.addTaskToWorklist(task, true)
                     MessageHandler.sendGrowlMessagesAsResource("growl.search.task.headline",
                             "growl.search.task.text")
-                } else {
+                } catch (e: TaskNotFoundException) {
                     // no task was found
                     logger.debug("No task with the given id found")
                     MessageHandler.sendGrowlMessagesAsResource("growl.search.task.notFound", "general.blank",
                             FacesMessage.SEVERITY_ERROR)
                 }
-
             } else if (quickSerach.matches("^\\d{8}$".toRegex())) { // piz
                 // searching for piz (8 digits)
                 logger.debug("Search for piz: $quickSerach")
@@ -115,15 +114,14 @@ class QuickSearchHandler @Autowired constructor(
                 val taskId = quickSerach.substring(0, 6)
                 val uniqueSlideIDinTask = quickSerach.substring(6, 9)
 
-                val task = taskRepository.findOptionalBySlideID(taskId,
-                        Integer.parseInt(uniqueSlideIDinTask), false, true, true, true, true)
-
-                if (task.isPresent()) {
+                try {
+                    val task = taskRepository.findBySlideID(taskId,
+                            Integer.parseInt(uniqueSlideIDinTask), false, true, true, true, true)
                     logger.debug("Slide found")
                     MessageHandler.sendGrowlMessagesAsResource("growl.search.slide.headline",
                             "growl.search.slide.text")
-                    worklistHandler.addTaskToWorklist(task.get(), true)
-                } else {
+                    worklistHandler.addTaskToWorklist(task, true)
+                } catch (e: TaskNotFoundException) {
                     // no slide was found
                     logger.debug("No slide with the given id found")
                     MessageHandler.sendGrowlMessagesAsResource("growl.search.slide.notFount", "general.blank",

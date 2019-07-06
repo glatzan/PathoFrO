@@ -8,6 +8,7 @@ import com.patho.main.repository.PatientRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.UserService
 import com.patho.main.service.impl.SpringContextBridge
+import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.menu.JSFMenuGenerator
 import com.patho.main.util.search.settings.EmptySearch
 import com.patho.main.util.search.settings.SimpleListSearch
@@ -312,12 +313,10 @@ open class CentralHandler @Autowired constructor(
 
             logger.debug("Reloading task")
 
-            val oTask = taskRepository.findOptionalByIdAndInitialize(task.id, false, true, true, true,
-                    true)
-
-            if (oTask.isPresent) {
-                mutableTask = oTask.get()
-            } else {
+            try {
+                mutableTask = taskRepository.findByID(task.id, false, true, true, true,
+                        true)
+            }catch (e : TaskNotFoundException){
                 // task might be delete from an other user
                 if (worklistHandler.current.isPatientSelected) {
                     onSelectPatient(worklistHandler.selectedPatient)

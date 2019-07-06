@@ -2,6 +2,7 @@ package com.patho.main.util.search.settings
 
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.patient.Patient
+import com.patho.main.model.patient.Task
 import com.patho.main.service.impl.SpringContextBridge
 import java.time.*
 import kotlin.collections.HashMap
@@ -153,5 +154,9 @@ open class SimpleListSearch : SearchSettings {
         }
 
         return result
+    }
+
+    override fun getTasks(): List<Task> {
+        return listOf()
     }
 }

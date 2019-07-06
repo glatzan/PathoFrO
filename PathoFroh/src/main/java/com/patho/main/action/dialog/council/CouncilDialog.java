@@ -25,6 +25,7 @@ import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
+import com.patho.main.util.exceptions.TaskNotFoundException;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.pdf.PDFThumbnailStreamContainerImpl;
 import lombok.AccessLevel;
@@ -213,7 +214,9 @@ public class CouncilDialog extends AbstractDialog {
     public void update(boolean reloadTask) {
 
         if (reloadTask) {
-            setTask(taskRepository.findOptionalByIdAndInitialize(task.getId(), true, true, true, true, true).get());
+
+            setTask(taskRepository.findByID(task, true, true, true, true, true));
+
 
             if (getCouncilList() != null && getCouncilList().size() > 0) {
 

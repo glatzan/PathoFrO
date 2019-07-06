@@ -25,6 +25,7 @@ import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.util.dialog.event.PDFSelectEvent;
 import com.patho.main.util.dialog.event.PatientReloadEvent;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
+import com.patho.main.util.exceptions.TaskNotFoundException;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TaskUtil;
 import com.patho.main.util.pdf.PDFCreator;
@@ -209,7 +210,7 @@ public class CreateTaskDialog extends AbstractDialog {
 
                     Block block = HistoUtil.getLastElement(sample.getBlocks());
 
-                    slideService.createSlidesXTimes(sampleTempData.getStainings(), block,"","", false, true, false, false);
+                    slideService.createSlidesXTimes(sampleTempData.getStainings(), block, "", "", false, true, false, false);
 
                 }
 
@@ -295,9 +296,13 @@ public class CreateTaskDialog extends AbstractDialog {
         } else if (!value.toString().matches("[0-9]{6}")) {
             throw new ValidatorException(
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Auftragsnummer darf nur Zahlen enthalten"));
-        } else if (taskRepository.findOptionalByTaskId(value.toString()).isPresent()) {
-            throw new ValidatorException(
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Auftragsnummer bereits vorhanden"));
+        } else {
+            try {
+                taskRepository.findByTaskID(value.toString(), false, false, false, false, false);
+                throw new ValidatorException(
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Auftragsnummer bereits vorhanden"));
+            } catch (TaskNotFoundException e) {
+            }
         }
     }
 

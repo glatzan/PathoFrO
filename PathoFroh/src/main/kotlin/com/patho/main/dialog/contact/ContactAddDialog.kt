@@ -121,11 +121,7 @@ open class ContactAddDialog @Autowired constructor(
      */
     override fun update(reload: Boolean) {
         if (reload) {
-            var optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, false, false, false, true, true)
-            if (!optionalTask.isPresent)
-                throw TaskNotFoundException()
-
-            task = optionalTask.get()
+            task = taskRepository.findByID(task.id, false, false, false, true, true)
         }
 
         if (showRoles.isNotEmpty())
@@ -181,6 +177,8 @@ open class ContactAddDialog @Autowired constructor(
     open class ContactPhysicianSelector(physician: Physician, id: Long, task: Task) : PhysicianSelector(physician, id) {
         val reportIntentOfTask = task.contacts.firstOrNull { it.person == physician.person }
         val contactOfTask = reportIntentOfTask != null
-        val removeAble: Boolean = (reportIntentOfTask?.deleteable ?: true) || (reportIntentOfTask?.let {!SpringContextBridge.services().reportIntentService.isHistoryPresent(it)} ?: true)
+        val removeAble: Boolean = (reportIntentOfTask?.deleteable
+                ?: true) || (reportIntentOfTask?.let { !SpringContextBridge.services().reportIntentService.isHistoryPresent(it) }
+                ?: true)
     }
 }

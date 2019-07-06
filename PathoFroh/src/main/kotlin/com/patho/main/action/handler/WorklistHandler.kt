@@ -5,6 +5,7 @@ import com.patho.main.model.patient.Task
 import com.patho.main.repository.PatientRepository
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.UserService
+import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.search.settings.EmptySearch
 import com.patho.main.util.search.settings.SearchSettings
 import com.patho.main.util.worklist.Worklist
@@ -146,8 +147,12 @@ open class WorklistHandler @Autowired @Lazy constructor(
     }
 
     open fun addTaskToWorklist(id: Long, changeView: Boolean): Task? {
-        val oTask = taskRepository.findOptionalByIdAndInitialize(id, false, true, true, true, true)
-        return if (oTask.isPresent()) addTaskToWorklist(oTask.get(), changeView) else null
+        return try {
+            val oTask = taskRepository.findByID(id, false, true, true, true, true)
+            addTaskToWorklist(oTask, changeView)
+        } catch (e: TaskNotFoundException) {
+            null
+        }
     }
 
     /**
@@ -188,7 +193,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Replaces the current task in the current worklist
      */
-    open fun replaceTaskInWorklist(reloadStaticData : Boolean = true) {
+    open fun replaceTaskInWorklist(reloadStaticData: Boolean = true) {
         replaceTaskInWorklist(current.selectedTask, true, reloadStaticData)
     }
 
@@ -202,12 +207,15 @@ open class WorklistHandler @Autowired @Lazy constructor(
     /**
      * Replaces the task in the current worklist, if the task is the selected task
      */
-    open fun replaceTaskInWorklist(task: Task, reload: Boolean, reloadStaticData : Boolean = true) {
+    open fun replaceTaskInWorklist(task: Task, reload: Boolean, reloadStaticData: Boolean = true) {
         var reloadedTask = task
 
         if (reload) {
-            val oTask = taskRepository.findOptionalByIdAndInitialize(task.id, false, true, true, true, true)
-            reloadedTask = if (oTask.isPresent) oTask.get() else return
+            try {
+                reloadedTask = taskRepository.findByID(task.id, false, true, true, true, true)
+            } catch (e: TaskNotFoundException) {
+                return
+            }
         }
 
         logger.debug("Replacing task due to external changes!")
@@ -215,9 +223,9 @@ open class WorklistHandler @Autowired @Lazy constructor(
         current.add(reloadedTask)
 
         if (current.isSelected(reloadedTask)) {
-            val t = listOfNotNull(CentralHandler.Load.MENU_MODEL, if(reloadStaticData) null else CentralHandler.Load.NO_GENERIC_DATA).toTypedArray()
+            val t = listOfNotNull(CentralHandler.Load.MENU_MODEL, if (reloadStaticData) null else CentralHandler.Load.NO_GENERIC_DATA).toTypedArray()
             // generating task data, taskstatus is generated previously
-            centralHandler.loadViews(*listOfNotNull(CentralHandler.Load.MENU_MODEL, if(reloadStaticData) null else CentralHandler.Load.NO_GENERIC_DATA).toTypedArray())
+            centralHandler.loadViews(*listOfNotNull(CentralHandler.Load.MENU_MODEL, if (reloadStaticData) null else CentralHandler.Load.NO_GENERIC_DATA).toTypedArray())
         }
 
     }

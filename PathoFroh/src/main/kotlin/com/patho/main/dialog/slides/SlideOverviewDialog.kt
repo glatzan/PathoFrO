@@ -67,13 +67,8 @@ open class SlideOverviewDialog @Autowired constructor(
     override fun update(reload: Boolean) {
 
         if (reload) {
-            val oTask = taskRepository.findOptionalByIdAndInitialize(task.id, true, true, true, true,
+            task = taskRepository.findByID(task.id, true, true, true, true,
                     true)
-
-            if (!oTask.isPresent)
-                throw TaskNotFoundException()
-
-            task = oTask.get()
         }
 
         task.generateTaskStatus()

@@ -568,9 +568,9 @@ public class Worklist {
     public void reloadSelectedPatientAndTask() {
         if (selectedTask != null) {
             logger.debug("Reloading current Task and Patient");
-            Optional<Task> oTask = taskRepository.findOptionalByIdAndInitialize(selectedTask.getId(), true, true, true,
+            Task oTask = taskRepository.findByID(selectedTask, true, true, true,
                     true, true);
-            add(oTask.get());
+            add(oTask);
         } else if (selectedPatient != null) {
             logger.debug("Reloading Patient");
             Optional<Patient> oPatient = patientRepository.findOptionalById(selectedPatient.getId(), true);

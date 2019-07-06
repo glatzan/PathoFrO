@@ -51,12 +51,9 @@ open class ArchiveTaskDialog @Autowired constructor(
         get() = forceArchivation || status.isArchiveAble
 
     override fun initBean(task: Task): Boolean {
-        val tmp = taskRepository.findOptionalByIdAndInitialize(task, true, true, true, true, true)
+        val tmp = taskRepository.findByID(task, true, true, true, true, true)
 
-        if (!tmp.isPresent)
-            throw TaskNotFoundException()
-
-        status = ArchiveTaskStatus(tmp.get())
+        status = ArchiveTaskStatus(tmp)
 
         selectedReportIntentStatus = null
 
@@ -67,7 +64,7 @@ open class ArchiveTaskDialog @Autowired constructor(
         removeFromWorklist = !(task.patient?.tasks?.any { it.favouriteLists.any { it.id == PredefinedFavouriteList.NotificationList.id } }
                 ?: true)
 
-        return super.initBean(tmp.get())
+        return super.initBean(tmp)
     }
 
     /**

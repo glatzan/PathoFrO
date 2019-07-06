@@ -3,7 +3,9 @@ package com.patho.main.util.search.settings
 import com.patho.main.common.Eye
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Patient
+import com.patho.main.model.patient.Task
 import com.patho.main.model.person.Person
+import com.patho.main.service.impl.SpringContextBridge
 import net.sf.cglib.core.Local
 import java.time.LocalDate
 
@@ -55,6 +57,12 @@ class ExtendedSearch : SearchSettings() {
     var to: LocalDate = LocalDate.now()
 
     override fun getPatients(): List<Patient> {
+        return listOf()
+    }
+
+    override fun getTasks(): List<Task> {
+        val taskRepository = SpringContextBridge.services().taskRepository
+
         return listOf()
     }
 }

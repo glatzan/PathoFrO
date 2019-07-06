@@ -87,12 +87,7 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
      * Initializes the dialog
      */
     open fun initBean(task: Task, diagnosisRevision: DiagnosisRevision?): Boolean {
-        val optionalTask = taskRepository.findOptionalByIdAndInitialize(task.id, true, true, false, true, true)
-
-        if (!optionalTask.isPresent)
-            throw TaskNotFoundException()
-
-        val oTask = optionalTask.get()
+        val oTask = taskRepository.findByID(task.id, true, true, false, true, true)
 
         diagnosisRevisions = ReportIntentStatusByDiagnosis(oTask)
 

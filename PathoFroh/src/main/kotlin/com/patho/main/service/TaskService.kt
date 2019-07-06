@@ -5,6 +5,7 @@ import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.DiagnosisRevisionRepository
 import com.patho.main.repository.TaskRepository
+import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.helper.TimeUtil
 import com.patho.main.util.task.TaskTreeTools
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
+import java.time.LocalDate
 import java.util.*
 
 @Service()
@@ -65,7 +67,7 @@ open class TaskService @Autowired constructor(
             return TaskIDValidity.SHORT
         } else if (!taskID.matches("[0-9]{6}".toRegex())) {
             return TaskIDValidity.ONLY_NUMBERS
-        } else if (taskRepository.findOptionalByTaskId(taskID).isPresent) {
+        } else if (!isTaskIDAvailable(taskID)) {
             return TaskIDValidity.ALREADY_PRESENT
         }
 
@@ -77,7 +79,12 @@ open class TaskService @Autowired constructor(
      */
     @Transactional
     open fun isTaskIDAvailable(taskID: String): Boolean {
-        return !taskRepository.findOptionalByTaskId(taskID).isPresent();
+        return try {
+            taskRepository.findByTaskID(taskID)
+            false
+        } catch (e: TaskNotFoundException) {
+            true
+        }
     }
 
     /**
@@ -87,19 +94,19 @@ open class TaskService @Autowired constructor(
     @Transactional
     open fun getNextTaskID(): String {
         // generating new task id
-        val task = taskRepository.findOptinalByLastID(Calendar.getInstance(), false, false, false, false,
-                false)
-
-        // task is within the current year
-        if (task.isPresent) {
-            // getting counter
-            val count = task.get().taskID.substring(2, 6)
+        return try {
+            // task is within the current year
+            val task = taskRepository.findByLastID(LocalDate.now(), false, false, false, false,
+                    false)
+            val count = task.taskID.substring(2, 6)
             // increment counter
             val counterAsInt = Integer.valueOf(count) + 1
-            return Integer.toString(TimeUtil.getCurrentYear() - 2000) + HistoUtil.fitString(counterAsInt, 4, '0')
-        } else {
+            Integer.toString(TimeUtil.getCurrentYear() - 2000) + HistoUtil.fitString(counterAsInt, 4, '0')
+
+        }catch (e : TaskNotFoundException){
             // first task ever, or first task of year , year + 0001
-            return Integer.toString(TimeUtil.getCurrentYear() - 2000) + HistoUtil.fitString(1, 4, '0')
+            Integer.toString(TimeUtil.getCurrentYear() - 2000) + HistoUtil.fitString(1, 4, '0')
+
         }
     }
 
@@ -137,7 +144,7 @@ open class TaskService @Autowired constructor(
         return taskRepository.save(tTask, resourceBundle.get("log.task.archived", tTask, commentary))
     }
 
-    open fun dearchvieTask(task: Task, commentary: String = "") : Task {
+    open fun dearchvieTask(task: Task, commentary: String = ""): Task {
         // finalizing task
         task.finalizationDate = null
         task.finalized = false
