@@ -1,15 +1,14 @@
 package com.patho.main.adaptors.clinc;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Setter

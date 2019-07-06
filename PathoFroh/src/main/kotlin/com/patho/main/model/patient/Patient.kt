@@ -3,9 +3,8 @@ package com.patho.main.model.patient
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.audit.AuditAble
-import com.patho.main.model.person.Person
 import com.patho.main.model.interfaces.DataList
-import com.patho.main.model.interfaces.ID
+import com.patho.main.model.person.Person
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
 import org.hibernate.annotations.*

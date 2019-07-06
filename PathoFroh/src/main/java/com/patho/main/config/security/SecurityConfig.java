@@ -16,6 +16,15 @@
 
 package com.patho.main.config.security;
 
+import com.patho.main.config.security.filters.JWTAuthorizationFilter;
+import com.patho.main.config.security.filters.JWTPasswortAuthorizationFilter;
+import com.patho.main.config.security.filters.UserAuthorizationFilter;
+import com.patho.main.config.security.handler.JWTAuthorizationFailureHandler;
+import com.patho.main.config.security.handler.UserAuthenticationFailureHandler;
+import com.patho.main.config.security.handler.UserAuthenticationSuccessHandler;
+import com.patho.main.config.security.provider.JWTAuthenticationProvider;
+import com.patho.main.config.security.provider.JWTUserAuthenticationProvider;
+import com.patho.main.config.security.provider.UserAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,16 +36,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import com.patho.main.config.security.filters.JWTAuthorizationFilter;
-import com.patho.main.config.security.filters.JWTPasswortAuthorizationFilter;
-import com.patho.main.config.security.filters.UserAuthorizationFilter;
-import com.patho.main.config.security.handler.JWTAuthorizationFailureHandler;
-import com.patho.main.config.security.handler.UserAuthenticationFailureHandler;
-import com.patho.main.config.security.handler.UserAuthenticationSuccessHandler;
-import com.patho.main.config.security.provider.JWTAuthenticationProvider;
-import com.patho.main.config.security.provider.JWTUserAuthenticationProvider;
-import com.patho.main.config.security.provider.UserAuthenticationProvider;
 
 /**
  * Spring Security Configuration.

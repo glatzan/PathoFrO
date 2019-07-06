@@ -1,9 +1,9 @@
 package com.patho.main.ui.container;
 
-import java.util.List;
-
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+
+import java.util.List;
 
 public class GuiContainerPatient {
 

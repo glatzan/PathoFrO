@@ -1,5 +1,9 @@
 package com.patho.main.adaptors.patient;
 
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.person.Person.Gender;
+import lombok.Setter;
+
 import java.io.StringWriter;
 import java.time.format.DateTimeFormatter;
 
@@ -8,12 +12,6 @@ import java.time.format.DateTimeFormatter;
 //import javax.xml.bind.Marshaller;
 //import javax.xml.bind.annotation.XmlElement;
 //import javax.xml.bind.annotation.XmlRootElement;
-
-import com.patho.main.model.person.Person.Gender;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.util.helper.TimeUtil;
-
-import lombok.Setter;
 
 //@XmlRootElement(namespace = "PatientData")
 @Setter

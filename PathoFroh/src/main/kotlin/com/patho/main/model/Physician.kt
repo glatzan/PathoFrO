@@ -1,7 +1,6 @@
 package com.patho.main.model
 
 import com.patho.main.common.ContactRole
-import com.patho.main.model.interfaces.ID
 import com.patho.main.model.person.Person
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.SelectBeforeUpdate

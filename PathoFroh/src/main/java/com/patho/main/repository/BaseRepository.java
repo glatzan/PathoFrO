@@ -1,14 +1,13 @@
 package com.patho.main.repository;
 
-import java.io.Serializable;
-import java.util.List;
-
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.user.HistoUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.user.HistoUser;
+import java.io.Serializable;
+import java.util.List;
 
 @NoRepositoryBean
 public interface BaseRepository<T, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {

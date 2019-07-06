@@ -2,7 +2,6 @@ package com.patho.main.action.dialog;
 
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
-
 import lombok.Getter;
 import lombok.Setter;
 

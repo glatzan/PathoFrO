@@ -3,7 +3,6 @@ package com.patho.main.service;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Sample;
-import com.patho.main.model.patient.Slide;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.BlockRepository;
 import com.patho.main.repository.TaskRepository;
@@ -11,7 +10,6 @@ import com.patho.main.util.task.TaskTreeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 @Service
 @Transactional
 public class BlockService extends AbstractService {

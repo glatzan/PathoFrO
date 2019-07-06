@@ -2,7 +2,6 @@ package com.patho.main.model.patient
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.MaterialPreset
-import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.interfaces.Parent
 import org.hibernate.annotations.DynamicUpdate
@@ -11,7 +10,6 @@ import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
 import org.hibernate.envers.NotAudited
-import java.util.*
 import javax.persistence.*
 
 /**

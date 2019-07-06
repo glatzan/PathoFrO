@@ -1,26 +1,24 @@
 package com.patho.main.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashSet;
-
+import com.patho.main.common.DateFormat;
+import com.patho.main.common.PredefinedFavouriteList;
+import com.patho.main.model.PDFContainer;
+import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.miscellaneous.Council;
+import com.patho.main.repository.CouncilRepository;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.common.DateFormat;
-import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.model.PDFContainer;
-import com.patho.main.model.patient.Task;
-import com.patho.main.repository.CouncilRepository;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.HashSet;
 
 @Service
 @Transactional

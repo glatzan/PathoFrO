@@ -1,17 +1,5 @@
 package com.patho.main.action.dialog.diagnosis;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.patho.main.service.DiagnosisService;
-import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog.DiagnosisRevisionContainer;
 import com.patho.main.action.handler.MessageHandler;
@@ -20,12 +8,21 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
-
+import com.patho.main.service.DiagnosisService;
+import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 /**
  * Dialog for adding a reportIntent revision on creating a restaining
  * 

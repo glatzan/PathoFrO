@@ -1,8 +1,8 @@
 package com.patho.main.repository.service;
 
-import java.util.List;
-
 import com.patho.main.model.DiagnosisPreset;
+
+import java.util.List;
 
 public interface DiagnosisPresetRepositoryCustom {
 	public List<DiagnosisPreset> findAllIgnoreArchivedByOrderByIndexInListAsc(boolean ignoreArchived);

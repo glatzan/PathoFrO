@@ -1,21 +1,19 @@
 package com.patho.main.action.dialog.settings.material;
 
-import com.patho.main.util.dialog.event.ReloadEvent;
-import com.patho.main.util.dialog.event.SlideSelectEvent;
-import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.service.MaterialPresetService;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
-
+import com.patho.main.util.dialog.event.ReloadEvent;
+import com.patho.main.util.dialog.event.SlideSelectEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 @Configurable
 @Getter

@@ -1,9 +1,8 @@
 package com.patho.main.model.util.json;
 
-import org.hibernate.annotations.TypeDef;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.TypeDef;
 
 // http://blog.rohrpostix.net/postgresql-json-jsonb-type-to-be-used-with-hibernate/
 @TypeDef(name = "JsonTest", typeClass = JsonTest.class)

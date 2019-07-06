@@ -1,13 +1,12 @@
 package com.patho.main.ui.selectors;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.patho.main.model.patient.Task;
-
 import com.patho.main.model.patient.notification.ReportIntent;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter

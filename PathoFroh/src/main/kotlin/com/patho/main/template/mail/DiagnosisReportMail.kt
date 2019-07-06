@@ -1,13 +1,6 @@
 package com.patho.main.template.mail
 
-import com.patho.main.model.patient.Patient
-import com.patho.main.model.patient.Task
-import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.template.MailTemplate
-import org.apache.velocity.VelocityContext
-import org.apache.velocity.app.Velocity
-import java.io.StringWriter
-import javax.persistence.Transient
 
 class DiagnosisReportMail : MailTemplate() {
 

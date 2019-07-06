@@ -1,17 +1,16 @@
 package com.patho.main.service;
 
-import java.util.ArrayList;
-
+import com.patho.main.common.View;
+import com.patho.main.model.user.HistoGroup;
+import com.patho.main.model.user.HistoUser;
+import com.patho.main.repository.GroupRepository;
 import com.patho.main.util.search.settings.SimpleListSearchOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.common.View;
-import com.patho.main.model.user.HistoGroup;
-import com.patho.main.model.user.HistoUser;
-import com.patho.main.repository.GroupRepository;
+import java.util.ArrayList;
 
 @Service
 @Transactional

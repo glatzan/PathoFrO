@@ -1,5 +1,20 @@
 package com.patho.main.util.printer;
 
+import com.google.gson.annotations.Expose;
+import com.patho.main.action.handler.MessageHandler;
+import com.patho.main.config.PathoConfig;
+import com.patho.main.repository.PrintDocumentRepository;
+import com.patho.main.template.PrintDocument;
+import com.patho.main.util.exception.CustomUserNotificationExcepetion;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,24 +24,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-
-import com.patho.main.config.PathoConfig;
-import com.patho.main.util.print.PrintPDFBearer;
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
-import com.google.gson.annotations.Expose;
-import com.patho.main.action.handler.MessageHandler;
-import com.patho.main.repository.PrintDocumentRepository;
-import com.patho.main.template.PrintDocument;
-import com.patho.main.util.exception.CustomUserNotificationExcepetion;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Zebra AbstractPrinter with ftp printing function. Buffer can be filled

@@ -1,9 +1,9 @@
 package com.patho.main.repository;
 
-import java.util.Optional;
-
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.repository.service.GroupRepositoryCustom;
+
+import java.util.Optional;
 
 public interface GroupRepository extends BaseRepository<HistoGroup, Long>, GroupRepositoryCustom {
 

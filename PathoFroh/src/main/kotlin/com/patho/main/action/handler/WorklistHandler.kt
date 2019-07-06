@@ -9,7 +9,6 @@ import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.search.settings.EmptySearch
 import com.patho.main.util.search.settings.SearchSettings
 import com.patho.main.util.worklist.Worklist
-import com.patho.main.util.worklist.search.AbstractWorklistSearch
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.context.annotation.Scope

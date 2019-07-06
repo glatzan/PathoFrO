@@ -26,7 +26,6 @@ import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.dialog.event.NotificationPerformedEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
-import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.print.PrintPDFBearer
 import com.patho.main.util.report.MailNotificationExecuteData
 import com.patho.main.util.report.NotificationExecuteData

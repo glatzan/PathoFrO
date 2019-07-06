@@ -1,11 +1,9 @@
 package com.patho.main.config.security.util;
 
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-
 import com.patho.main.model.user.HistoUser;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 /**
  * Class for holding jwt token

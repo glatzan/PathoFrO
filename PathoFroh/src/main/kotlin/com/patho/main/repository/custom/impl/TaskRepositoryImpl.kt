@@ -16,12 +16,8 @@ import com.patho.main.util.search.settings.ExtendedSearch
 import org.hibernate.Hibernate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.criteria.*
-import javax.persistence.criteria.Root
-import javax.persistence.criteria.Subquery
-import javax.persistence.criteria.CriteriaBuilder
-import com.patho.main.util.helper.TimeUtil.getYearAsInt
 import java.time.LocalDate
+import javax.persistence.criteria.*
 
 
 @Service

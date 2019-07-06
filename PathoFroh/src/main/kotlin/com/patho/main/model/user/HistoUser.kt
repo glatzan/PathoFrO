@@ -2,7 +2,6 @@ package com.patho.main.model.user
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.Physician
-import com.patho.main.model.interfaces.ID
 import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
 import com.patho.main.util.printer.ClinicPrinter

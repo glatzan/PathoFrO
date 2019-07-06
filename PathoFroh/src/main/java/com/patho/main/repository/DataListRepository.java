@@ -1,8 +1,8 @@
 package com.patho.main.repository;
 
-import java.util.List;
-
 import com.patho.main.model.interfaces.DataList;
+
+import java.util.List;
 
 public interface DataListRepository{
 	public void initialize(DataList datalist);

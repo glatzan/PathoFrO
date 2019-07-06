@@ -1,16 +1,15 @@
 package com.patho.main.model.util.log;
 
 
-import java.util.Optional;
-
+import com.patho.main.model.log.Log;
+import com.patho.main.model.log.LogInfo;
+import com.patho.main.util.helper.SecurityContextHolderUtil;
 import org.hibernate.envers.RevisionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.model.log.Log;
-import com.patho.main.model.log.LogInfo;
-import com.patho.main.util.helper.SecurityContextHolderUtil;
+import java.util.Optional;
 
 /**
  * Listener is called every Time an object is saved to database. Creates a log

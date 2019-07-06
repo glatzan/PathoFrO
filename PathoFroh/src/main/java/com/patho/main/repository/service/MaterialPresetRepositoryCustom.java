@@ -1,8 +1,8 @@
 package com.patho.main.repository.service;
 
-import java.util.List;
-
 import com.patho.main.model.MaterialPreset;
+
+import java.util.List;
 
 public interface MaterialPresetRepositoryCustom {
 	public List<MaterialPreset> findAll(boolean loadStainings);

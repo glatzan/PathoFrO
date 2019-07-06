@@ -1,30 +1,28 @@
 package com.patho.main.action.dialog.settings.favourites;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.common.Dialog;
 import com.patho.main.model.favourites.*;
+import com.patho.main.repository.FavouriteListRepository;
+import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.UserService;
+import com.patho.main.ui.FavouriteListContainer;
+import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.GroupSelectEvent;
 import com.patho.main.util.dialog.event.HistoUserSelectEvent;
 import com.patho.main.util.dialog.event.ReloadEvent;
+import com.patho.main.util.helper.HistoUtil;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.common.Dialog;
-import com.patho.main.repository.FavouriteListRepository;
-import com.patho.main.service.FavouriteListService;
-import com.patho.main.ui.FavouriteListContainer;
-import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.helper.HistoUtil;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Configurable
 @Getter

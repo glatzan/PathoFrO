@@ -1,33 +1,24 @@
 package com.patho.main.model.util.json;
 
-import com.fasterxml.jackson.core.JsonParser;  
-import com.fasterxml.jackson.databind.DeserializationContext;  
-import com.fasterxml.jackson.databind.JsonDeserializer;  
-import com.fasterxml.jackson.databind.Module;  
-import com.fasterxml.jackson.databind.ObjectMapper;  
-import com.fasterxml.jackson.databind.SerializationFeature;  
-import com.fasterxml.jackson.databind.module.SimpleModule;  
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;  
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;  
-import org.hibernate.HibernateException;  
-import org.hibernate.engine.spi.SharedSessionContractImplementor;  
-import org.hibernate.internal.SessionImpl;  
-import org.hibernate.usertype.UserType;  
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.internal.SessionImpl;
+import org.hibernate.usertype.UserType;
 
-import java.io.ByteArrayInputStream;  
-import java.io.ByteArrayOutputStream;  
-import java.io.IOException;  
-import java.io.ObjectInputStream;  
-import java.io.ObjectOutputStream;  
-import java.io.Serializable;  
-import java.io.StringWriter;  
-import java.lang.reflect.ParameterizedType;  
-import java.nio.charset.StandardCharsets;  
-import java.sql.PreparedStatement;  
-import java.sql.ResultSet;  
-import java.sql.SQLException;  
-import java.sql.Types;  
-import java.time.OffsetDateTime;  
+import java.io.*;
+import java.lang.reflect.ParameterizedType;
+import java.nio.charset.StandardCharsets;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 public abstract class JsonType<T> implements UserType, Serializable {

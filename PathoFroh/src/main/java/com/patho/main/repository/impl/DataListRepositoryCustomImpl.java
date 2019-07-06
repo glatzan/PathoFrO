@@ -1,13 +1,12 @@
 package com.patho.main.repository.impl;
 
-import java.util.List;
-
-import org.hibernate.Hibernate;
-import org.springframework.stereotype.Service;
-
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.repository.DataListRepository;
 import com.patho.main.repository.service.impl.AbstractRepositoryCustom;
+import org.hibernate.Hibernate;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DataListRepositoryCustomImpl extends AbstractRepositoryCustom implements DataListRepository {

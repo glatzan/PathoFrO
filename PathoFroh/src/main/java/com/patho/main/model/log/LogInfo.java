@@ -1,14 +1,13 @@
 package com.patho.main.model.log;
 
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.user.HistoUser;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
-
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.user.HistoUser;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Object containing additional data for login. A string which describes the

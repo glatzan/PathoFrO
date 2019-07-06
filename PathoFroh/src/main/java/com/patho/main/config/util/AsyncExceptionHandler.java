@@ -1,8 +1,8 @@
 package com.patho.main.config.util;
 
-import java.lang.reflect.Method;
-
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+
+import java.lang.reflect.Method;
 
 public class AsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
 

@@ -7,7 +7,10 @@ import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.Signature;
-import com.patho.main.model.patient.*;
+import com.patho.main.model.patient.Diagnosis;
+import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.Sample;
+import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
@@ -25,7 +28,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Getter

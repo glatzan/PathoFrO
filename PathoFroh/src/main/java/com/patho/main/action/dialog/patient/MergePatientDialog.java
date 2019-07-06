@@ -1,18 +1,5 @@
 package com.patho.main.action.dialog.patient;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.patho.main.util.dialog.event.ConfirmEvent;
-import com.patho.main.util.dialog.event.PatientMergeEvent;
-import com.patho.main.util.dialog.event.PatientReloadEvent;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DualListModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
@@ -21,12 +8,21 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PatientService;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.event.HistoEvent;
-
+import com.patho.main.util.dialog.event.ConfirmEvent;
+import com.patho.main.util.dialog.event.PatientMergeEvent;
+import com.patho.main.util.dialog.event.PatientReloadEvent;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DualListModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Configurable
 @Getter

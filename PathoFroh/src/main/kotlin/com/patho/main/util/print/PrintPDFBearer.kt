@@ -1,6 +1,5 @@
 package com.patho.main.util.print
 
-import com.patho.main.action.handler.CentralHandler
 import com.patho.main.model.PDFContainer
 import com.patho.main.template.PrintDocument
 

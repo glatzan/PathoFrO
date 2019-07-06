@@ -3,7 +3,6 @@ package com.patho.main.model
 import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.model.util.audit.AuditListener
-import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.annotations.Type

@@ -1,7 +1,6 @@
 package com.patho.main.service
 
 import com.patho.main.common.PredefinedFavouriteList
-import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.util.exceptions.DiagnosisRevisionsNotCompletedException

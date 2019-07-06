@@ -1,9 +1,9 @@
 package com.patho.main.repository;
 
+import com.patho.main.model.Physician;
+
 import java.util.List;
 import java.util.Optional;
-
-import com.patho.main.model.Physician;
 
 public interface LDAPRepository {
 

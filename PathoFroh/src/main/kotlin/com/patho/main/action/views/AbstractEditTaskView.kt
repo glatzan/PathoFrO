@@ -1,6 +1,5 @@
 package com.patho.main.action.views
 
-import com.patho.main.action.handler.CentralHandler
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.model.ListItem

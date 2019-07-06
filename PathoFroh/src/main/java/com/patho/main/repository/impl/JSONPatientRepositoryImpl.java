@@ -1,17 +1,5 @@
 package com.patho.main.repository.impl;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.hibernate.boot.model.naming.IllegalIdentifierException;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
@@ -20,8 +8,18 @@ import com.patho.main.model.json.JSONPatientMapper;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.JSONPatientRepository;
 import com.patho.main.util.helper.TimeUtil;
-
 import lombok.Setter;
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 //{
 //"vorname":"Andreas",

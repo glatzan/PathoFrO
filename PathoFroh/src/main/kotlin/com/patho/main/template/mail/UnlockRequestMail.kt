@@ -1,11 +1,6 @@
 package com.patho.main.template.mail
 
-import com.patho.main.model.user.HistoUser
 import com.patho.main.template.MailTemplate
-import org.apache.velocity.VelocityContext
-import org.apache.velocity.app.Velocity
-import java.io.StringWriter
-import javax.persistence.Transient
 
 class UnlockRequestMail : MailTemplate() {
 

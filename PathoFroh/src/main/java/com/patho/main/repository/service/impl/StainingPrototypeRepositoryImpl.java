@@ -1,21 +1,19 @@
 package com.patho.main.repository.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.patho.main.model.StainingPrototype;
+import com.patho.main.model.StainingPrototype.StainingType;
+import com.patho.main.model.StainingPrototype_;
+import com.patho.main.repository.service.StainingPrototypeRepositoryCustom;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototype.StainingType;
-import com.patho.main.model.StainingPrototype_;
-import com.patho.main.repository.service.StainingPrototypeRepositoryCustom;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional

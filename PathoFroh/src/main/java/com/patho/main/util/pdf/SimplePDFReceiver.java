@@ -1,7 +1,6 @@
 package com.patho.main.util.pdf;
 
 import com.patho.main.model.PDFContainer;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Synchronized;

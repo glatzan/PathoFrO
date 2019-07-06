@@ -1,9 +1,9 @@
 package com.patho.main.ui.interfaces;
 
+import com.patho.main.model.ListItem;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.patho.main.model.ListItem;
 
 public interface ListItemsAutoCompete {
 

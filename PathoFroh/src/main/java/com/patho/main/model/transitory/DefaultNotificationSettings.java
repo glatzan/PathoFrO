@@ -1,15 +1,13 @@
 package com.patho.main.model.transitory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.patho.main.common.ContactRole;
 import com.patho.main.model.patient.notification.NotificationTyp;
-import com.patho.main.model.patient.notification.ReportIntentNotification;
 import com.patho.main.util.helper.StreamUtils;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter

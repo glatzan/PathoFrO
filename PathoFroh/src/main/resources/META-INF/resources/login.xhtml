@@ -64,10 +64,8 @@
 		/* Blocking Gui for loading data */
 		function blockForLogin(block) {
 			if (block) {
-				PF('submitBTn').disable();
 				PF('blockLoginTable').block();
 			} else {
-				PF('submitBTn').enable();
 				PF('blockLoginTable').unblock();
 			}
 		}

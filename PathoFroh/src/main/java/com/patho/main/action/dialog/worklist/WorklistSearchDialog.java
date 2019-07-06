@@ -1,39 +1,29 @@
 package com.patho.main.action.dialog.worklist;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.patho.main.action.dialog.AbstractTabDialog;
+import com.patho.main.common.ContactRole;
+import com.patho.main.common.Dialog;
+import com.patho.main.model.*;
 import com.patho.main.model.favourites.FavouriteList;
+import com.patho.main.repository.*;
 import com.patho.main.service.UserService;
+import com.patho.main.ui.FavouriteListContainer;
+import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.SlideSelectEvent;
 import com.patho.main.util.dialog.event.WorklistSelectEvent;
+import com.patho.main.util.worklist.Worklist;
+import com.patho.main.util.worklist.search.WorklistFavouriteSearch;
+import com.patho.main.util.worklist.search.WorklistSearchExtended;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.dialog.AbstractTabDialog;
-import com.patho.main.common.ContactRole;
-import com.patho.main.common.Dialog;
-import com.patho.main.model.DiagnosisPreset;
-import com.patho.main.model.ListItem;
-import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.Physician;
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.repository.DiagnosisPresetRepository;
-import com.patho.main.repository.FavouriteListRepository;
-import com.patho.main.repository.ListItemRepository;
-import com.patho.main.repository.MaterialPresetRepository;
-import com.patho.main.repository.PhysicianRepository;
-import com.patho.main.ui.FavouriteListContainer;
-import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.worklist.Worklist;
-import com.patho.main.util.worklist.search.WorklistFavouriteSearch;
-import com.patho.main.util.worklist.search.WorklistSearchExtended;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configurable
 @Getter

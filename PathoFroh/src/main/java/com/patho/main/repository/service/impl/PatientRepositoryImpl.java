@@ -2,7 +2,9 @@ package com.patho.main.repository.service.impl;
 
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Eye;
-import com.patho.main.model.*;
+import com.patho.main.model.Physician;
+import com.patho.main.model.Signature;
+import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.favourites.FavouriteList_;
 import com.patho.main.model.patient.*;

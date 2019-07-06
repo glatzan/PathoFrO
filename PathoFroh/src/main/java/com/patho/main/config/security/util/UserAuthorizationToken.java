@@ -1,9 +1,8 @@
 package com.patho.main.config.security.util;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 /**
  * Class for storing user login password and name

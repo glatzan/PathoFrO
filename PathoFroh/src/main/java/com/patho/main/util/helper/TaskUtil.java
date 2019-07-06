@@ -1,17 +1,16 @@
 package com.patho.main.util.helper;
 
-import java.util.List;
-import java.util.Set;
-
+import com.patho.main.common.DiagnosisRevisionType;
 import com.patho.main.config.util.ResourceBundle;
+import com.patho.main.model.patient.DiagnosisRevision;
+import com.patho.main.model.patient.Slide;
+import com.patho.main.model.patient.Task;
 import com.patho.main.service.impl.SpringContextBridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.patho.main.common.DiagnosisRevisionType;
-import com.patho.main.model.patient.DiagnosisRevision;
-import com.patho.main.model.patient.Slide;
-import com.patho.main.model.patient.Task;
+import java.util.List;
+import java.util.Set;
 
 public class TaskUtil {
 

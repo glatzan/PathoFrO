@@ -1,12 +1,12 @@
 package com.patho.main.repository;
 
+import com.patho.main.template.MailTemplate;
+import com.patho.main.template.MailType;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
-
-import com.patho.main.template.MailTemplate;
-import com.patho.main.template.MailType;
 
 public interface MailRepository {
 

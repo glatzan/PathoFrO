@@ -1,11 +1,11 @@
 package com.patho.main.repository;
 
+import com.patho.main.config.excepion.ToManyEntriesException;
+import com.patho.main.model.patient.Patient;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import com.patho.main.config.excepion.ToManyEntriesException;
-import com.patho.main.model.patient.Patient;
 
 public interface JSONPatientRepository {
 	public Optional<Patient> findByPIZ(String piz);

@@ -11,7 +11,6 @@ import com.patho.main.util.dialog.event.PatientReloadEvent
 import com.patho.main.util.dialog.event.RemovePatientFromWorklistEvent
 import com.patho.main.util.status.reportIntent.ReportIntentBearer
 import com.patho.main.util.task.ArchiveTaskStatus
-import com.patho.main.util.exceptions.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component

@@ -1,12 +1,12 @@
 package com.patho.main.repository.service;
 
-import java.util.List;
-
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.SortOrder;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Task;
 import com.patho.main.ui.selectors.PhysicianSelector;
+
+import java.util.List;
 
 public interface PhysicianRepositoryCustom {
 

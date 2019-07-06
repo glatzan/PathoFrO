@@ -1,13 +1,12 @@
 package com.patho.main.config;
 
+import com.patho.main.config.util.AsyncExceptionHandler;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import com.patho.main.config.util.AsyncExceptionHandler;
 
 @Configuration
 @EnableAsync

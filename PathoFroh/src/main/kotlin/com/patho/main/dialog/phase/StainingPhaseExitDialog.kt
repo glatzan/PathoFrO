@@ -7,7 +7,6 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.SlideService
 import com.patho.main.util.dialog.event.StainingPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
-import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.ui.backend.CheckBoxStatus
 import org.springframework.beans.factory.annotation.Autowired

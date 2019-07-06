@@ -6,15 +6,10 @@ import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import lombok.Synchronized
-import org.primefaces.model.DefaultStreamedContent
-import org.primefaces.model.StreamedContent
 import org.slf4j.LoggerFactory
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.locks.ReentrantLock
-import javax.faces.context.FacesContext
-import javax.faces.event.PhaseId
 
 /**
  * Lazy implementation for the PDFStreamContainer

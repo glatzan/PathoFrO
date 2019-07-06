@@ -1,20 +1,13 @@
 package com.patho.main.model.log;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
+import com.patho.main.model.util.log.LogListener;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
 import org.hibernate.envers.RevisionTimestamp;
 
-import com.patho.main.model.util.log.LogListener;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
 
 @Entity
 @SequenceGenerator(name = "log_sequencegenerator", sequenceName = "log_sequence", initialValue=1, allocationSize = 50)

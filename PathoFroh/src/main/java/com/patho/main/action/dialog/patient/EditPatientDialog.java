@@ -1,17 +1,15 @@
 package com.patho.main.action.dialog.patient;
 
-import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.PatientRepository;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 @Configurable
 @Getter

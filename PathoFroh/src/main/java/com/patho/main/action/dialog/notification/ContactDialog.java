@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Transient;
 
 import java.util.List;
-
 @Configurable
 @Getter
 @Setter

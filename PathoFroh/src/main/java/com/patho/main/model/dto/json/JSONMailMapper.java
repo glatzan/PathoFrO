@@ -2,7 +2,6 @@ package com.patho.main.model.dto.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.patho.main.template.MailTemplate;
-
 import lombok.Getter;
 import lombok.Setter;
 

@@ -6,7 +6,6 @@ import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.model.person.Person
 import com.patho.main.service.impl.SpringContextBridge
-import net.sf.cglib.core.Local
 import java.time.LocalDate
 
 class ExtendedSearch : SearchSettings() {

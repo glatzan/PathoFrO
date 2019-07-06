@@ -1,9 +1,9 @@
 package com.patho.main.repository.service;
 
+import com.patho.main.model.person.Organization;
+
 import java.util.List;
 import java.util.Optional;
-
-import com.patho.main.model.person.Organization;
 
 public interface OrganizationRepositoryCustom {
 

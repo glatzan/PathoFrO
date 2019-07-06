@@ -1,7 +1,11 @@
 package com.patho.main.config.security.provider;
 
-import java.util.Optional;
-
+import com.patho.main.config.security.util.JWTAuthorizationToken;
+import com.patho.main.config.security.util.JWTPasswortApplicationToken;
+import com.patho.main.model.user.HistoUser;
+import com.patho.main.service.AuthenticationService;
+import com.patho.main.util.ldap.LDAPAuthenticationException;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -10,13 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-import com.patho.main.config.security.util.JWTAuthorizationToken;
-import com.patho.main.config.security.util.JWTPasswortApplicationToken;
-import com.patho.main.model.user.HistoUser;
-import com.patho.main.service.AuthenticationService;
-import com.patho.main.util.ldap.LDAPAuthenticationException;
-
-import lombok.Setter;
+import java.util.Optional;
 
 @Component
 @ConfigurationProperties(prefix = "patho.jwt")

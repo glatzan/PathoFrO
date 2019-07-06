@@ -1,15 +1,13 @@
 package com.patho.main.model.favourites;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-
+import com.patho.main.model.user.HistoUser;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
-import com.patho.main.model.user.HistoUser;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 @SelectBeforeUpdate(true)

@@ -1,12 +1,11 @@
 package com.patho.main.repository;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Repository;
-
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.service.UserRepositroyCustom;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends BaseRepository<HistoUser, Long>, UserRepositroyCustom {

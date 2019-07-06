@@ -5,7 +5,6 @@ import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.service.impl.SpringContextBridge
 import java.time.*
-import kotlin.collections.HashMap
 
 open class SimpleListSearch : SearchSettings {
 

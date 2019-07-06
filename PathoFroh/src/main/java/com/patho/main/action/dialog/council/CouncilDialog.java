@@ -25,7 +25,6 @@ import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
-import com.patho.main.util.exceptions.TaskNotFoundException;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.pdf.PDFThumbnailStreamContainerImpl;
 import lombok.AccessLevel;

@@ -1,20 +1,17 @@
 package com.patho.main.model.dto.ldap;
 
-import java.util.HashSet;
-
-import javax.naming.Name;
-
+import com.patho.main.model.Physician;
+import com.patho.main.model.person.Contact;
+import com.patho.main.model.person.Organization;
+import com.patho.main.model.person.Person;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
-import com.patho.main.model.person.Contact;
-import com.patho.main.model.person.Organization;
-import com.patho.main.model.person.Person;
-import com.patho.main.model.Physician;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.naming.Name;
+import java.util.HashSet;
 
 @Entry(objectClasses = { "person", "fw1Person", "top", "uklfrPerson" }, base = "ou=people")
 @Getter

@@ -1,11 +1,5 @@
 package com.patho.main.action.dialog.task;
 
-import java.util.List;
-
-import com.patho.main.util.dialog.event.TaskReloadEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.ListItem;
@@ -13,10 +7,14 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.service.TaskService;
 import com.patho.main.ui.interfaces.ListItemsAutoCompete;
-
+import com.patho.main.util.dialog.event.TaskReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
+import java.util.List;
 
 @Configurable
 @Getter

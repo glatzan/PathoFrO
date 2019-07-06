@@ -10,7 +10,6 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.DiagnosisService
 import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.DiagnosisRevisionNotFoundException
-import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
 import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis

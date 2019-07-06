@@ -1,28 +1,25 @@
 package com.patho.main.action.dialog.notification;
 
-import java.util.HashMap;
-
+import com.patho.main.action.dialog.AbstractDialog;
+import com.patho.main.common.ContactRole;
+import com.patho.main.common.Dialog;
+import com.patho.main.model.patient.Task;
+import com.patho.main.model.patient.notification.NotificationTyp;
 import com.patho.main.model.patient.notification.ReportIntent;
+import com.patho.main.model.patient.notification.ReportIntentNotification;
+import com.patho.main.repository.AssociatedContactRepository;
+import com.patho.main.repository.TaskRepository;
 import com.patho.main.util.dialog.event.ReloadEvent;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.common.ContactRole;
-import com.patho.main.common.Dialog;
-import com.patho.main.model.patient.notification.ReportIntentNotification;
-import com.patho.main.model.patient.notification.NotificationTyp;
-import com.patho.main.model.patient.Task;
-import com.patho.main.repository.AssociatedContactRepository;
-import com.patho.main.repository.TaskRepository;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
+import java.util.HashMap;
 @Configurable
 @Getter
 @Setter

@@ -1,12 +1,9 @@
 package com.patho.main.service;
 
-import com.patho.main.util.search.settings.SearchSettings;
-import com.patho.main.util.search.settings.SimpleListSearchOption;
-import org.springframework.stereotype.Service;
-
 import com.patho.main.model.user.HistoSettings;
+import com.patho.main.util.search.settings.SearchSettings;
 import com.patho.main.util.worklist.Worklist;
-import com.patho.main.util.worklist.search.AbstractWorklistSearch;
+import org.springframework.stereotype.Service;
 
 @Service
 public class WorklistService {

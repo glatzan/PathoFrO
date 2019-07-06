@@ -1,8 +1,8 @@
 package com.patho.main.repository.service;
 
-import java.util.List;
-
 import com.patho.main.model.user.HistoUser;
+
+import java.util.List;
 
 public interface UserRepositroyCustom {
 	public List<HistoUser> findAllIgnoreArchived();

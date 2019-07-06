@@ -1,15 +1,13 @@
 package com.patho.main.repository.service.impl;
 
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
+import com.patho.main.model.DiagnosisPreset;
+import com.patho.main.model.DiagnosisPreset_;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.DiagnosisPreset;
-import com.patho.main.model.DiagnosisPreset_;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Service
 @Transactional

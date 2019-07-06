@@ -1,20 +1,5 @@
 package com.patho.main.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.primefaces.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.patho.main.config.excepion.ToManyEntriesException;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
@@ -24,7 +9,14 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
+import org.primefaces.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 @Service
 @Transactional
 public class PatientService extends AbstractService {

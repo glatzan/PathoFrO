@@ -1,11 +1,10 @@
 package com.patho.main.util.exception;
 
 import com.patho.main.config.util.ResourceBundle;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 @Configurable(preConstruction = true)
 @Getter

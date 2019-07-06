@@ -1,20 +1,18 @@
 package com.patho.main.repository.service.impl;
 
-import java.util.List;
-import java.util.Optional;
+import com.patho.main.model.user.HistoGroup;
+import com.patho.main.model.user.HistoGroup_;
+import com.patho.main.repository.service.GroupRepositoryCustom;
+import org.hibernate.Hibernate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
-
-import org.hibernate.Hibernate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.patho.main.model.user.HistoGroup;
-import com.patho.main.model.user.HistoGroup_;
-import com.patho.main.repository.service.GroupRepositoryCustom;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional

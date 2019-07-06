@@ -1,13 +1,12 @@
 package com.patho.main.util.printer;
 
-import java.io.File;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.patho.main.model.PDFContainer;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.pdf.PrintOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 public class ClinicPrinterDummy extends ClinicPrinter {
 

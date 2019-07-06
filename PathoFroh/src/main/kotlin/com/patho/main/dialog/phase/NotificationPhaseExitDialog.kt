@@ -13,7 +13,6 @@ import com.patho.main.service.WorkPhaseService
 import com.patho.main.util.dialog.event.NotificationPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.DiagnosisRevisionNotFoundException
-import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
 import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
@@ -23,7 +22,6 @@ import com.patho.main.util.ui.backend.LabelStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import javax.management.Notification
 
 /**
  * Dialog for exiting the notification phase

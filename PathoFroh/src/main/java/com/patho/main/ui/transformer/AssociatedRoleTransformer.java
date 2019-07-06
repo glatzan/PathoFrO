@@ -1,13 +1,12 @@
 package com.patho.main.ui.transformer;
 
-import java.util.Arrays;
-import java.util.List;
+import com.patho.main.common.ContactRole;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-
-import com.patho.main.common.ContactRole;
+import java.util.Arrays;
+import java.util.List;
 
 public class AssociatedRoleTransformer implements Converter {
 

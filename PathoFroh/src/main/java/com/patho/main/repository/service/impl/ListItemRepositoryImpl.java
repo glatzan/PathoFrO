@@ -1,15 +1,14 @@
 package com.patho.main.repository.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.patho.main.model.ListItem;
+import com.patho.main.model.ListItem_;
+import com.patho.main.repository.service.ListItemRepositoryCustom;
 
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import com.patho.main.model.ListItem;
-import com.patho.main.model.ListItem_;
-import com.patho.main.repository.service.ListItemRepositoryCustom;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListItemRepositoryImpl extends AbstractRepositoryCustom implements ListItemRepositoryCustom {
 

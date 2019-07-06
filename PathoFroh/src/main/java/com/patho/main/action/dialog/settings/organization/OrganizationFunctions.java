@@ -1,12 +1,11 @@
 package com.patho.main.action.dialog.settings.organization;
 
-import com.patho.main.service.impl.SpringContextBridge;
-import com.patho.main.util.dialog.event.OrganizationSelectEvent;
-import org.primefaces.event.SelectEvent;
-
 import com.patho.main.model.person.Organization;
 import com.patho.main.model.person.Person;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialog.event.OrganizationSelectEvent;
+import org.primefaces.event.SelectEvent;
 
 public interface OrganizationFunctions {
 

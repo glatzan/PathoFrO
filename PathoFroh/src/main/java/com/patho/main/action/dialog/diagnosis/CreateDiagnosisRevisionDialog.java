@@ -21,7 +21,6 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
-
 @Configurable
 @Setter
 @Getter

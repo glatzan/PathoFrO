@@ -11,7 +11,6 @@ import com.patho.main.service.PatientService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.ListChooser;
 import com.patho.main.util.dialog.event.PatientSelectEvent;
-import com.patho.main.util.dialog.event.PatientReloadEvent;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
 import lombok.AccessLevel;
 import lombok.Getter;

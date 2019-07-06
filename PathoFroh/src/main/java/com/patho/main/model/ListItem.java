@@ -1,26 +1,17 @@
 package com.patho.main.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
-
+import com.patho.main.common.Dialog;
+import com.patho.main.model.interfaces.ArchivAble;
+import com.patho.main.model.interfaces.ID;
+import com.patho.main.model.interfaces.ListOrder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RevisionNumber;
 
-import com.patho.main.common.Dialog;
-import com.patho.main.model.interfaces.ArchivAble;
-import com.patho.main.model.interfaces.ID;
-import com.patho.main.model.interfaces.ListOrder;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
 
 @Entity
 @Audited

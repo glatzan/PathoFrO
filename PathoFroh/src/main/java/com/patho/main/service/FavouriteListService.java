@@ -1,20 +1,8 @@
 package com.patho.main.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.favourites.*;
-import org.apache.commons.lang.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
@@ -23,11 +11,20 @@ import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.FavouritePermissionsRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.util.helper.StreamUtils;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 @Service
 @Transactional
 public class FavouriteListService extends AbstractService {

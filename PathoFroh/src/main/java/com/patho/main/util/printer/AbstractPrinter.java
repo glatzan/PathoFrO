@@ -1,13 +1,11 @@
 package com.patho.main.util.printer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gson.annotations.Expose;
 import com.patho.main.model.interfaces.ID;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Getter
 @Setter

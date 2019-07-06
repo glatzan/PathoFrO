@@ -13,7 +13,6 @@ import com.patho.main.repository.TaskRepository
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.dialog.event.PhysicianSelectEvent
-import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.ui.selector.PhysicianSelector
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope

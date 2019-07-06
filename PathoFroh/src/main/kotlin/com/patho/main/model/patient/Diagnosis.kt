@@ -2,7 +2,6 @@ package com.patho.main.model.patient
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.DiagnosisPreset
-import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.Parent
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.SelectBeforeUpdate

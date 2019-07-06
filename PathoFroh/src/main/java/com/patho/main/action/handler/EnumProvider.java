@@ -1,20 +1,12 @@
 package com.patho.main.action.handler;
 
 import com.patho.main.action.views.ReceiptLogView;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import com.patho.main.common.ContactRole;
-import com.patho.main.common.CouncilState;
-import com.patho.main.common.DateFormat;
-import com.patho.main.common.Display;
-import com.patho.main.common.Eye;
-import com.patho.main.common.InformedConsentType;
-import com.patho.main.common.SignatureRole;
-import com.patho.main.common.TaskPriority;
+import com.patho.main.common.*;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.user.HistoGroup;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.time.Month;
 

@@ -17,7 +17,6 @@ import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.dialog.event.PhysicianSelectEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.DuplicatedReportIntentException
-import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.status.reportIntent.ReportIntentBearer
 import com.patho.main.util.ui.selector.UISelector
 import org.primefaces.event.SelectEvent

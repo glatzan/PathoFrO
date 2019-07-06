@@ -1,20 +1,5 @@
 package com.patho.main.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-
-import org.cups4j.CupsClient;
-import org.cups4j.CupsPrinter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.helper.HistoUtil;
@@ -23,9 +8,21 @@ import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.ClinicPrinterDummy;
 import com.patho.main.util.printer.LabelPrinter;
 import com.patho.main.util.printer.RoomContainer;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.cups4j.CupsClient;
+import org.cups4j.CupsPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional

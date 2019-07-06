@@ -1,14 +1,12 @@
 package com.patho.main.util.printer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.primefaces.json.JSONArray;
-
 import com.google.gson.Gson;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter

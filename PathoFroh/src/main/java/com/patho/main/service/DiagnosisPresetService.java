@@ -1,15 +1,14 @@
 package com.patho.main.service;
 
-import java.util.List;
-
+import com.patho.main.model.DiagnosisPreset;
+import com.patho.main.model.interfaces.ListOrder;
+import com.patho.main.repository.DiagnosisPresetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.DiagnosisPreset;
-import com.patho.main.model.interfaces.ListOrder;
-import com.patho.main.repository.DiagnosisPresetRepository;
+import java.util.List;
 
 @Service
 @Transactional

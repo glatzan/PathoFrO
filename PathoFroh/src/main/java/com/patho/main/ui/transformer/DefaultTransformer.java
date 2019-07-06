@@ -1,19 +1,17 @@
 package com.patho.main.ui.transformer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import com.patho.main.model.interfaces.ID;
+import com.patho.main.util.helper.StreamUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-
-import com.patho.main.model.interfaces.ID;
-import com.patho.main.util.helper.StreamUtils;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public class DefaultTransformer<T extends ID> implements Converter {
 

@@ -1,8 +1,8 @@
 package com.patho.main.service;
 
-import com.patho.main.model.person.Person;
 import com.patho.main.model.person.Contact;
 import com.patho.main.model.person.Organization;
+import com.patho.main.model.person.Person;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;

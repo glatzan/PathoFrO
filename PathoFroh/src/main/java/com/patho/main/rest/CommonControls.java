@@ -1,40 +1,10 @@
 package com.patho.main.rest;
 
-import static org.springframework.ldap.query.LdapQueryBuilder.query;
-
-import java.io.IOException;
-import java.time.Instant;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Optional;
-
-import javax.naming.Name;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-
 import com.patho.main.config.util.ResourceBundle;
-import com.patho.main.model.person.Person;
-import com.patho.main.util.exceptions.TaskNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ldap.core.AttributesMapper;
-import org.springframework.ldap.core.ContextMapper;
-import org.springframework.ldap.core.DirContextAdapter;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.support.LdapNameBuilder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.person.Person;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.LDAPRepository;
 import com.patho.main.repository.PatientRepository;
@@ -45,8 +15,31 @@ import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
+import com.patho.main.util.exceptions.TaskNotFoundException;
 import com.patho.main.util.helper.HistoUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.support.LdapNameBuilder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.naming.Name;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+import java.io.IOException;
+import java.time.Instant;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.ldap.query.LdapQueryBuilder.query;
 @RestController
 @RequestMapping(value = "/rest")
 public class CommonControls {

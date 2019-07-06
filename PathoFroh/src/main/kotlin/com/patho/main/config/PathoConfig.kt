@@ -2,7 +2,6 @@ package com.patho.main.config
 
 import com.patho.main.common.ContactRole
 import com.patho.main.model.patient.notification.NotificationTyp
-import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.repository.MediaRepository
 import com.patho.main.util.config.VersionContainer
 import org.apache.commons.io.FileUtils

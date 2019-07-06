@@ -1,26 +1,14 @@
 package com.patho.main.action.dialog.settings.users;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import com.patho.main.util.dialog.event.HistoUserDeleteEvent;
-import com.patho.main.util.dialog.event.PhysicianSelectEvent;
-import com.patho.main.util.dialog.event.UserReloadEvent;
-import com.patho.main.util.search.settings.SimpleListSearchOption;
-import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractTabDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationFunctions;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.View;
+import com.patho.main.model.Physician;
 import com.patho.main.model.person.Organization;
 import com.patho.main.model.person.Person;
-import com.patho.main.model.Physician;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoSettings;
 import com.patho.main.model.user.HistoUser;
@@ -30,13 +18,23 @@ import com.patho.main.service.PhysicianService;
 import com.patho.main.service.PrintService;
 import com.patho.main.service.UserService;
 import com.patho.main.ui.transformer.DefaultTransformer;
+import com.patho.main.util.dialog.event.HistoUserDeleteEvent;
+import com.patho.main.util.dialog.event.PhysicianSelectEvent;
+import com.patho.main.util.dialog.event.UserReloadEvent;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.LabelPrinter;
-
+import com.patho.main.util.search.settings.SimpleListSearchOption;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Configurable
 @Getter

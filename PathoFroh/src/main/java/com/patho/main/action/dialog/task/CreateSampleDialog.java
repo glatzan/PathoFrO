@@ -1,10 +1,5 @@
 package com.patho.main.action.dialog.task;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.MaterialPreset;
@@ -13,10 +8,13 @@ import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.service.SampleService;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
+import java.util.List;
 
 @Configurable
 @Getter

@@ -1,17 +1,16 @@
 package com.patho.main.repository.service;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import com.patho.main.model.patient.Patient;
+import com.patho.main.util.search.settings.SimpleListSearchCriterion;
+import com.patho.main.util.worklist.search.WorklistSearchExtended;
 
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import com.patho.main.model.patient.Patient;
-import com.patho.main.util.search.settings.SimpleListSearchCriterion;
-import com.patho.main.util.worklist.search.WorklistSearchExtended;
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 public interface PatientRepositoryCustom {
 

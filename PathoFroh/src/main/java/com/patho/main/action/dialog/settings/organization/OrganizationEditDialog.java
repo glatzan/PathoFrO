@@ -1,13 +1,5 @@
 package com.patho.main.action.dialog.settings.organization;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.patho.main.util.dialog.event.OrganizationSelectEvent;
-import com.patho.main.util.dialog.event.ReloadEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.person.Contact;
@@ -16,10 +8,16 @@ import com.patho.main.model.person.Person;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PersonRepository;
 import com.patho.main.service.OrganizationService;
-
+import com.patho.main.util.dialog.event.OrganizationSelectEvent;
+import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configurable
 @Getter

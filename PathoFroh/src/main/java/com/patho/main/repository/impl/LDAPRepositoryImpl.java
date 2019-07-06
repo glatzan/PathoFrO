@@ -1,14 +1,10 @@
 package com.patho.main.repository.impl;
 
-import static org.springframework.ldap.query.LdapQueryBuilder.query;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.naming.Name;
-
+import com.patho.main.model.Physician;
+import com.patho.main.model.dto.ldap.LDAPUserMapper;
+import com.patho.main.repository.LDAPRepository;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.ldap.core.LdapTemplate;
@@ -16,12 +12,13 @@ import org.springframework.ldap.query.ContainerCriteria;
 import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.stereotype.Service;
 
-import com.patho.main.model.Physician;
-import com.patho.main.model.dto.ldap.LDAPUserMapper;
-import com.patho.main.repository.LDAPRepository;
+import javax.naming.Name;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import lombok.Getter;
-import lombok.Setter;
+import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 @Service
 @ConfigurationProperties(prefix = "patho.ldap")

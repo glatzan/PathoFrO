@@ -1,14 +1,14 @@
 package com.patho.main.model.util.audit;
 
 
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-
 import com.patho.main.model.audit.AuditAble;
 import com.patho.main.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Lazy;
+
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 @Configurable
 public class AuditListener {

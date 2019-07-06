@@ -1,11 +1,11 @@
 package com.patho.main.repository;
 
+import com.patho.main.model.Physician;
+import com.patho.main.model.person.Person;
+import com.patho.main.repository.service.PhysicianRepositoryCustom;
+
 import java.util.List;
 import java.util.Optional;
-
-import com.patho.main.model.person.Person;
-import com.patho.main.model.Physician;
-import com.patho.main.repository.service.PhysicianRepositoryCustom;
 
 public interface PhysicianRepository extends BaseRepository<Physician, Long>, PhysicianRepositoryCustom {
 

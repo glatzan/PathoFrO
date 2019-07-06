@@ -35,7 +35,6 @@ import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
 import com.patho.main.action.dialog.task.RestoreTaskDialog;
-import com.patho.main.action.dialog.worklist.WorklistSearchDialog;
 import com.patho.main.action.dialog.worklist.WorklistSettingsDialog;
 import com.patho.main.action.dialog.worklist.WorklistSortDialog;
 import org.springframework.context.annotation.Scope;

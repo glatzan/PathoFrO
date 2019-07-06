@@ -3,7 +3,6 @@ package com.patho.main.action.views
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.action.handler.WorklistHandler
-import com.patho.main.model.MaterialPreset
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
@@ -14,7 +13,6 @@ import com.patho.main.service.BlockService
 import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SampleService
 import com.patho.main.service.SlideService
-import com.patho.main.ui.StainingTableChooser
 import com.patho.main.util.print.UnknownPrintingException
 import com.patho.main.util.status.reportIntent.ReportIntentBearer
 import com.patho.main.util.status.reportIntent.ReportIntentStatusByReportIntentAndDiagnosis

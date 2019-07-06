@@ -17,7 +17,6 @@ import com.patho.main.util.dialog.event.StainingPhaseExitEvent
 import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent
 import com.patho.main.util.dialog.event.TaskEntityDeleteEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
-import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.task.TaskStatus
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired

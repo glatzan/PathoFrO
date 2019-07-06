@@ -1,5 +1,6 @@
 package com.patho.main.util.hibernate;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.engine.spi.EntityEntry;
@@ -8,8 +9,6 @@ import org.hibernate.engine.spi.Status;
 import org.hibernate.event.spi.FlushEntityEvent;
 import org.hibernate.event.spi.FlushEntityEventListener;
 import org.hibernate.persister.entity.EntityPersister;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class RootAwareUpdateAndDeleteEventListener implements FlushEntityEventListener {

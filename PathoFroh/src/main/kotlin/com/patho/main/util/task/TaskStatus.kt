@@ -3,7 +3,7 @@ package com.patho.main.util.task
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.favourites.FavouriteList
 import com.patho.main.model.patient.*
-import com.patho.main.model.patient.NotificationStatus.*
+import com.patho.main.model.patient.NotificationStatus.NOTIFICATION_PENDING
 import com.patho.main.model.user.HistoPermissions
 import com.patho.main.service.impl.SpringContextBridge
 import org.slf4j.LoggerFactory

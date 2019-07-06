@@ -1,7 +1,6 @@
 package com.patho.main.config.security.handler;
 
 import com.patho.main.action.handler.CentralHandler;
-import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.common.View;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;

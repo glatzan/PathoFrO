@@ -8,7 +8,6 @@ import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.dialog.print.documentUi.AbstractDocumentUi
 import com.patho.main.dialog.print.documentUi.AbstractTaskDocumentUi
-import com.patho.main.dialog.print.documentUi.AbstractTaskReportUi
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.PrintDocumentRepository
@@ -20,7 +19,6 @@ import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.pdf.LazyPDFGuiManager
 import com.patho.main.util.pdf.PDFCreator
 import com.patho.main.util.pdf.PrintOrder
-import com.patho.main.util.print.LoadedPrintPDFBearer
 import com.patho.main.util.print.PrintPDFBearer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope

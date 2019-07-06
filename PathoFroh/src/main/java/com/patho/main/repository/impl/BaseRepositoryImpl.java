@@ -1,11 +1,12 @@
 package com.patho.main.repository.impl;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-
+import com.patho.main.model.interfaces.Parent;
+import com.patho.main.model.log.LogInfo;
+import com.patho.main.model.patient.Patient;
+import com.patho.main.model.user.HistoUser;
+import com.patho.main.model.util.log.LogListener;
+import com.patho.main.repository.BaseRepository;
+import com.patho.main.util.helper.SecurityContextHolderUtil;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +16,10 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.interfaces.Parent;
-import com.patho.main.model.log.LogInfo;
-import com.patho.main.model.patient.Patient;
-import com.patho.main.model.user.HistoUser;
-import com.patho.main.model.util.log.LogListener;
-import com.patho.main.repository.BaseRepository;
-import com.patho.main.util.helper.SecurityContextHolderUtil;
+import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import java.io.Serializable;
+import java.util.List;
 
 @Configurable
 public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID>

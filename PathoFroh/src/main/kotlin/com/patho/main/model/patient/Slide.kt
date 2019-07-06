@@ -2,7 +2,6 @@ package com.patho.main.model.patient
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.StainingPrototype
-import com.patho.main.model.interfaces.ID
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.interfaces.Parent
 import org.hibernate.annotations.DynamicUpdate

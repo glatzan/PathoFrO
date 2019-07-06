@@ -1,7 +1,6 @@
 package com.patho.main.model.user
 
 import com.patho.main.model.AbstractPersistable
-import com.patho.main.model.interfaces.ID
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.springframework.security.core.GrantedAuthority

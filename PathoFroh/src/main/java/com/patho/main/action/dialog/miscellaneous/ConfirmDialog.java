@@ -1,14 +1,11 @@
 package com.patho.main.action.dialog.miscellaneous;
 
-import com.patho.main.util.dialog.event.ConfirmEvent;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-
-import lombok.AllArgsConstructor;
+import com.patho.main.util.dialog.event.ConfirmEvent;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Configurable;
 
 @Getter
 @Setter

@@ -1,7 +1,6 @@
 package com.patho.main.util.exceptions
 
 import com.patho.main.service.impl.SpringContextBridge
-import java.io.FileNotFoundException
 
 /**
  * Is thrown if a contact is about to be added twice to a task

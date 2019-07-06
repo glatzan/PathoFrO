@@ -2,11 +2,7 @@ package com.patho.main.model.patient.notification
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.patho.main.model.patient.DiagnosisRevision
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType
-import org.hibernate.annotations.TypeDef
 import java.io.Serializable
-import java.time.Instant
-import javax.persistence.Column
 
 /**
  * Class for one reportIntent and its reports

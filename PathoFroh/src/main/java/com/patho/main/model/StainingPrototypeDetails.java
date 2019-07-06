@@ -1,21 +1,12 @@
 package com.patho.main.model;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-
-import org.hibernate.annotations.Type;
-
 import com.patho.main.model.interfaces.ID;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @SequenceGenerator(name = "stainingPrototypeDetails_sequencegenerator", sequenceName = "stainingPrototypeDetails_sequence")

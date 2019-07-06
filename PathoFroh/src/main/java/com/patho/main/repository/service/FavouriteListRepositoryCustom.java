@@ -1,12 +1,12 @@
 package com.patho.main.repository.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.patho.main.model.dto.FavouriteListMenuItem;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoUser;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface FavouriteListRepositoryCustom {
 	Optional<FavouriteList> findOptionalByIdAndInitialize(Long id, boolean loadList, boolean loadPermissions,

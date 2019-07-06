@@ -2,7 +2,6 @@ package com.patho.main.model.interfaces
 
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
-import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import java.io.File
 import javax.persistence.Transient

@@ -10,12 +10,14 @@ import com.patho.main.service.UserService
 import com.patho.main.ui.FavouriteListContainer
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.dialog.event.WorklistSelectEvent
-import com.patho.main.util.search.settings.*
+import com.patho.main.util.search.settings.ExtendedSearch
+import com.patho.main.util.search.settings.FavouriteListSearch
+import com.patho.main.util.search.settings.SearchSettings
+import com.patho.main.util.search.settings.SimpleListSearch
 import com.patho.main.util.worklist.Worklist
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import java.util.stream.Collectors
 
 @Component()
 @Scope(value = "session")

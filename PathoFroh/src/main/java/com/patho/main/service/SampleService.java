@@ -9,7 +9,6 @@ import com.patho.main.util.task.TaskTreeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 @Service
 @Transactional
 public class SampleService extends AbstractService {

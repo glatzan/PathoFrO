@@ -1,12 +1,9 @@
 package com.patho.main.config.security.filters;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.patho.main.config.security.util.JWTAuthorizationToken;
+import com.patho.main.config.security.util.JWTPasswortApplicationCreds;
+import com.patho.main.config.security.util.JWTPasswortApplicationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -17,10 +14,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.patho.main.config.security.util.JWTAuthorizationToken;
-import com.patho.main.config.security.util.JWTPasswortApplicationCreds;
-import com.patho.main.config.security.util.JWTPasswortApplicationToken;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * This filter will create a jwt token for a user. It is accessible through

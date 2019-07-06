@@ -1,24 +1,16 @@
 package com.patho.main.repository.service.impl;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import com.patho.main.model.favourites.*;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.patho.main.model.dto.FavouriteListMenuItem;
+import com.patho.main.model.favourites.*;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.service.FavouriteListRepositoryCustom;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.criteria.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional

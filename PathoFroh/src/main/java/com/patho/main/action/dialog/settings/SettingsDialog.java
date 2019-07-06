@@ -1,13 +1,24 @@
 package com.patho.main.action.dialog.settings;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.patho.main.action.dialog.AbstractTabDialog;
+import com.patho.main.action.handler.MessageHandler;
+import com.patho.main.common.ContactRole;
+import com.patho.main.common.Dialog;
+import com.patho.main.model.*;
+import com.patho.main.model.StainingPrototype.StainingType;
 import com.patho.main.model.favourites.FavouriteList;
+import com.patho.main.model.log.Log;
 import com.patho.main.model.log.Log_;
+import com.patho.main.model.person.Organization;
+import com.patho.main.model.user.HistoGroup;
+import com.patho.main.model.user.HistoUser;
+import com.patho.main.repository.*;
+import com.patho.main.service.*;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.SettingsReloadEvent;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.event.ReorderEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,42 +26,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import com.patho.main.action.dialog.AbstractTabDialog;
-import com.patho.main.action.handler.MessageHandler;
-import com.patho.main.common.ContactRole;
-import com.patho.main.common.Dialog;
-import com.patho.main.model.DiagnosisPreset;
-import com.patho.main.model.ListItem;
-import com.patho.main.model.MaterialPreset;
-import com.patho.main.model.person.Organization;
-import com.patho.main.model.Physician;
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototype.StainingType;
-import com.patho.main.model.log.Log;
-import com.patho.main.model.user.HistoGroup;
-import com.patho.main.model.user.HistoUser;
-import com.patho.main.repository.DiagnosisPresetRepository;
-import com.patho.main.repository.FavouriteListRepository;
-import com.patho.main.repository.GroupRepository;
-import com.patho.main.repository.ListItemRepository;
-import com.patho.main.repository.LogRepository;
-import com.patho.main.repository.MaterialPresetRepository;
-import com.patho.main.repository.OrganizationRepository;
-import com.patho.main.repository.PhysicianRepository;
-import com.patho.main.repository.StainingPrototypeRepository;
-import com.patho.main.repository.UserRepository;
-import com.patho.main.service.DiagnosisPresetService;
-import com.patho.main.service.GroupService;
-import com.patho.main.service.ListItemService;
-import com.patho.main.service.MaterialPresetService;
-import com.patho.main.service.OrganizationService;
-import com.patho.main.service.PhysicianService;
-import com.patho.main.service.StainingPrototypeService;
-import com.patho.main.service.UserService;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Configurable
 @Getter

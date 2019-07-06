@@ -1,8 +1,8 @@
 package com.patho.main.model.interfaces;
 
-import java.beans.Transient;
-
 import com.patho.main.common.Dialog;
+
+import java.beans.Transient;
 
 /**
  * Alle Objekte werden nicht gel�scht, sondern nurch archiviert.

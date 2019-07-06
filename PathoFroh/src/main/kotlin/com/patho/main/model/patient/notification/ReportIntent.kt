@@ -2,9 +2,9 @@ package com.patho.main.model.patient.notification
 
 import com.patho.main.common.ContactRole
 import com.patho.main.model.AbstractPersistable
-import com.patho.main.model.person.Person
 import com.patho.main.model.interfaces.ID
 import com.patho.main.model.patient.Task
+import com.patho.main.model.person.Person
 import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
 import org.hibernate.annotations.SelectBeforeUpdate

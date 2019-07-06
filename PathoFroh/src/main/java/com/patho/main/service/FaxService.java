@@ -1,7 +1,10 @@
 package com.patho.main.service;
 
-import java.io.IOException;
-
+import com.patho.main.model.PDFContainer;
+import com.patho.main.repository.MediaRepository;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,12 +17,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.patho.main.model.PDFContainer;
-import com.patho.main.repository.MediaRepository;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import java.io.IOException;
 
 @Service
 @Transactional

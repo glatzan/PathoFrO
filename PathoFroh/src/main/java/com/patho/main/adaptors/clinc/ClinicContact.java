@@ -1,18 +1,17 @@
 package com.patho.main.adaptors.clinc;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.model.person.Contact;
 import com.patho.main.model.person.Person;
-
-import com.patho.main.model.patient.notification.ReportIntent;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 	  "geschlecht":"Herr",
