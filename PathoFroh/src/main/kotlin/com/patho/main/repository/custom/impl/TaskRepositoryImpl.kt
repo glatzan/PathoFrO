@@ -169,6 +169,12 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
             }
         }
 
+        if (extendedSearch.isUsePatientGender) {
+            predicates.add(criteriaBuilder.equal(personPatientQuery.get(Person_.gender),
+                    extendedSearch.patientGender))
+            logger.debug("Search for task -> patient -> person.gender ${extendedSearch.patientGender} ")
+        }
+
         // case history
         if (extendedSearch.isUseCaseHistory) {
 
@@ -195,6 +201,18 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
         }
 
         return findAll(criteria, root, predicates, loadCouncils, loadDiagnoses, loadPDFs, loadContacts, loadParent)
+    }
+
+
+    @Transactional
+    override fun findAllByID(ids: List<Long>, loadCouncils: Boolean,
+                             loadDiagnoses: Boolean, loadPDFs: Boolean, loadContacts: Boolean, loadParent: Boolean): List<Task> {
+
+        val criteria = criteriaBuilder.createQuery(Task::class.java)
+        val root = criteria.from(Task::class.java)
+
+        return findAll(criteria, root, mutableListOf(root.get(Task_.id).`in`(ids)), loadCouncils, loadDiagnoses,
+                loadPDFs, loadContacts, loadParent)
     }
 
     @Transactional

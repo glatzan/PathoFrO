@@ -366,10 +366,11 @@
 
                 <p:commandButton value="#{msg['general.export']}" icon="fa fa-copy"
                                  widgetVar="exportBtn"
+                                 actionListener="#{exportTasksDialog.initAndPrepareBean(searchWorklistDialog.extendedSearchTab.search)}"
                                  onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
                                  process="@form">
-                    <f:actionListener
-                            binding="#{exportTasksDialog.initAndPrepareBean(searchWorklistDialog.extendedSearchTab.search)}"/>
+                    <p:ajax event="dialogReturn" oncomplete="disableButton(false, 'serachBtn', 'closeBtn', 'exportBtn')"
+                            listener="#{searchWorklistDialog.extendedSearchTab.onDefaultDialogReturn}"/>
                 </p:commandButton>
 
                 <p:commandButton value="#{msg['general.close']}" immediate="true"

@@ -9,12 +9,16 @@ import com.patho.main.repository.PhysicianRepository
 import com.patho.main.service.UserService
 import com.patho.main.ui.FavouriteListContainer
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.WorklistFactroy
+import com.patho.main.util.dialog.event.DialogCloseEvent
+import com.patho.main.util.dialog.event.ReloadEvent
 import com.patho.main.util.dialog.event.WorklistSelectEvent
 import com.patho.main.util.search.settings.ExtendedSearch
 import com.patho.main.util.search.settings.FavouriteListSearch
 import com.patho.main.util.search.settings.SearchSettings
 import com.patho.main.util.search.settings.SimpleListSearch
 import com.patho.main.util.worklist.Worklist
+import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -44,16 +48,8 @@ open class SearchWorklistDialog @Autowired constructor(
 
         lateinit var search: T
 
-        private fun getWorklist(): Worklist {
-            return Worklist("Default", search,
-                    userService.currentUser.settings.worklistHideNoneActiveTasks,
-                    userService.currentUser.settings.worklistSortOrder,
-                    userService.currentUser.settings.worklistAutoUpdate, false,
-                    userService.currentUser.settings.worklistSortOrderAsc)
-        }
-
         fun selectAndHide() {
-            hideDialog(WorklistSelectEvent(getWorklist()))
+            hideDialog(WorklistSelectEvent(WorklistFactroy.defaultWorklist(search,false)))
         }
     }
 
@@ -107,7 +103,7 @@ open class SearchWorklistDialog @Autowired constructor(
             "include/extendedSearch.xhtml") {
 
         lateinit var allPhysicians: List<Physician>
-        lateinit var allPhysiciansTransformer : DefaultTransformer<Physician>
+        lateinit var allPhysiciansTransformer: DefaultTransformer<Physician>
 
         lateinit var signaturePhysicians: List<Physician>
         lateinit var signaturePhysiciansTransformer: DefaultTransformer<Physician>
@@ -122,10 +118,12 @@ open class SearchWorklistDialog @Autowired constructor(
             return super.initTab(force)
         }
 
-        fun exportTasks(){
-
+        fun onDefaultDialogReturn(event: SelectEvent) {
+            if (event.getObject() is DialogCloseEvent) {
+            } else if (event.getObject() is WorklistSelectEvent) {
+                hideDialog(event.getObject())
+            }
         }
-
     }
 
 

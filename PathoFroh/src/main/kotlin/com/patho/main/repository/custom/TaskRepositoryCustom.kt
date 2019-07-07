@@ -31,6 +31,9 @@ interface TaskRepositoryCustom {
     fun findByExtendedSearchSettings(extendedSearch: ExtendedSearch, loadCouncils: Boolean,
                                      loadDiagnoses: Boolean, loadPDFs: Boolean, loadContacts: Boolean, loadParent: Boolean): List<Task>
 
+    fun findAllByID(ids: List<Long>, loadCouncils: Boolean,
+                    loadDiagnoses: Boolean, loadPDFs: Boolean, loadContacts: Boolean, loadParent: Boolean): List<Task>
+
     fun findAll(criteria: CriteriaQuery<Task>, root: Root<Task>, predicates: MutableList<Predicate>,
                 loadCouncils: Boolean, loadDiagnoses: Boolean, loadPDFs: Boolean, loadContacts: Boolean, loadParent: Boolean): List<Task>
 }

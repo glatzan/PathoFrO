@@ -17,10 +17,13 @@
 <h:body styleClass="histoDialogStyle">
 
     <h:form id="dialogContent">
+        <script>
+            $(document).ready(function () {
+                loadContent()
+            });
+        </script>
 
-        <p:remoteCommand name="loadContent" action="#{exportTasksDialog.update()}"
-                         process="@this" autoRun="true"
-                         partialSubmit="true"/>
+        <p:remoteCommand name="loadContent" actionListener="#{exportTasksDialog.update()}"/>
 
         <div class="dialogHeader">
             <h:panelGrid style="width:100%;" columns="2">
@@ -33,7 +36,8 @@
         </div>
 
         <div class="dialogContent">
-            <p:outputPanel deferred="true" id="dataContainer" autoUpdate="false" style="height: 520px">
+            <p:outputPanel deferred="true" id="dataContainer" style="height: 520px">
+                <p:ajax delay="1000"/>
                 <h:panelGrid styleClass="defaultHistoTable">
                     <h:outputFormat value="Gefundene Aufträge {0}">
                         <f:param
@@ -42,8 +46,8 @@
                 </h:panelGrid>
 
                 <p:dataTable var="task" scrollable="true" scrollHeight="450" id="tasks" lazy="true"
-                             value="#{exportTasksDialog.tasks}" styleClass="defaultHistoDataTable"
-                             selection="#{exportTasksDialog.selectedTasks}" rowKey="#{task.id}">
+                             value="#{exportTasksDialog.flatTasks}" styleClass="defaultHistoDataTable"
+                             selection="#{exportTasksDialog.selectedFlatTasks}" rowKey="#{task.id}">
 
 
                     <p:column selectionMode="multiple"
@@ -54,19 +58,19 @@
                     </p:column>
 
                     <p:column headerText="Name">
-                        <h:outputText value="#{task.parent.person.lastName}"/>
+                        <h:outputText value="#{task.lastName}"/>
                     </p:column>
 
                     <p:column headerText="Vorname">
-                        <h:outputText value="#{task.parent.person.firstName}"/>
+                        <h:outputText value="#{task.firstName}"/>
                     </p:column>
 
                     <p:column headerText="PIZ">
-                        <h:outputText value="#{task.parent.piz}"/>
+                        <h:outputText value="#{task.piz}"/>
                     </p:column>
 
                     <p:column headerText="Geburztag">
-                        <h:outputText value="#{task.parent.person.birthday}">
+                        <h:outputText value="#{task.birthday}">
                             <f:convertDateTime type="localDate" pattern="MM.dd.yyyy" timeZone="Europe/Berlin"/>
                         </h:outputText>
                     </p:column>
@@ -79,11 +83,11 @@
 
 
                     <p:column headerText="Diagnoses">
-                        <p:repeat value="#{task.diagnosisRevisions}" var="revision">
-                            <p:repeat value="#{revision.diagnoses}" var="diagnosis" varStatus="varIndex">
-                                <h:outputText value="#{diagnosis.diagnosis} #{!varIndex.last ? ';' : '' }"/>
-                            </p:repeat>
-                        </p:repeat>
+                        <h:outputText value="#{task.diagnoses}"/>
+                    </p:column>
+
+                    <p:column headerText="Bösartig">
+                        <h:outputText value="#{task.malign}"/>
                     </p:column>
 
                     <p:ajax event="rowSelect" process="@this"/>
@@ -98,7 +102,7 @@
 
                 <h:panelGrid columns="1" styleClass="left">
                     <h:panelGroup>
-                        <p:commandButton value="Export"
+                        <p:commandButton value="#{msg['general.export']}" icon="fa fa-copy"
                                          onclick="$('#dialogContent\\:exportLink').click();return false;">
                         </p:commandButton>
                         <h:commandLink style="display: none" id="exportLink">
@@ -108,13 +112,13 @@
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
-                    <p:commandButton value="#{msg['general.save']}" update="@form"
+                    <p:commandButton value="In Arbeitsliste laden" update="@form"
                                      process="@form" icon="fa fa-fw fa-check-circle-o">
                         <f:actionListener
-                                binding="#{exportTasksDialog.hideDialog()}"/>
+                                binding="#{exportTasksDialog.selectAndHide()}"/>
                     </p:commandButton>
 
-                    <p:commandButton value="#{msg['general.abort']}" immediate="true" process="@this"
+                    <p:commandButton value="#{msg['general.abort']}" process="@this"
                                      partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
                                      actionListener="#{exportTasksDialog.hideDialog()}"/>
                 </h:panelGrid>

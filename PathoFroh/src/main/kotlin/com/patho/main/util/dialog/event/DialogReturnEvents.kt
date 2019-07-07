@@ -153,3 +153,8 @@ class NotificationPhaseExitEvent(val startTaskArchival : Boolean = false) : Task
  * Return event for the NotificationPerforme dialog
  */
 class NotificationPerformedEvent(val endPhase: Boolean) : TaskReloadEvent()
+
+/**
+ * Close Event for dialogs
+ */
+class DialogCloseEvent : ReloadEvent()

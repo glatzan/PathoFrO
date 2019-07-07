@@ -56,7 +56,19 @@ class ExtendedSearch : SearchSettings() {
     var to: LocalDate = LocalDate.now()
 
     override fun getPatients(): List<Patient> {
-        return listOf()
+        val p: HashSet<Patient> = hashSetOf()
+        val tasks = getTasks()
+
+        tasks.forEach {
+            if (p.contains(it.parent)) {
+                it.parent?.tasks?.filter { t -> t == it }?.forEach { t -> t.active = true }
+            } else {
+                p.add(it.parent as Patient)
+                it.active = true
+            }
+        }
+
+        return p.toList()
     }
 
     override fun getTasks(): List<Task> {
