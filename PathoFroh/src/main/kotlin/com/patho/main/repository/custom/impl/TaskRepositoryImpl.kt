@@ -188,6 +188,12 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
             }
         }
 
+        // malign
+        if (extendedSearch.malign != "0") {
+            predicates.add(criteriaBuilder.equal(diagnosesQuery.get(Diagnosis_.malign),
+                    extendedSearch.malign == "1"))
+        }
+
         return findAll(criteria, root, predicates, loadCouncils, loadDiagnoses, loadPDFs, loadContacts, loadParent)
     }
 

@@ -18,10 +18,9 @@
 
     <h:form id="dialogContent">
 
-        <p:remoteCommand name="onload" action="#{exportTasksDialog.update()}"
-                         autoRun="#{exportTasksDialog.runDeferredLoad}" process="@this"
-                         partialSubmit="true"
-                         update="dialogContent:dataContainer"/>
+        <p:remoteCommand name="loadContent" action="#{exportTasksDialog.update()}"
+                         process="@this" autoRun="true"
+                         partialSubmit="true"/>
 
         <div class="dialogHeader">
             <h:panelGrid style="width:100%;" columns="2">
@@ -34,7 +33,7 @@
         </div>
 
         <div class="dialogContent">
-            <p:outputPanel deferred="true" id="dataContainer">
+            <p:outputPanel deferred="true" id="dataContainer" autoUpdate="false" style="height: 520px">
                 <h:panelGrid styleClass="defaultHistoTable">
                     <h:outputFormat value="Gefundene Aufträge {0}">
                         <f:param
@@ -42,7 +41,7 @@
                     </h:outputFormat>
                 </h:panelGrid>
 
-                <p:dataTable var="task" scrollable="true" scrollHeight="450" id="tasks"
+                <p:dataTable var="task" scrollable="true" scrollHeight="450" id="tasks" lazy="true"
                              value="#{exportTasksDialog.tasks}" styleClass="defaultHistoDataTable"
                              selection="#{exportTasksDialog.selectedTasks}" rowKey="#{task.id}">
 
@@ -50,7 +49,7 @@
                     <p:column selectionMode="multiple"
                               style="width:16px;text-align:center"/>
 
-                    <p:column headerText="Id">
+                    <p:column headerText="Id" sortBy="#{task.taskID}">
                         <h:outputText value="#{task.taskID}"/>
                     </p:column>
 
@@ -62,20 +61,34 @@
                         <h:outputText value="#{task.parent.person.firstName}"/>
                     </p:column>
 
+                    <p:column headerText="PIZ">
+                        <h:outputText value="#{task.parent.piz}"/>
+                    </p:column>
+
+                    <p:column headerText="Geburztag">
+                        <h:outputText value="#{task.parent.person.birthday}">
+                            <f:convertDateTime type="localDate" pattern="MM.dd.yyyy" timeZone="Europe/Berlin"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Datum">
+                        <h:outputText value="#{task.receiptDate}">
+                            <f:convertDateTime type="localDate" pattern="MM.dd.yyyy" timeZone="Europe/Berlin"/>
+                        </h:outputText>
+                    </p:column>
+
+
                     <p:column headerText="Diagnoses">
                         <p:repeat value="#{task.diagnosisRevisions}" var="revision">
-                            <h:outputText value="#{revision.d}"/>
+                            <p:repeat value="#{revision.diagnoses}" var="diagnosis" varStatus="varIndex">
+                                <h:outputText value="#{diagnosis.diagnosis} #{!varIndex.last ? ';' : '' }"/>
+                            </p:repeat>
                         </p:repeat>
                     </p:column>
 
                     <p:ajax event="rowSelect" process="@this"/>
                 </p:dataTable>
 
-
-                <h:commandLink id="excel">
-                    Export
-                    <p:dataExporter type="xls" target="tasks" fileName="export" selectionOnly="true"/>
-                </h:commandLink>
 
             </p:outputPanel>
         </div>
@@ -84,6 +97,14 @@
             <h:panelGrid columns="2">
 
                 <h:panelGrid columns="1" styleClass="left">
+                    <h:panelGroup>
+                        <p:commandButton value="Export"
+                                         onclick="$('#dialogContent\\:exportLink').click();return false;">
+                        </p:commandButton>
+                        <h:commandLink style="display: none" id="exportLink">
+                            <p:dataExporter type="xls" target="tasks" fileName="export" selectionOnly="true"/>
+                        </h:commandLink>
+                    </h:panelGroup>
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
