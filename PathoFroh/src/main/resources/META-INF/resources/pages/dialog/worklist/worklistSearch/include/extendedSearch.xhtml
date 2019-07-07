@@ -369,7 +369,7 @@
                                  onclick="disableButton(true, 'serachBtn', 'closeBtn', 'exportBtn')"
                                  process="@form">
                     <f:actionListener
-                            binding="#{searchWorklistDialog.extendedSearchTab.exportWorklist()}"/>
+                            binding="#{exportTasksDialog.initAndPrepareBean(searchWorklistDialog.extendedSearchTab.search)}"/>
                 </p:commandButton>
 
                 <p:commandButton value="#{msg['general.close']}" immediate="true"

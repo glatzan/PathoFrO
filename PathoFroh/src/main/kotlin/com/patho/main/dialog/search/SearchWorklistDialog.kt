@@ -122,6 +122,10 @@ open class SearchWorklistDialog @Autowired constructor(
             return super.initTab(force)
         }
 
+        fun exportTasks(){
+
+        }
+
     }
 
 

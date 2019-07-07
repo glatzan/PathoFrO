@@ -75,7 +75,7 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
 
     @Transactional
     override fun findByLastID(ofYear: LocalDate, loadCouncils: Boolean, loadDiagnoses: Boolean, loadPDFs: Boolean,
-                     loadContacts: Boolean, loadParent: Boolean): Task {
+                              loadContacts: Boolean, loadParent: Boolean): Task {
 
         val currentYear = (ofYear.year - 2000).toString() + "%"
 
@@ -210,15 +210,22 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
         if (loadPDFs)
             graph.addAttributeNodes(Task_.attachedPdfs.name)
 
+        if (loadParent) {
+            val subgraph = graph.addSubGraph(Task_.parent.name, Patient::class.java)
+            subgraph.addAttributeNodes(Patient_.tasks.name)
+            subgraph.addAttributeNodes(Patient_.attachedPdfs.name)
+        }
+
         criteria.where(criteriaBuilder.and(*predicates.toTypedArray()))
         criteria.distinct(true)
 
         val tasks = session.createQuery<Task>(criteria).setHint("javax.persistence.loadgraph", graph).resultList;
 
-        tasks.forEach {
-            Hibernate.initialize(it.parent!!.tasks)
-            Hibernate.initialize(it.parent!!.attachedPdfs)
-        }
+//
+//        tasks.forEach {
+//            Hibernate.initialize(it.parent!!.tasks)
+//            Hibernate.initialize(it.parent!!.attachedPdfs)
+//        }
 
         return tasks
     }

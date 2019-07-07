@@ -61,7 +61,6 @@ class ExtendedSearch : SearchSettings() {
 
     override fun getTasks(): List<Task> {
         val taskRepository = SpringContextBridge.services().taskRepository
-
-        return listOf()
+        return taskRepository.findByExtendedSearchSettings(this, true, true, false, false, false)
     }
 }

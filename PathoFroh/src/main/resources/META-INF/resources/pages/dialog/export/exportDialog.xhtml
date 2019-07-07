@@ -1,74 +1,105 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title><h:outputLabel
-			value="#{msg['dialog.changeTaskID.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="style" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="style" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.diagnosisPhaseExit.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
-<h:body styleClass="contentInputDialog">
+<h:body styleClass="histoDialogStyle">
 
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
-				<h:outputLabel
-					value="#{msg['dialog.changeTaskID.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <p:remoteCommand name="onload" action="#{exportTasksDialog.update()}"
+                         autoRun="#{exportTasksDialog.runDeferredLoad}" process="@this"
+                         partialSubmit="true"
+                         update="dialogContent:dataContainer"/>
+
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2">
+                <h:outputLabel value="#{msg['dialog.diagnosisPhaseExit.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;" process="@this"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
+
+        <div class="dialogContent">
+            <p:outputPanel deferred="true" id="dataContainer">
+                <h:panelGrid styleClass="defaultHistoTable">
+                    <h:outputFormat value="Gefundene Aufträge {0}">
+                        <f:param
+                                value="#{exportTasksDialog.tasks.size()}"/>
+                    </h:outputFormat>
+                </h:panelGrid>
+
+                <p:dataTable var="task" scrollable="true" scrollHeight="450" id="tasks"
+                             value="#{exportTasksDialog.tasks}" styleClass="defaultHistoDataTable"
+                             selection="#{exportTasksDialog.selectedTasks}" rowKey="#{task.id}">
 
 
-		<div class="dialogContent">
-			<h:panelGrid columns="1" styleClass="newStyleListingTable">
-				<p:dataTable var="task" scrollable="true" scrollHeight="250"
-					value="#{exportTasksDialog.tasks}" styleClass="defaultHistoDataTable"
-					selection="#{exportTasksDialog.tasksToExport}" rowKey="#{task.id}">
-					<p:column selectionMode="multiple"
-						style="width:16px;text-align:center" />
-					<p:column headerText="Id">
-						<h:outputText value="#{task.taskID}" />
-					</p:column>
-				</p:dataTable>
-			</h:panelGrid>
-		</div>
+                    <p:column selectionMode="multiple"
+                              style="width:16px;text-align:center"/>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+                    <p:column headerText="Id">
+                        <h:outputText value="#{task.taskID}"/>
+                    </p:column>
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
-				</h:panelGrid>
+                    <p:column headerText="Name">
+                        <h:outputText value="#{task.parent.person.lastName}"/>
+                    </p:column>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
-					<p:commandButton value="#{msg['general.save']}" update="@form"
-						process="@form" icon="fa fa-fw fa-check-circle-o">
-						<f:actionListener
-							binding="#{exportTasksDialog.hideDialog()}" />
-					</p:commandButton>
+                    <p:column headerText="Vorname">
+                        <h:outputText value="#{task.parent.person.firstName}"/>
+                    </p:column>
 
-					<p:commandButton value="#{msg['general.abort']}" immediate="true"
-						partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
-						process="@this"
-						actionListener="#{exportTasksDialog.hideDialog()}"></p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
+                    <p:column headerText="Diagnoses">
+                        <p:repeat value="#{task.diagnosisRevisions}" var="revision">
+                            <h:outputText value="#{revision.d}"/>
+                        </p:repeat>
+                    </p:column>
 
-	</h:form>
+                    <p:ajax event="rowSelect" process="@this"/>
+                </p:dataTable>
+
+
+                <h:commandLink id="excel">
+                    Export
+                    <p:dataExporter type="xls" target="tasks" fileName="export" selectionOnly="true"/>
+                </h:commandLink>
+
+            </p:outputPanel>
+        </div>
+
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
+                    <p:commandButton value="#{msg['general.save']}" update="@form"
+                                     process="@form" icon="fa fa-fw fa-check-circle-o">
+                        <f:actionListener
+                                binding="#{exportTasksDialog.hideDialog()}"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{msg['general.abort']}" immediate="true" process="@this"
+                                     partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
+                                     actionListener="#{exportTasksDialog.hideDialog()}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+
+    </h:form>
 </h:body>
 </html>
