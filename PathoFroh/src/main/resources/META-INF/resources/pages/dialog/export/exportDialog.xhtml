@@ -45,8 +45,9 @@
                 <f:facet name="header">
                     List of Cars
 
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="pi pi-align-justify" />
-                    <p:columnToggler datasource="dataContainer" trigger="toggler"  />
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right"
+                                     icon="pi pi-align-justify"/>
+                    <p:columnToggler datasource="dataContainer" trigger="toggler"/>
                 </f:facet>
 
                 <h:panelGrid styleClass="defaultHistoTable">
@@ -57,7 +58,7 @@
                 </h:panelGrid>
 
                 <p:dataTable var="task" scrollable="true" scrollHeight="450" id="tasks"
-                             sortBy="#{task.taskID}"
+                             sortBy="#{task.ed_TaskID}"
                              value="#{exportTasksDialog.flatTasks}" styleClass="defaultHistoDataTable"
                              selection="#{exportTasksDialog.selectedFlatTasks}" rowKey="#{task.id}">
 
@@ -65,42 +66,13 @@
                     <p:column selectionMode="multiple"
                               style="width:16px;text-align:center"/>
 
-                    <p:column headerText="Id" sortBy="#{task.taskID}">
-                        <h:outputText value="#{task.taskID}"/>
-                    </p:column>
-
-                    <p:column headerText="Name" sortBy="#{task.lastName}">
-                        <h:outputText value="#{task.lastName}"/>
-                    </p:column>
-
-                    <p:column headerText="Vorname">
-                        <h:outputText value="#{task.firstName}"/>
-                    </p:column>
-
-                    <p:column headerText="PIZ">
-                        <h:outputText value="#{task.piz}"/>
-                    </p:column>
-
-                    <p:column headerText="Geburztag">
-                        <h:outputText value="#{task.birthday}">
-                            <f:convertDateTime type="localDate" pattern="MM.dd.yyyy" timeZone="Europe/Berlin"/>
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="Datum">
-                        <h:outputText value="#{task.receiptDate}">
-                            <f:convertDateTime type="localDate" pattern="MM.dd.yyyy" timeZone="Europe/Berlin"/>
-                        </h:outputText>
-                    </p:column>
-
-
-                    <p:column headerText="Diagnoses">
-                        <h:outputText value="#{task.diagnoses}"/>
-                    </p:column>
-
-                    <p:column headerText="Bösartig">
-                        <h:outputText value="#{task.malign}"/>
-                    </p:column>
+                    <p:columns value="#{exportTasksDialog.selectedColumnModel}" var="column" columnIndexVar="colIndex"
+                               sortBy="#{task[column.property]}" filterBy="#{task[column.property]}">
+                        <f:facet name="header">
+                            <h:outputText value="#{column.header}"/>
+                        </f:facet>
+                        <h:outputText value="#{task[column.property]}"/>
+                    </p:columns>
 
                     <p:ajax event="rowSelect" process="@this"
                             update="dialogContent:exportBtn dialogContent:loadWorklistBtn"/>
@@ -117,14 +89,24 @@
         <div class="buttonContainer">
             <h:panelGrid columns="2">
 
-                <h:panelGrid columns="1" styleClass="left">
-                    <h:panelGroup>
-                        <p:commandButton value="#{msg['general.export']}" id="exportBtn"
-                                         disabled="#{exportTasksDialog.exportButton.disabled}"
-                                         icon="fa fa-download" ajax="false">
-                            <p:dataExporter type="xls" target="tasks" fileName="export" selectionOnly="true"/>
-                        </p:commandButton>
-                    </h:panelGroup>
+                <h:panelGrid columns="2" styleClass="left">
+                    <p:commandButton value="#{msg['general.export']}" id="exportBtn"
+                                     disabled="#{exportTasksDialog.exportButton.disabled}"
+                                     icon="fa fa-download" ajax="false">
+                        <p:dataExporter type="xls" target="tasks" fileName="export" selectionOnly="true"/>
+                    </p:commandButton>
+                    <p:selectCheckboxMenu value="#{exportTasksDialog.selectedColumnModel}" label="Spalten"
+                                          converter="#{exportTasksDialog.columnModelTransformer}"
+                                          filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                        <f:selectItems value="#{exportTasksDialog.columnModel}" />
+                        <p:ajax event="change"
+                                partialSubmit="true" process="@this"
+                                update=":dialogContent:tasks"/>
+
+                        <p:ajax event="toggleSelect"
+                                partialSubmit="true" process="@this"
+                                update=":dialogContent:tasks"/>
+                    </p:selectCheckboxMenu>
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right" id="buttonContainer">

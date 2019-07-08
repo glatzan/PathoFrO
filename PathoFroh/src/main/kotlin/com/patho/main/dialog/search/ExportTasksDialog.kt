@@ -2,9 +2,13 @@ package com.patho.main.dialog.search
 
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTaskDialog
+import com.patho.main.model.interfaces.ID
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
+import com.patho.main.service.SpringContextBridgedServices
 import com.patho.main.service.UserService
+import com.patho.main.service.impl.SpringContextBridge
+import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.worklist.WorklistFactroy
 import com.patho.main.util.dialog.event.WorklistSelectEvent
 import com.patho.main.util.search.settings.SearchSettings
@@ -13,6 +17,7 @@ import com.patho.main.util.ui.backend.CommandButtonStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import java.io.Serializable
 
 @Component
 @Scope(value = "session")
@@ -28,13 +33,19 @@ class ExportTasksDialog @Autowired constructor(
 
     var contentLoaded = false
 
-    val exportButton : CommandButtonStatus = object : CommandButtonStatus(){
+    var columnModel: List<ColumnModel> = listOf()
+
+    var selectedColumnModel: List<ColumnModel> = listOf()
+
+    lateinit var columnModelTransformer: DefaultTransformer<ColumnModel>
+
+    val exportButton: CommandButtonStatus = object : CommandButtonStatus() {
         override var isDisabled: Boolean
             get() = !contentLoaded || selectedFlatTasks.isEmpty()
             set(value) {}
     }
 
-    val loadWorklistBtn : CommandButtonStatus = object : CommandButtonStatus(){
+    val loadWorklistBtn: CommandButtonStatus = object : CommandButtonStatus() {
         override var isDisabled: Boolean
             get() = selectedFlatTasks.isEmpty()
             set(value) {}
@@ -54,9 +65,9 @@ class ExportTasksDialog @Autowired constructor(
         selectedFlatTasks.clear()
         contentLoaded = true
 
-        val fields = FlatTaskData::class.java.declaredFields
-
-        fields.forEach { println(it.name) }
+        columnModel = ColumnModel.factory(FlatTaskData::class.java.declaredFields.map { it.name })
+        selectedColumnModel = columnModel.filter { it.selected }
+        columnModelTransformer = DefaultTransformer<ColumnModel>(columnModel)
 
         return super.initBean()
     }
@@ -67,7 +78,7 @@ class ExportTasksDialog @Autowired constructor(
         flatTasks = tasks.map { FlatTaskData(it) }
     }
 
-    fun contentLoaded(){
+    fun contentLoaded() {
         contentLoaded = true
     }
 
@@ -75,4 +86,23 @@ class ExportTasksDialog @Autowired constructor(
         super.hideDialog(WorklistSelectEvent(WorklistFactroy.defaultWorklist(search, false)))
     }
 
+    class ColumnModel(propertyName: String, override var id: Long) : Serializable, ID {
+        var header: String
+        var property: String = propertyName
+        var selected: Boolean
+
+        init {
+            println(propertyName)
+            header = SpringContextBridge.services().resourceBundle["mics.flatTask.$propertyName"]
+            if (header.startsWith("???"))
+                header = propertyName
+            selected = propertyName.startsWith("ed") || true
+        }
+
+        companion object {
+            fun factory(propertyNames: List<String>): List<ColumnModel> {
+                return propertyNames.filter { it[0] == 'e' }.mapIndexed { index, obj -> ColumnModel(obj, index.toLong()) }
+            }
+        }
+    }
 }
