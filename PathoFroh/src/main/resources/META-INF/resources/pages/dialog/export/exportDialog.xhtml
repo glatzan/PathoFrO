@@ -3,7 +3,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
     <title><h:outputFormat
@@ -37,7 +38,17 @@
 
         <div class="dialogContent">
             <p:outputPanel deferred="true" id="dataContainer" style="height: 520px">
-                <p:ajax delay="1000"/>
+
+                <p:ajax delay="200" update="dialogContent:exportBtn dialogContent:loadWorklistBtn"
+                        listener="#{exportTasksDialog.contentLoaded()}"/>
+
+                <f:facet name="header">
+                    List of Cars
+
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="dataContainer" trigger="toggler"  />
+                </f:facet>
+
                 <h:panelGrid styleClass="defaultHistoTable">
                     <h:outputFormat value="Gefundene Aufträge {0}">
                         <f:param
@@ -45,7 +56,8 @@
                     </h:outputFormat>
                 </h:panelGrid>
 
-                <p:dataTable var="task" scrollable="true" scrollHeight="450" id="tasks" lazy="true"
+                <p:dataTable var="task" scrollable="true" scrollHeight="450" id="tasks"
+                             sortBy="#{task.taskID}"
                              value="#{exportTasksDialog.flatTasks}" styleClass="defaultHistoDataTable"
                              selection="#{exportTasksDialog.selectedFlatTasks}" rowKey="#{task.id}">
 
@@ -57,7 +69,7 @@
                         <h:outputText value="#{task.taskID}"/>
                     </p:column>
 
-                    <p:column headerText="Name">
+                    <p:column headerText="Name" sortBy="#{task.lastName}">
                         <h:outputText value="#{task.lastName}"/>
                     </p:column>
 
@@ -90,7 +102,12 @@
                         <h:outputText value="#{task.malign}"/>
                     </p:column>
 
-                    <p:ajax event="rowSelect" process="@this"/>
+                    <p:ajax event="rowSelect" process="@this"
+                            update="dialogContent:exportBtn dialogContent:loadWorklistBtn"/>
+                    <p:ajax event="rowUnselect" process="@this"
+                            update="dialogContent:exportBtn dialogContent:loadWorklistBtn"/>
+                    <p:ajax event="toggleSelect" process="@this"
+                            update="dialogContent:exportBtn dialogContent:loadWorklistBtn"/>
                 </p:dataTable>
 
 
@@ -102,17 +119,17 @@
 
                 <h:panelGrid columns="1" styleClass="left">
                     <h:panelGroup>
-                        <p:commandButton value="#{msg['general.export']}" icon="fa fa-copy"
-                                         onclick="$('#dialogContent\\:exportLink').click();return false;">
-                        </p:commandButton>
-                        <h:commandLink style="display: none" id="exportLink">
+                        <p:commandButton value="#{msg['general.export']}" id="exportBtn"
+                                         disabled="#{exportTasksDialog.exportButton.disabled}"
+                                         icon="fa fa-download" ajax="false">
                             <p:dataExporter type="xls" target="tasks" fileName="export" selectionOnly="true"/>
-                        </h:commandLink>
+                        </p:commandButton>
                     </h:panelGroup>
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
-                    <p:commandButton value="In Arbeitsliste laden" update="@form"
+                    <p:commandButton value="In Arbeitsliste laden" update="@form" id="loadWorklistBtn"
+                                     disabled="#{exportTasksDialog.loadWorklistBtn.disabled}"
                                      process="@form" icon="fa fa-fw fa-check-circle-o">
                         <f:actionListener
                                 binding="#{exportTasksDialog.selectAndHide()}"/>

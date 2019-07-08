@@ -1,17 +1,15 @@
 package com.patho.main.dialog.search
 
 import com.patho.main.common.Dialog
-import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.TaskRepository
 import com.patho.main.service.UserService
-import com.patho.main.util.WorklistFactroy
+import com.patho.main.util.worklist.WorklistFactroy
 import com.patho.main.util.dialog.event.WorklistSelectEvent
 import com.patho.main.util.search.settings.SearchSettings
-import com.patho.main.util.task.ArchiveTaskStatus
 import com.patho.main.util.task.FlatTaskData
-import com.patho.main.util.worklist.Worklist
+import com.patho.main.util.ui.backend.CommandButtonStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -28,7 +26,19 @@ class ExportTasksDialog @Autowired constructor(
 
     var selectedFlatTasks: MutableList<FlatTaskData> = mutableListOf<FlatTaskData>()
 
-    var runDeferredLoad = true
+    var contentLoaded = false
+
+    val exportButton : CommandButtonStatus = object : CommandButtonStatus(){
+        override var isDisabled: Boolean
+            get() = !contentLoaded || selectedFlatTasks.isEmpty()
+            set(value) {}
+    }
+
+    val loadWorklistBtn : CommandButtonStatus = object : CommandButtonStatus(){
+        override var isDisabled: Boolean
+            get() = selectedFlatTasks.isEmpty()
+            set(value) {}
+    }
 
     lateinit var search: SearchSettings
 
@@ -42,7 +52,12 @@ class ExportTasksDialog @Autowired constructor(
         tasks = listOf()
         flatTasks = listOf()
         selectedFlatTasks.clear()
-        runDeferredLoad = true
+        contentLoaded = true
+
+        val fields = FlatTaskData::class.java.declaredFields
+
+        fields.forEach { println(it.name) }
+
         return super.initBean()
     }
 
@@ -50,8 +65,10 @@ class ExportTasksDialog @Autowired constructor(
         logger.debug("Loading Data")
         tasks = search.getTasks()
         flatTasks = tasks.map { FlatTaskData(it) }
-        runDeferredLoad = false
-        print("end")
+    }
+
+    fun contentLoaded(){
+        contentLoaded = true
     }
 
     fun selectAndHide() {

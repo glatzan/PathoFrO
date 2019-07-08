@@ -75,7 +75,7 @@
 					value="#{dialog.accountingDataDialog.accountingData}">
 					<p:column headerText="#{msg['dialog.accounting.table.date']}">
 						<h:outputText value="#{accountingData.date}">
-							<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" />
+							<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" timeZone="Europe/Berlin"/>
 						</h:outputText>
 					</p:column>
 

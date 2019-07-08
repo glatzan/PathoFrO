@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -21,59 +22,57 @@ import java.util.List;
 @Configurable
 public class AccountingDataDialog extends AbstractDialog {
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private AccountingDataRepository accountingDataRepository;
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private AccountingDataRepository accountingDataRepository;
 
-	private LocalDate fromDate;
-	private LocalDate toDate;
+    private LocalDate fromDate;
+    private LocalDate toDate;
 
-	private List<AccountingData> accountingData;
+    private List<AccountingData> accountingData;
 
-	private boolean advancedData;
+    private boolean advancedData;
 
-	public AccountingDataDialog initAndPrepareBean() {
-		if (initBean())
-			prepareDialog();
+    public AccountingDataDialog initAndPrepareBean() {
+        if (initBean())
+            prepareDialog();
 
-		this.advancedData = false;
+        this.advancedData = false;
 
-		return this;
-	}
+        return this;
+    }
 
-	public boolean initBean() {
-		super.initBean(task, Dialog.ACCOUNTING_DATA);
-		return true;
-	}
+    public boolean initBean() {
+        super.initBean(task, Dialog.ACCOUNTING_DATA);
+        return true;
+    }
 
-	public void loadAccountingDate() {
+    public void loadAccountingDate() {
 
-		logger.debug("Loading accounting-data form {} to {}", fromDate, toDate);
+        logger.debug("Loading accounting-data form {} to {}", fromDate, toDate);
 
-		if (fromDate == null || toDate == null) {
-			setAccountingData(null);
-		} else {
-			setAccountingData(accountingDataRepository.findAllBetweenDates(this.fromDate, this.toDate));
-			MessageHandler.sendGrowlMessagesAsResource("growl.accounting.listLoaded");
-		}
-	}
+        if (fromDate == null || toDate == null) {
+            setAccountingData(null);
+        } else {
+            setAccountingData(accountingDataRepository.findAllBetweenDates(this.fromDate, this.toDate));
+            MessageHandler.sendGrowlMessagesAsResource("growl.accounting.listLoaded");
+        }
+    }
 
-	public String getExportFileName() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Export");
+    public String getExportFileName() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Export");
 
-		DateFormat df = new SimpleDateFormat("yyy-MM-dd");
+        if (fromDate != null) {
+            builder.append("_" + this.fromDate.format(DateTimeFormatter.ofPattern("yyy-MM-dd")));
+        }
 
-		if (fromDate != null) {
-			builder.append("_" + df.format(this.fromDate));
-		}
+        if (fromDate != null) {
+            builder.append("_" + this.toDate.format(DateTimeFormatter.ofPattern("yyy-MM-dd")));
+        }
+        builder.append(".xls");
 
-		if (fromDate != null) {
-			builder.append("_" + df.format(this.toDate));
-		}
-		builder.append(".xls");
-
-		return builder.toString();
-	}
+        return builder.toString();
+    }
 }

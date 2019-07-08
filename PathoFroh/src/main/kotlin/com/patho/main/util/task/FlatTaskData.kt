@@ -1,8 +1,9 @@
 package com.patho.main.util.task
 
 import com.patho.main.model.patient.Task
+import java.io.Serializable
 
-class FlatTaskData(val task: Task) {
+class FlatTaskData(val task: Task) : Serializable {
 
     var newLineChar = 10.toChar()
 

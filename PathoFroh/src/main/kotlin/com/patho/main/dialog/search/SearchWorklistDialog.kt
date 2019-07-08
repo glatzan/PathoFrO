@@ -9,15 +9,13 @@ import com.patho.main.repository.PhysicianRepository
 import com.patho.main.service.UserService
 import com.patho.main.ui.FavouriteListContainer
 import com.patho.main.ui.transformer.DefaultTransformer
-import com.patho.main.util.WorklistFactroy
+import com.patho.main.util.worklist.WorklistFactroy
 import com.patho.main.util.dialog.event.DialogCloseEvent
-import com.patho.main.util.dialog.event.ReloadEvent
 import com.patho.main.util.dialog.event.WorklistSelectEvent
 import com.patho.main.util.search.settings.ExtendedSearch
 import com.patho.main.util.search.settings.FavouriteListSearch
 import com.patho.main.util.search.settings.SearchSettings
 import com.patho.main.util.search.settings.SimpleListSearch
-import com.patho.main.util.worklist.Worklist
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
