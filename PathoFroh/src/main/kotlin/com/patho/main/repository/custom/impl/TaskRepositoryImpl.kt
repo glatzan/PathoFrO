@@ -1,5 +1,6 @@
 package com.patho.main.repository.custom.impl
 
+import com.patho.main.common.Eye
 import com.patho.main.model.Physician
 import com.patho.main.model.Signature
 import com.patho.main.model.Signature_
@@ -117,7 +118,7 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
                 JoinType.LEFT)
         val signatureTwoPhysicianQuery: Join<Signature, Physician> = signatureTwoQuery.join(Signature_.physician.name, JoinType.LEFT)
 
-        val contactQuery: Join<ReportIntent, Task> = root.join(Task_.contacts.name, JoinType.LEFT)
+        val contactQuery: Join<Task, ReportIntent> = root.join(Task_.contacts.name, JoinType.LEFT)
         val personContactQuery: Join<Person, ReportIntent> = contactQuery.join(ReportIntent_.person.name, JoinType.LEFT)
 
         val predicates = mutableListOf<Predicate>()
@@ -150,6 +151,12 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
             logger.debug("Search for task -> patient -> person.birthday ${extendedSearch.patientBirthdayFrom} to${extendedSearch.patientBirthdayTo} ")
         }
 
+        if (extendedSearch.isUsePatientGender) {
+            predicates.add(criteriaBuilder.equal(personPatientQuery.get(Person_.gender),
+                    extendedSearch.patientGender))
+            logger.debug("Search for task -> patient -> person.gender ${extendedSearch.patientGender} ")
+        }
+
         // material
         if (extendedSearch.isUseMaterial) {
 
@@ -167,12 +174,6 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
                 val or = criteriaBuilder.or(*materials.toTypedArray())
                 predicates.add(or)
             }
-        }
-
-        if (extendedSearch.isUsePatientGender) {
-            predicates.add(criteriaBuilder.equal(personPatientQuery.get(Person_.gender),
-                    extendedSearch.patientGender))
-            logger.debug("Search for task -> patient -> person.gender ${extendedSearch.patientGender} ")
         }
 
         // case history
@@ -194,10 +195,52 @@ open class TaskRepositoryImpl : AbstractRepositoryCustom(), TaskRepositoryCustom
             }
         }
 
+        // physician
+        if (extendedSearch.isUsePhysicians && extendedSearch.physicians?.isNotEmpty() == true) {
+            predicates.add(contactQuery.get(ReportIntent_.person).`in`(extendedSearch.physicians!!.map { it.person }))
+            logger.debug("Search for task -> contact ${extendedSearch.physicians}")
+        }
+
+        // signature
+        if (extendedSearch.isUseSignatures && extendedSearch.signatures?.isNotEmpty() == true) {
+            predicates.add(criteriaBuilder.or(signatureOneQuery.get(Signature_.physician).`in`(extendedSearch.signatures),
+                    signatureTwoQuery.get(Signature_.physician).`in`(extendedSearch.signatures)))
+            logger.debug("Search for task -> signature ${extendedSearch.signatures}")
+        }
+
+        // eye
+        if (extendedSearch.isUseEye && extendedSearch.eye != Eye.UNKNOWN) {
+            predicates.add(criteriaBuilder.equal(root.get(Task_.eye),
+                    extendedSearch.eye))
+            logger.debug("Search for task -> eye ${extendedSearch.eye}")
+        }
+
+        // ward
+        if (extendedSearch.isUseWard && !extendedSearch.ward.isNullOrEmpty()) {
+            predicates.add(criteriaBuilder.equal(root.get(Task_.ward),
+                    extendedSearch.ward))
+            logger.debug("Search for task -> ward ${extendedSearch.ward}")
+        }
+
         // malign
         if (extendedSearch.malign != "0") {
             predicates.add(criteriaBuilder.equal(diagnosesQuery.get(Diagnosis_.malign),
                     extendedSearch.malign == "1"))
+        }
+
+        // diagnosis
+        if(extendedSearch.isUseDiagnosis && !extendedSearch.diagnosis.isNullOrEmpty()){
+
+        }
+
+        // extended diagnosis text
+        if(extendedSearch.isUseDiagnosisText && !extendedSearch.diagnosisText.isNullOrEmpty()){
+
+        }
+
+        // from to
+        if(extendedSearch.isUseDate){
+
         }
 
         return findAll(criteria, root, predicates, loadCouncils, loadDiagnoses, loadPDFs, loadContacts, loadParent)

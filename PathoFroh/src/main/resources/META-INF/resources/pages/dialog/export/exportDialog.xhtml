@@ -8,7 +8,7 @@
 
 <h:head>
     <title><h:outputFormat
-            value="#{msg['dialog.diagnosisPhaseExit.headline']}"/></title>
+            value="#{msg['dialog.exportDialog.headline']}"/></title>
     <h:outputStylesheet name="style.css" value="style.css" library="css"/>
     <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
                         library="css"/>
@@ -18,13 +18,7 @@
 <h:body styleClass="histoDialogStyle">
 
     <h:form id="dialogContent">
-        <script>
-            $(document).ready(function () {
-                loadContent()
-            });
-        </script>
-
-        <p:remoteCommand name="loadContent" actionListener="#{exportTasksDialog.update()}"/>
+        <p:remoteCommand name="loadContent" autoRun="true" actionListener="#{exportTasksDialog.update()}"/>
 
         <div class="dialogHeader">
             <h:panelGrid style="width:100%;" columns="2">

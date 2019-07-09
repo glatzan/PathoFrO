@@ -65,7 +65,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		public SimpleSearchTab() {
 			setTabName("SimpleSearchTab");
-			setName("dialog.worklistsearch.simple");
+			setName("dialog.worklistsearch.simple.tabName");
 			setViewID("simpleSearch");
 			setCenterInclude("include/simpleSearch.xhtml");
 		}
@@ -105,7 +105,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		public FavouriteSearchTab() {
 			setTabName("FavouriteSearchTab");
-			setName("dialog.worklistsearch.favouriteList");
+			setName("dialog.worklistsearch.favouriteList.tabName");
 			setViewID("favouriteListSearch");
 			setCenterInclude("include/favouriteSearch.xhtml");
 		}
@@ -207,7 +207,7 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
 		public ExtendedSearchTab() {
 			setTabName("ExtendedSearchTab");
-			setName("dialog.worklistsearch.scifi");
+			setName("dialog.worklistsearch.scifi.tabName");
 			setViewID("extendedSearch");
 			setCenterInclude("include/extendedSearch.xhtml");
 			setDisabled(true);

@@ -53,7 +53,7 @@ open class SearchWorklistDialog @Autowired constructor(
 
     open inner class SimpleSearchTab : SearchTab<SimpleListSearch>(
             "SimpleSearchTab",
-            "dialog.worklistsearch.simple",
+            "dialog.worklistsearch.simple.tabName",
             "simpleSearch",
             "include/simpleSearch.xhtml") {
 
@@ -65,7 +65,7 @@ open class SearchWorklistDialog @Autowired constructor(
 
     open inner class FavouriteSearchTab : SearchTab<FavouriteListSearch>(
             "FavouriteSearchTab",
-            "dialog.worklistsearch.favouriteList",
+            "dialog.worklistsearch.favouriteList.tabName",
             "favouriteListSearch",
             "include/favouriteSearch.xhtml") {
 
@@ -96,7 +96,7 @@ open class SearchWorklistDialog @Autowired constructor(
 
     open inner class ExtendedSearchTab : SearchTab<ExtendedSearch>(
             "ExtendedSearchTab",
-            "dialog.worklistsearch.scifi",
+            "dialog.worklistsearch.scifi.tabName",
             "extendedSearch",
             "include/extendedSearch.xhtml") {
 

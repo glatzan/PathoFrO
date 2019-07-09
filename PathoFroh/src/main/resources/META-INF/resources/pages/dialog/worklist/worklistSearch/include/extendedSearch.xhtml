@@ -11,13 +11,14 @@
 
     <p:outputPanel styleClass="bodyPannel">
         <h:panelGrid columns="1" styleClass="defaultHistoTable">
-            <h:outputLabel value="Patient"
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.patient.text']}"
                            styleClass="headline"/>
         </h:panelGrid>
+
         <h:panelGrid columns="4" styleClass="defaultHistoTable"
                      columnClasses="columnWidth125, columnWidth300, columnWidth125,">
             <!-- name -->
-            <h:outputLabel value="Name"/>
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.patient.name.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -33,7 +34,7 @@
             </h:panelGroup>
 
             <!-- surname -->
-            <h:outputLabel value="Vorname"/>
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.patient.surname.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -49,7 +50,7 @@
             </h:panelGroup>
 
             <!-- gender -->
-            <h:outputLabel value="Geschlecht"/>
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.patient.gender.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -80,7 +81,9 @@
         <h:panelGrid columns="3" styleClass="defaultHistoTable"
                      columnClasses="columnWidth125,columnWidth300 , ,,">
 
-            <h:outputLabel value="Geburtzdatum"/>
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.patient.birthday.text']}"/>
+
+            <!-- from -->
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -89,7 +92,7 @@
                             <p:ajax event="change" update="bdayFrom"/>
                         </p:selectBooleanCheckbox>
                     </span>
-                    <span class="ui-inputgroup-addon middleElement">von</span>
+                    <span class="ui-inputgroup-addon middleElement">#{msg['dialog.worklistsearch.scifi.patient.birthday.from']}</span>
                     <p:calendar id="bdayFrom" autocomplete="bday"
                                 disabled="#{!searchWorklistDialog.extendedSearchTab.search.usePatientBirthdayFrom}"
                                 value="#{searchWorklistDialog.extendedSearchTab.search.patientBirthdayFrom}" locale="de"
@@ -98,7 +101,7 @@
                 </div>
             </h:panelGroup>
 
-
+            <!-- to -->
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -107,7 +110,7 @@
                             <p:ajax event="change" update="bdayTo"/>
                        </p:selectBooleanCheckbox>
                     </span>
-                    <span class="ui-inputgroup-addon middleElement">bis</span>
+                    <span class="ui-inputgroup-addon middleElement">#{msg['dialog.worklistsearch.scifi.patient.birthday.to']}</span>
                     <p:calendar id="bdayTo" autocomplete="bday"
                                 disabled="#{!searchWorklistDialog.extendedSearchTab.search.usePatientBirthdayTo}"
                                 value="#{searchWorklistDialog.extendedSearchTab.search.patientBirthdayTo}" locale="de"
@@ -123,12 +126,14 @@
         <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
             <p:separator/>
             <h:outputLabel
-                    value="Autrag"/>
+                    value="#{msg['dialog.worklistsearch.scifi.task.text']}"/>
         </h:panelGrid>
 
         <h:panelGrid columns="2" styleClass="defaultHistoTable"
                      columnClasses="columnWidth125, ">
-            <h:outputLabel value="Material"/>
+
+            <!-- material -->
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.task.material.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -143,7 +148,8 @@
                 </div>
             </h:panelGroup>
 
-            <h:outputLabel value="Vorgeschichte"/>
+            <!-- caseHisotry -->
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.task.caseHistory.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -158,8 +164,8 @@
                 </div>
             </h:panelGroup>
 
-
-            <h:outputLabel value="Einsender/Operateure"/>
+            <!-- surgeons -->
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.task.surgeon.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -191,8 +197,8 @@
                 </div>
             </h:panelGroup>
 
-
-            <h:outputLabel value="Unterschrift durch"/>
+            <!-- signature -->
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.task.signature.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -218,8 +224,8 @@
                 </div>
             </h:panelGroup>
 
-
-            <h:outputLabel value="Auge"/>
+            <!-- eye -->
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.task.eye.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -236,11 +242,10 @@
                         <f:selectItems value="#{enumProvider.eyes}" var="eye"
                                        itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}"/>
                     </p:selectOneMenu>
-
                 </div>
             </h:panelGroup>
 
-            <h:outputLabel value="Station"/>
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.task.ward.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
@@ -263,15 +268,17 @@
         <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
             <p:separator/>
             <h:outputLabel
-                    value="Diagnose"/>
+                    value="#{msg['dialog.worklistsearch.scifi.diagnosis.text']}"/>
         </h:panelGrid>
 
         <h:panelGrid columns="2" styleClass="defaultHistoTable"
                      columnClasses="columnWidth125, ">
-            <h:outputLabel value="Bösartig"/>
+            <!-- malign -->
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.diagnosis.malign.text']}"/>
             <p:triStateCheckbox value="#{searchWorklistDialog.extendedSearchTab.search.malign}"/>
 
-            <h:outputLabel value="Diagnose"/>
+            <!-- diagnosis -->
+            <h:outputLabel value="#{msg['dialog.worklistsearch.scifi.diagnosis.diagnosis.text']}"/>
             <h:panelGroup>
                 <div class="ui-inputgroup">
                     <span class="ui-inputgroup-addon-checkbox">
