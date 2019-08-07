@@ -18,7 +18,7 @@ select task.taskID, array_agg(distinct (sample.material)) as material, array_agg
 	left join associatedcontact as asso on task.id = asso.task_id  
 	left join person as perso on asso.person_id = perso.id
 	left join sample as sample on sample.parent_id = task.id
-	where ward like 'auswärtig' 
+	where ward ilike '%auswärtig%'
 	group by 1
 	order by task.taskID asc
 	

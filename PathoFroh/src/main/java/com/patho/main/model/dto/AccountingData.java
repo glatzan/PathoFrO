@@ -19,15 +19,20 @@ import java.time.format.DateTimeParseException;
                 "case when s.slideid ilike '%HE%' then true else false end as he, " +
                 "case when s.slideid ilike '%HE%' and (sm.material in ('Bulbi', 'Exenteratio', 'Glaskörperaspirat') or (s.slidelabeltext = '') IS false or tk.commentary ilike '%Depigmentierung%' or tk.commentary ilike '%Entkalkung%' or tk.commentary ilike '%Handeinbettung%') then true else false end as he2, " +
                 "case when s.slideid not ilike '%HE%' and sp.type not like 'IMMUN' then true else false end as pas, " +
-                "case when sp.type like 'IMMUN' then true else false end as imu " +
+                "case when sp.type like 'IMMUN' then true else false end as imu, " +
+                "case when tk.ward ilike '%auswärtig%' then true else false end as extern, " +
+                "string_agg(distinct (contPers.lastname) ,',') filter (where repInt.role != 'PATIENT') as surgeons " +
                 "FROM slide s " +
                 "left join stainingprototype sp on s.slideprototype_id = sp.id " +
                 "left join block bl on s.parent_id = bl.id " +
                 "left join sample sm on bl.parent_id = sm.id " +
                 "left join task tk on sm.parent_id = tk.id " +
                 "left join patient pt on tk.parent_id = pt.id " +
+                "left join reportintent repInt on tk.id = repInt.task_id " +
+                "left join person as contPers on repInt.person_id = contPers.id " +
+                "group by 1,2,3,4,5,6,7,8,9,10 "+
                 ") " +
-                "SELECT row_number() OVER () AS id, date_trunc( 'day' ,creationdate)\\:\\:date date, piz, sum(scount) as slidecount, " +
+                "SELECT row_number() OVER () AS id, date_trunc( 'day' ,creationdate)\\:\\:date date, piz, extern,surgeons, sum(scount) as slidecount, " +
                 "count(distinct(blockid)) as blockcount, " +
                 "count(distinct(sampleid)) as samplecount," +
                 "sum(case when he and not he2 then scount else 0 end) as \"4800\" , " +
@@ -36,7 +41,7 @@ import java.time.format.DateTimeParseException;
                 "sum(case when imu then scount else 0 end)  \"4815Imu\" " +
                 "FROM totals " +
                 "where creationdate >= :fromDate and creationdate <= :toDate " +
-                "group by 2,3 " +
+                "group by 2,3,4,5 " +
                 "order by 2,3; ",
         resultSetMapping = "AccountingData"
 )
@@ -53,6 +58,8 @@ import java.time.format.DateTimeParseException;
                         @ColumnResult(name = "4802", type = Integer.class),
                         @ColumnResult(name = "4815", type = Integer.class),
                         @ColumnResult(name = "4815Imu", type = Integer.class),
+                        @ColumnResult(name = "extern", type = Boolean.class),
+                        @ColumnResult(name = "surgeons", type = String.class),
                         @ColumnResult(name = "blockcount", type = Integer.class),
                         @ColumnResult(name = "samplecount", type = Integer.class)
                 }
@@ -74,6 +81,8 @@ public class AccountingData {
     private int v4802;
     private int v4015;
     private int v4815Imu;
+    private boolean extern;
+    private String surgeons;
 
     /**
      * Sample count
@@ -90,7 +99,7 @@ public class AccountingData {
      */
     private int slideCount;
 
-    public AccountingData(long id, LocalDate date, String piz, int slideCount, int v4800, int v4802, int v4015, int v4815Imu, int blockcount, int samplecount) {
+    public AccountingData(long id, LocalDate date, String piz, int slideCount, int v4800, int v4802, int v4015, int v4815Imu, boolean extern, String surgeons, int blockcount, int samplecount) {
         this.id = id;
         try {
             DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -108,6 +117,8 @@ public class AccountingData {
         this.blockCount = blockcount;
         this.sampleCount = samplecount;
         this.slideCount = slideCount;
+        this.extern = extern;
+        this.surgeons = surgeons;
 
     }
 }
