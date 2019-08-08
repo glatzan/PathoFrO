@@ -123,6 +123,10 @@
                               rendered="#{dialog.accountingDataDialog.advancedData}">
                         <h:outputText value="#{accountingData.surgeons}"/>
                     </p:column>
+                    <p:column headerText="Herkunft"
+                              rendered="#{dialog.accountingDataDialog.advancedData}">
+                        <h:outputText value="#{accountingData.town}"/>
+                    </p:column>
                 </p:dataTable>
             </h:panelGrid>
         </div>

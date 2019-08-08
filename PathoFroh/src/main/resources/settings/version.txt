@@ -21,7 +21,18 @@ select task.taskID, array_agg(distinct (sample.material)) as material, array_agg
 	where ward ilike '%auswärtig%'
 	group by 1
 	order by task.taskID asc
-	
+
+select  taskID, receiptdate , string_agg( material, ', '), count ( distinct sample.id) , string_agg(distinct person.lastname , '; ') FILTER (WHERE reportintent.role != 'PATIENT') as einsender, string_agg(distinct contact.town, '; ') FILTER (WHERE reportintent.role != 'PATIENT') from task
+left join sample on task.id = sample.parent_id
+left join reportintent on task.id = reportintent.task_id
+left join person on person.id = reportintent.person_id
+left join person_organization on person.id = person_organization.person_id
+left join organization on organization.id = person_organization.organization_id
+left join contact on contact.id= person.contact_id
+where task.ward ilike '%auswärtig%'
+group by taskID, receiptdate
+
+
 select flist.id, flist.name, coalesce(bool_or(fitem.task_id = 1),false) As containsTask from favouritelist flist 
 left join favouritepermissionsgroup fgroup on fgroup.favouritelist_id = flist.id  
 left join favouritepermissionsuser fuser on fuser.favouritelist_id = flist.id
