@@ -83,6 +83,11 @@
                         <h:outputText value="#{accountingData.piz}"/>
                     </p:column>
 
+                    <p:column headerText="#{msg['dialog.accounting.table.taskID']}"
+                              rendered="#{dialog.accountingDataDialog.advancedData}">
+                        <h:outputText value="#{accountingData.taskID}"/>
+                    </p:column>
+
                     <p:column headerText="#{msg['dialog.accounting.table.v4800']}">
                         <h:outputText value="#{accountingData.v4800}"/>
                     </p:column>

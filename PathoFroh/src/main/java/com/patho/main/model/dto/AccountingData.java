@@ -13,7 +13,7 @@ import java.time.format.DateTimeParseException;
         name = "AccountingData.findAllBetweenDates",
         query = "With totals as " +
                 "( " +
-                "select  tk.receiptDate as creationdate , piz, get_slide_count(s.slideid) as scount, " +
+                "select  tk.receiptDate as creationdate, tk.taskID as taskID , piz, get_slide_count(s.slideid) as scount, " +
                 "bl.id as blockid, " +
                 "sm.id as sampleid, " +
                 "case when s.slideid ilike '%HE%' then true else false end as he, " +
@@ -31,10 +31,10 @@ import java.time.format.DateTimeParseException;
                 "left join patient pt on tk.parent_id = pt.id " +
                 "left join reportintent repInt on tk.id = repInt.task_id " +
                 "left join person as contPers on repInt.person_id = contPers.id " +
-                "left join contact on contact.id = contPers.contact_id "+
-                "group by 1,2,3,4,5,6,7,8,9,10 "+
+                "left join contact on contact.id = contPers.contact_id " +
+                "group by 1,2,3,4,5,6,7,8,9,10,11 " +
                 ") " +
-                "SELECT row_number() OVER () AS id, date_trunc( 'day' ,creationdate)\\:\\:date date, piz, extern, surgeons, town, sum(scount) as slidecount, " +
+                "SELECT row_number() OVER () AS id, date_trunc( 'day' ,creationdate)\\:\\:date date, piz, taskID, extern, surgeons, town, sum(scount) as slidecount, " +
                 "count(distinct(blockid)) as blockcount, " +
                 "count(distinct(sampleid)) as samplecount," +
                 "sum(case when he and not he2 then scount else 0 end) as \"4800\" , " +
@@ -43,7 +43,7 @@ import java.time.format.DateTimeParseException;
                 "sum(case when imu then scount else 0 end)  \"4815Imu\" " +
                 "FROM totals " +
                 "where creationdate >= :fromDate and creationdate <= :toDate " +
-                "group by 2,3,4,5,6 " +
+                "group by 2,3,4,5,6,7 " +
                 "order by 2,3; ",
         resultSetMapping = "AccountingData"
 )
@@ -55,6 +55,7 @@ import java.time.format.DateTimeParseException;
                         @ColumnResult(name = "id", type = Long.class),
                         @ColumnResult(name = "date", type = LocalDate.class),
                         @ColumnResult(name = "piz", type = String.class),
+                        @ColumnResult(name = "taskID", type = String.class),
                         @ColumnResult(name = "slidecount", type = Integer.class),
                         @ColumnResult(name = "4800", type = Integer.class),
                         @ColumnResult(name = "4802", type = Integer.class),
@@ -80,6 +81,7 @@ public class AccountingData {
     private int year;
     private int month;
     private String piz;
+    private String taskID;
     private int v4800;
     private int v4802;
     private int v4015;
@@ -103,7 +105,7 @@ public class AccountingData {
      */
     private int slideCount;
 
-    public AccountingData(long id, LocalDate date, String piz, int slideCount, int v4800, int v4802, int v4015, int v4815Imu,  boolean extern, String town,String surgeons, int blockcount, int samplecount) {
+    public AccountingData(long id, LocalDate date, String piz, String taskID, int slideCount, int v4800, int v4802, int v4015, int v4815Imu, boolean extern, String town, String surgeons, int blockcount, int samplecount) {
         this.id = id;
         try {
             DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -114,6 +116,7 @@ public class AccountingData {
         }
 
         this.piz = piz;
+        this.taskID = taskID;
         this.v4800 = v4800;
         this.v4802 = v4802;
         this.v4015 = v4015;
