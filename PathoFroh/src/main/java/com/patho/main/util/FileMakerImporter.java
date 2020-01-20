@@ -15,6 +15,7 @@ import com.patho.main.repository.MaterialPresetRepository;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.helper.HistoUtil;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
@@ -37,7 +38,6 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-@Configurable
 @Getter
 @Setter
 public class FileMakerImporter {
@@ -95,36 +95,6 @@ public class FileMakerImporter {
     private final int index_external = 22;
     private final int index_diagnosisRevision = 23;
 
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private PatientService patientService;
-
-    @Autowired
-    private TaskRepository taskRepository;
-
-    @Autowired
-    private SampleService sampleService;
-
-    @Autowired
-    private DiagnosisService diagnosisService;
-
-//    @Autowired
-//    private AssociatedContactService associatedContactService;
-
-    @Autowired
-    private BioBankService bioBankService;
-
-    @Autowired
-    private FileService fileService;
-
-    @Autowired
-    private MaterialPresetRepository materialPresetRepository;
-
-    @Autowired
-    private PhysicianRepository physicianRepository;
-
     private HashMap<String, String> redirect = new HashMap<String, String>();
 
     {
@@ -147,7 +117,7 @@ public class FileMakerImporter {
             String name1 = redirect.get(spl[spl.length - 1]) == null ? spl[spl.length - 1]
                     : redirect.get(spl[spl.length - 1]);
 
-            List<Physician> physician = physicianRepository.findAllByPersonLastName(name1);
+            List<Physician> physician = SpringContextBridge.services().getPhysicianRepository().findAllByPersonLastName(name1);
 
             return physician.size() > 0 ? physician.get(0) : null;
 
@@ -330,7 +300,7 @@ public class FileMakerImporter {
                     }
 
                     logger.debug("Creating patient {}", strPit);
-                    p = patientService.findPatientByPizInDatabaseAndPDV(strPit, false);
+                    p = SpringContextBridge.services().getPatientService().findPatientByPizInDatabaseAndPDV(strPit, false);
 
                     if (!p.isPresent()) {
                         inserLog.append("Patient not found abort");
@@ -342,11 +312,11 @@ public class FileMakerImporter {
                         throw new IllegalIdentifierException("Signature Date empty");
                     }
 
-                    Patient pait = patientService.addPatient(p.get(), false);
+                    Patient pait = SpringContextBridge.services().getPatientService().addPatient(p.get(), false);
                     inserLog.append("Patient found: " + pait.getPerson().getFullName());
 
-                    if (taskService.isTaskIDAvailable(taskid)) {
-                        Task task = taskService.createTask(pait, taskid, true);
+                    if (SpringContextBridge.services().getTaskService().isTaskIDAvailable(taskid)) {
+                        Task task = SpringContextBridge.services().getTaskService().createTask(pait, taskid, true);
 
                         // eye
                         Eye eyes;
@@ -376,7 +346,7 @@ public class FileMakerImporter {
                         if (taskPrio)
                             task.setDueDate(LocalDate.ofInstant(taskPrioDate != null ? taskPrioDate.toInstant() : edate.toInstant(), ZoneId.systemDefault()));
 
-                        task = taskRepository.save(task);
+                        task = SpringContextBridge.services().getTaskRepository().save(task);
 
                         String[] diagnosis = row[index_diagnosis] != null
                                 ? row[index_diagnosis].split(Character.toString((char) 29))
@@ -387,14 +357,14 @@ public class FileMakerImporter {
                                 : new String[]{""};
 
                         for (int i = 0; i < materialArr.length; i++) {
-                            List<MaterialPreset> preset = materialPresetRepository.findAllByName(materialArr[i], true);
+                            List<MaterialPreset> preset = SpringContextBridge.services().getMaterialPresetRepository().findAllByName(materialArr[i], true);
 
-                            task = sampleService.createSample(task, preset.size() > 0 ? preset.get(0) : null,
+                            task = SpringContextBridge.services().getSampleService().createSample(task, preset.size() > 0 ? preset.get(0) : null,
                                     materialArr[i], true, true, true, true);
                         }
 
                         // creating standard diagnoses
-                        task = diagnosisService.createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
+                        task = SpringContextBridge.services().getDiagnosisService().createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
 
                         DiagnosisRevision rev = task.getDiagnosisRevisions().iterator().next();
 
@@ -418,10 +388,10 @@ public class FileMakerImporter {
                         task.setFinalized(true);
                         task.setFinalizationDate(sigantureDate.toInstant());
 
-                        task = taskRepository.save(task);
+                        task = SpringContextBridge.services().getTaskRepository().save(task);
 
                         if (diagnosisRevisionPhys != null) {
-                            task = diagnosisService.createDiagnosisRevision(task,
+                            task = SpringContextBridge.services().getDiagnosisService().createDiagnosisRevision(task,
                                     DiagnosisRevisionType.DIAGNOSIS_REVISION);
                             Iterator<DiagnosisRevision> iter = task.getDiagnosisRevisions().iterator();
                             iter.next();
@@ -452,7 +422,7 @@ public class FileMakerImporter {
 //                        task = associatedContactService
 //                                .addAssociatedContact(task, pait.getPerson(), ContactRole.PATIENT).getTask();
 
-                        BioBank bioBank = bioBankService.createBioBank(task);
+                        BioBank bioBank = SpringContextBridge.services().getBioBankService().createBioBank(task);
                     }
 
                 } catch (Exception e) {

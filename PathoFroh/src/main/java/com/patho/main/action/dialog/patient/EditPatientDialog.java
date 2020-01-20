@@ -4,6 +4,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.PatientRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,15 +12,9 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-@Configurable
 @Getter
 @Setter
 public class EditPatientDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PatientRepository patientRepository;
 
 	private Patient patient;
 
@@ -37,7 +32,7 @@ public class EditPatientDialog extends AbstractDialog {
 	}
 
 	public void savePatientData() {
-		patientRepository.save(getPatient(), resourceBundle.get("log.patient.edit"));
+		SpringContextBridge.services().getPatientRepository().save(getPatient(), resourceBundle.get("log.patient.edit"));
 	}
 
 	/**

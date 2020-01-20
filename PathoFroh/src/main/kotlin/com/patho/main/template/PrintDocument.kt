@@ -86,7 +86,7 @@ open class PrintDocument : AbstractTemplate {
     /**
      * Makes clone public
      */
-    override fun clone(): Any {
+    override open fun clone(): Any {
         return super.clone()
     }
 

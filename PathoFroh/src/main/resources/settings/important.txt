@@ -12,6 +12,7 @@ PLV8 Javascript Postgres
 Postgres 10 -> http://www.postgresonline.com/journal/archives/379-PLV8-binaries-for-PostgreSQL-10-windows-both-32-bit-and-64-bit.html
 Postgres 11 -> https://github.com/plv8/plv8/issues/220#issuecomment-434436117
 Overview -> http://www.postgresonline.com/winextensions.php
+plv8.control: Syantax Error on Line 1 -> UTF8
 
 PDFLatex
 -> Miktex -> https://miktex.org/

@@ -1,19 +1,13 @@
 package com.patho.main.config.excepion;
 
-import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.action.handler.MessageHandler;
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
@@ -46,20 +40,9 @@ import java.util.Map;
  * @author andi
  *
  */
-@Configurable
 public class PathoExceptionHandler extends ExceptionHandlerWrapper {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	protected ResourceBundle resourceBundle;
-	
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	protected GlobalEditViewHandler globalEditViewHandler;
 	
 	private ExceptionHandler wrapped;
 
@@ -116,7 +99,7 @@ public class PathoExceptionHandler extends ExceptionHandlerWrapper {
 					}
 						
 					closeDialogs();
-					globalEditViewHandler.reloadAllData();
+//					SpringContextBridge.services().getCentralHandler().reloadUIData();
 					MessageHandler.executeScript("clickButtonFromBean('globalCommandsForm:refreshContentBtn')");
 					MessageHandler.sendGrowlMessagesAsResource("growl.error.version", "growl.error.version.text");
 					
@@ -124,7 +107,7 @@ public class PathoExceptionHandler extends ExceptionHandlerWrapper {
 				}else if(cause instanceof InvalidDataAccessApiUsageException) {
 					
 					closeDialogs();
-					globalEditViewHandler.reloadAllData();
+//					SpringContextBridge.services().getCentralHandler().reloadUIData();
 					MessageHandler.executeScript("clickButtonFromBean('globalCommandsForm:refreshContentBtn')");
 					MessageHandler.sendGrowlMessagesAsResource("growl.error.save", "growl.error.save.text");
 					

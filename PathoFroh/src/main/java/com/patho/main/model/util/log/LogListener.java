@@ -18,7 +18,6 @@ import java.util.Optional;
  * @author glatza
  *
  */
-@Configurable
 public class LogListener implements RevisionListener {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());

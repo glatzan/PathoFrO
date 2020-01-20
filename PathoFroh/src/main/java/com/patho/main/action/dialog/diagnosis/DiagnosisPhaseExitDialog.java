@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.Set;
 
-@Configurable
 @Setter
 @Getter
 public class DiagnosisPhaseExitDialog extends AbstractDialog {

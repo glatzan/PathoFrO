@@ -6,6 +6,7 @@ import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.service.PrintService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.helper.HistoUtil;
@@ -34,19 +35,9 @@ import java.util.regex.Pattern;
 
 @Setter
 @Getter
-@Configurable
 public class ClinicPrinter extends AbstractPrinter {
 
     private static String IPADDRESS_PATTERN = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
-
-    @Autowired
-    protected PathoConfig pathoConfig;
-
-    @Autowired
-    protected MediaRepository mediaRepository;
-
-    @Autowired
-    protected PrintService printService;
 
     public ClinicPrinter() {
     }
@@ -127,7 +118,7 @@ public class ClinicPrinter extends AbstractPrinter {
             LoadedPrintPDFBearer cont = PDFCreator.mergePdfs(
                     Arrays.asList(printOrder.getPdfContainer(),
                             new LoadedPrintPDFBearer(new PDFContainer(PrintDocumentType.EMPTY, "",
-                                    pathoConfig.getDefaultDocuments().getEmptyPage(), ""))),
+                                    SpringContextBridge.services().getPathoConfig().getDefaultDocuments().getEmptyPage(), ""))),
                     "", PrintDocumentType.PRINT_DOCUMENT);
 
             printOrder.setPdfContainer(cont);
@@ -163,7 +154,7 @@ public class ClinicPrinter extends AbstractPrinter {
     }
 
     public boolean printTestPage() {
-        return print(new File(pathoConfig.getDefaultDocuments().getCupsPrinterTestPage()));
+        return print(new File(SpringContextBridge.services().getPathoConfig().getDefaultDocuments().getCupsPrinterTestPage()));
     }
 
     /**
@@ -173,8 +164,8 @@ public class ClinicPrinter extends AbstractPrinter {
      */
     private Optional<CupsPrinter> getPrinter() {
         try {
-            CupsClient cupsClient = new CupsClient(printService.getCupsPrinter().getHost(),
-                    printService.getCupsPrinter().getPort());
+            CupsClient cupsClient = new CupsClient(SpringContextBridge.services().getPrintService().getCupsPrinter().getHost(),
+                    SpringContextBridge.services().getPrintService().getCupsPrinter().getPort());
             CupsPrinter printer = cupsClient.getPrinter(new URL(getAddress()));
             return Optional.ofNullable(printer);
         } catch (Exception e) {

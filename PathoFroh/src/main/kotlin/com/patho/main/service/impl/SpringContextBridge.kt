@@ -2,6 +2,7 @@ package com.patho.main.service.impl
 
 import com.patho.main.action.handler.CentralHandler
 import com.patho.main.action.handler.CurrentUserHandler
+import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
@@ -10,7 +11,11 @@ import com.patho.main.repository.*
 import com.patho.main.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
+import org.springframework.core.task.AsyncTaskExecutor
+import org.springframework.core.task.TaskExecutor
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.stereotype.Component
+import org.springframework.transaction.support.TransactionTemplate
 import javax.persistence.EntityManager
 
 
@@ -73,6 +78,111 @@ class SpringContextBridge : SpringContextBridgedServices {
 
     @Autowired
     override lateinit var patientRepository: PatientRepository
+
+    @Autowired
+    override lateinit var transactionTemplate: TransactionTemplate
+
+    @Autowired
+    override lateinit var groupService: GroupService
+
+    @Autowired
+    override lateinit var groupRepository: GroupRepository
+
+    @Autowired
+    override lateinit var diagnosisService: DiagnosisService
+
+    @Autowired
+    override lateinit var pdfService: PDFService
+
+    @Autowired
+    override lateinit var pdfRepository: PDFRepository
+
+    @Autowired
+    override lateinit var patientService: PatientService
+
+    @Autowired
+    override lateinit var taskService: TaskService
+
+    @Autowired
+    override lateinit var organizationRepository: OrganizationRepository
+
+    @Autowired
+    override lateinit var personRepository: PersonRepository
+
+    @Autowired
+    override lateinit var accountingDataRepository: AccountingDataRepository
+
+    @Autowired
+    override lateinit var favouriteListService: FavouriteListService
+
+    @Autowired
+    override lateinit var associatedContactRepository: AssociatedContactRepository
+
+    @Autowired
+    override lateinit var bioBankRepository: BioBankRepository
+
+    @Autowired
+    override lateinit var logRepository: LogRepository
+
+    @Autowired
+    override lateinit var faxService: FaxService
+
+    @Autowired
+    override lateinit var stainingPrototypeRepository: StainingPrototypeRepository
+
+    @Autowired
+    override lateinit var slideRepository: SlideRepository
+
+    @Autowired
+    override lateinit var slideService: SlideService
+
+    @Autowired
+    override lateinit var userRepository: UserRepository
+
+    @Autowired
+    override lateinit var physicianRepository: PhysicianRepository
+
+     @Autowired
+     override lateinit var councilService: CouncilService
+
+    @Autowired
+    override lateinit var councilRepository: CouncilRepository
+
+    @Autowired
+    override lateinit var printDocumentRepository: PrintDocumentRepository
+
+    @Autowired
+    override lateinit var materialPresetRepository: MaterialPresetRepository
+
+    @Autowired
+    override lateinit var diagnosisPresetRepository: DiagnosisPresetRepository
+
+    @Autowired
+    override lateinit var ldapRepository: LDAPRepository
+
+    @Autowired
+    override lateinit var diagnosisPresetService: DiagnosisPresetService
+
+    @Autowired
+    override lateinit var materialPresetService: MaterialPresetService
+
+    @Autowired
+    override lateinit var stainingPrototypeService: StainingPrototypeService
+
+    @Autowired
+    override lateinit var listItemService: ListItemService
+
+    @Autowired
+    override lateinit var printService: PrintService
+
+    @Autowired
+    override lateinit var taskExecutor: ThreadPoolTaskExecutor
+
+    @Autowired
+    override lateinit var bioBankService: BioBankService
+
+    @Autowired
+    override lateinit var blockService: BlockService
 
     companion object {
         @JvmStatic

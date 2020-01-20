@@ -14,6 +14,7 @@ import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.repository.*;
 import com.patho.main.service.*;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.SettingsReloadEvent;
 import lombok.AccessLevel;
@@ -30,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class SettingsDialog extends AbstractTabDialog {
@@ -100,18 +100,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class HistoUserTab extends AbstractTab {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private UserService userService;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private UserRepository userRepository;
 
 		private List<HistoUser> users;
 
@@ -131,24 +120,13 @@ public class SettingsDialog extends AbstractTabDialog {
 		}
 
 		public void updateData() {
-			setUsers(userRepository.findAllIgnoreArchived(!showArchived));
+			setUsers(SpringContextBridge.services().getUserRepository().findAllIgnoreArchived(!showArchived));
 		}
 	}
 
 	@Getter
 	@Setter
-	@Configurable
 	public class HistoGroupTab extends AbstractTab {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private GroupRepository groupRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private GroupService groupService;
 
 		private List<HistoGroup> groups;
 
@@ -168,17 +146,17 @@ public class SettingsDialog extends AbstractTabDialog {
 		}
 
 		public void updateData() {
-			setGroups(groupRepository.findAllOrderByIdAsc(!showArchived));
+			setGroups(SpringContextBridge.services().getGroupRepository().findAllOrderByIdAsc(!showArchived));
 		}
 
 		public void archiveOrDelete(HistoGroup g, boolean archive) {
 			if (archive) {
-				if (groupService.deleteOrArchive(g)) {
+				if (SpringContextBridge.services().getGroupService().deleteOrArchive(g)) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.group.deleted");
 				} else
 					MessageHandler.sendGrowlMessagesAsResource("growl.group.archive");
 			} else {
-				groupService.archive(g, false);
+				SpringContextBridge.services().getGroupService().archive(g, false);
 				MessageHandler.sendGrowlMessagesAsResource("growl.group.dearchive");
 			}
 			updateData();
@@ -187,18 +165,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class DiagnosisTab extends AbstractTab {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private DiagnosisPresetService diagnosisPresetService;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private DiagnosisPresetRepository diagnosisPresetRepository;
 
 		private List<DiagnosisPreset> diagnosisPresets;
 
@@ -218,7 +185,7 @@ public class SettingsDialog extends AbstractTabDialog {
 		@Override
 		public void updateData() {
 			setDiagnosisPresets(
-					diagnosisPresetRepository.findAllIgnoreArchivedByOrderByIndexInListAsc(!isShowArchived()));
+					SpringContextBridge.services().getDiagnosisPresetRepository().findAllIgnoreArchivedByOrderByIndexInListAsc(!isShowArchived()));
 		}
 
 		/**
@@ -229,7 +196,7 @@ public class SettingsDialog extends AbstractTabDialog {
 		public void onReorderList(ReorderEvent event) {
 			logger.debug(
 					"List order changed, moved material from " + event.getFromIndex() + " to " + event.getToIndex());
-			diagnosisPresetService.reoderList(getDiagnosisPresets());
+			SpringContextBridge.services().getDiagnosisPresetService().reoderList(getDiagnosisPresets());
 			updateData();
 		}
 
@@ -240,12 +207,12 @@ public class SettingsDialog extends AbstractTabDialog {
 		 */
 		public void archiveOrDelete(DiagnosisPreset d, boolean archive) {
 			if (archive) {
-				if (diagnosisPresetService.deleteOrArchive(d)) {
+				if (SpringContextBridge.services().getDiagnosisPresetService().deleteOrArchive(d)) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.deleted");
 				} else
 					MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.archive");
 			} else {
-				diagnosisPresetService.archive(d, false);
+				SpringContextBridge.services().getDiagnosisPresetService().archive(d, false);
 				MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.dearchive");
 			}
 			updateData();
@@ -254,18 +221,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class MaterialTab extends AbstractTab {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private MaterialPresetRepository materialPresetRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private MaterialPresetService materialPresetService;
 
 		private List<MaterialPreset> materials;
 
@@ -285,17 +241,17 @@ public class SettingsDialog extends AbstractTabDialog {
 		@Override
 		public void updateData() {
 			setMaterials(
-					materialPresetRepository.findAllIgnoreArchivedOrderByPriorityCountDesc(false, !isShowArchived()));
+					SpringContextBridge.services().getMaterialPresetRepository().findAllIgnoreArchivedOrderByPriorityCountDesc(false, !isShowArchived()));
 		}
 
 		public void archiveOrDelete(MaterialPreset m, boolean archive) {
 			if (archive) {
-				if (materialPresetService.deleteOrArchive(m)) {
+				if (SpringContextBridge.services().getMaterialPresetService().deleteOrArchive(m)) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.material.deleted");
 				} else
 					MessageHandler.sendGrowlMessagesAsResource("growl.material.archive");
 			} else {
-				materialPresetService.archive(m, false);
+				SpringContextBridge.services().getMaterialPresetService().archive(m, false);
 				MessageHandler.sendGrowlMessagesAsResource("growl.material.dearchive");
 			}
 			updateData();
@@ -304,18 +260,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class StainingTab extends AbstractTab {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private StainingPrototypeRepository stainingPrototypeRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private StainingPrototypeService stainingPrototypeService;
 
 		/**
 		 * Tab container
@@ -340,19 +285,19 @@ public class SettingsDialog extends AbstractTabDialog {
 			getContainer().clear();
 			// adding tabs dynamically
 			for (StainingType type : StainingType.values()) {
-				getContainer().add(new StainingContainer(type, stainingPrototypeRepository
+				getContainer().add(new StainingContainer(type, SpringContextBridge.services().getStainingPrototypeRepository()
 						.findAllByTypeIgnoreArchivedOrderByPriorityCountDesc(type, false, !isShowArchived())));
 			}
 		}
 
 		public void archiveOrDelete(StainingPrototype p, boolean archive) {
 			if (archive) {
-				if (stainingPrototypeService.deleteOrArchive(p)) {
+				if (SpringContextBridge.services().getStainingPrototypeService().deleteOrArchive(p)) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.staining.deleted");
 				} else
 					MessageHandler.sendGrowlMessagesAsResource("growl.staining.archive");
 			} else {
-				stainingPrototypeService.archive(p, false);
+				SpringContextBridge.services().getStainingPrototypeService().archive(p, false);
 				MessageHandler.sendGrowlMessagesAsResource("growl.staining.dearchive");
 			}
 			updateData();
@@ -373,18 +318,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class StaticListTab extends AbstractTab {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private ListItemRepository listItemRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private ListItemService listItemService;
 
 		/**
 		 * Current static list to edit
@@ -411,7 +345,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setStaticListContent(listItemRepository.findAllOrderByIndex(getSelectedStaticList(), !isShowArchived()));
+			setStaticListContent(SpringContextBridge.services().getListItemRepository().findAllOrderByIndex(getSelectedStaticList(), !isShowArchived()));
 		}
 
 		/**
@@ -421,19 +355,19 @@ public class SettingsDialog extends AbstractTabDialog {
 		 */
 		public void archiveOrDelete(ListItem item, boolean archive) {
 			if (archive) {
-				if (listItemService.deleteOrArchive(item)) {
+				if (SpringContextBridge.services().getListItemService().deleteOrArchive(item)) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.listitem.deleted");
 				} else
 					MessageHandler.sendGrowlMessagesAsResource("growl.listitem.archive");
 			} else {
-				listItemService.archive(item, false);
+				SpringContextBridge.services().getListItemService().archive(item, false);
 				MessageHandler.sendGrowlMessagesAsResource("growl.listitem.dearchive");
 			}
 			updateData();
 		}
 
 		public void onReorderList(ReorderEvent event) {
-			listItemService.updateReoderedList(getStaticListContent(), getSelectedStaticList());
+			SpringContextBridge.services().getListItemService().updateReoderedList(getStaticListContent(), getSelectedStaticList());
 			updateData();
 		}
 	}
@@ -452,18 +386,8 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class PhysicianSettingsTab extends AbstractTab {
 
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private PhysicianRepository physicianRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private PhysicianService physicianService;
 
 		/**
 		 * True if archived physicians should be display
@@ -506,7 +430,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setPhysicianList(physicianRepository.findAllByRole(getShowPhysicianRoles(), !showArchived));
+			setPhysicianList(SpringContextBridge.services().getPhysicianRepository().findAllByRole(getShowPhysicianRoles(), !showArchived));
 		}
 
 		/**
@@ -527,12 +451,12 @@ public class SettingsDialog extends AbstractTabDialog {
 		 */
 		public void archiveOrDelete(Physician p, boolean archive) {
 			if (archive) {
-				if (physicianService.deleteOrArchive(p)) {
+				if (SpringContextBridge.services().getPhysicianService().deleteOrArchive(p)) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.person.deleted");
 				} else
 					MessageHandler.sendGrowlMessagesAsResource("growl.person.archive");
 			} else {
-				physicianService.archive(p, false);
+				SpringContextBridge.services().getPhysicianService().archive(p, false);
 				MessageHandler.sendGrowlMessagesAsResource("growl.person.dearchive");
 			}
 			updateData();
@@ -541,18 +465,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class OrganizationTab extends AbstractTab {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private OrganizationRepository organizationRepository;
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private OrganizationService organizationService;
 
 		private List<Organization> organizations;
 
@@ -574,7 +487,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setOrganizations(organizationRepository.findAllOrderByIdAsc(!showArchived));
+			setOrganizations(SpringContextBridge.services().getOrganizationRepository().findAllOrderByIdAsc(!showArchived));
 		}
 
 		/**
@@ -584,12 +497,12 @@ public class SettingsDialog extends AbstractTabDialog {
 		 */
 		public void archiveOrDelete(Organization organization, boolean archive) {
 			if (archive) {
-				if (organizationService.deleteOrArchive(organization)) {
+				if (SpringContextBridge.services().getOrganizationService().deleteOrArchive(organization)) {
 					MessageHandler.sendGrowlMessagesAsResource("growl.organization.deleted");
 				} else
 					MessageHandler.sendGrowlMessagesAsResource("growl.organization.archive");
 			} else {
-				organizationService.archive(organization, false);
+				SpringContextBridge.services().getOrganizationService().archive(organization, false);
 				MessageHandler.sendGrowlMessagesAsResource("growl.organization .dearchive");
 			}
 			updateData();
@@ -598,13 +511,7 @@ public class SettingsDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class FavouriteListTab extends AbstractTab {
-
-		@Autowired
-		@Getter(AccessLevel.NONE)
-		@Setter(AccessLevel.NONE)
-		private FavouriteListRepository favouriteListRepository;
 
 		/**
 		 * Array containing all favourite listis
@@ -620,18 +527,14 @@ public class SettingsDialog extends AbstractTabDialog {
 
 		@Override
 		public void updateData() {
-			setFavouriteLists(favouriteListRepository.findAll(false, true, true, true));
+			setFavouriteLists(SpringContextBridge.services().getFavouriteListRepository().findAll(false, true, true, true));
 		}
 
 	}
 
 	@Getter
 	@Setter
-	@Configurable
 	public class LogTab extends AbstractTab {
-
-		@Autowired
-		private LogRepository logRepository;
 
 		private int logsPerPage;
 
@@ -655,7 +558,7 @@ public class SettingsDialog extends AbstractTabDialog {
 		public void updateData() {
 
 			// updating page count
-			long maxLogPages = logRepository.count();
+			long maxLogPages = SpringContextBridge.services().getLogRepository().count();
 
 			pagesCount = (int) Math.ceil((double) maxLogPages / logsPerPage);
 
@@ -663,7 +566,7 @@ public class SettingsDialog extends AbstractTabDialog {
 				page = pagesCount;
 			}
 
-			setLogs(logRepository
+			setLogs(SpringContextBridge.services().getLogRepository()
 					.findAll(PageRequest.of(page - 1, getLogsPerPage(), Sort.by(Log_.id.getName()).descending()))
 					.getContent());
 		}

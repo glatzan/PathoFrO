@@ -5,7 +5,8 @@ import com.patho.main.model.patient.DiagnosisRevision
 import java.io.Serializable
 
 /**
- * Class for one reportIntent and its reports
+ * Class for one reportIntent and its reports. For every diagnosis there is only <b>one<b> DiagnosisHistoryRecord object.
+ * The notification attempts will be stored in the list "data"
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 open class DiagnosisHistoryRecord : Serializable {

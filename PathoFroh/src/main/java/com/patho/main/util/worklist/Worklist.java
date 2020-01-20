@@ -6,6 +6,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoSettings;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.task.TaskInfo;
 import com.patho.main.util.helper.TaskUtil;
 import com.patho.main.util.search.settings.SearchSettings;
@@ -16,16 +17,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.*;
 
-@Configurable
 public class Worklist {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private PatientRepository patientRepository;
-
-    @Autowired
-    private TaskRepository taskRepository;
 
     /**
      * Patients
@@ -549,7 +543,7 @@ public class Worklist {
             // updating patients in worklist which were not found by generic
             // search
 
-            List<Patient> histoMatchList = patientRepository.findAllByIds(manuallyUdatePizes, true, false, true);
+            List<Patient> histoMatchList = SpringContextBridge.services().getPatientRepository().findAllByIds(manuallyUdatePizes, true, false, true);
 
             for (Patient patient : histoMatchList) {
                 logger.trace("Updatin or adding: " + patient.toString());
@@ -568,12 +562,12 @@ public class Worklist {
     public void reloadSelectedPatientAndTask() {
         if (selectedTask != null) {
             logger.debug("Reloading current Task and Patient");
-            Task oTask = taskRepository.findByID(selectedTask, true, true, true,
+            Task oTask = SpringContextBridge.services().getTaskRepository().findByID(selectedTask, true, true, true,
                     true, true);
             add(oTask);
         } else if (selectedPatient != null) {
             logger.debug("Reloading Patient");
-            Optional<Patient> oPatient = patientRepository.findOptionalById(selectedPatient.getId(), true);
+            Optional<Patient> oPatient = SpringContextBridge.services().getPatientRepository().findOptionalById(selectedPatient.getId(), true);
             add(oPatient.get());
         } else {
             logger.debug("Error not reloading anything, should not happen!");

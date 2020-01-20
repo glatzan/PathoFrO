@@ -5,6 +5,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.service.MaterialPresetService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.SlideSelectEvent;
@@ -15,16 +16,9 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-@Configurable
 @Getter
 @Setter
 public class MaterialEditDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private MaterialPresetService materialPresetService;
-
 	private boolean newMaterial;
 
 	private MaterialPreset materialPreset;
@@ -47,7 +41,7 @@ public class MaterialEditDialog extends AbstractDialog {
 	}
 
 	public void saveAndHide() {
-		materialPresetService.addOrUpdate(getMaterialPreset());
+		SpringContextBridge.services().getMaterialPresetService().addOrUpdate(getMaterialPreset());
 		hideDialog(new ReloadEvent());
 	}
 

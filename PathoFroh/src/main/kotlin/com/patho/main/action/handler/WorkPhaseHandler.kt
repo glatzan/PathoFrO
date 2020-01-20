@@ -9,12 +9,13 @@ import com.patho.main.service.WorkPhaseService
 import com.patho.main.util.task.TaskStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
+import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Controller
 import org.springframework.transaction.annotation.Transactional
 
 
 @Controller
-@Scope("session")
+@Scope("session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 open class WorkPhaseHandler @Autowired constructor(
         private val workPhaseService: WorkPhaseService,
         private val diagnosisService: DiagnosisService,

@@ -5,6 +5,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.person.Organization;
 import com.patho.main.model.person.Person;
 import com.patho.main.repository.OrganizationRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.OrganizationSelectEvent;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
@@ -16,15 +17,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class OrganizationListDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private OrganizationRepository organizationRepository;
 
 	private List<Organization> organizations;
 
@@ -52,7 +47,7 @@ public class OrganizationListDialog extends AbstractDialog {
 
 	public void update() {
 		setSelectedOrganization(null);
-		setOrganizations(organizationRepository.findAll(true));
+		setOrganizations(SpringContextBridge.services().getOrganizationRepository().findAll(true));
 	}
 
 	/**

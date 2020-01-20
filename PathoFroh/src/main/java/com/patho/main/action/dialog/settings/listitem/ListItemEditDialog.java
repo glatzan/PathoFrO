@@ -5,6 +5,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.ListItem;
 import com.patho.main.repository.PersonRepository;
 import com.patho.main.service.ListItemService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,20 +13,9 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-@Configurable
 @Getter
 @Setter
 public class ListItemEditDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private ListItemService listItemService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PersonRepository personRepository;
 
 	private ListItem listItem;
 
@@ -55,7 +45,7 @@ public class ListItemEditDialog extends AbstractDialog {
 	}
 
 	private void save() {
-		listItemService.addOrUpdate(getListItem());
+		SpringContextBridge.services().getListItemService().addOrUpdate(getListItem());
 	}
 
 }

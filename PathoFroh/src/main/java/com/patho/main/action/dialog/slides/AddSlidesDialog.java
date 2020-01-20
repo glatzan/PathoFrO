@@ -10,6 +10,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.ListItemRepository;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.service.SlideService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.util.dialog.event.SlideSelectEvent;
 import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent;
@@ -20,29 +21,14 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configurable
 @Getter
 @Setter
 public class AddSlidesDialog extends AbstractDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private ListItemRepository listItemRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private StainingPrototypeRepository stainingPrototypeRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private SlideService slideService;
 
     /**
      * Current block for which the slides are created
@@ -114,7 +100,7 @@ public class AddSlidesDialog extends AbstractDialog {
         setSlideLabelText("");
 
         setSlideLabelTexts(
-                listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.SLIDES, false));
+                SpringContextBridge.services().getListItemRepository().findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.SLIDES, false));
 
         setSelectMode(block == null);
 
@@ -127,7 +113,7 @@ public class AddSlidesDialog extends AbstractDialog {
         // adding tabs dynamically
         for (StainingType type : StainingType.values()) {
             getContainer().add(new StainingTypeContainer(type,
-                    stainingPrototypeRepository.findAllByTypeOrderByPriorityCountDesc(type).stream()
+                    SpringContextBridge.services().getStainingPrototypeRepository().findAllByTypeOrderByPriorityCountDesc(type).stream()
                             .map(p -> new StainingPrototypeHolder(p)).collect(Collectors.toList())));
         }
 
@@ -162,7 +148,7 @@ public class AddSlidesDialog extends AbstractDialog {
         List<StainingPrototypeHolder> prototpyes = getSelectedPrototypeHolders();
 
         if (!prototpyes.isEmpty()) {
-            Task task = slideService.createSlidesXTimes(prototpyes, block, slideLabelText, commentary, restaining, true,
+            Task task = SpringContextBridge.services().getSlideService().createSlidesXTimes(prototpyes, block, slideLabelText, commentary, restaining, true,
                     asCompleted, true);
             hideDialog(new StainingPhaseUpdateEvent(task));
         }

@@ -4,6 +4,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.repository.GroupRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.GroupSelectEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,15 +14,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class GroupListDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GroupRepository groupRepository;
 
 	private List<HistoGroup> groups;
 
@@ -43,7 +38,7 @@ public class GroupListDialog extends AbstractDialog {
 	}
 
 	public void updateData() {
-		setGroups(groupRepository.findAllOrderByIdAsc(!showArchived));
+		setGroups(SpringContextBridge.services().getGroupRepository().findAllOrderByIdAsc(!showArchived));
 	}
 
 	public void selectAndHide() {

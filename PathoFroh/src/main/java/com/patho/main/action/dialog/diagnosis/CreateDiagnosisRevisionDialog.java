@@ -9,6 +9,8 @@ import com.patho.main.model.patient.*;
 import com.patho.main.model.util.audit.Audit;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.DiagnosisService;
+import com.patho.main.service.impl.SpringContextBridge;
+import com.patho.main.service.impl.SpringSessionContextBridge;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
 import com.patho.main.util.helper.TaskUtil;
 import lombok.AccessLevel;
@@ -21,25 +23,9 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
-@Configurable
 @Setter
 @Getter
 public class CreateDiagnosisRevisionDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DiagnosisService diagnosisService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskRepository taskRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private WorkPhaseHandler workPhaseHandler;
 
 	/**
 	 * Name of the new revision
@@ -152,9 +138,9 @@ public class CreateDiagnosisRevisionDialog extends AbstractDialog {
 	public void addDiagnosisAndHide() {
 		logger.debug("Creating new reportIntent revision " + newRevisionName);
 
-		task = diagnosisService.renameDiagnosisRevisions(task, getRevisionList());
-		task = diagnosisService.createDiagnosisRevision(task, newRevisionType, newRevisionName, "");
-		task = workPhaseHandler.updateDiagnosisPhase(task);
+		task = SpringContextBridge.services().getDiagnosisService().renameDiagnosisRevisions(task, getRevisionList());
+		task = SpringContextBridge.services().getDiagnosisService().createDiagnosisRevision(task, newRevisionType, newRevisionName, "");
+		task = SpringSessionContextBridge.services().getWorkPhaseHandler().updateDiagnosisPhase(task);
 
 		super.hideDialog(new TaskReloadEvent(task));
 	}

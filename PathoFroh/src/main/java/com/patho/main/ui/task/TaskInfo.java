@@ -4,6 +4,7 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.service.UserService;
+import com.patho.main.service.impl.SpringContextBridge;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,15 +17,9 @@ import java.util.HashSet;
 
 @Getter
 @Setter
-@Configurable(preConstruction = true)
 public class TaskInfo {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserService userService;
 
 	private Task task;
 
@@ -38,7 +33,7 @@ public class TaskInfo {
 	public boolean isTaksEditable() {
 		// task is editable
 		// users and guest can'special.pdfOrganizerDialog edit anything
-		if (!userService.userHasPermission(HistoPermissions.TASK_EDIT)) {
+		if (!SpringContextBridge.services().getUserService().userHasPermission(HistoPermissions.TASK_EDIT)) {
 			return false;
 		}
 

@@ -6,6 +6,7 @@ import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
 import com.patho.main.repository.StainingPrototypeRepository;
 import com.patho.main.service.StainingPrototypeService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,20 +18,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class StainingEditDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private StainingPrototypeRepository stainingPrototypeRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private StainingPrototypeService stainingPrototypeService;
 
 	private boolean newStaining;
 
@@ -53,7 +43,7 @@ public class StainingEditDialog extends AbstractDialog {
 		// reloading stating with batch details
 		if (staining.getId() != 0) {
 			setStainingPrototype(
-					stainingPrototypeRepository.findOptionalByIdAndInitilize(staining.getId(), true).get());
+					SpringContextBridge.services().getStainingPrototypeRepository().findOptionalByIdAndInitilize(staining.getId(), true).get());
 			setNewStaining(false);
 		} else {
 			setNewStaining(true);
@@ -95,6 +85,6 @@ public class StainingEditDialog extends AbstractDialog {
 	}
 
 	private void save() {
-		stainingPrototypeService.addOrUpdate(getStainingPrototype(), getRemoveDetails());
+		SpringContextBridge.services().getStainingPrototypeService().addOrUpdate(getStainingPrototype(), getRemoveDetails());
 	}
 }

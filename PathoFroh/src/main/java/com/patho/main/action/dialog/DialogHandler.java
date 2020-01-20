@@ -47,7 +47,7 @@ public class DialogHandler {
 	private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
 	private CreateSampleDialog createSampleDialog = new CreateSampleDialog();
 	private SlideNamingDialog slideNamingDialog = new SlideNamingDialog();
-	private QuickAddDiangosisRevisionDialog quickAddDiangosisRevisionDialog = new QuickAddDiangosisRevisionDialog();
+	private QuickAddDiagnosisRevisionDialog quickAddDiagnosisRevisionDialog = new QuickAddDiagnosisRevisionDialog();
 	private CreateTaskDialog createTaskDialog = new CreateTaskDialog();
 	private SearchPatientDialog searchPatientDialog = new SearchPatientDialog();
 	private UploadDialog uploadDialog = new UploadDialog();
@@ -103,8 +103,8 @@ public class DialogHandler {
 		return this.slideNamingDialog;
 	}
 
-	public QuickAddDiangosisRevisionDialog getQuickAddDiangosisRevisionDialog() {
-		return this.quickAddDiangosisRevisionDialog;
+	public QuickAddDiagnosisRevisionDialog getQuickAddDiagnosisRevisionDialog() {
+		return this.quickAddDiagnosisRevisionDialog;
 	}
 
 	public CreateTaskDialog getCreateTaskDialog() {

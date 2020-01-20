@@ -21,7 +21,6 @@ import javax.persistence.LockModeType;
 import java.io.Serializable;
 import java.util.List;
 
-@Configurable
 public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID>
 		implements BaseRepository<T, ID> {
 

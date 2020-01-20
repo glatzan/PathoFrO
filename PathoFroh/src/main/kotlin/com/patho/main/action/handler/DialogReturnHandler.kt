@@ -155,7 +155,7 @@ open class DialogReturnHandler @Autowired constructor(
     open fun onSettingsReturn(event: SelectEvent) {
         if (event.`object` is SettingsReloadEvent) {
             logger.debug("Settings return event")
-            centralHandler.reloadAllData()
+            centralHandler.reloadUIData()
             return
         }
         onDefaultReturn(event)

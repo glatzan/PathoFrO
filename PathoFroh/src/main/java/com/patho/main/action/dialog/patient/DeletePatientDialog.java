@@ -4,6 +4,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.service.PatientService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ConfirmEvent;
 import com.patho.main.util.dialog.event.PatientDeleteEvent;
 import lombok.AccessLevel;
@@ -13,15 +14,9 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-@Configurable
 @Getter
 @Setter
 public class DeletePatientDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PatientService patientService;
 
 	private Patient patient;
 
@@ -37,7 +32,7 @@ public class DeletePatientDialog extends AbstractDialog {
 	}
 
 	public void deleteAndHide() {
-		patientService.deleteOrArchive(patient);
+		SpringContextBridge.services().getPatientService().deleteOrArchive(patient);
 		hideDialog(new PatientDeleteEvent(patient));
 	}
 

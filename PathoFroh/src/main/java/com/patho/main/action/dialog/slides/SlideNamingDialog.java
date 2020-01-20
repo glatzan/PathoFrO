@@ -6,26 +6,16 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.TaskService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-@Configurable
 @Getter
 @Setter
 public class SlideNamingDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskRepository taskRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskService taskService;
 
 	private boolean useAutoNomeclature;
 
@@ -47,13 +37,13 @@ public class SlideNamingDialog extends AbstractDialog {
 
 	public void saveAndHide() {
 		task.setUseAutoNomenclature(isUseAutoNomeclature());
-		hideDialog(new TaskReloadEvent(taskRepository.save(task, resourceBundle.get("log.patient.task.update"))));
+		hideDialog(new TaskReloadEvent(SpringContextBridge.services().getTaskRepository().save(task, resourceBundle.get("log.patient.task.update"))));
 		MessageHandler.sendGrowlMessagesAsResource("growl.task.saved", "growl.task.saved.text");
 	}
 
 	public void renameAndHide(boolean ignoreManuallyChangedEntities) {
 		hideDialog(
-				new TaskReloadEvent(taskService.updateNamesOfTaskEntities(task, ignoreManuallyChangedEntities, true)));
+				new TaskReloadEvent(SpringContextBridge.services().getTaskService().updateNamesOfTaskEntities(task, ignoreManuallyChangedEntities, true)));
 		MessageHandler.sendGrowlMessagesAsResource("growl.task.updateNaming", "growl.task.updateNaming.text");
 	}
 }

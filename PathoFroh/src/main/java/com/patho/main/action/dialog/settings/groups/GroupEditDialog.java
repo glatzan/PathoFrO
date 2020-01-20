@@ -9,6 +9,8 @@ import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoSettings;
 import com.patho.main.repository.GroupRepository;
 import com.patho.main.service.GroupService;
+import com.patho.main.service.SpringContextBridgedServices;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.search.settings.SimpleListSearchOption;
 import lombok.AccessLevel;
@@ -19,20 +21,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.*;
 
-@Configurable
 @Getter
 @Setter
 public class GroupEditDialog extends AbstractTabDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GroupRepository groupRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GroupService groupService;
 
 	private GeneralTab generalTab;
 	private NameTab nameTab;
@@ -69,7 +60,7 @@ public class GroupEditDialog extends AbstractTabDialog {
 	public boolean initBean(HistoGroup group, boolean initialize) {
 
 		if (group.getId() != 0) {
-			setGroup(groupRepository.findOptionalById(group.getId(), true).get());
+			setGroup(SpringContextBridge.services().getGroupRepository().findOptionalById(group.getId(), true).get());
 			setNewGroup(false);
 		} else {
 			setGroup(group);
@@ -99,7 +90,7 @@ public class GroupEditDialog extends AbstractTabDialog {
 		});
 
 		// saving
-		groupService.addOrUpdate(getGroup());
+		SpringContextBridge.services().getGroupService().addOrUpdate(getGroup());
 
 		hideDialog(new ReloadEvent());
 	}

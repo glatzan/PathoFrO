@@ -9,6 +9,7 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.ReloadEvent;
@@ -25,15 +26,9 @@ import javax.faces.application.FacesMessage;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class UploadDialog extends AbstractDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PDFService pdfService;
 
     /**
      * Description of the uploaded file
@@ -129,7 +124,7 @@ public class UploadDialog extends AbstractDialog {
         try {
             logger.debug("Uploadgin to Patient: " + patient.getId());
 
-            PDFReturn res = pdfService.createAndAttachPDF(selectedDatalist.getDataList(),
+            PDFReturn res = SpringContextBridge.services().getPdfService().createAndAttachPDF(selectedDatalist.getDataList(),
                     new PDFInfo(file.getFileName(), getFileType()), file.getContents(), true);
 
             getSelectedDatalist().setDataList(res.getDataList());

@@ -9,6 +9,7 @@ import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.model.patient.notification.ReportIntentNotification;
 import com.patho.main.repository.AssociatedContactRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,20 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.HashMap;
-@Configurable
 @Getter
 @Setter
 public class ContactNotificationDialog extends AbstractDialog {
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private AssociatedContactRepository associatedContactRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskRepository taskRepository;
 
 	private ReportIntent associatedContact;
 
@@ -78,7 +69,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 	 */
 	public void update(boolean reload) {
 		if (reload) {
-			setTask(taskRepository.findByID(task.getId(), false, false, false, true, true));
+			setTask(SpringContextBridge.services().getTaskRepository().findByID(task.getId(), false, false, false, true, true));
 			for (ReportIntent contact : task.getContacts()) {
 				if (contact.equals(getAssociatedContact())) {
 					setAssociatedContact(contact);
@@ -138,7 +129,7 @@ public class ContactNotificationDialog extends AbstractDialog {
 	}
 
 	public void onRoleChange() {
-		associatedContactRepository.save(getAssociatedContact(),
+		SpringContextBridge.services().getAssociatedContactRepository().save(getAssociatedContact(),
 				resourceBundle.get("log.contact.roleChange", getAssociatedContact().getTask(),
 						getAssociatedContact().toString(), getAssociatedContact().getRole().toString()));
 		update(true);

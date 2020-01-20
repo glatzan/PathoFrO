@@ -17,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 
-@Configurable
 @Getter
 @Setter
 public class DataBaseConverter {
@@ -32,36 +31,6 @@ public class DataBaseConverter {
 	protected CriteriaBuilder getCriteriaBuilder() {
 		return getSession().getCriteriaBuilder();
 	}
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PatientRepository patientRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private BioBankRepository bankRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PDFRepository pdfRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PathoConfig pathoConfig;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private MediaRepository mediaRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PDFService pdfService;
 
 	public void start() {
 //		List<PDFContainer> ignoredContainer = new ArrayList<PDFContainer>();

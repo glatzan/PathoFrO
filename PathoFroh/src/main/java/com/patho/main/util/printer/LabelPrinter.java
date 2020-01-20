@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.config.PathoConfig;
 import com.patho.main.repository.PrintDocumentRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.util.exception.CustomUserNotificationExcepetion;
 import lombok.AccessLevel;
@@ -34,18 +35,7 @@ import java.util.Optional;
  */
 @Getter
 @Setter
-@Configurable
 public class LabelPrinter extends AbstractPrinter {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PrintDocumentRepository PrintDocumentRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PathoConfig pathoConfig;
 
 	/**
 	 * Default name of the ftp uploaded file. Should contain %counter% in order to
@@ -86,8 +76,8 @@ public class LabelPrinter extends AbstractPrinter {
 
 	public boolean printTestPage() {
 
-		Optional<PrintDocument> doc = PrintDocumentRepository
-				.findByID(pathoConfig.getDefaultDocuments().getSlideLableTestDocument());
+		Optional<PrintDocument> doc = SpringContextBridge.services().getPrintDocumentRepository()
+				.findByID(SpringContextBridge.services().getPathoConfig().getDefaultDocuments().getSlideLableTestDocument());
 
 		if (!doc.isPresent()) {
 			logger.error("New Task: No TemplateUtil for printing label found");

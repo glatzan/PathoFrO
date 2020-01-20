@@ -8,6 +8,7 @@ import com.patho.main.model.person.Person;
 import com.patho.main.repository.OrganizationRepository;
 import com.patho.main.repository.PersonRepository;
 import com.patho.main.service.OrganizationService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.OrganizationSelectEvent;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
@@ -19,25 +20,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class OrganizationEditDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private OrganizationService organizationService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private OrganizationRepository organizationRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PersonRepository personRepository;
 
 	private Organization organization;
 
@@ -64,7 +49,7 @@ public class OrganizationEditDialog extends AbstractDialog {
 			setOrganization(organization);
 			setNewOrganization(true);
 		} else {
-			setOrganization(organizationRepository.findOptionalByID(organization.getId(), true).get());
+			setOrganization(SpringContextBridge.services().getOrganizationRepository().findOptionalByID(organization.getId(), true).get());
 			setNewOrganization(false);
 		}
 
@@ -87,10 +72,10 @@ public class OrganizationEditDialog extends AbstractDialog {
 	 * Saves an edited physician to the database
 	 */
 	private void save() {
-		organization = organizationService.addOrUpdate(organization);
+		organization = SpringContextBridge.services().getOrganizationService().addOrUpdate(organization);
 
 		for (Person person : removeFromOrganization) {
-			personRepository.save(person, resourceBundle.get("log.person.organization.remove", person, organization));
+			SpringContextBridge.services().getPersonRepository().save(person, resourceBundle.get("log.person.organization.remove", person, organization));
 		}
 	}
 
@@ -102,7 +87,7 @@ public class OrganizationEditDialog extends AbstractDialog {
 	 * @param organization
 	 */
 	public void removePersonFromOrganization(Person person, Organization organization) {
-		organizationService.removePerson(organization, person, false);
+		SpringContextBridge.services().getOrganizationService().removePerson(organization, person, false);
 		getRemoveFromOrganization().add(person);
 	}
 

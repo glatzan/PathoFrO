@@ -10,6 +10,7 @@ import com.patho.main.model.person.Organization;
 import com.patho.main.model.person.Person;
 import com.patho.main.repository.LDAPRepository;
 import com.patho.main.service.PhysicianService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.PhysicianSelectEvent;
 import com.patho.main.util.dialog.event.ReloadEvent;
@@ -27,20 +28,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-@Configurable
 @Getter
 @Setter
 public class PhysicianSearchDialog extends AbstractTabDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private LDAPRepository ldapRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PhysicianService physicianService;
 
     private InternalPhysician internalPhysicianTab;
 
@@ -143,7 +133,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
                 logger.debug("Hallo " + searchString);
 
                 AtomicInteger i = new AtomicInteger(0);
-                setPhysicianList(ldapRepository.findAllByName(arr).stream()
+                setPhysicianList(SpringContextBridge.services().getLdapRepository().findAllByName(arr).stream()
                         .map(p -> new PhysicianContainer(i.getAndIncrement(), p)).collect(Collectors.toList()));
 
                 setSelectedPhysician(null);
@@ -165,7 +155,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
             if (getSelectedPhysician() != null) {
                 Physician phys = ((PhysicianContainer) getSelectedPhysician()).getPhysician();
                 phys.setAssociatedRoles(new HashSet<ContactRole>(Arrays.asList(getAssociatedRoles())));
-                ((PhysicianContainer) getSelectedPhysician()).setPhysician(physicianService.addOrMergePhysician(phys));
+                ((PhysicianContainer) getSelectedPhysician()).setPhysician(SpringContextBridge.services().getPhysicianService().addOrMergePhysician(phys));
             }
         }
 
@@ -239,7 +229,7 @@ public class PhysicianSearchDialog extends AbstractTabDialog {
         }
 
         private void save() {
-            setSelectedPhysician(physicianService.addOrMergePhysician(getSelectedPhysician()));
+            setSelectedPhysician(SpringContextBridge.services().getPhysicianService().addOrMergePhysician(getSelectedPhysician()));
         }
 
         @Override

@@ -14,6 +14,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.StainingTableChooser;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.worklist.Worklist;
@@ -134,26 +135,6 @@ public class GlobalEditViewHandler {
     private MaterialPreset materialPresetToChange;
 
 
-    public void reloadAllData() {
-        logger.debug("Force Reload of all data");
-        genericViewData.loadView();
-        centralHandler.getNavigationData().updateData();
-        logger.debug("Reloading worklist");
-        worklistHandler.getCurrent().updateWorklist(true);
-    }
-
-    public void reloadTask() {
-
-    }
-
-    public void reloadPatient() {
-
-    }
-
-    public void reloadGuiData() {
-        genericViewData.loadView();
-    }
-
     @Transactional
     public void addTaskToFavouriteList(Task task, long favouriteListID) {
 //		try {
@@ -199,35 +180,9 @@ public class GlobalEditViewHandler {
 
     @Getter
     @Setter
-    @Configurable
     public class CurrentTaskFunctions {
 
         protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-        @Autowired
-        @Getter(AccessLevel.NONE)
-        @Setter(AccessLevel.NONE)
-        private ResourceBundle resourceBundle;
-
-        @Autowired
-        @Getter(AccessLevel.NONE)
-        @Setter(AccessLevel.NONE)
-        private TaskService taskService;
-
-        @Autowired
-        @Getter(AccessLevel.NONE)
-        @Setter(AccessLevel.NONE)
-        private SampleService sampleService;
-
-        @Autowired
-        @Getter(AccessLevel.NONE)
-        @Setter(AccessLevel.NONE)
-        private BlockService blockService;
-
-        @Autowired
-        @Getter(AccessLevel.NONE)
-        @Setter(AccessLevel.NONE)
-        private DialogHandler dialogHandler;
 
         private GlobalEditViewHandler globalEditViewHandler;
 
@@ -275,7 +230,7 @@ public class GlobalEditViewHandler {
          */
         public Task save(Task task, boolean reload, String resourcesKey, Object... arr) {
             logger.debug("Saving task " + task.getTaskID());
-            task = taskRepository.save(task, resourceBundle.get(resourcesKey, arr), task.getPatient());
+            task = taskRepository.save(task, SpringContextBridge.services().getResourceBundle().get(resourcesKey, arr), task.getPatient());
             if (worklistHandler.isSelected(task)) {
                 if (!reload) {
                     setSelectedTask(task);
@@ -328,7 +283,7 @@ public class GlobalEditViewHandler {
          */
         public void updateMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
             logger.debug("Change maerial of sample with preset");
-            setSelectedTask(sampleService.updateMaterialOfSample(sample, materialPreset,false));
+            setSelectedTask(SpringContextBridge.services().getSampleService().updateMaterialOfSample(sample, materialPreset,false));
             centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 

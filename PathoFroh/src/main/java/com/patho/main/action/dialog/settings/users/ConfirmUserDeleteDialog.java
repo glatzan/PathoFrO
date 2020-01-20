@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Configurable;
 
-@Configurable
 @Getter
 @Setter
 public class ConfirmUserDeleteDialog extends AbstractDialog {

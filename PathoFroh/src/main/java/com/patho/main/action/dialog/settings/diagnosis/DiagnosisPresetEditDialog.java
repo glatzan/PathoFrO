@@ -5,6 +5,7 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.service.DiagnosisPresetService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.SlideSelectEvent;
 import lombok.AccessLevel;
@@ -14,15 +15,9 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-@Configurable
 @Getter
 @Setter
 public class DiagnosisPresetEditDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DiagnosisPresetService diagnosisPresetService;
 
 	private boolean newDiagnosis;
 
@@ -51,7 +46,7 @@ public class DiagnosisPresetEditDialog extends AbstractDialog {
 	}
 
 	public void saveAndHide() {
-		diagnosisPresetService.addOrUpdate(getDiagnosisPreset());
+		SpringContextBridge.services().getDiagnosisPresetService().addOrUpdate(getDiagnosisPreset());
 		hideDialog(new ReloadEvent());
 	}
 

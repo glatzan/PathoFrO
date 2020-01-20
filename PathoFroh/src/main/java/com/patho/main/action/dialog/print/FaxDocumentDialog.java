@@ -8,6 +8,7 @@ import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.model.person.Organization;
 import com.patho.main.repository.AssociatedContactNotificationRepository;
 import com.patho.main.service.FaxService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.helper.HistoUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,20 +20,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class FaxDocumentDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private AssociatedContactNotificationRepository associatedContactNotificationRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private FaxService faxService;
 
 	private PDFContainer pdf;
 
@@ -108,7 +98,7 @@ public class FaxDocumentDialog extends AbstractDialog {
 
 		logger.debug("Sending fax");
 
-		faxService.sendFax(number, pdf);
+		SpringContextBridge.services().getFaxService().sendFax(number, pdf);
 
 	}
 

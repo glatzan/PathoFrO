@@ -10,6 +10,7 @@ import com.patho.main.model.person.Organization;
 import com.patho.main.model.person.Person;
 import com.patho.main.repository.PhysicianRepository;
 import com.patho.main.service.PhysicianService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,20 +21,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import java.util.Arrays;
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class PhysicianEditDialog extends AbstractDialog implements OrganizationFunctions {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PhysicianService physicianService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PhysicianRepository physicianRepository;
 
 	private Physician physician;
 
@@ -67,11 +57,10 @@ public class PhysicianEditDialog extends AbstractDialog implements OrganizationF
 	/**
 	 * Saves an edited physician to the database
 	 * 
-	 * @param physician
 	 */
 	public void save() {
 		if (getPhysician() != null) {
-			physicianService.savePhysican(getPhysician());
+			SpringContextBridge.services().getPhysicianService().savePhysican(getPhysician());
 		}
 	}
 
@@ -80,9 +69,9 @@ public class PhysicianEditDialog extends AbstractDialog implements OrganizationF
 	 */
 	public void updateDataFromLdap() {
 		try {
-			Physician updatePhyscian = physicianRepository.findById(getPhysician().getId()).get();
+			Physician updatePhyscian = SpringContextBridge.services().getPhysicianRepository().findById(getPhysician().getId()).get();
 			updatePhyscian.getPerson().setAutoUpdate(true);
-			setPhysician(physicianService.updatePhysicianWithLdapData(updatePhyscian));
+			setPhysician(SpringContextBridge.services().getPhysicianService().updatePhysicianWithLdapData(updatePhyscian));
 			update();
 			MessageHandler.sendGrowlMessagesAsResource("growl.patient.updateLadp.success",
 					"growl.patient.updateLadp.success.info");

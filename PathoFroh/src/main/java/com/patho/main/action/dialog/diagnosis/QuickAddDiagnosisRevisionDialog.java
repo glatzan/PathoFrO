@@ -9,6 +9,7 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.DiagnosisService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,25 +30,9 @@ import java.util.List;
  * @author andi
  *
  */
-@Configurable
 @Setter
 @Getter
-public class QuickAddDiangosisRevisionDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private DiagnosisService diagnosisService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskRepository taskRepository;
+public class QuickAddDiagnosisRevisionDialog extends AbstractDialog {
 
 	private DiagnosisRevisionType type;
 
@@ -58,7 +43,7 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog {
 	@Accessors(chain = true)
 	private String internalReference;
 
-	public QuickAddDiangosisRevisionDialog initAndPrepareBean(Task task, DiagnosisRevisionType type) {
+	public QuickAddDiagnosisRevisionDialog initAndPrepareBean(Task task, DiagnosisRevisionType type) {
 		if (initBean(task, type))
 			prepareDialog();
 
@@ -66,7 +51,7 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog {
 	}
 
 	public boolean initBean(Task task, DiagnosisRevisionType type) {
-		task = taskRepository.findByID(task.getId(), false, true, false, false, false);
+		task = SpringContextBridge.services().getTaskRepository().findByID(task.getId(), false, true, false, false, false);
 
 		super.initBean(task, Dialog.DIAGNOSIS_REVISION_ADD);
 		setType(type);
@@ -82,13 +67,13 @@ public class QuickAddDiangosisRevisionDialog extends AbstractDialog {
 
 	public void createDiagnosisAndHide() {
 
-		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+		SpringContextBridge.services().getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
 
 			public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
 				if (renameOldDiagnoses)
-					task = diagnosisService.renameDiagnosisRevisions(task, getRevisionList());
+					task = SpringContextBridge.services().getDiagnosisService().renameDiagnosisRevisions(task, getRevisionList());
 
-				task = diagnosisService.createDiagnosisRevision(getTask(), type, internalReference);
+				task = SpringContextBridge.services().getDiagnosisService().createDiagnosisRevision(getTask(), type, internalReference);
 			}
 		});
 

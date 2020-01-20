@@ -176,7 +176,7 @@
 					<p:commandButton
 						value="#{msg['dialog.council.button.sendRequest']}"
 						style="margin-right:30px" icon="fa fa-check-circle-o"
-						actionListener="#{dialog.quickAddDiangosisRevisionDialog.initAndPrepareBean(dialog.councilDialog.task,'DIAGNOSIS_COUNCIL').setInternalReference('c:'.concat(dialog.councilDialog.selectedCouncil.id))}"
+						actionListener="#{dialog.quickAddDiagnosisRevisionDialog.initAndPrepareBean(dialog.councilDialog.task,'DIAGNOSIS_COUNCIL').setInternalReference('c:'.concat(dialog.councilDialog.selectedCouncil.id))}"
 						rendered="#{!dialog.councilDialog.selectedCouncil.councilRequestCompleted}">
 						<p:ajax event="dialogReturn" update="@form"
 							listener="#{dialog.councilDialog.onEndRequestState}"></p:ajax>

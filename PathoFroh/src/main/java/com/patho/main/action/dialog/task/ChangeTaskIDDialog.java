@@ -5,6 +5,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.TaskService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,20 +17,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-@Configurable
 @Getter
 @Setter
 public class ChangeTaskIDDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskRepository taskRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskService taskService;
 
 	private String newID;
 
@@ -54,7 +44,7 @@ public class ChangeTaskIDDialog extends AbstractDialog {
 
 	public void changeAndHide() {
 		logger.debug("Changing task id form " + task.getId() + " to " + newID);
-		hideDialog(new TaskReloadEvent(taskService.changeTaskID(task, newID)));
+		hideDialog(new TaskReloadEvent(SpringContextBridge.services().getTaskService().changeTaskID(task, newID)));
 	}
 
 	public void validateTaskID(FacesContext context, UIComponent componentToValidate, Object value)
@@ -64,7 +54,7 @@ public class ChangeTaskIDDialog extends AbstractDialog {
 			return;
 		}
 
-		switch (taskService.validateTaskID(value.toString())) {
+		switch (SpringContextBridge.services().getTaskService().validateTaskID(value.toString())) {
 		case SHORT:
 			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
 					resourceBundle.get("dialog.changeTaskID.error.short")));

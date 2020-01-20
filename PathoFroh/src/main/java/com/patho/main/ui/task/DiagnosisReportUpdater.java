@@ -9,6 +9,7 @@ import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.DocumentToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
@@ -25,37 +26,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Optional;
-@Configurable
 @Getter
 @Setter
 public class DiagnosisReportUpdater {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private ThreadPoolTaskExecutor taskExecutor;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private MediaRepository mediaRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PDFService pdfService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PrintDocumentRepository printDocumentRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private TaskRepository taskRepository;
 
     public Task updateDiagnosisReportNoneBlocking(Task task, DiagnosisRevision diagnosisRevision) {
         return updateDiagnosisReportNoneBlocking(task, diagnosisRevision, new LazyPDFReturnHandler() {
@@ -67,7 +42,7 @@ public class DiagnosisReportUpdater {
 
     public Task updateDiagnosisReportNoneBlocking(Task task, DiagnosisRevision diagnosisRevision,
                                                   LazyPDFReturnHandler returnHandler) {
-        Optional<PrintDocument> printDocument = printDocumentRepository
+        Optional<PrintDocument> printDocument = SpringContextBridge.services().getPrintDocumentRepository()
                 .findByTypeAndDefault(PrintDocumentType.DIAGNOSIS_REPORT);
 
         if (!printDocument.isPresent()) {
@@ -93,7 +68,7 @@ public class DiagnosisReportUpdater {
             logger.debug("Creating new PDF for report");
             PDFReturn res;
             try {
-                res = pdfService.createAndAttachPDF(
+                res = SpringContextBridge.services().getPdfService().createAndAttachPDF(
                         task, printDocument, new PDFInfo(diagnosisRevision.getName(),
                                 PrintDocumentType.DIAGNOSIS_REPORT_COMPLETED, "", PDFContainer.MARKER_DIAGNOSIS
                                 .replace("$id", String.valueOf(diagnosisRevision.getId()))),
@@ -107,8 +82,8 @@ public class DiagnosisReportUpdater {
             logger.debug("Updating pdf for report");
             PDFContainer container = pdf.get();
             container.setName(diagnosisRevision.getName());
-            task = taskRepository.save(task);
-            pdfService.updateAttachedPDF(container, printDocument, true, true);
+            task = SpringContextBridge.services().getTaskRepository().save(task);
+            SpringContextBridge.services().getPdfService().updateAttachedPDF(container, printDocument, true, true);
         }
 
         return task;

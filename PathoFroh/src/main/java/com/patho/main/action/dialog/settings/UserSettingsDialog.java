@@ -12,6 +12,7 @@ import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PrintService;
 import com.patho.main.service.UserService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.util.dialog.event.UserReloadEvent;
 import com.patho.main.util.printer.ClinicPrinter;
@@ -27,25 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configurable
 @Getter
 @Setter
 public class UserSettingsDialog extends AbstractTabDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserService userService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserRepository userRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private FavouriteListRepository favouriteListRepository;
 
 	private GeneralTab generalTab;
 	private PrinterTab printTab;
@@ -75,7 +60,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	}
 
 	public boolean initBean() {
-		setUser(userService.getCurrentUser());
+		setUser(SpringContextBridge.services().getUserService().getCurrentUser());
 		update();
 		return super.initBean(Dialog.USER_SETTINGS);
 	}
@@ -83,12 +68,12 @@ public class UserSettingsDialog extends AbstractTabDialog {
 	public void save() {
 		getUser().getSettings().setLabelPrinter(getPrintTab().getLabelPrinter());
 		getUser().getSettings().setPrinter(getPrintTab().getClinicPrinter());
-		setUser(userRepository.save(getUser()));
+		setUser(SpringContextBridge.services().getUserRepository().save(getUser()));
 		System.out.println(getUser().getSettings().getPreferredLabelPrinter());
 	}
 
 	public void update() {
-		setUser(userRepository.findById(user.getId()).get());
+		setUser(SpringContextBridge.services().getUserRepository().findById(user.getId()).get());
 	}
 
 	public void saveAndHide() {
@@ -119,19 +104,15 @@ public class UserSettingsDialog extends AbstractTabDialog {
 
 		public boolean initTab() {
 			setAvailableViews(
-					new ArrayList<View>(userService.getCurrentUser().getSettings().getAvailableViews()));
-			setAvailableWorklistsToLoad(userService.getCurrentUser().getSettings().getAvailableWorklists());
+					new ArrayList<View>(SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getAvailableViews()));
+			setAvailableWorklistsToLoad(SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getAvailableWorklists());
 			return true;
 		}
 	}
 
 	@Getter
 	@Setter
-	@Configurable
 	public class PrinterTab extends AbstractTab {
-
-		@Autowired
-		private PrintService printService;
 
 		private ClinicPrinter clinicPrinter;
 
@@ -145,8 +126,8 @@ public class UserSettingsDialog extends AbstractTabDialog {
 		}
 
 		public boolean initTab() {
-			ClinicPrinter printer = printService.getCurrentPrinter(userService.getCurrentUser());
-			LabelPrinter labelPrinter = printService.getCurrentLabelPrinter(userService.getCurrentUser());
+			ClinicPrinter printer = SpringContextBridge.services().getPrintService().getCurrentPrinter(SpringContextBridge.services().getUserService().getCurrentUser());
+			LabelPrinter labelPrinter = SpringContextBridge.services().getPrintService().getCurrentLabelPrinter(SpringContextBridge.services().getUserService().getCurrentUser());
 
 			setLabelPrinter(labelPrinter);
 			setClinicPrinter(printer);
@@ -169,7 +150,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 		}
 
 		public boolean initTab() {
-			setDisabled(!userService.userHasPermission(HistoPermissions.FAVOURITE_LIST_USE));
+			setDisabled(!SpringContextBridge.services().getUserService().userHasPermission(HistoPermissions.FAVOURITE_LIST_USE));
 			return true;
 		}
 
@@ -178,7 +159,7 @@ public class UserSettingsDialog extends AbstractTabDialog {
 			long test = System.currentTimeMillis();
 			logger.info("start - > 0");
 
-			List<FavouriteList> list = favouriteListRepository.findByUserAndWriteableAndReadable(user, false, false,
+			List<FavouriteList> list = SpringContextBridge.services().getFavouriteListRepository().findByUserAndWriteableAndReadable(user, false, false,
 					false, false, false, false);
 
 			containers = list.stream().map(p -> new FavouriteListContainer(p, user)).collect(Collectors.toList());

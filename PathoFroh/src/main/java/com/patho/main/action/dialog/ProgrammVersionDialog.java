@@ -3,6 +3,7 @@ package com.patho.main.action.dialog;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.PathoConfig;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.config.VersionContainer;
 import com.patho.main.util.helper.TimeUtil;
 import lombok.AccessLevel;
@@ -14,15 +15,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import java.util.Date;
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class ProgrammVersionDialog extends AbstractTabDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PathoConfig pathoConfig;
 
     private VersionTab versionTab;
     private ErrorTab errorTab;
@@ -62,7 +57,7 @@ public class ProgrammVersionDialog extends AbstractTabDialog {
         }
 
         public boolean initTab() {
-            setVersionInfo(pathoConfig.getVersionContainer().getVersions());
+            setVersionInfo(SpringContextBridge.services().getPathoConfig().getVersionContainer().getVersions());
             return true;
         }
 

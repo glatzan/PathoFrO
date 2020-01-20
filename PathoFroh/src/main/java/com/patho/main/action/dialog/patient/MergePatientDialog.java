@@ -7,6 +7,7 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.PatientService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.ConfirmEvent;
 import com.patho.main.util.dialog.event.PatientMergeEvent;
@@ -24,28 +25,12 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Configurable
 @Getter
 @Setter
 public class MergePatientDialog extends AbstractDialog {
 
 	public static final int MERGE_PIZ = 0;
 	public static final int MERGE_PATIENT = 1;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PatientService patientService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PatientRepository patientRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private ConfirmExternalPatientDataDialog confirmPatientData;
 
 	private Patient source;
 
@@ -96,7 +81,7 @@ public class MergePatientDialog extends AbstractDialog {
 		if (event.getObject() != null && event.getObject() instanceof PatientReloadEvent) {
 			Patient patient = ((PatientReloadEvent) event.getObject()).getPatient();
 			// Reloading patient with tasks
-			setSource(patient.getId() != 0 ? patientRepository.findOptionalById(patient.getId(), true, false).get()
+			setSource(patient.getId() != 0 ? SpringContextBridge.services().getPatientRepository().findOptionalById(patient.getId(), true, false).get()
 					: patient);
 
 			updateOnChange();
@@ -107,7 +92,7 @@ public class MergePatientDialog extends AbstractDialog {
 		if (event.getObject() != null && event.getObject() instanceof PatientReloadEvent) {
 			Patient patient = ((PatientReloadEvent) event.getObject()).getPatient();
 			// Reloading patient with tasks
-			setTarget(patient.getId() != 0 ? patientRepository.findOptionalById(patient.getId(), true, false).get()
+			setTarget(patient.getId() != 0 ? SpringContextBridge.services().getPatientRepository().findOptionalById(patient.getId(), true, false).get()
 					: patient);
 
 			updateOnChange();
@@ -147,13 +132,13 @@ public class MergePatientDialog extends AbstractDialog {
 		if (event.getObject() != null && event.getObject() instanceof ConfirmEvent
 				&& ((ConfirmEvent) event.getObject()).getObj()) {
 			if (source != null && target != null) {
-				patientService.moveTaskBetweenPatients(source, target, taskLists.getSource(), taskLists.getTarget());
+				SpringContextBridge.services().getPatientService().moveTaskBetweenPatients(source, target, taskLists.getSource(), taskLists.getTarget());
 
 				if (deleteSource)
-					source = patientService.archive(source, true);
+					source = SpringContextBridge.services().getPatientService().archive(source, true);
 
 				if (deleteTarget)
-					target = patientService.archive(target, true);
+					target = SpringContextBridge.services().getPatientService().archive(target, true);
 
 				MessageHandler.sendGrowlMessagesAsResource("growl.success", "growl.patient.merge.success");
 				hideDialog(new PatientMergeEvent(source, target));

@@ -5,6 +5,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,15 +13,9 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-@Configurable
 @Setter
 @Getter
 public class EditDiagnosisRevisionsDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskRepository taskRepository;
 
 	private DiagnosisRevision revision;
 
@@ -42,7 +37,7 @@ public class EditDiagnosisRevisionsDialog extends AbstractDialog {
 	}
 
 	public void saveAndHide() {
-		taskRepository.save(task, resourceBundle.get("log.patient.task.diagnosisRevisions.update", revision));
+		SpringContextBridge.services().getTaskRepository().save(task, resourceBundle.get("log.patient.task.diagnosisRevisions.update", revision));
 		hideDialog(new TaskReloadEvent());
 	}
 }

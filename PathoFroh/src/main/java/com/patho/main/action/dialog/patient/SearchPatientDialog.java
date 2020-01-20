@@ -9,6 +9,7 @@ import com.patho.main.model.person.Person;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.service.PatientService;
 import com.patho.main.service.UserService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.ListChooser;
 import com.patho.main.util.dialog.event.PatientSelectEvent;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
@@ -26,20 +27,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Configurable
 @Getter
 @Setter
 public class SearchPatientDialog extends AbstractTabDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PatientService patientService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private UserService userService;
 
     private ClinicSearchTab clinicSearchTab;
 
@@ -73,7 +63,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 
     public SearchPatientDialog externalMode(boolean forceExternalMode) {
         // only enable if forced or user has the permission to add external patients
-        if (forceExternalMode || userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN)) {
+        if (forceExternalMode || SpringContextBridge.services().getUserService().userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN)) {
             appendTab(externalPatientTab);
             externalPatientTab.initTab();
         }
@@ -162,7 +152,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
             setPatientList(null);
             setToManyMatchesInClinicDatabase(false);
             setSearchLocalDatabaseOnly(
-                    !userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_CLINIC));
+                    !SpringContextBridge.services().getUserService().userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_CLINIC));
             return true;
         }
 
@@ -182,7 +172,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 
                 if (getPatientPiz() != null && !getPatientPiz().isEmpty()) {
                     if (getPatientPiz().matches("^[0-9]{8}$")) { // if full piz
-                        Optional<Patient> oPatient = patientService.findPatientByPizInDatabaseAndPDV(getPatientPiz(),
+                        Optional<Patient> oPatient = SpringContextBridge.services().getPatientService().findPatientByPizInDatabaseAndPDV(getPatientPiz(),
                                 isSearchLocalDatabaseOnly());
                         if (oPatient.isPresent())
                             resultArr.add(oPatient.get());
@@ -191,7 +181,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
                         // 6to 7 digits of piz
                         // isSearchLocalDatabaseOnly() can be ignored because this function is only
                         // supported by local database
-                        resultArr.addAll(patientService
+                        resultArr.addAll(SpringContextBridge.services().getPatientService()
                                 .findAllPatientsByPizInDatabaseAndPDV(getPatientPiz().replaceAll("_", "")));
                     }
 
@@ -201,7 +191,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
 
                     AtomicBoolean toManyEntries = new AtomicBoolean(false);
 
-                    resultArr.addAll(patientService.findAllPatientsByNameSurnameBirthdayInDatabaseAndPDV(
+                    resultArr.addAll(SpringContextBridge.services().getPatientService().findAllPatientsByNameSurnameBirthdayInDatabaseAndPDV(
                             getPatientName(), getPatientSurname(), getPatientBirthday(), isSearchLocalDatabaseOnly(),
                             toManyEntries));
 
@@ -222,7 +212,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
          */
         public void hideDialogAndSelectItem() {
             SearchPatientDialog.this.hideDialog(new PatientSelectEvent(
-                    persistPatient ? patientService.addPatient(getSelectedPatientListItem().getListItem(), false)
+                    persistPatient ? SpringContextBridge.services().getPatientService().addPatient(getSelectedPatientListItem().getListItem(), false)
                             : getSelectedPatientListItem().getListItem()));
         }
 
@@ -262,7 +252,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
         }
 
         public boolean initTab() {
-            setDisabled(!userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN));
+            setDisabled(!SpringContextBridge.services().getUserService().userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN));
             setPatient(new Patient(new Person(new Contact())));
             getPatient().getPerson().setGender(Person.Gender.UNKNOWN);
             return true;
@@ -279,7 +269,7 @@ public class SearchPatientDialog extends AbstractTabDialog {
         public void onConfirmExternalPatientDialog(SelectEvent event) {
             if (event.getObject() != null && event.getObject() instanceof PatientSelectEvent) {
                 SearchPatientDialog.this.hideDialog(new PatientSelectEvent(persistPatient
-                        ? patientService
+                        ? SpringContextBridge.services().getPatientService()
                         .addPatient(((PatientSelectEvent) event.getObject()).getObj(), false)
                         : ((PatientSelectEvent) event.getObject()).getObj()));
             }

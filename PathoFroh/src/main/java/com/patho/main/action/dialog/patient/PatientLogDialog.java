@@ -5,6 +5,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.log.Log;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.repository.LogRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,15 +14,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
 
-@Configurable
 @Getter
 @Setter
 public class PatientLogDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private LogRepository logRepository;
 
 	private Patient patient;
 
@@ -40,7 +35,7 @@ public class PatientLogDialog extends AbstractDialog {
 	 */
 	public boolean initBean(Patient patient) {
 		setPatient(patient);
-		setPatientLog(logRepository.findAllByLogInfoPatientOrderByIdAsc(patient));
+		setPatientLog(SpringContextBridge.services().getLogRepository().findAllByLogInfoPatientOrderByIdAsc(patient));
 		return super.initBean(null, Dialog.PATIENT_LOG);
 	}
 }

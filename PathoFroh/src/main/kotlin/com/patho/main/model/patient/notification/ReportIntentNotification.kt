@@ -43,32 +43,6 @@ open class ReportIntentNotification : AbstractPersistable, ID {
     @Column
     open var active: Boolean = true
 
-//    /**
-//     * Notification was executed, this is even true if the notification process failed
-//     */
-//    @Column
-//    open var performed: Boolean = false
-//
-//    /**
-//     * True if notification failed
-//     */
-//    @Column
-//    open var failed: Boolean = false
-//
-//    /**
-//     * True if this is a copied notification.
-//     */
-//    @Column
-//    open var renewed: Boolean = false
-//
-//    @Column(columnDefinition = "VARCHAR")
-//    open var commentary: String? = null
-
-//    /**
-//     * Date on which the notification was performed
-//     */
-//    open var dateOfAction: Instant? = null
-
     /**
      * True if the notification address was altered by the user
      */
@@ -84,8 +58,6 @@ open class ReportIntentNotification : AbstractPersistable, ID {
     /**
      * HistoryData
      */
-//    @Column
-////    @Type(type = "DiagnosisHistoryRecord")
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     open var history: MutableList<DiagnosisHistoryRecord> = mutableListOf<DiagnosisHistoryRecord>()

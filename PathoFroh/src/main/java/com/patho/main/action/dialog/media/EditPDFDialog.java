@@ -4,6 +4,7 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.PDFRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
@@ -14,13 +15,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 @Getter
 @Setter
-@Configurable
 public class EditPDFDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PDFRepository pdfRepository;
 
 	/**
 	 * PDF container
@@ -47,7 +42,7 @@ public class EditPDFDialog extends AbstractDialog {
 	}
 
 	public void saveAndHide() {
-		pdfRepository.save(container, resourceBundle.get("log.pdf.edit", container));
+		SpringContextBridge.services().getPdfRepository().save(container, resourceBundle.get("log.pdf.edit", container));
 		hideDialog();
 	}
 

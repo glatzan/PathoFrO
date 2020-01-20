@@ -73,7 +73,7 @@ open class CentralHandler @Autowired constructor(
     /**
      * Reloads all data for the user
      */
-    open fun reloadAllData() {
+    open fun reloadUIData() {
         logger.debug("Force Reload of all data")
         genericViewData.loadView()
         navigationData.updateData()

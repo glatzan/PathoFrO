@@ -7,6 +7,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.miscellaneous.BioBank;
 import com.patho.main.repository.BioBankRepository;
 import com.patho.main.repository.TaskRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.TaskReloadEvent;
 import lombok.AccessLevel;
@@ -18,20 +19,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.Date;
 import java.util.Optional;
-@Configurable
 @Getter
 @Setter
 public class BioBankDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private BioBankRepository bioBankRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TaskRepository taskRepository;
 
 	private BioBank bioBank;
 
@@ -86,19 +76,19 @@ public class BioBankDialog extends AbstractDialog {
 	}
 
 	public void saveData() {
-		bioBank = bioBankRepository.save(bioBank, resourceBundle.get("log.patient.bioBank.save", getTask()),
+		bioBank = SpringContextBridge.services().getBioBankRepository().save(bioBank, resourceBundle.get("log.patient.bioBank.save", getTask()),
 				getTask().getPatient());
 	}
 
 	public void update(boolean reloadTask) {
 		if (reloadTask) {
-			Task oTask = taskRepository.findByID(getTask().getId(), false, false, false,
+			Task oTask = SpringContextBridge.services().getTaskRepository().findByID(getTask().getId(), false, false, false,
 					false, true);
 			setTask(oTask);
 		}
 
 		// setting associatedBioBank
-		Optional<BioBank> oBioBank = bioBankRepository.findOptionalByTaskAndInitialize(getTask());
+		Optional<BioBank> oBioBank = SpringContextBridge.services().getBioBankRepository().findOptionalByTaskAndInitialize(getTask());
 
 		if (oBioBank.isPresent())
 			setBioBank(oBioBank.get());

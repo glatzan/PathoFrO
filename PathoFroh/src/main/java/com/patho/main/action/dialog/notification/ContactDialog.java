@@ -11,6 +11,7 @@ import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.ReportIntentService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.selectors.AssociatedContactSelector;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
@@ -23,32 +24,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Transient;
 
 import java.util.List;
-@Configurable
 @Getter
 @Setter
 public class ContactDialog extends AbstractDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private ReportIntentService reportIntentService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private TaskRepository taskRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PhysicianService physicianService;
-
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    @Lazy
-    private DialogHandler dialogHandler;
 
     /**
      * List of contacts
@@ -90,7 +68,7 @@ public class ContactDialog extends AbstractDialog {
      */
     public void update(boolean reload) {
         if (reload) {
-            setTask(taskRepository.findByID(task.getId(), false, false, false, true, true));
+            setTask(SpringContextBridge.services().getTaskRepository().findByID(task.getId(), false, false, false, true, true));
         }
 
         updateContactHolders();
@@ -115,7 +93,7 @@ public class ContactDialog extends AbstractDialog {
     }
 
     public void removeContact(Task task, ReportIntent reportIntent) {
-        reportIntentService.removeReportIntent(task, reportIntent);
+        SpringContextBridge.services().getReportIntentService().removeReportIntent(task, reportIntent);
         update(true);
     }
 
@@ -128,9 +106,9 @@ public class ContactDialog extends AbstractDialog {
     @Transient
     public void addPhysicianWithRole(Physician physician, ContactRole role) {
         try {
-            reportIntentService.addReportIntent(getTask(), physician.getPerson(), role, true, true, true);
+            SpringContextBridge.services().getReportIntentService().addReportIntent(getTask(), physician.getPerson(), role, true, true, true);
             // increment counter
-            physicianService.incrementPhysicianPriorityCounter(physician.getPerson());
+            SpringContextBridge.services().getPhysicianService().incrementPhysicianPriorityCounter(physician.getPerson());
         } catch (IllegalArgumentException e) {
             logger.debug("Not adding, double contact");
             MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.contact.duplicated");

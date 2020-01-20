@@ -10,6 +10,7 @@ import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.repository.MediaRepository;
 import com.patho.main.service.PDFService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.print.LoadedPrintPDFBearer;
@@ -27,30 +28,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
-@Configurable(preConstruction = true)
 @Getter
 @Setter
 public class PDFCreator {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PathoConfig pathoConfig;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PDFService pdfService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private MediaRepository mediaRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private ThreadPoolTaskExecutor taskExecutor;
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -112,14 +92,14 @@ public class PDFCreator {
 
 	public PDFCreator(File workdirectory) {
 		if (workdirectory == null)
-			workdirectory = new File(pathoConfig.getFileSettings().getPrintDirectory());
+			workdirectory = new File(SpringContextBridge.services().getPathoConfig().getFileSettings().getPrintDirectory());
 
 		this.relaviteTargetDirectory = workdirectory;
-		this.absoluteTargetDirectory = mediaRepository.getWriteFile(workdirectory);
+		this.absoluteTargetDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(workdirectory);
 
-		this.workingDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getWorkDirectory());
-		this.auxDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getAuxDirectory());
-		this.errorDirectory = mediaRepository.getWriteFile(pathoConfig.getFileSettings().getErrorDirectory());
+		this.workingDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(SpringContextBridge.services().getPathoConfig().getFileSettings().getWorkDirectory());
+		this.auxDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(SpringContextBridge.services().getPathoConfig().getFileSettings().getAuxDirectory());
+		this.errorDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(SpringContextBridge.services().getPathoConfig().getFileSettings().getErrorDirectory());
 	}
 
 	public PDFContainer createPDF(PrintDocument template) throws FileNotFoundException {
@@ -133,7 +113,7 @@ public class PDFCreator {
 	public PDFContainer createPDF(PrintDocument template, File relaiveTargetDirectory, boolean generateThumbnail)
 			throws FileNotFoundException {
 		this.relaviteTargetDirectory = relaiveTargetDirectory;
-		this.absoluteTargetDirectory = mediaRepository.getWriteFile(relaiveTargetDirectory);
+		this.absoluteTargetDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(relaiveTargetDirectory);
 
 		PDFContainer container = getNewUniquePDF(generateThumbnail);
 		container.setType(template.getDocumentType());
@@ -156,7 +136,7 @@ public class PDFCreator {
 
 		String uuid = UUID.randomUUID().toString();
 
-		taskExecutor.execute(new Thread() {
+		SpringContextBridge.services().getTaskExecutor().execute(new Thread() {
 			public void run() {
 				try {
 					lock.acquire();
@@ -181,9 +161,9 @@ public class PDFCreator {
 	}
 
 	public PDFContainer updateExistingPDF(PrintDocument template, PDFContainer container, boolean generateThumbnail) {
-		this.absoluteTargetDirectory = mediaRepository
-				.getParentDirectory(mediaRepository.getWriteFile(container.getPath()));
-		this.relaviteTargetDirectory = mediaRepository.getParentDirectory(container.getPath());
+		this.absoluteTargetDirectory = SpringContextBridge.services().getMediaRepository()
+				.getParentDirectory(SpringContextBridge.services().getMediaRepository().getWriteFile(container.getPath()));
+		this.relaviteTargetDirectory = SpringContextBridge.services().getMediaRepository().getParentDirectory(container.getPath());
 
 		return runPDFCreation(template, container, generateThumbnail);
 	}
@@ -198,7 +178,7 @@ public class PDFCreator {
 
 		String uuid = UUID.randomUUID().toString();
 
-		taskExecutor.execute(new Thread() {
+		SpringContextBridge.services().getTaskExecutor().execute(new Thread() {
 			public void run() {
 				try {
 
@@ -218,9 +198,9 @@ public class PDFCreator {
 	}
 
 	private PDFContainer runPDFCreation(PrintDocument template, PDFContainer container, boolean generateThumbnail) {
-		this.absoulteTargetFile = mediaRepository.getWriteFile(container.getPath());
+		this.absoulteTargetFile = SpringContextBridge.services().getMediaRepository().getWriteFile(container.getPath());
 		this.relativeTargetFile = container.getPath();
-		this.absoluteTargetImg = mediaRepository.getWriteFile(container.getThumbnail());
+		this.absoluteTargetImg = SpringContextBridge.services().getMediaRepository().getWriteFile(container.getThumbnail());
 		this.relativeTargetImg = container.getThumbnail();
 
 		boolean created = run(template.getFinalContent(), generateThumbnail);
@@ -273,7 +253,7 @@ public class PDFCreator {
 					throw new IOException("Could not move Thumbnail");
 			}
 
-			if (pathoConfig.getFileSettings().getCleanup()) {
+			if (SpringContextBridge.services().getPathoConfig().getFileSettings().getCleanup()) {
 				cleanUp(helper, false);
 				logger.debug("Cleanup Completed");
 			} else {
@@ -325,7 +305,7 @@ public class PDFCreator {
 
 	private PDFLatexHelper initlizeTmpFiles(boolean thumbanil) throws FileNotFoundException {
 		logger.debug("Setting up temporary files");
-		String createName = mediaRepository.getUniqueName(workingDirectory, ".tex");
+		String createName = SpringContextBridge.services().getMediaRepository().getUniqueName(workingDirectory, ".tex");
 		PDFLatexHelper helper = new PDFLatexHelper();
 		helper.setInputFile(new File(workingDirectory, createName));
 		helper.setAuxFile(new File(auxDirectory, createName.replace(".tex", ".aux")));
@@ -336,7 +316,7 @@ public class PDFCreator {
 	}
 
 	private boolean initlizeInputFile(PDFLatexHelper helper, String content) throws IOException {
-		if (!mediaRepository.saveString(content, helper.getInputFile())) {
+		if (!SpringContextBridge.services().getMediaRepository().saveString(content, helper.getInputFile())) {
 			throw new IOException("Could not save pdf data to " + helper.getInputFile().getAbsolutePath());
 		}
 		return true;
@@ -402,8 +382,8 @@ public class PDFCreator {
 		if (helper.getOutputThumbnail() == null)
 			return false;
 
-		pdfService.createThumbnail(helper.getOutputThumbnail(), helper.getOutputFile(), 0,
-				pathoConfig.getFileSettings().getThumbnailDPI());
+		SpringContextBridge.services().getPdfService().createThumbnail(helper.getOutputThumbnail(), helper.getOutputFile(), 0,
+				SpringContextBridge.services().getPathoConfig().getFileSettings().getThumbnailDPI());
 
 		logger.debug("Thumbail created: " + helper.getOutputThumbnail().getPath());
 
@@ -411,7 +391,7 @@ public class PDFCreator {
 	}
 
 	private PDFContainer getNewUniquePDF(boolean thumbnail) throws FileNotFoundException {
-		String outPutName = mediaRepository.getUniqueName(absoluteTargetDirectory, ".pdf");
+		String outPutName = SpringContextBridge.services().getMediaRepository().getUniqueName(absoluteTargetDirectory, ".pdf");
 		File outFile = new File(relaviteTargetDirectory, outPutName);
 		File outImg = new File(relaviteTargetDirectory, outPutName.replace(".pdf", ".png"));
 
@@ -424,40 +404,40 @@ public class PDFCreator {
 
 	private void cleanUp(PDFLatexHelper helper, boolean error) {
 		if (!error) {
-			mediaRepository.delete(helper.inputFile);
-			mediaRepository.delete(helper.auxFile);
-			mediaRepository.delete(helper.logFile);
+			SpringContextBridge.services().getMediaRepository().delete(helper.inputFile);
+			SpringContextBridge.services().getMediaRepository().delete(helper.auxFile);
+			SpringContextBridge.services().getMediaRepository().delete(helper.logFile);
 			if (!absoluteTargetDirectory.equals(workingDirectory)) {
-				mediaRepository.delete(helper.outputFile);
+				SpringContextBridge.services().getMediaRepository().delete(helper.outputFile);
 				if (helper.outputThumbnail != null)
-					mediaRepository.delete(helper.outputThumbnail);
+					SpringContextBridge.services().getMediaRepository().delete(helper.outputThumbnail);
 			}
 
 		} else {
-			if (pathoConfig.getFileSettings().getKeepErrorFiles()) {
+			if (SpringContextBridge.services().getPathoConfig().getFileSettings().getKeepErrorFiles()) {
 				logger.debug("Moving files to error directory");
-				mediaRepository.moveFile(helper.inputFile, errorDirectory);
-				mediaRepository.moveFile(helper.auxFile, errorDirectory);
-				mediaRepository.moveFile(helper.logFile, errorDirectory);
-				mediaRepository.moveFile(helper.outputFile, errorDirectory);
+				SpringContextBridge.services().getMediaRepository().moveFile(helper.inputFile, errorDirectory);
+				SpringContextBridge.services().getMediaRepository().moveFile(helper.auxFile, errorDirectory);
+				SpringContextBridge.services().getMediaRepository().moveFile(helper.logFile, errorDirectory);
+				SpringContextBridge.services().getMediaRepository().moveFile(helper.outputFile, errorDirectory);
 				if (helper.outputThumbnail != null)
-					mediaRepository.moveFile(helper.outputThumbnail, errorDirectory);
+					SpringContextBridge.services().getMediaRepository().moveFile(helper.outputThumbnail, errorDirectory);
 				if (!absoluteTargetDirectory.equals(workingDirectory)) {
-					mediaRepository.moveFile(absoulteTargetFile, errorDirectory);
+					SpringContextBridge.services().getMediaRepository().moveFile(absoulteTargetFile, errorDirectory);
 					if (absoluteTargetImg != null)
-						mediaRepository.moveFile(absoluteTargetImg, errorDirectory);
+						SpringContextBridge.services().getMediaRepository().moveFile(absoluteTargetImg, errorDirectory);
 				}
 			} else {
-				mediaRepository.delete(helper.inputFile);
-				mediaRepository.delete(helper.auxFile);
-				mediaRepository.delete(helper.logFile);
-				mediaRepository.delete(helper.outputFile);
+				SpringContextBridge.services().getMediaRepository().delete(helper.inputFile);
+				SpringContextBridge.services().getMediaRepository().delete(helper.auxFile);
+				SpringContextBridge.services().getMediaRepository().delete(helper.logFile);
+				SpringContextBridge.services().getMediaRepository().delete(helper.outputFile);
 				if (helper.outputThumbnail != null)
-					mediaRepository.delete(helper.outputThumbnail);
+					SpringContextBridge.services().getMediaRepository().delete(helper.outputThumbnail);
 				if (!absoluteTargetDirectory.equals(workingDirectory)) {
-					mediaRepository.delete(absoulteTargetFile);
+					SpringContextBridge.services().getMediaRepository().delete(absoulteTargetFile);
 					if (absoluteTargetImg != null)
-						mediaRepository.delete(absoluteTargetImg);
+						SpringContextBridge.services().getMediaRepository().delete(absoluteTargetImg);
 				}
 			}
 		}
@@ -468,16 +448,16 @@ public class PDFCreator {
 	}
 
 	private boolean moveFileToTargetDestination(File srcFile, File destFile, boolean overwrite) {
-		return mediaRepository.moveFile(srcFile, destFile);
+		return SpringContextBridge.services().getMediaRepository().moveFile(srcFile, destFile);
 	}
 
 	public PDFContainer mergePDFs(PDFContainer target, List<LoadedPrintPDFBearer> containers) {
 		LoadedPrintPDFBearer loadedContainer = PDFCreator.mergePdfs(containers, "", target.getType());
 
-		mediaRepository.saveBytes(loadedContainer.getPdfData(), target.getPath());
+		SpringContextBridge.services().getMediaRepository().saveBytes(loadedContainer.getPdfData(), target.getPath());
 
 		if (target.getThumbnail() != null)
-			pdfService.createThumbnail(new File(target.getThumbnail()), loadedContainer.getPdfData());
+			SpringContextBridge.services().getPdfService().createThumbnail(new File(target.getThumbnail()), loadedContainer.getPdfData());
 
 		return target;
 	}

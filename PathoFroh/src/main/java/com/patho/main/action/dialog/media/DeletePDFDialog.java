@@ -6,6 +6,7 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.service.PDFService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,15 +14,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-@Getter
 @Setter
-@Configurable
 public class DeletePDFDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PDFService pdfService;
 
 	/**
 	 * Parent of the pdf
@@ -50,7 +44,7 @@ public class DeletePDFDialog extends AbstractDialog {
 		logger.debug("Deleting container");
 		MessageHandler.sendGrowlMessagesAsResource("log.pdf.delete", "log.pdf.delete.text",
 				new Object[] { container.getName() });
-		pdfService.deletePdf(parent, container);
+		SpringContextBridge.services().getPdfService().deletePdf(parent, container);
 		hideDialog();
 	}
 

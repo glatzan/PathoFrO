@@ -19,6 +19,7 @@ import com.patho.main.repository.PatientRepository;
 import com.patho.main.repository.PrintDocumentRepository;
 import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.*;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.DocumentToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
@@ -34,7 +35,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.TransactionStatus;
@@ -51,96 +51,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Configurable
 @Getter
 @Setter
 public class CreateTaskDialog extends AbstractDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private ThreadPoolTaskExecutor taskExecutor;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private TransactionTemplate transactionTemplate;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private CurrentUserHandler currentUserHandler;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private TaskService taskService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private TaskRepository taskRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private SampleService sampleService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private BlockService blockService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private SlideService slideService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private DiagnosisService diagnosisService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private BioBankService bioBankService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private FavouriteListService favouriteListService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private MaterialPresetRepository materialPresetRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PatientRepository patientRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PDFService pdfService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PathoConfig pathoConfig;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PrintDocumentRepository printDocumentRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private ReportIntentService reportIntentService;
-
 
     private Patient patient;
 
@@ -171,7 +84,7 @@ public class CreateTaskDialog extends AbstractDialog {
         setPatient(patient);
 
         // setting material list
-        setMaterialList(materialPresetRepository.findAllIgnoreArchivedOrderByPriorityCountDesc(true, true));
+        setMaterialList(SpringContextBridge.services().getMaterialPresetRepository().findAllIgnoreArchivedOrderByPriorityCountDesc(true, true));
 
         setTaskData(new TaskTempData());
 
@@ -184,58 +97,58 @@ public class CreateTaskDialog extends AbstractDialog {
      * @throws CustomNotUniqueReqest
      */
     public Task createNewTask() {
-        return transactionTemplate.execute(new TransactionCallback<Task>() {
+        return SpringContextBridge.services().getTransactionTemplate().execute(new TransactionCallback<Task>() {
 
             public Task doInTransaction(TransactionStatus transactionStatus) {
 
                 logger.debug("Creating new Task");
 
-                Task task = taskService.createTask(getPatient(), getTaskData().getTaskID(), true);
+                Task task = SpringContextBridge.services().getTaskService().createTask(getPatient(), getTaskData().getTaskID(), true);
                 task.setReceiptDate(getTaskData().getReceiptDate());
                 task.setDueDate(getTaskData().getDueDate());
                 task.setDateOfSugery(getTaskData().getReceiptDate());
                 task.setTaskPriority(getTaskData().getTaskPriority());
                 task.setUseAutoNomenclature(getTaskData().isUseAutoNomenclature());
 
-                task = taskRepository.save(task, resourceBundle.get("log.patient.task.update", task), patient);
+                task = SpringContextBridge.services().getTaskRepository().save(task, resourceBundle.get("log.patient.task.update", task), patient);
 
                 for (SampleTempData sampleTempData : getTaskData().getSamples()) {
                     logger.debug("Creating sample {}", sampleTempData.getMaterial());
-                    sampleService.createSample(task, sampleTempData.getMaterialPreset(), sampleTempData.getMaterial(),
+                    SpringContextBridge.services().getSampleService().createSample(task, sampleTempData.getMaterialPreset(), sampleTempData.getMaterial(),
                             false, true, true);
 
                     // creating block manually
                     Sample sample = HistoUtil.getLastElement(task.getSamples());
-                    blockService.createBlock(sample, false, true, false);
+                    SpringContextBridge.services().getBlockService().createBlock(sample, false, true, false);
 
                     Block block = HistoUtil.getLastElement(sample.getBlocks());
 
-                    slideService.createSlidesXTimes(sampleTempData.getStainings(), block, "", "", false, true, false, false);
+                    SpringContextBridge.services().getSlideService().createSlidesXTimes(sampleTempData.getStainings(), block, "", "", false, true, false, false);
 
                 }
 
                 // creating standard diagnoses
-                task = diagnosisService.createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
+                task = SpringContextBridge.services().getDiagnosisService().createDiagnosisRevision(task, DiagnosisRevisionType.DIAGNOSIS);
 
-                task = reportIntentService.addReportIntent(task, getPatient().getPerson(), ContactRole.PATIENT, false, false, true).getFirst();
+                task = SpringContextBridge.services().getReportIntentService().addReportIntent(task, getPatient().getPerson(), ContactRole.PATIENT, false, false, true).getFirst();
 
-                BioBank bioBank = bioBankService.createBioBank(task);
+                BioBank bioBank = SpringContextBridge.services().getBioBankService().createBioBank(task);
 
-                task = favouriteListService.addTaskToList(task, PredefinedFavouriteList.StainingList.getId());
+                task = SpringContextBridge.services().getFavouriteListService().addTaskToList(task, PredefinedFavouriteList.StainingList.getId());
 
                 if (getTaskData().isExternalSamples()) {
-                    task = favouriteListService.addTaskToList(task, getTaskData().getExnternalSampleCommentary(),
+                    task = SpringContextBridge.services().getFavouriteListService().addTaskToList(task, getTaskData().getExnternalSampleCommentary(),
                             PredefinedFavouriteList.ReturnSampleList.getId());
                 }
 
                 if (getTaskData().getBioBank().isPDFSelected()) {
-                    Patient p = patientRepository.findOptionalById(getPatient().getId()).get();
+                    Patient p = SpringContextBridge.services().getPatientRepository().findOptionalById(getPatient().getId()).get();
 
-                    p = pdfService.initializeDataListTree(p);
+                    p = SpringContextBridge.services().getPdfService().initializeDataListTree(p);
 
                     bioBank.setInformedConsentType(getTaskData().getBioBank().getInformedConsentType());
 
-                    pdfService.movePdf(pdfService.getDataListsOfPatient(p), bioBank,
+                    SpringContextBridge.services().getPdfService().movePdf(SpringContextBridge.services().getPdfService().getDataListsOfPatient(p), bioBank,
                             getTaskData().getBioBank().getContainer());
 
                 }
@@ -253,12 +166,12 @@ public class CreateTaskDialog extends AbstractDialog {
     public void createPrintAndHide() {
         task = createNewTask();
 
-        taskExecutor.execute(new Thread() {
+        SpringContextBridge.services().getTaskExecutor().execute(new Thread() {
             public void run() {
                 logger.debug("Stargin PDF Generation in new Thread");
 
-                Optional<PrintDocument> printDocument = printDocumentRepository
-                        .findByID(pathoConfig.getDefaultDocuments().getTaskCreationDocument());
+                Optional<PrintDocument> printDocument = SpringContextBridge.services().getPrintDocumentRepository()
+                        .findByID(SpringContextBridge.services().getPathoConfig().getDefaultDocuments().getTaskCreationDocument());
 
                 if (!printDocument.isPresent()) {
                     logger.error("New Task: No TemplateUtil for printing UReport found");
@@ -278,7 +191,7 @@ public class CreateTaskDialog extends AbstractDialog {
                     return;
                 }
 
-                currentUserHandler.getPrinter().print(new PrintOrder(container, 1, printDocument.get()));
+                SpringContextBridge.services().getCurrentUserHandler().getPrinter().print(new PrintOrder(container, 1, printDocument.get()));
 
                 logger.debug("PDF Generation completed, thread ended");
             }
@@ -298,7 +211,7 @@ public class CreateTaskDialog extends AbstractDialog {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Auftragsnummer darf nur Zahlen enthalten"));
         } else {
             try {
-                taskRepository.findByTaskID(value.toString(), false, false, false, false, false);
+                SpringContextBridge.services().getTaskRepository().findByTaskID(value.toString(), false, false, false, false, false);
                 throw new ValidatorException(
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Auftragsnummer bereits vorhanden"));
             } catch (TaskNotFoundException e) {
@@ -323,7 +236,7 @@ public class CreateTaskDialog extends AbstractDialog {
         private BioBankTempData bioBank;
 
         public TaskTempData() {
-            this.taskID = taskService.getNextTaskID();
+            this.taskID = SpringContextBridge.services().getTaskService().getNextTaskID();
             this.receiptDate = LocalDate.now();
             this.dueDate = LocalDate.now();
             this.useAutoNomenclature = true;

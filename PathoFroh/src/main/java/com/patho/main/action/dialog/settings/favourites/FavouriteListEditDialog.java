@@ -6,6 +6,7 @@ import com.patho.main.model.favourites.*;
 import com.patho.main.repository.FavouriteListRepository;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.UserService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.GroupSelectEvent;
@@ -24,25 +25,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Configurable
 @Getter
 @Setter
 public class FavouriteListEditDialog extends AbstractDialog {
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserService userService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private FavouriteListService favouriteListService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private FavouriteListRepository favouriteListRepository;
 
 	private boolean newFavouriteList;
 
@@ -68,7 +53,7 @@ public class FavouriteListEditDialog extends AbstractDialog {
 		favouriteList.setUsers(new HashSet<FavouritePermissionsUser>());
 		favouriteList.setGroups(new HashSet<FavouritePermissionsGroup>());
 		favouriteList.setItems(new ArrayList<FavouriteListItem>());
-		favouriteList.setOwner(userService.getCurrentUser());
+		favouriteList.setOwner(SpringContextBridge.services().getUserService().getCurrentUser());
 
 		return initAndPrepareBean(favouriteList, adminMode, false);
 	}
@@ -92,7 +77,7 @@ public class FavouriteListEditDialog extends AbstractDialog {
 	public boolean initBean(FavouriteList favouriteList, boolean adminMode, boolean initialize) {
 
 		if (initialize)
-			favouriteList = favouriteListRepository
+			favouriteList = SpringContextBridge.services().getFavouriteListRepository()
 					.findOptionalByIdAndInitialize(favouriteList.getId(), true, true, true).get();
 
 		setFavouriteList(favouriteList);
@@ -106,15 +91,15 @@ public class FavouriteListEditDialog extends AbstractDialog {
 		// getting lists for dumplist option, if admin mod all lists are available, if
 		// user only the writeable lists are displayed
 		if (adminMode) {
-			dumpLists = favouriteListRepository.findAll(false, false, false, false);
+			dumpLists = SpringContextBridge.services().getFavouriteListRepository().findAll(false, false, false, false);
 		} else {
-			dumpLists = favouriteListRepository.findByUserAndWriteableAndReadable(userService.getCurrentUser(),
+			dumpLists = SpringContextBridge.services().getFavouriteListRepository().findByUserAndWriteableAndReadable(SpringContextBridge.services().getUserService().getCurrentUser(),
 					true, false);
 		}
 
 		setDumpListTransformer(new DefaultTransformer<FavouriteList>(dumpLists));
 
-		setUserPermission(new FavouriteListContainer(favouriteList, userService.getCurrentUser()));
+		setUserPermission(new FavouriteListContainer(favouriteList, SpringContextBridge.services().getUserService().getCurrentUser()));
 		return super.initBean(task, Dialog.SETTINGS_FAVOURITE_LIST_EDIT);
 	}
 
@@ -149,10 +134,10 @@ public class FavouriteListEditDialog extends AbstractDialog {
 	 */
 	public void onPermissionSelectEvent(SelectEvent event) {
 		if (event.getObject() != null && event.getObject() instanceof HistoUserSelectEvent) {
-			favouriteListService.addUserPermission(getFavouriteList(),
+			SpringContextBridge.services().getFavouriteListService().addUserPermission(getFavouriteList(),
 					((HistoUserSelectEvent) event.getObject()).getObj(), true, false);
 		} else if (event.getObject() != null && event.getObject() instanceof GroupSelectEvent) {
-			favouriteListService.addGroupPermission(getFavouriteList(),
+			SpringContextBridge.services().getFavouriteListService().addGroupPermission(getFavouriteList(),
 					((GroupSelectEvent) event.getObject()).getObj(), true, false);
 		}
 	}
@@ -185,7 +170,7 @@ public class FavouriteListEditDialog extends AbstractDialog {
 	 * Saves the list.
 	 */
 	public void saveAndHide() {
-		favouriteListService.addOrUpdate(getFavouriteList(), getToDeleteList());
+		SpringContextBridge.services().getFavouriteListService().addOrUpdate(getFavouriteList(), getToDeleteList());
 		super.hideDialog(new ReloadEvent());
 	}
 

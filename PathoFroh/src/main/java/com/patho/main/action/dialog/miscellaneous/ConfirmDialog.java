@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 @Getter
 @Setter
-@Configurable
 public class ConfirmDialog extends AbstractDialog {
 
 	private String headline;

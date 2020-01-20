@@ -4,6 +4,7 @@ import com.patho.main.action.MainHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.Task;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.UniqueRequestID;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.exception.CustomNotUniqueReqest;
@@ -24,15 +25,9 @@ public abstract class AbstractDialog {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    protected MainHandlerAction mainHandlerAction;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    protected ResourceBundle resourceBundle;
+    protected ResourceBundle resourceBundle = SpringContextBridge.services().getResourceBundle();
 
     protected Task task;
 

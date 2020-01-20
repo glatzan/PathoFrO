@@ -10,17 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.support.TransactionTemplate;
 
-@Configurable
 @Getter
 @Setter
 public class DeleteTaskDialog extends AbstractDialog {
 
 	public static final int maxRevisionToDelete = 1;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private TransactionTemplate transactionTemplate;
 
 	private boolean deleteAble;
 

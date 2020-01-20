@@ -17,6 +17,7 @@ import com.patho.main.repository.UserRepository;
 import com.patho.main.service.PhysicianService;
 import com.patho.main.service.PrintService;
 import com.patho.main.service.UserService;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.HistoUserDeleteEvent;
 import com.patho.main.util.dialog.event.PhysicianSelectEvent;
@@ -29,37 +30,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@Configurable
 @Getter
 @Setter
 public class EditUserDialog extends AbstractTabDialog {
 
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserRepository userRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private UserService userService;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private GroupRepository groupRepository;
-
-	@Autowired
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private PhysicianService physicianService;
 
 	private UserTab userTab;
 	private SettingsTab settingsTab;
@@ -102,7 +81,7 @@ public class EditUserDialog extends AbstractTabDialog {
 	public boolean initBean(HistoUser user) {
 		// existing histo user
 		if (user.getId() != 0) {
-			Optional<HistoUser> oUser = userRepository.findById(user.getId());
+			Optional<HistoUser> oUser = SpringContextBridge.services().getUserRepository().findById(user.getId());
 
 			if (!oUser.isPresent())
 				return false;
@@ -135,7 +114,6 @@ public class EditUserDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class UserTab extends AbstractTab {
 
 		private List<HistoGroup> groups;
@@ -153,7 +131,7 @@ public class EditUserDialog extends AbstractTabDialog {
 
 		@Override
 		public boolean initTab() {
-			setGroups(groupRepository.findAll(true, false));
+			setGroups(SpringContextBridge.services().getGroupRepository().findAll(true, false));
 			setGroupTransformer(new DefaultTransformer<HistoGroup>(getGroups()));
 			return true;
 		}
@@ -164,18 +142,14 @@ public class EditUserDialog extends AbstractTabDialog {
 		}
 
 		public void roleChange() {
-			userService.updateGroupOfUser(getUser(), getUser().getGroup(), false);
+			SpringContextBridge.services().getUserService().updateGroupOfUser(getUser(), getUser().getGroup(), false);
 		}
 
 	}
 
 	@Getter
 	@Setter
-	@Configurable
 	public class SettingsTab extends AbstractTab {
-
-		@Autowired
-		private PrintService printService;
 
 		private View[] allViews;
 		private SimpleListSearchOption[] allWorklistOptions;
@@ -199,8 +173,8 @@ public class EditUserDialog extends AbstractTabDialog {
 						new SimpleListSearchOption[] { SimpleListSearchOption.DIAGNOSIS_LIST, SimpleListSearchOption.STAINING_LIST,
 								SimpleListSearchOption.NOTIFICATION_LIST, SimpleListSearchOption.EMPTY_LIST });
 
-				setLabelPrinter(printService.getCurrentLabelPrinter(getUser()));
-				setClinicPrinter(printService.getCurrentPrinter(getUser()));
+				setLabelPrinter(SpringContextBridge.services().getPrintService().getCurrentLabelPrinter(getUser()));
+				setClinicPrinter(SpringContextBridge.services().getPrintService().getCurrentPrinter(getUser()));
 			}
 			return true;
 		}
@@ -216,7 +190,6 @@ public class EditUserDialog extends AbstractTabDialog {
 
 	@Getter
 	@Setter
-	@Configurable
 	public class PersonTab extends AbstractTab implements OrganizationFunctions {
 
 		private List<ContactRole> allRoles;
@@ -272,7 +245,7 @@ public class EditUserDialog extends AbstractTabDialog {
 	public void saveUser() {
 		user.getSettings().setPrinter(settingsTab.getClinicPrinter());
 		user.getSettings().setLabelPrinter(settingsTab.getLabelPrinter());
-		userService.saveUser(user);
+		SpringContextBridge.services().getUserService().saveUser(user);
 	}
 
 	public void saveAndHide() {
@@ -286,9 +259,9 @@ public class EditUserDialog extends AbstractTabDialog {
 	 */
 	public void updateDataFromLdap() {
 		try {
-			HistoUser user = userRepository.findById(getUser().getId()).get();
+			HistoUser user = SpringContextBridge.services().getUserRepository().findById(getUser().getId()).get();
 			user.getPhysician().getPerson().setAutoUpdate(true);
-			setUser(userService.updateUserWithLdapData(user));
+			setUser(SpringContextBridge.services().getUserService().updateUserWithLdapData(user));
 			getSelectedTab().updateData();
 			MessageHandler.sendGrowlMessagesAsResource("growl.patient.updateLadp.success",
 					"growl.patient.updateLadp.success.info");
@@ -308,7 +281,7 @@ public class EditUserDialog extends AbstractTabDialog {
 	public void onDeleteDialogReturn(SelectEvent event) {
 		if (event.getObject() instanceof HistoUserDeleteEvent
 				&& ((HistoUserDeleteEvent) event.getObject()).isDelete()) {
-			if (userService.deleteOrDisable(getUser(),
+			if (SpringContextBridge.services().getUserService().deleteOrDisable(getUser(),
 					((HistoUserDeleteEvent) event.getObject()).isDeletePhysician()))
 				MessageHandler.sendGrowlMessagesAsResource("growl.user.deleted");
 			else
@@ -325,9 +298,9 @@ public class EditUserDialog extends AbstractTabDialog {
 			if (returnEv.isExtern()) {
 				setUser(new HistoUser(returnEv.getObj(), new HistoSettings()));
 				getUser().setLocalUser(true);
-				userService.updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
+				SpringContextBridge.services().getUserService().updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
 			} else {
-				Optional<HistoUser> oPhysician = userRepository
+				Optional<HistoUser> oPhysician = SpringContextBridge.services().getUserRepository()
 						.findOptionalByPhysicianUid(returnEv.getObj().getUid());
 
 				if (oPhysician.isPresent()) {
@@ -336,7 +309,7 @@ public class EditUserDialog extends AbstractTabDialog {
 					MessageHandler.sendGrowlMessages("User exsis!", "");
 				} else {
 					setUser(new HistoUser(returnEv.getObj(), new HistoSettings()));
-					userService.updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
+					SpringContextBridge.services().getUserService().updateGroupOfUser(getUser(), HistoGroup.GROUP_GUEST_ID, false);
 				}
 			}
 

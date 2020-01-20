@@ -12,7 +12,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Configurable
 public class WorklistSearchExtended extends AbstractWorklistSearch {
 
 	/**

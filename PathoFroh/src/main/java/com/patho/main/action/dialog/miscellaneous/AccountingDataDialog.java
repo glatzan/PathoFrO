@@ -5,6 +5,7 @@ import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.dto.AccountingData;
 import com.patho.main.repository.AccountingDataRepository;
+import com.patho.main.service.impl.SpringContextBridge;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +20,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Configurable
 public class AccountingDataDialog extends AbstractDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private AccountingDataRepository accountingDataRepository;
 
     private LocalDate fromDate;
     private LocalDate toDate;
@@ -55,7 +50,7 @@ public class AccountingDataDialog extends AbstractDialog {
         if (fromDate == null || toDate == null) {
             setAccountingData(null);
         } else {
-            setAccountingData(accountingDataRepository.findAllBetweenDates(this.fromDate, this.toDate));
+            setAccountingData(SpringContextBridge.services().getAccountingDataRepository().findAllBetweenDates(this.fromDate, this.toDate));
             MessageHandler.sendGrowlMessagesAsResource("growl.accounting.listLoaded");
         }
     }

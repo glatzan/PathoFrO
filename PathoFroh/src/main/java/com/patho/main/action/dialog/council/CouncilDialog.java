@@ -19,6 +19,7 @@ import com.patho.main.service.CouncilService;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -47,56 +48,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configurable
 @Getter
 @Setter
 public class CouncilDialog extends AbstractDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private ListItemRepository listItemRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PhysicianRepository physicianRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private CouncilService councilService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private CouncilRepository councilRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private TaskRepository taskRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PDFService pdfService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private PrintDocumentRepository printDocumentRepository;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private FavouriteListService favouriteListService;
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    @Lazy
-    private DialogHandler dialogHandler;
 
     @Autowired
     @Getter(AccessLevel.NONE)
@@ -194,7 +148,7 @@ public class CouncilDialog extends AbstractDialog {
 
         updatePhysicianLists();
 
-        setAttachmentList(listItemRepository
+        setAttachmentList(SpringContextBridge.services().getListItemRepository()
                 .findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.COUNCIL_ATTACHMENT, false));
 
         // setting council as default
@@ -214,7 +168,7 @@ public class CouncilDialog extends AbstractDialog {
 
         if (reloadTask) {
 
-            setTask(taskRepository.findByID(task, true, true, true, true, true));
+            setTask(SpringContextBridge.services().getTaskRepository().findByID(task, true, true, true, true, true));
 
 
             if (getCouncilList() != null && getCouncilList().size() > 0) {
@@ -376,12 +330,12 @@ public class CouncilDialog extends AbstractDialog {
      */
     public void updatePhysicianLists() {
         // list of physicians which are the counselors
-        setPhysicianCouncilList(physicianRepository.findAllByRole(new ContactRole[]{ContactRole.CASE_CONFERENCE},
+        setPhysicianCouncilList(SpringContextBridge.services().getPhysicianRepository().findAllByRole(new ContactRole[]{ContactRole.CASE_CONFERENCE},
                 true, SortOrder.PRIORITY));
         setPhysicianCouncilTransformer(new DefaultTransformer<Physician>(getPhysicianCouncilList()));
 
         // list of physicians to sign the request
-        setPhysicianSigantureList(physicianRepository.findAllByRole(new ContactRole[]{ContactRole.SIGNATURE}, true,
+        setPhysicianSigantureList(SpringContextBridge.services().getPhysicianRepository().findAllByRole(new ContactRole[]{ContactRole.SIGNATURE}, true,
                 SortOrder.PRIORITY));
         setPhysicianSigantureListTransformer(new DefaultTransformer<Physician>(getPhysicianSigantureList()));
     }
@@ -391,7 +345,7 @@ public class CouncilDialog extends AbstractDialog {
      */
     public void createCouncil() {
         logger.info("Adding new council");
-        Council c = councilService.createCouncil(getTask(), true).getCouncil();
+        Council c = SpringContextBridge.services().getCouncilService().createCouncil(getTask(), true).getCouncil();
 
         update(true);
         selectNode(new CouncilContainer(c), 0);
@@ -401,7 +355,7 @@ public class CouncilDialog extends AbstractDialog {
         if (event.getObject() instanceof QuickDiagnosisAddEvent) {
             // reloading
             logger.debug("Ending request phase");
-            councilService.endCouncilRequest(getTask(), getSelectedCouncil().getCouncil());
+            SpringContextBridge.services().getCouncilService().endCouncilRequest(getTask(), getSelectedCouncil().getCouncil());
             update(true);
             selectNode(getSelectedCouncil(), 1);
             // error handling e.g. version confilict
@@ -411,7 +365,7 @@ public class CouncilDialog extends AbstractDialog {
     }
 
     public void onCouncilCompleted() {
-        councilService.endCouncil(getTask(), getSelectedCouncil().getCouncil());
+        SpringContextBridge.services().getCouncilService().endCouncil(getTask(), getSelectedCouncil().getCouncil());
         update(true);
     }
 
@@ -435,7 +389,7 @@ public class CouncilDialog extends AbstractDialog {
         try {
             logger.debug("Uploadgin to Council: " + getSelectedCouncil().getId());
 
-            PDFService.PDFReturn res = pdfService.createAndAttachPDF(getSelectedCouncil().getCouncil(),
+            PDFService.PDFReturn res = SpringContextBridge.services().getPdfService().createAndAttachPDF(getSelectedCouncil().getCouncil(),
                     new PDFInfo(file.getFileName(), PrintDocumentType.COUNCIL_REPLY), file.getContents(), true);
 
             MessageHandler.sendGrowlMessagesAsResource("growl.upload.success.headline", "growl.upload.success.text", res.getContainer().getName());
@@ -452,7 +406,7 @@ public class CouncilDialog extends AbstractDialog {
      * Updates the council name, is called if the council physician is changed
      */
     public void onNameChange() {
-        getSelectedCouncil().setName(councilService.generateCouncilName(getSelectedCouncil()));
+        getSelectedCouncil().setName(SpringContextBridge.services().getCouncilService().generateCouncilName(getSelectedCouncil()));
         saveSelectedCouncil();
     }
 
@@ -476,9 +430,9 @@ public class CouncilDialog extends AbstractDialog {
         saveSelectedCouncil();
 
         if (getSelectedCouncil().getSampleShipped()) {
-            councilService.endSampleShiped(getTask(), getSelectedCouncil().getCouncil());
+            SpringContextBridge.services().getCouncilService().endSampleShiped(getTask(), getSelectedCouncil().getCouncil());
         } else {
-            councilService.beginSampleShiped(getTask(), getSelectedCouncil().getCouncil());
+            SpringContextBridge.services().getCouncilService().beginSampleShiped(getTask(), getSelectedCouncil().getCouncil());
         }
 
         update(true);
@@ -502,9 +456,9 @@ public class CouncilDialog extends AbstractDialog {
         saveSelectedCouncil();
 
         if (getSelectedCouncil().getReplyReceived()) {
-            councilService.endReplyReceived(getTask(), getSelectedCouncil().getCouncil());
+            SpringContextBridge.services().getCouncilService().endReplyReceived(getTask(), getSelectedCouncil().getCouncil());
         } else {
-            councilService.beginReplyReceived(getTask(), getSelectedCouncil().getCouncil());
+            SpringContextBridge.services().getCouncilService().beginReplyReceived(getTask(), getSelectedCouncil().getCouncil());
         }
 
         update(true);
@@ -516,12 +470,12 @@ public class CouncilDialog extends AbstractDialog {
     public void saveSelectedCouncil() {
         logger.debug("Saving council data");
         if (getSelectedCouncil() != null) {
-            Council c = councilRepository.save(getSelectedCouncil().getCouncil(),
+            Council c = SpringContextBridge.services().getCouncilRepository().save(getSelectedCouncil().getCouncil(),
                     resourceBundle.get("log.patient.task.council.update", getTask(), getSelectedCouncil().getName()),
                     getTask().getPatient());
 
             getSelectedCouncil().setCouncil(c);
-            councilRepository.initializeTask(c);
+            SpringContextBridge.services().getCouncilRepository().initializeTask(c);
             setTask(c.getTask());
             getTask().generateTaskStatus();
         }
@@ -534,7 +488,7 @@ public class CouncilDialog extends AbstractDialog {
      */
     public void printCouncilReport() {
 
-        List<PrintDocument> printDocuments = printDocumentRepository.findAllByTypes(PrintDocumentType.COUNCIL_REQUEST);
+        List<PrintDocument> printDocuments = SpringContextBridge.services().getPrintDocumentRepository().findAllByTypes(PrintDocumentType.COUNCIL_REQUEST);
 
         // getting ui objects
         List<AbstractDocumentUi<? extends PrintDocument, ? extends AbstractDocumentUi.SharedData>> printDocumentUIs = PrintDocumentRepository.factory(printDocuments);
