@@ -6,7 +6,6 @@ import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.patient.Patient;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
 
@@ -14,58 +13,58 @@ import java.util.List;
 @Setter
 public class WorklistSearchExtended extends AbstractWorklistSearch {
 
-	/**
-	 * Name of Material
-	 */
-	private String material;
+    /**
+     * Name of Material
+     */
+    private String material;
 
-	/**
-	 * List of physicians
-	 */
-	private Physician[] surgeons;
+    /**
+     * List of physicians
+     */
+    private Physician[] surgeons;
 
-	/**
-	 * List of physicians
-	 */
-	private Physician[] signature;
+    /**
+     * List of physicians
+     */
+    private Physician[] signature;
 
-	/**
-	 * Case history
-	 */
-	private String caseHistory;
+    /**
+     * Case history
+     */
+    private String caseHistory;
 
-	/**
-	 * Diagnosis text
-	 */
-	private String diagnosisText;
+    /**
+     * Diagnosis text
+     */
+    private String diagnosisText;
 
-	/**
-	 * Diagnosis
-	 */
-	private String diagnosis;
+    /**
+     * Diagnosis
+     */
+    private String diagnosis;
 
-	/**
-	 * Malign, tri state, 0 = nothing, 1= true, 2 = false
-	 */
-	private String malign = "0";
+    /**
+     * Malign, tri state, 0 = nothing, 1= true, 2 = false
+     */
+    private String malign = "0";
 
-	/**
-	 * Eye
-	 */
-	private Eye eye = Eye.UNKNOWN;
+    /**
+     * Eye
+     */
+    private Eye eye = Eye.UNKNOWN;
 
-	/**
-	 * ward
-	 */
-	private String ward;
+    /**
+     * ward
+     */
+    private String ward;
 
-	/**
-	 * List of stainings
-	 */
-	private List<StainingPrototype> stainings;
+    /**
+     * List of stainings
+     */
+    private List<StainingPrototype> stainings;
 
-	@Override
-	public List<Patient> getPatients() {
+    @Override
+    public List<Patient> getPatients() {
 
 //		List<Task> tasks = taskDAO.getTaskByCriteria(this, true);
 //
@@ -84,8 +83,8 @@ public class WorklistSearchExtended extends AbstractWorklistSearch {
 //		}
 //
 //		return patients;
-		return null;
-	}
+        return null;
+    }
 
 }
 

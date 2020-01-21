@@ -34,7 +34,6 @@ import com.patho.main.action.dialog.slides.SlideNamingDialog;
 import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
 import com.patho.main.action.dialog.task.CreateTaskDialog;
-import com.patho.main.action.dialog.task.RestoreTaskDialog;
 import com.patho.main.action.dialog.worklist.WorklistSettingsDialog;
 import com.patho.main.action.dialog.worklist.WorklistSortDialog;
 import org.springframework.context.annotation.Scope;
@@ -44,234 +43,230 @@ import org.springframework.stereotype.Component;
 @Scope(value = "session")
 public class DialogHandler {
 
-	private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
-	private CreateSampleDialog createSampleDialog = new CreateSampleDialog();
-	private SlideNamingDialog slideNamingDialog = new SlideNamingDialog();
-	private QuickAddDiagnosisRevisionDialog quickAddDiagnosisRevisionDialog = new QuickAddDiagnosisRevisionDialog();
-	private CreateTaskDialog createTaskDialog = new CreateTaskDialog();
-	private SearchPatientDialog searchPatientDialog = new SearchPatientDialog();
-	private UploadDialog uploadDialog = new UploadDialog();
-	private EditPDFDialog editPDFDialog = new EditPDFDialog();
-	private DeletePDFDialog deletePDFDialog = new DeletePDFDialog();
-	private DiagnosisPhaseExitDialog diagnosisPhaseExitDialog = new DiagnosisPhaseExitDialog();
-	private CreateDiagnosisRevisionDialog createDiagnosisRevisionDialog = new CreateDiagnosisRevisionDialog();
-	private EditDiagnosisRevisionsDialog editDiagnosisRevisionsDialog = new EditDiagnosisRevisionsDialog();
-	private DeleteDiagnosisRevisionDialog deleteDiagnosisRevisionDialog = new DeleteDiagnosisRevisionDialog();
-	private PatientLogDialog patientLogDialog = new PatientLogDialog();
-	private ChangeTaskIDDialog changeTaskIDDialog = new ChangeTaskIDDialog();
-	private AccountingDataDialog accountingDataDialog = new AccountingDataDialog();
-	private ContactDialog contactDialog = new ContactDialog();
-	private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
-	private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();
-	private CustomAddressDialog customAddressDialog = new CustomAddressDialog();
-	private CouncilDialog councilDialog = new CouncilDialog();
-	private SettingsDialog settingsDialog = new SettingsDialog();
-	private FavouriteListEditDialog favouriteListEditDialog = new FavouriteListEditDialog();
-	private FaxDocumentDialog faxDocumentDialog = new FaxDocumentDialog();
-	private BioBankDialog bioBankDialog = new BioBankDialog();
-	private EditUserDialog editUserDialog = new EditUserDialog();
-	private OrganizationListDialog organizationListDialog = new OrganizationListDialog();
-	private OrganizationEditDialog organizationEditDialog = new OrganizationEditDialog();
-	private PhysicianEditDialog physicianEditDialog = new PhysicianEditDialog();
-	private PhysicianSearchDialog physicianSearchDialog = new PhysicianSearchDialog();
-	private ListItemEditDialog listItemEditDialog = new ListItemEditDialog();
-	private StainingEditDialog stainingEditDialog = new StainingEditDialog();
-	private MaterialEditDialog materialEditDialog = new MaterialEditDialog();
-	private DiagnosisPresetEditDialog diagnosisPresetEditDialog = new DiagnosisPresetEditDialog();
-	private GroupEditDialog groupEditDialog = new GroupEditDialog();
-	private UserListDialog userListDialog = new UserListDialog();
-	private GroupListDialog groupListDialog = new GroupListDialog();
-	private UserSettingsDialog userSettingsDialog = new UserSettingsDialog();
-	private ConfirmUserDeleteDialog confirmUserDeleteDialog = new ConfirmUserDeleteDialog();
-	private WorklistSettingsDialog worklistSettingsDialog = new WorklistSettingsDialog();
-	private WorklistSortDialog worklistSortDialog = new WorklistSortDialog();
-	private MergePatientDialog mergePatientDialog = new MergePatientDialog();
-	private EditPatientDialog editPatientDialog = new EditPatientDialog();
-	private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
-	private ConfirmDialog confirmDialog = new ConfirmDialog();
-	private RestoreTaskDialog restoreTaskDialog = new RestoreTaskDialog();
+    private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
+    private CreateSampleDialog createSampleDialog = new CreateSampleDialog();
+    private SlideNamingDialog slideNamingDialog = new SlideNamingDialog();
+    private QuickAddDiagnosisRevisionDialog quickAddDiagnosisRevisionDialog = new QuickAddDiagnosisRevisionDialog();
+    private CreateTaskDialog createTaskDialog = new CreateTaskDialog();
+    private SearchPatientDialog searchPatientDialog = new SearchPatientDialog();
+    private UploadDialog uploadDialog = new UploadDialog();
+    private EditPDFDialog editPDFDialog = new EditPDFDialog();
+    private DeletePDFDialog deletePDFDialog = new DeletePDFDialog();
+    private DiagnosisPhaseExitDialog diagnosisPhaseExitDialog = new DiagnosisPhaseExitDialog();
+    private CreateDiagnosisRevisionDialog createDiagnosisRevisionDialog = new CreateDiagnosisRevisionDialog();
+    private EditDiagnosisRevisionsDialog editDiagnosisRevisionsDialog = new EditDiagnosisRevisionsDialog();
+    private DeleteDiagnosisRevisionDialog deleteDiagnosisRevisionDialog = new DeleteDiagnosisRevisionDialog();
+    private PatientLogDialog patientLogDialog = new PatientLogDialog();
+    private ChangeTaskIDDialog changeTaskIDDialog = new ChangeTaskIDDialog();
+    private AccountingDataDialog accountingDataDialog = new AccountingDataDialog();
+    private ContactDialog contactDialog = new ContactDialog();
+    private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
+    private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();
+    private CustomAddressDialog customAddressDialog = new CustomAddressDialog();
+    private CouncilDialog councilDialog = new CouncilDialog();
+    private SettingsDialog settingsDialog = new SettingsDialog();
+    private FavouriteListEditDialog favouriteListEditDialog = new FavouriteListEditDialog();
+    private FaxDocumentDialog faxDocumentDialog = new FaxDocumentDialog();
+    private BioBankDialog bioBankDialog = new BioBankDialog();
+    private EditUserDialog editUserDialog = new EditUserDialog();
+    private OrganizationListDialog organizationListDialog = new OrganizationListDialog();
+    private OrganizationEditDialog organizationEditDialog = new OrganizationEditDialog();
+    private PhysicianEditDialog physicianEditDialog = new PhysicianEditDialog();
+    private PhysicianSearchDialog physicianSearchDialog = new PhysicianSearchDialog();
+    private ListItemEditDialog listItemEditDialog = new ListItemEditDialog();
+    private StainingEditDialog stainingEditDialog = new StainingEditDialog();
+    private MaterialEditDialog materialEditDialog = new MaterialEditDialog();
+    private DiagnosisPresetEditDialog diagnosisPresetEditDialog = new DiagnosisPresetEditDialog();
+    private GroupEditDialog groupEditDialog = new GroupEditDialog();
+    private UserListDialog userListDialog = new UserListDialog();
+    private GroupListDialog groupListDialog = new GroupListDialog();
+    private UserSettingsDialog userSettingsDialog = new UserSettingsDialog();
+    private ConfirmUserDeleteDialog confirmUserDeleteDialog = new ConfirmUserDeleteDialog();
+    private WorklistSettingsDialog worklistSettingsDialog = new WorklistSettingsDialog();
+    private WorklistSortDialog worklistSortDialog = new WorklistSortDialog();
+    private MergePatientDialog mergePatientDialog = new MergePatientDialog();
+    private EditPatientDialog editPatientDialog = new EditPatientDialog();
+    private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
+    private ConfirmDialog confirmDialog = new ConfirmDialog();
 
-	public AddSlidesDialog getAddSlidesDialog() {
-		return this.addSlidesDialog;
-	}
+    public AddSlidesDialog getAddSlidesDialog() {
+        return this.addSlidesDialog;
+    }
 
-	public CreateSampleDialog getCreateSampleDialog() {
-		return this.createSampleDialog;
-	}
+    public CreateSampleDialog getCreateSampleDialog() {
+        return this.createSampleDialog;
+    }
 
-	public SlideNamingDialog getSlideNamingDialog() {
-		return this.slideNamingDialog;
-	}
+    public SlideNamingDialog getSlideNamingDialog() {
+        return this.slideNamingDialog;
+    }
 
-	public QuickAddDiagnosisRevisionDialog getQuickAddDiagnosisRevisionDialog() {
-		return this.quickAddDiagnosisRevisionDialog;
-	}
+    public QuickAddDiagnosisRevisionDialog getQuickAddDiagnosisRevisionDialog() {
+        return this.quickAddDiagnosisRevisionDialog;
+    }
 
-	public CreateTaskDialog getCreateTaskDialog() {
-		return this.createTaskDialog;
-	}
+    public CreateTaskDialog getCreateTaskDialog() {
+        return this.createTaskDialog;
+    }
 
-	public SearchPatientDialog getSearchPatientDialog() {
-		return this.searchPatientDialog;
-	}
+    public SearchPatientDialog getSearchPatientDialog() {
+        return this.searchPatientDialog;
+    }
 
-	public UploadDialog getUploadDialog() {
-		return this.uploadDialog;
-	}
+    public UploadDialog getUploadDialog() {
+        return this.uploadDialog;
+    }
 
-	public EditPDFDialog getEditPDFDialog() {
-		return this.editPDFDialog;
-	}
+    public EditPDFDialog getEditPDFDialog() {
+        return this.editPDFDialog;
+    }
 
-	public DeletePDFDialog getDeletePDFDialog() {
-		return this.deletePDFDialog;
-	}
+    public DeletePDFDialog getDeletePDFDialog() {
+        return this.deletePDFDialog;
+    }
 
-	public DiagnosisPhaseExitDialog getDiagnosisPhaseExitDialog() {
-		return this.diagnosisPhaseExitDialog;
-	}
+    public DiagnosisPhaseExitDialog getDiagnosisPhaseExitDialog() {
+        return this.diagnosisPhaseExitDialog;
+    }
 
-	public CreateDiagnosisRevisionDialog getCreateDiagnosisRevisionDialog() {
-		return this.createDiagnosisRevisionDialog;
-	}
+    public CreateDiagnosisRevisionDialog getCreateDiagnosisRevisionDialog() {
+        return this.createDiagnosisRevisionDialog;
+    }
 
-	public EditDiagnosisRevisionsDialog getEditDiagnosisRevisionsDialog() {
-		return this.editDiagnosisRevisionsDialog;
-	}
+    public EditDiagnosisRevisionsDialog getEditDiagnosisRevisionsDialog() {
+        return this.editDiagnosisRevisionsDialog;
+    }
 
-	public DeleteDiagnosisRevisionDialog getDeleteDiagnosisRevisionDialog() {
-		return this.deleteDiagnosisRevisionDialog;
-	}
+    public DeleteDiagnosisRevisionDialog getDeleteDiagnosisRevisionDialog() {
+        return this.deleteDiagnosisRevisionDialog;
+    }
 
-	public PatientLogDialog getPatientLogDialog() {
-		return this.patientLogDialog;
-	}
+    public PatientLogDialog getPatientLogDialog() {
+        return this.patientLogDialog;
+    }
 
-	public ChangeTaskIDDialog getChangeTaskIDDialog() {
-		return this.changeTaskIDDialog;
-	}
+    public ChangeTaskIDDialog getChangeTaskIDDialog() {
+        return this.changeTaskIDDialog;
+    }
 
-	public AccountingDataDialog getAccountingDataDialog() {
-		return this.accountingDataDialog;
-	}
+    public AccountingDataDialog getAccountingDataDialog() {
+        return this.accountingDataDialog;
+    }
 
-	public ContactDialog getContactDialog() {
-		return this.contactDialog;
-	}
+    public ContactDialog getContactDialog() {
+        return this.contactDialog;
+    }
 
-	public ContactNotificationDialog getContactNotificationDialog() {
-		return this.contactNotificationDialog;
-	}
+    public ContactNotificationDialog getContactNotificationDialog() {
+        return this.contactNotificationDialog;
+    }
 
-	public ProgrammVersionDialog getProgrammVersionDialog() {
-		return this.programmVersionDialog;
-	}
+    public ProgrammVersionDialog getProgrammVersionDialog() {
+        return this.programmVersionDialog;
+    }
 
-	public CustomAddressDialog getCustomAddressDialog() {
-		return this.customAddressDialog;
-	}
+    public CustomAddressDialog getCustomAddressDialog() {
+        return this.customAddressDialog;
+    }
 
-	public CouncilDialog getCouncilDialog() {
-		return this.councilDialog;
-	}
+    public CouncilDialog getCouncilDialog() {
+        return this.councilDialog;
+    }
 
-	public SettingsDialog getSettingsDialog() {
-		return this.settingsDialog;
-	}
+    public SettingsDialog getSettingsDialog() {
+        return this.settingsDialog;
+    }
 
-	public FavouriteListEditDialog getFavouriteListEditDialog() {
-		return this.favouriteListEditDialog;
-	}
+    public FavouriteListEditDialog getFavouriteListEditDialog() {
+        return this.favouriteListEditDialog;
+    }
 
-	public FaxDocumentDialog getFaxDocumentDialog() {
-		return this.faxDocumentDialog;
-	}
+    public FaxDocumentDialog getFaxDocumentDialog() {
+        return this.faxDocumentDialog;
+    }
 
-	public BioBankDialog getBioBankDialog() {
-		return this.bioBankDialog;
-	}
+    public BioBankDialog getBioBankDialog() {
+        return this.bioBankDialog;
+    }
 
-	public EditUserDialog getEditUserDialog() {
-		return this.editUserDialog;
-	}
+    public EditUserDialog getEditUserDialog() {
+        return this.editUserDialog;
+    }
 
-	public OrganizationListDialog getOrganizationListDialog() {
-		return this.organizationListDialog;
-	}
+    public OrganizationListDialog getOrganizationListDialog() {
+        return this.organizationListDialog;
+    }
 
-	public OrganizationEditDialog getOrganizationEditDialog() {
-		return this.organizationEditDialog;
-	}
+    public OrganizationEditDialog getOrganizationEditDialog() {
+        return this.organizationEditDialog;
+    }
 
-	public PhysicianEditDialog getPhysicianEditDialog() {
-		return this.physicianEditDialog;
-	}
+    public PhysicianEditDialog getPhysicianEditDialog() {
+        return this.physicianEditDialog;
+    }
 
-	public PhysicianSearchDialog getPhysicianSearchDialog() {
-		return this.physicianSearchDialog;
-	}
+    public PhysicianSearchDialog getPhysicianSearchDialog() {
+        return this.physicianSearchDialog;
+    }
 
-	public ListItemEditDialog getListItemEditDialog() {
-		return this.listItemEditDialog;
-	}
+    public ListItemEditDialog getListItemEditDialog() {
+        return this.listItemEditDialog;
+    }
 
-	public StainingEditDialog getStainingEditDialog() {
-		return this.stainingEditDialog;
-	}
+    public StainingEditDialog getStainingEditDialog() {
+        return this.stainingEditDialog;
+    }
 
-	public MaterialEditDialog getMaterialEditDialog() {
-		return this.materialEditDialog;
-	}
+    public MaterialEditDialog getMaterialEditDialog() {
+        return this.materialEditDialog;
+    }
 
-	public DiagnosisPresetEditDialog getDiagnosisPresetEditDialog() {
-		return this.diagnosisPresetEditDialog;
-	}
+    public DiagnosisPresetEditDialog getDiagnosisPresetEditDialog() {
+        return this.diagnosisPresetEditDialog;
+    }
 
-	public GroupEditDialog getGroupEditDialog() {
-		return this.groupEditDialog;
-	}
+    public GroupEditDialog getGroupEditDialog() {
+        return this.groupEditDialog;
+    }
 
-	public UserListDialog getUserListDialog() {
-		return this.userListDialog;
-	}
+    public UserListDialog getUserListDialog() {
+        return this.userListDialog;
+    }
 
-	public GroupListDialog getGroupListDialog() {
-		return this.groupListDialog;
-	}
+    public GroupListDialog getGroupListDialog() {
+        return this.groupListDialog;
+    }
 
-	public UserSettingsDialog getUserSettingsDialog() {
-		return this.userSettingsDialog;
-	}
+    public UserSettingsDialog getUserSettingsDialog() {
+        return this.userSettingsDialog;
+    }
 
-	public ConfirmUserDeleteDialog getConfirmUserDeleteDialog() {
-		return this.confirmUserDeleteDialog;
-	}
+    public ConfirmUserDeleteDialog getConfirmUserDeleteDialog() {
+        return this.confirmUserDeleteDialog;
+    }
 
-	public WorklistSettingsDialog getWorklistSettingsDialog() {
-		return this.worklistSettingsDialog;
-	}
+    public WorklistSettingsDialog getWorklistSettingsDialog() {
+        return this.worklistSettingsDialog;
+    }
 
-	public WorklistSortDialog getWorklistSortDialog() {
-		return this.worklistSortDialog;
-	}
+    public WorklistSortDialog getWorklistSortDialog() {
+        return this.worklistSortDialog;
+    }
 
-	public MergePatientDialog getMergePatientDialog() {
-		return this.mergePatientDialog;
-	}
+    public MergePatientDialog getMergePatientDialog() {
+        return this.mergePatientDialog;
+    }
 
-	public EditPatientDialog getEditPatientDialog() {
-		return this.editPatientDialog;
-	}
+    public EditPatientDialog getEditPatientDialog() {
+        return this.editPatientDialog;
+    }
 
-	public DeletePatientDialog getDeletePatientDialog() {
-		return this.deletePatientDialog;
-	}
+    public DeletePatientDialog getDeletePatientDialog() {
+        return this.deletePatientDialog;
+    }
 
-	public ConfirmDialog getConfirmDialog() {
-		return this.confirmDialog;
-	}
+    public ConfirmDialog getConfirmDialog() {
+        return this.confirmDialog;
+    }
 
-	public RestoreTaskDialog getRestoreTaskDialog() {
-		return this.restoreTaskDialog;
-	}
 }

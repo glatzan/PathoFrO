@@ -11,23 +11,23 @@ import java.util.Map;
 @Slf4j
 public class RootAwareInsertEventListener implements PersistEventListener {
 
-	public static final RootAwareInsertEventListener INSTANCE = new RootAwareInsertEventListener();
+    public static final RootAwareInsertEventListener INSTANCE = new RootAwareInsertEventListener();
 
-	@Override
-	public void onPersist(PersistEvent event) throws HibernateException {
-		final Object entity = event.getObject();
+    @Override
+    public void onPersist(PersistEvent event) throws HibernateException {
+        final Object entity = event.getObject();
 
-		if (entity instanceof RootAware) {
-			RootAware rootAware = (RootAware) entity;
-			Object root = rootAware.root();
-			event.getSession().lock(root, LockMode.OPTIMISTIC_FORCE_INCREMENT);
-			log.info("Incrementing {" + entity + "} entity version because a {" + root
-					+ "} child entity has been inserted");
-		}
-	}
+        if (entity instanceof RootAware) {
+            RootAware rootAware = (RootAware) entity;
+            Object root = rootAware.root();
+            event.getSession().lock(root, LockMode.OPTIMISTIC_FORCE_INCREMENT);
+            log.info("Incrementing {" + entity + "} entity version because a {" + root
+                    + "} child entity has been inserted");
+        }
+    }
 
-	@Override
-	public void onPersist(PersistEvent event, Map createdAlready) throws HibernateException {
-		onPersist(event);
-	}
+    @Override
+    public void onPersist(PersistEvent event, Map createdAlready) throws HibernateException {
+        onPersist(event);
+    }
 }

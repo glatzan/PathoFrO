@@ -4,16 +4,12 @@ import com.patho.main.common.WorklistSortOrder;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.user.HistoSettings;
-import com.patho.main.repository.PatientRepository;
-import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.task.TaskInfo;
 import com.patho.main.util.helper.TaskUtil;
 import com.patho.main.util.search.settings.SearchSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.*;
 

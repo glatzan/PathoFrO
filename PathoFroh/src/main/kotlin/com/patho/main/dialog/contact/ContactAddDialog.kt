@@ -8,8 +8,8 @@ import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportIntent
-import com.patho.main.repository.PhysicianRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.PhysicianRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.dialog.event.PhysicianSelectEvent

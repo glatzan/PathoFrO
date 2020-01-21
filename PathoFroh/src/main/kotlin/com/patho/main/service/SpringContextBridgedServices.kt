@@ -2,14 +2,14 @@ package com.patho.main.service
 
 import com.patho.main.action.handler.CentralHandler
 import com.patho.main.action.handler.CurrentUserHandler
-import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ResourceBundle
-import com.patho.main.repository.*
-import lombok.AccessLevel
+import com.patho.main.repository.jpa.*
+import com.patho.main.repository.miscellaneous.LDAPRepository
+import com.patho.main.repository.miscellaneous.MediaRepository
+import com.patho.main.repository.miscellaneous.PrintDocumentRepository
 import org.springframework.context.MessageSource
-import org.springframework.core.task.TaskExecutor
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.transaction.support.TransactionTemplate
 import javax.persistence.EntityManager
@@ -35,10 +35,10 @@ interface SpringContextBridgedServices {
     var worklistHandler: WorklistHandler
     var sampleService: SampleService
     var entityManager: EntityManager
-    var patientRepository : PatientRepository
+    var patientRepository: PatientRepository
     var transactionTemplate: TransactionTemplate
     var groupService: GroupService
-    var groupRepository : GroupRepository
+    var groupRepository: GroupRepository
     var diagnosisService: DiagnosisService
     var pdfService: PDFService
     var pdfRepository: PDFRepository

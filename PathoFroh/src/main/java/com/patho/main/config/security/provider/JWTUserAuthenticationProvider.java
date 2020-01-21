@@ -21,29 +21,29 @@ import java.util.Optional;
 @Setter
 public class JWTUserAuthenticationProvider implements AuthenticationProvider {
 
-	private String secret;
+    private String secret;
 
-	@Autowired
-	private AuthenticationService authenticationService;
+    @Autowired
+    private AuthenticationService authenticationService;
 
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		JWTPasswortApplicationToken auth = (JWTPasswortApplicationToken) authentication;
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        JWTPasswortApplicationToken auth = (JWTPasswortApplicationToken) authentication;
 
-		Optional<HistoUser> user;
-		try {
-			user = authenticationService.authenticate(auth.getPrincipal().toString(), auth.getCredentials().toString());
-		} catch (LDAPAuthenticationException e) {
-			// authentication was not successful, but user is in database
-			throw new BadCredentialsException("Invalid Password or User");
-		}
+        Optional<HistoUser> user;
+        try {
+            user = authenticationService.authenticate(auth.getPrincipal().toString(), auth.getCredentials().toString());
+        } catch (LDAPAuthenticationException e) {
+            // authentication was not successful, but user is in database
+            throw new BadCredentialsException("Invalid Password or User");
+        }
 
-		return new JWTAuthorizationToken(AuthenticationService.generateJWTToken(user.get(), secret));
-	}
+        return new JWTAuthorizationToken(AuthenticationService.generateJWTToken(user.get(), secret));
+    }
 
-	public boolean supports(Class<?> authentication) {
-		if (authentication.isAssignableFrom(JWTPasswortApplicationToken.class)) {
-			return true;
-		}
-		return false;
-	}
+    public boolean supports(Class<?> authentication) {
+        if (authentication.isAssignableFrom(JWTPasswortApplicationToken.class)) {
+            return true;
+        }
+        return false;
+    }
 }

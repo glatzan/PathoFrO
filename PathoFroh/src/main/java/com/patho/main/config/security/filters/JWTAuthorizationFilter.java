@@ -21,51 +21,51 @@ import java.io.IOException;
 
 public class JWTAuthorizationFilter extends AbstractAuthenticationProcessingFilter {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private String tokenPrefix;
+    private String tokenPrefix;
 
-	private String headerString;
+    private String headerString;
 
-	public JWTAuthorizationFilter(AuthenticationManager authenticationManager,ApplicationContext ctx, AuthenticationFailureHandler failureHandler) {
-		super("/rest/*"); // allow any request to contain an authorization header
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, ApplicationContext ctx, AuthenticationFailureHandler failureHandler) {
+        super("/rest/*"); // allow any request to contain an authorization header
 
-		// @value does not work in security filters
-		this.tokenPrefix = ctx.getEnvironment().getProperty("patho.jwt.tokenPrefix");
-		this.headerString = ctx.getEnvironment().getProperty("patho.jwt.headerString");
+        // @value does not work in security filters
+        this.tokenPrefix = ctx.getEnvironment().getProperty("patho.jwt.tokenPrefix");
+        this.headerString = ctx.getEnvironment().getProperty("patho.jwt.headerString");
 
-		System.out.println("tuuuuuuuuuuuuu " + tokenPrefix + " " + headerString);
-		setAuthenticationFailureHandler(failureHandler);
-		setAuthenticationManager(authenticationManager);
+        System.out.println("tuuuuuuuuuuuuu " + tokenPrefix + " " + headerString);
+        setAuthenticationFailureHandler(failureHandler);
+        setAuthenticationManager(authenticationManager);
 
-	}
+    }
 
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-			throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
 
-		String header = request.getHeader(headerString);
+        String header = request.getHeader(headerString);
 
-		if (header == null || !header.startsWith(tokenPrefix)) {
-			logger.debug("No auth header found!");
-			throw new BadCredentialsException("Invalid Token");
-		}
-		
-		JWTAuthorizationToken token = new JWTAuthorizationToken(header);
+        if (header == null || !header.startsWith(tokenPrefix)) {
+            logger.debug("No auth header found!");
+            throw new BadCredentialsException("Invalid Token");
+        }
 
-		SecurityContextHolder.getContext().setAuthentication(token);
+        JWTAuthorizationToken token = new JWTAuthorizationToken(header);
 
-		logger.debug("Authheader found, continue...");
-		
-		return getAuthenticationManager().authenticate(token);
-	}
+        SecurityContextHolder.getContext().setAuthentication(token);
 
-	@Override
-	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-			Authentication authResult) throws IOException, ServletException {
-		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		context.setAuthentication(authResult);
-		SecurityContextHolder.setContext(context);
-		chain.doFilter(request, response);
-	}
+        logger.debug("Authheader found, continue...");
+
+        return getAuthenticationManager().authenticate(token);
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+                                            Authentication authResult) throws IOException, ServletException {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authResult);
+        SecurityContextHolder.setContext(context);
+        chain.doFilter(request, response);
+    }
 
 }

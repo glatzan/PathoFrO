@@ -5,8 +5,6 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.*;
 import com.patho.main.model.favourites.FavouriteList;
-import com.patho.main.repository.*;
-import com.patho.main.service.UserService;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -15,12 +13,9 @@ import com.patho.main.util.dialog.event.WorklistSelectEvent;
 import com.patho.main.util.worklist.Worklist;
 import com.patho.main.util.worklist.search.WorklistFavouriteSearch;
 import com.patho.main.util.worklist.search.WorklistSearchExtended;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,220 +25,220 @@ import java.util.stream.Collectors;
 @Setter
 public class WorklistSearchDialog extends AbstractTabDialog {
 
-	private SimpleSearchTab simpleSearchTab;
-	private FavouriteSearchTab favouriteSearchTab;
-	private ExtendedSearchTab extendedSearchTab;
+    private SimpleSearchTab simpleSearchTab;
+    private FavouriteSearchTab favouriteSearchTab;
+    private ExtendedSearchTab extendedSearchTab;
 
-	public WorklistSearchDialog() {
-		setSimpleSearchTab(new SimpleSearchTab());
-		setFavouriteSearchTab(new FavouriteSearchTab());
-		setExtendedSearchTab(new ExtendedSearchTab());
-		tabs = new AbstractTab[] { simpleSearchTab, favouriteSearchTab, extendedSearchTab };
+    public WorklistSearchDialog() {
+        setSimpleSearchTab(new SimpleSearchTab());
+        setFavouriteSearchTab(new FavouriteSearchTab());
+        setExtendedSearchTab(new ExtendedSearchTab());
+        tabs = new AbstractTab[]{simpleSearchTab, favouriteSearchTab, extendedSearchTab};
 
-		// only setting tab on first dialog display
-		setSelectedTab(simpleSearchTab);
-	}
+        // only setting tab on first dialog display
+        setSelectedTab(simpleSearchTab);
+    }
 
-	public boolean initBean() {
-		return super.initBean(Dialog.WORKLIST_SEARCH, false);
-	}
+    public boolean initBean() {
+        return super.initBean(Dialog.WORKLIST_SEARCH, false);
+    }
 
-	@Getter
-	@Setter
-	public class SimpleSearchTab extends AbstractTab {
+    @Getter
+    @Setter
+    public class SimpleSearchTab extends AbstractTab {
 
 
-		public SimpleSearchTab() {
-			setTabName("SimpleSearchTab");
-			setName("dialog.worklistsearch.simple.tabName");
-			setViewID("simpleSearch");
-			setCenterInclude("include/simpleSearch.xhtml");
-		}
+        public SimpleSearchTab() {
+            setTabName("SimpleSearchTab");
+            setName("dialog.worklistsearch.simple.tabName");
+            setViewID("simpleSearch");
+            setCenterInclude("include/simpleSearch.xhtml");
+        }
 
-		@Override
-		public boolean initTab() {
-			return true;
-		}
+        @Override
+        public boolean initTab() {
+            return true;
+        }
 
-		public void onChangeWorklistSelection() {
+        public void onChangeWorklistSelection() {
 
-		}
+        }
 
-		public Worklist getWorklist() {
-			Worklist worklist = new Worklist("Default", null,
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrder(),
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistAutoUpdate(), false,
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrderAsc());
-			return worklist;
-		}
+        public Worklist getWorklist() {
+            Worklist worklist = new Worklist("Default", null,
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrder(),
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistAutoUpdate(), false,
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrderAsc());
+            return worklist;
+        }
 
-		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
-		}
-	}
+        public void hideDialogAndSelectItem() {
+            WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
+        }
+    }
 
-	@Getter
-	@Setter
-	public class FavouriteSearchTab extends AbstractTab {
+    @Getter
+    @Setter
+    public class FavouriteSearchTab extends AbstractTab {
 
-		private WorklistFavouriteSearch worklistSearch;
+        private WorklistFavouriteSearch worklistSearch;
 
-		private List<FavouriteListContainer> containers;
+        private List<FavouriteListContainer> containers;
 
-		private FavouriteListContainer selectedContainer;
+        private FavouriteListContainer selectedContainer;
 
-		public FavouriteSearchTab() {
-			setTabName("FavouriteSearchTab");
-			setName("dialog.worklistsearch.favouriteList.tabName");
-			setViewID("favouriteListSearch");
-			setCenterInclude("include/favouriteSearch.xhtml");
-		}
+        public FavouriteSearchTab() {
+            setTabName("FavouriteSearchTab");
+            setName("dialog.worklistsearch.favouriteList.tabName");
+            setViewID("favouriteListSearch");
+            setCenterInclude("include/favouriteSearch.xhtml");
+        }
 
-		@Override
-		public boolean initTab() {
-			setWorklistSearch(new WorklistFavouriteSearch());
-			setSelectedContainer(null);
-			return true;
-		}
+        @Override
+        public boolean initTab() {
+            setWorklistSearch(new WorklistFavouriteSearch());
+            setSelectedContainer(null);
+            return true;
+        }
 
-		@Override
-		public void updateData() {
-			List<FavouriteList> list = SpringContextBridge.services().getFavouriteListRepository().findByUserAndWriteableAndReadable(
-					SpringContextBridge.services().getUserService().getCurrentUser(), false, true, true, true, true, false);
+        @Override
+        public void updateData() {
+            List<FavouriteList> list = SpringContextBridge.services().getFavouriteListRepository().findByUserAndWriteableAndReadable(
+                    SpringContextBridge.services().getUserService().getCurrentUser(), false, true, true, true, true, false);
 
-			containers = list.stream().map(p -> new FavouriteListContainer(p, SpringContextBridge.services().getUserService().getCurrentUser()))
-					.collect(Collectors.toList());
-		}
+            containers = list.stream().map(p -> new FavouriteListContainer(p, SpringContextBridge.services().getUserService().getCurrentUser()))
+                    .collect(Collectors.toList());
+        }
 
-		public Worklist getWorklist() {
-			Worklist worklist = new Worklist("Default", null,
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrder(),
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrderAsc());
-			return worklist;
-		}
+        public Worklist getWorklist() {
+            Worklist worklist = new Worklist("Default", null,
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrder(),
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrderAsc());
+            return worklist;
+        }
 
-		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
-		}
+        public void hideDialogAndSelectItem() {
+            WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
+        }
 
-		public void setSelectedContainer(FavouriteListContainer selectedContainer) {
-			this.selectedContainer = selectedContainer;
+        public void setSelectedContainer(FavouriteListContainer selectedContainer) {
+            this.selectedContainer = selectedContainer;
 
-			if (selectedContainer != null) {
-				this.worklistSearch.setFavouriteList(selectedContainer.getFavouriteList());
-			}
-		}
-	}
+            if (selectedContainer != null) {
+                this.worklistSearch.setFavouriteList(selectedContainer.getFavouriteList());
+            }
+        }
+    }
 
-	@Getter
-	@Setter
-	public class ExtendedSearchTab extends AbstractTab {
+    @Getter
+    @Setter
+    public class ExtendedSearchTab extends AbstractTab {
 
-		private WorklistSearchExtended worklistSearch;
+        private WorklistSearchExtended worklistSearch;
 
-		/**
-		 * List of available materials
-		 */
-		private List<MaterialPreset> materialList;
+        /**
+         * List of available materials
+         */
+        private List<MaterialPreset> materialList;
 
-		/**
-		 * Physician list
-		 */
-		private Physician[] allPhysicians;
+        /**
+         * Physician list
+         */
+        private Physician[] allPhysicians;
 
-		/**
-		 * Transformer for physicians
-		 */
-		private DefaultTransformer<Physician> allPhysicianTransformer;
+        /**
+         * Transformer for physicians
+         */
+        private DefaultTransformer<Physician> allPhysicianTransformer;
 
-		/**
-		 * Contains all available case histories
-		 */
-		private List<ListItem> caseHistoryList;
+        /**
+         * Contains all available case histories
+         */
+        private List<ListItem> caseHistoryList;
 
-		/**
-		 * List of all reportIntent presets
-		 */
-		private List<DiagnosisPreset> diagnosisPresets;
+        /**
+         * List of all reportIntent presets
+         */
+        private List<DiagnosisPreset> diagnosisPresets;
 
-		/**
-		 * Contains all available wards
-		 */
-		private List<ListItem> wardList;
+        /**
+         * Contains all available wards
+         */
+        private List<ListItem> wardList;
 
-		public ExtendedSearchTab() {
-			setTabName("ExtendedSearchTab");
-			setName("dialog.worklistsearch.scifi.tabName");
-			setViewID("extendedSearch");
-			setCenterInclude("include/extendedSearch.xhtml");
-			setDisabled(true);
-		}
+        public ExtendedSearchTab() {
+            setTabName("ExtendedSearchTab");
+            setName("dialog.worklistsearch.scifi.tabName");
+            setViewID("extendedSearch");
+            setCenterInclude("include/extendedSearch.xhtml");
+            setDisabled(true);
+        }
 
-		@Override
-		public boolean initTab() {
-			setWorklistSearch(new WorklistSearchExtended());
+        @Override
+        public boolean initTab() {
+            setWorklistSearch(new WorklistSearchExtended());
 
-			// setting material list
-			setMaterialList(SpringContextBridge.services().getMaterialPresetRepository().findAll(true));
+            // setting material list
+            setMaterialList(SpringContextBridge.services().getMaterialPresetRepository().findAll(true));
 
-			// setting physician list
-			List<Physician> allPhysicians = SpringContextBridge.services().getPhysicianRepository().findAllByRole(ContactRole.values(), true);
-			setAllPhysicians(allPhysicians.toArray(new Physician[allPhysicians.size()]));
-			setAllPhysicianTransformer(new DefaultTransformer<>(getAllPhysicians()));
+            // setting physician list
+            List<Physician> allPhysicians = SpringContextBridge.services().getPhysicianRepository().findAllByRole(ContactRole.values(), true);
+            setAllPhysicians(allPhysicians.toArray(new Physician[allPhysicians.size()]));
+            setAllPhysicianTransformer(new DefaultTransformer<>(getAllPhysicians()));
 
-			// case history
-			setCaseHistoryList(SpringContextBridge.services().getListItemRepository()
-					.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.CASE_HISTORY, false));
+            // case history
+            setCaseHistoryList(SpringContextBridge.services().getListItemRepository()
+                    .findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.CASE_HISTORY, false));
 
-			// Diagnosis presets
-			setDiagnosisPresets(SpringContextBridge.services().getDiagnosisPresetRepository().findAllByOrderByIndexInListAsc());
+            // Diagnosis presets
+            setDiagnosisPresets(SpringContextBridge.services().getDiagnosisPresetRepository().findAllByOrderByIndexInListAsc());
 
-			// wardlist
-			setWardList(SpringContextBridge.services().getListItemRepository().findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.WARDS,
-					false));
+            // wardlist
+            setWardList(SpringContextBridge.services().getListItemRepository().findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.WARDS,
+                    false));
 
-			return true;
-		}
+            return true;
+        }
 
-		public Worklist getWorklist() {
-			Worklist worklist = new Worklist("Default", null,
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrder(),
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
-					SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrderAsc());
-			return worklist;
-		}
+        public Worklist getWorklist() {
+            Worklist worklist = new Worklist("Default", null,
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistHideNoneActiveTasks(),
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrder(),
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistAutoUpdate(), true,
+                    SpringContextBridge.services().getUserService().getCurrentUser().getSettings().getWorklistSortOrderAsc());
+            return worklist;
+        }
 
-		public void hideDialogAndSelectItem() {
-			WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
-		}
+        public void hideDialogAndSelectItem() {
+            WorklistSearchDialog.this.hideDialog(new WorklistSelectEvent(getWorklist()));
+        }
 
-		public void exportWorklist() {
+        public void exportWorklist() {
 //			List<Task> tasks = taskDAO.getTaskByCriteria(getWorklistSearch(), true);
 //			exportTasksDialog.initAndPrepareBean(tasks);
-		}
+        }
 
-		public void onSelectStainingDialogReturn(SelectEvent event) {
-			logger.debug("On select staining dialog return " + event.getObject());
+        public void onSelectStainingDialogReturn(SelectEvent event) {
+            logger.debug("On select staining dialog return " + event.getObject());
 
-			if (event.getObject() != null && event.getObject() instanceof SlideSelectEvent) {
+            if (event.getObject() != null && event.getObject() instanceof SlideSelectEvent) {
 
-				if (worklistSearch.getStainings() == null)
-					worklistSearch.setStainings(new ArrayList<StainingPrototype>());
+                if (worklistSearch.getStainings() == null)
+                    worklistSearch.setStainings(new ArrayList<StainingPrototype>());
 
-				// worklistSearch.getStainings().addAll(((SlideSelectResult)
-				// event.getObject()).getPrototpyes());
-			}
-		}
-	}
+                // worklistSearch.getStainings().addAll(((SlideSelectResult)
+                // event.getObject()).getPrototpyes());
+            }
+        }
+    }
 
-	public Worklist extendedSearch() {
+    public Worklist extendedSearch() {
 
-		logger.debug("Calling extended search");
+        logger.debug("Calling extended search");
 
-		return null;
-	}
+        return null;
+    }
 }

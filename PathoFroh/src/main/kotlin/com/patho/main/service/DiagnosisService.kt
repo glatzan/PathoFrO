@@ -5,9 +5,9 @@ import com.patho.main.common.DiagnosisRevisionType
 import com.patho.main.model.DiagnosisPreset
 import com.patho.main.model.Signature
 import com.patho.main.model.patient.*
-import com.patho.main.repository.DiagnosisRepository
-import com.patho.main.repository.DiagnosisRevisionRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.DiagnosisRepository
+import com.patho.main.repository.jpa.DiagnosisRevisionRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.ui.task.DiagnosisReportUpdater
 import com.patho.main.util.exceptions.LastDiagnosisCanNotBeDeletedException
 import com.patho.main.util.helper.TaskUtil

@@ -15,21 +15,21 @@ import java.io.IOException;
 @Component
 public class JWTAuthorizationFailureHandler implements AuthenticationFailureHandler {
 
-	public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-			AuthenticationException e) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                                        AuthenticationException e) throws IOException, ServletException {
 
-		String errorMessage = ExceptionUtils.getMessage(e);
+        String errorMessage = ExceptionUtils.getMessage(e);
 
-		System.out.println("hallo --- ss");
-		sendError(httpServletResponse, HttpServletResponse.SC_UNAUTHORIZED, errorMessage, e);
-	}
+        System.out.println("hallo --- ss");
+        sendError(httpServletResponse, HttpServletResponse.SC_UNAUTHORIZED, errorMessage, e);
+    }
 
-	private void sendError(HttpServletResponse response, int code, String message, Exception e) throws IOException {
-		SecurityContextHolder.clearContext();
+    private void sendError(HttpServletResponse response, int code, String message, Exception e) throws IOException {
+        SecurityContextHolder.clearContext();
 
-		Response<String> exceptionResponse = new Response<String>(Response.STATUES_FAILURE, message,
-				ExceptionUtils.getStackTrace(e));
+        Response<String> exceptionResponse = new Response<String>(Response.STATUES_FAILURE, message,
+                ExceptionUtils.getStackTrace(e));
 
-		exceptionResponse.send(response, code);
-	}
+        exceptionResponse.send(response, code);
+    }
 }

@@ -8,7 +8,7 @@ import com.patho.main.model.ListItem
 import com.patho.main.model.MaterialPreset
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.*
+import com.patho.main.repository.jpa.*
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.bearer.SimplePhysicianBearer
 import org.primefaces.model.menu.MenuModel

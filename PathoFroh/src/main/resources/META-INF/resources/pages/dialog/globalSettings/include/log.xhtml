@@ -1,111 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.settings.log.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.settings.log.headline']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannelFull">
+    <p:outputPanel styleClass="bodyPannelFull">
 
-		<p:dataTable var="log" style="width:100%;" scrollable="true"
-			scrollHeight="460" styleClass="defaultHistoDataTable"
-			value="#{dialog.settingsDialog.logTab.logs}">
+        <p:dataTable var="log" style="width:100%;" scrollable="true"
+                     scrollHeight="460" styleClass="defaultHistoDataTable"
+                     value="#{dialog.settingsDialog.logTab.logs}">
 
-			<!-- id -->
-			<p:column headerText="#{msg['dialog.settings.log.list.id']}"
-				style="width:50px;">
-				<h:outputLabel value="#{log.id}">
-				</h:outputLabel>
-			</p:column>
+            <!-- id -->
+            <p:column headerText="#{msg['dialog.settings.log.list.id']}"
+                      style="width:50px;">
+                <h:outputLabel value="#{log.id}">
+                </h:outputLabel>
+            </p:column>
 
-			<!-- date -->
-			<p:column headerText="#{msg['dialog.settings.log.list.date']}"
-				style="width:110px;">
-				<h:outputLabel value="#{log.timestamp}">
-					<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm" />
-				</h:outputLabel>
-			</p:column>
+            <!-- date -->
+            <p:column headerText="#{msg['dialog.settings.log.list.date']}"
+                      style="width:110px;">
+                <h:outputLabel value="#{log.timestamp}">
+                    <f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm"/>
+                </h:outputLabel>
+            </p:column>
 
-			<!-- name -->
-			<p:column headerText="#{msg['dialog.settings.log.list.user']}"
-				style="width:70px;" styleClass="centerChildElements">
-				<h:outputLabel value="#{log.logInfo.histoUser.username}"
-					title="#{log.logInfo.histoUser.username}">
-					<f:converter converterId="org.histo.ui.TruncateConverter" />
-					<f:attribute name="truncateAt" value="15" />
-					<f:attribute name="continuationMark" value="..." />
-				</h:outputLabel>
-			</p:column>
+            <!-- name -->
+            <p:column headerText="#{msg['dialog.settings.log.list.user']}"
+                      style="width:70px;" styleClass="centerChildElements">
+                <h:outputLabel value="#{log.logInfo.histoUser.username}"
+                               title="#{log.logInfo.histoUser.username}">
+                    <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                    <f:attribute name="truncateAt" value="15"/>
+                    <f:attribute name="continuationMark" value="..."/>
+                </h:outputLabel>
+            </p:column>
 
-			<!-- patient -->
-			<p:column headerText="#{msg['dialog.settings.log.list.patient']}"
-				style="width:150px;">
-				<h:outputLabel value="#{log.logInfo.patient.person.getFullName()}"
-					title="#{log.logInfo.patient.person.getFullName()}">
-					<f:converter converterId="org.histo.ui.TruncateConverter" />
-					<f:attribute name="truncateAt" value="30" />
-					<f:attribute name="continuationMark" value="..." />
-				</h:outputLabel>
-			</p:column>
+            <!-- patient -->
+            <p:column headerText="#{msg['dialog.settings.log.list.patient']}"
+                      style="width:150px;">
+                <h:outputLabel value="#{log.logInfo.patient.person.getFullName()}"
+                               title="#{log.logInfo.patient.person.getFullName()}">
+                    <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                    <f:attribute name="truncateAt" value="30"/>
+                    <f:attribute name="continuationMark" value="..."/>
+                </h:outputLabel>
+            </p:column>
 
-			<!-- message -->
-			<p:column headerText="#{msg['dialog.settings.log.list.message']}">
-				<h:outputLabel value="#{log.logInfo.logString}"
-					title="#{log.logInfo.logString}">
-					<f:converter converterId="org.histo.ui.TruncateConverter" />
-					<f:attribute name="truncateAt" value="55" />
-					<f:attribute name="continuationMark" value="..." />
-				</h:outputLabel>
-			</p:column>
+            <!-- message -->
+            <p:column headerText="#{msg['dialog.settings.log.list.message']}">
+                <h:outputLabel value="#{log.logInfo.logString}"
+                               title="#{log.logInfo.logString}">
+                    <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                    <f:attribute name="truncateAt" value="55"/>
+                    <f:attribute name="continuationMark" value="..."/>
+                </h:outputLabel>
+            </p:column>
 
-		</p:dataTable>
+        </p:dataTable>
 
-	</p:outputPanel>
+    </p:outputPanel>
 
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="5" styleClass="left">
+            <h:panelGrid columns="5" styleClass="left">
 
-				<!-- task per page -->
-				<h:outputLabel value="#{msg['body.taskList.perPage']}" />
-				<p:selectOneMenu value="#{dialog.settingsDialog.logTab.logsPerPage}">
-					<f:selectItem itemLabel="500" itemValue="500" />
-					<f:selectItem itemLabel="1000" itemValue="1000" />
-					<f:selectItem itemLabel="2000" itemValue="2000" />
+                <!-- task per page -->
+                <h:outputLabel value="#{msg['body.taskList.perPage']}"/>
+                <p:selectOneMenu value="#{dialog.settingsDialog.logTab.logsPerPage}">
+                    <f:selectItem itemLabel="500" itemValue="500"/>
+                    <f:selectItem itemLabel="1000" itemValue="1000"/>
+                    <f:selectItem itemLabel="2000" itemValue="2000"/>
 
-					<p:ajax event="change" process="@this" update="@form"
-						partialSubmit="true"
-						listener="#{dialog.settingsDialog.logTab.updateData()}"></p:ajax>
+                    <p:ajax event="change" process="@this" update="@form"
+                            partialSubmit="true"
+                            listener="#{dialog.settingsDialog.logTab.updateData()}"></p:ajax>
 
-				</p:selectOneMenu>
+                </p:selectOneMenu>
 
-				<h:outputLabel value="#{msg['body.taskList.page']}" />
+                <h:outputLabel value="#{msg['body.taskList.page']}"/>
 
-				<p:spinner size="3" value="#{dialog.settingsDialog.logTab.page}"
-					min="1" max="#{dialog.settingsDialog.logTab.pagesCount}">
-					<p:ajax event="change" process="@this" update="@form"
-						partialSubmit="true"
-						listener="#{dialog.settingsDialog.logTab.updateData()}" />
-				</p:spinner>
+                <p:spinner size="3" value="#{dialog.settingsDialog.logTab.page}"
+                           min="1" max="#{dialog.settingsDialog.logTab.pagesCount}">
+                    <p:ajax event="change" process="@this" update="@form"
+                            partialSubmit="true"
+                            listener="#{dialog.settingsDialog.logTab.updateData()}"/>
+                </p:spinner>
 
-				<h:outputLabel
-					value="von #{dialog.settingsDialog.logTab.pagesCount} Seiten" />
-			</h:panelGrid>
+                <h:outputLabel
+                        value="von #{dialog.settingsDialog.logTab.pagesCount} Seiten"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="1" styleClass="right">
-				<!-- close -->
-				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{dialog.settingsDialog.hideDialog()}" />
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+            <h:panelGrid columns="1" styleClass="right">
+                <!-- close -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 icon="fa fa-times-circle" partialSubmit="true" process="@this"
+                                 actionListener="#{dialog.settingsDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 </ui:composition>

@@ -7,7 +7,6 @@ import com.patho.main.util.dialog.event.CustomAddressSelectEvent;
 import com.patho.main.util.ui.selector.ReportIntentSelector;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Configurable;
 
 @Getter
 @Setter

@@ -1,141 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.settings.stainings']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.settings.stainings']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannelFull">
+    <p:outputPanel styleClass="bodyPannelFull">
 
-		<p:accordionPanel styleClass="contentAccordionPannel"
-			style="height:460px"
-			value="#{dialog.settingsDialog.stainingTab.container}"
-			var="container">
+        <p:accordionPanel styleClass="contentAccordionPannel"
+                          style="height:460px"
+                          value="#{dialog.settingsDialog.stainingTab.container}"
+                          var="container">
 
-			<p:tab title="#{msg['enum.stainingType.'.concat(container.type)]}">
-				<p:dataTable var="staining" styleClass="defaultHistoDataTable"
-					rowKey="#{staining.id}" scrollHeight="430" scrollable="true"
-					value="#{container.prototpyes}">
+            <p:tab title="#{msg['enum.stainingType.'.concat(container.type)]}">
+                <p:dataTable var="staining" styleClass="defaultHistoDataTable"
+                             rowKey="#{staining.id}" scrollHeight="430" scrollable="true"
+                             value="#{container.prototpyes}">
 
-					<!-- name -->
-					<p:column headerText="#{msg['dialog.settings.stainings.staining']}"
-						sortBy="#{staining.name}" style="width:20%">
-						<h:outputText value="#{staining.name}" />
-					</p:column>
+                    <!-- name -->
+                    <p:column headerText="#{msg['dialog.settings.stainings.staining']}"
+                              sortBy="#{staining.name}" style="width:20%">
+                        <h:outputText value="#{staining.name}"/>
+                    </p:column>
 
-					<!-- type -->
-					<p:column headerText="#{msg['dialog.settings.stainings.type']}"
-						sortBy="#{staining.type}" style="width:20%">
-						<h:outputText
-							value="#{msg['enum.stainingType.'.concat(staining.type)]}" />
-					</p:column>
+                    <!-- type -->
+                    <p:column headerText="#{msg['dialog.settings.stainings.type']}"
+                              sortBy="#{staining.type}" style="width:20%">
+                        <h:outputText
+                                value="#{msg['enum.stainingType.'.concat(staining.type)]}"/>
+                    </p:column>
 
-					<!-- commentary -->
-					<p:column
-						headerText="#{msg['dialog.settings.stainings.commentary']}"
-						style="width:auto">
-						<h:outputText value="#{staining.commentary}"
-							title="#{staining.commentary}">
-							<f:converter converterId="org.histo.ui.TruncateConverter" />
-							<f:attribute name="truncateAt" value="25" />
-							<f:attribute name="continuationMark" value="..." />
-						</h:outputText>
-					</p:column>
+                    <!-- commentary -->
+                    <p:column
+                            headerText="#{msg['dialog.settings.stainings.commentary']}"
+                            style="width:auto">
+                        <h:outputText value="#{staining.commentary}"
+                                      title="#{staining.commentary}">
+                            <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                            <f:attribute name="truncateAt" value="25"/>
+                            <f:attribute name="continuationMark" value="..."/>
+                        </h:outputText>
+                    </p:column>
 
-					<!-- priority -->
-					<p:column style="width:9%" sortBy="#{staining.priorityCount}"
-						headerText="#{msg['dialog.settings.stainings.priority']}"
-						styleClass="centerChildElements">
-						<h:outputLabel value="#{staining.priorityCount}"></h:outputLabel>
-					</p:column>
+                    <!-- priority -->
+                    <p:column style="width:9%" sortBy="#{staining.priorityCount}"
+                              headerText="#{msg['dialog.settings.stainings.priority']}"
+                              styleClass="centerChildElements">
+                        <h:outputLabel value="#{staining.priorityCount}"></h:outputLabel>
+                    </p:column>
 
-					<!-- archived -->
-					<p:column headerText="#{msg['dialog.settings.stainings.archived']}"
-						styleClass="centerChildElements" sortBy="#{staining.archived}"
-						style="width:80px;"
-						rendered="#{dialog.settingsDialog.stainingTab.showArchived}">
-						<ui:fragment rendered="#{staining.archived}">
-							<i class="fa fa-archive icon-red"
-								title="#{msg['dialog.settings.stainings.archived.info']}" />
-						</ui:fragment>
-					</p:column>
+                    <!-- archived -->
+                    <p:column headerText="#{msg['dialog.settings.stainings.archived']}"
+                              styleClass="centerChildElements" sortBy="#{staining.archived}"
+                              style="width:80px;"
+                              rendered="#{dialog.settingsDialog.stainingTab.showArchived}">
+                        <ui:fragment rendered="#{staining.archived}">
+                            <i class="fa fa-archive icon-red"
+                               title="#{msg['dialog.settings.stainings.archived.info']}"/>
+                        </ui:fragment>
+                    </p:column>
 
-					<!-- options -->
-					<p:column style="width:5%;"
-						styleClass="centerChildElements centerHeaderChildElements">
-						<f:facet name="header">
-							<i class="fa fa-cog" />
-						</f:facet>
+                    <!-- options -->
+                    <p:column style="width:5%;"
+                              styleClass="centerChildElements centerHeaderChildElements">
+                        <f:facet name="header">
+                            <i class="fa fa-cog"/>
+                        </f:facet>
 
-						<!-- edit -->
-						<p:commandLink title="#{msg['dialog.settings.stainings.edit']}"
-							partialSubmit="true" process="@this"
-							actionListener="#{dialog.stainingEditDialog.initAndPrepareBean(staining)}">
-							<i class="fa fa-cog" />
+                        <!-- edit -->
+                        <p:commandLink title="#{msg['dialog.settings.stainings.edit']}"
+                                       partialSubmit="true" process="@this"
+                                       actionListener="#{dialog.stainingEditDialog.initAndPrepareBean(staining)}">
+                            <i class="fa fa-cog"/>
 
-							<p:ajax event="dialogReturn" update="@form"
-								listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
-						</p:commandLink>
+                            <p:ajax event="dialogReturn" update="@form"
+                                    listener="#{dialog.settingsDialog.stainingTab.updateData()}"/>
+                        </p:commandLink>
 
-						<!-- delete -->
-						<p:commandLink title="#{msg['dialog.settings.stainings.option.archive']}"
-							rendered="#{!staining.archived}"
-							actionListener="#{dialog.settingsDialog.stainingTab.archiveOrDelete(staining, true)}"
-							update="@form" process="@this" partialSubmit="true">
-							<i class="fa fa-fw fa-times" />
-						</p:commandLink>
+                        <!-- delete -->
+                        <p:commandLink title="#{msg['dialog.settings.stainings.option.archive']}"
+                                       rendered="#{!staining.archived}"
+                                       actionListener="#{dialog.settingsDialog.stainingTab.archiveOrDelete(staining, true)}"
+                                       update="@form" process="@this" partialSubmit="true">
+                            <i class="fa fa-fw fa-times"/>
+                        </p:commandLink>
 
-						<!-- unarchive -->
-						<p:commandLink
-							title="#{msg['dialog.settings.stainings.option.dearchive']}"
-							rendered="#{staining.archived}"
-							actionListener="#{dialog.settingsDialog.stainingTab.archiveOrDelete(staining, false)}"
-							update="@form" process="@this" partialSubmit="true">
-							<i class="fa fa-fw fa-undo" />
-						</p:commandLink>
+                        <!-- unarchive -->
+                        <p:commandLink
+                                title="#{msg['dialog.settings.stainings.option.dearchive']}"
+                                rendered="#{staining.archived}"
+                                actionListener="#{dialog.settingsDialog.stainingTab.archiveOrDelete(staining, false)}"
+                                update="@form" process="@this" partialSubmit="true">
+                            <i class="fa fa-fw fa-undo"/>
+                        </p:commandLink>
 
-					</p:column>
-				</p:dataTable>
-			</p:tab>
-		</p:accordionPanel>
-	</p:outputPanel>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+        </p:accordionPanel>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="2" styleClass="left">
-				<!-- archived -->
-				<p:selectBooleanCheckbox
-					value="#{dialog.settingsDialog.stainingTab.showArchived}">
-					<p:ajax event="change" update="@form" process="@this"
-						partialSubmit="true"
-						listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value="#{msg['dialog.settings.stainings.backend.archived']}" />
-			</h:panelGrid>
+            <h:panelGrid columns="2" styleClass="left">
+                <!-- archived -->
+                <p:selectBooleanCheckbox
+                        value="#{dialog.settingsDialog.stainingTab.showArchived}">
+                    <p:ajax event="change" update="@form" process="@this"
+                            partialSubmit="true"
+                            listener="#{dialog.settingsDialog.stainingTab.updateData()}"/>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value="#{msg['dialog.settings.stainings.backend.archived']}"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- new -->
-				<p:commandButton value="#{msg['dialog.settings.stainings.new']}"
-					icon="fa fa-fw fa-picture-o" partialSubmit="true" process="@this"
-					actionListener="#{dialog.stainingEditDialog.initAndPrepareBean()}">
-					<p:ajax event="dialogReturn" update="@form"
-						listener="#{dialog.settingsDialog.stainingTab.updateData()}" />
-				</p:commandButton>
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- new -->
+                <p:commandButton value="#{msg['dialog.settings.stainings.new']}"
+                                 icon="fa fa-fw fa-picture-o" partialSubmit="true" process="@this"
+                                 actionListener="#{dialog.stainingEditDialog.initAndPrepareBean()}">
+                    <p:ajax event="dialogReturn" update="@form"
+                            listener="#{dialog.settingsDialog.stainingTab.updateData()}"/>
+                </p:commandButton>
 
-				<!-- close -->
-				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle" partialSubmit="true" process="@this"
-					actionListener="#{dialog.settingsDialog.hideDialog()}" />
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- close -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 icon="fa fa-times-circle" partialSubmit="true" process="@this"
+                                 actionListener="#{dialog.settingsDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 
 </ui:composition>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title><h:outputFormat
+            value="#{msg['dialog.dearchiveTask.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="closeOverlayPanelOnReturn.js"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
+</h:head>
+
+<h:body styleClass="histoDialogStyle">
+    <h:form id="dialogContent">
+
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.dearchiveTask.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
+
+        <div class="dialogContent">
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.dearchiveTask.text']}"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth150,">
+
+                <!-- reason preset -->
+                <h:outputLabel value="#{msg['dialog.dearchiveTask.preset']}"/>
+                <p:selectOneMenu id="selectPreset" style="width:85%"
+                                 converter="#{dearchiveTaskDialog.predefinedListItemTransformer}"
+                                 value="#{dearchiveTaskDialog.selectedListItem}">
+
+                    <f:selectItem value="#{null}" itemLabel="...."/>
+                    <f:selectItems value="#{dearchiveTaskDialog.predefinedListItems}" var="item"
+                                   itemValue="#{item}"
+                                   itemLabel="#{item.value}"/>
+                    <p:ajax event="change" process="@this" update="@form"
+                            listener="#{dearchiveTaskDialog.onSelectListItem()}"/>
+                </p:selectOneMenu>
+
+                <!-- reason input -->
+                <h:outputLabel value="#{msg['dialog.dearchiveTask.reason']}"/>
+                <p:inputTextarea rows="7" id="reasonInput" style="width:90%" required="true"
+                                 value="#{dearchiveTaskDialog.commentary}">
+                    <p:ajax event="change" update="@this"/>
+                </p:inputTextarea>
+            </h:panelGrid>
+
+
+        </div>
+
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Save button -->
+                    <p:commandButton value="#{msg['dialog.dearchiveTask.button.restore']}"
+                                     icon="fa fa-archive"
+                                     widgetVar="submitBtn"
+                                     onclick="PF('submitBtn').disable()"
+                                     oncomplete="PF('submitBtn').enable()"
+                                     update="dialogContent:reasonInput" process="@form"
+                                     actionListener="#{dearchiveTaskDialog.dearchiveAndHide()}"/>
+
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     immediate="true"
+                                     actionListener="#{dearchiveTaskDialog.hideDialog()}"
+                                     icon="fa fa-times-circle"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
+</h:body>
+</html>

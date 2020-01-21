@@ -1,85 +1,84 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.patinetLog.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.patinetLog.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputFormat value="#{msg['dialog.patinetLog.headline']}">
-					<f:param
-						value="#{dialog.patientLogDialog.patient.person.getFullName()}" />
-				</h:outputFormat>
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputFormat value="#{msg['dialog.patinetLog.headline']}">
+                    <f:param
+                            value="#{dialog.patientLogDialog.patient.person.getFullName()}"/>
+                </h:outputFormat>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
-			<p:dataTable var="log" styleClass="defaultHistoDataTable"
-				scrollable="true" scrollHeight="510"
-				value="#{dialog.patientLogDialog.patientLog}"
-				resizableColumns="false">
+        <div class="dialogContent">
+            <p:dataTable var="log" styleClass="defaultHistoDataTable"
+                         scrollable="true" scrollHeight="510"
+                         value="#{dialog.patientLogDialog.patientLog}"
+                         resizableColumns="false">
 
-				<!-- id -->
-				<p:column headerText="#{msg['dialog.patinetLog.list.id']}"
-					style="width:50px;text-align:center">
-					<h:outputLabel value="#{log.id}"></h:outputLabel>
-				</p:column>
+                <!-- id -->
+                <p:column headerText="#{msg['dialog.patinetLog.list.id']}"
+                          style="width:50px;text-align:center">
+                    <h:outputLabel value="#{log.id}"></h:outputLabel>
+                </p:column>
 
-				<!-- date -->
-				<p:column headerText="#{msg['dialog.patinetLog.list.date']}"
-					style="width:100px;text-align:center">
-					<h:outputText value="#{log.timestamp}">
-						<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
-					</h:outputText>
-				</p:column>
+                <!-- date -->
+                <p:column headerText="#{msg['dialog.patinetLog.list.date']}"
+                          style="width:100px;text-align:center">
+                    <h:outputText value="#{log.timestamp}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
+                    </h:outputText>
+                </p:column>
 
-				<!-- user -->
-				<p:column headerText="#{msg['dialog.patinetLog.list.user']}"
-					style="width:100px;">
-					<h:outputLabel value="#{log.logInfo.histoUser.username}"></h:outputLabel>
-				</p:column>
+                <!-- user -->
+                <p:column headerText="#{msg['dialog.patinetLog.list.user']}"
+                          style="width:100px;">
+                    <h:outputLabel value="#{log.logInfo.histoUser.username}"></h:outputLabel>
+                </p:column>
 
-				<!-- action -->
-				<p:column headerText="#{msg['dialog.patinetLog.list.action']}">
-					<h:outputLabel value="#{log.logInfo.logString}"></h:outputLabel>
-				</p:column>
-			</p:dataTable>
-		</div>
+                <!-- action -->
+                <p:column headerText="#{msg['dialog.patinetLog.list.action']}">
+                    <h:outputLabel value="#{log.logInfo.logString}"></h:outputLabel>
+                </p:column>
+            </p:dataTable>
+        </div>
 
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-				<h:panelGrid columns="1" styleClass="right">
-					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
-						icon="fa fa-times-circle"
-						actionListener="#{dialog.patientLogDialog.hideDialog()}" />
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                <h:panelGrid columns="1" styleClass="right">
+                    <p:commandButton value="#{msg['general.close']}" id="closeBtn"
+                                     icon="fa fa-times-circle"
+                                     actionListener="#{dialog.patientLogDialog.hideDialog()}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

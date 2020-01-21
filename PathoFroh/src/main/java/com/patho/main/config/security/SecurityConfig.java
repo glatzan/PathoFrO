@@ -46,81 +46,81 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private JWTAuthenticationProvider jwtAuthenticationProvider;
+    @Autowired
+    private JWTAuthenticationProvider jwtAuthenticationProvider;
 
-	@Autowired
-	private UserAuthenticationProvider userAuthenticationProvider;
+    @Autowired
+    private UserAuthenticationProvider userAuthenticationProvider;
 
-	@Autowired
-	private JWTUserAuthenticationProvider jwtUserAuthenticationProvider;
+    @Autowired
+    private JWTUserAuthenticationProvider jwtUserAuthenticationProvider;
 
-	@Autowired
-	private UserAuthenticationSuccessHandler userAuthenticationSuccessHandler;
+    @Autowired
+    private UserAuthenticationSuccessHandler userAuthenticationSuccessHandler;
 
-	@Autowired
-	private UserAuthenticationFailureHandler userAuthenticationFailureHandler;
+    @Autowired
+    private UserAuthenticationFailureHandler userAuthenticationFailureHandler;
 
-	@Autowired
-	private JWTAuthorizationFailureHandler jwtAuthorizationFailureHandler;
+    @Autowired
+    private JWTAuthorizationFailureHandler jwtAuthorizationFailureHandler;
 
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
-	@Override
-	protected void configure(HttpSecurity http) {
-		try {
-			// filter for generating jwt token, mapped to /rest/login
-			http.addFilterBefore(new JWTPasswortAuthorizationFilter(authenticationManagerBean(),
-					getApplicationContext(), jwtAuthorizationFailureHandler),
-					UsernamePasswordAuthenticationFilter.class);
+    @Override
+    protected void configure(HttpSecurity http) {
+        try {
+            // filter for generating jwt token, mapped to /rest/login
+            http.addFilterBefore(new JWTPasswortAuthorizationFilter(authenticationManagerBean(),
+                            getApplicationContext(), jwtAuthorizationFailureHandler),
+                    UsernamePasswordAuthenticationFilter.class);
 
-			// filter for rest security mapped to /rest/*
-			http.addFilterBefore(new JWTAuthorizationFilter(authenticationManagerBean(), getApplicationContext(),
-					jwtAuthorizationFailureHandler), UsernamePasswordAuthenticationFilter.class);
+            // filter for rest security mapped to /rest/*
+            http.addFilterBefore(new JWTAuthorizationFilter(authenticationManagerBean(), getApplicationContext(),
+                    jwtAuthorizationFailureHandler), UsernamePasswordAuthenticationFilter.class);
 
-			// filter for user login mapped to /*
-			http.addFilterBefore(new UserAuthorizationFilter(authenticationManagerBean(),
-					userAuthenticationFailureHandler, userAuthenticationSuccessHandler),
-					UsernamePasswordAuthenticationFilter.class);
+            // filter for user login mapped to /*
+            http.addFilterBefore(new UserAuthorizationFilter(authenticationManagerBean(),
+                            userAuthenticationFailureHandler, userAuthenticationSuccessHandler),
+                    UsernamePasswordAuthenticationFilter.class);
 
-			// configure authentication providers
-			http.authenticationProvider(jwtAuthenticationProvider);
-			http.authenticationProvider(jwtUserAuthenticationProvider);
-			http.authenticationProvider(userAuthenticationProvider);
+            // configure authentication providers
+            http.authenticationProvider(jwtAuthenticationProvider);
+            http.authenticationProvider(jwtUserAuthenticationProvider);
+            http.authenticationProvider(userAuthenticationProvider);
 
-			http.headers().frameOptions().sameOrigin();
+            http.headers().frameOptions().sameOrigin();
 
-			// disable csrf
-			http.csrf().disable();
+            // disable csrf
+            http.csrf().disable();
 
-			// setup security
-			http.authorizeRequests().antMatchers("/javax.faces.resource/**").permitAll().antMatchers("/style/**")
-					.permitAll().antMatchers("/gfx/**").permitAll().antMatchers("/scripts/**").permitAll()
-					.antMatchers("/javax.faces.resource/jquery/jquery-plugins.js.xhtml").permitAll()
-					.antMatchers("/RES_NOT_FOUND").permitAll().antMatchers("/error").permitAll()
-					.antMatchers("/login.xhtml*").permitAll().antMatchers("/**/favicon.ico").permitAll().anyRequest()
-					.authenticated().and().formLogin().loginPage("/login.xhtml").permitAll()
-					.loginProcessingUrl("/perform_login").permitAll().failureUrl("/login.jsf?error=true").and().logout()
-					.logoutSuccessUrl("/login.xhtml").permitAll().invalidateHttpSession(true)
-					.deleteCookies("JSESSIONID");
+            // setup security
+            http.authorizeRequests().antMatchers("/javax.faces.resource/**").permitAll().antMatchers("/style/**")
+                    .permitAll().antMatchers("/gfx/**").permitAll().antMatchers("/scripts/**").permitAll()
+                    .antMatchers("/javax.faces.resource/jquery/jquery-plugins.js.xhtml").permitAll()
+                    .antMatchers("/RES_NOT_FOUND").permitAll().antMatchers("/error").permitAll()
+                    .antMatchers("/login.xhtml*").permitAll().antMatchers("/**/favicon.ico").permitAll().anyRequest()
+                    .authenticated().and().formLogin().loginPage("/login.xhtml").permitAll()
+                    .loginProcessingUrl("/perform_login").permitAll().failureUrl("/login.jsf?error=true").and().logout()
+                    .logoutSuccessUrl("/login.xhtml").permitAll().invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID");
 
-			http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+            http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	/**
-	 * Password Encoder
-	 * 
-	 * @return
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    /**
+     * Password Encoder
+     *
+     * @return
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

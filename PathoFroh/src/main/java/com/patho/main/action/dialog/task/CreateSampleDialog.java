@@ -4,16 +4,11 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.patient.Task;
-import com.patho.main.repository.MaterialPresetRepository;
-import com.patho.main.service.SampleService;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
 
@@ -21,32 +16,32 @@ import java.util.List;
 @Setter
 public class CreateSampleDialog extends AbstractDialog {
 
-	private List<MaterialPreset> materials;
+    private List<MaterialPreset> materials;
 
-	private DefaultTransformer<MaterialPreset> materialTransformer;
+    private DefaultTransformer<MaterialPreset> materialTransformer;
 
-	private MaterialPreset selectedMaterial;
+    private MaterialPreset selectedMaterial;
 
-	public CreateSampleDialog initAndPrepareBean(Task task) {
-		if (initBean(task))
-			prepareDialog();
+    public CreateSampleDialog initAndPrepareBean(Task task) {
+        if (initBean(task))
+            prepareDialog();
 
-		return this;
-	}
+        return this;
+    }
 
-	public boolean initBean(Task task) {
-		super.initBean(task, Dialog.SAMPLE_CREATE);
+    public boolean initBean(Task task) {
+        super.initBean(task, Dialog.SAMPLE_CREATE);
 
-		setMaterials(SpringContextBridge.services().getMaterialPresetRepository().findAll(true));
+        setMaterials(SpringContextBridge.services().getMaterialPresetRepository().findAll(true));
 
-		if (!getMaterials().isEmpty()) {
-			setMaterialTransformer(new DefaultTransformer<>(getMaterials()));
-		}
+        if (!getMaterials().isEmpty()) {
+            setMaterialTransformer(new DefaultTransformer<>(getMaterials()));
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	public void createSampleAndHide() {
-		hideDialog(new StainingPhaseUpdateEvent(SpringContextBridge.services().getSampleService().createSample(getTask(), getSelectedMaterial())));
-	}
+    public void createSampleAndHide() {
+        hideDialog(new StainingPhaseUpdateEvent(SpringContextBridge.services().getSampleService().createSample(getTask(), getSelectedMaterial())));
+    }
 }

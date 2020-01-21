@@ -124,7 +124,7 @@ open class DialogReturnHandler @Autowired constructor(
             logger.debug("Deleting task entity event")
 
             val task: Task? = when (obj.obj) {
-                is Slide -> slideService.deleteSlide(obj.obj,true)
+                is Slide -> slideService.deleteSlide(obj.obj, true)
                 is Block -> blockService.deleteBlockAndPersist(obj.obj)
                 is Sample -> sampleService.deleteSampleAndPersist(obj.obj)
                 else -> null
@@ -204,10 +204,10 @@ open class DialogReturnHandler @Autowired constructor(
         onDefaultReturn(event)
     }
 
-    open fun onTaskPhaseChangeEvent(event: SelectEvent){
+    open fun onTaskPhaseChangeEvent(event: SelectEvent) {
         val obj = event.`object`
         if (obj is RemovePatientFromWorklistEvent) {
-           worklistHandler.removePatientFromWorklist(obj.obj)
+            worklistHandler.removePatientFromWorklist(obj.obj)
             return
         }
 

@@ -13,7 +13,6 @@ import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.task.TaskStatus;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.Set;
 

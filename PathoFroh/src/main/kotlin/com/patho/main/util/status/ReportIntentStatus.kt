@@ -28,13 +28,13 @@ open class ReportIntentStatus(task: Task) {
 
         open class ContactBearer(contact: ReportIntent, diagnosis: DiagnosisRevision) {
 
-            val notifications: List<NotificationBearer> = contact.notifications.map { p -> NotificationBearer(p, diagnosis) }.filter { p ->  p.historyPresent }
+            val notifications: List<NotificationBearer> = contact.notifications.map { p -> NotificationBearer(p, diagnosis) }.filter { p -> p.historyPresent }
 
             open class NotificationBearer(reportIntentNotification: ReportIntentNotification, diagnosis: DiagnosisRevision) {
                 val reportIntentNotification = reportIntentNotification
                 val type = reportIntentNotification.notificationTyp
 
-                val historyForDiagnoses : List<DiagnosisHistoryRecord> = SpringContextBridge.services().reportIntentService.findCompletedDiagnosisHistoryRecordByDiagnosis(reportIntentNotification,diagnosis)
+                val historyForDiagnoses: List<DiagnosisHistoryRecord> = SpringContextBridge.services().reportIntentService.findCompletedDiagnosisHistoryRecordByDiagnosis(reportIntentNotification, diagnosis)
                 val historyPresent = historyForDiagnoses.isNotEmpty()
 
             }

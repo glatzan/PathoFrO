@@ -13,25 +13,25 @@ import java.util.List;
 @Setter
 public class DefaultNotificationSettings {
 
-	private List<DefaultNotification> defaultNotifications;
+    private List<DefaultNotification> defaultNotifications;
 
-	public List<NotificationTyp> getDefaultNotificationForRole(ContactRole role) {
-		if (defaultNotifications != null) {
-			try {
-				return defaultNotifications.stream().filter(p -> p.getRole().equals(role))
-						.collect(StreamUtils.singletonCollector()).getNotificationTyps();
-			} catch (IllegalStateException e) {
-				// returning empty list
-			}
-		}
+    public List<NotificationTyp> getDefaultNotificationForRole(ContactRole role) {
+        if (defaultNotifications != null) {
+            try {
+                return defaultNotifications.stream().filter(p -> p.getRole().equals(role))
+                        .collect(StreamUtils.singletonCollector()).getNotificationTyps();
+            } catch (IllegalStateException e) {
+                // returning empty list
+            }
+        }
 
-		return new ArrayList<NotificationTyp>();
-	}
+        return new ArrayList<NotificationTyp>();
+    }
 
-	@Getter
-	@Setter
-	public class DefaultNotification {
-		private ContactRole role;
-		private List<NotificationTyp> notificationTyps;
-	}
+    @Getter
+    @Setter
+    public class DefaultNotification {
+        private ContactRole role;
+        private List<NotificationTyp> notificationTyps;
+    }
 }

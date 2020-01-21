@@ -14,16 +14,16 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SelectPrinter extends AbstractDialog {
 
-	private HistoUser user;
+    private HistoUser user;
 
-	public void initAndPrepareBean(HistoUser user) {
-		initBean(user);
-		prepareDialog();
-	}
+    public void initAndPrepareBean(HistoUser user) {
+        initBean(user);
+        prepareDialog();
+    }
 
-	public void initBean(HistoUser user) {
-		this.user = user;
-		super.initBean(task, Dialog.PRINT_SELECT_PRINTER, false);
-	}
+    public void initBean(HistoUser user) {
+        this.user = user;
+        super.initBean(task, Dialog.PRINT_SELECT_PRINTER, false);
+    }
 
 }

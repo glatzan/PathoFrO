@@ -63,4 +63,5 @@ public enum View {
 
     public boolean isLastSubviewAble() {
         return this.lastSubviewAble;
-    }}
+    }
+}

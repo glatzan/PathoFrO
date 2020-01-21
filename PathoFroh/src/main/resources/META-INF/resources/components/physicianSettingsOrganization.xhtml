@@ -1,103 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite">
 
 
 <composite:interface>
-	<composite:attribute name="physician" required="true" />
-	<composite:attribute name="dialog" required="true" />
-	<!-- Interface OrganizationFunctions -->
+    <composite:attribute name="physician" required="true"/>
+    <composite:attribute name="dialog" required="true"/>
+    <!-- Interface OrganizationFunctions -->
 </composite:interface>
 
 <composite:implementation>
 
-	<!-- Separator -->
-	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-		<p:separator />
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.organization']}" />
-	</h:panelGrid>
+    <!-- Separator -->
+    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+        <p:separator/>
+        <h:outputLabel
+                value="#{msg['component.physicianSettingsGeneral.organization']}"/>
+    </h:panelGrid>
 
-	<!-- Organization -->
-	<h:panelGrid columns="2" styleClass="defaultHistoTable"
-		columnClasses="columnWidth125, ">
+    <!-- Organization -->
+    <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                 columnClasses="columnWidth125, ">
 
-		<!-- default notification  -->
-		<h:outputLabel
-			title="#{msg['component.physicianSettingsGeneral.defaultAddress.text']}"
-			value="#{msg['component.physicianSettingsGeneral.defaultAddress']}" />
+        <!-- default notification  -->
+        <h:outputLabel
+                title="#{msg['component.physicianSettingsGeneral.defaultAddress.text']}"
+                value="#{msg['component.physicianSettingsGeneral.defaultAddress']}"/>
 
-		<p:selectOneMenu style="margin-top:1px;"
-			title="#{msg['component.physicianSettingsGeneral.defaultAddress.text']}"
-			value="#{cc.attrs.physician.person.defaultAddress}"
-			converter="#{cc.attrs.dialog.organizationTransformer}">
+        <p:selectOneMenu style="margin-top:1px;"
+                         title="#{msg['component.physicianSettingsGeneral.defaultAddress.text']}"
+                         value="#{cc.attrs.physician.person.defaultAddress}"
+                         converter="#{cc.attrs.dialog.organizationTransformer}">
 
-			<f:selectItem value="#{null}"
-				itemLabel="#{msg['component.physicianSettingsGeneral.defaultAddress.none']}"></f:selectItem>
+            <f:selectItem value="#{null}"
+                          itemLabel="#{msg['component.physicianSettingsGeneral.defaultAddress.none']}"></f:selectItem>
 
-			<f:selectItems value="#{cc.attrs.physician.person.organizsations}"
-				var="group" itemValue="#{group}" itemLabel="#{group.name}" />
+            <f:selectItems value="#{cc.attrs.physician.person.organizsations}"
+                           var="group" itemValue="#{group}" itemLabel="#{group.name}"/>
 
-		</p:selectOneMenu>
+        </p:selectOneMenu>
 
-		<!-- organization -->
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.organization']}" />
+        <!-- organization -->
+        <h:outputLabel
+                value="#{msg['component.physicianSettingsGeneral.organization']}"/>
 
-		<p:dataTable var="organization" style="width:90%;" scrollable="true"
-			id="organizationTab" scrollHeight="75" draggableRows="true"
-			styleClass="defaultHistoDataTable"
-			value="#{cc.attrs.physician.person.organizsations}">
+        <p:dataTable var="organization" style="width:90%;" scrollable="true"
+                     id="organizationTab" scrollHeight="75" draggableRows="true"
+                     styleClass="defaultHistoDataTable"
+                     value="#{cc.attrs.physician.person.organizsations}">
 
-			<p:column
-				headerText="#{msg['component.physicianSettingsGeneral.organization.name']}">
-				<h:outputText value="#{organization.name}" />
-			</p:column>
+            <p:column
+                    headerText="#{msg['component.physicianSettingsGeneral.organization.name']}">
+                <h:outputText value="#{organization.name}"/>
+            </p:column>
 
-			<p:column
-				headerText="#{msg['component.physicianSettingsGeneral.organization.note']}">
-				<h:outputLabel value="#{organization.note}">
-					<f:converter converterId="org.histo.ui.TruncateConverter" />
-					<f:attribute name="truncateAt" value="50" />
-					<f:attribute name="continuationMark" value="..." />
-				</h:outputLabel>
-			</p:column>
+            <p:column
+                    headerText="#{msg['component.physicianSettingsGeneral.organization.note']}">
+                <h:outputLabel value="#{organization.note}">
+                    <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                    <f:attribute name="truncateAt" value="50"/>
+                    <f:attribute name="continuationMark" value="..."/>
+                </h:outputLabel>
+            </p:column>
 
-			<p:column style="width:15px">
-				<ui:fragment rendered="#{organization.intern}">
-					<i class="fa fa-fw fa-check-circle icon-green"
-						title="#{msg['component.physicianSettingsGeneral.organization.clinicIntern']}" />
-				</ui:fragment>
-			</p:column>
+            <p:column style="width:15px">
+                <ui:fragment rendered="#{organization.intern}">
+                    <i class="fa fa-fw fa-check-circle icon-green"
+                       title="#{msg['component.physicianSettingsGeneral.organization.clinicIntern']}"/>
+                </ui:fragment>
+            </p:column>
 
-			<p:column style="width:30px"
-				styleClass="centerHeaderChildElements centerChildElements">
-				<f:facet name="header">
-					<p:commandLink
-						title="#{msg['component.physicianSettingsGeneral.organization.add']}"
-						process="@form"
-						actionListener="#{dialog.organizationListDialog.initAndPrepareBean().selectMode(true)}">
-						<p:ajax event="dialogReturn" update="@form"
-							listener="#{cc.attrs.dialog.onReturnOrganizationDialog}" />
-						<i class="fa fa-plus" />
-					</p:commandLink>
-				</f:facet>
+            <p:column style="width:30px"
+                      styleClass="centerHeaderChildElements centerChildElements">
+                <f:facet name="header">
+                    <p:commandLink
+                            title="#{msg['component.physicianSettingsGeneral.organization.add']}"
+                            process="@form"
+                            actionListener="#{dialog.organizationListDialog.initAndPrepareBean().selectMode(true)}">
+                        <p:ajax event="dialogReturn" update="@form"
+                                listener="#{cc.attrs.dialog.onReturnOrganizationDialog}"/>
+                        <i class="fa fa-plus"/>
+                    </p:commandLink>
+                </f:facet>
 
-				<p:commandLink
-					actionListener="#{cc.attrs.dialog.removeFromOrganization(organization)}"
-					update="@form" process="@form"
-					title="#{msg['component.physicianSettingsGeneral.organization.remove']}">
-					<i class="fa fa-remove" />
-				</p:commandLink>
-			</p:column>
+                <p:commandLink
+                        actionListener="#{cc.attrs.dialog.removeFromOrganization(organization)}"
+                        update="@form" process="@form"
+                        title="#{msg['component.physicianSettingsGeneral.organization.remove']}">
+                    <i class="fa fa-remove"/>
+                </p:commandLink>
+            </p:column>
 
-		</p:dataTable>
-	</h:panelGrid>
+        </p:dataTable>
+    </h:panelGrid>
 </composite:implementation>
 </html>

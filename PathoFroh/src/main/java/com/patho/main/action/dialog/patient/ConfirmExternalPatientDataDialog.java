@@ -10,28 +10,28 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope(value="session")
+@Scope(value = "session")
 @Getter
 @Setter
 public class ConfirmExternalPatientDataDialog extends AbstractDialog {
 
-	private Patient patient;
+    private Patient patient;
 
-	private boolean confirmed;
+    private boolean confirmed;
 
-	public void initAndPrepareBean(Patient patient) {
-		initBean(patient);
-		prepareDialog();
-	}
+    public void initAndPrepareBean(Patient patient) {
+        initBean(patient);
+        prepareDialog();
+    }
 
-	public void initBean(Patient patient) {
-		super.initBean(null, Dialog.PATIENT_DATA_CONFIRM, false);
-		setPatient(patient);
-		setConfirmed(false);
-	}
+    public void initBean(Patient patient) {
+        super.initBean(null, Dialog.PATIENT_DATA_CONFIRM, false);
+        setPatient(patient);
+        setConfirmed(false);
+    }
 
-	public void hideDialogAndSelectItem() {
-		super.hideDialog(new PatientSelectEvent(getPatient()));
-	}
-	
+    public void hideDialogAndSelectItem() {
+        super.hideDialog(new PatientSelectEvent(getPatient()));
+    }
+
 }

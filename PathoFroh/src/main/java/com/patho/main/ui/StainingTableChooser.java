@@ -9,7 +9,7 @@ import com.patho.main.model.patient.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StainingTableChooser<T extends IdManuallyAltered > {
+public class StainingTableChooser<T extends IdManuallyAltered> {
 
     private boolean choosen;
     private boolean even;

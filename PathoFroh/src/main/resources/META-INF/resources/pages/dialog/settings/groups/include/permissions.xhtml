@@ -1,407 +1,406 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+>
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.groupEdit.tab.rights.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.groupEdit.tab.rights.headline']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel">
-		<h:panelGrid columns="3" styleClass="defaultHistoHiddenTableContainer"
-			columnClasses="columnTop,columnTop,columnTop">
+    <p:outputPanel styleClass="bodyPannel">
+        <h:panelGrid columns="3" styleClass="defaultHistoHiddenTableContainer"
+                     columnClasses="columnTop,columnTop,columnTop">
 
-			<!-- settings dialog -->
-			<h:panelGrid columns="2" styleClass="defaultHistoTable">
+            <!-- settings dialog -->
+            <h:panelGrid columns="2" styleClass="defaultHistoTable">
 
-				<p:selectBooleanCheckbox style="margin-left:5px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS.text']}">
+                <p:selectBooleanCheckbox style="margin-left:5px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS.text']}">
 
-					<p:ajax event="change" update="@form"
-						listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS'])}"></p:ajax>
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS']}" />
+                    <p:ajax event="change" update="@form"
+                            listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS'])}"></p:ajax>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS']}"/>
 
-				<!-- settings dialog > user settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_USER.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_USER.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_USER']}" />
+                <!-- settings dialog > user settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_USER.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_USER.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_USER']}"/>
 
-				<!-- settings dialog > group settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_GROUP'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_GROUP.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_GROUP.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_GROUP']}" />
+                <!-- settings dialog > group settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_GROUP'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_GROUP.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_GROUP.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_GROUP']}"/>
 
-				<!-- settings dialog > diganoses settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_DIAGNOSES'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_DIAGNOSES.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_DIAGNOSES.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_DIAGNOSES']}" />
+                <!-- settings dialog > diganoses settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_DIAGNOSES'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_DIAGNOSES.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_DIAGNOSES.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_DIAGNOSES']}"/>
 
-				<!-- settings dialog > material settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_MATERIAL'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_MATERIAL.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_MATERIAL.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_MATERIAL']}" />
+                <!-- settings dialog > material settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_MATERIAL'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_MATERIAL.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_MATERIAL.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_MATERIAL']}"/>
 
-				<!-- settings dialog > staining settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_STAINING'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_STAINING.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_STAINING.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_STAINING']}" />
+                <!-- settings dialog > staining settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_STAINING'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_STAINING.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_STAINING.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_STAINING']}"/>
 
-				<!-- settings dialog > item lists settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_LISTS'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_LISTS.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_LISTS.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_LISTS']}" />
+                <!-- settings dialog > item lists settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_LISTS'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_LISTS.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_LISTS.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_LISTS']}"/>
 
-				<!-- settings dialog > favourite lists settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_FAVOURITE'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_FAVOURITE.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_FAVOURITE.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_FAVOURITE']}" />
+                <!-- settings dialog > favourite lists settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_FAVOURITE'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_FAVOURITE.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_FAVOURITE.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_FAVOURITE']}"/>
 
-				<!-- settings dialog > physicians settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_PHYSICIAN'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_PHYSICIAN.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_PHYSICIAN.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_PHYSICIAN']}" />
+                <!-- settings dialog > physicians settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_PHYSICIAN'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_PHYSICIAN.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_PHYSICIAN.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_PHYSICIAN']}"/>
 
-				<!-- settings dialog > organizations settings -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_ORGANIZAZIONS'].value}"
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_ORGANIZAZIONS.text']}" />
-				<h:outputLabel
-					title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_ORGANIZAZIONS.text']}"
-					value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_ORGANIZAZIONS']}" />
+                <!-- settings dialog > organizations settings -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['PROGRAM_SETTINGS_ORGANIZAZIONS'].value}"
+                                         title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_ORGANIZAZIONS.text']}"/>
+                <h:outputLabel
+                        title="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_ORGANIZAZIONS.text']}"
+                        value="#{msg['enum.histoPermissions.PROGRAM_SETTINGS_ORGANIZAZIONS']}"/>
 
-				<!-- favourite list -->
-				<!-- favourite list -->
-				<p:selectBooleanCheckbox style="margin-left:5px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST'].value}"
-					title="#{msg['enum.histoPermissions.FAVOURITE_LIST.text']}">
-					<p:ajax event="change" update="@form"
-						listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST'])}"></p:ajax>
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.FAVOURITE_LIST']}"
-					title="#{msg['enum.histoPermissions.FAVOURITE_LIST.text']}" />
+                <!-- favourite list -->
+                <!-- favourite list -->
+                <p:selectBooleanCheckbox style="margin-left:5px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST'].value}"
+                                         title="#{msg['enum.histoPermissions.FAVOURITE_LIST.text']}">
+                    <p:ajax event="change" update="@form"
+                            listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST'])}"></p:ajax>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.FAVOURITE_LIST']}"
+                        title="#{msg['enum.histoPermissions.FAVOURITE_LIST.text']}"/>
 
-				<!-- favourite list use -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_USE'].value}"
-					title="#{msg['enum.histoPermissions.FAVOURITE_LIST_USE.text']}">
-					<p:ajax event="change" update="@form"
-						listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_USE'])}"></p:ajax>
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.FAVOURITE_LIST_USE']}"
-					title="#{msg['enum.histoPermissions.FAVOURITE_LIST_USE.text']}" />
+                <!-- favourite list use -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_USE'].value}"
+                                         title="#{msg['enum.histoPermissions.FAVOURITE_LIST_USE.text']}">
+                    <p:ajax event="change" update="@form"
+                            listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_USE'])}"></p:ajax>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.FAVOURITE_LIST_USE']}"
+                        title="#{msg['enum.histoPermissions.FAVOURITE_LIST_USE.text']}"/>
 
-				<!-- favourite list icon -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_ICON'].value}"
-					title="#{msg['enum.histoPermissions.FAVOURITE_LIST_ICON.text']}">
-					<p:ajax event="change" update="@form"
-						listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_ICON'])}"></p:ajax>
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.FAVOURITE_LIST_ICON']}"
-					title="#{msg['enum.histoPermissions.FAVOURITE_LIST_ICON.text']}" />
+                <!-- favourite list icon -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_ICON'].value}"
+                                         title="#{msg['enum.histoPermissions.FAVOURITE_LIST_ICON.text']}">
+                    <p:ajax event="change" update="@form"
+                            listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_ICON'])}"></p:ajax>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.FAVOURITE_LIST_ICON']}"
+                        title="#{msg['enum.histoPermissions.FAVOURITE_LIST_ICON.text']}"/>
 
-				<!-- favourite list icon command -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_ICON_COMMAND'].value}"
-					title="#{msg['enum.histoPermissions.FAVOURITE_LIST_ICON_COMMAND.text']}">
-					<p:ajax event="change" update="@form"
-						listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_ICON_COMMAND'])}"></p:ajax>
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.FAVOURITE_LIST_ICON_COMMAND']}"
-					title="#{msg['enum.histoPermissions.FAVOURITE_LIST_ICON_COMMAND.text']}" />
-			</h:panelGrid>
+                <!-- favourite list icon command -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_ICON_COMMAND'].value}"
+                                         title="#{msg['enum.histoPermissions.FAVOURITE_LIST_ICON_COMMAND.text']}">
+                    <p:ajax event="change" update="@form"
+                            listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['FAVOURITE_LIST_ICON_COMMAND'])}"></p:ajax>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.FAVOURITE_LIST_ICON_COMMAND']}"
+                        title="#{msg['enum.histoPermissions.FAVOURITE_LIST_ICON_COMMAND.text']}"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="defaultHistoTable">
-				<!-- tasks -->
-				<!-- edit task -->
-				<p:selectBooleanCheckbox style="margin-left:5px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT'].value}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT.text']}">
-					<p:ajax event="change" update="@form"
-						listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT'])}"></p:ajax>
-				</p:selectBooleanCheckbox>
-				<h:outputLabel value=" #{msg['enum.histoPermissions.TASK_EDIT']}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT.text']}" />
+            <h:panelGrid columns="2" styleClass="defaultHistoTable">
+                <!-- tasks -->
+                <!-- edit task -->
+                <p:selectBooleanCheckbox style="margin-left:5px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT'].value}"
+                                         title="#{msg['enum.histoPermissions.TASK_EDIT.text']}">
+                    <p:ajax event="change" update="@form"
+                            listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT'])}"></p:ajax>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel value=" #{msg['enum.histoPermissions.TASK_EDIT']}"
+                               title="#{msg['enum.histoPermissions.TASK_EDIT.text']}"/>
 
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_NEW'].value}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_NEW.text']}" />
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.TASK_EDIT_NEW']}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_NEW.text']}" />
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_NEW'].value}"
+                                         title="#{msg['enum.histoPermissions.TASK_EDIT_NEW.text']}"/>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.TASK_EDIT_NEW']}"
+                        title="#{msg['enum.histoPermissions.TASK_EDIT_NEW.text']}"/>
 
-				<!-- edit task id -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_ID'].value}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_ID.text']}" />
-				<h:outputLabel value=" #{msg['enum.histoPermissions.TASK_EDIT_ID']}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_ID.text']}" />
+                <!-- edit task id -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_ID'].value}"
+                                         title="#{msg['enum.histoPermissions.TASK_EDIT_ID.text']}"/>
+                <h:outputLabel value=" #{msg['enum.histoPermissions.TASK_EDIT_ID']}"
+                               title="#{msg['enum.histoPermissions.TASK_EDIT_ID.text']}"/>
 
-				<!-- archive task -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_ARCHIVE'].value}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_ARCHIVE.text']}" />
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.TASK_EDIT_ARCHIVE']}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_ARCHIVE.text']}" />
+                <!-- archive task -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_ARCHIVE'].value}"
+                                         title="#{msg['enum.histoPermissions.TASK_EDIT_ARCHIVE.text']}"/>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.TASK_EDIT_ARCHIVE']}"
+                        title="#{msg['enum.histoPermissions.TASK_EDIT_ARCHIVE.text']}"/>
 
-				<!-- restore task -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_RESTORE'].value}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_RESTORE.text']}" />
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.TASK_EDIT_RESTORE']}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_RESTORE.text']}" />
+                <!-- restore task -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_RESTORE'].value}"
+                                         title="#{msg['enum.histoPermissions.TASK_EDIT_RESTORE.text']}"/>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.TASK_EDIT_RESTORE']}"
+                        title="#{msg['enum.histoPermissions.TASK_EDIT_RESTORE.text']}"/>
 
-				<!-- delete task -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_DELETE'].value}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_DELETE.text']}" />
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.TASK_EDIT_DELETE']}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_DELETE.text']}" />
+                <!-- delete task -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_DELETE'].value}"
+                                         title="#{msg['enum.histoPermissions.TASK_EDIT_DELETE.text']}"/>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.TASK_EDIT_DELETE']}"
+                        title="#{msg['enum.histoPermissions.TASK_EDIT_DELETE.text']}"/>
 
-				<!-- delete edited task -->
-				<p:selectBooleanCheckbox style="margin-left:15px;"
-					value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_DELETE_EDITED'].value}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_DELETE_EDITED.text']}" />
-				<h:outputLabel
-					value=" #{msg['enum.histoPermissions.TASK_EDIT_DELETE_EDITED']}"
-					title="#{msg['enum.histoPermissions.TASK_EDIT_DELETE_EDITED.text']}" />
-			</h:panelGrid>
+                <!-- delete edited task -->
+                <p:selectBooleanCheckbox style="margin-left:15px;"
+                                         value="#{dialog.groupEditDialog.permissionTab.permissions['TASK_EDIT_DELETE_EDITED'].value}"
+                                         title="#{msg['enum.histoPermissions.TASK_EDIT_DELETE_EDITED.text']}"/>
+                <h:outputLabel
+                        value=" #{msg['enum.histoPermissions.TASK_EDIT_DELETE_EDITED']}"
+                        title="#{msg['enum.histoPermissions.TASK_EDIT_DELETE_EDITED.text']}"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="1"
-				styleClass="defaultHistoHiddenTableContainer">
+            <h:panelGrid columns="1"
+                         styleClass="defaultHistoHiddenTableContainer">
 
-				<!-- patient -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable">
+                <!-- patient -->
+                <h:panelGrid columns="2" styleClass="defaultHistoTable">
 
-					<!-- edit patient -->
-					<h:panelGroup>
-						<p:selectBooleanCheckbox style="margin-left:5px;"
-							value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT'].value}"
-							id="PATIENT_EDIT_C">
-							<p:ajax event="change" update="@form"
-								listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT'])}"></p:ajax>
-						</p:selectBooleanCheckbox>
-						<p:tooltip for="PATIENT_EDIT_C"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT.text']}"
-							position="bottom" />
-					</h:panelGroup>
-					<h:panelGroup>
-						<h:outputLabel
-							value=" #{msg['enum.histoPermissions.PATIENT_EDIT']}"
-							id="PATIENT_EDIT_T" />
-						<p:tooltip for="PATIENT_EDIT_T"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT.text']}"
-							position="bottom" />
-					</h:panelGroup>
+                    <!-- edit patient -->
+                    <h:panelGroup>
+                        <p:selectBooleanCheckbox style="margin-left:5px;"
+                                                 value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT'].value}"
+                                                 id="PATIENT_EDIT_C">
+                            <p:ajax event="change" update="@form"
+                                    listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT'])}"></p:ajax>
+                        </p:selectBooleanCheckbox>
+                        <p:tooltip for="PATIENT_EDIT_C"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputLabel
+                                value=" #{msg['enum.histoPermissions.PATIENT_EDIT']}"
+                                id="PATIENT_EDIT_T"/>
+                        <p:tooltip for="PATIENT_EDIT_T"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
 
-					<!-- add clinic patient -->
-					<h:panelGroup>
-						<p:selectBooleanCheckbox style="margin-left:15px;"
-							value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_ADD_CLINIC'].value}"
-							id="PATIENT_EDIT_ADD_CLINIC_C" />
-						<p:tooltip for="PATIENT_EDIT_ADD_CLINIC_C"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_ADD_CLINIC.text']}"
-							position="bottom" />
-					</h:panelGroup>
-					<h:panelGroup>
-						<h:outputLabel
-							value=" #{msg['enum.histoPermissions.PATIENT_EDIT_ADD_CLINIC']}"
-							id="PATIENT_EDIT_ADD_CLINIC_T" />
-						<p:tooltip for="PATIENT_EDIT_ADD_CLINIC_T"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_ADD_CLINIC.text']}"
-							position="bottom" />
-					</h:panelGroup>
+                    <!-- add clinic patient -->
+                    <h:panelGroup>
+                        <p:selectBooleanCheckbox style="margin-left:15px;"
+                                                 value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_ADD_CLINIC'].value}"
+                                                 id="PATIENT_EDIT_ADD_CLINIC_C"/>
+                        <p:tooltip for="PATIENT_EDIT_ADD_CLINIC_C"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_ADD_CLINIC.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputLabel
+                                value=" #{msg['enum.histoPermissions.PATIENT_EDIT_ADD_CLINIC']}"
+                                id="PATIENT_EDIT_ADD_CLINIC_T"/>
+                        <p:tooltip for="PATIENT_EDIT_ADD_CLINIC_T"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_ADD_CLINIC.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
 
-					<!-- add external patient -->
-					<h:panelGroup>
-						<p:selectBooleanCheckbox style="margin-left:15px;"
-							value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_ADD_EXTERN'].value}"
-							id="PATIENT_EDIT_ADD_EXTERN_C" />
-						<p:tooltip for="PATIENT_EDIT_ADD_EXTERN_C"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_ADD_EXTERN.text']}"
-							position="bottom" />
-					</h:panelGroup>
-					<h:panelGroup>
-						<h:outputLabel
-							value=" #{msg['enum.histoPermissions.PATIENT_EDIT_ADD_EXTERN']}"
-							id="PATIENT_EDIT_ADD_EXTERN_T" />
-						<p:tooltip for="PATIENT_EDIT_ADD_EXTERN_T"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_ADD_EXTERN.text']}"
-							position="bottom" />
-					</h:panelGroup>
+                    <!-- add external patient -->
+                    <h:panelGroup>
+                        <p:selectBooleanCheckbox style="margin-left:15px;"
+                                                 value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_ADD_EXTERN'].value}"
+                                                 id="PATIENT_EDIT_ADD_EXTERN_C"/>
+                        <p:tooltip for="PATIENT_EDIT_ADD_EXTERN_C"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_ADD_EXTERN.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputLabel
+                                value=" #{msg['enum.histoPermissions.PATIENT_EDIT_ADD_EXTERN']}"
+                                id="PATIENT_EDIT_ADD_EXTERN_T"/>
+                        <p:tooltip for="PATIENT_EDIT_ADD_EXTERN_T"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_ADD_EXTERN.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
 
-					<!-- alter patient data manually -->
-					<h:panelGroup>
-						<p:selectBooleanCheckbox style="margin-left:15px;"
-							value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_ALTER_DATA'].value}"
-							id="PATIENT_EDIT_ALTER_DATA_C" />
-						<p:tooltip for="PATIENT_EDIT_ALTER_DATA_C"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_ALTER_DATA.text']}"
-							position="bottom" />
-					</h:panelGroup>
-					<h:panelGroup>
-						<h:outputLabel
-							value=" #{msg['enum.histoPermissions.PATIENT_EDIT_ALTER_DATA']}"
-							id="PATIENT_EDIT_ALTER_DATA_T" />
-						<p:tooltip for="PATIENT_EDIT_ALTER_DATA_T"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_ALTER_DATA.text']}"
-							position="bottom" />
-					</h:panelGroup>
+                    <!-- alter patient data manually -->
+                    <h:panelGroup>
+                        <p:selectBooleanCheckbox style="margin-left:15px;"
+                                                 value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_ALTER_DATA'].value}"
+                                                 id="PATIENT_EDIT_ALTER_DATA_C"/>
+                        <p:tooltip for="PATIENT_EDIT_ALTER_DATA_C"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_ALTER_DATA.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputLabel
+                                value=" #{msg['enum.histoPermissions.PATIENT_EDIT_ALTER_DATA']}"
+                                id="PATIENT_EDIT_ALTER_DATA_T"/>
+                        <p:tooltip for="PATIENT_EDIT_ALTER_DATA_T"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_ALTER_DATA.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
 
-					<!-- merge patients -->
-					<h:panelGroup>
-						<p:selectBooleanCheckbox style="margin-left:15px;"
-							value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_MERGE'].value}"
-							id="PATIENT_EDIT_MERGE_C" />
-						<p:tooltip for="PATIENT_EDIT_MERGE_C"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_MERGE.text']}"
-							position="bottom" />
-					</h:panelGroup>
-					<h:panelGroup>
-						<h:outputLabel
-							value=" #{msg['enum.histoPermissions.PATIENT_EDIT_MERGE']}"
-							id="PATIENT_EDIT_MERGE_T" />
-						<p:tooltip for="PATIENT_EDIT_MERGE_T"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_MERGE.text']}"
-							position="bottom" />
-					</h:panelGroup>
+                    <!-- merge patients -->
+                    <h:panelGroup>
+                        <p:selectBooleanCheckbox style="margin-left:15px;"
+                                                 value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_MERGE'].value}"
+                                                 id="PATIENT_EDIT_MERGE_C"/>
+                        <p:tooltip for="PATIENT_EDIT_MERGE_C"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_MERGE.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputLabel
+                                value=" #{msg['enum.histoPermissions.PATIENT_EDIT_MERGE']}"
+                                id="PATIENT_EDIT_MERGE_T"/>
+                        <p:tooltip for="PATIENT_EDIT_MERGE_T"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_MERGE.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
 
-					<!--delete patients -->
-					<h:panelGroup>
-						<p:selectBooleanCheckbox style="margin-left:15px;"
-							value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_DELETE'].value}"
-							id="PATIENT_EDIT_DELETE_C" />
-						<p:tooltip for="PATIENT_EDIT_DELETE_C"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_DELETE.text']}"
-							position="bottom" />
-					</h:panelGroup>
-					<h:panelGroup>
-						<h:outputLabel
-							value=" #{msg['enum.histoPermissions.PATIENT_EDIT_DELETE']}"
-							id="PATIENT_EDIT_DELETE_T" />
-						<p:tooltip for="PATIENT_EDIT_DELETE_T"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_DELETE.text']}"
-							position="bottom" />
-					</h:panelGroup>
+                    <!--delete patients -->
+                    <h:panelGroup>
+                        <p:selectBooleanCheckbox style="margin-left:15px;"
+                                                 value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_DELETE'].value}"
+                                                 id="PATIENT_EDIT_DELETE_C"/>
+                        <p:tooltip for="PATIENT_EDIT_DELETE_C"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_DELETE.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputLabel
+                                value=" #{msg['enum.histoPermissions.PATIENT_EDIT_DELETE']}"
+                                id="PATIENT_EDIT_DELETE_T"/>
+                        <p:tooltip for="PATIENT_EDIT_DELETE_T"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_DELETE.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
 
-					<!--media data -->
-					<h:panelGroup>
-						<p:selectBooleanCheckbox style="margin-left:15px;"
-							value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_UPLOAD_DATA'].value}"
-							id="PATIENT_UPLOAD_C" />
-						<p:tooltip for="PATIENT_UPLOAD_C"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_UPLOAD_DATA.text']}"
-							position="bottom" />
-					</h:panelGroup>
-					<h:panelGroup>
-						<h:outputLabel
-							value=" #{msg['enum.histoPermissions.PATIENT_EDIT_UPLOAD_DATA']}"
-							id="PATIENT_UPLOAD_T" />
-						<p:tooltip for="PATIENT_UPLOAD_T"
-							value="#{msg['enum.histoPermissions.PATIENT_EDIT_UPLOAD_DATA.text']}"
-							position="bottom" />
-					</h:panelGroup>
-				</h:panelGrid>
+                    <!--media data -->
+                    <h:panelGroup>
+                        <p:selectBooleanCheckbox style="margin-left:15px;"
+                                                 value="#{dialog.groupEditDialog.permissionTab.permissions['PATIENT_EDIT_UPLOAD_DATA'].value}"
+                                                 id="PATIENT_UPLOAD_C"/>
+                        <p:tooltip for="PATIENT_UPLOAD_C"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_UPLOAD_DATA.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputLabel
+                                value=" #{msg['enum.histoPermissions.PATIENT_EDIT_UPLOAD_DATA']}"
+                                id="PATIENT_UPLOAD_T"/>
+                        <p:tooltip for="PATIENT_UPLOAD_T"
+                                   value="#{msg['enum.histoPermissions.PATIENT_EDIT_UPLOAD_DATA.text']}"
+                                   position="bottom"/>
+                    </h:panelGroup>
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					style="margin-top:10px;">
+                <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                             style="margin-top:10px;">
 
-					<!-- user settings -->
-					<p:selectBooleanCheckbox style="margin-left:5px;"
-						value="#{dialog.groupEditDialog.permissionTab.permissions['USER'].value}"
-						title="#{msg['enum.histoPermissions.USER']}">
-						<p:ajax event="change" update="@form"
-							listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['WORKLIST'])}"></p:ajax>
-					</p:selectBooleanCheckbox>
-					<h:outputLabel value=" #{msg['enum.histoPermissions.USER']}"
-						title="#{msg['enum.histoPermissions.USER.text']}" />
+                    <!-- user settings -->
+                    <p:selectBooleanCheckbox style="margin-left:5px;"
+                                             value="#{dialog.groupEditDialog.permissionTab.permissions['USER'].value}"
+                                             title="#{msg['enum.histoPermissions.USER']}">
+                        <p:ajax event="change" update="@form"
+                                listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['WORKLIST'])}"></p:ajax>
+                    </p:selectBooleanCheckbox>
+                    <h:outputLabel value=" #{msg['enum.histoPermissions.USER']}"
+                                   title="#{msg['enum.histoPermissions.USER.text']}"/>
 
-					<!-- use worklist -->
-					<p:selectBooleanCheckbox style="margin-left:15px;"
-						value="#{dialog.groupEditDialog.permissionTab.permissions['USER_WORKLIST'].value}"
-						title="#{msg['enum.histoPermissions.USER_WORKLIST.text']}">
-						<p:ajax event="change" update="@form"
-							listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['USER_WORKLIST'])}"></p:ajax>
-					</p:selectBooleanCheckbox>
-					<h:outputLabel
-						value=" #{msg['enum.histoPermissions.USER_WORKLIST']}"
-						title="#{msg['enum.histoPermissions.USER_WORKLIST.text']}" />
+                    <!-- use worklist -->
+                    <p:selectBooleanCheckbox style="margin-left:15px;"
+                                             value="#{dialog.groupEditDialog.permissionTab.permissions['USER_WORKLIST'].value}"
+                                             title="#{msg['enum.histoPermissions.USER_WORKLIST.text']}">
+                        <p:ajax event="change" update="@form"
+                                listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['USER_WORKLIST'])}"></p:ajax>
+                    </p:selectBooleanCheckbox>
+                    <h:outputLabel
+                            value=" #{msg['enum.histoPermissions.USER_WORKLIST']}"
+                            title="#{msg['enum.histoPermissions.USER_WORKLIST.text']}"/>
 
-					<!-- report view  -->
-					<p:selectBooleanCheckbox style="margin-left:15px;"
-						value="#{dialog.groupEditDialog.permissionTab.permissions['USER_ALWAYS_SHOW_IN_WORKLIST_REPORT'].value}"
-						title="#{msg['enum.histoPermissions.USER_ALWAYS_SHOW_IN_WORKLIST_REPORT.text']}">
-						<p:ajax event="change" update="@form"
-							listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['USER_ALWAYS_SHOW_IN_WORKLIST_REPORT'])}"></p:ajax>
-					</p:selectBooleanCheckbox>
-					<h:outputLabel
-						value=" #{msg['enum.histoPermissions.USER_ALWAYS_SHOW_IN_WORKLIST_REPORT']}"
-						title="#{msg['enum.histoPermissions.USER_ALWAYS_SHOW_IN_WORKLIST_REPORT.text']}" />
+                    <!-- report view  -->
+                    <p:selectBooleanCheckbox style="margin-left:15px;"
+                                             value="#{dialog.groupEditDialog.permissionTab.permissions['USER_ALWAYS_SHOW_IN_WORKLIST_REPORT'].value}"
+                                             title="#{msg['enum.histoPermissions.USER_ALWAYS_SHOW_IN_WORKLIST_REPORT.text']}">
+                        <p:ajax event="change" update="@form"
+                                listener="#{dialog.groupEditDialog.permissionTab.onChangePermission(dialog.groupEditDialog.permissionTab.permissions['USER_ALWAYS_SHOW_IN_WORKLIST_REPORT'])}"></p:ajax>
+                    </p:selectBooleanCheckbox>
+                    <h:outputLabel
+                            value=" #{msg['enum.histoPermissions.USER_ALWAYS_SHOW_IN_WORKLIST_REPORT']}"
+                            title="#{msg['enum.histoPermissions.USER_ALWAYS_SHOW_IN_WORKLIST_REPORT.text']}"/>
 
-				</h:panelGrid>
-			</h:panelGrid>
-		</h:panelGrid>
-	</p:outputPanel>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGrid>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="1" styleClass="left">
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="left">
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- Save button -->
-				<p:commandButton value="#{msg['general.save']}" icon="fa fa-save "
-					actionListener="#{dialog.groupEditDialog.saveAndHide()}" />
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- Save button -->
+                <p:commandButton value="#{msg['general.save']}" icon="fa fa-save "
+                                 actionListener="#{dialog.groupEditDialog.saveAndHide()}"/>
 
-				<!-- Close button -->
-				<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-					actionListener="#{dialog.groupEditDialog.hideDialog()}"
-					widgetVar="closeBtn" icon="fa fa-times-circle">
-				</p:commandButton>
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- Close button -->
+                <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                 actionListener="#{dialog.groupEditDialog.hideDialog()}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle">
+                </p:commandButton>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 
 
 </ui:composition>

@@ -1,62 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:histo="http://java.sun.com/jsf/composite/components">
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.searchPatient.search']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.searchPatient.search']}"/>
+    </p:outputPanel>
 
-	<h:panelGrid columns="1" styleClass="defaultHistoTable">
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.person']}"
-			styleClass="headline" />
-	</h:panelGrid>
+    <h:panelGrid columns="1" styleClass="defaultHistoTable">
+        <h:outputLabel
+                value="#{msg['component.physicianSettingsGeneral.person']}"
+                styleClass="headline"/>
+    </h:panelGrid>
 
-	<p:outputPanel styleClass="bodyPannel">
+    <p:outputPanel styleClass="bodyPannel">
 
-		<histo:physicianSettingsGeneral
-			physician="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician}"
-			dialog="#{dialog.physicianSearchDialog.externalPhysicianTab}" />
+        <histo:physicianSettingsGeneral
+                physician="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician}"
+                dialog="#{dialog.physicianSearchDialog.externalPhysicianTab}"/>
 
-		<histo:physicianSettingsOrganization
-			physician="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician}"
-			dialog="#{dialog.physicianSearchDialog.externalPhysicianTab}" />
-	</p:outputPanel>
+        <histo:physicianSettingsOrganization
+                physician="#{dialog.physicianSearchDialog.externalPhysicianTab.selectedPhysician}"
+                dialog="#{dialog.physicianSearchDialog.externalPhysicianTab}"/>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="1" styleClass="left">
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="left">
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- save and hide button -->
-				<p:commandButton value="#{msg['general.create']}"
-					rendered="#{!dialog.physicianSearchDialog.selectMode}"
-					actionListener="#{dialog.physicianSearchDialog.externalPhysicianTab.saveAndHide()}"
-					icon="fa fa-check-circle-o" update="@form" process="@form">
-				</p:commandButton>
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- save and hide button -->
+                <p:commandButton value="#{msg['general.create']}"
+                                 rendered="#{!dialog.physicianSearchDialog.selectMode}"
+                                 actionListener="#{dialog.physicianSearchDialog.externalPhysicianTab.saveAndHide()}"
+                                 icon="fa fa-check-circle-o" update="@form" process="@form">
+                </p:commandButton>
 
-				<!-- select and hide button -->
-				<p:commandButton value="#{msg['general.select']}"
-					rendered="#{dialog.physicianSearchDialog.selectMode}"
-					actionListener="#{dialog.physicianSearchDialog.externalPhysicianTab.selectAndHide()}"
-					icon="fa fa-check-circle-o" update="@form" process="@form">
-				</p:commandButton>
+                <!-- select and hide button -->
+                <p:commandButton value="#{msg['general.select']}"
+                                 rendered="#{dialog.physicianSearchDialog.selectMode}"
+                                 actionListener="#{dialog.physicianSearchDialog.externalPhysicianTab.selectAndHide()}"
+                                 icon="fa fa-check-circle-o" update="@form" process="@form">
+                </p:commandButton>
 
-				<!-- Close button -->
-				<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-					immediate="true" icon="fa fa-times-circle"
-					actionListener="#{dialog.physicianSearchDialog.hideDialog()}">
-				</p:commandButton>
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- Close button -->
+                <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                 immediate="true" icon="fa fa-times-circle"
+                                 actionListener="#{dialog.physicianSearchDialog.hideDialog()}">
+                </p:commandButton>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 
 </ui:composition>

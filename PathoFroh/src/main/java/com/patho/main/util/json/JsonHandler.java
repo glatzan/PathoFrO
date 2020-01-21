@@ -14,45 +14,45 @@ import java.net.URL;
 @Setter
 public class JsonHandler {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	/**
-	 * Returns a json string grabbed from the given url.
-	 * 
-	 * @param url
-	 * @return
-	 */
-	public String requestJsonData(String url) {
+    /**
+     * Returns a json string grabbed from the given url.
+     *
+     * @param url
+     * @return
+     */
+    public String requestJsonData(String url) {
 
-		StringBuffer response = new StringBuffer();
+        StringBuffer response = new StringBuffer();
 
-		try {
+        try {
 
-			logger.debug("Fetching patient json from clinic backend: " + url);
+            logger.debug("Fetching patient json from clinic backend: " + url);
 
-			URL obj = new URL(url);
+            URL obj = new URL(url);
 
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-			// optional default is GET
-			con.setRequestMethod("GET");
+            // optional default is GET
+            con.setRequestMethod("GET");
 
-			// add request header
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            // add request header
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-			String inputLine;
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "";
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
 
-		logger.debug("Fetch string from clinic: " + response.toString());
-		return response.toString();
-	}
+        logger.debug("Fetch string from clinic: " + response.toString());
+        return response.toString();
+    }
 }

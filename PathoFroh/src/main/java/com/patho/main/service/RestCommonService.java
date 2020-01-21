@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RestCommonService {
 
-	public String generateRestToken(HistoUser user) {
-		return  "";
-	}
+    public String generateRestToken(HistoUser user) {
+        return "";
+    }
 }

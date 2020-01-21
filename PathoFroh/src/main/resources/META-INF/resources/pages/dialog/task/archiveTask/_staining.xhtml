@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <!-- staining, headline -->
+    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+        <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.text']}"/>
+    </h:panelGrid>
+
+    <!-- status as text -->
+    <h:panelGrid columns="2" styleClass="defaultHistoTable" columnClasses="columnWidth250">
+        <!-- stainingphase -->
+        <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.phase.text']} "/>
+        <h:panelGroup>
+            <i class="fa fa-fw #{archiveTaskDialog.taskStatus.staining.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"
+               title="#{archiveTaskDialog.taskStatus.staining.completed ? msg['dialog.archiveTask.status.staining.phase.completed'] : msg['dialog.archiveTask.status.staining.phase.notCompleted']}"/>
+            <h:outputFormat style="margin-left: 5px"
+                            value="#{archiveTaskDialog.taskStatus.staining.dateOfCompletion}"
+                            rendered="#{archiveTaskDialog.taskStatus.staining.completed}">
+                <f:converter converterId="instantDateTimeConverter"/>
+                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
+            </h:outputFormat>
+        </h:panelGroup>
+
+        <!-- number of total slides -->
+        <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.countSlides']}"/>
+        <h:outputLabel value="#{archiveTaskDialog.taskStatus.staining.slides.size()}"/>
+
+        <!-- status of all slide -->
+        <h:outputLabel value="#{msg['dialog.archiveTask.status.staining.slides.text']}"/>
+        <h:panelGroup>
+            <i class="fa fa-fw #{archiveTaskDialog.taskStatus.staining.slidesMarkedAsCompleted ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"
+               title="#{archiveTaskDialog.taskStatus.staining.slidesMarkedAsCompleted ? msg['dialog.archiveTask.status.staining.slides.completed'] : msg['dialog.archiveTask.status.staining.slides.notCompleted']}"/>
+        </h:panelGroup>
+    </h:panelGrid>
+
+    <!-- slides list-->
+    <h:panelGrid styleClass="defaultHistoTable">
+        <p:dataTable styleClass="defaultHistoDataTable" style="width: 90%" scrollable="true" scrollHeight="100"
+                     value="#{archiveTaskDialog.taskStatus.staining.slides}" var="slide">
+            <!-- name -->
+            <p:column
+                    headerText="#{msg['dialog.archiveTask.status.staining.details.list.name']}">
+                <h:outputText value="#{slide.name}"/>
+            </p:column>
+
+            <p:column style="width:125px"
+                      styleClass="centerChildElements centerHeaderChildElements"
+                      headerText="#{msg['dialog.archiveTask.status.staining.details.list.status']}">
+                <h:panelGroup>
+                    <i class="fa fa-fw #{slide.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"
+                       title="#{ slide.completed ? msg['dialog.archiveTask.status.staining.details.list.completed'] : msg['dialog.archiveTask.status.staining.details.list.notCompleted']}"/>
+                    <h:outputFormat style="margin-left: 5px" rendered="#{slide.completed}"
+                                    value="#{slide.dateOfCompletion}">
+                        <f:convertDateTime type="date"/>
+                    </h:outputFormat>
+                </h:panelGroup>
+            </p:column>
+        </p:dataTable>
+    </h:panelGrid>
+
+</ui:composition>
+
+

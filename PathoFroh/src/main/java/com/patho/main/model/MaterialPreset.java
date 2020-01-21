@@ -22,60 +22,60 @@ import java.util.List;
 @SequenceGenerator(name = "materialPreset_sequencegenerator", sequenceName = "materialPreset_sequence")
 public class MaterialPreset implements EditAbleEntity<MaterialPreset>, ID, Serializable {
 
-	private static final long serialVersionUID = 442137465482608899L;
+    private static final long serialVersionUID = 442137465482608899L;
 
-	@Id
-	@GeneratedValue(generator = "materialPreset_sequencegenerator")
-	@Column(unique = true, nullable = false)
-	private long id;
+    @Id
+    @GeneratedValue(generator = "materialPreset_sequencegenerator")
+    @Column(unique = true, nullable = false)
+    private long id;
 
-	@Column
-	private String name;
+    @Column
+    private String name;
 
-	@Column(columnDefinition = "text")
-	private String commentary;
+    @Column(columnDefinition = "text")
+    private String commentary;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<StainingPrototype> stainingPrototypes = new ArrayList<StainingPrototype>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<StainingPrototype> stainingPrototypes = new ArrayList<StainingPrototype>();
 
-	/**
-	 * On every selection of the material, this number will be increased. The
-	 * materials can be ordered according to this value. So often used materials
-	 * will be displayed first.
-	 */
-	@Column
-	private int priorityCount;
+    /**
+     * On every selection of the material, this number will be increased. The
+     * materials can be ordered according to this value. So often used materials
+     * will be displayed first.
+     */
+    @Column
+    private int priorityCount;
 
-	@Column
-	private boolean archived;
-	
-	public MaterialPreset() {
-	}
+    @Column
+    private boolean archived;
 
-	public MaterialPreset(MaterialPreset stainingPrototypeList) {
-		this.id = stainingPrototypeList.getId();
-		update(stainingPrototypeList);
-	}
+    public MaterialPreset() {
+    }
 
-	@Override
-	public String toString() {
-		return "ID: " + getId() + " Name: " + getName();
-	}
+    public MaterialPreset(MaterialPreset stainingPrototypeList) {
+        this.id = stainingPrototypeList.getId();
+        update(stainingPrototypeList);
+    }
 
-	@Transient
-	public void update(MaterialPreset stainingPrototypeList) {
-		this.name = stainingPrototypeList.getName();
-		this.commentary = stainingPrototypeList.getCommentary();
-		this.stainingPrototypes = new ArrayList<StainingPrototype>(stainingPrototypeList.getStainingPrototypes());
-	}
+    @Override
+    public String toString() {
+        return "ID: " + getId() + " Name: " + getName();
+    }
 
-	@Transient
-	public String asGson() {
-		final GsonBuilder builder = new GsonBuilder();
-		builder.excludeFieldsWithoutExposeAnnotation();
-		final Gson gson = builder.create();
-		return gson.toJson(this);
-	}
+    @Transient
+    public void update(MaterialPreset stainingPrototypeList) {
+        this.name = stainingPrototypeList.getName();
+        this.commentary = stainingPrototypeList.getCommentary();
+        this.stainingPrototypes = new ArrayList<StainingPrototype>(stainingPrototypeList.getStainingPrototypes());
+    }
+
+    @Transient
+    public String asGson() {
+        final GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        final Gson gson = builder.create();
+        return gson.toJson(this);
+    }
 
 }

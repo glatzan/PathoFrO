@@ -1,108 +1,107 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 <h:head>
-	<title><h:outputLabel
-			value="#{msg['dialog.editPatient.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputLabel
+            value="#{msg['dialog.editPatient.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.editPatient.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+    <h:form enctype="multipart/form-data" id="dialogContent">
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.editPatient.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
-			<!-- person mask -->
-			<histo:personSettingGeneral
-				person="#{dialog.editPatientDialog.patient.person}" />
+        <div class="dialogContent">
+            <!-- person mask -->
+            <histo:personSettingGeneral
+                    person="#{dialog.editPatientDialog.patient.person}"/>
 
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				columnClasses="columnWidth150,">
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth150,">
 
-				<!-- piz -->
-				<h:outputLabel value="#{msg['dialog.editPatient.piz']}" />
+                <!-- piz -->
+                <h:outputLabel value="#{msg['dialog.editPatient.piz']}"/>
 
-				<h:outputLabel
-					value="#{dialog.editPatientDialog.patient.piz eq '' ? msg['dialog.editPatient.piz.none'] : dialog.editPatientDialog.patient.piz}" />
-			</h:panelGrid>
-		</div>
+                <h:outputLabel
+                        value="#{dialog.editPatientDialog.patient.piz eq '' ? msg['dialog.editPatient.piz.none'] : dialog.editPatientDialog.patient.piz}"/>
+            </h:panelGrid>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
-				<h:panelGrid columns="1" styleClass="left">
-					<h:panelGroup>
-						<p:commandButton id="menuButton" value="#{msg['general.options']}"
-							type="button" icon="fa fa-fw fa-home" />
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+                <h:panelGrid columns="1" styleClass="left">
+                    <h:panelGroup>
+                        <p:commandButton id="menuButton" value="#{msg['general.options']}"
+                                         type="button" icon="fa fa-fw fa-home"/>
 
-						<p:menu overlay="true" trigger="menuButton" my="left bottom"
-							style="width:200px;" at="left top">
-							<p:menuitem value="#{msg['dialog.editPatient.merge']}"
-								disabled="#{!userService.userHasPermission('PATIENT_EDIT_MERGE')}"
-								onclick="PF('mergeBtn').jq.click();return false;"
-								icon="fa fa-fw fa-medkit" />
-							<p:menuitem value="#{msg['dialog.editPatient.delete']}"
-								disabled="#{!userService.userHasPermission('PATIENT_EDIT_DELETE')}"
-								onclick="PF('deleteBtn').jq.click();return false;"
-								icon="fa fa-fw fa-trash" />
-						</p:menu>
+                        <p:menu overlay="true" trigger="menuButton" my="left bottom"
+                                style="width:200px;" at="left top">
+                            <p:menuitem value="#{msg['dialog.editPatient.merge']}"
+                                        disabled="#{!userService.userHasPermission('PATIENT_EDIT_MERGE')}"
+                                        onclick="PF('mergeBtn').jq.click();return false;"
+                                        icon="fa fa-fw fa-medkit"/>
+                            <p:menuitem value="#{msg['dialog.editPatient.delete']}"
+                                        disabled="#{!userService.userHasPermission('PATIENT_EDIT_DELETE')}"
+                                        onclick="PF('deleteBtn').jq.click();return false;"
+                                        icon="fa fa-fw fa-trash"/>
+                        </p:menu>
 
-						<!-- merge dialog -->
-						<p:commandButton id="mergeBtn" widgetVar="mergeBtn"
-							actionListener="#{dialog.mergePatientDialog.initAndPrepareBean(dialog.editPatientDialog.patient)}"
-							style="display:none">
-							<p:ajax event="dialogReturn"
-								listener="#{dialog.editPatientDialog.onMergeReturn}"></p:ajax>
-						</p:commandButton>
+                        <!-- merge dialog -->
+                        <p:commandButton id="mergeBtn" widgetVar="mergeBtn"
+                                         actionListener="#{dialog.mergePatientDialog.initAndPrepareBean(dialog.editPatientDialog.patient)}"
+                                         style="display:none">
+                            <p:ajax event="dialogReturn"
+                                    listener="#{dialog.editPatientDialog.onMergeReturn}"></p:ajax>
+                        </p:commandButton>
 
-						<!-- delete dialog -->
-						<p:commandButton id="deleteBtn" widgetVar="deleteBtn"
-							actionListener="#{dialog.deletePatientDialog.initAndPrepareBean(dialog.editPatientDialog.patient)}"
-							style="display:none">
-							<p:ajax event="dialogReturn"
-								listener="#{dialog.editPatientDialog.onMergeReturn}"></p:ajax>
-						</p:commandButton>
-					</h:panelGroup>
-				</h:panelGrid>
+                        <!-- delete dialog -->
+                        <p:commandButton id="deleteBtn" widgetVar="deleteBtn"
+                                         actionListener="#{dialog.deletePatientDialog.initAndPrepareBean(dialog.editPatientDialog.patient)}"
+                                         style="display:none">
+                            <p:ajax event="dialogReturn"
+                                    listener="#{dialog.editPatientDialog.onMergeReturn}"></p:ajax>
+                        </p:commandButton>
+                    </h:panelGroup>
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- edit -->
-					<p:commandButton value="#{msg['general.save']}" process="@form"
-						icon="fa fa-fw fa-user-plus">
-						<f:actionListener
-							binding="#{dialog.editPatientDialog.savePatientData()}" />
-						<f:actionListener
-							binding="#{dialog.editPatientDialog.hideDialog()}" />
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- edit -->
+                    <p:commandButton value="#{msg['general.save']}" process="@form"
+                                     icon="fa fa-fw fa-user-plus">
+                        <f:actionListener
+                                binding="#{dialog.editPatientDialog.savePatientData()}"/>
+                        <f:actionListener
+                                binding="#{dialog.editPatientDialog.hideDialog()}"/>
+                    </p:commandButton>
 
-					<!-- abort -->
-					<p:commandButton value="#{msg['general.abort']}"
-						icon="fa fa-times-circle"
-						actionListener="#{dialog.editPatientDialog.hideDialog()}">
-						<p:ajax update="@form" resetValues="true"
-							icon="fa fa-fw fa-user-plus" />
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                    <!-- abort -->
+                    <p:commandButton value="#{msg['general.abort']}"
+                                     icon="fa fa-times-circle"
+                                     actionListener="#{dialog.editPatientDialog.hideDialog()}">
+                        <p:ajax update="@form" resetValues="true"
+                                icon="fa fa-fw fa-user-plus"/>
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>
 

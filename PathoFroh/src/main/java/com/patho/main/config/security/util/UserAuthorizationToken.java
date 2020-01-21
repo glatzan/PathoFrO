@@ -6,21 +6,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 /**
  * Class for storing user login password and name
- * 
- * @author andi
  *
+ * @author andi
  */
 @Getter
 @Setter
 public class UserAuthorizationToken extends UsernamePasswordAuthenticationToken {
 
-	private static final long serialVersionUID = 1213800806796822321L;
+    private static final long serialVersionUID = 1213800806796822321L;
 
-	private String otp;
+    private String otp;
 
-	public UserAuthorizationToken(String username, String password, String otp) {
-		super(username, password);
-		this.otp = otp;
-	}
-	
+    public UserAuthorizationToken(String username, String password, String otp) {
+        super(username, password);
+        this.otp = otp;
+    }
+
 }

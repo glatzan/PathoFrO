@@ -8,7 +8,7 @@ import com.patho.main.model.Signature
 import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.PhysicianRepository
+import com.patho.main.repository.jpa.PhysicianRepository
 import com.patho.main.service.DiagnosisService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope

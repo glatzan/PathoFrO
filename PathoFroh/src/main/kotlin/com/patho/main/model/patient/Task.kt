@@ -161,7 +161,7 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
      */
     open val notificationCompleted: Boolean
         @Transient
-        get () = notificationCompletionDate != null
+        get() = notificationCompletionDate != null
 
     /**
      * The date of the finalization.
@@ -303,7 +303,7 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
     @Transient
     fun generateTaskStatus(): TaskStatus {
         logger.debug("Generating taskstatus for " + taskID + " " + hashCode())
-        if(!::taskStatus.isInitialized){
+        if (!::taskStatus.isInitialized) {
             taskStatus = TaskStatus(this)
         }
 

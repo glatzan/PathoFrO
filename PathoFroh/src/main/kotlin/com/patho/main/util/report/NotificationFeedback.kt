@@ -26,12 +26,12 @@ interface NotificationFeedback {
     /**
      * True if notification is completed
      */
-    var completed : Boolean
+    var completed: Boolean
 
     /**
      * True if notification was successful
      */
-    var success : Boolean
+    var success: Boolean
 
     /**
      * Loads the feedback from the message file
@@ -47,7 +47,7 @@ interface NotificationFeedback {
         if (progress + 2 * progressPerStep > 100) {
             completed = true
             progress = 100
-        }else
+        } else
             progress += progressPerStep
     }
 
@@ -59,10 +59,10 @@ interface NotificationFeedback {
         completed = false
         progress = 0
         progressPerStep = 100 / steps
-        println("Progress " +progressPerStep +" " +steps)
+        println("Progress " + progressPerStep + " " + steps)
     }
 
-    fun end(success : Boolean){
+    fun end(success: Boolean) {
         this.success = success
         this.completed = true
     }

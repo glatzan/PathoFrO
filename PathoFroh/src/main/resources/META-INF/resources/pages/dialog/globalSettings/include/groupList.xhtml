@@ -1,116 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+>
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.settings.group']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.settings.group']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannelFull">
+    <p:outputPanel styleClass="bodyPannelFull">
 
-		<p:dataTable var="group" scrollable="true" scrollHeight="460"
-			rowKey="#{group.id}" rowIndexVar="rowIdx" id="batchList"
-			styleClass="defaultHistoDataTable"
-			value="#{dialog.settingsDialog.histoGroupTab.groups}">
+        <p:dataTable var="group" scrollable="true" scrollHeight="460"
+                     rowKey="#{group.id}" rowIndexVar="rowIdx" id="batchList"
+                     styleClass="defaultHistoDataTable"
+                     value="#{dialog.settingsDialog.histoGroupTab.groups}">
 
-			<!-- name -->
-			<p:column headerText="#{msg['dialog.settings.group.name']}">
-				<h:outputText value="#{group.name}" />
-			</p:column>
+            <!-- name -->
+            <p:column headerText="#{msg['dialog.settings.group.name']}">
+                <h:outputText value="#{group.name}"/>
+            </p:column>
 
-			<!-- archived -->
-			<p:column headerText="#{msg['dialog.settings.group.archived']}"
-				styleClass="centerChildElements" sortBy="#{group.archived}"
-				style="width:80px;"
-				rendered="#{dialog.settingsDialog.histoGroupTab.showArchived}">
-				<ui:fragment rendered="#{group.archived}">
-					<i class="fa fa-archive icon-red"
-						title="#{msg['dialog.settings.group.archived.info']}" />
-				</ui:fragment>
-			</p:column>
+            <!-- archived -->
+            <p:column headerText="#{msg['dialog.settings.group.archived']}"
+                      styleClass="centerChildElements" sortBy="#{group.archived}"
+                      style="width:80px;"
+                      rendered="#{dialog.settingsDialog.histoGroupTab.showArchived}">
+                <ui:fragment rendered="#{group.archived}">
+                    <i class="fa fa-archive icon-red"
+                       title="#{msg['dialog.settings.group.archived.info']}"/>
+                </ui:fragment>
+            </p:column>
 
-			<!-- options -->
-			<p:column
-				rendered="#{userService.userHasPermission('PROGRAM_SETTINGS_GROUP')}"
-				style="width:35px;"
-				styleClass="centerChildElements centerHeaderChildElements">
+            <!-- options -->
+            <p:column
+                    rendered="#{userService.userHasPermission('PROGRAM_SETTINGS_GROUP')}"
+                    style="width:35px;"
+                    styleClass="centerChildElements centerHeaderChildElements">
 
-				<f:facet name="header">
-					<i class="fa fa-cog"
-						title="#{msg['dialog.settings.group.options']}" />
-				</f:facet>
+                <f:facet name="header">
+                    <i class="fa fa-cog"
+                       title="#{msg['dialog.settings.group.options']}"/>
+                </f:facet>
 
-				<!-- edit -->
-				<p:commandLink title="#{msg['dialog.settings.group.options.edit']}"
-					actionListener="#{dialog.groupEditDialog.initAndPrepareBean(group)}"
-					process="@this" partialSubmit="true">
-					<p:ajax event="dialogReturn"
-						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
-						update="@form" />
-					<i class="fa fa-fw fa-cog" />
-				</p:commandLink>
+                <!-- edit -->
+                <p:commandLink title="#{msg['dialog.settings.group.options.edit']}"
+                               actionListener="#{dialog.groupEditDialog.initAndPrepareBean(group)}"
+                               process="@this" partialSubmit="true">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
+                            update="@form"/>
+                    <i class="fa fa-fw fa-cog"/>
+                </p:commandLink>
 
-				<!-- archive -->
-				<p:commandLink
-					title="#{msg['dialog.settings.group.options.archive']}"
-					rendered="#{!group.archived}"
-					actionListener="#{dialog.settingsDialog.histoGroupTab.archiveOrDelete(group, true)}"
-					update="@form" process="@this" partialSubmit="true">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
+                <!-- archive -->
+                <p:commandLink
+                        title="#{msg['dialog.settings.group.options.archive']}"
+                        rendered="#{!group.archived}"
+                        actionListener="#{dialog.settingsDialog.histoGroupTab.archiveOrDelete(group, true)}"
+                        update="@form" process="@this" partialSubmit="true">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
 
-				<!-- dearchive -->
-				<p:commandLink
-					title="#{msg['dialog.settings.group.options.dearchive']}"
-					rendered="#{group.archived}"
-					actionListener="#{dialog.settingsDialog.histoGroupTab.archiveOrDelete(group, false)}"
-					update="@form" process="@this" partialSubmit="true">
-					<i class="fa fa-fw fa-undo" />
-				</p:commandLink>
-			</p:column>
-		</p:dataTable>
-	</p:outputPanel>
+                <!-- dearchive -->
+                <p:commandLink
+                        title="#{msg['dialog.settings.group.options.dearchive']}"
+                        rendered="#{group.archived}"
+                        actionListener="#{dialog.settingsDialog.histoGroupTab.archiveOrDelete(group, false)}"
+                        update="@form" process="@this" partialSubmit="true">
+                    <i class="fa fa-fw fa-undo"/>
+                </p:commandLink>
+            </p:column>
+        </p:dataTable>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="2" styleClass="left">
-				<!-- archived -->
-				<p:selectBooleanCheckbox
-					value="#{dialog.settingsDialog.histoGroupTab.showArchived}"
-					title="#{msg['dialog.settings.group.backend.archive.text']}">
-					<p:ajax event="change" update="@form"
-						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}" />
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value="#{msg['dialog.settings.group.backend.archive']}" />
-			</h:panelGrid>
+            <h:panelGrid columns="2" styleClass="left">
+                <!-- archived -->
+                <p:selectBooleanCheckbox
+                        value="#{dialog.settingsDialog.histoGroupTab.showArchived}"
+                        title="#{msg['dialog.settings.group.backend.archive.text']}">
+                    <p:ajax event="change" update="@form"
+                            listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"/>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value="#{msg['dialog.settings.group.backend.archive']}"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- New group  -->
-				<p:commandButton
-					value="#{msg['dialog.settings.group.button.newGroup']}"
-					rendered="#{userService.userHasPermission('PROGRAM_SETTINGS_GROUP')}"
-					actionListener="#{dialog.groupEditDialog.initAndPrepareBean()}"
-					icon="fa fa-plus-circle ">
-					<p:ajax event="dialogReturn"
-						listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
-						update="@form" />
-				</p:commandButton>
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- New group  -->
+                <p:commandButton
+                        value="#{msg['dialog.settings.group.button.newGroup']}"
+                        rendered="#{userService.userHasPermission('PROGRAM_SETTINGS_GROUP')}"
+                        actionListener="#{dialog.groupEditDialog.initAndPrepareBean()}"
+                        icon="fa fa-plus-circle ">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialog.settingsDialog.histoGroupTab.updateData()}"
+                            update="@form"/>
+                </p:commandButton>
 
-				<!-- close -->
-				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle"
-					actionListener="#{dialog.settingsDialog.hideDialog()}" />
+                <!-- close -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 icon="fa fa-times-circle"
+                                 actionListener="#{dialog.settingsDialog.hideDialog()}"/>
 
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 
 </ui:composition>

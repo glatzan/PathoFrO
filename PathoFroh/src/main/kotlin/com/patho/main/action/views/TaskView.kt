@@ -3,7 +3,7 @@ package com.patho.main.action.views
 import com.patho.main.model.dto.TaskOverview
 import com.patho.main.model.patient.Task
 import com.patho.main.model.user.HistoUser
-import com.patho.main.repository.TaskOverviewRepository
+import com.patho.main.repository.jpa.TaskOverviewRepository
 import com.patho.main.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties

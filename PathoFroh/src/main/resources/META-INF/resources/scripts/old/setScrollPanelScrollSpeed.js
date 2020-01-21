@@ -1,14 +1,14 @@
 function setScrollPanelScrollSpeed(id, speed) {
 
-	if (arguments.length == 1)
-		speed = 100;
+    if (arguments.length == 1)
+        speed = 100;
 
-	var primfcid = id.replace(':', '\\:');
-	var idDataTbl = '#' + primfcid;
+    var primfcid = id.replace(':', '\\:');
+    var idDataTbl = '#' + primfcid;
 
-	$(idDataTbl).jScrollPane({
-		mouseWheelSpeed : speed
-	});
+    $(idDataTbl).jScrollPane({
+        mouseWheelSpeed: speed
+    });
 }
 
 

@@ -1,7 +1,7 @@
 package com.patho.main.service
 
 import com.patho.main.config.PathoConfig
-import com.patho.main.repository.MediaRepository
+import com.patho.main.repository.miscellaneous.MediaRepository
 import com.patho.main.template.MailTemplate
 import org.apache.commons.mail.EmailException
 import org.apache.commons.mail.MultiPartEmail

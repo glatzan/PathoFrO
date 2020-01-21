@@ -4,7 +4,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.interfaces.ArchivAble;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.interfaces.ListOrder;
-import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -18,55 +17,74 @@ import javax.persistence.*;
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
 @SequenceGenerator(name = "listItem_sequencegenerator", sequenceName = "listItem_sequence")
-@Getter
 @Setter
 public class ListItem implements ListOrder<ListItem>, ArchivAble, ID {
 
-	@Id
-	@GeneratedValue(generator = "listItem_sequencegenerator")
-	@Column(unique = true, nullable = false)
-	@RevisionNumber
-	private long id;
+    @Id
+    @GeneratedValue(generator = "listItem_sequencegenerator")
+    @Column(unique = true, nullable = false)
+    @RevisionNumber
+    private long id;
 
-	@Enumerated(EnumType.STRING)
-	private StaticList listType;
+    @Enumerated(EnumType.STRING)
+    private StaticList listType;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String value;
+    @Column(columnDefinition = "VARCHAR")
+    private String value;
 
-	@Column
-	private int indexInList;
+    @Column
+    private int indexInList;
 
-	@Column
-	private boolean archived;
+    @Column
+    private boolean archived;
 
-	public ListItem() {
-	}
+    public ListItem() {
+    }
 
-	public ListItem(StaticList staticList) {
-		this.listType = staticList;
-	}
+    public ListItem(StaticList staticList) {
+        this.listType = staticList;
+    }
 
-	/********************************************************
-	 * Interface ArchiveAble
-	 ********************************************************/
-	@Override
-	@Transient
-	public String getTextIdentifier() {
-		return null;
-	}
+    /********************************************************
+     * Interface ArchiveAble
+     ********************************************************/
+    @Override
+    @Transient
+    public String getTextIdentifier() {
+        return null;
+    }
 
-	@Override
-	@Transient
-	public Dialog getArchiveDialog() {
-		return null;
-	}
+    @Override
+    @Transient
+    public Dialog getArchiveDialog() {
+        return null;
+    }
 
-	/********************************************************
-	 * Interface ArchiveAble
-	 ********************************************************/
+    public long getId() {
+        return this.id;
+    }
 
-	public static enum StaticList {
-		WARDS, CASE_HISTORY, COUNCIL_ATTACHMENT, SLIDES, TASK_RESTORE;
-	}
+    public StaticList getListType() {
+        return this.listType;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    public int getIndexInList() {
+        return this.indexInList;
+    }
+
+    public boolean isArchived() {
+        return this.archived;
+    }
+
+    /********************************************************
+     * Interface ArchiveAble
+     ********************************************************/
+
+    public static enum StaticList {
+        WARDS, CASE_HISTORY, COUNCIL_ATTACHMENT, SLIDES, TASK_RESTORE, TASK_ARCHIVE;
+    }
 }

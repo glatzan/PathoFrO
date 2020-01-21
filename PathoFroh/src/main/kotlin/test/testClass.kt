@@ -2,7 +2,7 @@ package test
 
 class testClass {
 
-	fun test(){
-		print("Hallo");
-	}
+    fun test() {
+        print("Hallo");
+    }
 }

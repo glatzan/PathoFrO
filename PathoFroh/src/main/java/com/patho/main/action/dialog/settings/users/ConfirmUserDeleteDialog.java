@@ -6,7 +6,6 @@ import com.patho.main.model.user.HistoUser;
 import com.patho.main.util.dialog.event.HistoUserDeleteEvent;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Configurable;
 
 @Getter
 @Setter

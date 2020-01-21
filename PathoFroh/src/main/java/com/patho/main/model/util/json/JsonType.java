@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 
 public abstract class JsonType<T> implements UserType, Serializable {
 
-    private static final int[] SQL_TYPES = new int[] { Types.JAVA_OBJECT };
+    private static final int[] SQL_TYPES = new int[]{Types.JAVA_OBJECT};
     private static Boolean jsonSupportCache = null;
 
     private static final ThreadLocal<ObjectMapper> OBJECT_MAPPER_CACHE = new ThreadLocal<>();
@@ -40,7 +40,7 @@ public abstract class JsonType<T> implements UserType, Serializable {
 
     @Override
     public Object nullSafeGet(final ResultSet rs, final String[] names, SharedSessionContractImplementor sharedSessionContractImplementor,
-            final Object owner) throws SQLException {
+                              final Object owner) throws SQLException {
         final String cellContent = rs.getString(names[0]);
         if (cellContent == null) {
             return null;
@@ -54,7 +54,7 @@ public abstract class JsonType<T> implements UserType, Serializable {
 
     @Override
     public void nullSafeSet(final PreparedStatement ps, final Object value, final int idx,
-            SharedSessionContractImplementor sharedSessionContractImplementor) throws SQLException {
+                            SharedSessionContractImplementor sharedSessionContractImplementor) throws SQLException {
         boolean jsonSupported = isJsonSupported(sharedSessionContractImplementor);
         if (value == null) {
             ps.setNull(idx, jsonSupported ? Types.OTHER : Types.VARCHAR);
@@ -156,7 +156,7 @@ public abstract class JsonType<T> implements UserType, Serializable {
             @Override
             public OffsetDateTime deserialize(JsonParser jsonParser,
                                               DeserializationContext deserializationContext) throws IOException {
-                return  OffsetDateTime.parse(jsonParser.getValueAsString(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+                return OffsetDateTime.parse(jsonParser.getValueAsString(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
             }
         });
     }

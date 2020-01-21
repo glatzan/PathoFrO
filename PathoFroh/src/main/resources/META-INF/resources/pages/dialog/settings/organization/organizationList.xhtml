@@ -1,116 +1,116 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title><h:outputLabel
-			value="#{msg['dialog.organization.list.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputLabel
+            value="#{msg['dialog.organization.list.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.organization.list.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.organization.list.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
+        <div class="dialogContent">
 
-			<!-- organization table  -->
-			<p:dataTable var="organization" style="width:100%;"
-				rowKey="#{organization.id}" scrollable="true" scrollHeight="350"
-				selectionMode="single"
-				selection="#{dialog.organizationListDialog.selectedOrganization}"
-				styleClass="defaultHistoDataTable"
-				value="#{dialog.organizationListDialog.organizations}">
+            <!-- organization table  -->
+            <p:dataTable var="organization" style="width:100%;"
+                         rowKey="#{organization.id}" scrollable="true" scrollHeight="350"
+                         selectionMode="single"
+                         selection="#{dialog.organizationListDialog.selectedOrganization}"
+                         styleClass="defaultHistoDataTable"
+                         value="#{dialog.organizationListDialog.organizations}">
 
-				<!-- name -->
-				<p:column headerText="#{msg['dialog.organization.list.name']}"
-					sortBy="#{organization.name}" filterBy="#{organization.name}">
-					<h:outputText value="#{organization.name}" />
-				</p:column>
+                <!-- name -->
+                <p:column headerText="#{msg['dialog.organization.list.name']}"
+                          sortBy="#{organization.name}" filterBy="#{organization.name}">
+                    <h:outputText value="#{organization.name}"/>
+                </p:column>
 
-				<!-- commentary -->
-				<p:column headerText="#{msg['dialog.organization.list.note']}">
-					<h:outputLabel value="#{organization.note}">
-						<f:converter converterId="org.histo.ui.TruncateConverter" />
-						<f:attribute name="truncateAt" value="100" />
-						<f:attribute name="continuationMark" value="..." />
-					</h:outputLabel>
-				</p:column>
+                <!-- commentary -->
+                <p:column headerText="#{msg['dialog.organization.list.note']}">
+                    <h:outputLabel value="#{organization.note}">
+                        <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                        <f:attribute name="truncateAt" value="100"/>
+                        <f:attribute name="continuationMark" value="..."/>
+                    </h:outputLabel>
+                </p:column>
 
-				<!-- clinic organization -->
-				<p:column style="width:15px">
-					<f:facet name="header">
-						<h:outputText
-							value="#{msg['dialog.organization.list.clinicIntern']}"
-							title="#{msg['dialog.organization.list.clinicIntern.text']}" />
-					</f:facet>
+                <!-- clinic organization -->
+                <p:column style="width:15px">
+                    <f:facet name="header">
+                        <h:outputText
+                                value="#{msg['dialog.organization.list.clinicIntern']}"
+                                title="#{msg['dialog.organization.list.clinicIntern.text']}"/>
+                    </f:facet>
 
-					<ui:fragment rendered="#{organization.intern}">
-						<i class="fa fa-fw fa-check-circle icon-green"
-							title="#{msg['dialog.organization.list.clinicIntern.text']}" />
-					</ui:fragment>
-				</p:column>
+                    <ui:fragment rendered="#{organization.intern}">
+                        <i class="fa fa-fw fa-check-circle icon-green"
+                           title="#{msg['dialog.organization.list.clinicIntern.text']}"/>
+                    </ui:fragment>
+                </p:column>
 
-				<p:ajax event="rowSelect" update="@form" />
-				<p:ajax event="rowDblselect"
-					listener="#{dialog.organizationListDialog.selectAndHide()}"
-					disabled="#{!dialog.organizationListDialog.selectMode}" />
+                <p:ajax event="rowSelect" update="@form"/>
+                <p:ajax event="rowDblselect"
+                        listener="#{dialog.organizationListDialog.selectAndHide()}"
+                        disabled="#{!dialog.organizationListDialog.selectMode}"/>
 
-			</p:dataTable>
-		</div>
+            </p:dataTable>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-					<!-- new organization -->
-					<p:commandButton value="#{msg['dialog.organization.list.new']}"
-						icon="fa fa-fw fa-plus-circle" process="@this"
-						actionListener="#{dialog.organizationEditDialog.initAndPrepareBean()}"
-						partialSubmit="true" update="@form">
-						<p:ajax event="dialogReturn"
-							listener="#{dialog.organizationListDialog.onDefaultDialogReturn}"
-							update="@form" />
-					</p:commandButton>
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                    <!-- new organization -->
+                    <p:commandButton value="#{msg['dialog.organization.list.new']}"
+                                     icon="fa fa-fw fa-plus-circle" process="@this"
+                                     actionListener="#{dialog.organizationEditDialog.initAndPrepareBean()}"
+                                     partialSubmit="true" update="@form">
+                        <p:ajax event="dialogReturn"
+                                listener="#{dialog.organizationListDialog.onDefaultDialogReturn}"
+                                update="@form"/>
+                    </p:commandButton>
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
+                <h:panelGrid columns="2" styleClass="right">
 
-					<!-- select organization -->
-					<p:commandButton value="#{msg['general.select']}"
-						disabled="#{dialog.organizationListDialog.selectedOrganization eq null}"
-						rendered="#{dialog.organizationListDialog.selectMode}"
-						icon="fa fa-fw fa-check-circle-o">
-						<f:actionListener
-							binding="#{dialog.organizationListDialog.selectAndHide()}" />
-					</p:commandButton>
+                    <!-- select organization -->
+                    <p:commandButton value="#{msg['general.select']}"
+                                     disabled="#{dialog.organizationListDialog.selectedOrganization eq null}"
+                                     rendered="#{dialog.organizationListDialog.selectMode}"
+                                     icon="fa fa-fw fa-check-circle-o">
+                        <f:actionListener
+                                binding="#{dialog.organizationListDialog.selectAndHide()}"/>
+                    </p:commandButton>
 
-					<!-- close -->
-					<p:commandButton value="#{msg['general.close']}"
-						partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
-						process="@this"
-						actionListener="#{dialog.organizationListDialog.hideDialog()}"></p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                    <!-- close -->
+                    <p:commandButton value="#{msg['general.close']}"
+                                     partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
+                                     process="@this"
+                                     actionListener="#{dialog.organizationListDialog.hideDialog()}"></p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

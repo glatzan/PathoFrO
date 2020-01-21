@@ -4,18 +4,18 @@ import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTabDialog_
 import com.patho.main.model.Physician
-import com.patho.main.repository.FavouriteListRepository
-import com.patho.main.repository.PhysicianRepository
+import com.patho.main.repository.jpa.FavouriteListRepository
+import com.patho.main.repository.jpa.PhysicianRepository
 import com.patho.main.service.UserService
 import com.patho.main.ui.FavouriteListContainer
 import com.patho.main.ui.transformer.DefaultTransformer
-import com.patho.main.util.worklist.WorklistFactroy
 import com.patho.main.util.dialog.event.DialogCloseEvent
 import com.patho.main.util.dialog.event.WorklistSelectEvent
 import com.patho.main.util.search.settings.ExtendedSearch
 import com.patho.main.util.search.settings.FavouriteListSearch
 import com.patho.main.util.search.settings.SearchSettings
 import com.patho.main.util.search.settings.SimpleListSearch
+import com.patho.main.util.worklist.WorklistFactroy
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -47,7 +47,7 @@ open class SearchWorklistDialog @Autowired constructor(
         lateinit var search: T
 
         fun selectAndHide() {
-            hideDialog(WorklistSelectEvent(WorklistFactroy.defaultWorklist(search,false)))
+            hideDialog(WorklistSelectEvent(WorklistFactroy.defaultWorklist(search, false)))
         }
     }
 

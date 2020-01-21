@@ -7,30 +7,30 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 /**
  * Class for holding jwt token
- * @author andi
  *
+ * @author andi
  */
 @Getter
 @Setter
 public class JWTAuthorizationToken extends AbstractAuthenticationToken {
 
-	private static final long serialVersionUID = 9193997044541649135L;
+    private static final long serialVersionUID = 9193997044541649135L;
 
-	private String token;
-	
-	private HistoUser user;
-	
-	public JWTAuthorizationToken(String token ) {
-		super(null);
-		this.token = token;
-	}
+    private String token;
 
-	public Object getCredentials() {
-		return null;
-	}
+    private HistoUser user;
 
-	public Object getPrincipal() {
-		return user;
-	}
+    public JWTAuthorizationToken(String token) {
+        super(null);
+        this.token = token;
+    }
+
+    public Object getCredentials() {
+        return null;
+    }
+
+    public Object getPrincipal() {
+        return user;
+    }
 
 }

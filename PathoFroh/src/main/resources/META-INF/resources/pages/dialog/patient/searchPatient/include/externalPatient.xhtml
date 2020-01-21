@@ -1,47 +1,46 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel
-			value="#{msg['dialog.searchPatient.add.external.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel
+                value="#{msg['dialog.searchPatient.add.external.headline']}"/>
+    </p:outputPanel>
 
 
-	<p:outputPanel styleClass="bodyPannel">
-		<!-- person mask -->
-		<histo:personSettingGeneral
-			person="#{dialog.searchPatientDialog.externalPatientTab.patient.person}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="bodyPannel">
+        <!-- person mask -->
+        <histo:personSettingGeneral
+                person="#{dialog.searchPatientDialog.externalPatientTab.patient.person}"/>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="1" styleClass="left">
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="left">
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- Add button -->
-				<p:commandButton
-					actionListener="#{confirmExternalPatientDataDialog.initAndPrepareBean(dialog.searchPatientDialog.externalPatientTab.patient)}"
-					value="#{msg['dialog.searchPatient.add.button.add']}"
-					widgetVar="addExternalPatient" update="@form" process="@form"
-					icon="fa fa-fw fa-user-plus" partialSubmit="true">
-					<p:ajax event="dialogReturn" update="@form"
-						listener="#{dialog.searchPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}" />
-				</p:commandButton>
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- Add button -->
+                <p:commandButton
+                        actionListener="#{confirmExternalPatientDataDialog.initAndPrepareBean(dialog.searchPatientDialog.externalPatientTab.patient)}"
+                        value="#{msg['dialog.searchPatient.add.button.add']}"
+                        widgetVar="addExternalPatient" update="@form" process="@form"
+                        icon="fa fa-fw fa-user-plus" partialSubmit="true">
+                    <p:ajax event="dialogReturn" update="@form"
+                            listener="#{dialog.searchPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}"/>
+                </p:commandButton>
 
-				<!-- Close Button -->
-				<p:commandButton value="#{msg['general.close']}"
-					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
-					immediate="true"
-					actionListener="#{dialog.searchPatientDialog.hideDialog()}" />
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- Close Button -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
+                                 immediate="true"
+                                 actionListener="#{dialog.searchPatientDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 
 </ui:composition>

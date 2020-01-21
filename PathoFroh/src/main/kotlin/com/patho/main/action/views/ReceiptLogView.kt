@@ -8,7 +8,7 @@ import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.BlockService
 import com.patho.main.service.PrintExecutorService
 import com.patho.main.service.SampleService

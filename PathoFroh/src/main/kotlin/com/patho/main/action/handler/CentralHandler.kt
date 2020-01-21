@@ -4,8 +4,8 @@ import com.patho.main.action.views.*
 import com.patho.main.common.View
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.PatientRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.PatientRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.UserService
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.exceptions.TaskNotFoundException
@@ -316,7 +316,7 @@ open class CentralHandler @Autowired constructor(
             try {
                 mutableTask = taskRepository.findByID(task.id, false, true, true, true,
                         true)
-            }catch (e : TaskNotFoundException){
+            } catch (e: TaskNotFoundException) {
                 // task might be delete from an other user
                 if (worklistHandler.current.isPatientSelected) {
                     onSelectPatient(worklistHandler.selectedPatient)

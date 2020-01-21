@@ -2,7 +2,7 @@ package com.patho.main.service
 
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.util.exceptions.DiagnosisRevisionsNotCompletedException
 import com.patho.main.util.exceptions.NotificationNotCompletedException
 import com.patho.main.util.exceptions.StainingsNotCompletedException

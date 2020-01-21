@@ -7,10 +7,10 @@ import lombok.Setter;
 @Setter
 public class ProgramSettings {
 
-	private boolean offline;
+    private boolean offline;
 
-	private String workingDirectory;
+    private String workingDirectory;
 
-	private String phoneRegex;
+    private String phoneRegex;
 
 }

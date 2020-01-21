@@ -4,20 +4,20 @@ import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;
 
 public class PathoExceptionHandlerFactory extends ExceptionHandlerFactory {
-	
-	private ExceptionHandlerFactory parent;
 
-	// this injection handles jsf
-	public PathoExceptionHandlerFactory(ExceptionHandlerFactory parent) {
-		this.parent = parent;
-	}
+    private ExceptionHandlerFactory parent;
 
-	@Override
-	public ExceptionHandler getExceptionHandler() {
+    // this injection handles jsf
+    public PathoExceptionHandlerFactory(ExceptionHandlerFactory parent) {
+        this.parent = parent;
+    }
 
-		ExceptionHandler handler = new PathoExceptionHandler(parent.getExceptionHandler());
+    @Override
+    public ExceptionHandler getExceptionHandler() {
 
-		return handler;
-	}
+        ExceptionHandler handler = new PathoExceptionHandler(parent.getExceptionHandler());
+
+        return handler;
+    }
 
 }

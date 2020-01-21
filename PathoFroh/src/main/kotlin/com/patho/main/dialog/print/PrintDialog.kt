@@ -10,7 +10,7 @@ import com.patho.main.dialog.print.documentUi.AbstractDocumentUi
 import com.patho.main.dialog.print.documentUi.AbstractTaskDocumentUi
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.PrintDocumentRepository
+import com.patho.main.repository.miscellaneous.PrintDocumentRepository
 import com.patho.main.service.PrintService
 import com.patho.main.service.UserService
 import com.patho.main.template.PrintDocument
@@ -125,7 +125,7 @@ class PrintDialog @Autowired constructor(
             if (p is AbstractTaskDocumentUi) {
                 logger.debug("Initializing $p")
                 p.initialize(task)
-            }else
+            } else
                 logger.debug("No TaskReportUI: $p")
         }
 

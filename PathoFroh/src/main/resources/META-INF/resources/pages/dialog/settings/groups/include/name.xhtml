@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+>
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.groupEdit.tab.group.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.groupEdit.tab.group.headline']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel">
+    <p:outputPanel styleClass="bodyPannel">
 
-		<!-- Name -->
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth125,">
+        <!-- Name -->
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth125,">
 
-			<!-- name -->
-			<h:outputLabel value="#{msg['dialog.groupEdit.tab.group.name']}" />
-			<p:inputText value="#{dialog.groupEditDialog.group.name}"></p:inputText>
+            <!-- name -->
+            <h:outputLabel value="#{msg['dialog.groupEdit.tab.group.name']}"/>
+            <p:inputText value="#{dialog.groupEditDialog.group.name}"></p:inputText>
 
-			<!-- program group -->
-			<h:outputLabel
-				value="#{msg['dialog.groupEdit.tab.group.programmGroup']}" />
-			<p:selectOneMenu value="#{dialog.groupEditDialog.group.authRole}">
-				<f:selectItems value="#{enumProvider.authRoles}" var="authRole"
-					itemLabel="#{msg['enum.authRole.'.concat(authRole)]}" />
-			</p:selectOneMenu>
+            <!-- program group -->
+            <h:outputLabel
+                    value="#{msg['dialog.groupEdit.tab.group.programmGroup']}"/>
+            <p:selectOneMenu value="#{dialog.groupEditDialog.group.authRole}">
+                <f:selectItems value="#{enumProvider.authRoles}" var="authRole"
+                               itemLabel="#{msg['enum.authRole.'.concat(authRole)]}"/>
+            </p:selectOneMenu>
 
-			<!-- deactivated group -->
-			<h:outputLabel
-				value="#{msg['dialog.groupEdit.tab.group.deactivated']}" />
-			<p:selectBooleanCheckbox
-				title="#{msg['dialog.groupEdit.tab.group.deactivated.text']}"
-				value="#{dialog.groupEditDialog.group.userDeactivated}">
-			</p:selectBooleanCheckbox>
-		</h:panelGrid>
+            <!-- deactivated group -->
+            <h:outputLabel
+                    value="#{msg['dialog.groupEdit.tab.group.deactivated']}"/>
+            <p:selectBooleanCheckbox
+                    title="#{msg['dialog.groupEdit.tab.group.deactivated.text']}"
+                    value="#{dialog.groupEditDialog.group.userDeactivated}">
+            </p:selectBooleanCheckbox>
+        </h:panelGrid>
 
-	</p:outputPanel>
+    </p:outputPanel>
 
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="1" styleClass="left">
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="left">
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- Save button -->
-				<p:commandButton value="#{msg['general.save']}" icon="fa fa-save "
-					actionListener="#{dialog.groupEditDialog.saveAndHide()}" />
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- Save button -->
+                <p:commandButton value="#{msg['general.save']}" icon="fa fa-save "
+                                 actionListener="#{dialog.groupEditDialog.saveAndHide()}"/>
 
-				<!-- Close button -->
-				<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-					actionListener="#{dialog.groupEditDialog.hideDialog()}"
-					widgetVar="closeBtn" icon="fa fa-times-circle">
-				</p:commandButton>
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- Close button -->
+                <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                 actionListener="#{dialog.groupEditDialog.hideDialog()}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle">
+                </p:commandButton>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 
 </ui:composition>

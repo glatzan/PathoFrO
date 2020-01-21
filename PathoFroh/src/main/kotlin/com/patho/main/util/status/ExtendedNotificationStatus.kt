@@ -7,7 +7,6 @@ import com.patho.main.model.patient.notification.DiagnosisHistoryRecord
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.service.impl.SpringContextBridge
-import com.patho.main.util.status.reportIntent.ReportIntentBearer
 
 class ExtendedNotificationStatus(val task: Task) {
 
@@ -16,38 +15,93 @@ class ExtendedNotificationStatus(val task: Task) {
      */
     private val allDiagnoses = findAllDiagnoses(task.diagnosisRevisions, task.contacts)
 
+    /**
+     * List of notification statuses sorted by diagnoses
+     */
     val diagnosisNotificationStatus = DiagnosisNotificationStatus(task, allDiagnoses)
 
+    /**
+     * List of notification statuses sorted by reportIntents
+     */
     val reportNotificationIntentStatus = ReportNotificationIntentStatus(task, allDiagnoses)
+
+    /**
+     * True if all notification are completed
+     */
+    val isCompleted: Boolean = reportNotificationIntentStatus.reportIntents.all { p -> p.completed }
+
     /**
      * <pre>
+     * Class for sorting the notification status by reportIntent
+     *  // list of all reportIntents
+     *  reportIntents (List, ReportIntentStatus bearer for ReportIntent)
+     *      // list of all diagnosis revisions
+     *      diagnosis (List, DiagnosisRevisionStatus bearer for DiagnosisRevision)
+     *          name
+     *          ...
+     *          // list of a notification type + history record which is associated with the diagnosis
+     *          notifications (List, NotificationTypeAndHistory bearer for  NotificationTyp + DiagnosisHistoryRecord associated with the diagnosis)
+     *              history (DiagnosisHistoryRecord)
+     *              notificationTyp (NotificationTyp)
+     *              ...
      *
+     *
+     * Implements IExtendedNotificationStatusForReportIntent for displaying reasons (inner class can not be used in jsf components)
+     * Display Element: OverlayNotificationStatusForReportIntent.xhtml (displays ReportIntentStatus -> DiagnosisRevisionStatus)
      * </pre>
      */
-    class ReportNotificationIntentStatus(task: Task, allDiagnoses: Set<DiagnosisRevision>) {
+    class ReportNotificationIntentStatus(task: Task, allDiagnoses: Set<DiagnosisRevision>)  {
 
-        val reportIntents = task.contacts.map { ReportIntentStatus(it, task) }
+        /**
+         * List of all reportIntents
+         */
+        val reportIntents = task.contacts.map { ReportIntentStatus(it, allDiagnoses) }
 
-        class ReportIntentStatus(val reportIntent: ReportIntent, task: Task) {
+        /**
+         * This class contains a single reportIntent
+         */
+        class ReportIntentStatus(val reportIntent: ReportIntent, allDiagnoses: Set<DiagnosisRevision>) : IExtendedNotificationStatusForReportIntent {
 
-            val diagnosis = mutableListOf<ReportIntentBearer.DiagnosisBearer>()
+            /**
+             * A list of all diagnoses of associated case
+             */
+            override val diagnoses = allDiagnoses.map { DiagnosisRevisionStatus(it, reportIntent) }
 
-            class DiagnosisRevisionStatus(val diagnosisID: Long, task: Task) {
+            /**
+             * Is true if every notification for this reportintent is completed
+             */
+            val completed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportIntent)
 
-                val reportIntentNotificationBearers = mutableListOf<ReportIntentNotificationBearer>()
+            /**
+             * Class containing the diangosis and all notification associated with that diagnosis and the reportIntent
+             */
+            class DiagnosisRevisionStatus(val diagnosisRevision: DiagnosisRevision, reportIntent: ReportIntent) {
 
-                val diagnosisRevision = (task.diagnosisRevisions.firstOrNull { p -> p.id == diagnosisID })
+                /**
+                 * Diagnosis Name
+                 */
+                val name: String = diagnosisRevision.name
 
-                val diagnosisName: String = diagnosisRevision?.name
-                        ?: SpringContextBridge.services().resourceBundle.get("Deleted")
+                /**
+                 * Information of the associated notifications
+                 */
+                val notifications = findHistoryForDiagnosis(reportIntent)
 
-                open class ReportIntentNotificationBearer(var type: NotificationTyp, val diagnosisHistoryRecord: DiagnosisHistoryRecord) {
-                    val success = SpringContextBridge.services().reportIntentService.isNotificationPerformed(diagnosisHistoryRecord)
-                    val successes = diagnosisHistoryRecord.data.count { p -> !p.failed }
-                    val failedAttempts = diagnosisHistoryRecord.data.count { p -> p.failed }
-                    val attempts = diagnosisHistoryRecord.data.size
-                    val reportData = diagnosisHistoryRecord.data.toList()
+                /**
+                 * Search for history data matching the given diagnosis id
+                 */
+                private fun findHistoryForDiagnosis(reportIntent: ReportIntent): List<NotificationTypeAndHistory> {
+                    val notificationHistoryRecord = mutableListOf<NotificationTypeAndHistory>()
 
+                    reportIntent.notifications.forEach { n ->
+                        n.history.forEach { h ->
+                            if (h.diagnosisID == this.diagnosisRevision.id) {
+                                notificationHistoryRecord.add(NotificationTypeAndHistory(h, n.notificationTyp, n.active))
+                            }
+                        }
+                    }
+
+                    return notificationHistoryRecord
                 }
             }
         }
@@ -68,6 +122,7 @@ class ExtendedNotificationStatus(val task: Task) {
      *              notifications (List, NotificationTypeAndHistory bearer for  NotificationTyp + DiagnosisHistoryRecord associated with the diagnosis)
      *                  history (DiagnosisHistoryRecord)
      *                  notificationTyp (NotificationTyp)
+     *                  ...
      *
      *
      * </pre>
@@ -115,25 +170,25 @@ class ExtendedNotificationStatus(val task: Task) {
 
                 val mailRecord = notificationHistoryRecords.firstOrNull { p -> p.notificationTyp == NotificationTyp.EMAIL }
                 val isMailRecord = mailRecord != null
-                val isMailActive = isActive && mailRecord?.active ?: false
+                val isMailActive = isActive && mailRecord?.isNotificationActive ?: false
                 val mailPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(mailRecord?.history
                         ?: DiagnosisHistoryRecord())
 
                 val faxRecord = notificationHistoryRecords.firstOrNull { p -> p.notificationTyp == NotificationTyp.FAX }
                 val isFaxRecord = faxRecord != null
-                val isFaxActive = isActive && faxRecord?.active ?: false
+                val isFaxActive = isActive && faxRecord?.isNotificationActive ?: false
                 val faxPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(faxRecord?.history
                         ?: DiagnosisHistoryRecord())
 
                 val letterRecord = notificationHistoryRecords.firstOrNull { p -> p.notificationTyp == NotificationTyp.LETTER }
                 val isLetterRecord = letterRecord != null
-                val isLetterActive = isActive && letterRecord?.active ?: false
+                val isLetterActive = isActive && letterRecord?.isNotificationActive ?: false
                 val letterPerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(letterRecord?.history
                         ?: DiagnosisHistoryRecord())
 
                 val phoneRecord = notificationHistoryRecords.firstOrNull { p -> p.notificationTyp == NotificationTyp.PHONE }
                 val isPhoneRecord = phoneRecord != null
-                val isPhoneActive = isActive && phoneRecord?.active ?: false
+                val isPhoneActive = isActive && phoneRecord?.isNotificationActive ?: false
                 val phonePerformed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(phoneRecord?.history
                         ?: DiagnosisHistoryRecord())
             }
@@ -148,9 +203,9 @@ class ExtendedNotificationStatus(val task: Task) {
 
                 reportIntents.forEach { r ->
                     r.notifications.forEach { n ->
-                        val lastHistory = n.history.lastOrNull { h -> h.diagnosisID == this.diagnosisRevision.id }
-                        if (lastHistory != null) {
-                            notificationHistoryRecord.add(NotificationTypeAndHistory(lastHistory, n.notificationTyp, n.active))
+                        val history = n.history.lastOrNull { h -> h.diagnosisID == this.diagnosisRevision.id }
+                        if (history != null) {
+                            notificationHistoryRecord.add(NotificationTypeAndHistory(history, n.notificationTyp, n.active))
                         }
                     }
 
@@ -169,17 +224,13 @@ class ExtendedNotificationStatus(val task: Task) {
     /**
      * Class for history record and notification type
      */
-    class NotificationTypeAndHistory(val history: DiagnosisHistoryRecord, val notificationTyp: NotificationTyp, val active: Boolean)
-//TODO: merge
-//open class ReportIntentNotificationBearer(var type: NotificationTyp, val diagnosisHistoryRecord: DiagnosisHistoryRecord) {
-//    val success = SpringContextBridge.services().reportIntentService.isNotificationPerformed(diagnosisHistoryRecord)
-//    val successes = diagnosisHistoryRecord.data.count { p -> !p.failed }
-//    val failedAttempts = diagnosisHistoryRecord.data.count { p -> p.failed }
-//    val attempts = diagnosisHistoryRecord.data.size
-//    val reportData = diagnosisHistoryRecord.data.toList()
-//
-//}
-
+    class NotificationTypeAndHistory(val history: DiagnosisHistoryRecord, val notificationTyp: NotificationTyp, val isNotificationActive: Boolean) {
+        val success = SpringContextBridge.services().reportIntentService.isNotificationPerformed(history)
+        val totalSuccesses = history.data.count { p -> !p.failed }
+        val totalFailedAttempts = history.data.count { p -> p.failed }
+        val totalAttempts = history.data.size
+        val reportData = history.data.toList()
+    }
 
     /**
      * Returns a list with all ids of current and deleted diagnosis revisions. The current ids will be taken for a

@@ -6,7 +6,7 @@ import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.patient.Task;
-import com.patho.main.repository.FavouriteListRepository;
+import com.patho.main.repository.jpa.FavouriteListRepository;
 import com.patho.main.service.FavouriteListService;
 import com.patho.main.template.AbstractTemplate;
 import com.patho.main.util.helper.TimeUtil;

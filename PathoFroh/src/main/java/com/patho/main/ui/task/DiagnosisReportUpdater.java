@@ -3,9 +3,6 @@ package com.patho.main.ui.task;
 import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
-import com.patho.main.repository.MediaRepository;
-import com.patho.main.repository.PrintDocumentRepository;
-import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
@@ -14,18 +11,15 @@ import com.patho.main.template.DocumentToken;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.pdf.LazyPDFReturnHandler;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Optional;
+
 @Getter
 @Setter
 public class DiagnosisReportUpdater {

@@ -7,8 +7,8 @@ import com.patho.main.dialog.AbstractDialog_
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.patient.Patient
-import com.patho.main.repository.BioBankRepository
-import com.patho.main.repository.PatientRepository
+import com.patho.main.repository.jpa.BioBankRepository
+import com.patho.main.repository.jpa.PatientRepository
 import com.patho.main.service.PDFService
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.util.dialog.event.PDFSelectEvent

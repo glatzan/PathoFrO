@@ -17,7 +17,7 @@ class DeleteTaskEntityDialog : AbstractDialog_(Dialog.DELETE_ID_OBJECT) {
 
     var text: String = ""
 
-    fun initAndPrepareBean(deleteEntity: ID) : DeleteTaskEntityDialog {
+    fun initAndPrepareBean(deleteEntity: ID): DeleteTaskEntityDialog {
         if (initBean(deleteEntity, "", ""))
             prepareDialog()
         return this

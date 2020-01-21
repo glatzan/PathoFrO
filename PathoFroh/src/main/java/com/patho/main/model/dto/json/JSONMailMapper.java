@@ -10,12 +10,12 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JSONMailMapper {
 
-	private String subject;
-	private String body;
+    private String subject;
+    private String body;
 
-	public MailTemplate updateMailTemplate(MailTemplate template) {
-		template.setSubject(subject);
-		template.setBody(body);
-		return template;
-	}
+    public MailTemplate updateMailTemplate(MailTemplate template) {
+        template.setSubject(subject);
+        template.setBody(body);
+        return template;
+    }
 }

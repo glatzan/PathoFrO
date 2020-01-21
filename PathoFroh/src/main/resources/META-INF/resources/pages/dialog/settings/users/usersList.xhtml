@@ -1,113 +1,113 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title><h:outputLabel
-			value="#{msg['dialog.userList.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputLabel
+            value="#{msg['dialog.userList.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.userList.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.userList.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
+        <div class="dialogContent">
 
-			<p:dataTable var="user" scrollable="true" scrollHeight="480"
-				selection="#{dialog.userListDialog.selectedUser}"
-				selectionMode="single" rowIndexVar="rowIdx" id="batchList"
-				styleClass="defaultHistoDataTable" rowKey="#{user.id}"
-				value="#{dialog.userListDialog.users}">
+            <p:dataTable var="user" scrollable="true" scrollHeight="480"
+                         selection="#{dialog.userListDialog.selectedUser}"
+                         selectionMode="single" rowIndexVar="rowIdx" id="batchList"
+                         styleClass="defaultHistoDataTable" rowKey="#{user.id}"
+                         value="#{dialog.userListDialog.users}">
 
-				<!-- name -->
-				<p:column filterBy="#{user.username}" sortBy="#{user.username}"
-					headerText="#{msg['dialog.userList.list.username']}"
-					filterMatchMode="contains">
-					<h:outputText value="#{user.username}" />
-				</p:column>
+                <!-- name -->
+                <p:column filterBy="#{user.username}" sortBy="#{user.username}"
+                          headerText="#{msg['dialog.userList.list.username']}"
+                          filterMatchMode="contains">
+                    <h:outputText value="#{user.username}"/>
+                </p:column>
 
-				<!-- name -->
-				<p:column headerText="#{msg['dialog.userList.list.name']}"
-					sortBy="#{user.physician.person.getFullName()}">
-					<h:outputText value="#{user.physician.person.getFullName()}" />
-				</p:column>
+                <!-- name -->
+                <p:column headerText="#{msg['dialog.userList.list.name']}"
+                          sortBy="#{user.physician.person.getFullName()}">
+                    <h:outputText value="#{user.physician.person.getFullName()}"/>
+                </p:column>
 
-				<!-- role -->
-				<p:column headerText="#{msg['dialog.userList.list.clinicRole']}"
-					sortBy="#{user.physician.clinicRole}">
-					<h:outputText value="#{user.physician.clinicRole}" />
-				</p:column>
+                <!-- role -->
+                <p:column headerText="#{msg['dialog.userList.list.clinicRole']}"
+                          sortBy="#{user.physician.clinicRole}">
+                    <h:outputText value="#{user.physician.clinicRole}"/>
+                </p:column>
 
-				<!-- archived -->
-				<p:column headerText="#{msg['dialog.userList.list.archived']}"
-					styleClass="centerChildElements" sortBy="#{user.archived}"
-					style="width:11% !important;"
-					rendered="#{dialog.userListDialog.showArchived}">
-					<ui:fragment rendered="#{user.archived}">
-						<i class="fa fa-archive icon-red"
-							title="#{msg['dialog.userList.list.archive.info']}" />
-					</ui:fragment>
-				</p:column>
+                <!-- archived -->
+                <p:column headerText="#{msg['dialog.userList.list.archived']}"
+                          styleClass="centerChildElements" sortBy="#{user.archived}"
+                          style="width:11% !important;"
+                          rendered="#{dialog.userListDialog.showArchived}">
+                    <ui:fragment rendered="#{user.archived}">
+                        <i class="fa fa-archive icon-red"
+                           title="#{msg['dialog.userList.list.archive.info']}"/>
+                    </ui:fragment>
+                </p:column>
 
-				<p:ajax event="rowSelect" update="@form" />
+                <p:ajax event="rowSelect" update="@form"/>
 
-				<p:ajax event="rowDblselect"
-					listener="#{dialog.userListDialog.selectAndHide()}" />
+                <p:ajax event="rowDblselect"
+                        listener="#{dialog.userListDialog.selectAndHide()}"/>
 
-			</p:dataTable>
+            </p:dataTable>
 
-		</div>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="2" styleClass="left">
-					<!-- archived -->
-					<p:selectBooleanCheckbox
-						title="#{msg['dialog.userList.checkBox.archive.text']}"
-						value="#{dialog.userListDialog.showArchived}">
-						<p:ajax listener="#{dialog.userListDialog.updateData()}"
-							partialSubmit="true" process="@this" update="@form" />
-					</p:selectBooleanCheckbox>
+                <h:panelGrid columns="2" styleClass="left">
+                    <!-- archived -->
+                    <p:selectBooleanCheckbox
+                            title="#{msg['dialog.userList.checkBox.archive.text']}"
+                            value="#{dialog.userListDialog.showArchived}">
+                        <p:ajax listener="#{dialog.userListDialog.updateData()}"
+                                partialSubmit="true" process="@this" update="@form"/>
+                    </p:selectBooleanCheckbox>
 
-					<h:outputLabel value="#{msg['dialog.userList.checkBox.archive']}"></h:outputLabel>
-				</h:panelGrid>
+                    <h:outputLabel value="#{msg['dialog.userList.checkBox.archive']}"></h:outputLabel>
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- Select User-->
-					<p:commandButton value="#{msg['general.select']}"
-						disabled="#{dialog.userListDialog.selectedUser eq null}"
-						icon="fa fa-check-circle-o ">
-						<f:actionListener
-							binding="#{dialog.userListDialog.selectAndHide()}"></f:actionListener>
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Select User-->
+                    <p:commandButton value="#{msg['general.select']}"
+                                     disabled="#{dialog.userListDialog.selectedUser eq null}"
+                                     icon="fa fa-check-circle-o ">
+                        <f:actionListener
+                                binding="#{dialog.userListDialog.selectAndHide()}"></f:actionListener>
+                    </p:commandButton>
 
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						icon="fa fa-times-circle">
-						<f:actionListener binding="#{dialog.userListDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     icon="fa fa-times-circle">
+                        <f:actionListener binding="#{dialog.userListDialog.hideDialog()}"></f:actionListener>
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

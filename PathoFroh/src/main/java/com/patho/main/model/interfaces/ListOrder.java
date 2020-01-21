@@ -4,47 +4,47 @@ import java.util.List;
 
 public interface ListOrder<T extends ListOrder<?>> {
 
-	@SuppressWarnings("unchecked")
-	public default boolean moveOrderUp(List<T> parentList) {
-		int index = parentList.indexOf(this);
-		if (index > 0) {
+    @SuppressWarnings("unchecked")
+    public default boolean moveOrderUp(List<T> parentList) {
+        int index = parentList.indexOf(this);
+        if (index > 0) {
 
-			parentList.remove(this);
-			parentList.add(index - 1, (T)this);
-			
-			reOrderList(parentList);
-			
-			return true;
-		}
+            parentList.remove(this);
+            parentList.add(index - 1, (T) this);
 
-		return false;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public default boolean moveOrderDown(List<T> parentList) {
-		int index = parentList.indexOf(this);
-		if (index < parentList.size()-1) {
+            reOrderList(parentList);
 
-			parentList.remove(this);
-			parentList.add(index+1, (T)this);
-			
-			reOrderList(parentList);
-			
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
-	
-	public static void reOrderList(List<? extends ListOrder<?>> parentList){
-		int i = 0;
-		for (ListOrder<?> listOrder : parentList) {
-			listOrder.setIndexInList(i);
-			i++;
-		}
-	}
-	
-	public int getIndexInList();
+        return false;
+    }
 
-	public void setIndexInList(int indexInList);
+    @SuppressWarnings("unchecked")
+    public default boolean moveOrderDown(List<T> parentList) {
+        int index = parentList.indexOf(this);
+        if (index < parentList.size() - 1) {
+
+            parentList.remove(this);
+            parentList.add(index + 1, (T) this);
+
+            reOrderList(parentList);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void reOrderList(List<? extends ListOrder<?>> parentList) {
+        int i = 0;
+        for (ListOrder<?> listOrder : parentList) {
+            listOrder.setIndexInList(i);
+            i++;
+        }
+    }
+
+    public int getIndexInList();
+
+    public void setIndexInList(int indexInList);
 }

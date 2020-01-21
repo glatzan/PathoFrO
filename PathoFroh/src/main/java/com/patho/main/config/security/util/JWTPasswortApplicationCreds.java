@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class JWTPasswortApplicationCreds {
-	private String username;
-	private String password;
+    private String username;
+    private String password;
 }

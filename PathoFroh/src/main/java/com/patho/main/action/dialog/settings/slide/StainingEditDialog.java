@@ -4,15 +4,10 @@ import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
-import com.patho.main.repository.StainingPrototypeRepository;
-import com.patho.main.service.StainingPrototypeService;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -22,69 +17,69 @@ import java.util.List;
 @Setter
 public class StainingEditDialog extends AbstractDialog {
 
-	private boolean newStaining;
+    private boolean newStaining;
 
-	private StainingPrototype stainingPrototype;
+    private StainingPrototype stainingPrototype;
 
-	private List<StainingPrototypeDetails> removeDetails;
+    private List<StainingPrototypeDetails> removeDetails;
 
-	public StainingEditDialog initAndPrepareBean() {
-		return initAndPrepareBean(new StainingPrototype());
-	}
+    public StainingEditDialog initAndPrepareBean() {
+        return initAndPrepareBean(new StainingPrototype());
+    }
 
-	public StainingEditDialog initAndPrepareBean(StainingPrototype staining) {
-		if (initBean(staining))
-			prepareDialog();
-		return this;
-	}
+    public StainingEditDialog initAndPrepareBean(StainingPrototype staining) {
+        if (initBean(staining))
+            prepareDialog();
+        return this;
+    }
 
-	public boolean initBean(StainingPrototype staining) {
+    public boolean initBean(StainingPrototype staining) {
 
-		// reloading stating with batch details
-		if (staining.getId() != 0) {
-			setStainingPrototype(
-					SpringContextBridge.services().getStainingPrototypeRepository().findOptionalByIdAndInitilize(staining.getId(), true).get());
-			setNewStaining(false);
-		} else {
-			setNewStaining(true);
-			setStainingPrototype(staining);
-		}
+        // reloading stating with batch details
+        if (staining.getId() != 0) {
+            setStainingPrototype(
+                    SpringContextBridge.services().getStainingPrototypeRepository().findOptionalByIdAndInitilize(staining.getId(), true).get());
+            setNewStaining(false);
+        } else {
+            setNewStaining(true);
+            setStainingPrototype(staining);
+        }
 
-		setRemoveDetails(new ArrayList<StainingPrototypeDetails>());
+        setRemoveDetails(new ArrayList<StainingPrototypeDetails>());
 
-		return super.initBean(task, Dialog.SETTINGS_STAINING_EDIT);
-	}
+        return super.initBean(task, Dialog.SETTINGS_STAINING_EDIT);
+    }
 
-	public void addBatch() {
-		StainingPrototypeDetails newBatch = new StainingPrototypeDetails(stainingPrototype);
-		newBatch.setDeliveryDate(new Date(System.currentTimeMillis()));
-		getStainingPrototype().getBatchDetails().add(0, newBatch);
-	}
+    public void addBatch() {
+        StainingPrototypeDetails newBatch = new StainingPrototypeDetails(stainingPrototype);
+        newBatch.setDeliveryDate(new Date(System.currentTimeMillis()));
+        getStainingPrototype().getBatchDetails().add(0, newBatch);
+    }
 
-	public void removeBatch(StainingPrototypeDetails stainingPrototypeDetails) {
-		stainingPrototype.getBatchDetails().remove(stainingPrototypeDetails);
+    public void removeBatch(StainingPrototypeDetails stainingPrototypeDetails) {
+        stainingPrototype.getBatchDetails().remove(stainingPrototypeDetails);
 
-		// delete if user clicks save
-		if (stainingPrototypeDetails.getId() != 0) {
-			getRemoveDetails().add(stainingPrototypeDetails);
-		}
-	}
+        // delete if user clicks save
+        if (stainingPrototypeDetails.getId() != 0) {
+            getRemoveDetails().add(stainingPrototypeDetails);
+        }
+    }
 
-	public void cloneBatch(StainingPrototypeDetails stainingPrototypeDetails) {
-		try {
-			StainingPrototypeDetails clone = stainingPrototypeDetails.clone();
-			clone.setId(0);
-			stainingPrototype.getBatchDetails().add(0, clone);
-		} catch (CloneNotSupportedException e) {
-		}
-	}
+    public void cloneBatch(StainingPrototypeDetails stainingPrototypeDetails) {
+        try {
+            StainingPrototypeDetails clone = stainingPrototypeDetails.clone();
+            clone.setId(0);
+            stainingPrototype.getBatchDetails().add(0, clone);
+        } catch (CloneNotSupportedException e) {
+        }
+    }
 
-	public void saveAndHide() {
-		save();
-		hideDialog(new ReloadEvent());
-	}
+    public void saveAndHide() {
+        save();
+        hideDialog(new ReloadEvent());
+    }
 
-	private void save() {
-		SpringContextBridge.services().getStainingPrototypeService().addOrUpdate(getStainingPrototype(), getRemoveDetails());
-	}
+    private void save() {
+        SpringContextBridge.services().getStainingPrototypeService().addOrUpdate(getStainingPrototype(), getRemoveDetails());
+    }
 }

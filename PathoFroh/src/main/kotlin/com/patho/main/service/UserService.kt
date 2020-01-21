@@ -7,9 +7,9 @@ import com.patho.main.model.person.Person
 import com.patho.main.model.user.HistoGroup
 import com.patho.main.model.user.HistoPermissions
 import com.patho.main.model.user.HistoUser
-import com.patho.main.repository.GroupRepository
-import com.patho.main.repository.LDAPRepository
-import com.patho.main.repository.UserRepository
+import com.patho.main.repository.jpa.GroupRepository
+import com.patho.main.repository.jpa.UserRepository
+import com.patho.main.repository.miscellaneous.LDAPRepository
 import com.patho.main.util.user.HistoGroupNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -48,7 +48,7 @@ open class UserService @Autowired constructor(
     /**
      * Loads the current user from database an replaces the old user in security Context
      */
-    open fun reloadCurrentUser(){
+    open fun reloadCurrentUser() {
         val user = userRepository.findById(currentUser.id).get()
 
         val t = ArrayList<GrantedAuthority>()

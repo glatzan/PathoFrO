@@ -11,22 +11,22 @@ import javax.persistence.*;
 @MappedSuperclass
 public class FavouritePermissions implements ID {
 
-	@Id
-	@GeneratedValue(generator = "favouritepermission_sequencegenerator")
-	@SequenceGenerator(name = "favouritepermission_sequencegenerator", sequenceName = "favouritepermission_sequence")
-	@Column(unique = true, nullable = false)
-	protected long id;
+    @Id
+    @GeneratedValue(generator = "favouritepermission_sequencegenerator")
+    @SequenceGenerator(name = "favouritepermission_sequencegenerator", sequenceName = "favouritepermission_sequence")
+    @Column(unique = true, nullable = false)
+    protected long id;
 
-	@Column
-	protected boolean admin;
+    @Column
+    protected boolean admin;
 
-	@Column
-	protected boolean readable;
+    @Column
+    protected boolean readable;
 
-	@Column
-	protected boolean editable;
+    @Column
+    protected boolean editable;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	protected FavouriteList favouriteList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    protected FavouriteList favouriteList;
 
 }

@@ -49,7 +49,7 @@ open class Block : AbstractPersistable, Parent<Sample>, IdManuallyAltered {
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "parent")
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("creationDate ASC, id ASC")
-    open var slides= mutableListOf<Slide>()
+    open var slides = mutableListOf<Slide>()
 
     /**
      * Date of sample creation

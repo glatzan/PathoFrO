@@ -7,7 +7,6 @@ import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.miscellaneous.Council
 import com.patho.main.util.status.reportIntent.ReportIntentStatusByReportIntentAndDiagnosis
-import com.patho.main.util.task.ArchiveTaskStatus
 
 
 class TotalTaskStatus(task: Task) {
@@ -16,12 +15,11 @@ class TotalTaskStatus(task: Task) {
 
     val staining = StainingStatus(task)
     val diagnosis = DiagnosisStatus(task)
-    val notifications = ArchiveTaskStatus.NotificationStatus(task)
-    val consultations = ArchiveTaskStatus.CouncilStatus(task)
+    val notifications = ExtendedNotificationStatus(task)
+    val consultations = ConsultationStatus(task)
     val lists = FavouriteListStatus(task)
 
-    val isArchiveAble = staining.isCompleted && diagnosis.isCompleted && notifications.isCompleted && councilStatus.isCompleted && !favouritesStatus.isCompleted
-
+    val isArchiveAble = staining.isCompleted && diagnosis.isCompleted && notifications.isCompleted && consultations.isCompleted && lists.isNotBlockingFiling
 
     /**
      * Status for all slides
@@ -129,7 +127,7 @@ class TotalTaskStatus(task: Task) {
             /**
              * True if no notification should be performed
              */
-            val isNotificationPending = diagnosisRevision.notificationStatus == com.patho.main.model.patient.NotificationStatus.NO_NOTFICATION
+            val isNoNotification = diagnosisRevision.notificationStatus == com.patho.main.model.patient.NotificationStatus.NO_NOTFICATION
 
             /**
              * True if notification was performed
@@ -144,7 +142,7 @@ class TotalTaskStatus(task: Task) {
             /**
              *  True if reportIntent is valid
              */
-            val isValidDiagnosis = isCompleted && (isSigned || isNotificationPending)
+            val isValidDiagnosis = isCompleted && (isSigned || isNoNotification)
 
             private fun getSignatureStatus(signature: Signature): SignatureStatus? {
                 val signatureStatus = SignatureStatus(signature)
@@ -218,7 +216,7 @@ class TotalTaskStatus(task: Task) {
         /**
          *  True is no lists blocks filing
          */
-        val isNotBlockingFiling= !lists.any { it.blockTaskArchival }
+        val isNotBlockingFiling = !lists.any { it.blockTaskArchival }
 
         /**
          * Sorts all favouriteLists by groups

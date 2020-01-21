@@ -235,7 +235,7 @@ var commonFunctions = {
      * overlaypanel at that element'S position
      */
     showOverlayPanelParentByClass: function (panelID, parentClass) {
-        parentClass = "."+parentClass;
+        parentClass = "." + parentClass;
         var tmpSel = $(parentClass);
         if (tmpSel.length >= 1) {
             this.showOverlayPanel(panelID, tmpSel[0].id)

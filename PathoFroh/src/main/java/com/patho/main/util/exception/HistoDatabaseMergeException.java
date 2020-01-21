@@ -7,12 +7,12 @@ import lombok.Setter;
 @Setter
 public class HistoDatabaseMergeException extends RuntimeException {
 
-	private static final long serialVersionUID = -6690684165543685979L;
-	
-	private Object oldVersion;
+    private static final long serialVersionUID = -6690684165543685979L;
 
-	public HistoDatabaseMergeException(Object oldVersion) {
-		super("Inconsistent Version in Database");
-		this.oldVersion = oldVersion;
-	}
+    private Object oldVersion;
+
+    public HistoDatabaseMergeException(Object oldVersion) {
+        super("Inconsistent Version in Database");
+        this.oldVersion = oldVersion;
+    }
 }

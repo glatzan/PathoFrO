@@ -1,44 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:histo="http://java.sun.com/jsf/composite/components"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:histo="http://java.sun.com/jsf/composite/components"
+>
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel
-			value="#{msg['dialog.groupEdit.tab.settings.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel
+                value="#{msg['dialog.groupEdit.tab.settings.headline']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel">
-		<histo:userSettingsGeneral user="#{dialog.groupEditDialog.group}"
-			advanceMode="true"
-			allViews="#{dialog.groupEditDialog.generalTab.allViews}"
-			allWorklistOptions="#{dialog.groupEditDialog.generalTab.allWorklistOptions}"
-			valueChangeAction="#{dialog.groupEditDialog.generalTab.voidAction()}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="bodyPannel">
+        <histo:userSettingsGeneral user="#{dialog.groupEditDialog.group}"
+                                   advanceMode="true"
+                                   allViews="#{dialog.groupEditDialog.generalTab.allViews}"
+                                   allWorklistOptions="#{dialog.groupEditDialog.generalTab.allWorklistOptions}"
+                                   valueChangeAction="#{dialog.groupEditDialog.generalTab.voidAction()}"/>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="1" styleClass="left">
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="left">
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- Save button -->
-				<p:commandButton value="#{msg['general.save']}" icon="fa fa-save "
-					actionListener="#{dialog.groupEditDialog.saveAndHide()}" />
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- Save button -->
+                <p:commandButton value="#{msg['general.save']}" icon="fa fa-save "
+                                 actionListener="#{dialog.groupEditDialog.saveAndHide()}"/>
 
-				<!-- Close button -->
-				<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-					actionListener="#{dialog.groupEditDialog.hideDialog()}"
-					widgetVar="closeBtn" icon="fa fa-times-circle">
-				</p:commandButton>
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- Close button -->
+                <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                 actionListener="#{dialog.groupEditDialog.hideDialog()}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle">
+                </p:commandButton>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 </ui:composition>

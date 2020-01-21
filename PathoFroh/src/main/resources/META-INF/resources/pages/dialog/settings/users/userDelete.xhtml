@@ -1,85 +1,84 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.confirmUserDeleteDialog.headline']}">
-			<f:param
-				value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}" />
-		</h:outputFormat></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.confirmUserDeleteDialog.headline']}">
+        <f:param
+                value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}"/>
+    </h:outputFormat></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputFormat
-					value="#{msg['dialog.confirmUserDeleteDialog.headline']}">
-					<f:param
-						value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}" />
-				</h:outputFormat>
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputFormat
+                        value="#{msg['dialog.confirmUserDeleteDialog.headline']}">
+                    <f:param
+                            value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}"/>
+                </h:outputFormat>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
-			<h:panelGrid columns="1" styleClass="defaultHistoTable">
-				<h:outputFormat
-					value="#{msg['dialog.confirmUserDeleteDialog.text']}">
-					<f:param
-						value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}" />
-				</h:outputFormat>
-			</h:panelGrid>
+        <div class="dialogContent">
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                <h:outputFormat
+                        value="#{msg['dialog.confirmUserDeleteDialog.text']}">
+                    <f:param
+                            value="#{dialog.confirmUserDeleteDialog.user.physician.person.getFullName()}"/>
+                </h:outputFormat>
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				style="margin-left:10px">
-				<!-- remove from reportIntent list -->
-				<p:selectBooleanCheckbox
-					value="#{dialog.confirmUserDeleteDialog.deletePhysician}"
-					title="#{msg['dialog.confirmUserDeleteDialog.deletePhysician.info']}">
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value="#{msg['dialog.confirmUserDeleteDialog.deletePhysician']}" />
-			</h:panelGrid>
-		</div>
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         style="margin-left:10px">
+                <!-- remove from reportIntent list -->
+                <p:selectBooleanCheckbox
+                        value="#{dialog.confirmUserDeleteDialog.deletePhysician}"
+                        title="#{msg['dialog.confirmUserDeleteDialog.deletePhysician.info']}">
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value="#{msg['dialog.confirmUserDeleteDialog.deletePhysician']}"/>
+            </h:panelGrid>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- Delete button -->
-					<p:commandButton value="#{msg['general.delete']}"
-						icon="fa fa-fw fa-trash"
-						actionListener="#{dialog.confirmUserDeleteDialog.deleteAndHide()}"
-						onclick="disableButton(true, 'userDeleteBtn', 'closeBtn')">
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Delete button -->
+                    <p:commandButton value="#{msg['general.delete']}"
+                                     icon="fa fa-fw fa-trash"
+                                     actionListener="#{dialog.confirmUserDeleteDialog.deleteAndHide()}"
+                                     onclick="disableButton(true, 'userDeleteBtn', 'closeBtn')">
+                    </p:commandButton>
 
-					<!-- abort -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						widgetVar="closeBtn" icon="fa fa-times-circle"
-						actionListener="#{dialog.confirmUserDeleteDialog.hideDialog()}"></p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                    <!-- abort -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     widgetVar="closeBtn" icon="fa fa-times-circle"
+                                     actionListener="#{dialog.confirmUserDeleteDialog.hideDialog()}"></p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

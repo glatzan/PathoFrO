@@ -9,8 +9,8 @@ import com.patho.main.model.ListItem
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.ListItemRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.ListItemRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.SlideService
 import com.patho.main.ui.StainingTableChooser
 import com.patho.main.util.dialog.event.StainingPhaseExitEvent

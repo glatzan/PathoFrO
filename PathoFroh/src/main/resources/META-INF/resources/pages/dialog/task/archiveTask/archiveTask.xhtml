@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+    <title><h:outputFormat
+            value="#{msg['dialog.archiveTask.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
+</h:head>
+
+<h:body styleClass="histoDialogStyle">
+
+    <h:form id="dialogContent">
+
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.archiveTask.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
+
+        <!-- body -->
+        <div class="dialogContent">
+            <div class="ui-g">
+                <div class="ui-g-6">
+                    <!-- stainings -->
+                    <ui:include src="_staining.xhtml"/>
+                </div>
+                <div class="ui-g-6">
+                    <!-- consultation -->
+                    <ui:include src="_consultaion.xhtml"/>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6">
+                    <!-- diagnosis -->
+                    <ui:include src=" _diagnosis.xhtml"/>
+                </div>
+                <div class="ui-g-6">
+                    <!-- favouriteLists -->
+                    <ui:include src="_favouriteLists.xhtml"/>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6">
+                    <!-- notification -->
+                    <ui:include src=" _notification.xhtml"/>
+                </div>
+                <div class="ui-g-6">
+                    <ui:include src="_miscellaneous.xhtml"></ui:include>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttonContainer">
+
+            <h:panelGrid columns="2">
+
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Save button -->
+                    <p:commandButton disabled="#{!archiveTaskDialog.filingPossible}"
+                                     value="#{msg['dialog.archiveTask.button.archive.text']}" process="@form"
+                                     update="dialogContent:reasonInput"
+                                     widgetVar="submitBtn"
+                                     onclick="PF('submitBtn').disable()"
+                                     oncomplete="PF('submitBtn').enable()"
+                                     icon="fa fa-archive" actionListener="#{archiveTaskDialog.archiveAndHide()}">
+                    </p:commandButton>
+
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     immediate="true"
+                                     icon="fa fa-times-circle" actionListener="#{archiveTaskDialog.hideDialog()}">
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+
+        <!-- global tooltip -->
+        <pe:tooltip global="true"/>
+    </h:form>
+</h:body>
+</html>

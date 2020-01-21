@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:histo="http://java.sun.com/jsf/composite/components"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:histo="http://java.sun.com/jsf/composite/components"
+                xmlns:p="http://primefaces.org/ui">
 
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.userEdit.user']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.userEdit.user']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannelFull">
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth125, ">
+    <p:outputPanel styleClass="bodyPannelFull">
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth125, ">
 
-			<!-- User name -->
-			<h:outputLabel value="#{msg['dialog.userEdit.user.name']}" />
-			<p:inputText value="#{dialog.editUserDialog.user.username}"
-				required="true" />
+            <!-- User name -->
+            <h:outputLabel value="#{msg['dialog.userEdit.user.name']}"/>
+            <p:inputText value="#{dialog.editUserDialog.user.username}"
+                         required="true"/>
 
-			<!-- User role -->
-			<h:outputLabel value="#{msg['dialog.userEdit.user.role']}" />
-			<p:selectOneMenu style="margin-top:1px;"
-				title="#{msg['body.worklist.header.view']}"
-				value="#{dialog.editUserDialog.user.group}"
-				converter="#{dialog.editUserDialog.userTab.groupTransformer}"
-				disabled="#{!userService.userHasPermission('PROGRAM_SETTINGS_USER')}">
+            <!-- User role -->
+            <h:outputLabel value="#{msg['dialog.userEdit.user.role']}"/>
+            <p:selectOneMenu style="margin-top:1px;"
+                             title="#{msg['body.worklist.header.view']}"
+                             value="#{dialog.editUserDialog.user.group}"
+                             converter="#{dialog.editUserDialog.userTab.groupTransformer}"
+                             disabled="#{!userService.userHasPermission('PROGRAM_SETTINGS_USER')}">
 
-				<p:ajax event="change" execute="histoUser" partialSubmit="true"
-					listener="#{dialog.editUserDialog.userTab.roleChange()}"></p:ajax>
+                <p:ajax event="change" execute="histoUser" partialSubmit="true"
+                        listener="#{dialog.editUserDialog.userTab.roleChange()}"></p:ajax>
 
-				<f:selectItems value="#{dialog.editUserDialog.userTab.groups}"
-					var="group" itemValue="#{group}" itemLabel="#{group.name}" />
-			</p:selectOneMenu>
+                <f:selectItems value="#{dialog.editUserDialog.userTab.groups}"
+                               var="group" itemValue="#{group}" itemLabel="#{group.name}"/>
+            </p:selectOneMenu>
 
-			<!-- local user -->
-			<h:outputLabel value="#{msg['dialog.userEdit.localUser']}" />
-			<p:selectBooleanCheckbox
-				title="#{msg['dialog.userEdit.localUser.info']}"
-				value="#{dialog.editUserDialog.user.localUser}">
-			</p:selectBooleanCheckbox>
+            <!-- local user -->
+            <h:outputLabel value="#{msg['dialog.userEdit.localUser']}"/>
+            <p:selectBooleanCheckbox
+                    title="#{msg['dialog.userEdit.localUser.info']}"
+                    value="#{dialog.editUserDialog.user.localUser}">
+            </p:selectBooleanCheckbox>
 
-		</h:panelGrid>
+        </h:panelGrid>
 
-		<histo:physicianSettingsClinic displayUsername="false"
-			displayAutoupdate="#{!dialog.editUserDialog.user.localUser}"
-			physician="#{dialog.editUserDialog.user.physician}" />
-	</p:outputPanel>
+        <histo:physicianSettingsClinic displayUsername="false"
+                                       displayAutoupdate="#{!dialog.editUserDialog.user.localUser}"
+                                       physician="#{dialog.editUserDialog.user.physician}"/>
+    </p:outputPanel>
 
 </ui:composition>

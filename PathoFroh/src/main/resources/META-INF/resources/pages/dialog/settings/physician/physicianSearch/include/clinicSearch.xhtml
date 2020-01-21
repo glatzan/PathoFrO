@@ -1,115 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:histo="http://java.sun.com/jsf/composite/components"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:histo="http://java.sun.com/jsf/composite/components"
+>
 
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.searchPatient.search']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.searchPatient.search']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel">
-		<h:panelGrid styleClass="defaultHistoTable" columns="2">
+    <p:outputPanel styleClass="bodyPannel">
+        <h:panelGrid styleClass="defaultHistoTable" columns="2">
 
-			<!-- search -->
-			<h:outputLabel value="#{msg['dialog.searchPatient.search.person']}"
-				styleClass="bigFont" />
-			<p:inputText
-				value="#{dialog.physicianSearchDialog.internalPhysicianTab.searchString}"
-				id="searchStringInput" widgetVar="searchStringInput"
-				style="width: 98%">
-				<p:ajax event="keyup" delay="500" onstart="PF('blockSeach').block()"
-					oncomplete="PF('blockSeach').unblock()"
-					listener="#{dialog.physicianSearchDialog.internalPhysicianTab.searchForPhysician()}"
-					update="ldapPhysicianList" process="@this" />
+            <!-- search -->
+            <h:outputLabel value="#{msg['dialog.searchPatient.search.person']}"
+                           styleClass="bigFont"/>
+            <p:inputText
+                    value="#{dialog.physicianSearchDialog.internalPhysicianTab.searchString}"
+                    id="searchStringInput" widgetVar="searchStringInput"
+                    style="width: 98%">
+                <p:ajax event="keyup" delay="500" onstart="PF('blockSeach').block()"
+                        oncomplete="PF('blockSeach').unblock()"
+                        listener="#{dialog.physicianSearchDialog.internalPhysicianTab.searchForPhysician()}"
+                        update="ldapPhysicianList" process="@this"/>
 
-				<p:watermark for="searchStringInput"
-					value="#{msg['include.ladpPhysician.search.watermark']}" />
-			</p:inputText>
+                <p:watermark for="searchStringInput"
+                             value="#{msg['include.ladpPhysician.search.watermark']}"/>
+            </p:inputText>
 
-			<!-- physician list -->
-			<h:outputLabel value="#{msg['dialog.searchPatient.search.person']}"
-				styleClass="bigFont" />
+            <!-- physician list -->
+            <h:outputLabel value="#{msg['dialog.searchPatient.search.person']}"
+                           styleClass="bigFont"/>
 
-			<p:dataTable var="physician"
-				value="#{dialog.physicianSearchDialog.internalPhysicianTab.physicianList}"
-				id="ldapPhysicianList" selectionMode="single" scrollable="true"
-				scrollHeight="300" rowKey="#{physician.listID}"
-				selection="#{dialog.physicianSearchDialog.internalPhysicianTab.selectedPhysician}"
-				style="width: 99%" styleClass="defaultHistoDataTable">
+            <p:dataTable var="physician"
+                         value="#{dialog.physicianSearchDialog.internalPhysicianTab.physicianList}"
+                         id="ldapPhysicianList" selectionMode="single" scrollable="true"
+                         scrollHeight="300" rowKey="#{physician.listID}"
+                         selection="#{dialog.physicianSearchDialog.internalPhysicianTab.selectedPhysician}"
+                         style="width: 99%" styleClass="defaultHistoDataTable">
 
-				<!-- name -->
-				<p:column sortBy="#{physician.person.lastName}"
-					headerText="#{msg['include.ladpPhysician.search.name']}"
-					style="width:20%">
-					<h:outputText value="#{physician.person.getFullName()}" />
-				</p:column>
+                <!-- name -->
+                <p:column sortBy="#{physician.person.lastName}"
+                          headerText="#{msg['include.ladpPhysician.search.name']}"
+                          style="width:20%">
+                    <h:outputText value="#{physician.person.getFullName()}"/>
+                </p:column>
 
-				<!-- role -->
-				<p:column sortBy="#{physician.clinicRole}"
-					headerText="#{msg['include.ladpPhysician.search.role']}"
-					style="width:20%">
-					<h:outputText value="#{physician.clinicRole}" />
-				</p:column>
+                <!-- role -->
+                <p:column sortBy="#{physician.clinicRole}"
+                          headerText="#{msg['include.ladpPhysician.search.role']}"
+                          style="width:20%">
+                    <h:outputText value="#{physician.clinicRole}"/>
+                </p:column>
 
-				<p:ajax event="rowSelect" process="@form" />
-			</p:dataTable>
+                <p:ajax event="rowSelect" process="@form"/>
+            </p:dataTable>
 
-			<!-- role -->
-			<h:outputLabel value="#{msg['dialog.physicianSearch.person.role']}"
-				styleClass="bigFont" />
+            <!-- role -->
+            <h:outputLabel value="#{msg['dialog.physicianSearch.person.role']}"
+                           styleClass="bigFont"/>
 
-			<p:selectCheckboxMenu updateLabel="true" style="width:90%"
-				value="#{dialog.physicianSearchDialog.internalPhysicianTab.associatedRoles}"
-				multiple="true">
-				<f:selectItems var="role"
-					value="#{dialog.physicianSearchDialog.internalPhysicianTab.allRoles}"
-					itemValue="#{role}"
-					itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
+            <p:selectCheckboxMenu updateLabel="true" style="width:90%"
+                                  value="#{dialog.physicianSearchDialog.internalPhysicianTab.associatedRoles}"
+                                  multiple="true">
+                <f:selectItems var="role"
+                               value="#{dialog.physicianSearchDialog.internalPhysicianTab.allRoles}"
+                               itemValue="#{role}"
+                               itemLabel="#{msg['enum.contactRole.'.concat(role)]}"/>
 
-				<p:ajax partialSubmit="true" process="@form" />
-			</p:selectCheckboxMenu>
-		</h:panelGrid>
-	</p:outputPanel>
+                <p:ajax partialSubmit="true" process="@form"/>
+            </p:selectCheckboxMenu>
+        </h:panelGrid>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="1" styleClass="left">
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="left">
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- save button -->
-				<p:commandButton value="#{msg['general.create']}"
-					rendered="#{!dialog.physicianSearchDialog.selectMode}"
-					actionListener="#{dialog.physicianSearchDialog.internalPhysicianTab.saveAndHide()}"
-					icon="fa fa-check-circle-o" update="@form" process="@form">
-					<f:actionListener binding=""></f:actionListener>
-				</p:commandButton>
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- save button -->
+                <p:commandButton value="#{msg['general.create']}"
+                                 rendered="#{!dialog.physicianSearchDialog.selectMode}"
+                                 actionListener="#{dialog.physicianSearchDialog.internalPhysicianTab.saveAndHide()}"
+                                 icon="fa fa-check-circle-o" update="@form" process="@form">
+                    <f:actionListener binding=""></f:actionListener>
+                </p:commandButton>
 
-				<!-- select and hide button -->
-				<p:commandButton value="#{msg['general.select']}"
-					rendered="#{dialog.physicianSearchDialog.selectMode}"
-					actionListener="#{dialog.physicianSearchDialog.internalPhysicianTab.selectAndHide()}"
-					icon="fa fa-check-circle-o" update="@form" process="@form">
-				</p:commandButton>
+                <!-- select and hide button -->
+                <p:commandButton value="#{msg['general.select']}"
+                                 rendered="#{dialog.physicianSearchDialog.selectMode}"
+                                 actionListener="#{dialog.physicianSearchDialog.internalPhysicianTab.selectAndHide()}"
+                                 icon="fa fa-check-circle-o" update="@form" process="@form">
+                </p:commandButton>
 
-				<!-- Close button -->
-				<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-					immediate="true" icon="fa fa-times-circle"
-					actionListener="#{dialog.physicianSearchDialog.hideDialog()}">
-				</p:commandButton>
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- Close button -->
+                <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                 immediate="true" icon="fa fa-times-circle"
+                                 actionListener="#{dialog.physicianSearchDialog.hideDialog()}">
+                </p:commandButton>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 
-	<histo:blockUI target="adminForm:ldapPhysicianList"
-		widgetVar="blockSeach" />
+    <histo:blockUI target="adminForm:ldapPhysicianList"
+                   widgetVar="blockSeach"/>
 
 </ui:composition>

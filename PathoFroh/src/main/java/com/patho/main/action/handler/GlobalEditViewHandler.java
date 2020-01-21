@@ -1,8 +1,6 @@
 package com.patho.main.action.handler;
 
-import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.views.*;
-import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.ListItem;
 import com.patho.main.model.MaterialPreset;
@@ -11,8 +9,8 @@ import com.patho.main.model.patient.Diagnosis;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
-import com.patho.main.repository.PatientRepository;
-import com.patho.main.repository.TaskRepository;
+import com.patho.main.repository.jpa.PatientRepository;
+import com.patho.main.repository.jpa.TaskRepository;
 import com.patho.main.service.*;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.StainingTableChooser;
@@ -24,15 +22,16 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Getter
 @Setter
+@Deprecated
 public class GlobalEditViewHandler {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -283,7 +282,7 @@ public class GlobalEditViewHandler {
          */
         public void updateMaterialOfSample(Sample sample, MaterialPreset materialPreset) {
             logger.debug("Change maerial of sample with preset");
-            setSelectedTask(SpringContextBridge.services().getSampleService().updateMaterialOfSample(sample, materialPreset,false));
+            setSelectedTask(SpringContextBridge.services().getSampleService().updateMaterialOfSample(sample, materialPreset, false));
             centralHandler.loadViews(CentralHandler.Load.RELOAD_TASK_STATUS);
         }
 

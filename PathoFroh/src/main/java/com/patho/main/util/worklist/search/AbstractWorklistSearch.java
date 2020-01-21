@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AbstractWorklistSearch {
-	
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	public List<Patient> getPatients() {
-		return new ArrayList<Patient>();
-	}
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public List<Patient> getPatients() {
+        return new ArrayList<Patient>();
+    }
 }

@@ -4,7 +4,6 @@ import com.patho.main.model.patient.Task
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.search.settings.SearchSettings
 import com.patho.main.util.search.settings.StaticTaskListSearch
-import com.patho.main.util.worklist.Worklist
 
 class WorklistFactroy {
 
@@ -19,7 +18,7 @@ class WorklistFactroy {
         }
 
         @JvmStatic
-        fun taskWorklist(tasks : List<Task>): Worklist {
+        fun taskWorklist(tasks: List<Task>): Worklist {
             return Worklist("Default", StaticTaskListSearch(tasks),
                     SpringContextBridge.services().userService.currentUser.settings.worklistHideNoneActiveTasks,
                     SpringContextBridge.services().userService.currentUser.settings.worklistSortOrder,

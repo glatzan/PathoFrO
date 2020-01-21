@@ -10,22 +10,22 @@ import org.hibernate.envers.RevisionTimestamp;
 import javax.persistence.*;
 
 @Entity
-@SequenceGenerator(name = "log_sequencegenerator", sequenceName = "log_sequence", initialValue=1, allocationSize = 50)
+@SequenceGenerator(name = "log_sequencegenerator", sequenceName = "log_sequence", initialValue = 1, allocationSize = 50)
 @RevisionEntity(LogListener.class)
 @Getter
 @Setter
 public class Log {
 
-	@Id
-	@GeneratedValue(generator = "log_sequencegenerator")
-	@Column(unique = true, nullable = false)
-	@RevisionNumber
-	private int id;
+    @Id
+    @GeneratedValue(generator = "log_sequencegenerator")
+    @Column(unique = true, nullable = false)
+    @RevisionNumber
+    private int id;
 
-	@RevisionTimestamp
-	private long timestamp;
+    @RevisionTimestamp
+    private long timestamp;
 
-	@Embedded
-	private LogInfo logInfo;
+    @Embedded
+    private LogInfo logInfo;
 
 }

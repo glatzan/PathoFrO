@@ -12,19 +12,19 @@ import java.util.stream.Collectors;
 @Setter
 public class AssociatedContactSelector extends AbstractSelector {
 
-	private ReportIntent contact;
-	private boolean deleteAble;
+    private ReportIntent contact;
+    private boolean deleteAble;
 
-	protected AssociatedContactSelector(ReportIntent contact) {
-		this.contact = contact;
-		// deletion only possible if no notification was performed
+    protected AssociatedContactSelector(ReportIntent contact) {
+        this.contact = contact;
+        // deletion only possible if no notification was performed
 //		setDeleteAble(
 //////				contact.getNotifications() != null ? !contact.getNotifications().stream().anyMatch(p -> p.getPerformed())
 //////						: true);
-		setDeleteAble(false);
-	}
+        setDeleteAble(false);
+    }
 
-	public static List<AssociatedContactSelector> factory(Task task) {
-		return task.getContacts().stream().map(p -> new AssociatedContactSelector(p)).collect(Collectors.toList());
-	}
+    public static List<AssociatedContactSelector> factory(Task task) {
+        return task.getContacts().stream().map(p -> new AssociatedContactSelector(p)).collect(Collectors.toList());
+    }
 }

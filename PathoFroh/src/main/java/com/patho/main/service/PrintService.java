@@ -31,243 +31,243 @@ import java.util.List;
 @ConfigurationProperties(prefix = "patho.printer")
 public class PrintService extends AbstractService {
 
-	private CupsPrinterHandler cupsPrinter;
+    private CupsPrinterHandler cupsPrinter;
 
-	private LablePrinterHandler lablePrinter;
+    private LablePrinterHandler lablePrinter;
 
-	@PostConstruct
-	public void initializePrinters() {
-		getCupsPrinter().initialize();
-		getLablePrinter().initialize();
-	}
+    @PostConstruct
+    public void initializePrinters() {
+        getCupsPrinter().initialize();
+        getLablePrinter().initialize();
+    }
 
-	public ClinicPrinter getCurrentPrinter(HistoUser user) {
-		return cupsPrinter.findPrinterForUser(user);
-	}
+    public ClinicPrinter getCurrentPrinter(HistoUser user) {
+        return cupsPrinter.findPrinterForUser(user);
+    }
 
-	/**
-	 * returns the current label priter
-	 * 
-	 * @return
-	 */
-	public LabelPrinter getCurrentLabelPrinter(HistoUser user) {
-		return lablePrinter.findPrinterForUser(user);
-	}
+    /**
+     * returns the current label priter
+     *
+     * @return
+     */
+    public LabelPrinter getCurrentLabelPrinter(HistoUser user) {
+        return lablePrinter.findPrinterForUser(user);
+    }
 
-	@Getter
-	@Setter
-	public static class CupsPrinterHandler {
+    @Getter
+    @Setter
+    public static class CupsPrinterHandler {
 
-		private final Logger logger = LoggerFactory.getLogger(this.getClass());
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-		private String host;
+        private String host;
 
-		private int port;
+        private int port;
 
-		private String testPage;
+        private String testPage;
 
-		private String printerForRoom;
+        private String printerForRoom;
 
-		/**
-		 * List of clinicla pritners
-		 */
-		private List<ClinicPrinter> printer;
+        /**
+         * List of clinicla pritners
+         */
+        private List<ClinicPrinter> printer;
 
-		/**
-		 * Transformer for printerList
-		 */
-		private DefaultTransformer<ClinicPrinter> printerTransformer;
+        /**
+         * Transformer for printerList
+         */
+        private DefaultTransformer<ClinicPrinter> printerTransformer;
 
-		public void initialize() {
-			setPrinter(loadCupsPrinters(host, port));
-			setPrinterTransformer(new DefaultTransformer<ClinicPrinter>(getPrinter()));
-		}
+        public void initialize() {
+            setPrinter(loadCupsPrinters(host, port));
+            setPrinterTransformer(new DefaultTransformer<ClinicPrinter>(getPrinter()));
+        }
 
-		private List<ClinicPrinter> loadCupsPrinters(String host, int port) {
-			ArrayList<ClinicPrinter> result = new ArrayList<ClinicPrinter>();
-			CupsClient cupsClient;
+        private List<ClinicPrinter> loadCupsPrinters(String host, int port) {
+            ArrayList<ClinicPrinter> result = new ArrayList<ClinicPrinter>();
+            CupsClient cupsClient;
 
-			try {
-				cupsClient = new CupsClient(host, port);
-				List<CupsPrinter> cupsPrinter = cupsClient.getPrinters();
-				// transformin into clinicprinters
-				for (CupsPrinter p : cupsPrinter) {
-					result.add(new ClinicPrinter(p));
-				}
+            try {
+                cupsClient = new CupsClient(host, port);
+                List<CupsPrinter> cupsPrinter = cupsClient.getPrinters();
+                // transformin into clinicprinters
+                for (CupsPrinter p : cupsPrinter) {
+                    result.add(new ClinicPrinter(p));
+                }
 
-			} catch (Exception e) {
-				logger.error("Retriving printers failed" + e);
-				e.printStackTrace();
-			}
+            } catch (Exception e) {
+                logger.error("Retriving printers failed" + e);
+                e.printStackTrace();
+            }
 
-			result.add(0, new ClinicPrinterDummy());
+            result.add(0, new ClinicPrinterDummy());
 
-			return result;
-		}
+            return result;
+        }
 
-		/**
-		 * Returns a printer for the given user
-		 * 
-		 * @param user
-		 * @return
-		 */
-		public ClinicPrinter findPrinterForUser(HistoUser user) {
-			if(user == null)
-				return getPrinter().get(0);
-			
-			if (user.getSettings().getAutoSelectedPreferredPrinter()) {
-				ClinicPrinter printer = getCupsPrinterForRoom();
-				if (printer != null) {
-					logger.debug("Pritner found, setting auto printer to " + printer.getName());
-					return printer;
-				} else
-					logger.debug("No Pritner found!, selecting default printer");
+        /**
+         * Returns a printer for the given user
+         *
+         * @param user
+         * @return
+         */
+        public ClinicPrinter findPrinterForUser(HistoUser user) {
+            if (user == null)
+                return getPrinter().get(0);
 
-			}
+            if (user.getSettings().getAutoSelectedPreferredPrinter()) {
+                ClinicPrinter printer = getCupsPrinterForRoom();
+                if (printer != null) {
+                    logger.debug("Pritner found, setting auto printer to " + printer.getName());
+                    return printer;
+                } else
+                    logger.debug("No Pritner found!, selecting default printer");
 
-			if (user.getSettings().getPreferredPrinter() == 0) {
-				// dummy printer is always there
-				return getPrinter().get(0);
-			} else {
-				// updating the current printer, if no printer was selected the dummy printer
-				// will be returned
-				return findPrinterByID(user.getSettings().getPreferredPrinter());
-			}
-		}
+            }
 
-		/**
-		 * Searches the loaded clinical printers for the given printer. If found the
-		 * printer from the global list will be returned. This will prevent problems if
-		 * something has changed.
-		 * 
-		 * If no printer was found the first printer will be returned (DummyPrinter)
-		 * 
-		 * @return
-		 */
-		public ClinicPrinter findPrinterByID(long id) {
-			for (ClinicPrinter printer : getPrinter()) {
-				if (printer.getId() == id)
-					return printer;
-			}
+            if (user.getSettings().getPreferredPrinter() == 0) {
+                // dummy printer is always there
+                return getPrinter().get(0);
+            } else {
+                // updating the current printer, if no printer was selected the dummy printer
+                // will be returned
+                return findPrinterByID(user.getSettings().getPreferredPrinter());
+            }
+        }
 
-			logger.debug("Returning dummy printer");
-			return getPrinter().get(0);
-		}
+        /**
+         * Searches the loaded clinical printers for the given printer. If found the
+         * printer from the global list will be returned. This will prevent problems if
+         * something has changed.
+         * <p>
+         * If no printer was found the first printer will be returned (DummyPrinter)
+         *
+         * @return
+         */
+        public ClinicPrinter findPrinterByID(long id) {
+            for (ClinicPrinter printer : getPrinter()) {
+                if (printer.getId() == id)
+                    return printer;
+            }
 
-		/**
-		 * Loads a printer from the room in association with the current ip
-		 * 
-		 * @return
-		 */
-		public ClinicPrinter getCupsPrinterForRoom() {
-			HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-					.getRequest();
-			String ip = getRemoteAddress(request);
+            logger.debug("Returning dummy printer");
+            return getPrinter().get(0);
+        }
 
-			if (ip != null) {
-				String printerToRoomJson = (new JsonHandler()).requestJsonData(printerForRoom.replace("$ip", ip));
+        /**
+         * Loads a printer from the room in association with the current ip
+         *
+         * @return
+         */
+        public ClinicPrinter getCupsPrinterForRoom() {
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+                    .getRequest();
+            String ip = getRemoteAddress(request);
 
-				List<RoomContainer> container = RoomContainer.factory(printerToRoomJson);
+            if (ip != null) {
+                String printerToRoomJson = (new JsonHandler()).requestJsonData(printerForRoom.replace("$ip", ip));
 
-				if (container.size() > 0) {
-					RoomContainer firstConatiner = container.get(0);
+                List<RoomContainer> container = RoomContainer.factory(printerToRoomJson);
 
-					for (ClinicPrinter printer : getPrinter()) {
-						if (HistoUtil.isNotNullOrEmpty(firstConatiner.getPrinter())
-								&& firstConatiner.getPrinter().equals(printer.getDeviceUri())) {
-							logger.debug("Printer found for room " + ip + "; printer = " + printer.getName());
-							return printer;
-						}
-					}
-				}
+                if (container.size() > 0) {
+                    RoomContainer firstConatiner = container.get(0);
 
-			}
+                    for (ClinicPrinter printer : getPrinter()) {
+                        if (HistoUtil.isNotNullOrEmpty(firstConatiner.getPrinter())
+                                && firstConatiner.getPrinter().equals(printer.getDeviceUri())) {
+                            logger.debug("Printer found for room " + ip + "; printer = " + printer.getName());
+                            return printer;
+                        }
+                    }
+                }
 
-			return null;
+            }
 
-		}
+            return null;
 
-		/**
-		 * Gets the remote address from a HttpServletRequest object. It prefers the
-		 * `X-Forwarded-For` header, as this is the recommended way to do it (user may
-		 * be behind one or more proxies).
-		 *
-		 * Taken from https://stackoverflow.com/a/38468051/778272
-		 *
-		 * @param request - the request object where to get the remote address from
-		 * @return a string corresponding to the IP address of the remote machine
-		 */
-		public static String getRemoteAddress(HttpServletRequest request) {
-			String ipAddress = request.getHeader("X-FORWARDED-FOR");
-			if (ipAddress != null) {
-				// cares only about the first IP if there is a list
-				ipAddress = ipAddress.replaceFirst(",.*", "");
-			} else {
-				ipAddress = request.getRemoteAddr();
-			}
-			return ipAddress;
-		}
+        }
 
-	}
+        /**
+         * Gets the remote address from a HttpServletRequest object. It prefers the
+         * `X-Forwarded-For` header, as this is the recommended way to do it (user may
+         * be behind one or more proxies).
+         * <p>
+         * Taken from https://stackoverflow.com/a/38468051/778272
+         *
+         * @param request - the request object where to get the remote address from
+         * @return a string corresponding to the IP address of the remote machine
+         */
+        public static String getRemoteAddress(HttpServletRequest request) {
+            String ipAddress = request.getHeader("X-FORWARDED-FOR");
+            if (ipAddress != null) {
+                // cares only about the first IP if there is a list
+                ipAddress = ipAddress.replaceFirst(",.*", "");
+            } else {
+                ipAddress = request.getRemoteAddr();
+            }
+            return ipAddress;
+        }
 
-	@Getter
-	@Setter
-	public static class LablePrinterHandler {
+    }
 
-		private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Getter
+    @Setter
+    public static class LablePrinterHandler {
 
-		private String testPage;
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-		/**
-		 * Transformer for labelprinters
-		 */
-		private List<LabelPrinter> printer;
+        private String testPage;
 
-		/**
-		 * Transformer for labelprinters
-		 */
-		private DefaultTransformer<LabelPrinter> printerTransformer;
+        /**
+         * Transformer for labelprinters
+         */
+        private List<LabelPrinter> printer;
 
-		public void initialize() {
-			setPrinterTransformer(new DefaultTransformer<LabelPrinter>(getPrinter()));
-		}
-		
-		public LabelPrinter findPrinterByID(String id) {
+        /**
+         * Transformer for labelprinters
+         */
+        private DefaultTransformer<LabelPrinter> printerTransformer;
 
-			for (LabelPrinter labelPrinter : getPrinter()) {
-				if (labelPrinter.getId() == Long.valueOf(id)) {
-					return labelPrinter;
-				}
-			}
-			return null;
-		}
+        public void initialize() {
+            setPrinterTransformer(new DefaultTransformer<LabelPrinter>(getPrinter()));
+        }
 
-		/**
-		 * Returns a printer for the given user
-		 * 
-		 * @param user
-		 * @return
-		 */
-		public LabelPrinter findPrinterForUser(HistoUser user) {
-			if(user == null) {
-				return printer.get(0);
-			}
-			
-			// TODO auto select for roon
-			if (user.getSettings().getPreferredLabelPrinter() == null) {
-				return printer.get(0);
-			} else {
-				LabelPrinter labelPrinter = findPrinterByID(user.getSettings().getPreferredLabelPrinter());
+        public LabelPrinter findPrinterByID(String id) {
 
-				if (labelPrinter != null) {
-					logger.debug("Settings printer " + labelPrinter.getName() + " as selected printer");
-					return labelPrinter;
-				} else {
-					// TODO serach for pritner in the same room
-					return printer.get(0);
-				}
-			}
-		}
-	}
+            for (LabelPrinter labelPrinter : getPrinter()) {
+                if (labelPrinter.getId() == Long.valueOf(id)) {
+                    return labelPrinter;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Returns a printer for the given user
+         *
+         * @param user
+         * @return
+         */
+        public LabelPrinter findPrinterForUser(HistoUser user) {
+            if (user == null) {
+                return printer.get(0);
+            }
+
+            // TODO auto select for roon
+            if (user.getSettings().getPreferredLabelPrinter() == null) {
+                return printer.get(0);
+            } else {
+                LabelPrinter labelPrinter = findPrinterByID(user.getSettings().getPreferredLabelPrinter());
+
+                if (labelPrinter != null) {
+                    logger.debug("Settings printer " + labelPrinter.getName() + " as selected printer");
+                    return labelPrinter;
+                } else {
+                    // TODO serach for pritner in the same room
+                    return printer.get(0);
+                }
+            }
+        }
+    }
 
 }

@@ -1,937 +1,914 @@
 body {
-	margin: 0px !important;
-	font-size: 0.8em !important;
+    margin: 0px !important;
+    font-size: 0.8em !important;
 }
 
 /* -------------- Pannelgrid container --------------*/
 .newTableContainer {
-	table-layout: fixed;
+    table-layout: fixed;
 }
 
-.newTableContainer>tbody>tr>td, .newTableContainer>tbody>tr,
-	.newTableContainer>tbody, .newTableContainer {
-	padding: 0px !important;
-	border-collapse: collapse !important;
-	border: 0px !important;
-	border-spacing: 0px !important;
+.newTableContainer > tbody > tr > td, .newTableContainer > tbody > tr,
+.newTableContainer > tbody, .newTableContainer {
+    padding: 0px !important;
+    border-collapse: collapse !important;
+    border: 0px !important;
+    border-spacing: 0px !important;
 }
 
 .newTableContainer .columnTop {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .newTableContainer .columnMiddle {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .newTableContainer .columnTextCenter {
-	text-align: center;
+    text-align: center;
 }
 
 .newTableContainer .column75px {
-	width: 75px !important;
+    width: 75px !important;
 }
 
 .newTableContainer .column100px {
-	width: 100px !important;
+    width: 100px !important;
 }
 
 .newTableContainer .column200px {
-	width: 200px !important;
+    width: 200px !important;
 }
 
 .newTableContainer .column300px {
-	width: 300px !important;
-	max-width: 300px !important;
+    width: 300px !important;
+    max-width: 300px !important;
 }
 
 .newTableContainer .column2 {
-	width: 2% !important;
+    width: 2% !important;
 }
 
 .newTableContainer .column20 {
-	width: 20%;
+    width: 20%;
 }
 
 .newTableContainer .column25 {
-	width: 25%;
+    width: 25%;
 }
 
 .newTableContainer .columnAuto {
-	width: auto !important;
+    width: auto !important;
 }
 
 .newTableContainer .column30 {
-	width: 30% !important;
+    width: 30% !important;
 }
 
 .newTableContainer .columnHorizontalPadding td {
-	padding: 0px 3px !important;
+    padding: 0px 3px !important;
 }
 
 /* -------------- New Pannelgrid Style --------------*/
 .newStyleListingTable {
-	border: none !important;
-	border-spacing: 0px !important;
-	width: 100% !important;
-	table-layout: auto !important;
+    border: none !important;
+    border-spacing: 0px !important;
+    width: 100% !important;
+    table-layout: auto !important;
 }
 
-.newStyleListingTable>tbody>tr>td {
-	padding: 3px !important;
-	border: none !important;
-	border-spacing: 0px !important;
-	width: auto;
-	white-space: nowrap;
+.newStyleListingTable > tbody > tr > td {
+    padding: 3px !important;
+    border: none !important;
+    border-spacing: 0px !important;
+    width: auto;
+    white-space: nowrap;
 }
 
-.newStyleListingTable label, .newStyleListingTable>tbody>tr>td {
-	padding: 4px !important;
-	font-size: 12px;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none !important;
-	font-style: normal !important;
-	font-variant: normal !important;
+.newStyleListingTable label, .newStyleListingTable > tbody > tr > td {
+    padding: 4px !important;
+    font-size: 12px;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none !important;
+    font-style: normal !important;
+    font-variant: normal !important;
 }
 
 .newStyleListingTable label.headline {
-	font-size: 14px !important;
-	font-weight: bold;
+    font-size: 14px !important;
+    font-weight: bold;
 }
 
 .newStyleListingTable .ui-radiobutton {
-	padding: 4px !important;
+    padding: 4px !important;
 }
 
 .newStyleListingTable .ui-state-focus {
-	box-shadow: none !important;
+    box-shadow: none !important;
 }
 
 /* inputfields should be flat, no shadow*/
 .newStyleListingTable input, .newStyleListingTable textarea {
-	padding: 4px !important;
-	font-size: 12px !important;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none !important;
-	font-style: normal !important;
-	font-variant: normal !important;
+    padding: 4px !important;
+    font-size: 12px !important;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none !important;
+    font-style: normal !important;
+    font-variant: normal !important;
 }
 
 /* ODD tr color */
-.newStyleListingTable .oddColumnColoredTr>td {
-	background-color: #f2f2f2;
+.newStyleListingTable .oddColumnColoredTr > td {
+    background-color: #f2f2f2;
 }
 
 /* ODD td color */
 .newStyleListingTable .oddColumnColored {
-	background-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 /* -- addintion for seperator table */
 .newStyleListingTableSeparator {
-	margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .newStyleListingTableSeparator label {
-	padding: 4px !important;
-	font-size: 1.1em !important;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none !important;
-	font-style: normal !important;
-	font-weight: bold !important;
-	font-variant: normal !important;
-	color: #555555;
+    padding: 4px !important;
+    font-size: 1.1em !important;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-variant: normal !important;
+    color: #555555;
 }
 
 /* -------------- New Pannelgridn Column Styles --------------*/
 .newStyleListingTable .columnLabelContainer100 {
-	width: 100px !important;
+    width: 100px !important;
 }
 
 .newStyleListingTable .columnLabelContainer150 {
-	width: 150px !important;
+    width: 150px !important;
 }
 
 .newStyleListingTable .columnLabelContainer200 {
-	width: 200px !important;
+    width: 200px !important;
 }
 
 .newStyleListingTable .columnLabelContainer300 {
-	width: 300px !important;
+    width: 300px !important;
 }
 
 .newStyleListingTable .columnInputContainer300 input,
-	.newStyleListingTable .columnInputContainer300 textarea {
-	width: 500px !important;
+.newStyleListingTable .columnInputContainer300 textarea {
+    width: 500px !important;
 }
 
 /* min width column*/
 .newStyleListingTable .columnMinWidth {
-	width: 1%;
-	white-space: nowrap;
+    width: 1%;
+    white-space: nowrap;
 }
 
 /* auto width column*/
 .newStyleListingTable .columnAutoWidth {
-	text-align: left;
-	background-color: #fff;
-	max-width: 200px;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    text-align: left;
+    background-color: #fff;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .newStyleListingTable .columnBold {
-	font-weight: bold !important;
+    font-weight: bold !important;
 }
 
 .newStyleListingTable .columnTop {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .newStyleListingTable .columnTextCenter {
-	text-align: center;
+    text-align: center;
 }
 
 .newStyleListingTable .columnTextLeft {
-	text-align: left;
+    text-align: left;
 }
 
 .newStyleListingTable .columnNoVerticalPadding {
-	padding-top: 0px !important;
-	padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
 }
 
 .newStyleListingTable .columnHorTextcenter {
-	text-align: center !important;
+    text-align: center !important;
 }
 
 .newStyleListingTable .columnTop {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .newStyleListingTable .columnLongText {
-	white-space: normal !important;
+    white-space: normal !important;
 }
 
 .newStyleListingTable .columnLongText label {
-	padding-left: 0px !important;
+    padding-left: 0px !important;
 }
 
 .newStyleListingTableFixed {
-	table-layout: fixed !important;
+    table-layout: fixed !important;
 }
 
 .newStyleScrollTable {
-	padding: 0px;
+    padding: 0px;
 }
 
 .newStyleScrollTable thead, .newStyleScrollTable tbody,
-	.newStyleScrollTable tr, .newStyleScrollTable td, .newStyleScrollTable th
-	{
-	display: block;
+.newStyleScrollTable tr, .newStyleScrollTable td, .newStyleScrollTable th {
+    display: block;
 }
 
 .newStyleScrollTable tr:after {
-	content: ' ';
-	display: block;
-	visibility: hidden;
-	clear: both;
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
 }
 
 .newStyleScrollTable thead th {
-	height: 30px;
+    height: 30px;
 
-	/*text-align: left;*/
+    /*text-align: left;*/
 }
 
 .newStyleScrollTable thead th {
-	height: 30px;
+    height: 30px;
 
-	/*text-align: left;*/
+    /*text-align: left;*/
 }
 
 .newStyleScrollTable tbody {
-	height: 120px;
-	overflow-y: auto;
+    height: 120px;
+    overflow-y: auto;
 }
 
 /* -------------- New DataTable Style --------------*/
 /* for scrollable datatables*/
 .newStyleDataTable {
-	width: 100%;
-	white-space: normal;
+    width: 100%;
+    white-space: normal;
 }
 
-.newStyleDataTable tbody.ui-datatable-data, .newStyleDataTable tbody.ui-datatable-data>tr
-	{
-	border: none !important;
-	border-spacing: 0px !important;
+.newStyleDataTable tbody.ui-datatable-data, .newStyleDataTable tbody.ui-datatable-data > tr {
+    border: none !important;
+    border-spacing: 0px !important;
 }
 
-.newStyleDataTable tbody.ui-datatable-data>tr>td {
-	padding-top: 3px !important;
-	padding-bottom: 3px !important;
-	border: none !important;
-	border-spacing: 0px !important;
-	font-size: 12px;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none;
-	font-style: normal;
-	font-variant: normal;
+.newStyleDataTable tbody.ui-datatable-data > tr > td {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    border: none !important;
+    border-spacing: 0px !important;
+    font-size: 12px;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none;
+    font-style: normal;
+    font-variant: normal;
 }
 
 /* labels and column header size */
-.newStyleDataTable label, .newStyleDataTable .ui-datatable-scrollable-header .ui-column-title
-	{
-	font-size: 12px;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none;
-	font-style: normal;
-	font-variant: normal;
+.newStyleDataTable label, .newStyleDataTable .ui-datatable-scrollable-header .ui-column-title {
+    font-size: 12px;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none;
+    font-style: normal;
+    font-variant: normal;
 }
 
 /* hide unnecessary header*/
 .newStyleDataTable .ui-datatable-scrollable-theadclone {
-	display: none;
+    display: none;
 }
 
-.newStyleDataTable  tr.ui-datatable-odd>td {
-	background-color: #f2f2f2;
+.newStyleDataTable tr.ui-datatable-odd > td {
+    background-color: #f2f2f2;
 }
 
-.newStyleDataTable tr.ui-state-highlight>td {
-	background-color: #fcf1b8;
-	font-weight: bold !important;
-	border: none !important;
+.newStyleDataTable tr.ui-state-highlight > td {
+    background-color: #fcf1b8;
+    font-weight: bold !important;
+    border: none !important;
 }
 
-.newStyleDataTable tr.ui-state-highlight>td label {
-	font-weight: bold !important;
+.newStyleDataTable tr.ui-state-highlight > td label {
+    font-weight: bold !important;
 }
 
-.newStyleDataTable tr.ui-state-hover>td {
-	background-color: #fcf1b8;
+.newStyleDataTable tr.ui-state-hover > td {
+    background-color: #fcf1b8;
 }
 
 /* !important is needed sometimes */
 .newStyleDataTable ::-webkit-scrollbar {
-	width: 12px !important;
+    width: 12px !important;
 }
 
 /* Track */
 .newStyleDataTable ::-webkit-scrollbar-track {
-	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
-	-webkit-border-radius: 10px !important;
-	border-radius: 10px !important;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+    -webkit-border-radius: 10px !important;
+    border-radius: 10px !important;
 }
 
 /* Handle */
 .newStyleDataTable ::-webkit-scrollbar-thumb {
-	-webkit-border-radius: 10px !important;
-	border-radius: 10px !important;
-	background: rgba(255, 0, 0, 0.8) !important;
-	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5) !important;
+    -webkit-border-radius: 10px !important;
+    border-radius: 10px !important;
+    background: rgba(255, 0, 0, 0.8) !important;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5) !important;
 }
 
-.newStyleDataTable  ::-webkit-scrollbar-thumb:window-inactive {
-	background: rgba(255, 0, 0, 0.4) !important;
+.newStyleDataTable ::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(255, 0, 0, 0.4) !important;
 }
 
 /* option column, no underline*/
 .newStyleDataTable a {
-	text-decoration: none !important;
+    text-decoration: none !important;
 }
 
 /* min width column*/
 .newStyleDataTable .columnMinWidth {
-	width: 1%;
-	white-space: nowrap;
+    width: 1%;
+    white-space: nowrap;
 }
 
 /* auto width column*/
 .newStyleDataTable .columnAutoWidth {
-	text-align: left;
-	background-color: #fff;
-	max-width: 500px;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    text-align: left;
+    background-color: #fff;
+    max-width: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* row background set manually via class datatable-odd */
-.newStyleDataTable-ManualBackgroundColor tr.ui-datatable-odd>td {
-	background-color: inherit;
+.newStyleDataTable-ManualBackgroundColor tr.ui-datatable-odd > td {
+    background-color: inherit;
 }
 
 /* row background set manually via class datatable-odd */
 .newStyleDataTable-ManualBackgroundColor td.datatable-odd {
-	background-color: #f2f2f2 !important;
+    background-color: #f2f2f2 !important;
 }
 
 /* long serach column for header*/
 .newStyleDataTable-LongSearchBarInHead .ui-column-filter {
-	width: 95% !important;
-	padding: 4px !important;
-	font-size: 12px !important;
-	font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
-	box-shadow: none !important;
-	font-style: normal !important;
-	font-variant: normal !important;
+    width: 95% !important;
+    padding: 4px !important;
+    font-size: 12px !important;
+    font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
+    box-shadow: none !important;
+    font-style: normal !important;
+    font-variant: normal !important;
 }
 
 /* hides column headers of a data table*/
-.newStyleDataTable-HideColumnHeader .ui-datatable-tablewrapper>table>thead
-	{
-	display: none;
+.newStyleDataTable-HideColumnHeader .ui-datatable-tablewrapper > table > thead {
+    display: none;
 }
 
 /* -------------- New DataList Style --------------*/
 .newStyleDataList {
-	width: 100%;
-	white-space: normal;
+    width: 100%;
+    white-space: normal;
 }
 
 .newStyleDataList table thead tr {
-	display: none;
+    display: none;
 }
 
 .newStyleDataList tr, .newStyleDataList tbody {
-	border: none !important;
+    border: none !important;
 }
 
 .newStyleDataList td {
-	padding-top: 3px !important;
-	padding-bottom: 3px !important;
-	border: none !important;
-	border-spacing: 0px !important;
-	font-size: 12px;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none;
-	font-style: normal;
-	font-variant: normal;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    border: none !important;
+    border-spacing: 0px !important;
+    font-size: 12px;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none;
+    font-style: normal;
+    font-variant: normal;
 }
 
 /* -------------- Simple Dialog Style --------------*/
 /* Dialog for adding content */
 .contentInputDialog {
-	padding: 0px !important;
-	border: 0px !important;
-	overflow: hidden;
-	height: 100vh;
-	position: relative;
+    padding: 0px !important;
+    border: 0px !important;
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
 }
 
 /* Dialog header */
 .contentInputDialog .dialogHeader {
-	padding: 8px 10px;
-	font-weight: bold;
-	font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
-	background: #cccccc
-		url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness)
-		50% 50% repeat-x;
+    padding: 8px 10px;
+    font-weight: bold;
+    font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
+    background: #cccccc url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x;
 }
 
-.contentInputDialog .dialogHeader, .contentInputDialog .dialogHeader a:-webkit-any-link
-	{
-	color: #555555;
-	font-size: 15px;
+.contentInputDialog .dialogHeader, .contentInputDialog .dialogHeader a:-webkit-any-link {
+    color: #555555;
+    font-size: 15px;
 }
 
 .contentInputDialog .dialogContent {
-	padding: 2px;
-	padding-bottom: 0.5em;
-	height: calc(100vh - 73px);
-	width: clac(100% - 4px);
+    padding: 2px;
+    padding-bottom: 0.5em;
+    height: calc(100vh - 73px);
+    width: clac(100% -4px);
 }
 
 .contentInputDialog .buttonContainer {
-	width: 100%;
-	position: absolute;
-	bottom: 0.2em !important;
+    width: 100%;
+    position: absolute;
+    bottom: 0.2em !important;
 }
 
 /* small buttons */
 .contentInputDialog .buttonContainer .ui-button-text {
-	padding-top: 0.2em !important;
-	padding-bottom: 0.2em !important;
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
 }
 
 /* left table*/
 .contentInputDialog .buttonContainer .left {
-	margin-left: 0px;
+    margin-left: 0px;
 }
 
 /* button margin for left buttons*/
 .contentInputDialog .buttonContainer .left button {
-	margin-left: 0.6em !important;
+    margin-left: 0.6em !important;
 }
 
 .contentInputDialog .buttonContainer .left .ui-chkbox-box {
-	margin-left: 0.6em !important;
+    margin-left: 0.6em !important;
 }
 
 .contentInputDialog .buttonContainer .left .ui-selectcheckboxmenu {
-	margin-left: 0.6em !important;
+    margin-left: 0.6em !important;
 }
 
 .contentInputDialog .buttonContainer .left label {
-	margin-left: 0.6em !important;
+    margin-left: 0.6em !important;
 }
 
 /* style of the popup menu*/
 .contentInputDialog .buttonContainer .left .ui-selectonemenu {
-	margin-left: 0.6em !important;
+    margin-left: 0.6em !important;
 }
 
 /* style of the popup menu*/
-.contentInputDialog .buttonContainer .left .ui-selectonemenu .ui-selectonemenu-label
-	{
-	padding: 0.2em !important;
+.contentInputDialog .buttonContainer .left .ui-selectonemenu .ui-selectonemenu-label {
+    padding: 0.2em !important;
 }
 
 /* right table */
 .contentInputDialog .buttonContainer .right {
-	margin-right: 0px;
-	float: right;
+    margin-right: 0px;
+    float: right;
 }
 
 /* button margin for right buttons*/
 .contentInputDialog .buttonContainer .right button {
-	margin-right: 0.6em !important;
+    margin-right: 0.6em !important;
 }
 
 /* style of the popup menu*/
 .customSerachSelectMenuPanel {
-	padding: 0px;
+    padding: 0px;
 }
 
 /* -------------- breadCrumbs navigation --------------*/
 /* navigation background */
 .breadCrumbsNavigation {
-	width: 100%;
-	border: 1px solid #d3d3d3;
-	border-left: 0px;
-	border-right: 0px;
-	background: #e6e6e6
-		url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness")
-		50% 50% repeat-x;
+    width: 100%;
+    border: 1px solid #d3d3d3;
+    border-left: 0px;
+    border-right: 0px;
+    background: #e6e6e6 url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness") 50% 50% repeat-x;
 }
 
 /* navigation hight*/
 .breadCrumbsNavigation td {
-	padding-left: 5px !important;
-	height: 19px !important;
+    padding-left: 5px !important;
+    height: 19px !important;
 }
 
 /* remove underline from navigation*/
 .breadCrumbsNavigation a:-webkit-any-link {
-	text-decoration: none !important;
+    text-decoration: none !important;
 }
 
 /* naigation text*/
 .breadCrumbsNavigation td, .breadCrumbsNavigation label,
-	.breadCrumbsNavigation a {
-	font-size: 1.1em !important;
-	font-family: Verdana, Arial, sans-serif;
-	color: #555555;
-	font-weight: bold;
+.breadCrumbsNavigation a {
+    font-size: 1.1em !important;
+    font-family: Verdana, Arial, sans-serif;
+    color: #555555;
+    font-weight: bold;
 }
 
 /* -------------- patient navigation table --------------*/
 /* Search container */
 .patientNavigationHeader {
-	width: 100%;
-	border-top: 1px solid #d3d3d3 !important;
-	border-bottom: 1px solid #d3d3d3 !important;
-	border-right: 1px solid #d3d3d3 !important;
-	text-align: left;
-	background: #e6e6e6
-		url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness")
-		50% 50% repeat-x;
+    width: 100%;
+    border-top: 1px solid #d3d3d3 !important;
+    border-bottom: 1px solid #d3d3d3 !important;
+    border-right: 1px solid #d3d3d3 !important;
+    text-align: left;
+    background: #e6e6e6 url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness") 50% 50% repeat-x;
 }
 
 /* header tds */
-.patientNavigationHeader>tbody>tr>td {
-	height: 19px !important;
-	color: #555555;
-	font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
-	padding-left: 5px;
-	font-size: 1.1em !important;
-	font-weight: bold;
+.patientNavigationHeader > tbody > tr > td {
+    height: 19px !important;
+    color: #555555;
+    font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
+    padding-left: 5px;
+    font-size: 1.1em !important;
+    font-weight: bold;
 }
 
 .patientNavigationHeader .buttonContainer {
-	margin-right: 10px;
-	float: right;
+    margin-right: 10px;
+    float: right;
 }
 
 .patientNavigationHeader .buttonContainer a {
-	text-decoration: none !important;
-	color: #555555;
+    text-decoration: none !important;
+    color: #555555;
 }
 
-.patientNavigationTable .ui-datatable-tablewrapper>table>thead {
-	display: none;
+.patientNavigationTable .ui-datatable-tablewrapper > table > thead {
+    display: none;
 }
 
-.patientNavigationTable .ui-datatable-tablewrapper>table>tbody,
-	.patientNavigationTable .ui-datatable-tablewrapper>table>tbody>tr {
-	border-left: none;
-	border-right: none;
+.patientNavigationTable .ui-datatable-tablewrapper > table > tbody,
+.patientNavigationTable .ui-datatable-tablewrapper > table > tbody > tr {
+    border-left: none;
+    border-right: none;
 }
 
-.patientNavigationTable .ui-datatable-tablewrapper>table>tbody {
-	border-top: none;
+.patientNavigationTable .ui-datatable-tablewrapper > table > tbody {
+    border-top: none;
 }
 
-.patientNavigationTable .ui-datatable-tablewrapper>table>tbody>tr:first-of-type,
-	.patientNavigationTable .ui-datatable-tablewrapper>table>tbody>tr:first-of-type>td
-	{
-	border-top: none;
+.patientNavigationTable .ui-datatable-tablewrapper > table > tbody > tr:first-of-type,
+.patientNavigationTable .ui-datatable-tablewrapper > table > tbody > tr:first-of-type > td {
+    border-top: none;
 }
 
-.patientNavigationTable .ui-datatable-tablewrapper>table>tbody>tr>td {
-	padding: 0px !important;
-	border-left: none;
-	border-right: none;
+.patientNavigationTable .ui-datatable-tablewrapper > table > tbody > tr > td {
+    padding: 0px !important;
+    border-left: none;
+    border-right: none;
 }
 
 /* change background on mouse over*/
 .patientNavigationTable .ui-state-hover {
-	background: #e6e6e6 !important;
+    background: #e6e6e6 !important;
 }
 
 .patientNavigationTable .ui-state-highlight {
-	background: #fcf1b8 !important;
+    background: #fcf1b8 !important;
 }
 
 /* -------------- Tab Dialog Style --------------*/
 .tabDialog {
-	padding: 0px !important;
-	margin: 0px !important;
-	overflow-x: hidden;
-	height: 100vh;
+    padding: 0px !important;
+    margin: 0px !important;
+    overflow-x: hidden;
+    height: 100vh;
 }
 
 /* Dialog header */
 .tabDialog .dialogHeader {
-	padding: 0px 10px;
-	display: flex;
-	font-size: 1.0em;
-	align-items: center;
-	justify-content: center;
-	height: 33px;
-	font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
-	background: #cccccc
-		url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness)
-		50% 50% repeat-x;
-	align-items: center;
-	justify-content: center;
-	font-size: 14px;
+    padding: 0px 10px;
+    display: flex;
+    font-size: 1.0em;
+    align-items: center;
+    justify-content: center;
+    height: 33px;
+    font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
+    background: #cccccc url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
 }
 
 /* main table*/
 .tabDialog .contentTable {
-	width: 100%;
-	height: calc(100vh - 33px);
+    width: 100%;
+    height: calc(100vh - 33px);
 }
 
 /* Nacigation Table*/
 .tabDialog .contentTable .navigationTable {
-	width: 97%
+    width: 97%
 }
 
 .tabDialog .contentTable .navigationTable button:first-of-type {
-	margin-top: 1px !important;
+    margin-top: 1px !important;
 }
 
 /* navigation table button style*/
 .tabDialog .contentTable .navigationTable button {
-	border: 1px solid #a8a8a8;
-	border-radius: 3px;
-	width: calc(100% - 1px);
-	margin-left: 1px;
-	border-top-left-radius: 0px;
-	border-bottom-left-radius: 0px;
-	border-top-left-radius: 0px;
+    border: 1px solid #a8a8a8;
+    border-radius: 3px;
+    width: calc(100% - 1px);
+    margin-left: 1px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
 }
 
 .tabDialog .contentTable .navigationTable button.childButton {
-	margin-left: 20px;
-	width: calc(100% - 20px);
+    margin-left: 20px;
+    width: calc(100% - 20px);
 }
 
 /* navigation table removing blue border on click*/
 .tabDialog .contentTable .navigationTable button:focus {
-	outline: none !important;
+    outline: none !important;
 }
 
 /* navigation table shifting text to the left*/
 .tabDialog .contentTable .navigationTable button span {
-	float: left;
+    float: left;
 }
 
 /* navigation table selected button background*/
 .tabDialog .contentTable .navigationTable .selectedButton {
-	background: #ffffff !important;
+    background: #ffffff !important;
 }
 
 /* size and layout of the contant table*/
 .tabDialog .contentTable .dialogContent {
-	height: calc(100vh - 33px);
-	width: 100%;
-	overflow-x: hidden;
-	overflow-y: auto;
-	overflow-x: hidden;
-	position: relative;
+    height: calc(100vh - 33px);
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
 }
 
 /* header panel style*/
 .tabDialog .contentTable .dialogContent .headerPannel {
-	padding: 4px;
-	margin-top: 1px;
-	background: #cccccc
-		url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness)
-		50% 50% repeat-x;
-	font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
-	align-items: center;
-	justify-content: center;
-	width: calc(100% - 10px);
-	display: block;
-	border: 1px solid #a8a8a8;
-	border-radius: 3px;
-	font-size: 14px;
-	margin-bottom: 10px;
+    padding: 4px;
+    margin-top: 1px;
+    background: #cccccc url(/Histo2016/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x;
+    font-family: Arial, "Trebuchet MS", Verdana, sans-serif !important;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 10px);
+    display: block;
+    border: 1px solid #a8a8a8;
+    border-radius: 3px;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 /* body pannel*/
 .tabDialog .contentTable .dialogContent .bodyPannel {
-	width: calc(100% - 10px);
-	display: block;
+    width: calc(100% - 10px);
+    display: block;
 }
 
 /* body pannel, max width*/
 .tabDialog .contentTable .dialogContent .bodyPannelFull {
-	width: 100%;
-	display: block;
+    width: 100%;
+    display: block;
 }
 
 /* body pannel scrollable*/
 .tabDialog .contentTable .dialogContent .bodyPannelScroll {
-	width: 100%;
-	height: calc(100vh - 110px);
-	display: block;
-	overflow-y: scroll;
+    width: 100%;
+    height: calc(100vh - 110px);
+    display: block;
+    overflow-y: scroll;
 }
 
 /* button container at the bottom*/
 .tabDialog .contentTable .dialogContent .buttonContainer {
-	position: absolute;
-	bottom: 0.2em !important;
-	width: 100%;
+    position: absolute;
+    bottom: 0.2em !important;
+    width: 100%;
 }
 
 /* small buttons */
-.tabDialog .contentTable .dialogContent .buttonContainer .ui-button-text
-	{
-	padding-top: 0.2em !important;
-	padding-bottom: 0.2em !important;
+.tabDialog .contentTable .dialogContent .buttonContainer .ui-button-text {
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
 }
 
 /* left table*/
 .tabDialog .contentTable .dialogContent .buttonContainer .left {
-	margin-left: 0px;
+    margin-left: 0px;
 }
 
 /* button margin for left buttons*/
 .tabDialog .contentTable .dialogContent .buttonContainer .left button {
-	margin-left: 0.3em !important;
+    margin-left: 0.3em !important;
 }
 
-.tabDialog .contentTable .dialogContent .buttonContainer .left .ui-chkbox-box
-	{
-	margin-left: 0.3em !important;
+.tabDialog .contentTable .dialogContent .buttonContainer .left .ui-chkbox-box {
+    margin-left: 0.3em !important;
 }
 
 .tabDialog .contentTable .dialogContent .buttonContainer .left label {
-	margin-left: 0.3em !important;
+    margin-left: 0.3em !important;
 }
 
 /* style of the popup menu*/
-.tabDialog .contentTable .dialogContent .buttonContainer .left .ui-selectonemenu
-	{
-	margin-left: 0.3em !important;
+.tabDialog .contentTable .dialogContent .buttonContainer .left .ui-selectonemenu {
+    margin-left: 0.3em !important;
 }
 
 /* style of the popup menu*/
-.tabDialog .contentTable .dialogContent .buttonContainer .left .ui-selectonemenu .ui-selectonemenu-label
-	{
-	padding: 0.2em !important;
+.tabDialog .contentTable .dialogContent .buttonContainer .left .ui-selectonemenu .ui-selectonemenu-label {
+    padding: 0.2em !important;
 }
 
 /* right table */
 .tabDialog .contentTable .dialogContent .buttonContainer .right {
-	margin-right: 0px;
-	float: right;
+    margin-right: 0px;
+    float: right;
 }
 
 /* button margin for right buttons*/
 .tabDialog .contentTable .dialogContent .buttonContainer .right button {
-	margin-right: 0.3em !important;
+    margin-right: 0.3em !important;
 }
 
 /* -------------- components --------------*/
 /* selectCheckboxMenu */
 .selectCheckboxMenu .ui-inputfield {
-	box-shadow: none;
+    box-shadow: none;
 }
 
 /* centered backend*/
 .centerCheckbox {
-	padding-top: 4px;
-	height: 16px !important;
+    padding-top: 4px;
+    height: 16px !important;
 }
 
 /* Small button */
 .smallButton .ui-button-text {
-	padding-top: 0.2em !important;
-	padding-bottom: 0.2em !important;
-	font-size: 12px;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none;
-	font-style: normal;
-	font-variant: normal;
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
+    font-size: 12px;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none;
+    font-style: normal;
+    font-variant: normal;
 }
 
 /* style of the popup SelectOneMenu*/
 .iconFixForSelectOneMenu {
-	padding: 0px;
+    padding: 0px;
 }
 
 /* style of the popup menu*/
 .iconFixForSelectOneMenu .ui-selectonemenu-filter {
-	width: 77% !important;
-	padding: 3px 7px;
+    width: 77% !important;
+    padding: 3px 7px;
 }
 
 .numberFixForSpinner .ui-spinner-input {
-	padding-right: 25px !important;
+    padding-right: 25px !important;
 }
 
 .lableLineBreak {
-	white-space: pre-wrap;
+    white-space: pre-wrap;
 }
 
 /* Spinner for one number*/
 .oneNumberSpinner {
-	padding-left: 0px !important;
-	padding-right: 15px !important;
+    padding-left: 0px !important;
+    padding-right: 15px !important;
 }
 
 .oneNumberSpinner input {
-	width: 10px !important;
-	padding-left: 0px !important;
+    width: 10px !important;
+    padding-left: 0px !important;
 }
 
 /* SelctCheckbox Menu on top of the component */
 .selectCheckboxMenuOnTop {
-	bottom: 35px !important;
-	top: auto !important;
+    bottom: 35px !important;
+    top: auto !important;
 }
 
 /* Padding for overlay pannel in views */
-.histoOverlayPanel>div {
-	padding: 4px !important;
+.histoOverlayPanel > div {
+    padding: 4px !important;
 }
 
 /* ---------------- Fonts ------------ */
 .standardFont, .standardFont label {
-	padding: 4px;
-	font-size: 12px;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none;
-	font-style: normal;
-	font-variant: normal;
+    padding: 4px;
+    font-size: 12px;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none;
+    font-style: normal;
+    font-variant: normal;
 }
 
 .bigFont, .bigFont label {
-	font-size: 1.1em !important;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none !important;;
-	font-style: normal !important;;
-	font-variant: normal !important;;
-	font-weight: bold !important;;
-	color: #555555;
+    font-size: 1.1em !important;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none !important;;
+    font-style: normal !important;;
+    font-variant: normal !important;;
+    font-weight: bold !important;;
+    color: #555555;
 }
 
 .hugeFont, .hugeFont label {
-	font-size: 1.5em !important;
-	font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
-	box-shadow: none;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: bold;
-	color: #555555;
+    font-size: 1.5em !important;
+    font-family: Verdana, Arial, "Trebuchet MS", sans-serif;
+    box-shadow: none;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    color: #555555;
 }
 
 .icon-green, .icon-green:link, .icon-green:active, .icon-green:hover,
-	.icon-green:visited {
-	color: green;
+.icon-green:visited {
+    color: green;
 }
 
 .icon-blue, .icon-blue:link, .icon-blue:active, .icon-blue:hover,
-	.icon-blue:visited {
-	color: blue;
+.icon-blue:visited {
+    color: blue;
 }
 
 .icon-purple, .icon-purple:link, .icon-purple:active, .icon-purple:hover,
-	.icon-purple:visited {
-	color: purple;
+.icon-purple:visited {
+    color: purple;
 }
 
 .icon-orange, .icon-orange:link, .icon-orange:active, .icon-orange:hover,
-	.icon-orange:visited {
-	color: orange;
+.icon-orange:visited {
+    color: orange;
 }
 
 .icon-grey, .icon-grey:link, .icon-grey:active, .icon-grey:hover,
-	.icon-grey:visited {
-	color: #555555;
+.icon-grey:visited {
+    color: #555555;
 }
 
-.icon-red, .icon-red:link, .icon-red:active, .icon-red:hover, .icon-red:visited
-	{
-	color: red;
+.icon-red, .icon-red:link, .icon-red:active, .icon-red:hover, .icon-red:visited {
+    color: red;
 }
 
 /* scrollpanel style */
 .histoScroll {
-	height: calc(100vh - 64px);
-	width: calc(100% - 1px) !important;
-	border-left: none !important;
-	border-top: none !important;
-	border-bottom: none !important;
-	border-spacing: 0px !important;
-	border-left: none !important;
+    height: calc(100vh - 64px);
+    width: calc(100% - 1px) !important;
+    border-left: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-spacing: 0px !important;
+    border-left: none !important;
 }
 
 /* scrollpanel body with*/
-.histoScroll .ui-scrollpanel-content, .histoScroll .ui-scrollpanel-container
-	{
-	width: calc(100% - 1px) !important;
+.histoScroll .ui-scrollpanel-content, .histoScroll .ui-scrollpanel-container {
+    width: calc(100% - 1px) !important;
 }
 
 /*scrollpanel bar*/
 .histoScroll .ui-scrollpanel-vbar {
-	width: 5px;
+    width: 5px;
 }
 
 /* background of the bar*/
 .histoScroll .ui-scrollpanel-track {
-	background: none;
+    background: none;
 }
 
 /* background of the bars drag*/
 .histoScroll .ui-scrollpanel-track .ui-scrollpanel-drag {
-	background: #555555;
-	border-radius: 5px;
+    background: #555555;
+    border-radius: 5px;
 }

@@ -17,62 +17,62 @@ import java.time.format.DateTimeFormatter;
 @Setter
 public class PatientData {
 
-	public PatientData() {
-		
-	}
-	
-	public PatientData(Patient patient) {
-		// <Sex>M</Sex>
-		setSex(patient.getPerson().getGender() == Gender.FEMALE ? 'W' : 'M');
-		// <Surname>Hairer</Surname>
-		setSurename(patient.getPerson().getFirstName());
-		// <Givenname>Martin</Givenname>
-		setGivenname(patient.getPerson().getLastName());
-		// <BirthDate>1975-11-14</BirthDate>
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		setBirthDate(formatter.format(patient.getPerson().getBirthday()));
-		// <PersonalTitle>Prof. Dr.</PersonalTitle>
-		setPersonalTitle(patient.getPerson().getTitle());
-		// <JobTitle>Mathematiker</JobTitle>
-		// TODO implement job title
-		// <CountryCodePostal>CH</CountryCodePostal>
-		// <PLZ>1202</PLZ>
-		setPlz(patient.getPerson().getContact().getPostcode());
-		// <City>Geneve</City>
-		setCity(patient.getPerson().getContact().getTown());
-		// <Street>Avenue de France 40</Street>
-		setStreet(patient.getPerson().getContact().getStreet());
-		// <TelephoneNumber>+49 761 270 41680</TelephoneNumber>
-		setTelephoneNumber(patient.getPerson().getContact().getPhone());
-	}
+    public PatientData() {
 
-//	@XmlElement(name = "Sex")
-	private char sex;
-//	@XmlElement(name = "Surename")
-	private String surename;
-//	@XmlElement(name = "Givenname")
-	private String givenname;
-//	@XmlElement(name = "BirthDate")
-	private String birthDate;
-//	@XmlElement(name = "PersonalTitle")
-	private String personalTitle;
-//	@XmlElement(name = "JobTitle")
-	private String jobTitle;
-//	@XmlElement(name = "CountryCodePostal")
-	private String countryCodePostal;
-//	@XmlElement(name = "PLZ")
-	private String plz;
-//	@XmlElement(name = "City")
-	private String city;
-//	@XmlElement(name = "Street")
-	private String street;
-//	@XmlElement(name = "TelephoneNumber")
-	private String telephoneNumber;
+    }
 
-	public String getAsXML() {
-		
-		StringWriter result = new StringWriter();
-		
+    public PatientData(Patient patient) {
+        // <Sex>M</Sex>
+        setSex(patient.getPerson().getGender() == Gender.FEMALE ? 'W' : 'M');
+        // <Surname>Hairer</Surname>
+        setSurename(patient.getPerson().getFirstName());
+        // <Givenname>Martin</Givenname>
+        setGivenname(patient.getPerson().getLastName());
+        // <BirthDate>1975-11-14</BirthDate>
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        setBirthDate(formatter.format(patient.getPerson().getBirthday()));
+        // <PersonalTitle>Prof. Dr.</PersonalTitle>
+        setPersonalTitle(patient.getPerson().getTitle());
+        // <JobTitle>Mathematiker</JobTitle>
+        // TODO implement job title
+        // <CountryCodePostal>CH</CountryCodePostal>
+        // <PLZ>1202</PLZ>
+        setPlz(patient.getPerson().getContact().getPostcode());
+        // <City>Geneve</City>
+        setCity(patient.getPerson().getContact().getTown());
+        // <Street>Avenue de France 40</Street>
+        setStreet(patient.getPerson().getContact().getStreet());
+        // <TelephoneNumber>+49 761 270 41680</TelephoneNumber>
+        setTelephoneNumber(patient.getPerson().getContact().getPhone());
+    }
+
+    //	@XmlElement(name = "Sex")
+    private char sex;
+    //	@XmlElement(name = "Surename")
+    private String surename;
+    //	@XmlElement(name = "Givenname")
+    private String givenname;
+    //	@XmlElement(name = "BirthDate")
+    private String birthDate;
+    //	@XmlElement(name = "PersonalTitle")
+    private String personalTitle;
+    //	@XmlElement(name = "JobTitle")
+    private String jobTitle;
+    //	@XmlElement(name = "CountryCodePostal")
+    private String countryCodePostal;
+    //	@XmlElement(name = "PLZ")
+    private String plz;
+    //	@XmlElement(name = "City")
+    private String city;
+    //	@XmlElement(name = "Street")
+    private String street;
+    //	@XmlElement(name = "TelephoneNumber")
+    private String telephoneNumber;
+
+    public String getAsXML() {
+
+        StringWriter result = new StringWriter();
+
 //		try {
 //			JAXBContext jaxbContext = JAXBContext.newInstance(PatientData.class);
 //			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -87,6 +87,6 @@ public class PatientData {
 //			e.printStackTrace();
 //		}
 
-		return result.toString();
-	}
+        return result.toString();
+    }
 }

@@ -1,0 +1,130 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<!--calling button-->
+<!--<p:commandLink-->
+<!--styleClass="contactInfoOverplayTrigger"-->
+<!--icon="pi pi-search"-->
+<!--actionListener="#{archiveTaskDialog.setSelectedReportIntentStatus(reportIntent)}"-->
+<!--partialSubmit="true"-->
+<!--process="@this"-->
+<!--update="dialogContent:contactInfoOverlayPanel"-->
+<!--oncomplete="commonFunctions.showOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}');">-->
+<!--<i class="fa fa-info-circle"/>-->
+<!--</p:commandLink>-->
+
+<!-- Overlay for display com.patho.main.util.status.reportIntentent.ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer objects -->
+<composite:interface>
+    <!-- com.patho.main.util.status.reportIntentent.ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer -->
+    <composite:attribute name="reportIntentStatus" required="true"
+                         type="com.patho.main.util.status.IExtendedNotificationStatusForReportIntent"/>
+    <!-- id and widgetvar of the overlaypanel -->
+    <composite:attribute name="wid" required="true" default="false"/>
+    <!-- custom class of trigger button, to add the trigger event -->
+    <composite:attribute name="triggerClass" required="true" default="false"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <script type="text/javascript">
+        commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler("#{cc.attrs.wid}")
+        commonFunctions.addShowDialogOnMouseEnterForClickable(".#{cc.attrs.triggerClass}", "#{cc.attrs.wid}")
+    </script>
+
+    <!-- overlay for contact notifications -->
+    <p:overlayPanel widgetVar="#{cc.attrs.wid}" hideEvent="null" showEvent="null"
+                    style="padding-bottom: 5px;width:400px !important;"
+                    dismissable="false" id="#{cc.attrs.wid}" styleClass="histoOverlayPanel">
+
+        <c:forEach items="#{cc.attrs.reportIntentStatus.diagnoses}"
+                   var="diagnosisRevisionStatus">
+
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
+
+                <h:panelGroup layout="block" style="width: clac(100% - 5 px);" styleClass="histo_header">
+                    <h:outputText value="#{diagnosisRevisionStatus.name}"/>
+                </h:panelGroup>
+
+                <c:forEach items="#{diagnosisRevisionStatus.notifications}"
+                           var="notifications">
+
+                    <h:panelGrid columns="5" styleClass="defaultHistoHiddenTableContainer"
+                                 style="width:98% !important;margin-left: 10px"
+                                 columnClasses="columnWidth25,columnWidth75,columnWidth75,columnWidth75,">
+
+                        <!-- type icon -->
+                        <h:panelGroup>
+                            <ui:fragment
+                                    rendered="#{notifications.notificationTyp eq 'EMAIL'}">
+                                <i class="fa fa-envelope icon-grey"/>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{notifications.notificationTyp eq 'FAX'}">
+                                <i class="fa fa-fax icon-grey"/>
+                            </ui:fragment>
+
+                            <ui:fragment
+                                    rendered="#{notifications.notificationTyp eq 'LETTER'}">
+                                <i class="fa fa-pencil-square-o icon-grey"/>
+                            </ui:fragment>
+
+                            <ui:fragment
+                                    rendered="#{notifications.notificationTyp eq 'PHONE'}">
+                                <i class="fa fa-phone icon-grey"/>
+                            </ui:fragment>
+
+                            <ui:fragment
+                                    rendered="#{notifications.notificationTyp eq 'PRINT'}">
+                                <i class="fa fa-print icon-grey"/>
+                            </ui:fragment>
+                        </h:panelGroup>
+
+                        <!-- attempts -->
+                        <h:outputFormat value="#{msg['body.receiptlog.contact.overview.attempts']}">
+                            <f:param value="#{notifications.totalAttempts}"/>
+                        </h:outputFormat>
+
+                        <!-- successes -->
+                        <h:outputFormat value="#{msg['body.receiptlog.contact.overview.success']}">
+                            <f:param value="#{notifications.totalSuccesses}"/>
+                        </h:outputFormat>
+
+                        <!-- failedAttempts -->
+                        <h:outputFormat
+                                value="#{msg['body.receiptlog.contact.overview.failedAttampts']}">
+                            <f:param value="#{notifications.totalFailedAttempts}"/>
+                        </h:outputFormat>
+
+                        <!-- performed -->
+                        <ui:fragment rendered="#{notifications.totalAttempts != 0}">
+                            <h:panelGroup>
+                                <h:outputLabel
+                                        value="#{msg['body.receiptlog.contact.overview.performed']}"/>
+                                <i class="fa fa-fw #{notifications.success ? 'fa-check-circle icon-green' :'fa-exclamation-triangle icon-red'}"
+                                   title="#{msg['body.statiningView.idManuallyAltered']}"/>
+                            </h:panelGroup>
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{notifications.totalAttempts == 0}">
+                            <h:panelGroup>
+                                <h:outputLabel
+                                        value="#{msg['body.receiptlog.contact.overview.performed']}"/>
+                                <i class="fa fa-fw fa-minus"/>
+                            </h:panelGroup>
+                        </ui:fragment>
+
+                    </h:panelGrid>
+
+                </c:forEach>
+            </h:panelGrid>
+        </c:forEach>
+
+    </p:overlayPanel>
+
+</composite:implementation>
+</html>

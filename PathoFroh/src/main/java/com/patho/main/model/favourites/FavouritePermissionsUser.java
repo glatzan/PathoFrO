@@ -16,13 +16,13 @@ import javax.persistence.OneToOne;
 @Setter
 public class FavouritePermissionsUser extends FavouritePermissions {
 
-	@OneToOne
-	private HistoUser user;
+    @OneToOne
+    private HistoUser user;
 
-	public FavouritePermissionsUser() {
-	}
+    public FavouritePermissionsUser() {
+    }
 
-	public FavouritePermissionsUser(HistoUser user) {
-		this.user = user;
-	}
+    public FavouritePermissionsUser(HistoUser user) {
+        this.user = user;
+    }
 }

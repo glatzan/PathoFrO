@@ -1,130 +1,129 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
 
 <h:head>
-	<title><h:outputFormat
-			value="#{dialog.diagnosisPresetEditDialog.newDiagnosis ? msg['dialog.diagnosisPresetEdit.headline.new'] : msg['dialog.diagnosisPresetEdit.headline.edit']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{dialog.diagnosisPresetEditDialog.newDiagnosis ? msg['dialog.diagnosisPresetEdit.headline.new'] : msg['dialog.diagnosisPresetEdit.headline.edit']}"/>
+    </title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel
-					value="#{dialog.diagnosisPresetEditDialog.newDiagnosis ? msg['dialog.diagnosisPresetEdit.headline.new'] : msg['dialog.diagnosisPresetEdit.headline.edit']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
-
-
-		<div class="dialogContent">
-
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				style="widht:100%" columnClasses="columnWidth150, ">
-
-				<!-- text -->
-				<h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.text']}" />
-				<p:inputTextarea id="diagnosisText" style="width:70%"
-					value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.diagnosis}">
-					<p:watermark for="diagnosisText"
-						value="#{msg['dialog.diagnosisPresetEdit.text.watermark']}" />
-				</p:inputTextarea>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel
+                        value="#{dialog.diagnosisPresetEditDialog.newDiagnosis ? msg['dialog.diagnosisPresetEdit.headline.new'] : msg['dialog.diagnosisPresetEdit.headline.edit']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
 
-				<!-- category -->
-				<h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.category']}" />
-				<p:inputText style="width:70%"
-					value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.category}"
-					id="diagnosisName">
-					<p:watermark for="diagnosisName"
-						value="#{msg['dialog.diagnosisPresetEdit.category.watermark']}" />
-				</p:inputText>
+        <div class="dialogContent">
 
-				<!-- icd10 -->
-				<h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.icd10']}" />
-				<p:inputText
-					value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.icd10}"
-					id="diagnosisICD">
-					<p:watermark for="diagnosisICD"
-						value="#{msg['dialog.diagnosisPresetEdit.icd10.watermark']}" />
-				</p:inputText>
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         style="widht:100%" columnClasses="columnWidth150, ">
 
-				<!-- malign -->
-				<h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.malign']}" />
-				<p:selectBooleanCheckbox
-					value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.malign}" />
+                <!-- text -->
+                <h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.text']}"/>
+                <p:inputTextarea id="diagnosisText" style="width:70%"
+                                 value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.diagnosis}">
+                    <p:watermark for="diagnosisText"
+                                 value="#{msg['dialog.diagnosisPresetEdit.text.watermark']}"/>
+                </p:inputTextarea>
 
-				<!-- commentary -->
-				<h:outputLabel
-					value="#{msg['dialog.diagnosisPresetEdit.commentary']}" />
-				<p:inputTextarea id="diagnosisCommentary" style="width:70%"
-					value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.commentary}">
-					<p:watermark for="diagnosisCommentary"
-						value="#{msg['dialog.diagnosisPresetEdit.commentary.watermark']}" />
-				</p:inputTextarea>
 
-				<!-- letter to -->
-				<h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.letter']}" />
-				<p:selectCheckboxMenu updateLabel="true"
-					value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.diagnosisReportAsLetterAsArray}"
-					multiple="true">
-					<f:selectItems var="role"
-						value="#{dialog.diagnosisPresetEditDialog.allRoles}"
-						itemValue="#{role}"
-						itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
-				</p:selectCheckboxMenu>
+                <!-- category -->
+                <h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.category']}"/>
+                <p:inputText style="width:70%"
+                             value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.category}"
+                             id="diagnosisName">
+                    <p:watermark for="diagnosisName"
+                                 value="#{msg['dialog.diagnosisPresetEdit.category.watermark']}"/>
+                </p:inputText>
 
-				<!-- archived -->
-				<h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.archived']}"></h:outputLabel>
-				<p:selectBooleanCheckbox
-					value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.archived}">
-				</p:selectBooleanCheckbox>
+                <!-- icd10 -->
+                <h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.icd10']}"/>
+                <p:inputText
+                        value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.icd10}"
+                        id="diagnosisICD">
+                    <p:watermark for="diagnosisICD"
+                                 value="#{msg['dialog.diagnosisPresetEdit.icd10.watermark']}"/>
+                </p:inputText>
 
-				<!-- extended Text-->
-				<h:outputLabel
-					value="#{msg['dialog.diagnosisPresetEdit.textPreset']}" />
-				<p:editor
-					value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.extendedDiagnosisText}">
-				</p:editor>
-			</h:panelGrid>
-		</div>
+                <!-- malign -->
+                <h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.malign']}"/>
+                <p:selectBooleanCheckbox
+                        value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.malign}"/>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+                <!-- commentary -->
+                <h:outputLabel
+                        value="#{msg['dialog.diagnosisPresetEdit.commentary']}"/>
+                <p:inputTextarea id="diagnosisCommentary" style="width:70%"
+                                 value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.commentary}">
+                    <p:watermark for="diagnosisCommentary"
+                                 value="#{msg['dialog.diagnosisPresetEdit.commentary.watermark']}"/>
+                </p:inputTextarea>
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <!-- letter to -->
+                <h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.letter']}"/>
+                <p:selectCheckboxMenu updateLabel="true"
+                                      value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.diagnosisReportAsLetterAsArray}"
+                                      multiple="true">
+                    <f:selectItems var="role"
+                                   value="#{dialog.diagnosisPresetEditDialog.allRoles}"
+                                   itemValue="#{role}"
+                                   itemLabel="#{msg['enum.contactRole.'.concat(role)]}"/>
+                </p:selectCheckboxMenu>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- Save button -->
-					<p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
-						actionListener="#{dialog.diagnosisPresetEditDialog.saveAndHide()}">
-					</p:commandButton>
+                <!-- archived -->
+                <h:outputLabel value="#{msg['dialog.diagnosisPresetEdit.archived']}"></h:outputLabel>
+                <p:selectBooleanCheckbox
+                        value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.archived}">
+                </p:selectBooleanCheckbox>
 
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						actionListener="#{dialog.diagnosisPresetEditDialog.hideDialog()}"
-						icon="fa fa-times-circle">
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                <!-- extended Text-->
+                <h:outputLabel
+                        value="#{msg['dialog.diagnosisPresetEdit.textPreset']}"/>
+                <p:editor
+                        value="#{dialog.diagnosisPresetEditDialog.diagnosisPreset.extendedDiagnosisText}">
+                </p:editor>
+            </h:panelGrid>
+        </div>
+
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Save button -->
+                    <p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
+                                     actionListener="#{dialog.diagnosisPresetEditDialog.saveAndHide()}">
+                    </p:commandButton>
+
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     actionListener="#{dialog.diagnosisPresetEditDialog.hideDialog()}"
+                                     icon="fa fa-times-circle">
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

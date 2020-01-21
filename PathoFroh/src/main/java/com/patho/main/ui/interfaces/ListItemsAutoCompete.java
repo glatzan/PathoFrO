@@ -7,16 +7,16 @@ import java.util.List;
 
 public interface ListItemsAutoCompete {
 
-	public default List<String> getListsuggestions(String input) {
-		ArrayList<String> result = new ArrayList<String>();
+    public default List<String> getListsuggestions(String input) {
+        ArrayList<String> result = new ArrayList<String>();
 
-		for (ListItem items : getPredefinedListItems()) {
-			if (items.getValue().toLowerCase().startsWith(input.toLowerCase()))
-				result.add(items.getValue());
-		}
+        for (ListItem items : getPredefinedListItems()) {
+            if (items.getValue().toLowerCase().startsWith(input.toLowerCase()))
+                result.add(items.getValue());
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public List<ListItem> getPredefinedListItems();
+    public List<ListItem> getPredefinedListItems();
 }

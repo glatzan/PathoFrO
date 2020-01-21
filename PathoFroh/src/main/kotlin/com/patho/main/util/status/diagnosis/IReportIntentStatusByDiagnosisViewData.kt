@@ -1,7 +1,7 @@
 package com.patho.main.util.status.diagnosis
 
 /**
- * ViewData for reportIntentStatusByDiagnosisDatatable.xhtml
+ * ViewData for DatatableNotificationStatusByDiagnosis.xhtml
  */
 interface IReportIntentStatusByDiagnosisViewData {
     /**

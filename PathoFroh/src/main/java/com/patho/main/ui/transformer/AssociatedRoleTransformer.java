@@ -10,37 +10,37 @@ import java.util.List;
 
 public class AssociatedRoleTransformer implements Converter {
 
-	private List<ContactRole> roles;
+    private List<ContactRole> roles;
 
-	public AssociatedRoleTransformer(List<ContactRole> roles) {
-		this.roles = roles;
-	}
-	
-	public AssociatedRoleTransformer(ContactRole[] roles) {
-		this.roles = Arrays.asList(roles);
-	}
+    public AssociatedRoleTransformer(List<ContactRole> roles) {
+        this.roles = roles;
+    }
 
-	public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-		if (value != null && value.trim().length() > 0) {
-			try {
-				for (ContactRole role : roles) {
-					if (value.equals(role.name()))
-						return role;
-				}
-				return null;
-			} catch (NumberFormatException e) {
-			}
-		} else {
-			return null;
-		}
-		return null;
-	}
+    public AssociatedRoleTransformer(ContactRole[] roles) {
+        this.roles = Arrays.asList(roles);
+    }
 
-	public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-		if (object != null && object instanceof ContactRole) {
-			return String.valueOf(((ContactRole) object).name());
-		} else {
-			return "";
-		}
-	}
+    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
+        if (value != null && value.trim().length() > 0) {
+            try {
+                for (ContactRole role : roles) {
+                    if (value.equals(role.name()))
+                        return role;
+                }
+                return null;
+            } catch (NumberFormatException e) {
+            }
+        } else {
+            return null;
+        }
+        return null;
+    }
+
+    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
+        if (object != null && object instanceof ContactRole) {
+            return String.valueOf(((ContactRole) object).name());
+        } else {
+            return "";
+        }
+    }
 }

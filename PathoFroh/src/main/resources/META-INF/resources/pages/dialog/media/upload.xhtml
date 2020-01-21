@@ -1,97 +1,95 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
 
 <h:head>
-	<title><h:outputFormat value="#{msg['dialog.media.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat value="#{msg['dialog.media.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.media.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.media.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
-			<h:panelGrid styleClass="defaultHistoTable" columns="2"
-				columnClasses="columnWidth125">
-				<!-- save place -->
-				<h:outputLabel value="#{msg['dialog.media.save']}"></h:outputLabel>
-				<p:selectOneMenu 
-					panelStyleClass="searchSelectMenuPanel"
-					converter="#{dialog.uploadDialog.dataListTransformer}"
-					value="#{dialog.uploadDialog.selectedDatalist}" filter="true"
-					filterMatchMode="contains">
+        <div class="dialogContent">
+            <h:panelGrid styleClass="defaultHistoTable" columns="2"
+                         columnClasses="columnWidth125">
+                <!-- save place -->
+                <h:outputLabel value="#{msg['dialog.media.save']}"></h:outputLabel>
+                <p:selectOneMenu
+                        panelStyleClass="searchSelectMenuPanel"
+                        converter="#{dialog.uploadDialog.dataListTransformer}"
+                        value="#{dialog.uploadDialog.selectedDatalist}" filter="true"
+                        filterMatchMode="contains">
 
-					<f:selectItems value="#{dialog.uploadDialog.dataLists}"
-						var="container"
-						itemLabel="#{msg['enum.dataList.'.concat(container.dataList.getClass().simpleName)]} - #{container.dataList.getPublicName()}"
-						itemValue="#{container}" />
+                    <f:selectItems value="#{dialog.uploadDialog.dataLists}"
+                                   var="container"
+                                   itemLabel="#{msg['enum.dataList.'.concat(container.dataList.getClass().simpleName)]} - #{container.dataList.getPublicName()}"
+                                   itemValue="#{container}"/>
 
-					<p:ajax event="change" process="@form" />
-				</p:selectOneMenu>
+                    <p:ajax event="change" process="@form"/>
+                </p:selectOneMenu>
 
-				<!-- commentary -->
-				<h:outputLabel value="#{msg['dialog.media.commentary']}"></h:outputLabel>
-				<p:inputTextarea style="width: 80%"
-					value="#{dialog.uploadDialog.uploadedFileCommentary}">
-					<p:ajax event="change" process="@form" />
-				</p:inputTextarea>
+                <!-- commentary -->
+                <h:outputLabel value="#{msg['dialog.media.commentary']}"></h:outputLabel>
+                <p:inputTextarea style="width: 80%"
+                                 value="#{dialog.uploadDialog.uploadedFileCommentary}">
+                    <p:ajax event="change" process="@form"/>
+                </p:inputTextarea>
 
-				<!-- types -->
-				<h:outputLabel value="#{msg['dialog.media.type']}"></h:outputLabel>
-				<p:selectOneMenu 
-					panelStyleClass="searchSelectMenuPanel"
-					value="#{dialog.uploadDialog.fileType}" filter="true"
-					filterMatchMode="contains">
+                <!-- types -->
+                <h:outputLabel value="#{msg['dialog.media.type']}"></h:outputLabel>
+                <p:selectOneMenu
+                        panelStyleClass="searchSelectMenuPanel"
+                        value="#{dialog.uploadDialog.fileType}" filter="true"
+                        filterMatchMode="contains">
 
-					<f:selectItems value="#{dialog.uploadDialog.availableFileTypes}"
-						var="type" itemLabel="#{msg['enum.documentType.'.concat(type)]}"
-						itemValue="#{type}" />
+                    <f:selectItems value="#{dialog.uploadDialog.availableFileTypes}"
+                                   var="type" itemLabel="#{msg['enum.documentType.'.concat(type)]}"
+                                   itemValue="#{type}"/>
 
-					<p:ajax event="change" process="@form" />
-				</p:selectOneMenu>
+                    <p:ajax event="change" process="@form"/>
+                </p:selectOneMenu>
 
-				<!-- media -->
-				<h:outputLabel value="#{msg['dialog.media.data']}"></h:outputLabel>
-				<p:fileUpload style="width:83%"
-					fileUploadListener="#{dialog.uploadDialog.handleFileUpload}"
-					mode="advanced" dragDropSupport="false" multiple="true"
-					sizeLimit="10000000" fileLimit="5" allowTypes="/(\.|\/)(pdf)$/" />
-			</h:panelGrid>
-		</div>
+                <!-- media -->
+                <h:outputLabel value="#{msg['dialog.media.data']}"></h:outputLabel>
+                <p:fileUpload style="width:83%"
+                              fileUploadListener="#{dialog.uploadDialog.handleFileUpload}"
+                              mode="advanced" dragDropSupport="false" multiple="true"
+                              sizeLimit="10000000" fileLimit="5" allowTypes="/(\.|\/)(pdf)$/"/>
+            </h:panelGrid>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
-						icon="fa fa-times-circle"
-						actionListener="#{dialog.uploadDialog.hideDialog()}" />
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                <h:panelGrid columns="2" styleClass="right">
+                    <p:commandButton value="#{msg['general.close']}" id="closeBtn"
+                                     icon="fa fa-times-circle"
+                                     actionListener="#{dialog.uploadDialog.hideDialog()}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

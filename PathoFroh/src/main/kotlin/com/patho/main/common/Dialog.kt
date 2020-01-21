@@ -20,7 +20,7 @@ enum class Dialog {
     SLIDE_OVERVIEW("/pages/dialog/task/staining/slideOverview", null, 1024, 600, false, false, true),                                                                        // OK 				// TEST OK
     SLIDE_NAMING("/pages/dialog/task/staining/slideNaming", null, 430, 270, false, false, true),                                                                            // OK				// TEST OK
     SLIDE_CREATE("/pages/dialog/task/staining/addSlide", null, 858, 484, false, false, true),                                                                                // OK				// TEST OK
-    DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/task/diagnosis/diagnosisRecordOverwrite", null, 480, 272, false, false, true),                                                // OK				// TEST OK
+    DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/diagnosis/diagnosisRecordOverwrite", null, 480, 272, false, false, true),                                                // OK				// TEST OK
     CONTACTS("/pages/dialog/contact/contacts", null, 1024, 600, false, false, true),                                                                                        // OK				// TEST OK
     CONTACTS_NOTIFICATION("/pages/dialog/contact/contactNotification", null, 858, 484, false, false, true),                                                                // OK				// TEST OK
     CONTACTS_SELECT("/pages/dialog/contact/contactSelect", null, 858, 484, false, false, true),                                                                            // OK				// TEST OK
@@ -59,8 +59,15 @@ enum class Dialog {
     STAINING_PHASE_EXIT("/pages/dialog/phase/stainingPhaseExit", null, 480, 272, false, false, true), // 16:9
     DIAGNOSIS_PHASE_EXIT("/pages/dialog/phase/diagnosisPhaseExit", null, 640, 360, false, false, true), // 16:9
     NOTIFICATION_PHASE_EXIT("/pages/dialog/phase/notificationPhaseExit", null, 640, 370, false, false, true), // 16:9
-    TASK_ARCHIVE("/pages/dialog/task/archive/archiveTask", null, 1024, 600, false, false, true), // 16:9
-    TASK_RESTORE("/pages/dialog/task/archive/restoreTask", null, 480, 272, false, false, true), // 16:9
+
+    /**
+     * Archive Task Dialog (Kotlin)
+     */
+    TASK_ARCHIVE("/pages/dialog/task/archiveTask/archiveTask", null, 1280, 720, false, false, true), // 16:9
+    /**
+     * Dearchive Task Dialog (Kotlin)
+     */
+    TASK_DEARCHIVE("/pages/dialog/task/dearchiveTask", null, 480, 272, false, false, true), // 16:9
     DIAGNOSIS_REVISION_CREATE("/pages/dialog/task/diagnosisRevision/diagnosisRevisionsCreate", null, 640, 360, false, false, true),                                            // OK
     DIAGNOSIS_REVISION_EDIT("/pages/dialog/task/diagnosisRevision/diagnosisRevisionsEdit", null, 480, 272, false, false, true),                                                // OK
     DIAGNOSIS_REVISION_DELETE("/pages/dialog/task/diagnosisRevision/diagnosisRevisionDelete", null, 480, 272, false, false, true),                                            // OK
@@ -68,7 +75,7 @@ enum class Dialog {
     PRINT_SELECT_PRINTER("/pages/dialog/selectPrinter", null, 640, 360, false, false, true),
     ACCOUNTING_DATA("/pages/dialog/miscellaneous/accounting", null, 1024, 600, false, false, true),                                                                        // OK
     CONFIRM_CHANGE("/pages/dialog/miscellaneous/confirm", null, 320, 180, false, false, true),                                                                                // OK
-    DELETE_ID_OBJECT("/pages/dialog/task/delete/deleteTaskEntity", null, 320, 180, false, false, true);                                                                                // OK
+    DELETE_ID_OBJECT("/pages/dialog/task/deleteTaskEntity", null, 320, 180, false, false, true);                                                                                // OK
 
     val path: String
     val useOptions: Boolean

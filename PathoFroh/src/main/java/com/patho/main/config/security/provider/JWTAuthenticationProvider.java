@@ -2,7 +2,7 @@ package com.patho.main.config.security.provider;
 
 import com.patho.main.config.security.util.JWTAuthorizationToken;
 import com.patho.main.model.user.HistoUser;
-import com.patho.main.repository.UserRepository;
+import com.patho.main.repository.jpa.UserRepository;
 import com.patho.main.service.AuthenticationService;
 import com.patho.main.util.helper.HistoUtil;
 import lombok.Setter;
@@ -23,49 +23,49 @@ import java.util.Optional;
 @Setter
 public class JWTAuthenticationProvider implements AuthenticationProvider {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private String tokenPrefix;
+    private String tokenPrefix;
 
-	private String secret;
+    private String secret;
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	public JWTAuthenticationProvider() {
-	}
+    public JWTAuthenticationProvider() {
+    }
 
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		JWTAuthorizationToken auth = (JWTAuthorizationToken) authentication;
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        JWTAuthorizationToken auth = (JWTAuthorizationToken) authentication;
 
-		String username = AuthenticationService.verifyJWTToken(auth, secret, tokenPrefix);
+        String username = AuthenticationService.verifyJWTToken(auth, secret, tokenPrefix);
 
-		if (HistoUtil.isNullOrEmpty(username)) {
-			logger.debug("Bad JWT Token! Access denied");
-			throw new BadCredentialsException("Invalid Token");
-		}
+        if (HistoUtil.isNullOrEmpty(username)) {
+            logger.debug("Bad JWT Token! Access denied");
+            throw new BadCredentialsException("Invalid Token");
+        }
 
-		Optional<HistoUser> user = userRepository.findOptionalByPhysicianUid(username);
+        Optional<HistoUser> user = userRepository.findOptionalByPhysicianUid(username);
 
-		logger.debug("Looking for User " + username);
+        logger.debug("Looking for User " + username);
 
-		if (user.isPresent()) {
-			logger.debug("Token OK! Access granted");
-			auth.setUser(user.get());
-			auth.setAuthenticated(true);
-		} else {
-			logger.debug("No User found! Access denied");
-			throw new BadCredentialsException("No User found");
-		}
+        if (user.isPresent()) {
+            logger.debug("Token OK! Access granted");
+            auth.setUser(user.get());
+            auth.setAuthenticated(true);
+        } else {
+            logger.debug("No User found! Access denied");
+            throw new BadCredentialsException("No User found");
+        }
 
-		return auth;
-	}
+        return auth;
+    }
 
-	public boolean supports(Class<?> authentication) {
-		if (authentication.isAssignableFrom(JWTAuthorizationToken.class)) {
-			return true;
-		}
-		return false;
-	}
+    public boolean supports(Class<?> authentication) {
+        if (authentication.isAssignableFrom(JWTAuthorizationToken.class)) {
+            return true;
+        }
+        return false;
+    }
 
 }

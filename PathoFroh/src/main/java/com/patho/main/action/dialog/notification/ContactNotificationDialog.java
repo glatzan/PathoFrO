@@ -7,137 +7,133 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.notification.NotificationTyp;
 import com.patho.main.model.patient.notification.ReportIntent;
 import com.patho.main.model.patient.notification.ReportIntentNotification;
-import com.patho.main.repository.AssociatedContactRepository;
-import com.patho.main.repository.TaskRepository;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.HashMap;
+
 @Getter
 @Setter
 public class ContactNotificationDialog extends AbstractDialog {
 
 
-	private ReportIntent associatedContact;
+    private ReportIntent associatedContact;
 
-	private MenuModel model;
+    private MenuModel model;
 
-	private ContactRole[] selectableRoles;
+    private ContactRole[] selectableRoles;
 
-	private HashMap<String, String> icons = new HashMap<String, String>() {
+    private HashMap<String, String> icons = new HashMap<String, String>() {
 
-		private static final long serialVersionUID = 6498119466449178573L;
+        private static final long serialVersionUID = 6498119466449178573L;
 
-		{
-			put("EMAIL", "fa-envelope");
-			put("FAX", "fa-fax");
-			put("PHONE", "fa-phone");
-			put("LETTER", "fa-pencil-square-o");
-		}
-	};
+        {
+            put("EMAIL", "fa-envelope");
+            put("FAX", "fa-fax");
+            put("PHONE", "fa-phone");
+            put("LETTER", "fa-pencil-square-o");
+        }
+    };
 
-	public ContactNotificationDialog initAndPrepareBean(Task task, ReportIntent reportIntent) {
-		if (initBean(task, reportIntent))
-			prepareDialog();
+    public ContactNotificationDialog initAndPrepareBean(Task task, ReportIntent reportIntent) {
+        if (initBean(task, reportIntent))
+            prepareDialog();
 
-		return this;
-	}
+        return this;
+    }
 
-	public boolean initBean(Task task, ReportIntent reportIntent) {
+    public boolean initBean(Task task, ReportIntent reportIntent) {
 
-		super.initBean(task, Dialog.CONTACTS_NOTIFICATION);
+        super.initBean(task, Dialog.CONTACTS_NOTIFICATION);
 
-		setAssociatedContact(reportIntent);
+        setAssociatedContact(reportIntent);
 
-		update(false);
+        update(false);
 
-		setSelectableRoles(ContactRole.values());
+        setSelectableRoles(ContactRole.values());
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Reloads data of the task
-	 */
-	public void update(boolean reload) {
-		if (reload) {
-			setTask(SpringContextBridge.services().getTaskRepository().findByID(task.getId(), false, false, false, true, true));
-			for (ReportIntent contact : task.getContacts()) {
-				if (contact.equals(getAssociatedContact())) {
-					setAssociatedContact(contact);
-					break;
-				}
-			}
-		}
+    /**
+     * Reloads data of the task
+     */
+    public void update(boolean reload) {
+        if (reload) {
+            setTask(SpringContextBridge.services().getTaskRepository().findByID(task.getId(), false, false, false, true, true));
+            for (ReportIntent contact : task.getContacts()) {
+                if (contact.equals(getAssociatedContact())) {
+                    setAssociatedContact(contact);
+                    break;
+                }
+            }
+        }
 
-		generatedMenuModel();
-	}
+        generatedMenuModel();
+    }
 
-	public void generatedMenuModel() {
-		NotificationTyp[] typeArr = { NotificationTyp.EMAIL, NotificationTyp.FAX,
-				NotificationTyp.LETTER, NotificationTyp.PHONE };
+    public void generatedMenuModel() {
+        NotificationTyp[] typeArr = {NotificationTyp.EMAIL, NotificationTyp.FAX,
+                NotificationTyp.LETTER, NotificationTyp.PHONE};
 
-		model = new DefaultMenuModel();
+        model = new DefaultMenuModel();
 
-		for (int i = 0; i < typeArr.length; i++) {
-			boolean disabled = false;
+        for (int i = 0; i < typeArr.length; i++) {
+            boolean disabled = false;
 
-			if (getAssociatedContact().getNotifications() != null)
-				for (ReportIntentNotification reportIntentNotification : getAssociatedContact()
-						.getNotifications()) {
+            if (getAssociatedContact().getNotifications() != null)
+                for (ReportIntentNotification reportIntentNotification : getAssociatedContact()
+                        .getNotifications()) {
 //					if (reportIntentNotification.getNotificationTyp().equals(typeArr[i])
 //							&& reportIntentNotification.getActive() && !reportIntentNotification.getFailed()) {
 //						disabled = true;
 //						break;
 //					}
-				}
+                }
 
-			DefaultMenuItem item = new DefaultMenuItem("");
-			item.setIcon("fa " + icons.get(typeArr[i].toString()));
-			item.setCommand("#{dialog.contactNotificationDialog.addNotification('" + typeArr[i].toString() + "')}");
-			item.setValue(resourceBundle.get("enum.notificationType." + typeArr[i].toString()));
-			item.setDisabled(disabled);
-			item.setUpdate("@form");
-			model.addElement(item);
-		}
-	}
+            DefaultMenuItem item = new DefaultMenuItem("");
+            item.setIcon("fa " + icons.get(typeArr[i].toString()));
+            item.setCommand("#{dialog.contactNotificationDialog.addNotification('" + typeArr[i].toString() + "')}");
+            item.setValue(resourceBundle.get("enum.notificationType." + typeArr[i].toString()));
+            item.setDisabled(disabled);
+            item.setUpdate("@form");
+            model.addElement(item);
+        }
+    }
 
-	public void removeNotification(ReportIntentNotification reportIntentNotification) {
+    public void removeNotification(ReportIntentNotification reportIntentNotification) {
 //		associatedContactService.removeNotification(associatedContact, reportIntentNotification)
 //				.getReportIntent();
-		update(true);
-	}
+        update(true);
+    }
 
-	public void addNotification(NotificationTyp notification) {
+    public void addNotification(NotificationTyp notification) {
 //		associatedContactService.addNotificationByTypeAndDisableOld(associatedContact, notification)
 //				.getReportIntent();
-		update(true);
-	}
+        update(true);
+    }
 
-	public void notificationAsPerformed(ReportIntentNotification reportIntentNotification) {
+    public void notificationAsPerformed(ReportIntentNotification reportIntentNotification) {
 //		associatedContactService.performNotification(associatedContact, reportIntentNotification,
 //				resourceBundle.get("log.contact.notification.performed.manual"), true).getReportIntent();
-		update(true);
-	}
+        update(true);
+    }
 
-	public void onRoleChange() {
-		SpringContextBridge.services().getAssociatedContactRepository().save(getAssociatedContact(),
-				resourceBundle.get("log.contact.roleChange", getAssociatedContact().getTask(),
-						getAssociatedContact().toString(), getAssociatedContact().getRole().toString()));
-		update(true);
-	}
+    public void onRoleChange() {
+        SpringContextBridge.services().getAssociatedContactRepository().save(getAssociatedContact(),
+                resourceBundle.get("log.contact.roleChange", getAssociatedContact().getTask(),
+                        getAssociatedContact().toString(), getAssociatedContact().getRole().toString()));
+        update(true);
+    }
 
-	@Override
-	public void hideDialog() {
-		super.hideDialog(new ReloadEvent());
-	}
+    @Override
+    public void hideDialog() {
+        super.hideDialog(new ReloadEvent());
+    }
 
 }

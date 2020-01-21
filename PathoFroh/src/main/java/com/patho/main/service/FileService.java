@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FileService {
 
-	public void addFileToPatient(String piz, PDFContainer container) {
-		
-	}
-	
-	public void addFileToPatient(Patient patient, PDFContainer container) {
-		
-	}
+    public void addFileToPatient(String piz, PDFContainer container) {
+
+    }
+
+    public void addFileToPatient(Patient patient, PDFContainer container) {
+
+    }
 }

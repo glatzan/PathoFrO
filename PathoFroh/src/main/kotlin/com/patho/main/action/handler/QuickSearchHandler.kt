@@ -2,7 +2,7 @@ package com.patho.main.action.handler
 
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.user.HistoPermissions
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.PatientService
 import com.patho.main.service.UserService
 import com.patho.main.util.exceptions.TaskNotFoundException

@@ -6,10 +6,10 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.person.Person;
 import com.patho.main.model.user.HistoUser;
-import com.patho.main.repository.LDAPRepository;
-import com.patho.main.repository.PatientRepository;
-import com.patho.main.repository.TaskRepository;
-import com.patho.main.repository.UserRepository;
+import com.patho.main.repository.jpa.PatientRepository;
+import com.patho.main.repository.jpa.TaskRepository;
+import com.patho.main.repository.jpa.UserRepository;
+import com.patho.main.repository.miscellaneous.LDAPRepository;
 import com.patho.main.service.AuthenticationService;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
+
 @RestController
 @RequestMapping(value = "/rest")
 public class CommonControls {

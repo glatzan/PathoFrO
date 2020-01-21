@@ -1,180 +1,179 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title><h:outputLabel
-			value="#{msg['dialog.mergePatientDialog.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputLabel
+            value="#{msg['dialog.mergePatientDialog.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.mergePatientDialog.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.mergePatientDialog.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
-			<h:panelGrid columns="2" style="width: 100%"
-				styleClass="listingHistoHiddenTableContainer"
-				columnClasses="columnWidthPercent50,columnWidthPercent50">
+        <div class="dialogContent">
+            <h:panelGrid columns="2" style="width: 100%"
+                         styleClass="listingHistoHiddenTableContainer"
+                         columnClasses="columnWidthPercent50,columnWidthPercent50">
 
-				<!-- source -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					columnClasses="columnWidth150,">
-					<!-- name -->
-					<h:outputLabel value="#{msg['dialog.mergePatientDialog.source']}" />
-					<p:commandLink icon="fa fa-fw fa-user"
-						actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
-						title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
-						<p:ajax event="dialogReturn" update="@form" process="@form"
-							listener="#{dialog.mergePatientDialog.onReturnSelectSource}"></p:ajax>
-						<i class="fa fa-fw fa-search" />
-					</p:commandLink>
+                <!-- source -->
+                <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                             columnClasses="columnWidth150,">
+                    <!-- name -->
+                    <h:outputLabel value="#{msg['dialog.mergePatientDialog.source']}"/>
+                    <p:commandLink icon="fa fa-fw fa-user"
+                                   actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
+                                   title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
+                        <p:ajax event="dialogReturn" update="@form" process="@form"
+                                listener="#{dialog.mergePatientDialog.onReturnSelectSource}"></p:ajax>
+                        <i class="fa fa-fw fa-search"/>
+                    </p:commandLink>
 
-					<!-- name -->
-					<h:outputLabel value="#{msg['dialog.mergePatientDialog.name']}:" />
-					<h:outputLabel
-						value="#{dialog.mergePatientDialog.source.person.getFullName()}"></h:outputLabel>
+                    <!-- name -->
+                    <h:outputLabel value="#{msg['dialog.mergePatientDialog.name']}:"/>
+                    <h:outputLabel
+                            value="#{dialog.mergePatientDialog.source.person.getFullName()}"></h:outputLabel>
 
-					<!-- birthday -->
-					<p:outputLabel
-						value="#{msg['dialog.mergePatientDialog.birthday']}:" />
-					<h:outputLabel
-						value="#{dialog.mergePatientDialog.source.person.birthday}">
-						<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" />
-					</h:outputLabel>
+                    <!-- birthday -->
+                    <p:outputLabel
+                            value="#{msg['dialog.mergePatientDialog.birthday']}:"/>
+                    <h:outputLabel
+                            value="#{dialog.mergePatientDialog.source.person.birthday}">
+                        <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
+                    </h:outputLabel>
 
-					<!-- piz -->
-					<h:outputLabel value="#{msg['dialog.mergePatientDialog.piz']}:" />
-					<h:outputLabel
-						value="#{dialog.mergePatientDialog.source.piz eq '' ? msg['dialog.mergePatientDialog.piz.none'] : dialog.mergePatientDialog.source.piz}"></h:outputLabel>
-				</h:panelGrid>
+                    <!-- piz -->
+                    <h:outputLabel value="#{msg['dialog.mergePatientDialog.piz']}:"/>
+                    <h:outputLabel
+                            value="#{dialog.mergePatientDialog.source.piz eq '' ? msg['dialog.mergePatientDialog.piz.none'] : dialog.mergePatientDialog.source.piz}"></h:outputLabel>
+                </h:panelGrid>
 
-				<!-- target -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					columnClasses="columnWidth150," style="margin-left:20px;">
+                <!-- target -->
+                <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                             columnClasses="columnWidth150," style="margin-left:20px;">
 
-					<!-- name -->
-					<h:outputLabel value="#{msg['dialog.mergePatientDialog.target']}" />
-					<p:commandLink
-						actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
-						title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
-						<p:ajax event="dialogReturn" update="@form" process="@form"
-							listener="#{dialog.mergePatientDialog.onReturnSelectTarget}"></p:ajax>
-						<i class="fa fa-fw fa-search" />
-					</p:commandLink>
+                    <!-- name -->
+                    <h:outputLabel value="#{msg['dialog.mergePatientDialog.target']}"/>
+                    <p:commandLink
+                            actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
+                            title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
+                        <p:ajax event="dialogReturn" update="@form" process="@form"
+                                listener="#{dialog.mergePatientDialog.onReturnSelectTarget}"></p:ajax>
+                        <i class="fa fa-fw fa-search"/>
+                    </p:commandLink>
 
-					<!-- name -->
-					<h:outputLabel value="#{msg['dialog.mergePatientDialog.name']}:" />
-					<h:outputLabel
-						value="#{dialog.mergePatientDialog.target.person.getFullName()}"></h:outputLabel>
+                    <!-- name -->
+                    <h:outputLabel value="#{msg['dialog.mergePatientDialog.name']}:"/>
+                    <h:outputLabel
+                            value="#{dialog.mergePatientDialog.target.person.getFullName()}"></h:outputLabel>
 
-					<!-- birthday -->
-					<p:outputLabel
-						value="#{msg['dialog.mergePatientDialog.birthday']}:" />
-					<h:outputLabel
-						value="#{dialog.mergePatientDialog.target.person.birthday}">
-						<f:convertDateTime type="localDate" pattern="dd.MM.yyyy" />
-					</h:outputLabel>
+                    <!-- birthday -->
+                    <p:outputLabel
+                            value="#{msg['dialog.mergePatientDialog.birthday']}:"/>
+                    <h:outputLabel
+                            value="#{dialog.mergePatientDialog.target.person.birthday}">
+                        <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
+                    </h:outputLabel>
 
-					<!-- piz -->
-					<h:outputLabel value="#{msg['dialog.mergePatientDialog.piz']}:" />
-					<h:outputLabel
-						value="#{dialog.mergePatientDialog.target.piz eq '' ? msg['dialog.mergePatientDialog.piz.none'] : dialog.mergePatientDialog.target.piz}"></h:outputLabel>
-				</h:panelGrid>
-			</h:panelGrid>
+                    <!-- piz -->
+                    <h:outputLabel value="#{msg['dialog.mergePatientDialog.piz']}:"/>
+                    <h:outputLabel
+                            value="#{dialog.mergePatientDialog.target.piz eq '' ? msg['dialog.mergePatientDialog.piz.none'] : dialog.mergePatientDialog.target.piz}"></h:outputLabel>
+                </h:panelGrid>
+            </h:panelGrid>
 
-			<h:panelGrid columns="1" styleClass="defaultHistoTable"
-				style="width:100%; margin-top:20px;">
-				<p:pickList value="#{dialog.mergePatientDialog.taskLists}"
-					styleClass="mergePatientPicklist"
-					converter="#{dialog.mergePatientDialog.taskTransformer}"
-					disabled="#{dialog.mergePatientDialog.taskPickerDisabled}"
-					var="task" itemLabel="#{task}" itemValue="#{task}">
-					<p:ajax event="transfer"
-						listener="#{dialog.mergePatientDialog.onTaskMoved()}"
-						update="@form" />
-				</p:pickList>
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="defaultHistoTable"
+                         style="width:100%; margin-top:20px;">
+                <p:pickList value="#{dialog.mergePatientDialog.taskLists}"
+                            styleClass="mergePatientPicklist"
+                            converter="#{dialog.mergePatientDialog.taskTransformer}"
+                            disabled="#{dialog.mergePatientDialog.taskPickerDisabled}"
+                            var="task" itemLabel="#{task}" itemValue="#{task}">
+                    <p:ajax event="transfer"
+                            listener="#{dialog.mergePatientDialog.onTaskMoved()}"
+                            update="@form"/>
+                </p:pickList>
+            </h:panelGrid>
 
-			<!-- delete -->
-			<h:panelGrid columns="2" style="width: 100%"
-				styleClass="listingHistoHiddenTableContainer"
-				columnClasses="columnWidthPercent50,columnWidthPercent50">
+            <!-- delete -->
+            <h:panelGrid columns="2" style="width: 100%"
+                         styleClass="listingHistoHiddenTableContainer"
+                         columnClasses="columnWidthPercent50,columnWidthPercent50">
 
-				<!-- source -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					columnClasses="columnWidth25,">
-					<p:selectBooleanCheckbox
-						value="#{dialog.mergePatientDialog.deleteSource}"
-						disabled="#{!dialog.mergePatientDialog.sourceDeleteAble}" />
-					<h:outputLabel
-						value="#{msg['dialog.mergePatientDialog.patienten.delete']}" />
-				</h:panelGrid>
+                <!-- source -->
+                <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                             columnClasses="columnWidth25,">
+                    <p:selectBooleanCheckbox
+                            value="#{dialog.mergePatientDialog.deleteSource}"
+                            disabled="#{!dialog.mergePatientDialog.sourceDeleteAble}"/>
+                    <h:outputLabel
+                            value="#{msg['dialog.mergePatientDialog.patienten.delete']}"/>
+                </h:panelGrid>
 
-				<!-- target -->
-				<h:panelGrid columns="2" styleClass="defaultHistoTable"
-					columnClasses="columnWidth25," style="margin-left:20px;">
-					<p:selectBooleanCheckbox
-						value="#{dialog.mergePatientDialog.deleteTarget}"
-						disabled="#{!dialog.mergePatientDialog.targetDeleteAble}" />
-					<h:outputLabel
-						value="#{msg['dialog.mergePatientDialog.patienten.delete']}" />
+                <!-- target -->
+                <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                             columnClasses="columnWidth25," style="margin-left:20px;">
+                    <p:selectBooleanCheckbox
+                            value="#{dialog.mergePatientDialog.deleteTarget}"
+                            disabled="#{!dialog.mergePatientDialog.targetDeleteAble}"/>
+                    <h:outputLabel
+                            value="#{msg['dialog.mergePatientDialog.patienten.delete']}"/>
 
-				</h:panelGrid>
-			</h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
 
-			<h:panelGrid columns="1" styleClass="defaultHistoTable"
-				style="width:100%; margin-top:10px; margin-left:10px">
-				<h:outputLabel styleClass="headline" style="color: red !important"
-					value="#{msg['dialog.mergePatientDialog.sameSourceAndTarget']}"
-					rendered="#{dialog.mergePatientDialog.samePatientForSourceAndTarget}" />
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="defaultHistoTable"
+                         style="width:100%; margin-top:10px; margin-left:10px">
+                <h:outputLabel styleClass="headline" style="color: red !important"
+                               value="#{msg['dialog.mergePatientDialog.sameSourceAndTarget']}"
+                               rendered="#{dialog.mergePatientDialog.samePatientForSourceAndTarget}"/>
+            </h:panelGrid>
 
-		</div>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- merge patient -->
-					<p:commandButton widgetVar="createPatientBtn"
-						disabled="#{!dialog.mergePatientDialog.taskWasMoved}"
-						value="#{msg['dialog.mergePatientDialog.button.merge']}"
-						actionListener="#{dialog.confirmDialog.initAndPrepareBean('dialog.mergePatientDialog.confirm.headline','dialog.mergePatientDialog.confirm.text')}"
-						icon="fa fa-fw fa-medkit">
-						<p:ajax event="dialogReturn"
-							listener="#{dialog.mergePatientDialog.onMergePatientReturn}"></p:ajax>
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- merge patient -->
+                    <p:commandButton widgetVar="createPatientBtn"
+                                     disabled="#{!dialog.mergePatientDialog.taskWasMoved}"
+                                     value="#{msg['dialog.mergePatientDialog.button.merge']}"
+                                     actionListener="#{dialog.confirmDialog.initAndPrepareBean('dialog.mergePatientDialog.confirm.headline','dialog.mergePatientDialog.confirm.text')}"
+                                     icon="fa fa-fw fa-medkit">
+                        <p:ajax event="dialogReturn"
+                                listener="#{dialog.mergePatientDialog.onMergePatientReturn}"></p:ajax>
+                    </p:commandButton>
 
-					<!-- abort -->
-					<p:commandButton value="#{msg['general.abort']}"
-						widgetVar="closeBtn" partialSubmit="true"
-						icon="fa fa-fw fa-times-circle" id="closeBtn" process="@this"
-						actionListener="#{dialog.mergePatientDialog.hideDialog()}"></p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
+                    <!-- abort -->
+                    <p:commandButton value="#{msg['general.abort']}"
+                                     widgetVar="closeBtn" partialSubmit="true"
+                                     icon="fa fa-fw fa-times-circle" id="closeBtn" process="@this"
+                                     actionListener="#{dialog.mergePatientDialog.hideDialog()}"></p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
 
-	</h:form>
+    </h:form>
 </h:body>
 </html>

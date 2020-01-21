@@ -1,53 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite">
 
 
 <composite:interface>
-	<composite:attribute name="rendered" required="false" default="true" />
-	<composite:attribute name="auditElement" required="true" />
+    <composite:attribute name="rendered" required="false" default="true"/>
+    <composite:attribute name="auditElement" required="true"/>
 
-	<composite:attribute name="tableWidth" default="width:100%"
-		required="false" />
+    <composite:attribute name="tableWidth" default="width:100%"
+                         required="false"/>
 </composite:interface>
 
 <composite:implementation>
 
-	<h:panelGrid columns="2" styleClass="defaultHistoTable"
-		style="margin-top:5px;margin-left:5px;width:#{cc.attrs.tableWidth} !important;"
-		rendered="#{cc.attrs.rendered}">
+    <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                 style="margin-top:5px;margin-left:5px;width:#{cc.attrs.tableWidth} !important;"
+                 rendered="#{cc.attrs.rendered}">
 
-		<!-- created date-->
-		<h:outputText value="#{msg['component.auditTable.createdOn']}" />
-		<h:outputText value="#{cc.attrs.auditElement.createdOn}"
-			style="#{cc.attrs.auditElement.createdOn eq 0 ? 'display:none' : ''}">
-			<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
-		</h:outputText>
+        <!-- created date-->
+        <h:outputText value="#{msg['component.auditTable.createdOn']}"/>
+        <h:outputText value="#{cc.attrs.auditElement.createdOn}"
+                      style="#{cc.attrs.auditElement.createdOn eq 0 ? 'display:none' : ''}">
+            <f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
+        </h:outputText>
 
-		<!-- created name-->
-		<h:outputText value="#{msg['component.auditTable.createdBy']}" />
-		<h:outputText value="#{cc.attrs.auditElement.createdBy}">
-		</h:outputText>
+        <!-- created name-->
+        <h:outputText value="#{msg['component.auditTable.createdBy']}"/>
+        <h:outputText value="#{cc.attrs.auditElement.createdBy}">
+        </h:outputText>
 
-		<!-- updated date-->
-		<h:outputText value="#{msg['component.auditTable.updatedOn']}" />
-		<h:outputText
-			style="#{cc.attrs.auditElement.updatedOn eq 0 ? 'display:none' : ''}"
-			value="#{cc.attrs.auditElement.updatedOn}">
-			<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss" />
-		</h:outputText>
+        <!-- updated date-->
+        <h:outputText value="#{msg['component.auditTable.updatedOn']}"/>
+        <h:outputText
+                style="#{cc.attrs.auditElement.updatedOn eq 0 ? 'display:none' : ''}"
+                value="#{cc.attrs.auditElement.updatedOn}">
+            <f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
+        </h:outputText>
 
-		<!-- updated name-->
-		<h:outputText value="#{msg['component.auditTable.updatedBy']}" />
-		<h:outputText value="#{cc.attrs.auditElement.updatedBy}" />
+        <!-- updated name-->
+        <h:outputText value="#{msg['component.auditTable.updatedBy']}"/>
+        <h:outputText value="#{cc.attrs.auditElement.updatedBy}"/>
 
-	</h:panelGrid>
+    </h:panelGrid>
 
 </composite:implementation>
 </html>

@@ -17,160 +17,160 @@ import java.util.Set;
 @SequenceGenerator(name = "diagnosisPreset_sequencegenerator", sequenceName = "diagnosisPreset_sequence")
 public class DiagnosisPreset implements ListOrder<DiagnosisPreset>, ID, Serializable {
 
-	private static final long serialVersionUID = 7345658902599657920L;
+    private static final long serialVersionUID = 7345658902599657920L;
 
-	@Id
-	@GeneratedValue(generator = "diagnosisPreset_sequencegenerator")
-	@Column(unique = true, nullable = false)
-	private long id;
-	
-	@Column(columnDefinition = "VARCHAR")
-	private String category;
-	
-	@Column(columnDefinition = "VARCHAR")
-	private String icd10;
-	
-	@Column(columnDefinition = "VARCHAR")
-	private boolean malign;
-	
-	@Column(columnDefinition = "text")
-	private String diagnosis;
-	
-	@Column(columnDefinition = "text")
-	private String extendedDiagnosisText;
-	
-	@Column(columnDefinition = "text")
-	private String commentary;
-	
-	@Column
-	private int indexInList;
-	
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Enumerated(EnumType.STRING)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
-	private Set<ContactRole> diagnosisReportAsLetter;
+    @Id
+    @GeneratedValue(generator = "diagnosisPreset_sequencegenerator")
+    @Column(unique = true, nullable = false)
+    private long id;
 
-	@Column
-	private boolean archived;
-	
-	public DiagnosisPreset() {
-	}
+    @Column(columnDefinition = "VARCHAR")
+    private String category;
 
-	public DiagnosisPreset(DiagnosisPreset diagnosisPreset) {
-		this.id = diagnosisPreset.getId();
-	}
+    @Column(columnDefinition = "VARCHAR")
+    private String icd10;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof DiagnosisPreset) {
-			if (getId() == ((DiagnosisPreset) obj).getId()) {
-				return true;
-			}
-		}
+    @Column(columnDefinition = "VARCHAR")
+    private boolean malign;
 
-		return super.equals(obj);
-	}
-	
-	@Override
-	public int hashCode() {
-		return (int) getId();
-	}
+    @Column(columnDefinition = "text")
+    private String diagnosis;
 
-	/**
-	 * Used for gui, can only handle arrays
-	 * 
-	 * @return
-	 */
-	@Transient
-	public ContactRole[] getDiagnosisReportAsLetterAsArray() {
-		return getDiagnosisReportAsLetter() != null
-				? (ContactRole[]) getDiagnosisReportAsLetter()
-						.toArray(new ContactRole[getDiagnosisReportAsLetter().size()])
-				: new ContactRole[0];
-	}
+    @Column(columnDefinition = "text")
+    private String extendedDiagnosisText;
 
-	public void setDiagnosisReportAsLetterAsArray(ContactRole[] diagnosisReportAsLetter) {
-		this.diagnosisReportAsLetter = new HashSet<>(Arrays.asList(diagnosisReportAsLetter));
-	}
+    @Column(columnDefinition = "text")
+    private String commentary;
 
-	public long getId() {
-		return this.id;
-	}
+    @Column
+    private int indexInList;
 
-	public String getCategory() {
-		return this.category;
-	}
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @Cascade(value = {org.hibernate.annotations.CascadeType.ALL})
+    private Set<ContactRole> diagnosisReportAsLetter;
 
-	public String getIcd10() {
-		return this.icd10;
-	}
+    @Column
+    private boolean archived;
 
-	public boolean isMalign() {
-		return this.malign;
-	}
+    public DiagnosisPreset() {
+    }
 
-	public String getDiagnosis() {
-		return this.diagnosis;
-	}
+    public DiagnosisPreset(DiagnosisPreset diagnosisPreset) {
+        this.id = diagnosisPreset.getId();
+    }
 
-	public String getExtendedDiagnosisText() {
-		return this.extendedDiagnosisText;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DiagnosisPreset) {
+            if (getId() == ((DiagnosisPreset) obj).getId()) {
+                return true;
+            }
+        }
 
-	public String getCommentary() {
-		return this.commentary;
-	}
+        return super.equals(obj);
+    }
 
-	public int getIndexInList() {
-		return this.indexInList;
-	}
+    @Override
+    public int hashCode() {
+        return (int) getId();
+    }
 
-	public Set<ContactRole> getDiagnosisReportAsLetter() {
-		return this.diagnosisReportAsLetter;
-	}
+    /**
+     * Used for gui, can only handle arrays
+     *
+     * @return
+     */
+    @Transient
+    public ContactRole[] getDiagnosisReportAsLetterAsArray() {
+        return getDiagnosisReportAsLetter() != null
+                ? (ContactRole[]) getDiagnosisReportAsLetter()
+                .toArray(new ContactRole[getDiagnosisReportAsLetter().size()])
+                : new ContactRole[0];
+    }
 
-	public boolean isArchived() {
-		return this.archived;
-	}
+    public void setDiagnosisReportAsLetterAsArray(ContactRole[] diagnosisReportAsLetter) {
+        this.diagnosisReportAsLetter = new HashSet<>(Arrays.asList(diagnosisReportAsLetter));
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+        return this.id;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public String getCategory() {
+        return this.category;
+    }
 
-	public void setIcd10(String icd10) {
-		this.icd10 = icd10;
-	}
+    public String getIcd10() {
+        return this.icd10;
+    }
 
-	public void setMalign(boolean malign) {
-		this.malign = malign;
-	}
+    public boolean isMalign() {
+        return this.malign;
+    }
 
-	public void setDiagnosis(String diagnosis) {
-		this.diagnosis = diagnosis;
-	}
+    public String getDiagnosis() {
+        return this.diagnosis;
+    }
 
-	public void setExtendedDiagnosisText(String extendedDiagnosisText) {
-		this.extendedDiagnosisText = extendedDiagnosisText;
-	}
+    public String getExtendedDiagnosisText() {
+        return this.extendedDiagnosisText;
+    }
 
-	public void setCommentary(String commentary) {
-		this.commentary = commentary;
-	}
+    public String getCommentary() {
+        return this.commentary;
+    }
 
-	public void setIndexInList(int indexInList) {
-		this.indexInList = indexInList;
-	}
+    public int getIndexInList() {
+        return this.indexInList;
+    }
 
-	public void setDiagnosisReportAsLetter(Set<ContactRole> diagnosisReportAsLetter) {
-		this.diagnosisReportAsLetter = diagnosisReportAsLetter;
-	}
+    public Set<ContactRole> getDiagnosisReportAsLetter() {
+        return this.diagnosisReportAsLetter;
+    }
 
-	public void setArchived(boolean archived) {
-		this.archived = archived;
-	}
+    public boolean isArchived() {
+        return this.archived;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setIcd10(String icd10) {
+        this.icd10 = icd10;
+    }
+
+    public void setMalign(boolean malign) {
+        this.malign = malign;
+    }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    public void setExtendedDiagnosisText(String extendedDiagnosisText) {
+        this.extendedDiagnosisText = extendedDiagnosisText;
+    }
+
+    public void setCommentary(String commentary) {
+        this.commentary = commentary;
+    }
+
+    public void setIndexInList(int indexInList) {
+        this.indexInList = indexInList;
+    }
+
+    public void setDiagnosisReportAsLetter(Set<ContactRole> diagnosisReportAsLetter) {
+        this.diagnosisReportAsLetter = diagnosisReportAsLetter;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
 }

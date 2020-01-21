@@ -1,54 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite">
 
 
 <composite:interface>
-	<composite:attribute name="physician" required="true" />
-	<composite:attribute name="displayUsername" required="false"
-		default="true" />
-	<composite:attribute name="displayAutoupdate" required="false"
-		default="true" />
+    <composite:attribute name="physician" required="true"/>
+    <composite:attribute name="displayUsername" required="false"
+                         default="true"/>
+    <composite:attribute name="displayAutoupdate" required="false"
+                         default="true"/>
 </composite:interface>
 
 <composite:implementation>
 
-	<!-- Separator -->
-	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable"
-		rendered="#{cc.attrs.physician.isClinicEmployee()}">
-		<p:separator />
-		<h:outputLabel value="#{msg['component.physicianSettingsClinic']}" />
-	</h:panelGrid>
+    <!-- Separator -->
+    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable"
+                 rendered="#{cc.attrs.physician.isClinicEmployee()}">
+        <p:separator/>
+        <h:outputLabel value="#{msg['component.physicianSettingsClinic']}"/>
+    </h:panelGrid>
 
-	<h:panelGrid columns="4" styleClass="defaultHistoTable"
-		rendered="#{cc.attrs.physician.isClinicEmployee()}"
-		columnClasses="columnWidth125, ,columnWidth125, ">
+    <h:panelGrid columns="4" styleClass="defaultHistoTable"
+                 rendered="#{cc.attrs.physician.isClinicEmployee()}"
+                 columnClasses="columnWidth125, ,columnWidth125, ">
 
-		<!-- auto update -->
-		<h:outputLabel rendered="#{cc.attrs.displayAutoupdate}"
-			value="#{msg['component.physicianSettingsClinic.autoUpdate']}" />
-		<p:selectBooleanCheckbox rendered="#{cc.attrs.displayAutoupdate}"
-			title="#{msg['component.physicianSettingsClinic.autoUpdate.text']}"
-			value="#{cc.attrs.physician.person.autoUpdate}">
-		</p:selectBooleanCheckbox>
+        <!-- auto update -->
+        <h:outputLabel rendered="#{cc.attrs.displayAutoupdate}"
+                       value="#{msg['component.physicianSettingsClinic.autoUpdate']}"/>
+        <p:selectBooleanCheckbox rendered="#{cc.attrs.displayAutoupdate}"
+                                 title="#{msg['component.physicianSettingsClinic.autoUpdate.text']}"
+                                 value="#{cc.attrs.physician.person.autoUpdate}">
+        </p:selectBooleanCheckbox>
 
-		<!-- User clinic function -->
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsClinic.clinicFunction']}" />
-		<p:inputText value="#{cc.attrs.physician.clinicRole}" />
+        <!-- User clinic function -->
+        <h:outputLabel
+                value="#{msg['component.physicianSettingsClinic.clinicFunction']}"/>
+        <p:inputText value="#{cc.attrs.physician.clinicRole}"/>
 
-		<!-- User name -->
-		<h:outputLabel rendered="#{cc.attrs.displayUsername}"
-			value="#{msg['component.physicianSettingsClinic.userName']}" />
-		<p:inputText value="#{cc.attrs.physician.uid}"
-			rendered="#{cc.attrs.displayUsername}" />
+        <!-- User name -->
+        <h:outputLabel rendered="#{cc.attrs.displayUsername}"
+                       value="#{msg['component.physicianSettingsClinic.userName']}"/>
+        <p:inputText value="#{cc.attrs.physician.uid}"
+                     rendered="#{cc.attrs.displayUsername}"/>
 
-	</h:panelGrid>
+    </h:panelGrid>
 </composite:implementation>
 </html>

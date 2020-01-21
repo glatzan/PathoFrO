@@ -3,7 +3,7 @@ package com.patho.main.service
 import com.patho.main.action.handler.CurrentUserHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.patient.Slide
-import com.patho.main.repository.PrintDocumentRepository
+import com.patho.main.repository.miscellaneous.PrintDocumentRepository
 import com.patho.main.template.DocumentToken
 import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.print.UnknownPrintingException

@@ -5,17 +5,17 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class Audit {
- 
+
     @Column
     private long createdOn;
- 
-    @Column(length=10)
+
+    @Column(length = 10)
     private String createdBy;
- 
+
     @Column
     private long updatedOn;
- 
-    @Column(length=10)
+
+    @Column(length = 10)
     private String updatedBy;
 
     public long getCreatedOn() {

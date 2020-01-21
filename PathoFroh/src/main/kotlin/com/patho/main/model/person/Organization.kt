@@ -14,7 +14,7 @@ open class Organization : AbstractPersistable {
 
     @Id
     @GeneratedValue(generator = "organization_sequencegenerator")
-    @SequenceGenerator(name = "organization_sequencegenerator", sequenceName = "organization_sequence" , allocationSize = 1)
+    @SequenceGenerator(name = "organization_sequencegenerator", sequenceName = "organization_sequence", allocationSize = 1)
     @Column(unique = true, nullable = false)
     open override var id: Long = 0
 

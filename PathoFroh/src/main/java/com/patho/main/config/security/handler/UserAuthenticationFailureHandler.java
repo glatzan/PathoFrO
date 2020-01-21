@@ -19,23 +19,23 @@ import java.io.IOException;
 @Component
 public class UserAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException e) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException e) throws IOException, ServletException {
 
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			session.setAttribute(LoginHandler.LoginFaildSessionAttribue, "Einloggen Fehlgeschlagen");
-		}
-		redirectStrategy.sendRedirect(request, response, "/login.xhtml?error=pw");
-	}
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute(LoginHandler.LoginFaildSessionAttribue, "Einloggen Fehlgeschlagen");
+        }
+        redirectStrategy.sendRedirect(request, response, "/login.xhtml?error=pw");
+    }
 }
 
 class MyResponseRequestWrapper extends HttpServletResponseWrapper {
-	public MyResponseRequestWrapper(HttpServletResponse response) {
-		super(response);
-	}
+    public MyResponseRequestWrapper(HttpServletResponse response) {
+        super(response);
+    }
 }

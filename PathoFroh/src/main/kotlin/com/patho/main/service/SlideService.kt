@@ -5,8 +5,8 @@ import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.SlideRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.SlideRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.ui.selectors.StainingPrototypeHolder
 import com.patho.main.util.task.TaskTreeTools
 import org.springframework.beans.factory.annotation.Autowired

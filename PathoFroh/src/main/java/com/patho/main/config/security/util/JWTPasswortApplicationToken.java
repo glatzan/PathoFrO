@@ -8,17 +8,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @Setter
 public class JWTPasswortApplicationToken extends UsernamePasswordAuthenticationToken {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7279566587737255850L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7279566587737255850L;
 
-	public JWTPasswortApplicationToken(JWTPasswortApplicationCreds creds) {
-		super(creds.getUsername(), creds.getPassword());
-	}
+    public JWTPasswortApplicationToken(JWTPasswortApplicationCreds creds) {
+        super(creds.getUsername(), creds.getPassword());
+    }
 
-	public JWTPasswortApplicationToken(String username, String password) {
-		super(username, password);
-	}
+    public JWTPasswortApplicationToken(String username, String password) {
+        super(username, password);
+    }
 
 }

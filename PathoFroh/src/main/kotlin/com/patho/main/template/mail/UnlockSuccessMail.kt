@@ -2,7 +2,7 @@ package com.patho.main.template.mail
 
 import com.patho.main.template.MailTemplate
 
-class UnlockSuccessMail : MailTemplate(){
+class UnlockSuccessMail : MailTemplate() {
 //    @Transient
 //    private var histoUser: HistoUser? = null
 //

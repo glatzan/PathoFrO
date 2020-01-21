@@ -1,116 +1,116 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
 
 <h:head>
-	<title><h:outputFormat
-			rendered="#{!dialog.editUserDialog.newUser}"
-			value="#{msg['dialog.userEdit.headline']}">
-			<f:param
-				value="#{dialog.editUserDialog.user.physician.person.getFullName()}" />
-		</h:outputFormat><h:outputLabel rendered="#{dialog.editUserDialog.newUser}"
-			value="#{msg['dialog.userEdit.headline.new']}"></h:outputLabel></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            rendered="#{!dialog.editUserDialog.newUser}"
+            value="#{msg['dialog.userEdit.headline']}">
+        <f:param
+                value="#{dialog.editUserDialog.user.physician.person.getFullName()}"/>
+    </h:outputFormat><h:outputLabel rendered="#{dialog.editUserDialog.newUser}"
+                                    value="#{msg['dialog.userEdit.headline.new']}"></h:outputLabel></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoTabDialogStyle">
 
-	<h:outputScript library="scripts" name="selectCheckboxMenuTop.js" />
+    <h:outputScript library="scripts" name="selectCheckboxMenuTop.js"/>
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputFormat value="#{msg['dialog.userEdit.headline']}"
-					rendered="#{!dialog.editUserDialog.newUser}">
-					<f:param
-						value="#{dialog.editUserDialog.user.physician.person.getFullName()}" />
-				</h:outputFormat>
-				<h:outputLabel rendered="#{dialog.editUserDialog.newUser}"
-					value="#{msg['dialog.userEdit.headline.new']}"></h:outputLabel>
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputFormat value="#{msg['dialog.userEdit.headline']}"
+                                rendered="#{!dialog.editUserDialog.newUser}">
+                    <f:param
+                            value="#{dialog.editUserDialog.user.physician.person.getFullName()}"/>
+                </h:outputFormat>
+                <h:outputLabel rendered="#{dialog.editUserDialog.newUser}"
+                               value="#{msg['dialog.userEdit.headline.new']}"></h:outputLabel>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent"></div>
+        <div class="dialogContent"></div>
 
-		<h:panelGrid columns="2" styleClass="dialogContainer">
-			<p:outputPanel id="navigationTable" styleClass="navigationTable">
-				<c:forEach items="#{dialog.editUserDialog.tabs}" var="tab"
-					varStatus="loop">
-					<p:commandButton value="#{msg[tab.name]}"
-						disabled="#{tab.disabled}"
-						styleClass="#{tab eq dialog.editUserDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
-						actionListener="#{dialog.editUserDialog.onTabChange(tab)}"
-						update="navigationTable dialogContent">
-						<p:ajax event="dialogReturn"
-							update="navigationTable dialogContent"></p:ajax>
-					</p:commandButton>
-				</c:forEach>
-			</p:outputPanel>
-			<p:outputPanel id="dialogContent" styleClass="dialogContent">
-				<ui:include src="#{dialog.editUserDialog.selectedTab.centerInclude}" />
-			</p:outputPanel>
-		</h:panelGrid>
+        <h:panelGrid columns="2" styleClass="dialogContainer">
+            <p:outputPanel id="navigationTable" styleClass="navigationTable">
+                <c:forEach items="#{dialog.editUserDialog.tabs}" var="tab"
+                           varStatus="loop">
+                    <p:commandButton value="#{msg[tab.name]}"
+                                     disabled="#{tab.disabled}"
+                                     styleClass="#{tab eq dialog.editUserDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
+                                     actionListener="#{dialog.editUserDialog.onTabChange(tab)}"
+                                     update="navigationTable dialogContent">
+                        <p:ajax event="dialogReturn"
+                                update="navigationTable dialogContent"></p:ajax>
+                    </p:commandButton>
+                </c:forEach>
+            </p:outputPanel>
+            <p:outputPanel id="dialogContent" styleClass="dialogContent">
+                <ui:include src="#{dialog.editUserDialog.selectedTab.centerInclude}"/>
+            </p:outputPanel>
+        </h:panelGrid>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-					<h:panelGroup>
-						<p:commandButton id="menuButton" value="#{msg['general.options']}"
-							type="button" rendered="#{!dialog.editUserDialog.newUser}"
-							icon="fa fa-fw fa-home" />
+                <h:panelGrid columns="1" styleClass="left">
+                    <h:panelGroup>
+                        <p:commandButton id="menuButton" value="#{msg['general.options']}"
+                                         type="button" rendered="#{!dialog.editUserDialog.newUser}"
+                                         icon="fa fa-fw fa-home"/>
 
-						<p:menu overlay="true" trigger="menuButton" my="left bottom"
-							at="left top">
-							<p:menuitem value="#{msg['general.delete']}"
-								onclick="PF('deleteBtn').jq.click();return false;"
-								icon="fa fa-fw fa-trash" />
-							<p:menuitem value="#{msg['general.refresh']}"
-								disabled="#{!dialog.editUserDialog.refreshAble}" update="@form"
-								actionListener="#{dialog.editUserDialog.updateDataFromLdap()}"
-								icon="fa fa-fw fa-undo" />
-						</p:menu>
+                        <p:menu overlay="true" trigger="menuButton" my="left bottom"
+                                at="left top">
+                            <p:menuitem value="#{msg['general.delete']}"
+                                        onclick="PF('deleteBtn').jq.click();return false;"
+                                        icon="fa fa-fw fa-trash"/>
+                            <p:menuitem value="#{msg['general.refresh']}"
+                                        disabled="#{!dialog.editUserDialog.refreshAble}" update="@form"
+                                        actionListener="#{dialog.editUserDialog.updateDataFromLdap()}"
+                                        icon="fa fa-fw fa-undo"/>
+                        </p:menu>
 
-						<!-- Delete -->
-						<p:commandButton immediate="true" id="deleteBtn"
-							actionListener="#{dialog.confirmUserDeleteDialog.initAndPrepareBean(dialog.editUserDialog.user)}"
-							widgetVar="deleteBtn" style="display:none">
-							<p:ajax event="dialogReturn"
-								listener="#{dialog.editUserDialog.onDeleteDialogReturn}"
-								update="@form" />
-						</p:commandButton>
-					</h:panelGroup>
-				</h:panelGrid>
+                        <!-- Delete -->
+                        <p:commandButton immediate="true" id="deleteBtn"
+                                         actionListener="#{dialog.confirmUserDeleteDialog.initAndPrepareBean(dialog.editUserDialog.user)}"
+                                         widgetVar="deleteBtn" style="display:none">
+                            <p:ajax event="dialogReturn"
+                                    listener="#{dialog.editUserDialog.onDeleteDialogReturn}"
+                                    update="@form"/>
+                        </p:commandButton>
+                    </h:panelGroup>
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- Save button -->
-					<p:commandButton value="#{msg['general.save']}" update="@form"
-						process="@form" icon="fa fa-check-circle-o"
-						actionListener="#{dialog.editUserDialog.saveAndHide()}">
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Save button -->
+                    <p:commandButton value="#{msg['general.save']}" update="@form"
+                                     process="@form" icon="fa fa-check-circle-o"
+                                     actionListener="#{dialog.editUserDialog.saveAndHide()}">
+                    </p:commandButton>
 
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						update="@form" immediate="true" icon="fa fa-times-circle"
-						actionListener="#{dialog.editUserDialog.hideDialog()}">
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     update="@form" immediate="true" icon="fa fa-times-circle"
+                                     actionListener="#{dialog.editUserDialog.hideDialog()}">
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

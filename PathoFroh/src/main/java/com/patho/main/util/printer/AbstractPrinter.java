@@ -11,40 +11,40 @@ import org.slf4j.LoggerFactory;
 @Setter
 public abstract class AbstractPrinter implements ID {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@Expose
-	protected long id;
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Expose
-	protected String address;
+    @Expose
+    protected long id;
 
-	@Expose
-	protected String port;
+    @Expose
+    protected String address;
 
-	@Expose
-	protected String name;
+    @Expose
+    protected String port;
 
-	@Expose
-	protected String description;
+    @Expose
+    protected String name;
 
-	@Expose
-	protected String location;
+    @Expose
+    protected String description;
 
-	@Expose
-	protected String commentary;
+    @Expose
+    protected String location;
 
-	@Expose
-	protected String userName;
+    @Expose
+    protected String commentary;
 
-	@Expose
-	protected String password;
+    @Expose
+    protected String userName;
 
-	@Expose
-	protected String deviceUri;
+    @Expose
+    protected String password;
 
-	public AbstractPrinter() {
-	}
+    @Expose
+    protected String deviceUri;
 
-	public abstract boolean printTestPage();
+    public AbstractPrinter() {
+    }
+
+    public abstract boolean printTestPage();
 }

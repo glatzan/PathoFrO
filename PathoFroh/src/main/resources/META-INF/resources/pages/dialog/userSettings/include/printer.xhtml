@@ -1,123 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel value="#{msg['dialog.userSettings.printer']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel value="#{msg['dialog.userSettings.printer']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannelFull">
+    <p:outputPanel styleClass="bodyPannelFull">
 
-		<!-- standard view -->
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150,">
+        <!-- standard view -->
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth150,">
 
-			<!-- pritner select auto view -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.printer.autoPrinte']}" />
-			<p:selectBooleanCheckbox
-				value="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferredPrinter}">
-				<p:ajax event="change" update="@form"
-					listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}" />
-			</p:selectBooleanCheckbox>
+            <!-- pritner select auto view -->
+            <h:outputLabel
+                    value="#{msg['dialog.userSettings.printer.autoPrinte']}"/>
+            <p:selectBooleanCheckbox
+                    value="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferredPrinter}">
+                <p:ajax event="change" update="@form"
+                        listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}"/>
+            </p:selectBooleanCheckbox>
 
-			<h:outputLabel value="#{msg['dialog.userSettings.printer.name']}" />
-			<h:panelGrid columns="2"
-				styleClass="listingHistoHiddenTableContainer">
-				<!-- select printer -->
-				<p:selectOneMenu panelStyleClass="searchSelectMenuPanel"
-					converter="#{printService.cupsPrinter.printerTransformer}"
-					disabled="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferredPrinter}"
-					value="#{dialog.userSettingsDialog.printTab.clinicPrinter}"
-					filter="true" filterMatchMode="contains">
+            <h:outputLabel value="#{msg['dialog.userSettings.printer.name']}"/>
+            <h:panelGrid columns="2"
+                         styleClass="listingHistoHiddenTableContainer">
+                <!-- select printer -->
+                <p:selectOneMenu panelStyleClass="searchSelectMenuPanel"
+                                 converter="#{printService.cupsPrinter.printerTransformer}"
+                                 disabled="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferredPrinter}"
+                                 value="#{dialog.userSettingsDialog.printTab.clinicPrinter}"
+                                 filter="true" filterMatchMode="contains">
 
-					<f:selectItems value="#{printService.cupsPrinter.printer}"
-						var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
+                    <f:selectItems value="#{printService.cupsPrinter.printer}"
+                                   var="printer" itemLabel="#{printer.name}" itemValue="#{printer}"/>
 
-					<p:ajax event="change"
-						listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}" />
-				</p:selectOneMenu>
+                    <p:ajax event="change"
+                            listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}"/>
+                </p:selectOneMenu>
 
-				<!-- testprint -->
-				<p:commandLink styleClass="icon-grey"
-					title="#{msg['dialog.userSettings.printer.testPage.hint']}"
-					style="margin-left:10px;"
-					actionListener="#{dialog.userSettingsDialog.printTab.clinicPrinter.printTestPage()}">
-					<i class="fa fa-fw fa-print" />
-				</p:commandLink>
-			</h:panelGrid>
-		</h:panelGrid>
+                <!-- testprint -->
+                <p:commandLink styleClass="icon-grey"
+                               title="#{msg['dialog.userSettings.printer.testPage.hint']}"
+                               style="margin-left:10px;"
+                               actionListener="#{dialog.userSettingsDialog.printTab.clinicPrinter.printTestPage()}">
+                    <i class="fa fa-fw fa-print"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </h:panelGrid>
 
-		<!-- seperator -->
-		<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-			<p:separator />
-			<h:outputLabel value="#{msg['dialog.userSettings.labelPrinter']}" />
-		</h:panelGrid>
+        <!-- seperator -->
+        <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+            <p:separator/>
+            <h:outputLabel value="#{msg['dialog.userSettings.labelPrinter']}"/>
+        </h:panelGrid>
 
-		<!-- label printer -->
-		<h:panelGrid columns="2" styleClass="defaultHistoTable"
-			columnClasses="columnWidth150,">
-			<!-- label printer -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.labelPrinter.autoPrint']}" />
-			<p:selectBooleanCheckbox
-				value="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferredLabelPrinter}">
-				<p:ajax event="change" update="@form"
-					listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}" />
-			</p:selectBooleanCheckbox>
+        <!-- label printer -->
+        <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                     columnClasses="columnWidth150,">
+            <!-- label printer -->
+            <h:outputLabel
+                    value="#{msg['dialog.userSettings.labelPrinter.autoPrint']}"/>
+            <p:selectBooleanCheckbox
+                    value="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferredLabelPrinter}">
+                <p:ajax event="change" update="@form"
+                        listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}"/>
+            </p:selectBooleanCheckbox>
 
-			<!-- selected labelprinter -->
-			<h:outputLabel
-				value="#{msg['dialog.userSettings.labelPrinter.name']}" />
-			<h:panelGrid columns="2"
-				styleClass="listingHistoHiddenTableContainer">
-				<!-- select printer -->
-				<p:selectOneMenu
-					disabled="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferredLabelPrinter}"
-					converter="#{printService.lablePrinter.printerTransformer}"
-					panelStyleClass="searchSelectMenuPanel"
-					value="#{dialog.userSettingsDialog.printTab.labelPrinter}"
-					filter="true" filterMatchMode="contains">
+            <!-- selected labelprinter -->
+            <h:outputLabel
+                    value="#{msg['dialog.userSettings.labelPrinter.name']}"/>
+            <h:panelGrid columns="2"
+                         styleClass="listingHistoHiddenTableContainer">
+                <!-- select printer -->
+                <p:selectOneMenu
+                        disabled="#{dialog.userSettingsDialog.user.settings.autoSelectedPreferredLabelPrinter}"
+                        converter="#{printService.lablePrinter.printerTransformer}"
+                        panelStyleClass="searchSelectMenuPanel"
+                        value="#{dialog.userSettingsDialog.printTab.labelPrinter}"
+                        filter="true" filterMatchMode="contains">
 
-					<f:selectItems value="#{printService.lablePrinter.printer}"
-						var="printer" itemLabel="#{printer.name}" itemValue="#{printer}" />
+                    <f:selectItems value="#{printService.lablePrinter.printer}"
+                                   var="printer" itemLabel="#{printer.name}" itemValue="#{printer}"/>
 
-					<p:ajax event="change"
-						listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}" />
-				</p:selectOneMenu>
+                    <p:ajax event="change"
+                            listener="#{dialog.userSettingsDialog.printTab.triggerEventOnChange()}"/>
+                </p:selectOneMenu>
 
-				<!-- testprint -->
-				<p:commandLink styleClass="icon-grey"
-					title="#{msg['dialog.userSettings.labelPrinter.testPage.hint']}"
-					style="margin-left:10px;"
-					actionListener="#{dialog.userSettingsDialog.printTab.labelPrinter.printTestPage()}">
-					<i class="fa fa-fw fa-print" />
-				</p:commandLink>
-			</h:panelGrid>
-		</h:panelGrid>
-	</p:outputPanel>
+                <!-- testprint -->
+                <p:commandLink styleClass="icon-grey"
+                               title="#{msg['dialog.userSettings.labelPrinter.testPage.hint']}"
+                               style="margin-left:10px;"
+                               actionListener="#{dialog.userSettingsDialog.printTab.labelPrinter.printTestPage()}">
+                    <i class="fa fa-fw fa-print"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </h:panelGrid>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
-			<h:panelGrid columns="1" styleClass="left">
-			</h:panelGrid>
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
+            <h:panelGrid columns="1" styleClass="left">
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<p:commandButton value="#{msg['general.save']}"
-					actionListener="#{dialog.userSettingsDialog.saveAndHide()}"
-					icon="fa fa-check-circle-o" partialSubmit="true" process="@form">
-				</p:commandButton>
+            <h:panelGrid columns="2" styleClass="right">
+                <p:commandButton value="#{msg['general.save']}"
+                                 actionListener="#{dialog.userSettingsDialog.saveAndHide()}"
+                                 icon="fa fa-check-circle-o" partialSubmit="true" process="@form">
+                </p:commandButton>
 
-				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle"
-					actionListener="#{dialog.userSettingsDialog.hideDialog()}">
-				</p:commandButton>
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <p:commandButton value="#{msg['general.close']}"
+                                 icon="fa fa-times-circle"
+                                 actionListener="#{dialog.userSettingsDialog.hideDialog()}">
+                </p:commandButton>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 </ui:composition>

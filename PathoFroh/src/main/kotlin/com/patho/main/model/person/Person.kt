@@ -25,7 +25,7 @@ open class Person : AbstractPersistable, FullName {
 
     @Version
     open var version: Long = 0
-    
+
     @Enumerated(EnumType.ORDINAL)
     open override var gender = Gender.UNKNOWN
 

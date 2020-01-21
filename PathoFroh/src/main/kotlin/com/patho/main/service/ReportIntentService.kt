@@ -7,9 +7,9 @@ import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.*
 import com.patho.main.model.person.Organization
 import com.patho.main.model.person.Person
-import com.patho.main.repository.AssociatedContactRepository
-import com.patho.main.repository.ReportIntentNotificationRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.AssociatedContactRepository
+import com.patho.main.repository.jpa.ReportIntentNotificationRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.util.exceptions.DuplicatedReportIntentException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -465,7 +465,7 @@ open class ReportIntentService @Autowired constructor(
 
     /**
      * Checks if  notifications are performed for the given diagnosis
-    */
+     */
     @Transient
     open fun isNotificationPerformedForDiagnosis(reportIntentNotification: ReportIntentNotification, diagnosisRevision: DiagnosisRevision): Boolean {
         return reportIntentNotification.history.any { it.diagnosisID == diagnosisRevision.id && isNotificationPerformed(it) }

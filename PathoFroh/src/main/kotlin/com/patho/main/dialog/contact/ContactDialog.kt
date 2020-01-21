@@ -9,8 +9,8 @@ import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
-import com.patho.main.repository.AssociatedContactRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.AssociatedContactRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.PhysicianService
 import com.patho.main.service.ReportIntentService
 import com.patho.main.service.impl.SpringContextBridge

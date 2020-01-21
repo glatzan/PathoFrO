@@ -17,12 +17,16 @@ spring:
     allow-bean-definition-overriding: true
   servlet:
     multipart:
-      max-file-size: 50MB  
+      max-file-size: 50MB
       max-request-size: 100MB
   datasource:
     url: jdbc:postgresql://localhost/histo
     username: postgres
     password: postgres
+  data:
+    redis:
+      repositories:
+        enabled: false
   jpa:
     generate-ddl: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -47,20 +51,20 @@ spring:
 logging:
   file: test.log
   path: D:/
-  level: 
+  level:
     org:
       springframework:
         security: ERROR
       # disable lob error
       hibernate:
-        engine: 
+        engine:
           jdbc:
             env:
               internal:
                 LobCreatorBuilderImpl: ERROR
 patho:
   common:
-     ####### Task View #######
+    ####### Task View #######
     taskView:
       tasksPerPage: 50
       tasksPerPageOptions:
@@ -75,9 +79,9 @@ patho:
     userParentDn: people
     userDn: uid
   ####### JWT #######
-  jwt:   
+  jwt:
     secret: 7w!z%C*F)J@NcRfUjXn2r5u8x/A?D(G+
-    tokenPrefix: Bearer 
+    tokenPrefix: Bearer
     headerString: Authorization
   ####### JSON #######
   json:
@@ -95,8 +99,7 @@ patho:
       printerForRoom: http://10.210.21.11:3009/DB/PLS/ip2room/ip/$ip
     lablePrinter:
       printer:
-        -
-          name: Aug-Histo-Etikettendrucker-1
+        - name: Aug-Histo-Etikettendrucker-1
           id: 1
           location: Histologie-Labor
           address: 10.250.7.242
@@ -104,15 +107,14 @@ patho:
           userName: admin
           password: 1234
           timeout: 1000
-        -
-          name: Aug-Histo-Etikettendrucker-2
+        - name: Aug-Histo-Etikettendrucker-2
           id: 2
           location: Histologie-Labor
           address: 10.250.7.239
           port: 21
           userName: admin
           password: 1234
-          timeout: 1000     
+          timeout: 1000
   ####### SETTINGS #######
   settings:
     ####### MAIL #######
@@ -128,29 +130,25 @@ patho:
       errorAddresses:
         - andreas.glatz@uniklinik-freiburg.de
     mails:
-      -
-        id: 0
+      - id: 0
         templateName: org.histo.template.mail.SuccessUnlockMail
         defaultOfType: true
         name: Benutzer-Freischaltung erfolgt
         content: classpath:templates/mail/successUnlock.txt
-      -
-        id: 1
+      - id: 1
         templateName: org.histo.template.mail.RequestUnlockMail
         name: Benutzer-Freischaltung erbeten
         defaultOfType: true
         content: classpath:templates/mail/requestUnlock.txt
-      -
-        id: 2
+      - id: 2
         templateName: org.histo.template.mail.DiagnosisReportMail
         name: Diagnose-Benachrichtigung
-        defaultOfType : true
+        defaultOfType: true
         content: classpath:templates/mail/diagnosisReport.txt
-      -
-        id: 3
+      - id: 3
         templateName: org.histo.template.mail.ErrorMail
         name: Fehlermeldung!
-        defaultOfType : true
+        defaultOfType: true
         content: classpath:templates/mail/error.txt
     fileSettings:
       thumbnailDPI: 50
@@ -180,32 +178,25 @@ patho:
       printerTestDocument: 0
       emptyPage: classpath:templates/print/emptyPage.pdf
       lablePrinterTestPage: test.zpl
-      cupsPrinterTestPage: classpath:templates/print/testPage.pdf      
+      cupsPrinterTestPage: classpath:templates/print/testPage.pdf
     defaultNotification:
       defaultNotifications:
-        -
-          role: SURGEON
-          notificationTyps: 
-            -
-              EMAIL
-        -
-          role: CLINIC_PHYSICIAN
+        - role: SURGEON
           notificationTyps:
-            -
-              EMAIL
-        -
-          role: EXTERNAL_SURGEON
+            - EMAIL
+        - role: CLINIC_PHYSICIAN
           notificationTyps:
-            -
-              LETTER
+            - EMAIL
+        - role: EXTERNAL_SURGEON
+          notificationTyps:
+            - LETTER
     miscellaneous:
       phoneRegex: "^\\s*(?:[\\+#]?(\\d{1,3}))?([-. ()/\\\\]*(\\d*))*?\\s*$"
     schedule:
       pdfCleanupCron: '5 21 * * * *'
-  ####### Print Documents #######
+    ####### Print Documents #######
     documents:
-      - 
-        id: 0
+      - id: 0
         name: Eingangsbogen
         content: classpath:templates/print/USchein_full.tex
         alternateContent:
@@ -217,21 +208,19 @@ patho:
         transientContent: true
         hidden: false
         sharedContextGroup: 2
-      -
-        id: 1
+      - id: 1
         name: Eingangsbogen bedrucken
         content: classpath:templates/print/USchein_empty.tex
         alternateContent: ""
         type: U_REPORT_EMTY
-        attributes: 
+        attributes:
         templateName: com.patho.main.template.print.CaseCertificate
         uiClass: com.patho.main.dialog.print.documentUi.CaseCertificateUi
         defaultOfType: false
         transientContent: true
         hidden: false
         sharedContextGroup: 2
-      -
-        id: 2
+      - id: 2
         name: Eingangsbogen bedrucken, umgekehrt
         content: classpath:templates/print/USchein_empty_rotated180.tex
         alternateContent: ""
@@ -243,8 +232,7 @@ patho:
         transientContent: true
         hidden: false
         sharedContextGroup: 2
-      -
-        id: 10
+      - id: 10
         name: Befundbericht
         content: classpath:templates/print/Report_Intern.tex
         alternateContent: ""
@@ -258,8 +246,7 @@ patho:
         duplexPrinting: true
         printEvenPageCount: true
         sharedContextGroup: 1
-      -
-        id: 11
+      - id: 11
         name: Befundbericht - ohne Logo
         content: classpath:templates/print/Report_Intern_noLogo.tex
         alternateContent: ""
@@ -273,8 +260,7 @@ patho:
         duplexPrinting: true
         printEvenPageCount: true
         sharedContextGroup: 1
-      -
-        id: 20
+      - id: 20
         name: Befundbericht extern
         content: classpath:templates/print/Report_Extern.tex
         alternateContent: ""
@@ -288,8 +274,7 @@ patho:
         duplexPrinting: true
         printEvenPageCount: true
         sharedContextGroup: 1
-      -
-        id: 21
+      - id: 21
         name: Befundbericht extern - ohne Logo
         content: classpath:templates/print/Report_Extern_noLogo.tex
         alternateContent: ""
@@ -303,46 +288,42 @@ patho:
         duplexPrinting: true
         printEvenPageCount: true
         sharedContextGroup: 1
-      -
-        id: 50
+      - id: 50
         name: Konsil
         content: classpath:templates/print/council.tex
         alternateContent: ""
         type: COUNCIL_REQUEST
-        attributes: 
+        attributes:
         templateName: com.patho.main.template.print.CouncilReport
         uiClass: com.patho.main.dialog.print.documentUi.CouncilReportUi
         defaultOfType: true
         transientContent: false
         hidden: false
-      -
-        id: 100
+      - id: 100
         name: Default Slide Lable
         content: classpath:templates/print_label/defaultLable.zpl
         alternateContent: ""
         type: LABLE
-        attributes: 
+        attributes:
         templateName: com.patho.main.template.print.SlideLable
         defaultOfType: true
         transientContent: false
         hidden: false
-      -
-        id: 150
+      - id: 150
         name: Test Slide Lable
         content: classpath:templates/print_label/testLable.zpl
         alternateContent: ""
         type: TEST_LABLE
-        attributes: 
+        attributes:
         templateName: com.patho.main.template.print.SlideLable
         defaultOfType: true
         transientContent: false
         hidden: false
-      -
-        id: 1000
+      - id: 1000
         name: Send Report
         content: classpath:templates/print/SendReport.tex
         alternateContent: ""
-        attributes: 
+        attributes:
         type: NOTIFICATION_SEND_REPORT
         templateName: com.patho.main.template.print.SendReport
         defaultOfType: true

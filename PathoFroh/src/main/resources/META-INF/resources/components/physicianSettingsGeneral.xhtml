@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 
 <composite:interface>
-	<composite:attribute name="physician" required="true" />
-	<composite:attribute name="dialog" required="true" />
-	<!-- ContactRole[] allRoles; -->
+    <composite:attribute name="physician" required="true"/>
+    <composite:attribute name="dialog" required="true"/>
+    <!-- ContactRole[] allRoles; -->
 </composite:interface>
 
 <composite:implementation>
 
-	<histo:personSettingGeneral person="#{cc.attrs.physician.person}" />
+    <histo:personSettingGeneral person="#{cc.attrs.physician.person}"/>
 
-	<!-- Separator -->
-	<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-		<p:separator />
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.function']}" />
-	</h:panelGrid>
+    <!-- Separator -->
+    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+        <p:separator/>
+        <h:outputLabel
+                value="#{msg['component.physicianSettingsGeneral.function']}"/>
+    </h:panelGrid>
 
-	<h:panelGrid columns="2" styleClass="defaultHistoTable"
-		columnClasses="columnWidth125, ">
+    <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                 columnClasses="columnWidth125, ">
 
-		<!-- role -->
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.programRole']}" />
+        <!-- role -->
+        <h:outputLabel
+                value="#{msg['component.physicianSettingsGeneral.programRole']}"/>
 
-		<p:selectCheckboxMenu updateLabel="true" style="width:90%"
-			value="#{cc.attrs.physician.associatedRolesAsArray}" multiple="true">
-			<f:selectItems var="role" value="#{cc.attrs.dialog.allRoles}"
-				itemValue="#{role}"
-				itemLabel="#{msg['enum.contactRole.'.concat(role)]}" />
+        <p:selectCheckboxMenu updateLabel="true" style="width:90%"
+                              value="#{cc.attrs.physician.associatedRolesAsArray}" multiple="true">
+            <f:selectItems var="role" value="#{cc.attrs.dialog.allRoles}"
+                           itemValue="#{role}"
+                           itemLabel="#{msg['enum.contactRole.'.concat(role)]}"/>
 
-		</p:selectCheckboxMenu>
+        </p:selectCheckboxMenu>
 
-		<!-- archived -->
-		<h:outputLabel
-			value="#{msg['component.physicianSettingsGeneral.archived']}" />
-		<p:selectBooleanCheckbox
-			title="#{msg['component.physicianSettingsGeneral.archived']}"
-			value="#{cc.attrs.physician.archived}">
-		</p:selectBooleanCheckbox>
-	</h:panelGrid>
+        <!-- archived -->
+        <h:outputLabel
+                value="#{msg['component.physicianSettingsGeneral.archived']}"/>
+        <p:selectBooleanCheckbox
+                title="#{msg['component.physicianSettingsGeneral.archived']}"
+                value="#{cc.attrs.physician.archived}">
+        </p:selectBooleanCheckbox>
+    </h:panelGrid>
 
 </composite:implementation>
 </html>

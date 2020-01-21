@@ -1,212 +1,219 @@
 @import "common.less";
 
-.container{
-	
-	// header + body
-	.content{
-		.histo_noPadding();
-		background:black;	
-		
-		// header background
-		.header {
-			.histo_noPadding();
-			
-			// table container
-			.headerTable{
-				width: 100%;
-				td{
-					background: #e6e6e6
-						url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness")
-						50% 50% repeat-x;
-				}
-				
-				// header right
-				.headerRight {
-					float: right;
-				}
-			}
-				
-			// hiding command buttons
-			.hiddenButton{
-				display: none;
-			}
-		}
-		
-		.body{
-			padding: 0px !important;
-			height: ~"calc(100vh - 33px) !important";
-	
-			.breadCrumbs {
-				width: 100%;
-				border: 1px solid #d3d3d3;
-				border-left: 0px;
-				border-right: 0px;
-				background: #e6e6e6
-					url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness")
-					50% 50% repeat-x;
-					
-				/* navigation hight*/	
-				td {
-					padding-left: 5px !important;
-				}
-	
-				/* naigation text*/
-				label, a, td{
-					.histo_font(14);
-					font-weight: bold;
-					color: #555555;
-				}	
-				
-				.columnWidthMin{
-					width: 1%;
-					white-space: nowrap;
-				}
-			}
-			
-			/* scrollpanel style */
-			.bodyScrollPanelStyle{
-				height: ~"calc(100vh - 29px) !important";
-				width: ~"calc(100% - 1px) !important";
-				border: none !important;
-				border-spacing: 0px !important;
-				
-				.ui-scrollpanel-hbar{
-					display: none;
-				}
-				
-				/* scrollpanel body with*/
-				.ui-scrollpanel-content, .ui-scrollpanel-container{
-					width: ~"calc(100% - 1px) !important";
-				}
-				
-				/*scrollpanel bar*/
-				.ui-scrollpanel-vbar {
-					width: 5px;
-				}
-				
-				/* background of the bar*/
-				.ui-scrollpanel-track {
-					background: none;
-					
-					/* background of the bars drag*/
-					.ui-scrollpanel-drag {
-						background: #555555;
-						border-radius: 5px;
-					}
-				}
-			}
-		}
-	}
+.container {
 
-	// left navigation
-	.navigation{
-		.histo_noPadding();
-		
-		.headerTable{
-			width: 100%;
-			td{
-				background: #e6e6e6
-					url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness")
-					50% 50% repeat-x;
-			}
-			
-			.seachFiled {
-				width: 265px;
-			}
-		}
-		
-		.patientNavigationHeader {
-			width: 100%;
-			border-top: 1px solid #d3d3d3 !important;
-			border-right: 1px solid #d3d3d3 !important;
-			text-align: left;
-			background: #e6e6e6
-				url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness")
-				50% 50% repeat-x;
-			
-			.histo_font(14);
-			font-weight: bold;
-			
-			.buttonContainer {
-				margin-right: 5px;
-				float: right;
-				a{
-					color: @header_text_color;
-				}
-			}
-		}
-		
-		/* scrollpanel style */
-		.patientScrollPanelStyle{
-			height: ~"calc(100vh - 50px) !important";
-			width: ~"calc(100% - 1px) !important";
-			border-left: none !important;
-			border-top: none !important;
-			border-bottom: none !important;
-			border-spacing: 0px !important;
-			
-			/* scrollpanel body with*/
-			.ui-scrollpanel-content, .ui-scrollpanel-container{
-				width: ~"calc(100% - 1px) !important";
-			}
-			
-			/*scrollpanel bar*/
-			.ui-scrollpanel-vbar {
-				width: 5px;
-			}
-			
-			/* background of the bar*/
-			.ui-scrollpanel-track {
-				background: none;
-				
-				/* background of the bars drag*/
-				.ui-scrollpanel-drag {
-					background: #555555;
-					border-radius: 5px;
-				}
-			}
-			
-			.patientNavigationBody{
-				.ui-datatable-tablewrapper{
-					>table{
-						>thead {
-							display: none;
-						}
-						
-						>tbody{
-							border-left: none;
-							border-right: none;
-							border-top: none;
-							
-							>tr{
-								border-left: none;
-								border-right: none;
-								
-								>td{
-									padding: 0px !important;
-									border-left: none;
-									border-right: none;
-								}
-							}
-							
-							>tr:first-of-type, >tr:first-of-type>td{
-								border-top: none;
-							}
-						}
-					}
-				}
-				
-				.ui-state-hover {
-					background: #e6e6e6 !important;
-				}
-	
-				.ui-state-highlight {
-					background: #fcf1b8 !important;
-				}
-			}
-		}
-		
- 
-	}
+  // header + body
+  .content {
+    .histo_noPadding();
+    background: black;
+
+    // header background
+    .header {
+      .histo_noPadding();
+
+      // table container
+      .headerTable {
+        width: 100%;
+
+        td {
+          background: #e6e6e6 url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness") 50% 50% repeat-x;
+        }
+
+        // header right
+        .headerRight {
+          float: right;
+        }
+      }
+
+      // hiding command buttons
+      .hiddenButton {
+        display: none;
+      }
+    }
+
+    .body {
+      padding: 0px !important;
+      height: ~"calc(100vh - 33px) !important";
+
+      .breadCrumbs {
+        width: 100%;
+        border: 1px solid #d3d3d3;
+        border-left: 0px;
+        border-right: 0px;
+        background: #e6e6e6 url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness") 50% 50% repeat-x;
+
+        /* navigation hight*/
+
+        td {
+          padding-left: 5px !important;
+        }
+
+        /* naigation text*/
+
+        label, a, td {
+          .histo_font(14);
+          font-weight: bold;
+          color: #555555;
+        }
+
+        .columnWidthMin {
+          width: 1%;
+          white-space: nowrap;
+        }
+      }
+
+      /* scrollpanel style */
+
+      .bodyScrollPanelStyle {
+        height: ~"calc(100vh - 29px) !important";
+        width: ~"calc(100% - 1px) !important";
+        border: none !important;
+        border-spacing: 0px !important;
+
+        .ui-scrollpanel-hbar {
+          display: none;
+        }
+
+        /* scrollpanel body with*/
+
+        .ui-scrollpanel-content, .ui-scrollpanel-container {
+          width: ~"calc(100% - 1px) !important";
+        }
+
+        /*scrollpanel bar*/
+
+        .ui-scrollpanel-vbar {
+          width: 5px;
+        }
+
+        /* background of the bar*/
+
+        .ui-scrollpanel-track {
+          background: none;
+
+          /* background of the bars drag*/
+
+          .ui-scrollpanel-drag {
+            background: #555555;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+  }
+
+  // left navigation
+  .navigation {
+    .histo_noPadding();
+
+    .headerTable {
+      width: 100%;
+
+      td {
+        background: #e6e6e6 url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness") 50% 50% repeat-x;
+      }
+
+      .seachFiled {
+        width: 265px;
+      }
+    }
+
+    .patientNavigationHeader {
+      width: 100%;
+      border-top: 1px solid #d3d3d3 !important;
+      border-right: 1px solid #d3d3d3 !important;
+      text-align: left;
+      background: #e6e6e6 url("/Histo16/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness") 50% 50% repeat-x;
+
+      .histo_font(14);
+      font-weight: bold;
+
+      .buttonContainer {
+        margin-right: 5px;
+        float: right;
+
+        a {
+          color: @header_text_color;
+        }
+      }
+    }
+
+    /* scrollpanel style */
+
+    .patientScrollPanelStyle {
+      height: ~"calc(100vh - 50px) !important";
+      width: ~"calc(100% - 1px) !important";
+      border-left: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      border-spacing: 0px !important;
+
+      /* scrollpanel body with*/
+
+      .ui-scrollpanel-content, .ui-scrollpanel-container {
+        width: ~"calc(100% - 1px) !important";
+      }
+
+      /*scrollpanel bar*/
+
+      .ui-scrollpanel-vbar {
+        width: 5px;
+      }
+
+      /* background of the bar*/
+
+      .ui-scrollpanel-track {
+        background: none;
+
+        /* background of the bars drag*/
+
+        .ui-scrollpanel-drag {
+          background: #555555;
+          border-radius: 5px;
+        }
+      }
+
+      .patientNavigationBody {
+        .ui-datatable-tablewrapper {
+          > table {
+            > thead {
+              display: none;
+            }
+
+            > tbody {
+              border-left: none;
+              border-right: none;
+              border-top: none;
+
+              > tr {
+                border-left: none;
+                border-right: none;
+
+                > td {
+                  padding: 0px !important;
+                  border-left: none;
+                  border-right: none;
+                }
+              }
+
+              > tr:first-of-type, > tr:first-of-type > td {
+                border-top: none;
+              }
+            }
+          }
+        }
+
+        .ui-state-hover {
+          background: #e6e6e6 !important;
+        }
+
+        .ui-state-highlight {
+          background: #fcf1b8 !important;
+        }
+      }
+    }
+
+
+  }
 }
 	

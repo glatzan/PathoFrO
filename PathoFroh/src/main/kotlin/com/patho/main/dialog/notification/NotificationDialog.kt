@@ -15,9 +15,9 @@ import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
-import com.patho.main.repository.MailRepository
-import com.patho.main.repository.PrintDocumentRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.TaskRepository
+import com.patho.main.repository.miscellaneous.MailRepository
+import com.patho.main.repository.miscellaneous.PrintDocumentRepository
 import com.patho.main.service.ReportIntentService
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.MailTemplate
@@ -32,6 +32,8 @@ import com.patho.main.util.report.NotificationExecuteData
 import com.patho.main.util.report.ReportIntentExecuteData
 import com.patho.main.util.report.ui.ReportIntentNotificationUIContainer
 import com.patho.main.util.report.ui.ReportIntentUIContainer
+import com.patho.main.util.status.ExtendedNotificationStatus
+import com.patho.main.util.status.IExtendedDatatableNotificationStatusByDiagnosis
 import com.patho.main.util.status.diagnosis.DiagnosisBearer
 import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
 import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
@@ -263,7 +265,14 @@ class NotificationDialog @Autowired constructor(
             "GeneralTab",
             "dialog.notificationDialog.general.navigationText",
             "generalTab",
-            "include/general.xhtml"), IReportIntentStatusByDiagnosisViewData {
+            "n_general.xhtml"), IReportIntentStatusByDiagnosisViewData, IExtendedDatatableNotificationStatusByDiagnosis {
+
+        override lateinit var diagnosisNotificationStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus
+
+        override var selectedDiagnosisRevisionStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus.DiagnosisRevisionStatus? = null
+
+        override var displayDiagnosisRevisionStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus.DiagnosisRevisionStatus? = null
+
 
         /**
          * List of all reportIntent revisions with their status
@@ -300,6 +309,10 @@ class NotificationDialog @Autowired constructor(
             logger.debug("Initializing general data...")
             // This tab should always be used
             useNotification.value = true
+
+            diagnosisNotificationStatus = ExtendedNotificationStatus(task).diagnosisNotificationStatus
+            selectedDiagnosisRevisionStatus = diagnosisNotificationStatus.diagnoses.firstOrNull{ p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
+            displayDiagnosisRevisionStatus = null
 
             diagnosisRevisions = ReportIntentStatusByDiagnosis(task)
             selectDiagnosisRevision = diagnosisRevisions.diagnosisBearer.firstOrNull { p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
@@ -338,7 +351,7 @@ class NotificationDialog @Autowired constructor(
             "MailTab",
             "dialog.notificationDialog.mail.navigationText",
             "mailTab",
-            "include/mail.xhtml",
+            "n_mail.xhtml",
             NotificationTyp.EMAIL) {
 
         /**
@@ -372,7 +385,7 @@ class NotificationDialog @Autowired constructor(
             "FaxTab",
             "dialog.notificationDialog.fax.navigationText",
             "faxTab",
-            "include/fax.xhtml",
+            "n_fax.xhtml",
             NotificationTyp.FAX) {
 
         /**
@@ -409,7 +422,7 @@ class NotificationDialog @Autowired constructor(
             "LetterTab",
             "dialog.notificationDialog.letter.navigationText",
             "letterTab",
-            "include/letter.xhtml",
+            "n_letter.xhtml",
             NotificationTyp.LETTER) {
 
         /**
@@ -439,7 +452,7 @@ class NotificationDialog @Autowired constructor(
             "PhoneTab",
             "dialog.notificationDialog.phone.navigationText",
             "phoneTab",
-            "include/phone.xhtml",
+            "n_phone.xhtml",
             NotificationTyp.PHONE) {
 
         override fun initTab(force: Boolean): Boolean {
@@ -455,7 +468,7 @@ class NotificationDialog @Autowired constructor(
             "SendTab",
             "dialog.notification.tab.send",
             "sendTab",
-            "include/send.xhtml") {
+            "n_send.xhtml") {
 
         /**
          * Only active notifications

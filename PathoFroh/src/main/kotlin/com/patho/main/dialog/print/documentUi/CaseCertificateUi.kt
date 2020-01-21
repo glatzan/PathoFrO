@@ -12,11 +12,11 @@ class CaseCertificateUi : AbstractTaskDocumentUi<CaseCertificate, AbstractDocume
 
     constructor(caseCertificate: CaseCertificate) : this(caseCertificate, SharedData())
 
-    constructor(caseCertificate: CaseCertificate, sharedData: SharedData) : super(caseCertificate,sharedData)
+    constructor(caseCertificate: CaseCertificate, sharedData: SharedData) : super(caseCertificate, sharedData)
 
     /**
      * Resets the printed flag to false
-      */
+     */
     override fun beginNextTemplateIteration() {
         printed = false
     }

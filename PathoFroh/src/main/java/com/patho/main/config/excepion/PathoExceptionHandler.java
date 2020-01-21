@@ -3,7 +3,6 @@ package com.patho.main.config.excepion;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
-import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ import java.util.Map;
  * <!-- <factory> <exception-handler-factory> org.histo.config.exception.
  * CustomExceptionHandlerFactory </exception-handler-factory> </factory>--> can
  * be actived in faces config again if needed
- * 
+ * <p>
  * <mvc:interceptors> <bean id="webContentInterceptor" class=
  * "org.springframework.web.servlet.mvc.WebContentInterceptor">
  * <property name= "cacheSeconds" value="0" />
@@ -34,86 +33,85 @@ import java.util.Map;
  * <property name="useCacheControlHeader" value="true" />
  * <property name= "useCacheControlNoStore" value="true" /> </bean>
  * </mvc:interceptors>
- * 
+ * <p>
  * this is used instead in spring config
- * 
- * @author andi
  *
+ * @author andi
  */
 public class PathoExceptionHandler extends ExceptionHandlerWrapper {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	private ExceptionHandler wrapped;
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public PathoExceptionHandler(ExceptionHandler exception) {
-		this.wrapped = exception;
-	}
+    private ExceptionHandler wrapped;
 
-	@Override
-	public ExceptionHandler getWrapped() {
-		return wrapped;
-	}
+    public PathoExceptionHandler(ExceptionHandler exception) {
+        this.wrapped = exception;
+    }
 
-	@Override
-	public void handle() throws FacesException {
+    @Override
+    public ExceptionHandler getWrapped() {
+        return wrapped;
+    }
 
-		final Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator();
+    @Override
+    public void handle() throws FacesException {
 
-		while (i.hasNext()) {
-			ExceptionQueuedEvent event = i.next();
-			ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event.getSource();
+        final Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator();
 
-			// get the exception from context
-			Throwable cause = context.getException();
+        while (i.hasNext()) {
+            ExceptionQueuedEvent event = i.next();
+            ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event.getSource();
 
-			final FacesContext fc = FacesContext.getCurrentInstance();
-			final Map<String, Object> requestMap = fc.getExternalContext().getRequestMap();
-			final NavigationHandler nav = fc.getApplication().getNavigationHandler();
+            // get the exception from context
+            Throwable cause = context.getException();
 
-			logger.debug("Global exeption handler - " + cause);
+            final FacesContext fc = FacesContext.getCurrentInstance();
+            final Map<String, Object> requestMap = fc.getExternalContext().getRequestMap();
+            final NavigationHandler nav = fc.getApplication().getNavigationHandler();
 
-			// getting root excepetion
-			while (cause instanceof FacesException || cause instanceof ELException) {
-				if (cause instanceof FacesException)
-					cause = ((FacesException) cause).getCause();
-				else
-					cause = ((ELException) cause).getCause();
-			}
+            logger.debug("Global exeption handler - " + cause);
 
-			boolean hanled = false;
+            // getting root excepetion
+            while (cause instanceof FacesException || cause instanceof ELException) {
+                if (cause instanceof FacesException)
+                    cause = ((FacesException) cause).getCause();
+                else
+                    cause = ((ELException) cause).getCause();
+            }
 
-			logger.debug("Global exeption handler - " + cause);
+            boolean hanled = false;
 
-			if (cause != null) {
-				if(cause instanceof ObjectOptimisticLockingFailureException) {
-					String c = ((ObjectOptimisticLockingFailureException)cause).getPersistentClassName();
-					Object identifier = ((ObjectOptimisticLockingFailureException)cause).getIdentifier();
-					
-					System.out.println(c + " " + Task.class.toString());
-					
-					if(c.equals(Task.class.toString())) {
-						System.out.println("task");
-					}else if(c.equals(Patient.class.toString())) {
-						System.out.println("Patient");
-					}
-						
-					closeDialogs();
+            logger.debug("Global exeption handler - " + cause);
+
+            if (cause != null) {
+                if (cause instanceof ObjectOptimisticLockingFailureException) {
+                    String c = ((ObjectOptimisticLockingFailureException) cause).getPersistentClassName();
+                    Object identifier = ((ObjectOptimisticLockingFailureException) cause).getIdentifier();
+
+                    System.out.println(c + " " + Task.class.toString());
+
+                    if (c.equals(Task.class.toString())) {
+                        System.out.println("task");
+                    } else if (c.equals(Patient.class.toString())) {
+                        System.out.println("Patient");
+                    }
+
+                    closeDialogs();
 //					SpringContextBridge.services().getCentralHandler().reloadUIData();
-					MessageHandler.executeScript("clickButtonFromBean('globalCommandsForm:refreshContentBtn')");
-					MessageHandler.sendGrowlMessagesAsResource("growl.error.version", "growl.error.version.text");
-					
-					hanled = true;
-				}else if(cause instanceof InvalidDataAccessApiUsageException) {
-					
-					closeDialogs();
+                    MessageHandler.executeScript("clickButtonFromBean('globalCommandsForm:refreshContentBtn')");
+                    MessageHandler.sendGrowlMessagesAsResource("growl.error.version", "growl.error.version.text");
+
+                    hanled = true;
+                } else if (cause instanceof InvalidDataAccessApiUsageException) {
+
+                    closeDialogs();
 //					SpringContextBridge.services().getCentralHandler().reloadUIData();
-					MessageHandler.executeScript("clickButtonFromBean('globalCommandsForm:refreshContentBtn')");
-					MessageHandler.sendGrowlMessagesAsResource("growl.error.save", "growl.error.save.text");
-					
-					hanled = true;
-				}
-			}
+                    MessageHandler.executeScript("clickButtonFromBean('globalCommandsForm:refreshContentBtn')");
+                    MessageHandler.sendGrowlMessagesAsResource("growl.error.save", "growl.error.save.text");
+
+                    hanled = true;
+                }
+            }
 //
 //				if (cause instanceof CustomNotUniqueReqest) {
 //					logger.debug("Not Unique Reqest Error");
@@ -170,17 +168,17 @@ public class PathoExceptionHandler extends ExceptionHandlerWrapper {
 //
 //			}
 
-			if (hanled)
-				i.remove();
-		}
-		// parent hanle
-		getWrapped().handle();
-	}
-	
-	private void closeDialogs() {
-		if(MessageHandler.isDialogContext()) {
-			logger.debug("Closing Dialog");
-			PrimeFaces.current().dialog().closeDynamic(new ReloadEvent());
-		}
-	}
+            if (hanled)
+                i.remove();
+        }
+        // parent hanle
+        getWrapped().handle();
+    }
+
+    private void closeDialogs() {
+        if (MessageHandler.isDialogContext()) {
+            logger.debug("Closing Dialog");
+            PrimeFaces.current().dialog().closeDynamic(new ReloadEvent());
+        }
+    }
 }

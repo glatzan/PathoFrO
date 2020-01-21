@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <!-- staining, headline -->
+    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+        <h:outputLabel value="#{msg['dialog.archiveTask.miscellaneous.text']}"/>
+    </h:panelGrid>
+
+    <!-- status as text -->
+    <h:panelGrid columns="2" styleClass="defaultHistoTable" columnClasses="columnWidth250">
+        <h:outputLabel value="#{msg['dialog.archiveTask.miscellaneous.forceFiling']}" style="#{archiveTaskDialog.forceFiling ? 'color: red' : ''}"/>
+        <p:selectBooleanCheckbox value="#{archiveTaskDialog.forceFiling}">
+            <p:ajax event="change" execute="@this" update="@form"/>
+        </p:selectBooleanCheckbox>
+
+        <h:outputLabel value="#{msg['dialog.archiveTask.miscellaneous.removeFromWorklist']}"/>
+        <p:selectBooleanCheckbox value="#{archiveTaskDialog.removeFromWorklist}">
+            <p:ajax event="change" execute="@this" update="@form"/>
+        </p:selectBooleanCheckbox>
+    </h:panelGrid>
+
+    <!-- slides list-->
+    <h:panelGrid styleClass="defaultHistoTable" rendered="#{archiveTaskDialog.forceFiling}" columns="2" columnClasses="columnWidth125">
+        <!-- reason preset -->
+        <h:outputLabel value="#{msg['dialog.dearchiveTask.preset']}"/>
+        <p:selectOneMenu id="selectPreset" style="width:85%"
+                         converter="#{archiveTaskDialog.predefinedListItemTransformer}"
+                         value="#{archiveTaskDialog.selectedListItem}">
+
+            <f:selectItem value="#{null}" itemLabel="...."/>
+            <f:selectItems value="#{archiveTaskDialog.predefinedListItems}" var="item"
+                           itemValue="#{item}"
+                           itemLabel="#{item.value}"/>
+            <p:ajax event="change" process="@this" update="@form"
+                    listener="#{archiveTaskDialog.onSelectListItem()}"/>
+        </p:selectOneMenu>
+
+        <!-- reason input -->
+        <h:outputLabel value="#{msg['dialog.dearchiveTask.reason']}"/>
+        <p:inputTextarea rows="7" id="reasonInput" style="width:90%" required="true"
+                         value="#{archiveTaskDialog.commentary}">
+            <p:ajax event="change" process="@this" update="@this"/>
+        </p:inputTextarea>
+    </h:panelGrid>
+
+</ui:composition>
+
+

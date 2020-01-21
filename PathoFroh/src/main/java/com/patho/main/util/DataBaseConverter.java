@@ -1,17 +1,8 @@
 package com.patho.main.util;
 
-import com.patho.main.config.PathoConfig;
-import com.patho.main.repository.BioBankRepository;
-import com.patho.main.repository.MediaRepository;
-import com.patho.main.repository.PDFRepository;
-import com.patho.main.repository.PatientRepository;
-import com.patho.main.service.PDFService;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,18 +12,18 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Setter
 public class DataBaseConverter {
 
-	@PersistenceContext
-	protected EntityManager em;
+    @PersistenceContext
+    protected EntityManager em;
 
-	protected Session getSession() {
-		return em.unwrap(Session.class);
-	}
+    protected Session getSession() {
+        return em.unwrap(Session.class);
+    }
 
-	protected CriteriaBuilder getCriteriaBuilder() {
-		return getSession().getCriteriaBuilder();
-	}
+    protected CriteriaBuilder getCriteriaBuilder() {
+        return getSession().getCriteriaBuilder();
+    }
 
-	public void start() {
+    public void start() {
 //		List<PDFContainer> ignoredContainer = new ArrayList<PDFContainer>();
 //		List<Patient> p = patientRepository.findAll();
 //
@@ -160,5 +151,5 @@ public class DataBaseConverter {
 //		for (PDFContainer pdfContainer : ignoredContainer) {
 //			System.out.println("-> " + pdfContainer.getName());
 //		}
-	}
+    }
 }

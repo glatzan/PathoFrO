@@ -1,109 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite">
 
 
 <composite:interface>
-	<!-- attached pdf list -->
-	<composite:attribute name="pdfSource" required="true" />
+    <!-- attached pdf list -->
+    <composite:attribute name="pdfSource" required="true"/>
 
-	<!-- pdf organizer -->
-	<composite:attribute name="pdfOrganizier" required="true" />
-	<!-- patient -->
-	<composite:attribute name="patient" required="true" />
+    <!-- pdf organizer -->
+    <composite:attribute name="pdfOrganizier" required="true"/>
+    <!-- patient -->
+    <composite:attribute name="patient" required="true"/>
 
-	<composite:attribute name="nameLength" default="20" required="false" />
-	<composite:attribute name="commentaryLength" default="30"
-		required="false" />
-	<composite:attribute name="typLenth" default="300" required="false" />
+    <composite:attribute name="nameLength" default="20" required="false"/>
+    <composite:attribute name="commentaryLength" default="30"
+                         required="false"/>
+    <composite:attribute name="typLenth" default="300" required="false"/>
 
-	<composite:attribute name="tableWidth" default="width:100%"
-		required="false" />
-	<composite:attribute name="tableHeight" default="300" required="false" />
-	
-	<composite:attribute name="showUpload" default="true" required="false" />
+    <composite:attribute name="tableWidth" default="width:100%"
+                         required="false"/>
+    <composite:attribute name="tableHeight" default="300" required="false"/>
+
+    <composite:attribute name="showUpload" default="true" required="false"/>
 </composite:interface>
 
 <composite:implementation>
 
-	<p:dataTable var="attachedPdf" id="attachedPdfList"
-		style="width:#{cc.attrs.tableWidth}" scrollable="true"
-		scrollHeight="#{cc.attrs.tableHeight}" value="#{cc.attrs.pdfSource}"
-		styleClass="defaultHistoDataTable">
+    <p:dataTable var="attachedPdf" id="attachedPdfList"
+                 style="width:#{cc.attrs.tableWidth}" scrollable="true"
+                 scrollHeight="#{cc.attrs.tableHeight}" value="#{cc.attrs.pdfSource}"
+                 styleClass="defaultHistoDataTable">
 
-		<!-- name -->
-		<p:column style="width:30%">
-			<f:facet name="header">
-				<h:outputLabel value="#{msg['component.pdfTable.pdf']}"></h:outputLabel>
-			</f:facet>
+        <!-- name -->
+        <p:column style="width:30%">
+            <f:facet name="header">
+                <h:outputLabel value="#{msg['component.pdfTable.pdf']}"></h:outputLabel>
+            </f:facet>
 
-			<h:outputLabel value="#{attachedPdf.name}"
-				title="#{attachedPdf.name}">
-				<f:converter converterId="org.histo.ui.TruncateConverter" />
-				<f:attribute name="truncateAt" value="#{cc.attrs.nameLength}" />
-				<f:attribute name="continuationMark" value="..." />
-			</h:outputLabel>
-		</p:column>
+            <h:outputLabel value="#{attachedPdf.name}"
+                           title="#{attachedPdf.name}">
+                <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                <f:attribute name="truncateAt" value="#{cc.attrs.nameLength}"/>
+                <f:attribute name="continuationMark" value="..."/>
+            </h:outputLabel>
+        </p:column>
 
-		<!-- date -->
-		<p:column style="width:18%">
-			<f:facet name="header">
-				<h:outputLabel value="#{msg['component.pdfTable.dateOfUPload']}"></h:outputLabel>
-			</f:facet>
-			<h:outputText value="#{attachedPdf.audit.createdOn}">
-				<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
-			</h:outputText>
-		</p:column>
+        <!-- date -->
+        <p:column style="width:18%">
+            <f:facet name="header">
+                <h:outputLabel value="#{msg['component.pdfTable.dateOfUPload']}"></h:outputLabel>
+            </f:facet>
+            <h:outputText value="#{attachedPdf.audit.createdOn}">
+                <f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
+            </h:outputText>
+        </p:column>
 
-		<!-- type -->
-		<p:column style="width:10%">
-			<f:facet name="header">
-				<h:outputLabel value="#{msg['component.pdfTable.type']}"></h:outputLabel>
-			</f:facet>
-			<h:outputLabel
-				value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"
-				title="#{msg['enum.documentType.'.concat(attachedPdf.type)]}">
-				<f:converter converterId="org.histo.ui.TruncateConverter" />
-				<f:attribute name="truncateAt" value="#{cc.attrs.typLenth}" />
-				<f:attribute name="continuationMark" value="..." />
-			</h:outputLabel>
-		</p:column>
+        <!-- type -->
+        <p:column style="width:10%">
+            <f:facet name="header">
+                <h:outputLabel value="#{msg['component.pdfTable.type']}"></h:outputLabel>
+            </f:facet>
+            <h:outputLabel
+                    value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"
+                    title="#{msg['enum.documentType.'.concat(attachedPdf.type)]}">
+                <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                <f:attribute name="truncateAt" value="#{cc.attrs.typLenth}"/>
+                <f:attribute name="continuationMark" value="..."/>
+            </h:outputLabel>
+        </p:column>
 
-		<!-- comentary -->
-		<p:column style="auto">
-			<f:facet name="header">
-				<h:outputLabel value="#{msg['component.pdfTable.commentary']}"></h:outputLabel>
-			</f:facet>
-			<h:outputLabel value="#{attachedPdf.commentary}"
-				title="#{attachedPdf.commentary}">
-				<f:converter converterId="org.histo.ui.TruncateConverter" />
-				<f:attribute name="truncateAt" value="#{cc.attrs.commentaryLength}" />
-				<f:attribute name="continuationMark" value="..." />
-			</h:outputLabel>
-		</p:column>
+        <!-- comentary -->
+        <p:column style="auto">
+            <f:facet name="header">
+                <h:outputLabel value="#{msg['component.pdfTable.commentary']}"></h:outputLabel>
+            </f:facet>
+            <h:outputLabel value="#{attachedPdf.commentary}"
+                           title="#{attachedPdf.commentary}">
+                <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                <f:attribute name="truncateAt" value="#{cc.attrs.commentaryLength}"/>
+                <f:attribute name="continuationMark" value="..."/>
+            </h:outputLabel>
+        </p:column>
 
-		<p:column style="width:15px">
-			<f:facet name="header">
-				<p:commandLink id="upload" 
-					rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA') and cc.attrs.showUpload}"
-					actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient)}">
-					<p:ajax event="dialogReturn" update="@form" />
-					<i class="fa fa-plus"></i>
-				</p:commandLink>
-			</f:facet>
-			<p:commandLink
-				rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-				actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient).setPDFToDisplay(attachedPdf)}">
-				<p:ajax event="dialogReturn" update="@form" />
-				<i class="fa fa-search"></i>
-			</p:commandLink>
-		</p:column>
-	</p:dataTable>
+        <p:column style="width:15px">
+            <f:facet name="header">
+                <p:commandLink id="upload"
+                               rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA') and cc.attrs.showUpload}"
+                               actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient)}">
+                    <p:ajax event="dialogReturn" update="@form"/>
+                    <i class="fa fa-plus"></i>
+                </p:commandLink>
+            </f:facet>
+            <p:commandLink
+                    rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
+                    actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient).setPDFToDisplay(attachedPdf)}">
+                <p:ajax event="dialogReturn" update="@form"/>
+                <i class="fa fa-search"></i>
+            </p:commandLink>
+        </p:column>
+    </p:dataTable>
 </composite:implementation>
 </html>

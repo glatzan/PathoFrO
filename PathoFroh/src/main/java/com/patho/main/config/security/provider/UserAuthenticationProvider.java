@@ -22,58 +22,58 @@ import java.util.Optional;
 @Component
 public class UserAuthenticationProvider implements AuthenticationProvider {
 
-	@Autowired
-	private AuthenticationService authenticationService;
+    @Autowired
+    private AuthenticationService authenticationService;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		UserAuthorizationToken auth = (UserAuthorizationToken) authentication;
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        UserAuthorizationToken auth = (UserAuthorizationToken) authentication;
 
-		Optional<HistoUser> user;
-		try {
-			user = authenticationService.authenticate(auth.getPrincipal().toString(), auth.getCredentials().toString());
-		} catch (LDAPAuthenticationException e) {
-			// authentication was not successful, but user is in database
-			throw new BadCredentialsException("Invalid Password or User");
-		}
+        Optional<HistoUser> user;
+        try {
+            user = authenticationService.authenticate(auth.getPrincipal().toString(), auth.getCredentials().toString());
+        } catch (LDAPAuthenticationException e) {
+            // authentication was not successful, but user is in database
+            throw new BadCredentialsException("Invalid Password or User");
+        }
 
-		HistoUser hUser;
+        HistoUser hUser;
 
-		// user is not present in database check if present in ldap
-		if (!user.isPresent()) {
-			// user exists within the ldap domain, not known to the local program
-			if (authenticationService.authenticateWithLDAP(auth.getPrincipal().toString(),
-					auth.getCredentials().toString())) {
-				// create new user and go to request permission page
-				
-				Optional<HistoUser> newUSer = userService.createUser(auth.getPrincipal().toString());
-				
-				if(newUSer.isPresent()) {
-					hUser = newUSer.get();
-				}else
-					throw new BadCredentialsException(
-							"Error while loading user data, please contact your administrator");
-			} else {
-				// user is not known in the ldap domain and in the local program -> throw error
-				throw new BadCredentialsException("Invalid Password or User");
-			}
-		} else {
-			hUser = user.get();
-		}
+        // user is not present in database check if present in ldap
+        if (!user.isPresent()) {
+            // user exists within the ldap domain, not known to the local program
+            if (authenticationService.authenticateWithLDAP(auth.getPrincipal().toString(),
+                    auth.getCredentials().toString())) {
+                // create new user and go to request permission page
 
-		List<GrantedAuthority> t = new ArrayList<GrantedAuthority>();
-		t.add(new SimpleGrantedAuthority("USER"));
+                Optional<HistoUser> newUSer = userService.createUser(auth.getPrincipal().toString());
 
-		return new UsernamePasswordAuthenticationToken(hUser, null, t);
-	}
+                if (newUSer.isPresent()) {
+                    hUser = newUSer.get();
+                } else
+                    throw new BadCredentialsException(
+                            "Error while loading user data, please contact your administrator");
+            } else {
+                // user is not known in the ldap domain and in the local program -> throw error
+                throw new BadCredentialsException("Invalid Password or User");
+            }
+        } else {
+            hUser = user.get();
+        }
 
-	public boolean supports(Class<?> authentication) {
-		if (authentication.isAssignableFrom(UserAuthorizationToken.class)) {
-			return true;
-		}
-		return false;
-	}
+        List<GrantedAuthority> t = new ArrayList<GrantedAuthority>();
+        t.add(new SimpleGrantedAuthority("USER"));
+
+        return new UsernamePasswordAuthenticationToken(hUser, null, t);
+    }
+
+    public boolean supports(Class<?> authentication) {
+        if (authentication.isAssignableFrom(UserAuthorizationToken.class)) {
+            return true;
+        }
+        return false;
+    }
 
 }

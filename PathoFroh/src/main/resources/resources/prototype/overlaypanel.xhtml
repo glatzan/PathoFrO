@@ -13,6 +13,26 @@
 
     <p:overlayPanel widgetVar="xxxxxx" hideEvent="null" showEvent="null"
                     dismissable="false" id="xxxxxx" styleClass="histoOverlayPanel">
+
+        <p:dataTable id="reasonOverlayDataTable"
+                     widgetVar="reasonOverlayDataTable"
+                     value="#{dearchiveTaskDialog.predefinedListItems}"
+                     var="item" styleClass="defaultHistoDataTable" scrollable="true"
+                     scrollHeight="250" rowKey="#{item.id}"
+                     selection="#{dearchiveTaskDialog.selectedListItem}"
+                     selectionMode="single">
+
+            <p:column id="valueColumn">
+                <h:outputText value="#{item.value}"/>
+            </p:column>
+
+            <p:ajax event="rowSelect" update="dialogContent:reasonInput"
+                    process="dialogContent:reasonOverlayPanel"
+                    listener="#{dearchiveTaskDialog.onSelectListItem()}"
+                    oncomplete="PF('reasonOverlayDataTable').hide();"/>
+
+        </p:dataTable>
+
     </p:overlayPanel>
 
 

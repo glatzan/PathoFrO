@@ -2,15 +2,11 @@ package com.patho.main.action.dialog;
 
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.config.VersionContainer;
 import com.patho.main.util.helper.TimeUtil;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.Date;
 import java.util.List;

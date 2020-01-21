@@ -1,7 +1,7 @@
 package com.patho.main.common;
 
 public enum Display {
-	PATIENT, RECEIPTLOG, DIAGNOSIS_INTERN;
+    PATIENT, RECEIPTLOG, DIAGNOSIS_INTERN;
 }
 
 

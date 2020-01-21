@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <h:head>
-	<title><h:outputFormat value="#{msg['dialog.info.headline']}">
-		</h:outputFormat></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
-	<h:outputScript library="scripts" name="scrollAbleTableCoumnSync.js" />
+    <title><h:outputFormat value="#{msg['dialog.info.headline']}">
+    </h:outputFormat></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
+    <h:outputScript library="scripts" name="scrollAbleTableCoumnSync.js"/>
 </h:head>
 
 <h:body styleClass="histoTabDialogStyle">
-	<h:form id="adminForm">
+    <h:form id="adminForm">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2">
-				<h:outputLabel value="#{msg['dialog.info.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					immediate="true">
-					<f:actionListener
-						binding="#{dialog.programmVersionDialog.hideDialog()}" />
-					<i class="fa fa-fw fa-times icon-grey" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2">
+                <h:outputLabel value="#{msg['dialog.info.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               immediate="true">
+                    <f:actionListener
+                            binding="#{dialog.programmVersionDialog.hideDialog()}"/>
+                    <i class="fa fa-fw fa-times icon-grey"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<h:panelGrid columns="2" styleClass="dialogContainer">
-			<p:outputPanel id="navigationTable" styleClass="navigationTable">
-				<c:forEach items="#{dialog.programmVersionDialog.tabs}" var="tab"
-					varStatus="loop">
-					<p:commandButton value="#{msg[tab.name]}"
-						disabled="#{tab.disabled}"
-						styleClass="#{tab eq dialog.programmVersionDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
-						actionListener="#{dialog.programmVersionDialog.onTabChange(tab)}"
-						update="navigationTable dialogContent" />
-				</c:forEach>
-			</p:outputPanel>
-			<p:outputPanel id="dialogContent" styleClass="dialogContent">
-				<ui:include
-					src="#{dialog.programmVersionDialog.selectedTab.centerInclude}" />
-			</p:outputPanel>
-		</h:panelGrid>
-	</h:form>
+        <h:panelGrid columns="2" styleClass="dialogContainer">
+            <p:outputPanel id="navigationTable" styleClass="navigationTable">
+                <c:forEach items="#{dialog.programmVersionDialog.tabs}" var="tab"
+                           varStatus="loop">
+                    <p:commandButton value="#{msg[tab.name]}"
+                                     disabled="#{tab.disabled}"
+                                     styleClass="#{tab eq dialog.programmVersionDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
+                                     actionListener="#{dialog.programmVersionDialog.onTabChange(tab)}"
+                                     update="navigationTable dialogContent"/>
+                </c:forEach>
+            </p:outputPanel>
+            <p:outputPanel id="dialogContent" styleClass="dialogContent">
+                <ui:include
+                        src="#{dialog.programmVersionDialog.selectedTab.centerInclude}"/>
+            </p:outputPanel>
+        </h:panelGrid>
+    </h:form>
 </h:body>
 </html>

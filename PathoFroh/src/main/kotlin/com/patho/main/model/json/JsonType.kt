@@ -66,7 +66,7 @@ abstract class JsonType<T> : UserType, Serializable {
 
     override fun deepCopy(value: Any?): Any? {
 
-        if(value == null) return null
+        if (value == null) return null
 
         try {
             // use serialization to create a deep copy
@@ -139,7 +139,7 @@ abstract class JsonType<T> : UserType, Serializable {
 
         @Synchronized
         private fun isJsonSupported(sharedSessionContractImplementor: SharedSessionContractImplementor): Boolean {
-           println("$jsonSupportCache ----------------- ${(sharedSessionContractImplementor as SessionImpl).sessionFactory.properties}")
+            println("$jsonSupportCache ----------------- ${(sharedSessionContractImplementor as SessionImpl).sessionFactory.properties}")
             if (jsonSupportCache == null) {
                 jsonSupportCache = (sharedSessionContractImplementor as SessionImpl).sessionFactory.properties["hibernate.dialect"].toString()
                         .startsWith("org.hibernate.dialect.PostgreSQL")

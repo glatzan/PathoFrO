@@ -3,7 +3,7 @@ package com.patho.main.dialog.phase
 import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.common.Dialog
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.SlideService
 import com.patho.main.util.dialog.event.StainingPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
@@ -46,7 +46,7 @@ open class StainingPhaseExitDialog @Autowired constructor(
             override fun onClick() {
                 exitPhase.set(completeStainings.value, true, !completeStainings.value, false)
                 goToDiagnosis.set(true, true, false, false)
-                removeFromWorklist.set(completeStainings.value,true,false,false)
+                removeFromWorklist.set(completeStainings.value, true, false, false)
             }
         }
 

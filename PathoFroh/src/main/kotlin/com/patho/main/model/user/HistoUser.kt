@@ -66,7 +66,7 @@ open class HistoUser : AbstractPersistable, UserDetails {
      *  Transient settings for changing with no permanent effect
      */
     @Transient
-    open var transient : TransientSettings = TransientSettings()
+    open var transient: TransientSettings = TransientSettings()
 
     constructor()
 

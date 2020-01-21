@@ -3,8 +3,8 @@ package com.patho.main.service
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.DiagnosisRevisionRepository
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.DiagnosisRevisionRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.helper.TimeUtil
@@ -102,7 +102,7 @@ open class TaskService @Autowired constructor(
             val counterAsInt = Integer.valueOf(count) + 1
             Integer.toString(TimeUtil.getCurrentYear() - 2000) + HistoUtil.fitString(counterAsInt, 4, '0')
 
-        }catch (e : TaskNotFoundException){
+        } catch (e: TaskNotFoundException) {
             // first task ever, or first task of year , year + 0001
             Integer.toString(TimeUtil.getCurrentYear() - 2000) + HistoUtil.fitString(1, 4, '0')
 
@@ -143,7 +143,7 @@ open class TaskService @Autowired constructor(
         return taskRepository.save(tTask, resourceBundle.get("log.task.archived", tTask, commentary))
     }
 
-    open fun dearchvieTask(task: Task, commentary: String = ""): Task {
+    open fun dearchiveTask(task: Task, commentary: String = ""): Task {
         // finalizing task
         task.finalizationDate = null
         task.finalized = false

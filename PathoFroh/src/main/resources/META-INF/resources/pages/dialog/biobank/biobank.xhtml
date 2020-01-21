@@ -1,129 +1,127 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:histo="http://java.sun.com/jsf/composite/components">
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.biobank.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.biobank.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.biobank.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.biobank.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
 
-		<div class="dialogContent">
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				columnClasses="columnTop columnWidth150, ,columnTop">
+        <div class="dialogContent">
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         columnClasses="columnTop columnWidth150, ,columnTop">
 
-				<!-- type of informed consent -->
-				<h:outputLabel value="#{msg['dialog.biobank.informentConsent']}" />
-				<p:selectOneMenu id="consentType" styleClass="smallInput"
-					value="#{dialog.bioBankDialog.bioBank.informedConsentType}">
-					<f:selectItems value="#{enumProvider.informedConsentTypes}"
-						var="type"
-						itemLabel="#{msg['enum.informedConsentType.'.concat(type)]}"
-						itemValue="#{type}" />
+                <!-- type of informed consent -->
+                <h:outputLabel value="#{msg['dialog.biobank.informentConsent']}"/>
+                <p:selectOneMenu id="consentType" styleClass="smallInput"
+                                 value="#{dialog.bioBankDialog.bioBank.informedConsentType}">
+                    <f:selectItems value="#{enumProvider.informedConsentTypes}"
+                                   var="type"
+                                   itemLabel="#{msg['enum.informedConsentType.'.concat(type)]}"
+                                   itemValue="#{type}"/>
 
-					<p:ajax event="change" update="@form"
-						listener="#{dialog.bioBankDialog.onTypeChange()}"></p:ajax>
-				</p:selectOneMenu>
+                    <p:ajax event="change" update="@form"
+                            listener="#{dialog.bioBankDialog.onTypeChange()}"></p:ajax>
+                </p:selectOneMenu>
 
-				<!-- consent date -->
-				<h:outputLabel
-					value="#{msg['dialog.biobank.informentConsent.date']}" />
-				<p:calendar pattern="dd.MM.yyyy" mask="true"
-					value="#{dialog.bioBankDialog.bioBank.consentDate}">
-					<p:ajax event="dateSelect"
-						listener="#{dialog.bioBankDialog.saveData()}" />
-					<p:ajax event="change"
-						listener="#{dialog.bioBankDialog.saveData()}" />
-				</p:calendar>
+                <!-- consent date -->
+                <h:outputLabel
+                        value="#{msg['dialog.biobank.informentConsent.date']}"/>
+                <p:calendar pattern="dd.MM.yyyy" mask="true"
+                            value="#{dialog.bioBankDialog.bioBank.consentDate}">
+                    <p:ajax event="dateSelect"
+                            listener="#{dialog.bioBankDialog.saveData()}"/>
+                    <p:ajax event="change"
+                            listener="#{dialog.bioBankDialog.saveData()}"/>
+                </p:calendar>
 
-				<!-- revoked date -->
-				<h:outputLabel
-					value="#{msg['dialog.biobank.revoke.informentConsent.date']}"
-					rendered="#{dialog.bioBankDialog.bioBank.informedConsentType eq 'REVOKED'}" />
-				<p:calendar pattern="dd.MM.yyyy" mask="true"
-					rendered="#{dialog.bioBankDialog.bioBank.informedConsentType eq 'REVOKED'}"
-					value="#{dialog.bioBankDialog.bioBank.retractionDate}">
-					<p:ajax event="dateSelect"
-						listener="#{dialog.bioBankDialog.saveData()}" />
-					<p:ajax event="change"
-						listener="#{dialog.bioBankDialog.saveData()}" />
-				</p:calendar>
+                <!-- revoked date -->
+                <h:outputLabel
+                        value="#{msg['dialog.biobank.revoke.informentConsent.date']}"
+                        rendered="#{dialog.bioBankDialog.bioBank.informedConsentType eq 'REVOKED'}"/>
+                <p:calendar pattern="dd.MM.yyyy" mask="true"
+                            rendered="#{dialog.bioBankDialog.bioBank.informedConsentType eq 'REVOKED'}"
+                            value="#{dialog.bioBankDialog.bioBank.retractionDate}">
+                    <p:ajax event="dateSelect"
+                            listener="#{dialog.bioBankDialog.saveData()}"/>
+                    <p:ajax event="change"
+                            listener="#{dialog.bioBankDialog.saveData()}"/>
+                </p:calendar>
 
-				<!-- external commentary  -->
-				<h:outputLabel value="#{msg['dialog.biobank.commentary']}"></h:outputLabel>
-				<p:inputTextarea rows="4" style="width:89%"
-					value="#{dialog.bioBankDialog.bioBank.commentary}">
-					<p:ajax event="keyup" execute="@this" delay="1000"
-						listener="#{dialog.bioBankDialog.saveData()}" />
-					<p:ajax event="change" execute="@this"
-						listener="#{dialog.bioBankDialog.saveData()}" />
-				</p:inputTextarea>
+                <!-- external commentary  -->
+                <h:outputLabel value="#{msg['dialog.biobank.commentary']}"></h:outputLabel>
+                <p:inputTextarea rows="4" style="width:89%"
+                                 value="#{dialog.bioBankDialog.bioBank.commentary}">
+                    <p:ajax event="keyup" execute="@this" delay="1000"
+                            listener="#{dialog.bioBankDialog.saveData()}"/>
+                    <p:ajax event="change" execute="@this"
+                            listener="#{dialog.bioBankDialog.saveData()}"/>
+                </p:inputTextarea>
 
-				<!-- attached pdfs -->
-				<h:outputLabel value="#{msg['dialog.biobank.pdf']}"></h:outputLabel>
-				<histo:pdfTable tableHeight="100" typLenth="8" showUpload="false"
-					tableWidth="90%"
-					pdfSource="#{dialog.bioBankDialog.bioBank.attachedPdfs}"
-					pdfOrganizier="#{dialog.pdfOrganizer}"
-					patient="#{dialog.bioBankDialog.task.patient}" nameLength="20"
-					commentaryLength="30" />
+                <!-- attached pdfs -->
+                <h:outputLabel value="#{msg['dialog.biobank.pdf']}"></h:outputLabel>
+                <histo:pdfTable tableHeight="100" typLenth="8" showUpload="false"
+                                tableWidth="90%"
+                                pdfSource="#{dialog.bioBankDialog.bioBank.attachedPdfs}"
+                                pdfOrganizier="#{dialog.pdfOrganizer}"
+                                patient="#{dialog.bioBankDialog.task.patient}" nameLength="20"
+                                commentaryLength="30"/>
 
-				<h:outputLabel value="#{msg['dialog.biobank.history']}"></h:outputLabel>
-				<!-- audit table -->
-				<histo:auditTable id="biobankInfo" tableWidth="300px"
-					auditElement="#{dialog.bioBankDialog.bioBank.audit}" />
+                <h:outputLabel value="#{msg['dialog.biobank.history']}"></h:outputLabel>
+                <!-- audit table -->
+                <histo:auditTable id="biobankInfo" tableWidth="300px"
+                                  auditElement="#{dialog.bioBankDialog.bioBank.audit}"/>
 
-			</h:panelGrid>
-		</div>
+            </h:panelGrid>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-					<!-- media -->
-					<p:commandButton
-						value="#{msg['dialog.biobank.button.addInformetConsent']}"
-						icon="fa fa-upload"
-						actionListener="#{pdfOrganizerDialog.initAndPrepareBean(dialog.bioBankDialog.task.patient).uploadDocumentType('BIOBANK_INFORMED_CONSENT').uploadTarget(dialog.bioBankDialog.bioBank)}">
-						<p:ajax event="dialogReturn"
-							listener="#{dialog.bioBankDialog.onDefaultDialogReturn}"
-							update="@form" />
-					</p:commandButton>
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                    <!-- media -->
+                    <p:commandButton
+                            value="#{msg['dialog.biobank.button.addInformetConsent']}"
+                            icon="fa fa-upload"
+                            actionListener="#{pdfOrganizerDialog.initAndPrepareBean(dialog.bioBankDialog.task.patient).uploadDocumentType('BIOBANK_INFORMED_CONSENT').uploadTarget(dialog.bioBankDialog.bioBank)}">
+                        <p:ajax event="dialogReturn"
+                                listener="#{dialog.bioBankDialog.onDefaultDialogReturn}"
+                                update="@form"/>
+                    </p:commandButton>
+                </h:panelGrid>
 
-				<h:panelGrid columns="1" styleClass="right">
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
-						icon="fa fa-check-circle-o">
-						<f:actionListener binding="#{dialog.bioBankDialog.saveAndHide()}" />
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                <h:panelGrid columns="1" styleClass="right">
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.close']}" id="closeBtn"
+                                     icon="fa fa-check-circle-o">
+                        <f:actionListener binding="#{dialog.bioBankDialog.saveAndHide()}"/>
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

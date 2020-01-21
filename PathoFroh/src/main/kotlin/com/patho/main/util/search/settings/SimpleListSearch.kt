@@ -78,7 +78,7 @@ open class SimpleListSearch : SearchSettings {
                             true, false, true))
 
                 val lists = selectedLists
-                if (!lists.isNullOrEmpty()) {
+                if (lists != null && lists.isNotEmpty()) {
                     result.addAll(rep.findAllByFavouriteLists(
                             (lists.toList().map { it.id }),
                             true))

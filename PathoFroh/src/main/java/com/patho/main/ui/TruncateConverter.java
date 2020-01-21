@@ -9,69 +9,67 @@ import javax.faces.convert.FacesConverter;
 @FacesConverter("org.histo.ui.TruncateConverter")
 public class TruncateConverter implements Converter {
 
-	private int truncateAt = 0;
+    private int truncateAt = 0;
 
-	private String continuationMark;
+    private String continuationMark;
 
-	public Object getAsObject(FacesContext context, UIComponent component, String value) throws ConverterException {
-		// Should never happend - TruncateConverter is only usable for output.
-		throw new AssertionError(getClass().getName() + " does not support Input conversion.");
-	}
+    public Object getAsObject(FacesContext context, UIComponent component, String value) throws ConverterException {
+        // Should never happend - TruncateConverter is only usable for output.
+        throw new AssertionError(getClass().getName() + " does not support Input conversion.");
+    }
 
-	public String getAsString(FacesContext context, UIComponent component, Object value) throws ConverterException {
+    public String getAsString(FacesContext context, UIComponent component, Object value) throws ConverterException {
 
-		if (value == null) {
-			return null;
-		}
+        if (value == null) {
+            return null;
+        }
 
-		try{
-			setTruncateAt(Integer.valueOf((String)component.getAttributes().get("truncateAt")));
-		}catch(NumberFormatException e){
-			return "truncateAT no Int";
-		}
-		
-		setContinuationMark((String)component.getAttributes().get("continuationMark"));
-		
-		StringBuffer buff = new StringBuffer();
-		buff.append(value);
+        try {
+            setTruncateAt(Integer.valueOf((String) component.getAttributes().get("truncateAt")));
+        } catch (NumberFormatException e) {
+            return "truncateAT no Int";
+        }
 
-		if (getTruncateAt() > 0 && buff.length() > getTruncateAt()) {
-			buff.setLength(getTruncateAt());
-			if (getContinuationMark() != null) {
-				buff.append(getContinuationMark());
-			}
-		}
+        setContinuationMark((String) component.getAttributes().get("continuationMark"));
 
-		return buff.toString();
-	}
+        StringBuffer buff = new StringBuffer();
+        buff.append(value);
 
-	/**
-	 * @return Returns the continuationMark.
-	 */
-	public String getContinuationMark() {
-		return continuationMark;
-	}
+        if (getTruncateAt() > 0 && buff.length() > getTruncateAt()) {
+            buff.setLength(getTruncateAt());
+            if (getContinuationMark() != null) {
+                buff.append(getContinuationMark());
+            }
+        }
 
-	/**
-	 * @param continuationMark
-	 *            The continuationMark to set.
-	 */
-	public void setContinuationMark(String continuationMark) {
-		this.continuationMark = continuationMark;
-	}
+        return buff.toString();
+    }
 
-	/**
-	 * @return Returns the truncateAt.
-	 */
-	public int getTruncateAt() {
-		return truncateAt;
-	}
+    /**
+     * @return Returns the continuationMark.
+     */
+    public String getContinuationMark() {
+        return continuationMark;
+    }
 
-	/**
-	 * @param truncateAt
-	 *            The truncateAt to set.
-	 */
-	public void setTruncateAt(int truncateAt) {
-		this.truncateAt = truncateAt;
-	}
+    /**
+     * @param continuationMark The continuationMark to set.
+     */
+    public void setContinuationMark(String continuationMark) {
+        this.continuationMark = continuationMark;
+    }
+
+    /**
+     * @return Returns the truncateAt.
+     */
+    public int getTruncateAt() {
+        return truncateAt;
+    }
+
+    /**
+     * @param truncateAt The truncateAt to set.
+     */
+    public void setTruncateAt(int truncateAt) {
+        this.truncateAt = truncateAt;
+    }
 }

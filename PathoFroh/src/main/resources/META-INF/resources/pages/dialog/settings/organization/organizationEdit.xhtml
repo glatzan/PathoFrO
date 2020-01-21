@@ -1,233 +1,231 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
 
 <h:head>
-	<title><h:outputLabel
-			rendered="#{dialog.organizationEditDialog.newOrganization}"
-			value="#{msg['dialog.organizationEdit.headline.new']}" /> <h:outputFormat
-			rendered="#{!dialog.organizationEditDialog.newOrganization}"
-			value="#{msg['dialog.organizationEdit.headline.edit']}">
-			<f:param value="#{dialog.organizationEditDialog.organization.name}" />
-		</h:outputFormat></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputLabel
+            rendered="#{dialog.organizationEditDialog.newOrganization}"
+            value="#{msg['dialog.organizationEdit.headline.new']}"/> <h:outputFormat
+            rendered="#{!dialog.organizationEditDialog.newOrganization}"
+            value="#{msg['dialog.organizationEdit.headline.edit']}">
+        <f:param value="#{dialog.organizationEditDialog.organization.name}"/>
+    </h:outputFormat></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:outputScript library="scripts" name="selectCheckboxMenuTop.js" />
+    <h:outputScript library="scripts" name="selectCheckboxMenuTop.js"/>
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:panelGroup>
-					<h:outputLabel
-						rendered="#{dialog.organizationEditDialog.newOrganization}"
-						value="#{msg['dialog.organizationEdit.headline.new']}" />
-					<h:outputFormat
-						rendered="#{!dialog.organizationEditDialog.newOrganization}"
-						value="#{msg['dialog.organizationEdit.headline.edit']}">
-						<f:param
-							value="#{dialog.organizationEditDialog.organization.name}" />
-					</h:outputFormat>
-				</h:panelGroup>
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:panelGroup>
+                    <h:outputLabel
+                            rendered="#{dialog.organizationEditDialog.newOrganization}"
+                            value="#{msg['dialog.organizationEdit.headline.new']}"/>
+                    <h:outputFormat
+                            rendered="#{!dialog.organizationEditDialog.newOrganization}"
+                            value="#{msg['dialog.organizationEdit.headline.edit']}">
+                        <f:param
+                                value="#{dialog.organizationEditDialog.organization.name}"/>
+                    </h:outputFormat>
+                </h:panelGroup>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
+        <div class="dialogContent">
 
-			<h:panelGrid columns="1" styleClass="defaultHistoTable">
-				<h:outputLabel
-					value="#{msg['dialog.organizationEdit.organization']}"
-					styleClass="headline" />
-			</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                <h:outputLabel
+                        value="#{msg['dialog.organizationEdit.organization']}"
+                        styleClass="headline"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="4" styleClass="defaultHistoTable"
-				columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
-				<!-- name -->
-				<p:outputLabel value="#{msg['dialog.organizationEdit.name']}" />
-				<p:inputText id="organizationName"
-					value="#{dialog.organizationEditDialog.organization.name}" />
+            <h:panelGrid columns="4" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
+                <!-- name -->
+                <p:outputLabel value="#{msg['dialog.organizationEdit.name']}"/>
+                <p:inputText id="organizationName"
+                             value="#{dialog.organizationEditDialog.organization.name}"/>
 
-				<!-- clinic -->
-				<p:outputLabel
-					value="#{msg['dialog.organizationEdit.clinicIntern']}" />
-				<p:selectBooleanCheckbox id="organizationIntern"
-					value="#{dialog.organizationEditDialog.organization.intern}" />
-			</h:panelGrid>
+                <!-- clinic -->
+                <p:outputLabel
+                        value="#{msg['dialog.organizationEdit.clinicIntern']}"/>
+                <p:selectBooleanCheckbox id="organizationIntern"
+                                         value="#{dialog.organizationEditDialog.organization.intern}"/>
+            </h:panelGrid>
 
-			<!-- Separator -->
-			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-				<p:separator />
-				<h:outputLabel value="#{msg['dialog.organizationEdit.adress']}" />
-			</h:panelGrid>
+            <!-- Separator -->
+            <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                <p:separator/>
+                <h:outputLabel value="#{msg['dialog.organizationEdit.adress']}"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="4" styleClass="defaultHistoTable"
-				columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
-				<!-- street -->
-				<p:outputLabel
-					value="#{msg['dialog.organizationEdit.adress.street']}" />
-				<p:inputText id="_street" name="street-address"
-					autocomplete="street-address"
-					value="#{dialog.organizationEditDialog.organization.contact.street}" />
+            <h:panelGrid columns="4" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
+                <!-- street -->
+                <p:outputLabel
+                        value="#{msg['dialog.organizationEdit.adress.street']}"/>
+                <p:inputText id="_street" name="street-address"
+                             autocomplete="street-address"
+                             value="#{dialog.organizationEditDialog.organization.contact.street}"/>
 
-				<!-- building -->
-				<p:outputLabel
-					value="#{msg['dialog.organizationEdit.adress.building']}" />
-				<p:inputText id="_building" name="building-address"
-					autocomplete="building-address"
-					value="#{dialog.organizationEditDialog.organization.contact.building}" />
+                <!-- building -->
+                <p:outputLabel
+                        value="#{msg['dialog.organizationEdit.adress.building']}"/>
+                <p:inputText id="_building" name="building-address"
+                             autocomplete="building-address"
+                             value="#{dialog.organizationEditDialog.organization.contact.building}"/>
 
-				<!-- address addition one -->
-				<h:outputLabel
-					value="#{msg['dialog.organizationEdit.additionOne']}" />
-				<p:inputText
-					value="#{dialog.organizationEditDialog.organization.contact.addressadditon}" />
+                <!-- address addition one -->
+                <h:outputLabel
+                        value="#{msg['dialog.organizationEdit.additionOne']}"/>
+                <p:inputText
+                        value="#{dialog.organizationEditDialog.organization.contact.addressadditon}"/>
 
-				<!-- address addition two -->
-				<h:outputLabel
-					value="#{msg['dialog.organizationEdit.additionTwo']}" />
-				<p:inputText
-					value="#{dialog.organizationEditDialog.organization.contact.addressadditon2}" />
+                <!-- address addition two -->
+                <h:outputLabel
+                        value="#{msg['dialog.organizationEdit.additionTwo']}"/>
+                <p:inputText
+                        value="#{dialog.organizationEditDialog.organization.contact.addressadditon2}"/>
 
-				<!-- Postcode -->
-				<p:outputLabel
-					value="#{msg['dialog.organizationEdit.adress.postCode']}" />
-				<p:inputText style="width:75px;"
-					value="#{dialog.organizationEditDialog.organization.contact.postcode}"
-					name="postal-code" autocomplete="postal-code" />
+                <!-- Postcode -->
+                <p:outputLabel
+                        value="#{msg['dialog.organizationEdit.adress.postCode']}"/>
+                <p:inputText style="width:75px;"
+                             value="#{dialog.organizationEditDialog.organization.contact.postcode}"
+                             name="postal-code" autocomplete="postal-code"/>
 
-				<!-- Town -->
-				<p:outputLabel value="#{msg['dialog.organizationEdit.adress.town']}" />
-				<p:inputText id="_town" name="city" autocomplete="address-level2"
-					value="#{dialog.organizationEditDialog.organization.contact.town}" />
-			</h:panelGrid>
+                <!-- Town -->
+                <p:outputLabel value="#{msg['dialog.organizationEdit.adress.town']}"/>
+                <p:inputText id="_town" name="city" autocomplete="address-level2"
+                             value="#{dialog.organizationEditDialog.organization.contact.town}"/>
+            </h:panelGrid>
 
-			<!-- Separator -->
-			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-				<p:separator />
-				<h:outputLabel
-					value="#{msg['dialog.organizationEdit.miscellaneous']}" />
-			</h:panelGrid>
-
-
-			<h:panelGrid columns="4" styleClass="defaultHistoTable"
-				columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
-
-				<!-- phone -->
-				<p:outputLabel
-					value="#{msg['dialog.organizationEdit.adress.phone']}" />
-				<p:inputText
-					value="#{dialog.organizationEditDialog.organization.contact.phone}"
-					name="phone" autocomplete="tel" />
-
-				<!-- mobile -->
-				<p:outputLabel
-					value="#{msg['dialog.organizationEdit.adress.mobile']}" />
-				<p:inputText
-					value="#{dialog.organizationEditDialog.organization.contact.phone}"
-					name="phone" autocomplete="tel" />
-
-				<!-- homepage -->
-				<p:outputLabel
-					value="#{msg['dialog.organizationEdit.adress.homepage']}" />
-				<p:inputText
-					value="#{dialog.organizationEditDialog.organization.contact.homepage}"
-					name="homepage" autocomplete="homepage" />
-
-				<!-- fax -->
-				<p:outputLabel value="#{msg['dialog.organizationEdit.adress.fax']}" />
-				<p:inputText
-					value="#{dialog.organizationEditDialog.organization.contact.fax}"
-					name="fax" autocomplete="fax" />
-
-				<!-- mail -->
-				<p:outputLabel
-					value="#{msg['dialog.organizationEdit.adress.email']}" />
-				<p:inputText id="_email" name="mail" autocomplete="mail"
-					value="#{dialog.organizationEditDialog.organization.contact.email}" />
-			</h:panelGrid>
-
-			<!-- Separator -->
-			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-				<p:separator />
-				<h:outputLabel value="#{msg['dialog.organizationEdit.note']}" />
-			</h:panelGrid>
-
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				columnClasses="columnWidth125, ">
-				<p:inputTextarea id="organizationNote" style="width:95%"
-					value="#{dialog.organizationEditDialog.organization.note}" />
-			</h:panelGrid>
+            <!-- Separator -->
+            <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                <p:separator/>
+                <h:outputLabel
+                        value="#{msg['dialog.organizationEdit.miscellaneous']}"/>
+            </h:panelGrid>
 
 
-			<!-- Separator -->
-			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-				<p:separator />
-				<h:outputLabel value="#{msg['dialog.organizationEdit.persons']}" />
-			</h:panelGrid>
+            <h:panelGrid columns="4" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth125, columnWidthPercent40, columnWidth125,">
 
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				columnClasses="columnWidth125, ">
-				<p:dataTable id="userTable" styleClass="defaultHistoDataTable"
-					value="#{dialog.organizationEditDialog.organization.persons}"
-					var="person" style="width:96%" scrollable="true" scrollHeight="150">
-					<p:column
-						headerText="#{msg['dialog.organizationEdit.persons.name']}">
-						<h:outputLabel value="#{person.getFullName()}" />
+                <!-- phone -->
+                <p:outputLabel
+                        value="#{msg['dialog.organizationEdit.adress.phone']}"/>
+                <p:inputText
+                        value="#{dialog.organizationEditDialog.organization.contact.phone}"
+                        name="phone" autocomplete="tel"/>
 
-					</p:column>
+                <!-- mobile -->
+                <p:outputLabel
+                        value="#{msg['dialog.organizationEdit.adress.mobile']}"/>
+                <p:inputText
+                        value="#{dialog.organizationEditDialog.organization.contact.phone}"
+                        name="phone" autocomplete="tel"/>
 
-					<p:column headerText="#" style="width:15px;"
-						styleClass="centerChildElements ,centerHeaderChildElements">
-						<p:commandLink update="@form" process="@form" partialSubmit="true"
-							title="#{msg['dialog.organizationEdit.persons.remove']}">
-							<i class="fa fa-remove" />
-							<f:actionListener
-								binding="#{dialog.organizationEditDialog.removePersonFromOrganization(person, dialog.organizationEditDialog.organization)}" />
-						</p:commandLink>
-					</p:column>
-				</p:dataTable>
-			</h:panelGrid>
-		</div>
+                <!-- homepage -->
+                <p:outputLabel
+                        value="#{msg['dialog.organizationEdit.adress.homepage']}"/>
+                <p:inputText
+                        value="#{dialog.organizationEditDialog.organization.contact.homepage}"
+                        name="homepage" autocomplete="homepage"/>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+                <!-- fax -->
+                <p:outputLabel value="#{msg['dialog.organizationEdit.adress.fax']}"/>
+                <p:inputText
+                        value="#{dialog.organizationEditDialog.organization.contact.fax}"
+                        name="fax" autocomplete="fax"/>
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <!-- mail -->
+                <p:outputLabel
+                        value="#{msg['dialog.organizationEdit.adress.email']}"/>
+                <p:inputText id="_email" name="mail" autocomplete="mail"
+                             value="#{dialog.organizationEditDialog.organization.contact.email}"/>
+            </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- Save button -->
-					<p:commandButton value="#{msg['general.save']}"
-						icon="fa fa-check-circle-o">
-						<f:actionListener
-							binding="#{dialog.organizationEditDialog.saveAndHide()}"></f:actionListener>
-					</p:commandButton>
+            <!-- Separator -->
+            <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                <p:separator/>
+                <h:outputLabel value="#{msg['dialog.organizationEdit.note']}"/>
+            </h:panelGrid>
 
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						icon="fa fa-times-circle">
-						<f:actionListener
-							binding="#{dialog.organizationEditDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth125, ">
+                <p:inputTextarea id="organizationNote" style="width:95%"
+                                 value="#{dialog.organizationEditDialog.organization.note}"/>
+            </h:panelGrid>
+
+
+            <!-- Separator -->
+            <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                <p:separator/>
+                <h:outputLabel value="#{msg['dialog.organizationEdit.persons']}"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         columnClasses="columnWidth125, ">
+                <p:dataTable id="userTable" styleClass="defaultHistoDataTable"
+                             value="#{dialog.organizationEditDialog.organization.persons}"
+                             var="person" style="width:96%" scrollable="true" scrollHeight="150">
+                    <p:column
+                            headerText="#{msg['dialog.organizationEdit.persons.name']}">
+                        <h:outputLabel value="#{person.getFullName()}"/>
+
+                    </p:column>
+
+                    <p:column headerText="#" style="width:15px;"
+                              styleClass="centerChildElements ,centerHeaderChildElements">
+                        <p:commandLink update="@form" process="@form" partialSubmit="true"
+                                       title="#{msg['dialog.organizationEdit.persons.remove']}">
+                            <i class="fa fa-remove"/>
+                            <f:actionListener
+                                    binding="#{dialog.organizationEditDialog.removePersonFromOrganization(person, dialog.organizationEditDialog.organization)}"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </div>
+
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Save button -->
+                    <p:commandButton value="#{msg['general.save']}"
+                                     icon="fa fa-check-circle-o">
+                        <f:actionListener
+                                binding="#{dialog.organizationEditDialog.saveAndHide()}"></f:actionListener>
+                    </p:commandButton>
+
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     icon="fa fa-times-circle">
+                        <f:actionListener
+                                binding="#{dialog.organizationEditDialog.hideDialog()}"></f:actionListener>
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

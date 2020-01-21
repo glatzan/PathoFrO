@@ -2,13 +2,10 @@ package com.patho.main.util.worklist.search;
 
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.patient.Patient;
-import com.patho.main.repository.PatientRepository;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.task.TaskStatus;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
 

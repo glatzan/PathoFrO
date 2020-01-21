@@ -9,7 +9,7 @@ import org.hibernate.annotations.TypeDef;
 @Getter
 @Setter
 public class JsonTest extends JsonType<JsonTest> {
-	private String test;
+    private String test;
 }
 
 

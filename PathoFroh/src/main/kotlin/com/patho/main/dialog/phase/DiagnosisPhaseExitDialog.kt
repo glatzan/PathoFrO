@@ -6,7 +6,7 @@ import com.patho.main.common.Dialog
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
-import com.patho.main.repository.TaskRepository
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.DiagnosisService
 import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.DiagnosisRevisionNotFoundException

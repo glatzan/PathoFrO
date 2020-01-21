@@ -7,20 +7,20 @@ import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 
 public class RootAwareEventListenerIntegrator implements org.hibernate.integrator.spi.Integrator {
 
-	public static final RootAwareEventListenerIntegrator INSTANCE = new RootAwareEventListenerIntegrator();
+    public static final RootAwareEventListenerIntegrator INSTANCE = new RootAwareEventListenerIntegrator();
 
-	@Override
-	public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory,
-			SessionFactoryServiceRegistry serviceRegistry) {
+    @Override
+    public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory,
+                          SessionFactoryServiceRegistry serviceRegistry) {
 
-		final EventListenerRegistry eventListenerRegistry = serviceRegistry.getService(EventListenerRegistry.class);
+        final EventListenerRegistry eventListenerRegistry = serviceRegistry.getService(EventListenerRegistry.class);
 
 //		eventListenerRegistry.appendListeners(EventType.PERSIST, RootAwareInsertEventListener.INSTANCE);
 //		eventListenerRegistry.appendListeners(EventType.FLUSH_ENTITY, RootAwareUpdateAndDeleteEventListener.INSTANCE);
-	}
+    }
 
-	@Override
-	public void disintegrate(SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
-		// Do nothing
-	}
+    @Override
+    public void disintegrate(SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
+        // Do nothing
+    }
 }

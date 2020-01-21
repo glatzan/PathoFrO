@@ -1,29 +1,22 @@
 package com.patho.main.action.dialog.notification;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.notification.ReportIntent;
-import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.PhysicianService;
-import com.patho.main.service.ReportIntentService;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.selectors.AssociatedContactSelector;
 import com.patho.main.util.dialog.event.ReloadEvent;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Transient;
 
 import java.util.List;
+
 @Getter
 @Setter
 public class ContactDialog extends AbstractDialog {

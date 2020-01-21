@@ -1,49 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
 <h:head>
-	<ui:param name="root" value="#{request.contextPath}/" />
-	<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
-	<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
-	<h:outputStylesheet name="style.css" value="style.css" library="css"/>
-	<h:outputStylesheet name="baseStyle.css" value="baseStyle.css" library="css"/>
+    <ui:param name="root" value="#{request.contextPath}/"/>
+    <meta http-equiv="X-UA-Compatible" content="EmulateIE8"/>
+    <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="baseStyle.css" value="baseStyle.css" library="css"/>
 </h:head>
 
 <h:body style="overflow: hidden; ">
-	<div class="ui-g container" style="height: 100vh !important">
-		<div class="ui-g-2 navigation">
-			<!-- Nav -->
-			<h:form id="navigationForm">
-				<ui:insert name="navigation" />
-			</h:form>
-		</div>
-		<div class="ui-g-10 content">
-			<div class="ui-g-12 header">
-				<!-- Header -->
-				<h:form id="headerForm">
-					<ui:insert name="header" />
-					<ui:include src="blockUi.xhtml" />
-				</h:form>
-			</div>
+    <div class="ui-g container" style="height: 100vh !important">
+        <div class="ui-g-2 navigation">
+            <!-- Nav -->
+            <h:form id="navigationForm">
+                <ui:insert name="navigation"/>
+            </h:form>
+        </div>
+        <div class="ui-g-10 content">
+            <div class="ui-g-12 header">
+                <!-- Header -->
+                <h:form id="headerForm">
+                    <ui:insert name="header"/>
+                    <ui:include src="blockUi.xhtml"/>
+                </h:form>
+            </div>
 
-			<div class="ui-g-12 body">
-				<!-- Conent -->
-				<h:form id="contentForm">
-					<ui:insert name="content" />
-				</h:form>
-			</div>
+            <div class="ui-g-12 body">
+                <!-- Conent -->
+                <h:form id="contentForm">
+                    <ui:insert name="content"/>
+                </h:form>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 
-	<ui:insert name="globalInclude" />
+    <ui:insert name="globalInclude"/>
 
-	<ui:include src="growl.xhtml" />
+    <ui:include src="growl.xhtml"/>
 
 </h:body>
 </html>

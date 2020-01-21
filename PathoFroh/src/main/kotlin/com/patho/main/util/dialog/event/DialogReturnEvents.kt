@@ -147,7 +147,7 @@ class DiagnosisPhaseExitEvent(val task: Task, val revision: DiagnosisRevision?, 
 /**
  * Return event for the ExitNotification Dialog
  */
-class NotificationPhaseExitEvent(val startTaskArchival : Boolean = false) : TaskReloadEvent()
+class NotificationPhaseExitEvent(val startTaskArchival: Boolean = false) : TaskReloadEvent()
 
 /**
  * Return event for the NotificationPerforme dialog

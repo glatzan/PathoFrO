@@ -171,7 +171,7 @@ open class TaskStatus {
          */
         @JvmStatic
         fun checkIfReStainingFlag(patient: Patient): Boolean {
-            return patient.tasks.all { p -> checkIfReStainingFlag(p) }
+            return patient.tasks.any { p -> checkIfReStainingFlag(p) }
         }
 
         /**
@@ -179,7 +179,7 @@ open class TaskStatus {
          */
         @JvmStatic
         fun checkIfReStainingFlag(task: Task): Boolean {
-            return task.samples.all { p -> checkIfReStainingFlag(p) }
+            return task.samples.any { p -> checkIfReStainingFlag(p) }
         }
 
         /**
@@ -187,7 +187,7 @@ open class TaskStatus {
          */
         @JvmStatic
         fun checkIfReStainingFlag(sample: Sample): Boolean {
-            return sample.blocks.all { p -> checkIfReStainingFlag(p) }
+            return sample.blocks.any { p -> checkIfReStainingFlag(p) }
         }
 
         /**
@@ -195,7 +195,7 @@ open class TaskStatus {
          */
         @JvmStatic
         fun checkIfReStainingFlag(block: Block): Boolean {
-            return block.slides.all { p -> p.reStaining }
+            return block.slides.any { p -> p.reStaining }
         }
 
         /**

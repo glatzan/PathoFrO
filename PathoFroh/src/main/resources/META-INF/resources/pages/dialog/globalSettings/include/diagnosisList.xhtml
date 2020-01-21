@@ -1,141 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputLabel
-			value="#{msg['dialog.settings.reportIntent.list.headline']}" />
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputLabel
+                value="#{msg['dialog.settings.reportIntent.list.headline']}"/>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannelFull">
+    <p:outputPanel styleClass="bodyPannelFull">
 
-		<p:dataTable var="diagnosisPreset" style="width:100%;"
-			scrollable="true" scrollHeight="460" draggableRows="true"
-			value="#{dialog.settingsDialog.diagnosisTab.diagnosisPresets}"
-			styleClass="defaultHistoDataTable">
+        <p:dataTable var="diagnosisPreset" style="width:100%;"
+                     scrollable="true" scrollHeight="460" draggableRows="true"
+                     value="#{dialog.settingsDialog.diagnosisTab.diagnosisPresets}"
+                     styleClass="defaultHistoDataTable">
 
-			<!-- reportIntent name -->
-			<p:column sortBy="#{diagnosisPreset.diagnosisText}"
-				headerText="#{msg['dialog.settings.reportIntent.list.reportIntent']}"
-				style="width:35%">
-				<h:outputText value="#{diagnosisPreset.diagnosis}" />
-			</p:column>
+            <!-- reportIntent name -->
+            <p:column sortBy="#{diagnosisPreset.diagnosisText}"
+                      headerText="#{msg['dialog.settings.reportIntent.list.reportIntent']}"
+                      style="width:35%">
+                <h:outputText value="#{diagnosisPreset.diagnosis}"/>
+            </p:column>
 
-			<!-- reportIntent category -->
-			<p:column sortBy="#{diagnosisPreset.name}"
-				headerText="#{msg['dialog.settings.reportIntent.list.category']}"
-				style="width:15%">
-				<h:outputLabel value="#{diagnosisPreset.category}"
-					title="#{diagnosisPreset.category}">
-					<f:converter converterId="org.histo.ui.TruncateConverter"
-						truncateAt="15" />
-					<f:attribute name="truncateAt" value="15" />
-					<f:attribute name="continuationMark" value="..." />
-				</h:outputLabel>
-			</p:column>
+            <!-- reportIntent category -->
+            <p:column sortBy="#{diagnosisPreset.name}"
+                      headerText="#{msg['dialog.settings.reportIntent.list.category']}"
+                      style="width:15%">
+                <h:outputLabel value="#{diagnosisPreset.category}"
+                               title="#{diagnosisPreset.category}">
+                    <f:converter converterId="org.histo.ui.TruncateConverter"
+                                 truncateAt="15"/>
+                    <f:attribute name="truncateAt" value="15"/>
+                    <f:attribute name="continuationMark" value="..."/>
+                </h:outputLabel>
+            </p:column>
 
-			<!-- commentary -->
-			<p:column
-				headerText="#{msg['dialog.settings.reportIntent.list.commentary']}"
-				style="width:atuo">
-				<h:outputLabel value="#{diagnosisPreset.commentary}">
-					<f:converter converterId="org.histo.ui.TruncateConverter"
-						truncateAt="40" />
-					<f:attribute name="truncateAt" value="40" />
-					<f:attribute name="continuationMark" value="..." />
-				</h:outputLabel>
-			</p:column>
+            <!-- commentary -->
+            <p:column
+                    headerText="#{msg['dialog.settings.reportIntent.list.commentary']}"
+                    style="width:atuo">
+                <h:outputLabel value="#{diagnosisPreset.commentary}">
+                    <f:converter converterId="org.histo.ui.TruncateConverter"
+                                 truncateAt="40"/>
+                    <f:attribute name="truncateAt" value="40"/>
+                    <f:attribute name="continuationMark" value="..."/>
+                </h:outputLabel>
+            </p:column>
 
-			<!-- archived -->
-			<p:column
-				headerText="#{msg['dialog.settings.reportIntent.list.archived']}"
-				styleClass="centerChildElements"
-				sortBy="#{diagnosisPreset.archived}" style="width:80px;"
-				rendered="#{dialog.settingsDialog.diagnosisTab.showArchived}">
-				<ui:fragment rendered="#{diagnosisPreset.archived}">
-					<i class="fa fa-archive icon-red"
-						title="#{msg['dialog.settings.reportIntent.list.archived.info']}" />
-				</ui:fragment>
-			</p:column>
+            <!-- archived -->
+            <p:column
+                    headerText="#{msg['dialog.settings.reportIntent.list.archived']}"
+                    styleClass="centerChildElements"
+                    sortBy="#{diagnosisPreset.archived}" style="width:80px;"
+                    rendered="#{dialog.settingsDialog.diagnosisTab.showArchived}">
+                <ui:fragment rendered="#{diagnosisPreset.archived}">
+                    <i class="fa fa-archive icon-red"
+                       title="#{msg['dialog.settings.reportIntent.list.archived.info']}"/>
+                </ui:fragment>
+            </p:column>
 
-			<!-- options -->
-			<p:column style="width:35px;"
-				styleClass="centerChildElements centerHeaderChildElements">
-				<f:facet name="header">
-					<i class="fa fa-cog"
-						title="#{msg['dialog.settings.reportIntent.list.options']}" />
-				</f:facet>
+            <!-- options -->
+            <p:column style="width:35px;"
+                      styleClass="centerChildElements centerHeaderChildElements">
+                <f:facet name="header">
+                    <i class="fa fa-cog"
+                       title="#{msg['dialog.settings.reportIntent.list.options']}"/>
+                </f:facet>
 
-				<!-- edit -->
-				<p:commandLink
-					title="#{msg['dialog.settings.reportIntent.list.options.edit']}"
-					actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean(diagnosisPreset)}">
-					<i class="fa fa-fw fa-cog" />
-					<p:ajax event="dialogReturn"
-						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"
-						update="@form" />
-				</p:commandLink>
+                <!-- edit -->
+                <p:commandLink
+                        title="#{msg['dialog.settings.reportIntent.list.options.edit']}"
+                        actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean(diagnosisPreset)}">
+                    <i class="fa fa-fw fa-cog"/>
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"
+                            update="@form"/>
+                </p:commandLink>
 
-				<!-- archive -->
-				<p:commandLink
-					title="#{msg['dialog.settings.reportIntent.list.archive']}"
-					rendered="#{!diagnosisPreset.archived}"
-					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, true)}"
-					update="@form">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
+                <!-- archive -->
+                <p:commandLink
+                        title="#{msg['dialog.settings.reportIntent.list.archive']}"
+                        rendered="#{!diagnosisPreset.archived}"
+                        actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, true)}"
+                        update="@form">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
 
-				<!-- dearchive -->
-				<p:commandLink
-					title="#{msg['dialog.settings.reportIntent.list.dearchive']}"
-					rendered="#{diagnosisPreset.archived}"
-					actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, false)}"
-					update="@form">
-					<i class="fa fa-fw fa-undo" />
-				</p:commandLink>
-			</p:column>
+                <!-- dearchive -->
+                <p:commandLink
+                        title="#{msg['dialog.settings.reportIntent.list.dearchive']}"
+                        rendered="#{diagnosisPreset.archived}"
+                        actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, false)}"
+                        update="@form">
+                    <i class="fa fa-fw fa-undo"/>
+                </p:commandLink>
+            </p:column>
 
-			<p:ajax event="rowReorder" update="@form" process="@form"
-				listener="#{dialog.settingsDialog.diagnosisTab.onReorderList}" />
-		</p:dataTable>
-	</p:outputPanel>
+            <p:ajax event="rowReorder" update="@form" process="@form"
+                    listener="#{dialog.settingsDialog.diagnosisTab.onReorderList}"/>
+        </p:dataTable>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
 
-			<h:panelGrid columns="2" styleClass="left">
-				<!-- archived -->
-				<p:selectBooleanCheckbox
-					value="#{dialog.settingsDialog.diagnosisTab.showArchived}">
-					<p:ajax event="change"
-						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}" />
-				</p:selectBooleanCheckbox>
-				<h:outputLabel
-					value="#{msg['dialog.settings.reportIntent.list.backend.archived']}" />
-			</h:panelGrid>
+            <h:panelGrid columns="2" styleClass="left">
+                <!-- archived -->
+                <p:selectBooleanCheckbox
+                        value="#{dialog.settingsDialog.diagnosisTab.showArchived}">
+                    <p:ajax event="change"
+                            listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"/>
+                </p:selectBooleanCheckbox>
+                <h:outputLabel
+                        value="#{msg['dialog.settings.reportIntent.list.backend.archived']}"/>
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="right">
-				<!-- new -->
-				<p:commandButton
-					value="#{msg['dialog.settings.reportIntent.list.button.new']}"
-					icon="fa fa-fw fa-plus-circle"
-					actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean()}">
-					<p:ajax event="dialogReturn"
-						listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"
-						update="@form" />
-				</p:commandButton>
+            <h:panelGrid columns="2" styleClass="right">
+                <!-- new -->
+                <p:commandButton
+                        value="#{msg['dialog.settings.reportIntent.list.button.new']}"
+                        icon="fa fa-fw fa-plus-circle"
+                        actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean()}">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"
+                            update="@form"/>
+                </p:commandButton>
 
-				<!-- close -->
-				<p:commandButton value="#{msg['general.close']}"
-					icon="fa fa-times-circle"
-					actionListener="#{dialog.settingsDialog.hideDialog()}" />
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- close -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 icon="fa fa-times-circle"
+                                 actionListener="#{dialog.settingsDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 
 </ui:composition>

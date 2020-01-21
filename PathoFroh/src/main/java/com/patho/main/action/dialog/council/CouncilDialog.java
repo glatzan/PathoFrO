@@ -1,7 +1,6 @@
 package com.patho.main.action.dialog.council;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.dialog.DialogHandler;
 import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
@@ -14,9 +13,7 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.model.Physician;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.miscellaneous.Council;
-import com.patho.main.repository.*;
-import com.patho.main.service.CouncilService;
-import com.patho.main.service.FavouriteListService;
+import com.patho.main.repository.miscellaneous.PrintDocumentRepository;
 import com.patho.main.service.PDFService;
 import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.impl.SpringContextBridge;
@@ -38,8 +35,6 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Lazy;
 
 import javax.faces.application.FacesMessage;
 import java.io.FileNotFoundException;

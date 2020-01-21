@@ -2,10 +2,7 @@ package com.patho.main.util.printer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.patho.main.config.PathoConfig;
 import com.patho.main.model.PDFContainer;
-import com.patho.main.repository.MediaRepository;
-import com.patho.main.service.PrintService;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
@@ -20,8 +17,6 @@ import org.apache.commons.io.FileUtils;
 import org.cups4j.CupsClient;
 import org.cups4j.CupsPrinter;
 import org.cups4j.PrintJob;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

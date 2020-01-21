@@ -8,7 +8,7 @@ abstract class SearchSettings {
 
     protected val logger = LoggerFactory.getLogger(this.javaClass)
 
-    abstract fun getPatients() : List<Patient>
+    abstract fun getPatients(): List<Patient>
 
-    abstract fun getTasks() : List<Task>
+    abstract fun getTasks(): List<Task>
 }

@@ -11,10 +11,6 @@ import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.miscellaneous.BioBank;
-import com.patho.main.repository.MaterialPresetRepository;
-import com.patho.main.repository.PhysicianRepository;
-import com.patho.main.repository.TaskRepository;
-import com.patho.main.service.*;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.helper.HistoUtil;
 import com.univocity.parsers.csv.CsvParser;
@@ -26,8 +22,6 @@ import lombok.Setter;
 import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.io.*;
 import java.text.ParseException;
@@ -38,6 +32,7 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 @Getter
 @Setter
 public class FileMakerImporter {

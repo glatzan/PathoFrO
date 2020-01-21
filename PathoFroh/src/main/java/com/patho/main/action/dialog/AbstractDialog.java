@@ -1,6 +1,5 @@
 package com.patho.main.action.dialog;
 
-import com.patho.main.action.MainHandlerAction;
 import com.patho.main.common.Dialog;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.patient.Task;
@@ -15,7 +14,6 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 
@@ -143,7 +141,7 @@ public abstract class AbstractDialog {
      * @param event
      */
     public void onSubDialogReturn(SelectEvent event) {
-        logger.debug("Default Dialog return function object: {}",event.getObject() != null ? event.getObject().getClass() : "empty");
+        logger.debug("Default Dialog return function object: {}", event.getObject() != null ? event.getObject().getClass() : "empty");
         if (event.getObject() != null && event.getObject() instanceof ReloadEvent) {
             update(true);
         }

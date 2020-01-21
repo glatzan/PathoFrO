@@ -1,132 +1,131 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.createDiagnosisRevision.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.createDiagnosisRevision.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 
 <h:body styleClass="histoDialogStyle">
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2">
-				<h:outputFormat
-					value="#{msg['dialog.createDiagnosisRevision.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2">
+                <h:outputFormat
+                        value="#{msg['dialog.createDiagnosisRevision.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
-			<h:panelGrid columns="2" styleClass="defaultHistoTable">
+        <div class="dialogContent">
+            <h:panelGrid columns="2" styleClass="defaultHistoTable">
 
-				<!-- Name -->
-				<h:outputLabel value="#{msg['dialog.createDiagnosisRevision.name']}"></h:outputLabel>
-				<p:inputText
-					value="#{dialog.createDiagnosisRevisionDialog.newRevisionName}"></p:inputText>
+                <!-- Name -->
+                <h:outputLabel value="#{msg['dialog.createDiagnosisRevision.name']}"></h:outputLabel>
+                <p:inputText
+                        value="#{dialog.createDiagnosisRevisionDialog.newRevisionName}"></p:inputText>
 
-				<!-- Typ -->
-				<h:outputLabel value="#{msg['dialog.createDiagnosisRevision.type']}"></h:outputLabel>
-				<p:selectOneMenu
-					value="#{dialog.createDiagnosisRevisionDialog.newRevisionType}">
-					<f:selectItems
-						value="#{dialog.createDiagnosisRevisionDialog.selectableRevisionTypes}"
-						var="type" itemLabel="#{msg['enum.diagnosisType.'.concat(type)]}"
-						itemValue="#{type}" />
+                <!-- Typ -->
+                <h:outputLabel value="#{msg['dialog.createDiagnosisRevision.type']}"></h:outputLabel>
+                <p:selectOneMenu
+                        value="#{dialog.createDiagnosisRevisionDialog.newRevisionType}">
+                    <f:selectItems
+                            value="#{dialog.createDiagnosisRevisionDialog.selectableRevisionTypes}"
+                            var="type" itemLabel="#{msg['enum.diagnosisType.'.concat(type)]}"
+                            itemValue="#{type}"/>
 
-					<p:ajax update="@form"
-						listener="#{dialog.createDiagnosisRevisionDialog.updateAll()}"></p:ajax>
-				</p:selectOneMenu>
+                    <p:ajax update="@form"
+                            listener="#{dialog.createDiagnosisRevisionDialog.updateAll()}"></p:ajax>
+                </p:selectOneMenu>
 
-				<!-- change names of other revisions -->
-				<h:outputLabel
-					value="#{msg['dialog.createDiagnosisRevision.changeNames']}"></h:outputLabel>
-				<h:selectBooleanCheckbox
-					value="#{dialog.createDiagnosisRevisionDialog.generateNames}">
+                <!-- change names of other revisions -->
+                <h:outputLabel
+                        value="#{msg['dialog.createDiagnosisRevision.changeNames']}"></h:outputLabel>
+                <h:selectBooleanCheckbox
+                        value="#{dialog.createDiagnosisRevisionDialog.generateNames}">
 
-					<p:ajax event="change" process="@form" update="@form"
-						listener="#{dialog.createDiagnosisRevisionDialog.updateIndexAndRevisionList()}"></p:ajax>
-				</h:selectBooleanCheckbox>
+                    <p:ajax event="change" process="@form" update="@form"
+                            listener="#{dialog.createDiagnosisRevisionDialog.updateIndexAndRevisionList()}"></p:ajax>
+                </h:selectBooleanCheckbox>
 
-			</h:panelGrid>
+            </h:panelGrid>
 
-			<h:panelGrid columns="1" styleClass="defaultHistoTable"
-				style="margin-top:10px;">
-				<p:accordionPanel styleClass="contentAccordionPannel"
-					activeIndex="#{dialog.createDiagnosisRevisionDialog.accIndex}"
-					style="height:320px">
-					<p:tab
-						title="#{msg['dialog.createDiagnosisRevision.extendedOptions']}"
-						closable="true">
-						<p:dataTable var="revision" styleClass="defaultHistoDataTable"
-							value="#{dialog.createDiagnosisRevisionDialog.revisionList}">
+            <h:panelGrid columns="1" styleClass="defaultHistoTable"
+                         style="margin-top:10px;">
+                <p:accordionPanel styleClass="contentAccordionPannel"
+                                  activeIndex="#{dialog.createDiagnosisRevisionDialog.accIndex}"
+                                  style="height:320px">
+                    <p:tab
+                            title="#{msg['dialog.createDiagnosisRevision.extendedOptions']}"
+                            closable="true">
+                        <p:dataTable var="revision" styleClass="defaultHistoDataTable"
+                                     value="#{dialog.createDiagnosisRevisionDialog.revisionList}">
 
-							<!-- old name -->
-							<p:column
-								headerText="#{msg['dialog.createDiagnosisRevision.name.old']}">
-								<h:outputText value="#{revision.name}" />
-							</p:column>
+                            <!-- old name -->
+                            <p:column
+                                    headerText="#{msg['dialog.createDiagnosisRevision.name.old']}">
+                                <h:outputText value="#{revision.name}"/>
+                            </p:column>
 
-							<!-- copy -->
-							<p:column style="width:20px;">
-								<f:facet name="header">
-									<i class="fa fa-fw fa-arrow-circle-o-right"
-										title="#{msg['dialog.createDiagnosisRevision.name.copy']}" />
-								</f:facet>
-								<p:commandLink
-									title="#{msg['dialog.createDiagnosisRevision.name.copy']}"
-									update="@form"
-									actionListener="#{dialog.createDiagnosisRevisionDialog.copyOldNameFromDiagnosisRevision(revision)}">
-									<i class="fa fa-fw fa-arrow-circle-o-right" />
-								</p:commandLink>
-							</p:column>
+                            <!-- copy -->
+                            <p:column style="width:20px;">
+                                <f:facet name="header">
+                                    <i class="fa fa-fw fa-arrow-circle-o-right"
+                                       title="#{msg['dialog.createDiagnosisRevision.name.copy']}"/>
+                                </f:facet>
+                                <p:commandLink
+                                        title="#{msg['dialog.createDiagnosisRevision.name.copy']}"
+                                        update="@form"
+                                        actionListener="#{dialog.createDiagnosisRevisionDialog.copyOldNameFromDiagnosisRevision(revision)}">
+                                    <i class="fa fa-fw fa-arrow-circle-o-right"/>
+                                </p:commandLink>
+                            </p:column>
 
-							<!-- new name -->
-							<p:column
-								headerText="#{msg['dialog.createDiagnosisRevision.name.new']}">
-								<p:inputText value="#{revision.newName}" style="width:97%"></p:inputText>
-							</p:column>
-						</p:dataTable>
-					</p:tab>
-				</p:accordionPanel>
-			</h:panelGrid>
-		</div>
+                            <!-- new name -->
+                            <p:column
+                                    headerText="#{msg['dialog.createDiagnosisRevision.name.new']}">
+                                <p:inputText value="#{revision.newName}" style="width:97%"></p:inputText>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                </p:accordionPanel>
+            </h:panelGrid>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- confirm -->
-					<p:commandButton value="#{msg['general.save']}"
-						icon="fa fa-check-circle-o">
-						<f:actionListener
-							binding="#{dialog.createDiagnosisRevisionDialog.addDiagnosisAndHide()}" />
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- confirm -->
+                    <p:commandButton value="#{msg['general.save']}"
+                                     icon="fa fa-check-circle-o">
+                        <f:actionListener
+                                binding="#{dialog.createDiagnosisRevisionDialog.addDiagnosisAndHide()}"/>
+                    </p:commandButton>
 
-					<!-- Abort button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						immediate="true" icon="fa fa-times-circle"
-						actionListener="#{dialog.createDiagnosisRevisionDialog.hideDialog()}" />
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
+                    <!-- Abort button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     immediate="true" icon="fa fa-times-circle"
+                                     actionListener="#{dialog.createDiagnosisRevisionDialog.hideDialog()}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
 
-	</h:form>
+    </h:form>
 </h:body>
 </html>

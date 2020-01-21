@@ -14,92 +14,92 @@ import java.util.Date;
 @Setter
 public class StainingPrototypeDetails implements ID, Cloneable {
 
-	@Id
-	@GeneratedValue(generator = "stainingPrototypeDetails_sequencegenerator")
-	@Column(unique = true, nullable = false)
-	private long id;
+    @Id
+    @GeneratedValue(generator = "stainingPrototypeDetails_sequencegenerator")
+    @Column(unique = true, nullable = false)
+    private long id;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String name;
+    @Column(columnDefinition = "VARCHAR")
+    private String name;
 
-	/**
-	 * Parent
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	private StainingPrototype staining;
+    /**
+     * Parent
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    private StainingPrototype staining;
 
-	/**
-	 * rabbit/ mouse
-	 */
-	@Column(columnDefinition = "VARCHAR")
-	private String host;
+    /**
+     * rabbit/ mouse
+     */
+    @Column(columnDefinition = "VARCHAR")
+    private String host;
 
-	/**
-	 * e.g. human
-	 */
-	@Column(columnDefinition = "VARCHAR")
-	private String specifity;
+    /**
+     * e.g. human
+     */
+    @Column(columnDefinition = "VARCHAR")
+    private String specifity;
 
-	/**
-	 * e.g. 2ml
-	 */
-	@Column(columnDefinition = "VARCHAR")
-	private String quantityDelivered;
+    /**
+     * e.g. 2ml
+     */
+    @Column(columnDefinition = "VARCHAR")
+    private String quantityDelivered;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String positiveControl;
+    @Column(columnDefinition = "VARCHAR")
+    private String positiveControl;
 
-	/**
-	 * temperature
-	 */
-	@Column(columnDefinition = "VARCHAR")
-	private String storage;
+    /**
+     * temperature
+     */
+    @Column(columnDefinition = "VARCHAR")
+    private String storage;
 
-	@Column(columnDefinition = "VARCHAR")
-	@Type(type = "date")
-	private Date bestBefore;
+    @Column(columnDefinition = "VARCHAR")
+    @Type(type = "date")
+    private Date bestBefore;
 
-	@Column(columnDefinition = "VARCHAR")
-	@Type(type = "date")
-	private Date deliveryDate;
+    @Column(columnDefinition = "VARCHAR")
+    @Type(type = "date")
+    private Date deliveryDate;
 
-	@Column(columnDefinition = "VARCHAR")
-	@Type(type = "date")
-	private Date emptyDate;
+    @Column(columnDefinition = "VARCHAR")
+    @Type(type = "date")
+    private Date emptyDate;
 
-	/**
-	 * e.g firm
-	 */
-	@Column(columnDefinition = "VARCHAR")
-	private String supplier;
+    /**
+     * e.g firm
+     */
+    @Column(columnDefinition = "VARCHAR")
+    private String supplier;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String treatment;
+    @Column(columnDefinition = "VARCHAR")
+    private String treatment;
 
-	@Column
-	private int incubationTime;
+    @Column
+    private int incubationTime;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String dilution;
+    @Column(columnDefinition = "VARCHAR")
+    private String dilution;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String standardDilution;
+    @Column(columnDefinition = "VARCHAR")
+    private String standardDilution;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String process;
+    @Column(columnDefinition = "VARCHAR")
+    private String process;
 
-	@Column(columnDefinition = "VARCHAR")
-	private String commentary;
+    @Column(columnDefinition = "VARCHAR")
+    private String commentary;
 
-	public StainingPrototypeDetails() {
+    public StainingPrototypeDetails() {
 
-	}
+    }
 
-	public StainingPrototypeDetails(StainingPrototype stainingPrototype) {
-		this.staining = stainingPrototype;
-	}
+    public StainingPrototypeDetails(StainingPrototype stainingPrototype) {
+        this.staining = stainingPrototype;
+    }
 
-	public StainingPrototypeDetails clone() throws CloneNotSupportedException {
-		return (StainingPrototypeDetails) super.clone();
-	}
+    public StainingPrototypeDetails clone() throws CloneNotSupportedException {
+        return (StainingPrototypeDetails) super.clone();
+    }
 }

@@ -7,17 +7,12 @@ import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoGroup.AuthRole;
 import com.patho.main.model.user.HistoPermissions;
 import com.patho.main.model.user.HistoSettings;
-import com.patho.main.repository.GroupRepository;
-import com.patho.main.service.GroupService;
-import com.patho.main.service.SpringContextBridgedServices;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.search.settings.SimpleListSearchOption;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.*;
 
@@ -25,175 +20,175 @@ import java.util.*;
 @Setter
 public class GroupEditDialog extends AbstractTabDialog {
 
-	private GeneralTab generalTab;
-	private NameTab nameTab;
-	private PermissionTab permissionTab;
+    private GeneralTab generalTab;
+    private NameTab nameTab;
+    private PermissionTab permissionTab;
 
-	private boolean newGroup;
+    private boolean newGroup;
 
-	private HistoGroup group;
+    private HistoGroup group;
 
-	public GroupEditDialog() {
-		setNameTab(new NameTab());
-		setGeneralTab(new GeneralTab());
-		setPermissionTab(new PermissionTab());
+    public GroupEditDialog() {
+        setNameTab(new NameTab());
+        setGeneralTab(new GeneralTab());
+        setPermissionTab(new PermissionTab());
 
-		tabs = new AbstractTab[] { nameTab, generalTab, permissionTab };
-	}
+        tabs = new AbstractTab[]{nameTab, generalTab, permissionTab};
+    }
 
-	public GroupEditDialog initAndPrepareBean() {
-		HistoGroup group = new HistoGroup(new HistoSettings());
-		group.getSettings().setAvailableViews(new ArrayList<View>());
-		group.setAuthRole(AuthRole.ROLE_NONEAUTH);
-		group.setPermissions(new HashSet<HistoPermissions>());
+    public GroupEditDialog initAndPrepareBean() {
+        HistoGroup group = new HistoGroup(new HistoSettings());
+        group.getSettings().setAvailableViews(new ArrayList<View>());
+        group.setAuthRole(AuthRole.ROLE_NONEAUTH);
+        group.setPermissions(new HashSet<HistoPermissions>());
 
-		return initAndPrepareBean(group);
-	}
+        return initAndPrepareBean(group);
+    }
 
-	public GroupEditDialog initAndPrepareBean(HistoGroup group) {
-		if (initBean(group, true))
-			prepareDialog();
+    public GroupEditDialog initAndPrepareBean(HistoGroup group) {
+        if (initBean(group, true))
+            prepareDialog();
 
-		return this;
-	}
+        return this;
+    }
 
-	public boolean initBean(HistoGroup group, boolean initialize) {
+    public boolean initBean(HistoGroup group, boolean initialize) {
 
-		if (group.getId() != 0) {
-			setGroup(SpringContextBridge.services().getGroupRepository().findOptionalById(group.getId(), true).get());
-			setNewGroup(false);
-		} else {
-			setGroup(group);
-			setNewGroup(true);
-		}
+        if (group.getId() != 0) {
+            setGroup(SpringContextBridge.services().getGroupRepository().findOptionalById(group.getId(), true).get());
+            setNewGroup(false);
+        } else {
+            setGroup(group);
+            setNewGroup(true);
+        }
 
-		return super.initBean(Dialog.SETTINGS_GROUP_EDIT);
-	}
+        return super.initBean(Dialog.SETTINGS_GROUP_EDIT);
+    }
 
-	public void saveAndHide() {
+    public void saveAndHide() {
 
-		// setting default view if not set
-		if (getGroup().getSettings().getDefaultView() == null) {
-			if (getGroup().getSettings().getAvailableViews() == null
-					&& getGroup().getSettings().getAvailableViews().size() > 0)
-				getGroup().getSettings().setDefaultView(getGroup().getSettings().getAvailableViewsAsArray()[0]);
-		}
+        // setting default view if not set
+        if (getGroup().getSettings().getDefaultView() == null) {
+            if (getGroup().getSettings().getAvailableViews() == null
+                    && getGroup().getSettings().getAvailableViews().size() > 0)
+                getGroup().getSettings().setDefaultView(getGroup().getSettings().getAvailableViewsAsArray()[0]);
+        }
 
-		// settings permissions
-		getGroup().getPermissions().clear();
+        // settings permissions
+        getGroup().getPermissions().clear();
 
-		// adding/ readding permissions
-		permissionTab.permissions.forEach((p, v) -> {
-			if (v.isValue()) {
-				getGroup().getPermissions().add(v.getPermission());
-			}
-		});
+        // adding/ readding permissions
+        permissionTab.permissions.forEach((p, v) -> {
+            if (v.isValue()) {
+                getGroup().getPermissions().add(v.getPermission());
+            }
+        });
 
-		// saving
-		SpringContextBridge.services().getGroupService().addOrUpdate(getGroup());
+        // saving
+        SpringContextBridge.services().getGroupService().addOrUpdate(getGroup());
 
-		hideDialog(new ReloadEvent());
-	}
+        hideDialog(new ReloadEvent());
+    }
 
-	@Getter
-	@Setter
-	public class NameTab extends AbstractTab {
+    @Getter
+    @Setter
+    public class NameTab extends AbstractTab {
 
-		public NameTab() {
-			setTabName("NameTab");
-			setName("dialog.groupEdit.tab.group.headline");
-			setViewID("nameTab");
-			setCenterInclude("include/name.xhtml");
-		}
+        public NameTab() {
+            setTabName("NameTab");
+            setName("dialog.groupEdit.tab.group.headline");
+            setViewID("nameTab");
+            setCenterInclude("include/name.xhtml");
+        }
 
-	}
+    }
 
-	@Getter
-	@Setter
-	public class GeneralTab extends AbstractTab {
+    @Getter
+    @Setter
+    public class GeneralTab extends AbstractTab {
 
-		private View[] allViews;
-		private SimpleListSearchOption[] allWorklistOptions;
+        private View[] allViews;
+        private SimpleListSearchOption[] allWorklistOptions;
 
-		public GeneralTab() {
-			setTabName("GeneralTab");
-			setName("dialog.groupEdit.tab.settings.headline");
-			setViewID("generalTab");
-			setCenterInclude("include/general.xhtml");
-		}
+        public GeneralTab() {
+            setTabName("GeneralTab");
+            setName("dialog.groupEdit.tab.settings.headline");
+            setViewID("generalTab");
+            setCenterInclude("include/general.xhtml");
+        }
 
-		public boolean initTab() {
-			setAllViews(new View[] { View.GUEST, View.WORKLIST_TASKS, View.WORKLIST_PATIENT, View.WORKLIST_DIAGNOSIS,
-					View.WORKLIST_RECEIPTLOG, View.WORKLIST_REPORT });
+        public boolean initTab() {
+            setAllViews(new View[]{View.GUEST, View.WORKLIST_TASKS, View.WORKLIST_PATIENT, View.WORKLIST_DIAGNOSIS,
+                    View.WORKLIST_RECEIPTLOG, View.WORKLIST_REPORT});
 
-			setAllWorklistOptions(
-					new SimpleListSearchOption[] { SimpleListSearchOption.DIAGNOSIS_LIST, SimpleListSearchOption.STAINING_LIST,
-							SimpleListSearchOption.NOTIFICATION_LIST, SimpleListSearchOption.EMPTY_LIST });
+            setAllWorklistOptions(
+                    new SimpleListSearchOption[]{SimpleListSearchOption.DIAGNOSIS_LIST, SimpleListSearchOption.STAINING_LIST,
+                            SimpleListSearchOption.NOTIFICATION_LIST, SimpleListSearchOption.EMPTY_LIST});
 
-			return true;
-		}
+            return true;
+        }
 
-		public void voidAction() {
-		}
-	}
+        public void voidAction() {
+        }
+    }
 
-	@Getter
-	@Setter
-	public class PermissionTab extends AbstractTab {
+    @Getter
+    @Setter
+    public class PermissionTab extends AbstractTab {
 
-		@Setter(AccessLevel.NONE)
-		private Map<String, PermissionHolder> permissions;
+        @Setter(AccessLevel.NONE)
+        private Map<String, PermissionHolder> permissions;
 
-		public PermissionTab() {
-			setTabName("PermissionTab");
-			setName("dialog.groupEdit.tab.rights.headline");
-			setViewID("permissionTab");
-			setCenterInclude("include/permissions.xhtml");
-		}
+        public PermissionTab() {
+            setTabName("PermissionTab");
+            setName("dialog.groupEdit.tab.rights.headline");
+            setViewID("permissionTab");
+            setCenterInclude("include/permissions.xhtml");
+        }
 
-		public boolean initTab() {
-			setPermissions(group.getPermissions());
-			return true;
-		}
+        public boolean initTab() {
+            setPermissions(group.getPermissions());
+            return true;
+        }
 
-		public void onChangePermission(PermissionHolder holder) {
-			permissions.forEach((k, v) -> {
-				if (v.getPermission().getParent() == holder.getPermission()) {
-					v.setValue(holder.isValue());
-				}
-			});
-		}
+        public void onChangePermission(PermissionHolder holder) {
+            permissions.forEach((k, v) -> {
+                if (v.getPermission().getParent() == holder.getPermission()) {
+                    v.setValue(holder.isValue());
+                }
+            });
+        }
 
-		public void setPermissions(Set<HistoPermissions> groupPermissions) {
-			permissions = new HashMap<String, PermissionHolder>();
+        public void setPermissions(Set<HistoPermissions> groupPermissions) {
+            permissions = new HashMap<String, PermissionHolder>();
 
-			Set<HistoPermissions> groupPermissionsCopy = new HashSet<HistoPermissions>(groupPermissions);
-			HistoPermissions[] permissionArr = HistoPermissions.values();
+            Set<HistoPermissions> groupPermissionsCopy = new HashSet<HistoPermissions>(groupPermissions);
+            HistoPermissions[] permissionArr = HistoPermissions.values();
 
-			for (int i = 0; i < permissionArr.length; i++) {
-				PermissionHolder permissionIsSet = new PermissionHolder(false, permissionArr[i]);
-				for (HistoPermissions histoPermission : groupPermissionsCopy) {
-					if (permissionArr[i] == histoPermission) {
-						permissionIsSet.setValue(true);
-						break;
-					}
-				}
+            for (int i = 0; i < permissionArr.length; i++) {
+                PermissionHolder permissionIsSet = new PermissionHolder(false, permissionArr[i]);
+                for (HistoPermissions histoPermission : groupPermissionsCopy) {
+                    if (permissionArr[i] == histoPermission) {
+                        permissionIsSet.setValue(true);
+                        break;
+                    }
+                }
 
-				permissions.put(permissionArr[i].name(), permissionIsSet);
-			}
-		}
-	}
+                permissions.put(permissionArr[i].name(), permissionIsSet);
+            }
+        }
+    }
 
-	@Getter
-	@Setter
-	public class PermissionHolder {
+    @Getter
+    @Setter
+    public class PermissionHolder {
 
-		private boolean value;
-		private HistoPermissions permission;
+        private boolean value;
+        private HistoPermissions permission;
 
-		public PermissionHolder(boolean value, HistoPermissions permission) {
-			this.value = value;
-			this.permission = permission;
-		}
-	}
+        public PermissionHolder(boolean value, HistoPermissions permission) {
+            this.value = value;
+            this.permission = permission;
+        }
+    }
 }

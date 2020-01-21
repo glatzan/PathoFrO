@@ -1,56 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:b="http://bootsfaces.net/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
 
-	<p:outputPanel styleClass="headerPannel">
-		<h:outputFormat value="#{msg['dialog.council.reply']}" escape="false">
-			<f:param value="#{dialog.councilDialog.selectedCouncil.name}" />
-		</h:outputFormat>
-	</p:outputPanel>
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputFormat value="#{msg['dialog.council.reply']}" escape="false">
+            <f:param value="#{dialog.councilDialog.selectedCouncil.name}"/>
+        </h:outputFormat>
+    </p:outputPanel>
 
-	<p:outputPanel styleClass="bodyPannel" style="padding:10px;">
+    <p:outputPanel styleClass="bodyPannel" style="padding:10px;">
 
-		<h:panelGrid id="content"
-			styleClass="defaultHistoHiddenTableContainer noupdate"
-			style="width:calc(100% - 5px)">
-			<pe:documentViewer height="610" style="margin-left:5px;"
-				class="noupdate"
-				rendered="#{dialog.councilDialog.stream.renderPDF}"
-				value="#{dialog.councilDialog.stream.getPDFStream()}"
-				download="#{dialog.councilDialog.stream.getDisplayPDF.name}" />
-		</h:panelGrid>
-	</p:outputPanel>
+        <h:panelGrid id="content"
+                     styleClass="defaultHistoHiddenTableContainer noupdate"
+                     style="width:calc(100% - 5px)">
+            <pe:documentViewer height="610" style="margin-left:5px;"
+                               class="noupdate"
+                               rendered="#{dialog.councilDialog.stream.renderPDF}"
+                               value="#{dialog.councilDialog.stream.getPDFStream()}"
+                               download="#{dialog.councilDialog.stream.getDisplayPDF.name}"/>
+        </h:panelGrid>
+    </p:outputPanel>
 
-	<div class="buttonContainer">
-		<h:panelGrid columns="2" style="width:100%"
-			styleClass="newTableContainer">
+    <div class="buttonContainer">
+        <h:panelGrid columns="2" style="width:100%"
+                     styleClass="newTableContainer">
 
-			<h:panelGrid columns="1" styleClass="newTableContainer left">
+            <h:panelGrid columns="1" styleClass="newTableContainer left">
 
-			</h:panelGrid>
+            </h:panelGrid>
 
-			<h:panelGrid columns="2" styleClass="newTableContainer right">
-				<!-- print -->
-				<p:commandButton value="#{msg['general.print']}"
-					icon="fa fa-check-circle-o">
-					<f:actionListener
-						binding="#{dialog.councilDialog.printCouncilReport()}" />
-				</p:commandButton>
+            <h:panelGrid columns="2" styleClass="newTableContainer right">
+                <!-- print -->
+                <p:commandButton value="#{msg['general.print']}"
+                                 icon="fa fa-check-circle-o">
+                    <f:actionListener
+                            binding="#{dialog.councilDialog.printCouncilReport()}"/>
+                </p:commandButton>
 
-				<!-- Close Button -->
-				<p:commandButton value="#{msg['general.close']}"
-					widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
-					immediate="true"
-					actionListener="#{dialog.councilDialog.hideDialog()}" />
-			</h:panelGrid>
-		</h:panelGrid>
-	</div>
+                <!-- Close Button -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
+                                 immediate="true"
+                                 actionListener="#{dialog.councilDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
 </ui:composition>

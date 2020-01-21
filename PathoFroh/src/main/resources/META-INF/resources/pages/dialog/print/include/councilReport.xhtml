@@ -1,222 +1,222 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-	<!-- script for scrolltable -->
-	<h:outputScript library="scripts" name="scrollAbleTableCoumnSync.js" />
+    <!-- script for scrolltable -->
+    <h:outputScript library="scripts" name="scrollAbleTableCoumnSync.js"/>
 
-	<h:outputLabel value="#{msg['dialog.print.council']}"
-		styleClass="bigFont" />
+    <h:outputLabel value="#{msg['dialog.print.council']}"
+                   styleClass="bigFont"/>
 
-	<!-- council for task -->
-	<h:panelGroup>
+    <!-- council for task -->
+    <h:panelGroup>
 
-		<!-- council select -->
-		<p:selectOneMenu
-			converter="#{printDialog.selectedTemplate.sharedData.councilListTransformer}"
-			style="width:90%"
-			value="#{printDialog.selectedTemplate.sharedData.selectedCouncil}">
+        <!-- council select -->
+        <p:selectOneMenu
+                converter="#{printDialog.selectedTemplate.sharedData.councilListTransformer}"
+                style="width:90%"
+                value="#{printDialog.selectedTemplate.sharedData.selectedCouncil}">
 
-			<f:selectItems
-				value="#{printDialog.selectedTemplate.sharedData.councilList}"
-				var="council" itemLabel="#{council.name}" itemValue="#{council}" />
+            <f:selectItems
+                    value="#{printDialog.selectedTemplate.sharedData.councilList}"
+                    var="council" itemLabel="#{council.name}" itemValue="#{council}"/>
 
-			<p:ajax event="change" process="@this"
-				onstart="updateContactForCouncil()" />
+            <p:ajax event="change" process="@this"
+                    onstart="updateContactForCouncil()"/>
 
-		</p:selectOneMenu>
+        </p:selectOneMenu>
 
-		<!-- select and update -->
-		<p:remoteCommand name="updateContactForCouncil"
-			update="printSettingsTable pollUpdateTable buttonBtnContainer">
-			<f:actionListener
-				binding="#{printDialog.selectedTemplate.sharedData.updateContactList()}" />
-			<f:actionListener
-				binding="#{printDialog.onChangePrintTemplate()}" />
-		</p:remoteCommand>
-	</h:panelGroup>
+        <!-- select and update -->
+        <p:remoteCommand name="updateContactForCouncil"
+                         update="printSettingsTable pollUpdateTable buttonBtnContainer">
+            <f:actionListener
+                    binding="#{printDialog.selectedTemplate.sharedData.updateContactList()}"/>
+            <f:actionListener
+                    binding="#{printDialog.onChangePrintTemplate()}"/>
+        </p:remoteCommand>
+    </h:panelGroup>
 
-	<h:outputLabel value="#{msg['dialog.print.addresses']}"
-		styleClass="bigFont" />
+    <h:outputLabel value="#{msg['dialog.print.addresses']}"
+                   styleClass="bigFont"/>
 
-	<p:panelGrid styleClass="printDialog_AdressTable"
-		id="addressScrollTable">
-		<f:facet name="header">
-			<p:row>
-				<p:column>
-					<h:outputLabel value="#"></h:outputLabel>
-				</p:column>
-				<p:column>
-					<h:outputLabel value="#{msg['dialog.print.count']}"></h:outputLabel>
-				</p:column>
-				<p:column />
-				<p:column />
-				<p:column />
-			</p:row>
-		</f:facet>
+    <p:panelGrid styleClass="printDialog_AdressTable"
+                 id="addressScrollTable">
+        <f:facet name="header">
+            <p:row>
+                <p:column>
+                    <h:outputLabel value="#"></h:outputLabel>
+                </p:column>
+                <p:column>
+                    <h:outputLabel value="#{msg['dialog.print.count']}"></h:outputLabel>
+                </p:column>
+                <p:column/>
+                <p:column/>
+                <p:column/>
+            </p:row>
+        </f:facet>
 
-		<c:forEach varStatus="outer"
-			items="#{printDialog.selectedTemplate.sharedData.contactList}"
-			var="chooser">
-			<p:row
-				styleClass="#{(outer.index + 1 ) mod 2 eq 0 ? 'alternate_row_background' : ''}">
-				<!-- select -->
-				<p:column>
-					<!-- select boolean backend for not changing the pdf -->
-					<p:selectBooleanCheckbox value="#{chooser.selected}"
-						rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
-						<p:ajax event="change" process="printSettingsTable"
-							listener="#{printDialog.selectedTemplate.onChooseContact(chooser)}"
-							update="printSettingsTable" />
-					</p:selectBooleanCheckbox>
+        <c:forEach varStatus="outer"
+                   items="#{printDialog.selectedTemplate.sharedData.contactList}"
+                   var="chooser">
+            <p:row
+                    styleClass="#{(outer.index + 1 ) mod 2 eq 0 ? 'alternate_row_background' : ''}">
+                <!-- select -->
+                <p:column>
+                    <!-- select boolean backend for not changing the pdf -->
+                    <p:selectBooleanCheckbox value="#{chooser.selected}"
+                                             rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
+                        <p:ajax event="change" process="printSettingsTable"
+                                listener="#{printDialog.selectedTemplate.onChooseContact(chooser)}"
+                                update="printSettingsTable"/>
+                    </p:selectBooleanCheckbox>
 
-					<!-- select boolean backend for changing the pdf -->
-					<h:panelGroup
-						rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
-						<p:selectBooleanCheckbox value="#{chooser.selected}">
-							<p:ajax event="change" process="printSettingsTable"
-								onstart="updateContactAndRerenderPDF#{outer.index}()" />
-						</p:selectBooleanCheckbox>
+                    <!-- select boolean backend for changing the pdf -->
+                    <h:panelGroup
+                            rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
+                        <p:selectBooleanCheckbox value="#{chooser.selected}">
+                            <p:ajax event="change" process="printSettingsTable"
+                                    onstart="updateContactAndRerenderPDF#{outer.index}()"/>
+                        </p:selectBooleanCheckbox>
 
-						<p:remoteCommand name="updateContactAndRerenderPDF#{outer.index}"
-							update="printSettingsTable pollUpdateTable buttonBtnContainer">
-							<f:actionListener
-								binding="#{printDialog.selectedTemplate.onChooseContact(chooser)}" />
-							<f:actionListener
-								binding="#{printDialog.onChangePrintTemplate()}" />
-						</p:remoteCommand>
-					</h:panelGroup>
+                        <p:remoteCommand name="updateContactAndRerenderPDF#{outer.index}"
+                                         update="printSettingsTable pollUpdateTable buttonBtnContainer">
+                            <f:actionListener
+                                    binding="#{printDialog.selectedTemplate.onChooseContact(chooser)}"/>
+                            <f:actionListener
+                                    binding="#{printDialog.onChangePrintTemplate()}"/>
+                        </p:remoteCommand>
+                    </h:panelGroup>
 
-				</p:column>
+                </p:column>
 
-				<!-- count -->
-				<p:column>
-					<p:spinner value="#{chooser.copies}" styleClass="oneNumberSpinner"
-						disabled="#{!chooser.selected}" min="1" max="9" />
-				</p:column>
+                <!-- count -->
+                <p:column>
+                    <p:spinner value="#{chooser.copies}" styleClass="oneNumberSpinner"
+                               disabled="#{!chooser.selected}" min="1" max="9"/>
+                </p:column>
 
-				<!-- role -->
-				<p:column>
-					<h:outputLabel rendered="#{chooser.contact.role ne 'NONE'}"
-						value="#{msg['enum.contactRole.'.concat(chooser.contact.role)]}"
-						title="#{msg['enum.contactRole.'.concat(chooser.contact.role)]}">
-						<f:converter converterId="org.histo.ui.TruncateConverter" />
-						<f:attribute name="truncateAt" value="9" />
-						<f:attribute name="continuationMark" value="..." />
-					</h:outputLabel>
-				</p:column>
+                <!-- role -->
+                <p:column>
+                    <h:outputLabel rendered="#{chooser.contact.role ne 'NONE'}"
+                                   value="#{msg['enum.contactRole.'.concat(chooser.contact.role)]}"
+                                   title="#{msg['enum.contactRole.'.concat(chooser.contact.role)]}">
+                        <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                        <f:attribute name="truncateAt" value="9"/>
+                        <f:attribute name="continuationMark" value="..."/>
+                    </h:outputLabel>
+                </p:column>
 
-				<!-- name -->
-				<p:column>
-					<h:outputLabel value="#{chooser.contact.person.getFullName()}"
-						id="editAddress#{outer.index}">
-						<f:converter converterId="org.histo.ui.TruncateConverter" />
-						<f:attribute name="truncateAt" value="20" />
-						<f:attribute name="continuationMark" value="..." />
-					</h:outputLabel>
+                <!-- name -->
+                <p:column>
+                    <h:outputLabel value="#{chooser.contact.person.getFullName()}"
+                                   id="editAddress#{outer.index}">
+                        <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                        <f:attribute name="truncateAt" value="20"/>
+                        <f:attribute name="continuationMark" value="..."/>
+                    </h:outputLabel>
 
-					<p:overlayPanel for="editAddress#{outer.index}"
-						widgetVar="editAddressOver#{outer.index}"
-						rendered="#{!chooser.emptyAddress}"
-						id="editAddressOver#{outer.index}" showEvent="mouseover"
-						hideEvent="mouseout">
+                    <p:overlayPanel for="editAddress#{outer.index}"
+                                    widgetVar="editAddressOver#{outer.index}"
+                                    rendered="#{!chooser.emptyAddress}"
+                                    id="editAddressOver#{outer.index}" showEvent="mouseover"
+                                    hideEvent="mouseout">
 
-						<h:outputText value="#{chooser.customAddress}" escape="false"
-							styleClass="forcedLineBreak" />
-					</p:overlayPanel>
-				</p:column>
+                        <h:outputText value="#{chooser.customAddress}" escape="false"
+                                      styleClass="forcedLineBreak"/>
+                    </p:overlayPanel>
+                </p:column>
 
-				<p:column>
-					<h:panelGroup rendered="#{!chooser.emptyAddress}">
+                <p:column>
+                    <h:panelGroup rendered="#{!chooser.emptyAddress}">
 
-						<!-- select boolean backend for not changing the pdf -->
-						<p:commandLink
-							rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}"
-							title="#{msg['dialog.printDialog.individualAddress']}"
-							actionListener="#{dialog.customAddressDialog.initAndPrepareBean(printDialog.selectedTemplate.task,chooser)}">
-							<i class="fa fa-gear" style="margin-left: 2px" />
-							<p:ajax event="dialogReturn"
-								listener="#{printDialog.selectedTemplate.onCustomAddressReturn}"
-								update="editAddressOver#{outer.index}" />
-						</p:commandLink>
+                        <!-- select boolean backend for not changing the pdf -->
+                        <p:commandLink
+                                rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}"
+                                title="#{msg['dialog.printDialog.individualAddress']}"
+                                actionListener="#{dialog.customAddressDialog.initAndPrepareBean(printDialog.selectedTemplate.task,chooser)}">
+                            <i class="fa fa-gear" style="margin-left: 2px"/>
+                            <p:ajax event="dialogReturn"
+                                    listener="#{printDialog.selectedTemplate.onCustomAddressReturn}"
+                                    update="editAddressOver#{outer.index}"/>
+                        </p:commandLink>
 
-						<!-- select boolean backend for changing the pdf -->
-						<h:panelGroup
-							rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
-							<p:commandLink title="#{msg['dialog.printDialog.individualAddress']}"
-								actionListener="#{dialog.customAddressDialog.initAndPrepareBean(printDialog.selectedTemplate.task,chooser)}">
-								<i class="fa fa-gear" style="margin-left: 2px" />
+                        <!-- select boolean backend for changing the pdf -->
+                        <h:panelGroup
+                                rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
+                            <p:commandLink title="#{msg['dialog.printDialog.individualAddress']}"
+                                           actionListener="#{dialog.customAddressDialog.initAndPrepareBean(printDialog.selectedTemplate.task,chooser)}">
+                                <i class="fa fa-gear" style="margin-left: 2px"/>
 
-								<p:ajax event="dialogReturn"
-									update="editAddressOver#{outer.index}"
-									listener="#{printDialog.selectedTemplate.onCustomAddressReturn}"
-									oncomplete="updateAfterCustomAddress#{outer.index}()" />
-							</p:commandLink>
+                                <p:ajax event="dialogReturn"
+                                        update="editAddressOver#{outer.index}"
+                                        listener="#{printDialog.selectedTemplate.onCustomAddressReturn}"
+                                        oncomplete="updateAfterCustomAddress#{outer.index}()"/>
+                            </p:commandLink>
 
-							<p:remoteCommand name="updateAfterCustomAddress#{outer.index}"
-								update="editAddressOver#{outer.index} pollUpdateTable buttonBtnContainer">
-								<f:actionListener
-									binding="#{printDialog.onChangePrintTemplate()}" />
-							</p:remoteCommand>
-						</h:panelGroup>
+                            <p:remoteCommand name="updateAfterCustomAddress#{outer.index}"
+                                             update="editAddressOver#{outer.index} pollUpdateTable buttonBtnContainer">
+                                <f:actionListener
+                                        binding="#{printDialog.onChangePrintTemplate()}"/>
+                            </p:remoteCommand>
+                        </h:panelGroup>
 
-					</h:panelGroup>
-				</p:column>
-			</p:row>
+                    </h:panelGroup>
+                </p:column>
+            </p:row>
 
-			<!-- Organizations -->
-			<c:forEach varStatus="inner" items="#{chooser.organizations}"
-				var="organizazion">
-				<p:row
-					styleClass="#{(outer.index + 1 ) mod 2 eq 0 ? 'alternate_row_background' : ''}">
-					<p:column style="background-color: inherit !important;">
-					</p:column>
-					<p:column style="text-align: center;">
+            <!-- Organizations -->
+            <c:forEach varStatus="inner" items="#{chooser.organizations}"
+                       var="organizazion">
+                <p:row
+                        styleClass="#{(outer.index + 1 ) mod 2 eq 0 ? 'alternate_row_background' : ''}">
+                    <p:column style="background-color: inherit !important;">
+                    </p:column>
+                    <p:column style="text-align: center;">
 
-						<!-- select boolean backend for not changing the pdf -->
-						<p:selectBooleanCheckbox value="#{organizazion.selected}"
-							rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
-							<p:ajax event="change" process="@form"
-								update="printSettingsTable"
-								listener="#{printDialog.selectedTemplate.onChooseOrganizationOfContact(organizazion)}"></p:ajax>
-						</p:selectBooleanCheckbox>
+                        <!-- select boolean backend for not changing the pdf -->
+                        <p:selectBooleanCheckbox value="#{organizazion.selected}"
+                                                 rendered="#{!printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
+                            <p:ajax event="change" process="@form"
+                                    update="printSettingsTable"
+                                    listener="#{printDialog.selectedTemplate.onChooseOrganizationOfContact(organizazion)}"></p:ajax>
+                        </p:selectBooleanCheckbox>
 
 
-						<!-- select boolean backend for changing the pdf -->
-						<h:panelGroup
-							rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
-							<p:selectBooleanCheckbox value="#{organizazion.selected}">
-								<p:ajax event="change" process="printSettingsTable"
-									onstart="updateOrganizationAndRerenderPDF#{outer.index}()" />
-							</p:selectBooleanCheckbox>
+                        <!-- select boolean backend for changing the pdf -->
+                        <h:panelGroup
+                                rendered="#{printDialog.selectedTemplate.sharedData.updatePdfOnEverySettingChange}">
+                            <p:selectBooleanCheckbox value="#{organizazion.selected}">
+                                <p:ajax event="change" process="printSettingsTable"
+                                        onstart="updateOrganizationAndRerenderPDF#{outer.index}()"/>
+                            </p:selectBooleanCheckbox>
 
-							<p:remoteCommand
-								name="updateOrganizationAndRerenderPDF#{outer.index}"
-								update="printSettingsTable pollUpdateTable buttonBtnContainer">
-								<f:actionListener
-									binding="#{printDialog.selectedTemplate.onChooseOrganizationOfContact(organizazion)}" />
-								<f:actionListener
-									binding="#{printDialog.onChangePrintTemplate()}" />
-							</p:remoteCommand>
-						</h:panelGroup>
+                            <p:remoteCommand
+                                    name="updateOrganizationAndRerenderPDF#{outer.index}"
+                                    update="printSettingsTable pollUpdateTable buttonBtnContainer">
+                                <f:actionListener
+                                        binding="#{printDialog.selectedTemplate.onChooseOrganizationOfContact(organizazion)}"/>
+                                <f:actionListener
+                                        binding="#{printDialog.onChangePrintTemplate()}"/>
+                            </p:remoteCommand>
+                        </h:panelGroup>
 
-					</p:column>
-					<p:column colspan="3">
-						<h:outputText value="#{organizazion.organization.name}" />
-					</p:column>
-				</p:row>
-			</c:forEach>
+                    </p:column>
+                    <p:column colspan="3">
+                        <h:outputText value="#{organizazion.organization.name}"/>
+                    </p:column>
+                </p:row>
+            </c:forEach>
 
-		</c:forEach>
-	</p:panelGrid>
+        </c:forEach>
+    </p:panelGrid>
 
-	<script type="text/javascript">
-		scrollAbleTableCoumnSync('#dialogContent\\:addressScrollTable', 16);
-	</script>
+    <script type="text/javascript">
+        scrollAbleTableCoumnSync('#dialogContent\\:addressScrollTable', 16);
+    </script>
 </ui:composition>

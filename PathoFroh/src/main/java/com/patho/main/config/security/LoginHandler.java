@@ -15,24 +15,24 @@ import javax.servlet.http.HttpServletRequest;
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class LoginHandler {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public static final String LoginFaildSessionAttribue = "loginFailedMessage";
+    public static final String LoginFaildSessionAttribue = "loginFailedMessage";
 
-	public void removeLoginFailedMessagedAttribute(PhaseEvent event) {
-		if (event.getPhaseId() == PhaseId.RENDER_RESPONSE) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(LoginFaildSessionAttribue);
-		}
-	}
+    public void removeLoginFailedMessagedAttribute(PhaseEvent event) {
+        if (event.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(LoginFaildSessionAttribue);
+        }
+    }
 
-	/**
-	 * Refreshes the current Session
-	 */
-	public void keepSessionAlive() {
-		logger.debug("Refreshing Session");
-		FacesContext fc = FacesContext.getCurrentInstance();
-		HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-		request.getSession();
-	}
+    /**
+     * Refreshes the current Session
+     */
+    public void keepSessionAlive() {
+        logger.debug("Refreshing Session");
+        FacesContext fc = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+        request.getSession();
+    }
 
 }

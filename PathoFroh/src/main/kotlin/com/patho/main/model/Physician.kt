@@ -104,7 +104,7 @@ open class Physician : AbstractPersistable {
      * Returns true if no associatedRoles are set
      */
     @Transient
-    open fun hasNoAssociateRole() : Boolean = associatedRoles.isEmpty()
+    open fun hasNoAssociateRole(): Boolean = associatedRoles.isEmpty()
 
     /**
      * Adds an role to the physician

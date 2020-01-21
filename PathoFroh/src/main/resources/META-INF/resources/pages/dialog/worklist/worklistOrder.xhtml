@@ -1,91 +1,90 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title><h:outputFormat
-			value="#{msg['dialog.worklistorder.headline']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{msg['dialog.worklistorder.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
-	<h:form id="dialogContent">
+    <h:form id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel value="#{msg['dialog.worklistorder.headline']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.worklistorder.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
-		<div class="dialogContent">
-			<h:panelGrid columns="2" styleClass="defaultHistoTable"
-				columnClasses="columnTop,">
-				<!-- sorting -->
-				<h:outputLabel value="#{msg['dialog.worklistorder.sorting']}" />
+        <div class="dialogContent">
+            <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                         columnClasses="columnTop,">
+                <!-- sorting -->
+                <h:outputLabel value="#{msg['dialog.worklistorder.sorting']}"/>
 
-				<p:selectOneRadio
-					value="#{worklistHandler.current.worklistSortOrder}"
-					layout="grid" columns="1">
-					<f:selectItem
-						itemLabel="#{msg['dialog.worklistorder.sorting.tasknumber']}"
-						itemValue="TASK_ID" />
-					<f:selectItem
-						itemLabel="#{msg['dialog.worklistorder.sorting.piz']}"
-						itemValue="PIZ" />
-					<f:selectItem
-						itemLabel="#{msg['dialog.worklistorder.sorting.name']}"
-						itemValue="NAME" />
-					<f:selectItem
-						itemLabel="#{msg['dialog.worklistorder.sorting.priority']}"
-						itemValue="PRIORITY" />
-				</p:selectOneRadio>
+                <p:selectOneRadio
+                        value="#{worklistHandler.current.worklistSortOrder}"
+                        layout="grid" columns="1">
+                    <f:selectItem
+                            itemLabel="#{msg['dialog.worklistorder.sorting.tasknumber']}"
+                            itemValue="TASK_ID"/>
+                    <f:selectItem
+                            itemLabel="#{msg['dialog.worklistorder.sorting.piz']}"
+                            itemValue="PIZ"/>
+                    <f:selectItem
+                            itemLabel="#{msg['dialog.worklistorder.sorting.name']}"
+                            itemValue="NAME"/>
+                    <f:selectItem
+                            itemLabel="#{msg['dialog.worklistorder.sorting.priority']}"
+                            itemValue="PRIORITY"/>
+                </p:selectOneRadio>
 
-				<!-- ascending -->
-				<h:outputLabel value="#{msg['dialog.worklistorder.order']}"></h:outputLabel>
-				<p:selectBooleanButton
-					value="#{worklistHandler.current.sortAscending}"
-					onLabel="#{msg['dialog.worklistorder.order.asc']}"
-					offLabel="#{msg['dialog.worklistorder.order.dec']}" />
-			</h:panelGrid>
-		</div>
+                <!-- ascending -->
+                <h:outputLabel value="#{msg['dialog.worklistorder.order']}"></h:outputLabel>
+                <p:selectBooleanButton
+                        value="#{worklistHandler.current.sortAscending}"
+                        onLabel="#{msg['dialog.worklistorder.order.asc']}"
+                        offLabel="#{msg['dialog.worklistorder.order.dec']}"/>
+            </h:panelGrid>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- confirm -->
-					<p:commandButton value="#{msg['dialog.worklistorder.button.sort']}"
-						icon="fa fa-check-circle-o">
-						<f:actionListener
-							binding="#{worklistHandler.current.sortWordklist()}" />
-						<f:actionListener
-							binding="#{dialog.worklistSortDialog.hideDialog()}" />
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- confirm -->
+                    <p:commandButton value="#{msg['dialog.worklistorder.button.sort']}"
+                                     icon="fa fa-check-circle-o">
+                        <f:actionListener
+                                binding="#{worklistHandler.current.sortWordklist()}"/>
+                        <f:actionListener
+                                binding="#{dialog.worklistSortDialog.hideDialog()}"/>
+                    </p:commandButton>
 
-					<!-- Abort button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						icon="fa fa-times-circle"
-						actionListener="#{dialog.worklistSortDialog.hideDialog()}">
-						<p:ajax update="@form" resetValues="true" />
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
+                    <!-- Abort button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     icon="fa fa-times-circle"
+                                     actionListener="#{dialog.worklistSortDialog.hideDialog()}">
+                        <p:ajax update="@form" resetValues="true"/>
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
 
-	</h:form>
+    </h:form>
 </h:body>
 </html>

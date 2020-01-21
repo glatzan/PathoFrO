@@ -1,113 +1,112 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
 
 
 <h:outputFormat value="#{msg['dialog.userDelete.headline']}">
-	<f:param
-		value="#{dialog.editUserDialog.user.physician.person.fullName}" />
+    <f:param
+            value="#{dialog.editUserDialog.user.physician.person.fullName}"/>
 </h:outputFormat>
 
 <h:head>
-	<title><h:outputFormat value="#{msg['']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="style" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
-	<h:outputStylesheet name="histoNew.css" value="histoNew.css" />
+    <title><h:outputFormat value="#{msg['']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="style"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
+    <h:outputStylesheet name="histoNew.css" value="histoNew.css"/>
 </h:head>
 
 <h:body styleClass="contentInputDialog">
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<f:metadata>
-			<f:viewAction action="#{loginHandler.setDisabled(false)}" />
-		</f:metadata>
+        <f:metadata>
+            <f:viewAction action="#{loginHandler.setDisabled(false)}"/>
+        </f:metadata>
 
-		<script type="text/javascript">
-			
-		</script>
+        <script type="text/javascript">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="newTableContainer">
-				<h:outputLabel value="#{msg['']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					styleClass="noUnderlineAtLink"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        </script>
 
-
-		<div class="dialogContent">
-			<h:panelGrid columns="2" styleClass="newStyleListingTable"
-				columnClasses="columnLabelContainer150,columnInputContainer300">
-			</h:panelGrid>
-
-			<h:panelGrid columns="1" styleClass="newStyleListingTable">
-				<p:dataTable var="batch" scrollable="true" scrollHeight="250"
-					rowIndexVar="rowIdx" id="batchList" styleClass="newStyleDataTable"
-					value="#{dialog.stainingEditDialog.stainingPrototype.batchDetails}">
-				</p:dataTable>
-			</h:panelGrid>
-
-			<h:panelGrid columns="1" styleClass="newStyleListingTable"
-				columnClasses="columnLongText">
-				<h:outputLabel value="#{msg['']}" />
-			</h:panelGrid>
-
-			<!-- Separator -->
-			<h:panelGrid columns="1"
-				styleClass="newStyleListingTable newStyleListingTableSeparator">
-				<p:separator style="width:100%" />
-				<h:outputLabel value="#{msg['component.physicianSettingsGeneral.address']}" />
-			</h:panelGrid>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="newTableContainer">
+                <h:outputLabel value="#{msg['']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               styleClass="noUnderlineAtLink"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
 
-		</div>
+        <div class="dialogContent">
+            <h:panelGrid columns="2" styleClass="newStyleListingTable"
+                         columnClasses="columnLabelContainer150,columnInputContainer300">
+            </h:panelGrid>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2" style="width:100%"
-				styleClass="newTableContainer">
+            <h:panelGrid columns="1" styleClass="newStyleListingTable">
+                <p:dataTable var="batch" scrollable="true" scrollHeight="250"
+                             rowIndexVar="rowIdx" id="batchList" styleClass="newStyleDataTable"
+                             value="#{dialog.stainingEditDialog.stainingPrototype.batchDetails}">
+                </p:dataTable>
+            </h:panelGrid>
 
-				<h:panelGrid columns="1" styleClass="newTableContainer left">
-					<!-- Save button -->
-					<p:commandButton value="#{msg['general.save']}" icon="fa fa-plus">
-						<f:actionListener
-							binding="#{dialog.stainingEditDialog.addBatch()}"></f:actionListener>
-					</p:commandButton>
-				</h:panelGrid>
+            <h:panelGrid columns="1" styleClass="newStyleListingTable"
+                         columnClasses="columnLongText">
+                <h:outputLabel value="#{msg['']}"/>
+            </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="newTableContainer right">
-					<!-- Save button -->
-					<p:commandButton value="#{msg['general.save']}"
-						icon="fa fa-check-circle-o">
-						<f:actionListener
-							binding="#{dialog.physicianSearchDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
+            <!-- Separator -->
+            <h:panelGrid columns="1"
+                         styleClass="newStyleListingTable newStyleListingTableSeparator">
+                <p:separator style="width:100%"/>
+                <h:outputLabel value="#{msg['component.physicianSettingsGeneral.address']}"/>
+            </h:panelGrid>
 
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-						icon="fa fa-times-circle">
-						<f:actionListener
-							binding="#{dialog.stainingEditDialog.hideDialog()}"></f:actionListener>
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+
+        </div>
+
+        <div class="buttonContainer">
+            <h:panelGrid columns="2" style="width:100%"
+                         styleClass="newTableContainer">
+
+                <h:panelGrid columns="1" styleClass="newTableContainer left">
+                    <!-- Save button -->
+                    <p:commandButton value="#{msg['general.save']}" icon="fa fa-plus">
+                        <f:actionListener
+                                binding="#{dialog.stainingEditDialog.addBatch()}"></f:actionListener>
+                    </p:commandButton>
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" styleClass="newTableContainer right">
+                    <!-- Save button -->
+                    <p:commandButton value="#{msg['general.save']}"
+                                     icon="fa fa-check-circle-o">
+                        <f:actionListener
+                                binding="#{dialog.physicianSearchDialog.hideDialog()}"></f:actionListener>
+                    </p:commandButton>
+
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     icon="fa fa-times-circle">
+                        <f:actionListener
+                                binding="#{dialog.stainingEditDialog.hideDialog()}"></f:actionListener>
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>
 
-Blocking 
+        Blocking
 
-onstart="PF('blockUIWidget').block()"
-oncomplete="PF('blockUIWidget').unblock()"
+        onstart="PF('blockUIWidget').block()"
+        oncomplete="PF('blockUIWidget').unblock()"
 
 <ui:include src="../../template/blockUi.xhtml"></ui:include>

@@ -32,7 +32,7 @@ class JSONPatientMapper {
     fun getPatient(patient: Patient): Patient {
 
         patient.person.title = titel ?: ""
-        patient.person.lastName =  name ?: ""
+        patient.person.lastName = name ?: ""
         patient.person.firstName = vorname ?: ""
 
         if (geburtsdatum != null) {
@@ -50,7 +50,7 @@ class JSONPatientMapper {
 
         patient.insurance = krankenkasse ?: ""
         patient.piz = piz ?: ""
-        patient.person.contact.town =  ort ?: ""
+        patient.person.contact.town = ort ?: ""
         patient.person.contact.postcode = plz ?: ""
         patient.person.contact.street = anschrift ?: ""
 

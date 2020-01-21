@@ -1,127 +1,126 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
 
 <h:head>
-	<title><h:outputFormat
-			value="#{dialog.materialEditDialog.newMaterial ? msg['dialog.materialEdit.new'] : msg['dialog.materialEdit.edit']}" /></title>
-	<h:outputStylesheet name="style.css" value="style.css" library="css" />
-	<h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
-		library="css" />
-	<h:outputScript library="scripts" name="commonFunctions.js" />
+    <title><h:outputFormat
+            value="#{dialog.materialEditDialog.newMaterial ? msg['dialog.materialEdit.new'] : msg['dialog.materialEdit.edit']}"/>
+    </title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
 
-	<h:form enctype="multipart/form-data" id="dialogContent">
+    <h:form enctype="multipart/form-data" id="dialogContent">
 
-		<div class="dialogHeader">
-			<h:panelGrid style="width:100%;" columns="2"
-				styleClass="defaultHistoTable">
-				<h:outputLabel
-					value="#{dialog.materialEditDialog.newMaterial ? msg['dialog.materialEdit.new'] : msg['dialog.materialEdit.edit']}" />
-				<p:commandLink title="#{msg['general.close']}" style="float:right;"
-					onclick="$('#dialogContent\\:closeBtn').click();return false;">
-					<i class="fa fa-fw fa-times" />
-				</p:commandLink>
-			</h:panelGrid>
-		</div>
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel
+                        value="#{dialog.materialEditDialog.newMaterial ? msg['dialog.materialEdit.new'] : msg['dialog.materialEdit.edit']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
 
 
-		<div class="dialogContent">
+        <div class="dialogContent">
 
-			<h:panelGrid columns="2" styleClass="defaultHistoTable">
+            <h:panelGrid columns="2" styleClass="defaultHistoTable">
 
-				<!-- name -->
-				<h:outputLabel value="#{msg['dialog.materialEdit.name']}"></h:outputLabel>
-				<p:inputText style="width:390px"
-					value="#{dialog.materialEditDialog.materialPreset.name}" />
+                <!-- name -->
+                <h:outputLabel value="#{msg['dialog.materialEdit.name']}"></h:outputLabel>
+                <p:inputText style="width:390px"
+                             value="#{dialog.materialEditDialog.materialPreset.name}"/>
 
-				<!-- commentary -->
-				<h:outputLabel value="#{msg['dialog.materialEdit.commentary']}"></h:outputLabel>
-				<p:inputTextarea rows="3" style="width:390px"
-					value="#{dialog.materialEditDialog.materialPreset.commentary}" />
+                <!-- commentary -->
+                <h:outputLabel value="#{msg['dialog.materialEdit.commentary']}"></h:outputLabel>
+                <p:inputTextarea rows="3" style="width:390px"
+                                 value="#{dialog.materialEditDialog.materialPreset.commentary}"/>
 
-				<!-- priority -->
-				<h:outputLabel value="#{msg['dialog.materialEdit.priority']}"></h:outputLabel>
-				<p:inputText
-					value="#{dialog.materialEditDialog.materialPreset.priorityCount}" />
+                <!-- priority -->
+                <h:outputLabel value="#{msg['dialog.materialEdit.priority']}"></h:outputLabel>
+                <p:inputText
+                        value="#{dialog.materialEditDialog.materialPreset.priorityCount}"/>
 
-			</h:panelGrid>
+            </h:panelGrid>
 
-			<!-- Separator -->
-			<h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
-				<p:separator />
-				<h:outputLabel value="#{msg['dialog.materialEdit.stainings']}" />
-			</h:panelGrid>
+            <!-- Separator -->
+            <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+                <p:separator/>
+                <h:outputLabel value="#{msg['dialog.materialEdit.stainings']}"/>
+            </h:panelGrid>
 
-			<!-- stanings -->
-			<h:panelGrid columns="1" styleClass="defaultHistoTable">
-				<p:dataTable var="staining" scrollable="true" scrollHeight="250"
-					styleClass="defaultHistoDataTable"
-					value="#{dialog.materialEditDialog.materialPreset.stainingPrototypes}">
+            <!-- stanings -->
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                <p:dataTable var="staining" scrollable="true" scrollHeight="250"
+                             styleClass="defaultHistoDataTable"
+                             value="#{dialog.materialEditDialog.materialPreset.stainingPrototypes}">
 
-					<p:column headerText="#{msg['dialog.materialEdit.stainings.name']}"
-						sortBy="#{staining.name}" style="width:30%">
-						<h:outputText value="#{staining.name}" />
-					</p:column>
+                    <p:column headerText="#{msg['dialog.materialEdit.stainings.name']}"
+                              sortBy="#{staining.name}" style="width:30%">
+                        <h:outputText value="#{staining.name}"/>
+                    </p:column>
 
-					<p:column headerText="#{msg['dialog.materialEdit.stainings.type']}"
-						sortBy="#{staining.type}">
-						<h:outputText
-							value="#{msg['enum.stainingType.'.concat(staining.type)]}" />
-					</p:column>
+                    <p:column headerText="#{msg['dialog.materialEdit.stainings.type']}"
+                              sortBy="#{staining.type}">
+                        <h:outputText
+                                value="#{msg['enum.stainingType.'.concat(staining.type)]}"/>
+                    </p:column>
 
-					<!-- remove -->
-					<p:column style="width:15px;"
-						styleClass="centerChildElements centerChildElements">
-						<f:facet name="header">
-							<i class="fa fa-cog" />
-						</f:facet>
-						<p:commandLink title="#{msg['general.remove']}"
-							actionListener="#{dialog.materialEditDialog.removeStaining(staining)}"
-							update="@form">
-							<i class="fa fa-trash-o" />
-						</p:commandLink>
-					</p:column>
+                    <!-- remove -->
+                    <p:column style="width:15px;"
+                              styleClass="centerChildElements centerChildElements">
+                        <f:facet name="header">
+                            <i class="fa fa-cog"/>
+                        </f:facet>
+                        <p:commandLink title="#{msg['general.remove']}"
+                                       actionListener="#{dialog.materialEditDialog.removeStaining(staining)}"
+                                       update="@form">
+                            <i class="fa fa-trash-o"/>
+                        </p:commandLink>
+                    </p:column>
 
-				</p:dataTable>
-			</h:panelGrid>
-		</div>
+                </p:dataTable>
+            </h:panelGrid>
+        </div>
 
-		<div class="buttonContainer">
-			<h:panelGrid columns="2">
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
 
-				<h:panelGrid columns="1" styleClass="left">
-					<!-- add batch button -->
-					<p:commandButton
-						value="#{msg['dialog.materialEdit.stainings.add']}"
-						icon="fa fa-picture-o" update="@form"
-						actionListener="#{dialog.addSlidesDialog.initAndPrepareBean()}">
-						<p:ajax event="dialogReturn" update="@form"
-							listener="#{dialog.materialEditDialog.onDefaultDialogReturn}" />
-					</p:commandButton>
-				</h:panelGrid>
+                <h:panelGrid columns="1" styleClass="left">
+                    <!-- add batch button -->
+                    <p:commandButton
+                            value="#{msg['dialog.materialEdit.stainings.add']}"
+                            icon="fa fa-picture-o" update="@form"
+                            actionListener="#{dialog.addSlidesDialog.initAndPrepareBean()}">
+                        <p:ajax event="dialogReturn" update="@form"
+                                listener="#{dialog.materialEditDialog.onDefaultDialogReturn}"/>
+                    </p:commandButton>
+                </h:panelGrid>
 
-				<h:panelGrid columns="2" styleClass="right">
-					<!-- Save button -->
-					<p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
-						actionListener="#{dialog.materialEditDialog.saveAndHide()}">
-					</p:commandButton>
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Save button -->
+                    <p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
+                                     actionListener="#{dialog.materialEditDialog.saveAndHide()}">
+                    </p:commandButton>
 
-					<!-- Close button -->
-					<p:commandButton value="#{msg['general.close']}" id="closeBtn"
-						actionListener="#{dialog.materialEditDialog.hideDialog()}"
-						icon="fa fa-times-circle">
-					</p:commandButton>
-				</h:panelGrid>
-			</h:panelGrid>
-		</div>
-	</h:form>
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.close']}" id="closeBtn"
+                                     actionListener="#{dialog.materialEditDialog.hideDialog()}"
+                                     icon="fa fa-times-circle">
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
 </h:body>
 </html>

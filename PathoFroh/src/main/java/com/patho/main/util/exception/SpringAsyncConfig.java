@@ -11,15 +11,15 @@ import java.util.concurrent.Executor;
 @Configuration
 @EnableAsync
 public class SpringAsyncConfig implements AsyncConfigurer {
-     
-	@Override
-	public Executor getAsyncExecutor() {
-		return new ThreadPoolTaskExecutor();
-	}
 
-	@Override
-	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-		return new ThreadExceptionHandler();
-	}
-     
+    @Override
+    public Executor getAsyncExecutor() {
+        return new ThreadPoolTaskExecutor();
+    }
+
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return new ThreadExceptionHandler();
+    }
+
 }
