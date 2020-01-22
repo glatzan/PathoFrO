@@ -139,12 +139,12 @@ public class FavouriteListService extends AbstractService {
         return task;
     }
 
-    public void removeTaskFromList(long taskID, boolean addToDumpList, Long... ids) {
-        removeTaskFromList(taskID, addToDumpList, ArrayUtils.toPrimitive(ids));
+    public Task removeTaskFromList(long taskID, boolean addToDumpList, Long... ids) {
+        return removeTaskFromList(taskID, addToDumpList, ArrayUtils.toPrimitive(ids));
     }
 
-    public void removeTaskFromList(long taskID, Long... ids) {
-        removeTaskFromList(taskID, true, ids);
+    public Task removeTaskFromList(long taskID, Long... ids) {
+        return removeTaskFromList(taskID, true, ids);
     }
 
     public Task removeTaskFromList(long taskID, boolean addToDumpList,

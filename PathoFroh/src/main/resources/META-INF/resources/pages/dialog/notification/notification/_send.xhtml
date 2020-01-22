@@ -91,4 +91,9 @@
         <p:ajax event="dialogReturn" listener="#{notificationDialog.sendTab.onSubDialogReturn}"/>
     </p:commandButton>
 
+    <p:commandButton widgetVar="openArchiveTaskBtm" id="openArchiveTaskBtm" style="display: none"
+                     actionListener="#{archiveTaskDialog.initAndPrepareBean(notificationDialog.task)}">
+        <p:ajax event="dialogReturn" listener="#{notificationDialog.sendTab.onSubDialogReturn}"/>
+    </p:commandButton>
+
 </ui:composition>

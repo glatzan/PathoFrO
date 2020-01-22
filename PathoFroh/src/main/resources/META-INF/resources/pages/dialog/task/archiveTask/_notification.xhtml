@@ -35,7 +35,7 @@
 
             <!-- infos -->
             <p:column style="width: 20px" styleClass="centerChildElements ">
-                <p:commandLink
+                <p:commandLink rendered="#{reportNotificationIntentStatus.notificationDesignated}"
                         styleClass="contactInfoOverplayTrigger"
                         icon="pi pi-search"
                         actionListener="#{archiveTaskDialog.setSelectedReportIntentStatus(reportNotificationIntentStatus)}"
@@ -45,12 +45,15 @@
                         oncomplete="commonFunctions.showOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}');">
                     <i class="fa fa-info-circle"/>
                 </p:commandLink>
+                <h:panelGroup rendered="#{!reportNotificationIntentStatus.notificationDesignated}">
+                    <i class="fa fa-ellipsis-h icon-green" title="#{msg['dialog.archiveTask.status.notification.details.list.noNotification']}"/>
+                </h:panelGroup>
             </p:column>
 
             <!-- status -->
             <p:column style="width: 20px"
                       styleClass="centerChildElements centerHeaderChildElements">
-                <h:panelGroup id="notficationp">
+                <h:panelGroup rendered="#{!reportNotificationIntentStatus.noNotification}">
                     <i class="fa fa-fw #{reportNotificationIntentStatus.completed ? 'fa-check-circle icon-green' : 'fa-times-circle icon-red'}"
                        title="#{reportNotificationIntentStatus.completed ?msg['dialog.archiveTask.status.notification.details.list.status.completed'] : msg['dialog.archiveTask.status.notification.details.list.status.notCompleted']}"/>
                 </h:panelGroup>

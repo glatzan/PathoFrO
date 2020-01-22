@@ -162,21 +162,19 @@ class JSFMenuGenerator {
 
                 // Remove from staining phase
                 item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.slide.endStayInPhase"))
-                item.command = ("#{globalEditViewHandler.removeTaskFromFavouriteList(worklistHandler.selectedTask, "
+                item.command = ("#{sharedFunctionHandler.removeTaskFromFavouriteList(worklistHandler.current.selectedTask, "
                         + PredefinedFavouriteList.StayInStainingList.id + ")}")
                 item.icon = "fa fa-image"
                 item.isRendered = task.taskStatus.listStatus.inListStayInStaining
-                item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                 item.update = "navigationForm:patientList contentForm headerForm"
                 stainingSubMenu.addElement(item)
 
                 // Add to stay in staining phase
                 item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.slide.enterStayInPhase"))
-                item.onclick = "$('#headerForm\\\\:stainingPhaseEnter').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
+                item.onclick = "PF('stainingPhaseEnter').jq.click();PF('taskTieredMenuButton').hide();return false;"
                 item.icon = "fa fa-image"
                 item.isRendered = !(task.taskStatus.listStatus.inListStaining || task.taskStatus.listStatus.inListReStaining
                         || task.taskStatus.listStatus.inListStayInStaining) && task.taskStatus.editable
-                item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                 item.update = "navigationForm:patientList contentForm headerForm"
                 stainingSubMenu.addElement(item)
             }
@@ -217,10 +215,9 @@ class JSFMenuGenerator {
                 // Leave phase if stay in phase
                 item = DefaultMenuItem(
                         resourceBundle.get("pages.header.menu.sample.diagnosis.endStayInPhase"))
-                item.command = ("#{globalEditViewHandler.removeTaskFromFavouriteList(worklistHandler.selectedTask, "
+                item.command = ("#{sharedFunctionHandler.removeTaskFromFavouriteList(worklistHandler.current.selectedTask, "
                         + PredefinedFavouriteList.StayInDiagnosisList.id + ")}")
                 item.isRendered = task.taskStatus.listStatus.inListStayInDiagnosis
-                item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                 item.update = "navigationForm:patientList contentForm headerForm"
                 item.icon = "fa fa-eye-slash"
                 diagnosisSubMenu.addElement(item)
@@ -230,7 +227,6 @@ class JSFMenuGenerator {
                 item.onclick = "$('#headerForm\\\\:diagnosisPhaseEnter').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
                 item.isRendered = !(task.taskStatus.listStatus.inListDiagnosis || task.taskStatus.listStatus.inListReDiagnosis
                         || task.taskStatus.listStatus.inListStayInDiagnosis) && task.taskStatus.editable
-                item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                 item.update = "navigationForm:patientList contentForm headerForm"
                 item.icon = "fa fa-eye"
                 diagnosisSubMenu.addElement(item)
@@ -270,7 +266,6 @@ class JSFMenuGenerator {
                 // exit notification phase, without performing notification
                 item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.notification.endPhaseForced"))
                 item.onclick = "$('#headerForm\\\\:notificationPhaseExit').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;"
-                item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                 item.update = "navigationForm:patientList contentForm headerForm"
                 item.icon = "fa fa-volume-off"
                 item.isRendered = task.taskStatus.listStatus.inListNotification || task.taskStatus.listStatus.inListStayInNotification
@@ -278,9 +273,8 @@ class JSFMenuGenerator {
 
                 // exit stay in notification phase
                 item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.notification.endStayInPhase"))
-                item.command = ("#{globalEditViewHandler.removeTaskFromFavouriteList(worklistHandler.selectedTask, "
+                item.command = ("#{sharedFunctionHandler.removeTaskFromFavouriteList(worklistHandler.current.selectedTask, "
                         + PredefinedFavouriteList.StayInNotificationList.id + ")}")
-                item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                 item.update = "navigationForm:patientList contentForm headerForm"
                 item.icon = "fa fa-volume-off"
                 item.isRendered = task.taskStatus.listStatus.inListStayInNotification
@@ -288,9 +282,8 @@ class JSFMenuGenerator {
 
                 // add to notification phase
                 item = DefaultMenuItem(resourceBundle.get("pages.header.menu.sample.notification.enterStayInPhase"))
-                item.command = ("#{globalEditViewHandler.addTaskToFavouriteList(worklistHandler.selectedTask, "
+                item.command = ("#{sharedFunctionHandler.addTaskToFavouriteList(worklistHandler.current.selectedTask, "
                         + PredefinedFavouriteList.NotificationList.id + ")}")
-                item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                 item.update = "navigationForm:patientList contentForm headerForm"
                 item.icon = "fa fa-volume-off"
                 item.isRendered = !(task.taskStatus.listStatus.inListNotification || task.taskStatus.listStatus.inListStayInNotification) && task.taskStatus.editable
@@ -356,7 +349,6 @@ class JSFMenuGenerator {
                                         event = "dialogReturn",
                                         signature = "centralHandler.loadViews",
                                         update = "navigationForm:patientList contentForm headerForm",
-                                        onComplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll');",
                                         variables = listOf(JSFBackendButton.VariableHolder<CentralHandler.Load>(CentralHandler.Load.MENU_MODEL, "valu1"),
                                                 JSFBackendButton.VariableHolder<CentralHandler.Load>(CentralHandler.Load.RELOAD_TASK_STATUS, "valu2"),
                                                 JSFBackendButton.VariableHolder<CentralHandler.Load>(CentralHandler.Load.RELOAD_MENU_MODEL_FAVOURITE_LISTS, "valu3")))
@@ -368,16 +360,14 @@ class JSFMenuGenerator {
                                         + "').click();$('#headerForm\\\\:taskTieredMenuButton').hide();return false;")
 
                             } else {
-                                item.command = ("#{globalEditViewHandler.removeTaskFromFavouriteList(worklistHandler.selectedTask, "
+                                item.command = ("#{sharedFunctionHandler.removeTaskFromFavouriteList(worklistHandler.current.selectedTask, "
                                         + favouriteListItem.getId() + ")}")
-                                item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                                 item.update = "navigationForm:patientList contentForm headerForm"
                             }
                         } else {
                             item.icon = "fa fa-circle-o"
-                            item.command = ("#{globalEditViewHandler.addTaskToFavouriteList(worklistHandler.selectedTask, "
+                            item.command = ("#{sharedFunctionHandler.addTaskToFavouriteList(worklistHandler.current.selectedTask, "
                                     + favouriteListItem.getId() + ")}")
-                            item.oncomplete = "updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
                             item.update = "navigationForm:patientList contentForm headerForm"
                         }
 

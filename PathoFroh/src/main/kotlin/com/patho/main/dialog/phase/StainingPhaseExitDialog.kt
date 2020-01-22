@@ -7,7 +7,7 @@ import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.SlideService
 import com.patho.main.util.dialog.event.StainingPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
-import com.patho.main.util.task.ArchiveTaskStatus
+import com.patho.main.util.status.TotalTaskStatus
 import com.patho.main.util.ui.backend.CheckBoxStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -39,7 +39,7 @@ open class StainingPhaseExitDialog @Autowired constructor(
     override fun initBean(task: Task): Boolean {
         val oTask = taskRepository.findByID(task.id, true, true, false, true, true)
 
-        val status = ArchiveTaskStatus(oTask)
+        val status = TotalTaskStatus(oTask)
 
         // complete checkbox
         completeStainings = object : CheckBoxStatus() {
@@ -57,10 +57,8 @@ open class StainingPhaseExitDialog @Autowired constructor(
             }
         }
 
-        println(!status.stainingStatus.allSlidesCompleted)
-
         // complete stainings if not all completed
-        completeStainings.set(true, !status.stainingStatus.allSlidesCompleted, false, false)
+        completeStainings.set(true, !status.staining.slidesMarkedAsCompleted, false, false)
 
         // remove from list
         removeFromWorklist.set(true, true, false, false)

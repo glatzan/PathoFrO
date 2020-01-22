@@ -4,8 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:c="http://java.sun.com/jsp/jstl/core"
->
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
 <!-- importing enum for switch -->
 <p:importEnum
@@ -63,25 +63,25 @@
                     <p:column headerText="#{msg['dialog.contactDialog.data.notification']}">
                         <p:repeat value="#{contactHolder.reportIntentByTyp}" var="intentByType" varStatus="index">
                             <h:panelGrid styleClass="listingHistoHiddenTableContainer" columns="3" style="width:auto">
-                                <pe:switch value="#{intentByType.reportIntentNotification.notificationTyp}">
+                                <pe:switch value="#{intentByType.reportIntentNotification.notificationTyp.name()}">
                                     <!-- mail -->
-                                    <pe:case value="#{notificationTyp.EMAIL}">
+                                    <pe:case value="#{notificationTyp.EMAIL.name()}">
                                         <i class="fa fa-envelope icon-grey"/>
                                     </pe:case>
                                     <!-- fax -->
-                                    <pe:case value="#{notificationTyp.FAX}">
+                                    <pe:case value="#{notificationTyp.FAX.name()}">
                                         <i class="fa fa-fax icon-grey"/>
                                     </pe:case>
                                     <!-- letter -->
-                                    <pe:case value="#{notificationTyp.LETTER}">
+                                    <pe:case value="#{notificationTyp.LETTER.name()}">
                                         <i class="fa fa-pencil-square-o icon-grey"/>
                                     </pe:case>
                                     <!-- phone -->
-                                    <pe:case value="#{notificationTyp.PHONE}">
+                                    <pe:case value="#{notificationTyp.PHONE.name()}">
                                         <i class="fa fa-phone icon-grey"/>
                                     </pe:case>
                                     <!-- print -->
-                                    <pe:case value="#{notificationTyp.PRINT}">
+                                    <pe:case value="#{notificationTyp.PRINT.name()}">
                                         <i class="fa fa-print icon-grey"/>
                                     </pe:case>
                                     <!-- default -->
@@ -137,17 +137,17 @@
                     <!-- detailed data -->
                     <p:summaryRow>
                         <p:column colspan="4" style="text-align:right" rendered="#{contactHolder.showDetails}">
-                            <p:repeat value="#{contactHolder.reportIntentStatus.diagnosisBearers}"
-                                      var="diagnosisBearer">
+                            <p:repeat value="#{contactHolder.reportIntentStatus.diagnoses}"
+                                      var="diagnosis">
                                 <h:panelGrid columns="2" columnClasses="columnWidth250">
                                     <!-- reportIntent name -->
                                     <h:panelGroup>
                                         <i class="fa fa-eyedropper"/>
-                                        <h:outputLabel value="#{diagnosisBearer.diagnosisName}"/>
+                                        <h:outputLabel value="#{diagnosis.name}"/>
                                     </h:panelGroup>
 
                                     <!-- notification status -->
-                                    <p:dataTable value="#{diagnosisBearer.reportIntentNotificationBearers}"
+                                    <p:dataTable value="#{diagnosis.notifications}"
                                                  style="width: 600px"
                                                  styleClass="plainHistoTable"
                                                  var="reportIntentBearer">
@@ -155,26 +155,26 @@
                                         <!-- type icon -->
                                         <p:column>
                                             <h:panelGroup>
-                                                <pe:switch value="#{reportIntentBearer.type}">
+                                                <pe:switch value="#{reportIntentBearer.notificationTyp.name()}">
                                                     <!-- mail -->
-                                                    <pe:case value="#{notificationTyp.EMAIL}">
+                                                    <pe:case value="#{notificationTyp.EMAIL.name()}">
                                                         <i class="fa fa-envelope icon-grey"/>
                                                     </pe:case>
                                                     <!-- fax -->
 
-                                                    <pe:case value="#{notificationTyp.FAX}">
+                                                    <pe:case value="#{notificationTyp.FAX.name()}">
                                                         <i class="fa fa-fax icon-grey"/>
                                                     </pe:case>
                                                     <!-- letter -->
-                                                    <pe:case value="#{notificationTyp.LETTER}">
+                                                    <pe:case value="#{notificationTyp.LETTER.name()}">
                                                         <i class="fa fa-pencil-square-o icon-grey"/>
                                                     </pe:case>
                                                     <!-- phone -->
-                                                    <pe:case value="#{notificationTyp.PHONE}">
+                                                    <pe:case value="#{notificationTyp.PHONE.name()}">
                                                         <i class="fa fa-phone icon-grey"/>
                                                     </pe:case>
                                                     <!-- print -->
-                                                    <pe:case value="#{notificationTyp.PRINT}">
+                                                    <pe:case value="#{notificationTyp.PRINT.name()}">
                                                         <i class="fa fa-print icon-grey"/>
                                                     </pe:case>
                                                     <!-- default -->
@@ -186,21 +186,21 @@
                                                 <!-- name -->
                                                 <h:outputText
                                                         style="margin-left: 5px"
-                                                        value="#{msg['enum.notificationType.'.concat(reportIntentBearer.type)]}"/>
+                                                        value="#{msg['enum.notificationType.'.concat(reportIntentBearer.notificationTyp)]}"/>
                                             </h:panelGroup>
                                         </p:column>
 
                                         <!-- attempts -->
                                         <p:column>
                                             <h:outputFormat value="#{msg['dialog.contactDialog.data.attempts']}">
-                                                <f:param value="#{reportIntentBearer.attempts}"/>
+                                                <f:param value="#{reportIntentBearer.totalAttempts}"/>
                                             </h:outputFormat>
                                         </p:column>
 
                                         <!-- successes -->
                                         <p:column>
                                             <h:outputFormat value="#{msg['dialog.contactDialog.data.success']}">
-                                                <f:param value="#{reportIntentBearer.successes}"/>
+                                                <f:param value="#{reportIntentBearer.totalSuccesses}"/>
                                             </h:outputFormat>
                                         </p:column>
 
@@ -208,13 +208,13 @@
                                         <p:column>
                                             <h:outputFormat
                                                     value="#{msg['dialog.contactDialog.data.failedAttempts']}">
-                                                <f:param value="#{reportIntentBearer.failedAttempts}"/>
+                                                <f:param value="#{reportIntentBearer.totalFailedAttempts}"/>
                                             </h:outputFormat>
                                         </p:column>
 
                                         <!-- performed -->
                                         <p:column>
-                                            <ui:fragment rendered="#{reportIntentBearer.attempts != 0}">
+                                            <ui:fragment rendered="#{reportIntentBearer.totalAttempts != 0}">
                                                 <h:panelGroup>
                                                     <h:outputLabel
                                                             value="#{msg['dialog.contactDialog.data.performed']}"/>
@@ -246,9 +246,9 @@
 
                                 <h:panelGroup>
                                     <!-- icon -->
-                                    <pe:switch value="#{buttonStatus.notificationTyp}">
+                                    <pe:switch value="#{buttonStatus.notificationTyp.name()}">
                                         <!-- mail -->
-                                        <pe:case value="#{notificationTyp.EMAIL}">
+                                        <pe:case value="#{notificationTyp.EMAIL.name()}">
                                             <i class="fa fa-envelope icon-grey"/>
                                             <h:outputFormat value=" #{msg['dialog.contactDialog.overlay.mail']}:">
                                                 <f:param
@@ -256,7 +256,7 @@
                                             </h:outputFormat>
                                         </pe:case>
                                         <!-- fax -->
-                                        <pe:case value="#{notificationTyp.FAX}">
+                                        <pe:case value="#{notificationTyp.FAX.name()}">
                                             <i class="fa fa-fax icon-grey"/>
                                             <h:outputFormat value=" #{msg['dialog.contactDialog.overlay.fax']}:">
                                                 <f:param
@@ -264,7 +264,7 @@
                                             </h:outputFormat>
                                         </pe:case>
                                         <!-- letter -->
-                                        <pe:case value="#{notificationTyp.LETTER}">
+                                        <pe:case value="#{notificationTyp.LETTER.name()}">
                                             <i class="fa fa-pencil-square-o icon-grey"/>
                                             <h:outputFormat value=" #{msg['dialog.contactDialog.overlay.letter']}:">
                                                 <f:param
@@ -272,7 +272,7 @@
                                             </h:outputFormat>
                                         </pe:case>
                                         <!-- phone -->
-                                        <pe:case value="#{notificationTyp.PHONE}">
+                                        <pe:case value="#{notificationTyp.PHONE.name()}">
                                             <i class="fa fa-phone icon-grey"/>
                                             <h:outputFormat value=" #{msg['dialog.contactDialog.overlay.phone']}:">
                                                 <f:param
@@ -367,7 +367,7 @@
                 </h:panelGrid>
             </h:panelGrid>
         </div>
-
+        <pe:tooltip global="true"/>
     </h:form>
 </h:body>
 </html>

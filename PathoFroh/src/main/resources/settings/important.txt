@@ -1,42 +1,31 @@
 VM Arguments: 
--javaagent:${m2_repo}/org/springframework/spring-instrument/5.1.4.RELEASE/spring-instrument-5.1.4.RELEASE.jar
--javaagent:${m2_repo}/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
--Xms256m -Xmx2G
+-Xms512m -Xmx4G
 -Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider
 -Dfile.encoding=UTF8
 
--XXaltjvm=dcevm -javaagent:${m2_repo}/org/hotswapagent/hotswap-agent-core/1.3.0/hotswap-agent-core-1.3.0.jar=autoHotswap=true
-${m2_repo} has to be set under run -> variables 
+Hotswap, legacy
+-javaagent:${m2_repo}/org/springframework/spring-instrument/5.1.4.RELEASE/spring-instrument-5.1.4.RELEASE.jar
+-javaagent:${m2_repo}/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
 
 PLV8 Javascript Postgres 
-Postgres 10 -> http://www.postgresonline.com/journal/archives/379-PLV8-binaries-for-PostgreSQL-10-windows-both-32-bit-and-64-bit.html
-Postgres 11 -> https://github.com/plv8/plv8/issues/220#issuecomment-434436117
-Overview -> http://www.postgresonline.com/winextensions.php
-plv8.control: Syantax Error on Line 1 -> UTF8
+-> Postgres 10 -> http://www.postgresonline.com/journal/archives/379-PLV8-binaries-for-PostgreSQL-10-windows-both-32-bit-and-64-bit.html
+-> Postgres 11 -> https://github.com/plv8/plv8/issues/220#issuecomment-434436117
+-> Overview -> http://www.postgresonline.com/winextensions.php
+-> plv8.control: Syantax Error on Line 1 -> UTF8
 
 PDFLatex
 -> Miktex -> https://miktex.org/
 
-HotSwap:
--> https://dzone.com/articles/hot-swap-java-bytecode-on-runtime
-Args -XXaltjvm=dcevm -javaagent:C:/Users/andi/Documents/develop/hotswap-agent-1.3.0.jar=autoHotswap=true
-
-JPA MEtamodel
+JPA MEtamodel (eclipse, legacy now with marven)
 -> Projekt Settings -> Java Compiler -> Annotation Processing -> Enable prject specific settings, source direcotry: target\generated-sources\annotations, test source directory target\generated-test-sources\test-annotations
 -> Projekt Settings -> Java Compiler -> Annotation Processing -> Factory Path -> .m2\repository\org\hibernate\hibernate-jpamodelgen\5.2.17.Final
 
-
-
-Handel Version Erros in Dialoges 
+Handel Version Erros in Dialoges
 -> new ReloadEvent() is fired
 -> if nested dialog, parent should catch ReloadEvent() 
 
 UserHandlerAction
 -> requestUnlock()
-
-GlobalEditViewHanderl
--> addTaskToFavouriteList
--> removeTaskFromFavouriteList
 
 NotificationPhaseExitDialog
 DeleteTaskDialog

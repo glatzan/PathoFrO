@@ -504,6 +504,12 @@ open class ReportIntentService @Autowired constructor(
     }
 
     /**
+     * Checks if a notification is designated
+     */
+    open fun isNotificationDesignated(reportIntent: ReportIntent) : Boolean{
+        return !reportIntent.notifications.isEmpty()
+    }
+    /**
      * Checks if the notifications of the given type were performed
      */
     open fun isNotificationPerformed(reportIntent: ReportIntent, type: NotificationTyp): Boolean {
@@ -535,11 +541,11 @@ open class ReportIntentService @Autowired constructor(
         if (organization != null)
             buffer.append(organization.name + "\r\n")
 
-        if (addition1.isNullOrEmpty()) buffer.append("$addition1\r\n")
-        if (addition2.isNullOrEmpty()) buffer.append("$addition2\r\n")
-        if (street.isNullOrEmpty()) buffer.append("$street\r\n")
-        if (postcode.isNullOrEmpty()) buffer.append("$postcode\r\n")
-        if (town.isNullOrEmpty()) buffer.append("$town\r\n")
+        if (!addition1.isNullOrEmpty()) buffer.append("$addition1\r\n")
+        if (!addition2.isNullOrEmpty()) buffer.append("$addition2\r\n")
+        if (!street.isNullOrEmpty()) buffer.append("$street\r\n")
+        if (!postcode.isNullOrEmpty()) buffer.append("$postcode\r\n")
+        if (!town.isNullOrEmpty()) buffer.append("$town\r\n")
 
         return buffer.toString()
     }

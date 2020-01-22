@@ -8,6 +8,7 @@ import com.patho.main.model.user.HistoPermissions
 import com.patho.main.service.impl.SpringContextBridge
 import org.slf4j.LoggerFactory
 
+@Deprecated("Shift to TotalTaskStatus")
 open class TaskStatus {
 
     protected val logger = LoggerFactory.getLogger(this.javaClass)

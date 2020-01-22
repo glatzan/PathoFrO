@@ -18,6 +18,7 @@ import java.time.Month;
  */
 @Component
 @Scope(value = "session")
+@Deprecated
 public class EnumProvider {
 
     /**

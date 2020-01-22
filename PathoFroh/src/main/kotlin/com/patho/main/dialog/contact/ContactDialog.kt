@@ -5,6 +5,7 @@ import com.patho.main.common.ContactRole
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.Physician
+import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.model.patient.notification.ReportIntent
@@ -17,7 +18,7 @@ import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.dialog.event.PhysicianSelectEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.exceptions.DuplicatedReportIntentException
-import com.patho.main.util.status.reportIntent.ReportIntentBearer
+import com.patho.main.util.status.ExtendedNotificationStatus
 import com.patho.main.util.ui.selector.UISelector
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -56,7 +57,7 @@ open class ContactDialog @Autowired constructor(
             task = taskRepository.findByID(task.id, false, false, false, true, true)
         }
 
-        reportIntents = task.contacts.mapIndexed { index, p -> ReportIntentSelector(p, task, index.toLong()) }
+        reportIntents = task.contacts.mapIndexed { index, p -> ReportIntentSelector(p, task, index.toLong(),ExtendedNotificationStatus.findAllDiagnoses(task.diagnosisRevisions,task.contacts)) }
     }
 
     open fun removeContact(reportIntent: ReportIntent) {
@@ -145,11 +146,12 @@ open class ContactDialog @Autowired constructor(
      * Class for selecting the report intent. This class also contains a report intent status and
      * a flag if the report intent is deletable.
      */
-    class ReportIntentSelector(val reportIntent: ReportIntent, task: Task, override var id: Long) : UISelector<ReportIntent>(reportIntent) {
+    class ReportIntentSelector(val reportIntent: ReportIntent, task: Task, override var id: Long, allDiagnoses: Set<DiagnosisRevision>) : UISelector<ReportIntent>(reportIntent) {
+
         /**
          * Status sorted by diagnoses
          */
-        val reportIntentStatus = ReportIntentBearer(reportIntent, task)
+        val reportIntentStatus = ExtendedNotificationStatus.ReportNotificationIntentStatus.ReportIntentStatus(reportIntent, allDiagnoses)
 
         /**
          * True if the report intent can be deleted
@@ -164,7 +166,7 @@ open class ContactDialog @Autowired constructor(
         /**
          * True is details ar present, for older task pre version 2.0 there aren'special.pdfOrganizerDialog any details
          */
-        val detailsPresent = reportIntentStatus.diagnosisBearers.isNotEmpty()
+        val detailsPresent = reportIntentStatus.diagnoses.isNotEmpty()
 
         /**
          * Status for the report intents sorted by type

@@ -66,6 +66,10 @@ public class MessageHandler {
         sendGrowlMessagesAsResource(headline, message, FacesMessage.SEVERITY_ERROR);
     }
 
+    public static void sendGrowlErrorAsResource(String headline, String message, Object... params) {
+        sendGrowlMessagesAsResource(headline, message, FacesMessage.SEVERITY_ERROR,params);
+    }
+
     public static void sendGrowlMessagesAsResource(String headline, String message) {
         sendGrowlMessagesAsResource(headline, message, FacesMessage.SEVERITY_INFO);
     }

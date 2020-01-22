@@ -25,6 +25,7 @@ import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.dialog.event.NotificationPerformedEvent
+import com.patho.main.util.dialog.event.NotificationPhaseExitEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.print.PrintPDFBearer
 import com.patho.main.util.report.MailNotificationExecuteData
@@ -34,9 +35,6 @@ import com.patho.main.util.report.ui.ReportIntentNotificationUIContainer
 import com.patho.main.util.report.ui.ReportIntentUIContainer
 import com.patho.main.util.status.ExtendedNotificationStatus
 import com.patho.main.util.status.IExtendedDatatableNotificationStatusByDiagnosis
-import com.patho.main.util.status.diagnosis.DiagnosisBearer
-import com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData
-import com.patho.main.util.status.diagnosis.ReportIntentStatusByDiagnosis
 import com.patho.main.util.ui.backend.CheckBoxStatus
 import com.patho.main.util.ui.backend.CommandButtonStatus
 import com.patho.main.util.ui.selector.ReportIntentSelector
@@ -225,7 +223,7 @@ class NotificationDialog @Autowired constructor(
 
         override fun updateData() {
             logger.debug("Updating $tabName")
-            reportIntentStatus.update(task, generalTab.selectDiagnosisRevision?.diagnosisRevision)
+            reportIntentStatus.update(task, generalTab.selectedDiagnosisRevisionStatus?.diagnosisRevision)
 
             // only updating notification status if no manually change had been made
             if (!useNotification.manuallyAltered)
@@ -236,7 +234,7 @@ class NotificationDialog @Autowired constructor(
          * Initializes the useNotification value and calls the parent method
          */
         override fun initTab(force: Boolean): Boolean {
-            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp, this, generalTab.selectDiagnosisRevision?.diagnosisRevision)
+            reportIntentStatus = ReportIntentUIContainer(task, notificationTyp, this, generalTab.selectedDiagnosisRevisionStatus?.diagnosisRevision)
             useNotification.value = reportIntentStatus.hasActiveNotifications
             return super.initTab(force)
         }
@@ -265,29 +263,23 @@ class NotificationDialog @Autowired constructor(
             "GeneralTab",
             "dialog.notificationDialog.general.navigationText",
             "generalTab",
-            "n_general.xhtml"), IReportIntentStatusByDiagnosisViewData, IExtendedDatatableNotificationStatusByDiagnosis {
-
-        override lateinit var diagnosisNotificationStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus
-
-        override var selectedDiagnosisRevisionStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus.DiagnosisRevisionStatus? = null
-
-        override var displayDiagnosisRevisionStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus.DiagnosisRevisionStatus? = null
+            "_general.xhtml"), IExtendedDatatableNotificationStatusByDiagnosis {
 
 
         /**
          * List of all reportIntent revisions with their status
          */
-        override lateinit var diagnosisRevisions: ReportIntentStatusByDiagnosis
+        override lateinit var diagnosisNotificationStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus
 
         /**
          * Selected reportIntent for that the notification will be performed
          */
-        override var selectDiagnosisRevision: DiagnosisBearer? = null
+        override var selectedDiagnosisRevisionStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus.DiagnosisRevisionStatus? = null
 
         /**
          * Diagnosis bearer for displaying details in the datatable overlay panel
          */
-        override var viewDiagnosisRevisionDetails: DiagnosisBearer? = null
+        override var displayDiagnosisRevisionStatus: ExtendedNotificationStatus.DiagnosisNotificationStatus.DiagnosisRevisionStatus? = null
 
         /**
          * Count of additional prints
@@ -303,7 +295,7 @@ class NotificationDialog @Autowired constructor(
          * True if a reportIntent is selected
          */
         open val diagnosisSelected
-            get() = selectDiagnosisRevision != null
+            get() = selectedDiagnosisRevisionStatus != null
 
         override fun initTab(force: Boolean): Boolean {
             logger.debug("Initializing general data...")
@@ -311,11 +303,8 @@ class NotificationDialog @Autowired constructor(
             useNotification.value = true
 
             diagnosisNotificationStatus = ExtendedNotificationStatus(task).diagnosisNotificationStatus
-            selectedDiagnosisRevisionStatus = diagnosisNotificationStatus.diagnoses.firstOrNull{ p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
+            selectedDiagnosisRevisionStatus = diagnosisNotificationStatus.diagnoses.firstOrNull { p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
             displayDiagnosisRevisionStatus = null
-
-            diagnosisRevisions = ReportIntentStatusByDiagnosis(task)
-            selectDiagnosisRevision = diagnosisRevisions.diagnosisBearer.firstOrNull { p -> p.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
 
             // setting templates + transformer
             templates = printDocumentRepository.findAllByTypes(PrintDocumentType.DIAGNOSIS_REPORT,
@@ -336,10 +325,10 @@ class NotificationDialog @Autowired constructor(
          */
         override fun onDiagnosisSelection() {
             // sets a not approved warning
-            selectedDiagnosisNotApproved = selectDiagnosisRevision?.diagnosisRevision?.notificationStatus != NotificationStatus.NOTIFICATION_PENDING
+            selectedDiagnosisNotApproved = selectedDiagnosisRevisionStatus?.diagnosisRevision?.notificationStatus != NotificationStatus.NOTIFICATION_PENDING
 
             // disable tabs if no reportIntent is selected.
-            if (selectDiagnosisRevision == null)
+            if (selectedDiagnosisRevisionStatus == null)
                 disableTabs(false, true, true, true, true, true)
             else
                 disableTabs(false, false, false, false, false, false)
@@ -351,7 +340,7 @@ class NotificationDialog @Autowired constructor(
             "MailTab",
             "dialog.notificationDialog.mail.navigationText",
             "mailTab",
-            "n_mail.xhtml",
+            "_mail.xhtml",
             NotificationTyp.EMAIL) {
 
         /**
@@ -385,7 +374,7 @@ class NotificationDialog @Autowired constructor(
             "FaxTab",
             "dialog.notificationDialog.fax.navigationText",
             "faxTab",
-            "n_fax.xhtml",
+            "_fax.xhtml",
             NotificationTyp.FAX) {
 
         /**
@@ -422,7 +411,7 @@ class NotificationDialog @Autowired constructor(
             "LetterTab",
             "dialog.notificationDialog.letter.navigationText",
             "letterTab",
-            "n_letter.xhtml",
+            "_letter.xhtml",
             NotificationTyp.LETTER) {
 
         /**
@@ -452,7 +441,7 @@ class NotificationDialog @Autowired constructor(
             "PhoneTab",
             "dialog.notificationDialog.phone.navigationText",
             "phoneTab",
-            "n_phone.xhtml",
+            "_phone.xhtml",
             NotificationTyp.PHONE) {
 
         override fun initTab(force: Boolean): Boolean {
@@ -468,7 +457,7 @@ class NotificationDialog @Autowired constructor(
             "SendTab",
             "dialog.notification.tab.send",
             "sendTab",
-            "n_send.xhtml") {
+            "_send.xhtml") {
 
         /**
          * Only active notifications
@@ -511,7 +500,7 @@ class NotificationDialog @Autowired constructor(
          * Starting perform notification dialog
          */
         open fun performNotifications() {
-            val diagnosis = generalTab.selectDiagnosisRevision?.diagnosisRevision
+            val diagnosis = generalTab.selectedDiagnosisRevisionStatus?.diagnosisRevision
             if (diagnosis != null) {
 
                 var report = ReportIntentExecuteData(task, diagnosis)
@@ -570,20 +559,25 @@ class NotificationDialog @Autowired constructor(
          * Default return function for sub dialogs
          */
         open fun onSubDialogReturn(event: SelectEvent) {
+            println(event)
             val obj = event.getObject()
+            // return event of send dialog
             if (obj is NotificationPerformedEvent) {
                 // end phase, show end phase dialog
                 if (obj.endPhase) {
-                    println("End phase ")
                     MessageHandler.executeScript(GuiCommands.OPEN_END_STAINING_PHASE_FROM_NOTIFICATION_DIALOG)
                 } else {
                     MessageHandler.sendGrowlMessagesAsResource("growl.notification.endWithoutPhaseEnd.headline", "growl.notification.endWithoutPhaseEnd.text")
                     hideDialog(TaskReloadEvent())
                 }
-            } else {
+            } else if (obj is NotificationPhaseExitEvent) {
+                if (obj.startTaskArchival)
+                    MessageHandler.executeScript(GuiCommands.OPEN_ARCHIVE_TASK_DIALOG_FROM_NOTIFICATION_DIALOG)
+                else
+                    hideDialog(TaskReloadEvent())
+            } else
                 hideDialog(event.`object` ?: TaskReloadEvent())
-            }
         }
-
     }
+
 }

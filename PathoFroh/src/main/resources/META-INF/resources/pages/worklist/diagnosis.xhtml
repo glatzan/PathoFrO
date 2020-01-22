@@ -703,23 +703,64 @@
 
 
                 <!-- Buttons -->
-                <h:panelGrid columns="2" styleClass="defaultHistoTable"
+                <h:panelGrid columns="3" styleClass="defaultHistoTable"
                              id="diagnosisSpotContentButtons#{varCounterOuter.index}"
-                             columnClasses="columnWidthMin, columnWidthAuto">
+                             columnClasses="columnWidthMin,columnWidthMin, columnWidthAuto">
+
+                    <!-- new diagnosis revision -->
+                    <p:commandButton widgetVar="newDiagnosisRevision#{varCounterOuter.index}"
+                                     value="#{msg['body.diagnosis.diagnosis.new']}"
+                                     icon="fa fa-plus-circle"
+                                     actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
+                        <p:ajax event="dialogReturn"
+                                listener="#{dialogReturnHandler.onDefaultReturn}"
+                                update="navigationForm:patientList contentForm:contentPanel headerForm"
+                                oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
+                    </p:commandButton>
 
                     <h:panelGroup>
+                        <!-- end or reend diagnosis-->
                         <p:splitButton
-                                rendered="#{revision.completed and !worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(revision)}"
-                                value="#{msg['body.diagnosis.diagnosis.amendment']}"
+                                value="#{!revision.completed ? msg['body.diagnosis.diagnosis.end'] : msg['body.diagnosis.diagnosis.re_end']}"
+                                rendered="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(revision) }"
                                 disabled="#{!diagnosisView.task.taskStatus.editable}"
-                                onclick="$('#contentForm\\:admendDiagnosisRevision#{varCounterOuter.index}').click();"
-                                icon="fa fa-edit">
+                                onclick="$('#contentForm\\:endDiagnosisRevision#{varCounterOuter.index}').click();"
+                                icon="fa fa-eye-slash">
+
+                            <!-- amendment -->
+                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.amendment']}"
+                                        rendered="#{revision.completed}"
+                                        icon="fa fa-edit"
+                                        onclick="$('#contentForm\\:admendDiagnosisRevision#{varCounterOuter.index}').click();"
+                                        disabled="#{!diagnosisView.task.taskStatus.editable}"/>
+
+                            <!-- rename -->
+                            <p:menuitem
+                                    value="#{msg['body.diagnosis.diagnosis.rename']}"
+                                    onclick="PF('editDiagnosisRevision#{varCounterOuter.index}').jq.click();"
+                                    icon="fa fa-pencil"
+                                    disabled="#{!diagnosisView.task.taskStatus.editable}"/>
+
 
                             <!-- delete diagnosis -->
-                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.reend']}"
-                                        icon="fa fa-eye-slash"
-                                        onclick="$('#contentForm\\:endDiagnosisRevision#{varCounterOuter.index}').click();"/>
+                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.delete']}"
+                                        icon="fa fa-trash"
+                                        onclick="PF('deleteRevision#{varCounterOuter.index}').jq.click();"
+                                        disabled="#{!diagnosisView.task.taskStatus.editable}"/>
 
+                            <p:separator/>
+
+                            <!-- new staining -->
+                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.slide']}"
+                                        icon="fa fa-paint-brush"
+                                        onclick="PF('newStaining').jq.click();"
+                                        disabled="#{!diagnosisView.task.taskStatus.editable}"/>
+
+                            <p:separator/>
+
+                            <!-- print diagnosis -->
+                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.print']}"
+                                        icon="fa fa-print" disabled="true"/>
                         </p:splitButton>
 
                         <!-- save changes -->
@@ -729,55 +770,8 @@
                                          icon="fa fa-check-circle-o"
                                          update="diagnosisSpotDiagnosis#{varCounterOuter.index} diagnosisSpotContentSignature#{varCounterOuter.index} diagnosisSpotContentButtons#{varCounterOuter.index}">
                             <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.endDiagnosisAmendment(revision)}"/>
+                                    binding="#{diagnosisView.endDiagnosisAmendment(revision)}"/>
                         </p:commandButton>
-
-                        <!-- adment revision -->
-                        <p:commandButton style="display:none"
-                                         id="admendDiagnosisRevision#{varCounterOuter.index}"
-                                         oncomplete="PF('diagnosisSpotBlocker#{varCounterOuter.index}').show()"
-                                         update="diagnosisSpotDiagnosis#{varCounterOuter.index} diagnosisSpotContentSignature#{varCounterOuter.index} diagnosisSpotContentButtons#{varCounterOuter.index}">
-                            <f:actionListener
-                                    binding="#{globalEditViewHandler.ct.beginDiagnosisAmendment(revision)}"/>
-                        </p:commandButton>
-
-                        <!-- end diangosis -->
-                        <p:commandButton value="#{msg['body.diagnosis.diagnosis.end']}"
-                                         icon="fa fa-eye-slash"
-                                         id="endDiagnosisRevision#{varCounterOuter.index}"
-                                         style="#{(revision.completed) ? 'display:none' : ''}"
-                                         disabled="#{!diagnosisView.task.taskStatus.editable}"
-                                         actionListener="#{diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, revision)}">
-                            <p:ajax event="dialogReturn"
-                                    listener="#{dialogReturnHandler.onDefaultReturn}"
-                                    update="navigationForm:patientList contentForm:contentPanel headerForm"/>
-                        </p:commandButton>
-
-                    </h:panelGroup>
-
-
-                    <h:panelGroup>
-                        <!-- rename diagnosis -->
-                        <p:splitButton value="#{msg['body.diagnosis.diagnosis.rename']}"
-                                       disabled="#{!diagnosisView.task.taskStatus.editable}"
-                                       onclick="PF('editDiagnosisRevision#{varCounterOuter.index}').jq.click();"
-                                       icon="fa fa-pencil">
-
-                            <!-- delete diagnosis -->
-                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.delete']}"
-                                        icon="fa fa-trash"
-                                        onclick="PF('deleteRevision#{varCounterOuter.index}').jq.click();"/>
-
-                            <!-- print diagnosis -->
-                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.print']}"
-                                        icon="fa fa-print" disabled="true"/>
-                            <p:separator/>
-
-                            <!-- new diagnosis -->
-                            <p:menuitem value="#{msg['body.diagnosis.diagnosis.new']}"
-                                        icon="fa fa-plus-circle"
-                                        onclick="PF('newDiagnosisRevision#{varCounterOuter.index}').jq.click();"/>
-                        </p:splitButton>
 
                         <!-- edit diagnosis revision -->
                         <p:commandButton
@@ -786,8 +780,7 @@
                                 actionListener="#{dialog.editDiagnosisRevisionsDialog.initAndPrepareBean(worklistHandler.current.selectedTask,revision)}">
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultReturn}"
-                                    update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
+                                    update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandButton>
 
                         <!-- delete diagnosis revision -->
@@ -796,20 +789,40 @@
                                          actionListener="#{dialog.deleteDiagnosisRevisionDialog.initAndPrepareBean(revision)}">
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultReturn}"
-                                    update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
+                                    update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandButton>
 
-                        <!-- new diagnosis revision -->
-                        <p:commandButton widgetVar="newDiagnosisRevision#{varCounterOuter.index}"
-                                         style="display:none"
-                                         actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
+                        <!-- adment revision -->
+                        <p:commandButton style="display:none"
+                                         id="admendDiagnosisRevision#{varCounterOuter.index}"
+                                         oncomplete="PF('diagnosisSpotBlocker#{varCounterOuter.index}').show()"
+                                         update="diagnosisSpotDiagnosis#{varCounterOuter.index} diagnosisSpotContentSignature#{varCounterOuter.index} diagnosisSpotContentButtons#{varCounterOuter.index}">
+                            <f:actionListener
+                                    binding="#{diagnosisView.beginDiagnosisAmendment(revision)}"/>
+                        </p:commandButton>
+
+                        <!-- new staining -->
+                        <p:commandButton style="display:none"
+                                         id="newStaining" widgetVar="newStaining"
+                                         actionListener="#{slideOverviewDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultReturn}"
-                                    update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
+                                    update="navigationForm:patientList contentForm headerForm"/>
                         </p:commandButton>
 
+                        <!-- end diangosis -->
+                        <p:commandButton id="endDiagnosisRevision#{varCounterOuter.index}"
+                                         style="display:none"
+                                         actionListener="#{diagnosisPhaseExitDialog.initAndPrepareBean(worklistHandler.current.selectedTask, revision)}">
+                            <p:ajax event="dialogReturn"
+                                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                                    update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                        </p:commandButton>
+
+                    </h:panelGroup>
+
+                    <!-- status icons -->
+                    <h:panelGroup>
                         <h:panelGroup id="diagnosisCompleted#{varCounterOuter.index}">
                             <i class="fa fa-fw fa-rss-square fa-lg #{revision.completed ? 'icon-green' : 'icon-grey'}"
                                title=""/>
@@ -849,8 +862,8 @@
                                     <h:outputLabel value="Keine Benachrichtigung druchgeführt"/>
                                 </p:tooltip>
                             </h:panelGroup>
-
                         </h:panelGroup>
+
                     </h:panelGroup>
                 </h:panelGrid>
 

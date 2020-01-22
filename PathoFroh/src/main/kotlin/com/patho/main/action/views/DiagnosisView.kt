@@ -22,8 +22,6 @@ open class DiagnosisView @Autowired constructor(
         private val diagnosisService: DiagnosisService,
         private val worklistHandler: WorklistHandler) : AbstractEditTaskView() {
 
-    open var diagnosisViewData = listOf<DiagnosisViewData>()
-
     /**
      * Array for diagnoses filter
      */
@@ -42,8 +40,6 @@ open class DiagnosisView @Autowired constructor(
     override fun loadView(task: Task) {
         logger.debug("Loading reportIntent data")
         super.loadView(task)
-
-        diagnosisViewData = task.diagnosisRevisions.map { p -> DiagnosisViewData(p) }
 
         // updating signature date and person to sign
         for (revision in task.diagnosisRevisions) {
@@ -109,7 +105,19 @@ open class DiagnosisView @Autowired constructor(
         save(task, resourcesKey, *arr)
     }
 
-    open class DiagnosisViewData(diagnosisRevision: DiagnosisRevision) {
-        open val diagnosisRevision = diagnosisRevision
+
+    open fun beginDiagnosisAmendment(diagnosisRevision: DiagnosisRevision) {
+        // workaround for forcing a persist of the task, even if no changes have been made
+        worklistHandler.current.selectedTaskInfo.admendRevision(diagnosisRevision)
+        worklistHandler.current.selectedTask.audit?.updatedOn = System.currentTimeMillis()
+        save(worklistHandler.current.selectedTask, "log.patient.task.diagnosisRevision.lock", worklistHandler.current.selectedTask.taskID, diagnosisRevision)
+    }
+
+    open fun endDiagnosisAmendment(diagnosisRevision: DiagnosisRevision) {
+        // workaround for forcing a persist of the task, even if no changes have been made
+        worklistHandler.current.selectedTaskInfo.lockRevision(diagnosisRevision)
+        worklistHandler.current.selectedTask.audit?.updatedOn = System.currentTimeMillis()
+        val task = diagnosisService.generateDefaultDiagnosisReport(worklistHandler.current.selectedTask, diagnosisRevision)
+        save(task, "log.patient.task.diagnosisRevision.lock", task.taskID, diagnosisRevision)
     }
 }

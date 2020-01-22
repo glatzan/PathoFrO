@@ -2,6 +2,7 @@ package com.patho.main.util.status
 
 import com.patho.main.common.DiagnosisRevisionType
 import com.patho.main.model.patient.DiagnosisRevision
+import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.DiagnosisHistoryRecord
 import com.patho.main.model.patient.notification.NotificationTyp
@@ -28,7 +29,7 @@ class ExtendedNotificationStatus(val task: Task) {
     /**
      * True if all notification are completed
      */
-    val isCompleted: Boolean = reportNotificationIntentStatus.reportIntents.all { p -> p.completed }
+    val isCompleted: Boolean = reportNotificationIntentStatus.reportIntents.all { p -> p.isCompleted || !p.isNotificationDesignated || !p.isActive }
 
     /**
      * <pre>
@@ -50,7 +51,7 @@ class ExtendedNotificationStatus(val task: Task) {
      * Display Element: OverlayNotificationStatusForReportIntent.xhtml (displays ReportIntentStatus -> DiagnosisRevisionStatus)
      * </pre>
      */
-    class ReportNotificationIntentStatus(task: Task, allDiagnoses: Set<DiagnosisRevision>)  {
+    class ReportNotificationIntentStatus(task: Task, allDiagnoses: Set<DiagnosisRevision>) {
 
         /**
          * List of all reportIntents
@@ -60,7 +61,7 @@ class ExtendedNotificationStatus(val task: Task) {
         /**
          * This class contains a single reportIntent
          */
-        class ReportIntentStatus(val reportIntent: ReportIntent, allDiagnoses: Set<DiagnosisRevision>) : IExtendedNotificationStatusForReportIntent {
+        class ReportIntentStatus(val reportIntent: ReportIntent, allDiagnoses: Set<DiagnosisRevision>) : IExtendedOverlayNotificationStatusForReportIntent {
 
             /**
              * A list of all diagnoses of associated case
@@ -70,7 +71,22 @@ class ExtendedNotificationStatus(val task: Task) {
             /**
              * Is true if every notification for this reportintent is completed
              */
-            val completed: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportIntent)
+            override val isCompleted: Boolean = SpringContextBridge.services().reportIntentService.isNotificationPerformed(reportIntent)
+
+            /**
+             * True if notification is active
+             */
+            override val isActive = reportIntent.active
+
+            /**
+             * True if no notification is designated
+             */
+            override val isNotificationDesignated = SpringContextBridge.services().reportIntentService.isNotificationDesignated(reportIntent)
+
+            /**
+             * True if either not active or no notification should happen
+             */
+            override val isNoNotification = !isActive || !isNotificationDesignated
 
             /**
              * Class containing the diangosis and all notification associated with that diagnosis and the reportIntent
@@ -146,6 +162,11 @@ class ExtendedNotificationStatus(val task: Task) {
             val name: String = diagnosisRevision.name
 
             /**
+             * Status of the notification
+             */
+            val notificationStatus: NotificationStatus = diagnosisRevision.notificationStatus
+
+            /**
              * All associated reportIntents
              */
             val reportIntents: List<ReportIntentStatus> = findReportIntents(reportIntents)
@@ -167,6 +188,8 @@ class ExtendedNotificationStatus(val task: Task) {
              */
             class ReportIntentStatus(val reportIntent: ReportIntent, notificationHistoryRecords: List<NotificationTypeAndHistory>) {
                 val isActive = reportIntent.active
+
+                val isNotificationDesignated = SpringContextBridge.services().reportIntentService.isNotificationDesignated(reportIntent)
 
                 val mailRecord = notificationHistoryRecords.firstOrNull { p -> p.notificationTyp == NotificationTyp.EMAIL }
                 val isMailRecord = mailRecord != null
@@ -232,24 +255,26 @@ class ExtendedNotificationStatus(val task: Task) {
         val reportData = history.data.toList()
     }
 
-    /**
-     * Returns a list with all ids of current and deleted diagnosis revisions. The current ids will be taken for a
-     * list of diagnosisRevisions, the deleted ids will be taken from the history of the reportIntents.
-     */
-    private fun findAllDiagnoses(diagnosisRevisions: Set<DiagnosisRevision>, reportIntents: Set<ReportIntent>): Set<DiagnosisRevision> {
-        val revisions = hashSetOf<DiagnosisRevision>()
-        revisions.addAll(diagnosisRevisions)
-        reportIntents.forEach { p ->
-            p.notifications.forEach { n ->
-                n.history.forEach { h ->
-                    if (!revisions.any { it.id == h.diagnosisID }) {
-                        val newRev = DiagnosisRevision(SpringContextBridge.services().resourceBundle.get("Deleted"), DiagnosisRevisionType.TMP)
-                        newRev.id = h.diagnosisID
-                        revisions.add(newRev)
+    companion object {
+        /**
+         * Returns a list with all ids of current and deleted diagnosis revisions. The current ids will be taken for a
+         * list of diagnosisRevisions, the deleted ids will be taken from the history of the reportIntents.
+         */
+        public fun findAllDiagnoses(diagnosisRevisions: Set<DiagnosisRevision>, reportIntents: Set<ReportIntent>): Set<DiagnosisRevision> {
+            val revisions = hashSetOf<DiagnosisRevision>()
+            revisions.addAll(diagnosisRevisions)
+            reportIntents.forEach { p ->
+                p.notifications.forEach { n ->
+                    n.history.forEach { h ->
+                        if (!revisions.any { it.id == h.diagnosisID }) {
+                            val newRev = DiagnosisRevision(SpringContextBridge.services().resourceBundle.get("Deleted"), DiagnosisRevisionType.TMP)
+                            newRev.id = h.diagnosisID
+                            revisions.add(newRev)
+                        }
                     }
                 }
             }
+            return revisions
         }
-        return revisions
     }
 }

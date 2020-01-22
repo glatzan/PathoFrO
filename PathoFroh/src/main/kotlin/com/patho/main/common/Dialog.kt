@@ -48,7 +48,7 @@ enum class Dialog {
     USER_SETTINGS_SAVE("/pages/dialog/userSettings/confirmSave", null, 480, 272, false, false, true),                                                                        // OK
     MEDICAL_FINDINGS("/pages/dialog/medicalFindings/medicalFindings", null, 1024, 600, false, false, true),  // 16:9
     NOTIFICATION_ALREADY_PERFORMED("/pages/dialog/notification/notification_already_performed", null, 480, 272, false, false, true), //  16:9
-    NOTIFICATION("/pages/dialog/notification/notification", null, 1024, 600, false, false, true),  // 16:9
+    NOTIFICATION("/pages/dialog/notification/notification/notification", null, 1024, 600, false, false, true),  // 16:9
     NOTIFICATION_PERFORM("/pages/dialog/notification/performNotification", null, 640, 360, false, false, true),  // 16:9
     NOTIFICATION_PREVIEW("/pages/dialog/notification/notification_preview", null, 1024, 600, false, false, true), //  16:9
     INFO("/pages/dialog/info/info", null, 1024, 600, false, false, true),                                                                                                    // OK

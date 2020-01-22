@@ -111,7 +111,7 @@
 
         <!-- show patient data-->
         <p:commandButton id="showPatientOverview" widgetVar="showPatientOverview"
-                         actionListener="#{centralHandler.onDeselectTas}"
+                         actionListener="#{centralHandler.onDeselectTask()}"
                          update=" navigationForm:patientList contentForm:contentPanel headerForm"/>
 
         <!-- pdf handler -->
@@ -231,7 +231,7 @@
         <p:commandButton id="notificationPhaseExit" widgetVar="notificationPhaseExit"
                          actionListener="#{notificationPhaseExitDialog.initAndPrepareBean(worklistHandler.selectedTask)}">
             <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                    listener="#{dialogReturnHandler.onEndNotificationPhaseReturn}"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
 
@@ -240,6 +240,14 @@
                          actionListener="#{archiveTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
             <p:ajax event="dialogReturn"
                     listener="#{dialogReturnHandler.onTaskPhaseChangeEvent}"
+                    update="navigationForm:patientList contentForm headerForm"/>
+        </p:commandButton>
+
+        <!-- dearchive Task -->
+        <p:commandButton id="restoreTaskBtn"
+                         actionListener="#{dearchiveTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+            <p:ajax event="dialogReturn"
+                    listener="#{dialogReturnHandler.onDefaultReturn}"
                     update="navigationForm:patientList contentForm headerForm"/>
         </p:commandButton>
 
@@ -275,6 +283,7 @@
                     update="navigationForm:patientList contentForm"/>
         </p:commandButton>
 
+        <!-- TODO: update Dialog -->
         <!-- accounting button -->
         <p:commandButton id="accountingDialogBtn" partialSubmit="true" widgetVar="accountingDialogBtn"
                          process="@this"
@@ -290,6 +299,7 @@
                     update="navigationForm:patientList contentForm"/>
         </p:commandButton>
 
+        <!-- TODO: update Dialog -->
         <!-- Info button -->
         <p:commandButton id="infoDialogBtn" widgetVar="infoDialogBtn"
                          actionListener="#{dialog.programmVersionDialog.initAndPrepareBean()}">
@@ -298,16 +308,4 @@
         </p:commandButton>
     </h:panelGroup>
 
-    <h:panelGroup styleClass="hiddenButton">
-
-
-        <!-- restore Task -->
-        <p:commandButton id="restoreTaskBtn"
-                         actionListener="#{dearchiveTaskDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
-            <p:ajax event="dialogReturn"
-                    listener="#{dialogReturnHandler.onDefaultReturn}"
-                    update="navigationForm:patientList contentForm headerForm"/>
-        </p:commandButton>
-
-    </h:panelGroup>
 </ui:composition>

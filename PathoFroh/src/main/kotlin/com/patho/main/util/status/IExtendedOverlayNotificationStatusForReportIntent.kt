@@ -1,5 +1,6 @@
 package com.patho.main.util.status
 
+import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.status.ExtendedNotificationStatus
 
 /**
@@ -10,6 +11,10 @@ import com.patho.main.util.status.ExtendedNotificationStatus
  * Is implemented by @see com.patho.main.util.status.ExtendedNotificationStatus.ReportNotificationIntentStatus.ReportIntentStatus
  * Display Element: OverlayNotificationStatusForReportIntent.xhtml (displays ReportIntentStatus -> DiagnosisRevisionStatus)
  */
-interface IExtendedNotificationStatusForReportIntent {
+interface IExtendedOverlayNotificationStatusForReportIntent {
     val diagnoses: List<ExtendedNotificationStatus.ReportNotificationIntentStatus.ReportIntentStatus.DiagnosisRevisionStatus>
+    val isCompleted: Boolean
+    val isActive : Boolean
+    val isNotificationDesignated : Boolean
+    val isNoNotification : Boolean
 }

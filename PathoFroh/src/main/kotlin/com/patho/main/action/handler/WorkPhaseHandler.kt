@@ -45,11 +45,12 @@ open class WorkPhaseHandler @Autowired constructor(
     }
 
     /**
-     * Starts the staining phase
+     * Starts the staining phase and reloaded the given task
      */
     @Transactional
-    open fun startStainingPhase(task: Task): Task {
-        return workPhaseService.startStainingPhase(task)
+    open fun startStainingPhase(task: Task) {
+        val tmp = workPhaseService.startStainingPhase(task)
+        worklistHandler.replaceTaskInWorklist(tmp)
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.patho.main.action.dialog.settings.favourites;
 
 import com.patho.main.action.dialog.AbstractDialog;
-import com.patho.main.action.handler.GlobalEditViewHandler;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.favourites.FavouriteList;
@@ -29,12 +28,6 @@ import java.util.Date;
 @Setter
 @Getter
 public class FavouriteListItemRemoveDialog extends AbstractDialog {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    @Lazy
-    private GlobalEditViewHandler globalEditViewHandler;
 
     @Autowired
     @Getter(AccessLevel.NONE)
@@ -98,7 +91,7 @@ public class FavouriteListItemRemoveDialog extends AbstractDialog {
     @Transactional
     public void removeTaskFromList() {
 //		favouriteListService.removeTaskFromList(task.getId(), favouriteList.getId());
-//		mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.removed", "growl.favouriteList.removed.text",
+//		mainHandlerAction.sendGrowlMessagesAsResource("growl.favouriteList.removed.headline", "growl.favouriteList.removed.headline.text",
 //				new Object[] { task.getTaskID(), favouriteList.getName() });
     }
 

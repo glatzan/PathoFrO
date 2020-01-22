@@ -6,7 +6,6 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.miscellaneous.Council
-import com.patho.main.util.status.reportIntent.ReportIntentStatusByReportIntentAndDiagnosis
 
 
 class TotalTaskStatus(task: Task) {
@@ -158,32 +157,6 @@ class TotalTaskStatus(task: Task) {
             }
         }
     }
-
-    /**
-     * Notification status
-     */
-    public class NotificationStatus(task: Task) {
-        /**
-         * If notification phase is set to completed
-         */
-        val isCompleted = task.notificationCompleted
-
-        /**
-         * Date of notification phase completion
-         */
-        val dateOfCompletion = task.notificationCompletionDate
-
-        /**
-         * Singe notifications
-         */
-        val notification = ReportIntentStatusByReportIntentAndDiagnosis(task)
-
-        /**
-         * Returns true if all notifications are completed
-         */
-        val allNotificationsCompleted = notification.completed
-    }
-
 
     public class ConsultationStatus(task: Task) {
 

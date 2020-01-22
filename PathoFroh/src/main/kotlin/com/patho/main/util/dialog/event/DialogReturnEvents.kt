@@ -13,8 +13,9 @@ import com.patho.main.model.user.HistoUser
 import com.patho.main.ui.selectors.StainingPrototypeHolder
 import com.patho.main.util.ui.selector.ReportIntentSelector
 import com.patho.main.util.worklist.Worklist
+import java.io.Serializable
 
-open class DialogReturnEvent
+open class DialogReturnEvent : Serializable
 
 /**
  * Select event

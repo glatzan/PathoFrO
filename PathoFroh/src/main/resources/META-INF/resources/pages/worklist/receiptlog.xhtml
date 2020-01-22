@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:histo="http://java.sun.com/jsf/composite/components/notification">
 
     <h:outputScript library="scripts" name="closeOverlayPanelOnReturn.js"/>
     <h:outputScript library="scripts" name="commonFunctions.js"/>
@@ -171,6 +169,27 @@
 
             <!-- middle column -->
             <h:panelGrid columns="1" styleClass="defaultHistoTable">
+
+                <h:panelGrid columns="2"
+                             styleClass="listingHistoHiddenTableContainer">
+                    <!-- Task Number -->
+                    <h:outputLabel value="#{msg['body.diagnosis.taskNumber']}"/>
+                    <h:panelGrid columns="2"
+                                 styleClass="listingHistoHiddenTableContainer">
+                        <p:inputText disabled="true"
+                                     value="#{diagnosisView.task.taskID}"/>
+                        <p:commandLink title="#{msg['body.diagnosis.taskNumber.change']}"
+                                       rendered="#{userService.userHasPermission('TASK_EDIT_ID')}"
+                                       disabled="#{!diagnosisView.task.taskStatus.editable}"
+                                       actionListener="#{dialog.changeTaskIDDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                            <i class="fa fa-fw fa-cog"/>
+                            <p:ajax event="dialogReturn"
+                                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                                    update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                </h:panelGrid>
+
                 <h:panelGrid columns="2"
                              styleClass="listingHistoHiddenTableContainer">
                     <!-- material -->
@@ -402,9 +421,9 @@
                 </h:panelGrid>
                 <h:panelGroup>
                     <!-- contacts -->
-                    <p:dataTable var="reportIntent" scrollable="true" scrollHeight="90"
+                    <p:dataTable var="reportIntentStatus" scrollable="true" scrollHeight="90"
                                  style="width:450px" styleClass="defaultHistoDataTable"
-                                 value="#{receiptLogView.reportIntentStatus.reportIntentBearer}">
+                                 value="#{receiptLogView.reportNotificationIntentStatus.reportIntents}">
 
                         <!-- name -->
                         <p:column style="width:auto">
@@ -412,15 +431,16 @@
                                 <h:outputLabel value="#{msg['body.receiptlog.contact.name']}"/>
                             </f:facet>
 
-                            <h:outputLabel value="#{reportIntent.person.getFullName()}" id="test123"/>
+                            <h:outputLabel value="#{reportIntentStatus.reportIntent.person.getFullName()}"
+                                           id="test123"/>
 
                             <p:commandLink
                                     styleClass="contactInfoOverplayTrigger"
                                     icon="pi pi-search"
-                                    actionListener="#{receiptLogView.setSelectedReportIntentStatus(reportIntent)}"
+                                    actionListener="#{receiptLogView.setSelectedReportIntentStatus(reportIntentStatus)}"
                                     partialSubmit="true"
                                     process="@this"
-                                    update="contentForm:contactInfoOverlayPanel"
+                                    update="contentForm:contactInfoOverlayBearer:contactInfoOverlayPanel"
                                     oncomplete="commonFunctions.showOverlayPanel('contactInfoOverlayPanel', '#{component.clientId}');">
                                 <i class="fa fa-info-circle"/>
                             </p:commandLink>
@@ -432,8 +452,8 @@
                                 <h:outputLabel value="#{msg['body.receiptlog.contact.role']}"/>
                             </f:facet>
                             <h:outputLabel
-                                    value="#{msg['enum.contactRole.'.concat(reportIntent.role)]}"
-                                    title="#{msg['enum.contactRole.'.concat(reportIntent.role)]}">
+                                    value="#{msg['enum.contactRole.'.concat(reportIntentStatus.reportIntent.role)]}"
+                                    title="#{msg['enum.contactRole.'.concat(reportIntentStatus.reportIntent.role)]}">
                                 <f:converter converterId="org.histo.ui.TruncateConverter"/>
                                 <f:attribute name="truncateAt" value="13"/>
                                 <f:attribute name="continuationMark" value="..."/>
@@ -447,8 +467,8 @@
                             </f:facet>
 
                             <h:outputLabel
-                                    value="#{reportIntent.address.town}"
-                                    title="#{reportIntent.address.town}">
+                                    value="#{reportIntentStatus.reportIntent.person.contact.town}"
+                                    title="#{reportIntentStatus.reportIntent.person.contact.town}">
                                 <f:converter converterId="org.histo.ui.TruncateConverter"/>
                                 <f:attribute name="truncateAt" value="15"/>
                                 <f:attribute name="continuationMark" value="..."/>
@@ -461,104 +481,17 @@
                                 <i class="fa fa-check-square-o"
                                    title="#{msg['body.receiptlog.contact.type.performed']}"/>
                             </f:facet>
-                            <ui:fragment rendered="#{reportIntent.completed}">
+                            <ui:fragment rendered="#{reportIntentStatus.completed}">
                                 <i class="fa fa-check icon-green"/>
                             </ui:fragment>
                         </p:column>
                     </p:dataTable>
 
-                    <script type="text/javascript">
-                        commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('contactInfoOverlayPanel')
-                        commonFunctions.addShowDialogOnMouseEnterForClickable(".contactInfoOverplayTrigger", "contactInfoOverlayPanel")
-                    </script>
-
-                    <!-- overlay for contact notifications -->
-                    <p:overlayPanel widgetVar="contactInfoOverlayPanel" hideEvent="null" showEvent="null"
-                                    dismissable="false" id="contactInfoOverlayPanel" styleClass="histoOverlayPanel">
-
-                        <c:forEach items="#{receiptLogView.selectedReportIntentStatus.diagnosisBearers}"
-                                   var="diagnosisBearer">
-
-                            <h:panelGrid columns="1" style="width:400px !important;" styleClass="defaultHistoTable">
-
-                                <h:panelGroup layout="block" style="widht:100%;" styleClass="histo_header">
-                                    <h:outputText value="#{diagnosisBearer.diagnosisName}"/>
-                                </h:panelGroup>
-
-                                <c:forEach items="#{diagnosisBearer.reportIntentNotificationBearers}"
-                                           var="notificationBearer">
-
-                                    <h:panelGrid columns="5" styleClass="defaultHistoHiddenTableContainer"
-                                                 style="width:98% !important;margin-left: 10px"
-                                                 columnClasses="columnWidth25,columnWidth75,columnWidth75,columnWidth75,">
-
-                                        <!-- type icon -->
-                                        <h:panelGroup>
-                                            <ui:fragment
-                                                    rendered="#{notificationBearer.type eq 'EMAIL'}">
-                                                <i class="fa fa-envelope icon-grey"/>
-                                            </ui:fragment>
-
-                                            <ui:fragment rendered="#{notificationBearer.type eq 'FAX'}">
-                                                <i class="fa fa-fax icon-grey"/>
-                                            </ui:fragment>
-
-                                            <ui:fragment
-                                                    rendered="#{notificationBearer.type eq 'LETTER'}">
-                                                <i class="fa fa-pencil-square-o icon-grey"/>
-                                            </ui:fragment>
-
-                                            <ui:fragment
-                                                    rendered="#{notificationBearer.type eq 'PHONE'}">
-                                                <i class="fa fa-phone icon-grey"/>
-                                            </ui:fragment>
-
-                                            <ui:fragment
-                                                    rendered="#{notificationBearer.type eq 'PRINT'}">
-                                                <i class="fa fa-print icon-grey"/>
-                                            </ui:fragment>
-                                        </h:panelGroup>
-
-                                        <!-- attempts -->
-                                        <h:outputFormat value="#{msg['body.receiptlog.contact.overview.attempts']}">
-                                            <f:param value="#{notificationBearer.attempts}"/>
-                                        </h:outputFormat>
-
-                                        <!-- successes -->
-                                        <h:outputFormat value="#{msg['body.receiptlog.contact.overview.success']}">
-                                            <f:param value="#{notificationBearer.successes}"/>
-                                        </h:outputFormat>
-
-                                        <!-- failedAttempts -->
-                                        <h:outputFormat
-                                                value="#{msg['body.receiptlog.contact.overview.failedAttampts']}">
-                                            <f:param value="#{notificationBearer.failedAttempts}"/>
-                                        </h:outputFormat>
-
-                                        <!-- performed -->
-                                        <ui:fragment rendered="#{notificationBearer.attempts != 0}">
-                                            <h:panelGroup>
-                                                <h:outputLabel
-                                                        value="#{msg['body.receiptlog.contact.overview.performed']}"/>
-                                                <i class="fa fa-fw #{notificationBearer.success ? 'fa-check-circle icon-green' :'fa-exclamation-triangle icon-red'}"
-                                                   title="#{msg['body.statiningView.idManuallyAltered']}"/>
-                                            </h:panelGroup>
-                                        </ui:fragment>
-
-                                        <ui:fragment rendered="#{notificationBearer.attempts == 0}">
-                                            <h:panelGroup>
-                                                <h:outputLabel
-                                                        value="#{msg['body.receiptlog.contact.overview.performed']}"/>
-                                                <i class="fa fa-fw fa-minus"/>
-                                            </h:panelGroup>
-                                        </ui:fragment>
-
-                                    </h:panelGrid>
-
-                                </c:forEach>
-                            </h:panelGrid>
-                        </c:forEach>
-                    </p:overlayPanel>
+                    <!-- overlay for report intent information -->
+                    <histo:OverlayNotificationStatusForReportIntent id="contactInfoOverlayBearer"
+                                                                    reportIntentStatus="#{receiptLogView.selectedReportIntentStatus}"
+                                                                    wid="contactInfoOverlayPanel"
+                                                                    triggerClass="contactInfoOverplayTrigger"/>
                 </h:panelGroup>
             </h:panelGrid>
         </h:panelGrid>

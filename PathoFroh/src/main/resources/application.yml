@@ -27,6 +27,16 @@ spring:
     redis:
       repositories:
         enabled: false
+  #remove for productive
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  #set to true for productive
+  freemarker:
+    cache: false
+    check-template-location: false
   jpa:
     generate-ddl: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -45,8 +55,6 @@ spring:
     auto: false
   messages:
     basename: messages/messages
-  freemarker:
-    checkTemplateLocation:  false
 
 logging:
   file: test.log

@@ -19,7 +19,7 @@ public enum HistoPermissions {
      * Used in AddPatientDialogHandler to only update local, not display clinic
      * patients <BR>
      * -> Used in <BR>
-     * --> GlobalEditViewHandler in quicksearch to search only in local db <BR>
+     * --> quicksearch to search only in local db <BR>
      * --> SearchPatientDialog to search only in local database
      */
     PATIENT_EDIT_ADD_CLINIC(PATIENT_EDIT),

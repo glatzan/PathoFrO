@@ -109,7 +109,7 @@ open class SlideOverviewDialog @Autowired constructor(
     open fun onStainingPhaseExitReturn(event: SelectEvent) {
         if (event.`object` is StainingPhaseExitEvent) {
             // end staingphase confirmed, close dialog and forward
-            logger.debug("Staining phase exit dialog return, forwarding to globalEditViewHandler")
+            logger.debug("Staining phase exit dialog return")
             hideDialog(event.getObject())
             return
         }

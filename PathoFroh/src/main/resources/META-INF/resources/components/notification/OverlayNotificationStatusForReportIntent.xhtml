@@ -18,11 +18,12 @@
 <!--<i class="fa fa-info-circle"/>-->
 <!--</p:commandLink>-->
 
-<!-- Overlay for display com.patho.main.util.status.reportIntentent.ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer objects -->
+<!-- Overlay for display com.patho.main.util.status.IExtendedOverlayNotificationStatusForReportIntent objects -->
+<!-- Overlay display for displaying notification status sored by diagnosis for a table of report intents-->
 <composite:interface>
-    <!-- com.patho.main.util.status.reportIntentent.ReportIntentStatusByReportIntentAndDiagnosis.ReportIntentBearer -->
+    <!-- com.patho.main.util.status.IExtendedOverlayNotificationStatusForReportIntent -->
     <composite:attribute name="reportIntentStatus" required="true"
-                         type="com.patho.main.util.status.IExtendedNotificationStatusForReportIntent"/>
+                         type="com.patho.main.util.status.IExtendedOverlayNotificationStatusForReportIntent"/>
     <!-- id and widgetvar of the overlaypanel -->
     <composite:attribute name="wid" required="true" default="false"/>
     <!-- custom class of trigger button, to add the trigger event -->
@@ -49,6 +50,14 @@
                 <h:panelGroup layout="block" style="width: clac(100% - 5 px);" styleClass="histo_header">
                     <h:outputText value="#{diagnosisRevisionStatus.name}"/>
                 </h:panelGroup>
+
+                <h:panelGrid columns="5" styleClass="defaultHistoHiddenTableContainer"
+                             style="width:98% !important;margin-left: 10px"
+                             rendered="#{cc.attrs.reportIntentStatus.noNotification}">
+                    <h:outputText
+                            value="#{msg['component.overlayNotificationStatusForReportIntent.noAction']}"
+                            styleClass="icon-red"/>
+                </h:panelGrid>
 
                 <c:forEach items="#{diagnosisRevisionStatus.notifications}"
                            var="notifications">
@@ -85,18 +94,20 @@
                         </h:panelGroup>
 
                         <!-- attempts -->
-                        <h:outputFormat value="#{msg['body.receiptlog.contact.overview.attempts']}">
+                        <h:outputFormat
+                                value="#{msg['component.overlayNotificationStatusForReportIntent.totalAttempts']}">
                             <f:param value="#{notifications.totalAttempts}"/>
                         </h:outputFormat>
 
                         <!-- successes -->
-                        <h:outputFormat value="#{msg['body.receiptlog.contact.overview.success']}">
+                        <h:outputFormat
+                                value="#{msg['component.overlayNotificationStatusForReportIntent.totalSuccesses']}">
                             <f:param value="#{notifications.totalSuccesses}"/>
                         </h:outputFormat>
 
                         <!-- failedAttempts -->
                         <h:outputFormat
-                                value="#{msg['body.receiptlog.contact.overview.failedAttampts']}">
+                                value="#{msg['component.overlayNotificationStatusForReportIntent.failedAttempts']}">
                             <f:param value="#{notifications.totalFailedAttempts}"/>
                         </h:outputFormat>
 
@@ -104,7 +115,7 @@
                         <ui:fragment rendered="#{notifications.totalAttempts != 0}">
                             <h:panelGroup>
                                 <h:outputLabel
-                                        value="#{msg['body.receiptlog.contact.overview.performed']}"/>
+                                        value="#{msg['component.overlayNotificationStatusForReportIntent.performed']}"/>
                                 <i class="fa fa-fw #{notifications.success ? 'fa-check-circle icon-green' :'fa-exclamation-triangle icon-red'}"
                                    title="#{msg['body.statiningView.idManuallyAltered']}"/>
                             </h:panelGroup>
@@ -113,7 +124,7 @@
                         <ui:fragment rendered="#{notifications.totalAttempts == 0}">
                             <h:panelGroup>
                                 <h:outputLabel
-                                        value="#{msg['body.receiptlog.contact.overview.performed']}"/>
+                                        value="#{msg['component.overlayNotificationStatusForReportIntent.performed']}"/>
                                 <i class="fa fa-fw fa-minus"/>
                             </h:panelGroup>
                         </ui:fragment>

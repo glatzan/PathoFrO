@@ -3,12 +3,14 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:pe="http://primefaces.org/ui/extensions">
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
+<!-- Datatable with Diagnosis and Notification-Overlaypanel-->
 <composite:interface>
-    <!-- controller class implementing com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData -->
+    <!-- controller class implementing com.patho.main.util.status.IExtendedDatatableNotificationStatusByDiagnosis -->
     <composite:attribute name="controller" required="true"
-                         type="com.patho.main.util.status.diagnosis.IReportIntentStatusByDiagnosisViewData"/>
+                         type="com.patho.main.util.status.IExtendedDatatableNotificationStatusByDiagnosis"/>
     <!-- id of the form and id path to the component-->
     <composite:attribute name="formID" required="true"/>
 
@@ -18,24 +20,23 @@
 
 <composite:implementation>
 
-
     <!-- importing enum for switch -->
     <p:importEnum
             type="com.patho.main.model.patient.NotificationStatus"
             var="notificationStatus" allSuffix="ALL_ENUM_VALUES"/>
 
-    <p:dataTable var="diagnosisBearer" id="diangosisList"
+    <p:dataTable var="_diagnosis" id="diangosisList"
                  scrollHeight="100" styleClass="defaultHistoDataTable"
                  scrollable="true" selectionMode="single" disabledSelection="#{cc.attrs.disableSelection}"
-                 rowKey="#{diagnosisBearer.diagnosisRevision.id}"
-                 selection="#{cc.attrs.controller.selectDiagnosisRevision}"
-                 value="#{cc.attrs.controller.diagnosisRevisions.diagnosisBearer}">
+                 rowKey="#{_diagnosis.diagnosisRevision.id}"
+                 selection="#{cc.attrs.controller.selectedDiagnosisRevisionStatus}"
+                 value="#{cc.attrs.controller.diagnosisNotificationStatus.diagnoses}">
 
         <!-- Name -->
         <p:column
                 headerText="#{msg['dialog.notificationDialog.general.data.name']}"
                 style="width:auto">
-            <h:outputText value="#{diagnosisBearer.diagnosisRevision.name}"/>
+            <h:outputText value="#{_diagnosis.name}"/>
         </p:column>
 
         <!-- info -->
@@ -46,7 +47,7 @@
             <p:commandLink
                     styleClass="diagnosisOverlayPanelTrigger"
                     icon="pi pi-search"
-                    actionListener="#{cc.attrs.controller.setViewDiagnosisRevisionDetails(diagnosisBearer)}"
+                    actionListener="#{cc.attrs.controller.setDisplayDiagnosisRevisionStatus(_diagnosis)}"
                     partialSubmit="true"
                     process="@this"
                     update="#{cc.attrs.formID}:diagnosisOverlayPanel"
@@ -56,30 +57,30 @@
         </p:column>
 
         <!-- pending -->
-        <p:column style="width:10%" styleClass="centerChildElements"
+        <p:column style="width:30%" styleClass="centerChildElements"
                   headerText="#{msg['dialog.notificationDialog.general.data.status.text']}">
-            <pe:switch value="#{diagnosisBearer.diagnosisRevision.notificationStatus}">
-                <pe:case value="#{notificationStatus.NOT_APPROVED}">
+            <pe:switch value="#{_diagnosis.notificationStatus.name()}">
+                <pe:case value="#{notificationStatus.NOT_APPROVED.name()}">
                     <i class="fa fa-fw fa-volume-off icon-red"
                        title="#{msg['dialog.notificationDialog.general.data.status.notApproved']}"/>
                 </pe:case>
-                <pe:case value="#{notificationStatus.NOTIFICATION_PENDING}">
+                <pe:case value="#{notificationStatus.NOTIFICATION_PENDING.name()}">
                     <i class="fa fa-fw fa-volume-down icon-orange"
                        title="#{msg['dialog.notificationDialog.general.data.status.pending']}"/>
                 </pe:case>
-                <pe:case value="#{notificationStatus.NO_NOTFICATION}">
+                <pe:case value="#{notificationStatus.NO_NOTFICATION.name()}">
                     <i class="fa fa-fw fa-circle"
                        title="#{msg['dialog.notificationDialog.general.data.status.none']}"/>
                 </pe:case>
-                <pe:case value="#{notificationStatus.NOTIFICATION_PERFORMED}">
+                <pe:case value="#{notificationStatus.NOTIFICATION_PERFORMED.name()}">
                     <i class="fa fa-fw fa-volume-up icon-blue"
                        title="#{msg['dialog.notificationDialog.general.data.status.completed']}"/>
                 </pe:case>
-                <pe:case value="#{notificationStatus.NOTIFICATION_FAILED}">
+                <pe:case value="#{notificationStatus.NOTIFICATION_FAILED.name()}">
                     <i class="fa fa-fw fa-volume-up icon-red"
                        title="#{msg['dialog.notificationDialog.general.data.status.completed']}"/>
                 </pe:case>
-                <pe:case value="#{notificationStatus.NOTIFICATION_COMPLETED}">
+                <pe:case value="#{notificationStatus.NOTIFICATION_COMPLETED.name()}">
                     <i class="fa fa-fw fa-check-circle icon-green"
                        title="#{msg['dialog.notificationDialog.general.data.status.completed']}"/>
                 </pe:case>
@@ -93,8 +94,8 @@
         <p:column style="width:20%"
                   headerText="#{msg['dialog.notificationDialog.general.data.performed']}">
 
-            <h:outputText value="#{diagnosisBearer.diagnosisRevision.notificationDate}"
-                          rendered="#{diagnosisBearer.diagnosisRevision.notified}">
+            <h:outputText value="#{_diagnosis.diagnosisRevision.notificationDate}"
+                          rendered="#{_diagnosis.diagnosisRevision.notified}">
                 <f:converter converterId="instantDateTimeConverter"/>
                 <f:attribute name="pattern" value="dd.MM.yyyy HH:mm:ss"/>
             </h:outputText>
@@ -106,15 +107,15 @@
     </p:dataTable>
 
     <script type="text/javascript">
-        commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('diagnosisOverlayPanel')
-        commonFunctions.addShowDialogOnMouseEnterForClickable(".diagnosisOverlayPanelTrigger", "diagnosisOverlayPanel")
+        commonFunctions.addGlobalHideOverlayPanelOnMouseClickHandler('diagnosisOverlayPanel');
+        commonFunctions.addShowDialogOnMouseEnterForClickable(".diagnosisOverlayPanelTrigger", "diagnosisOverlayPanel");
     </script>
 
     <!-- overlay for contact notifications -->
     <p:overlayPanel widgetVar="diagnosisOverlayPanel" hideEvent="null" showEvent="null"
                     style="width: 400px;"
                     dismissable="false" id="diagnosisOverlayPanel" styleClass="histoOverlayPanel">
-        <p:dataTable value="#{cc.attrs.controller.viewDiagnosisRevisionDetails.reportIntents}"
+        <p:dataTable value="#{cc.attrs.controller.displayDiagnosisRevisionStatus.reportIntents}"
                      var="reportIntent" styleClass="defaultHistoDataTable">
             <!-- name -->
             <p:column headerText="#{msg['dialog.notificationDialog.general.overlay.personName']}"

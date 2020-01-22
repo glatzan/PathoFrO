@@ -1,5 +1,6 @@
 package com.patho.main.action.handler
 
+import com.patho.main.common.GuiCommands
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Slide
@@ -208,6 +209,16 @@ open class DialogReturnHandler @Autowired constructor(
         val obj = event.`object`
         if (obj is RemovePatientFromWorklistEvent) {
             worklistHandler.removePatientFromWorklist(obj.obj)
+            return
+        }
+
+        onDefaultReturn(event)
+    }
+
+    open fun onEndNotificationPhaseReturn(event: SelectEvent){
+        val obj = event.`object`
+        if (obj is NotificationPhaseExitEvent && obj.startTaskArchival) {
+            MessageHandler.executeScript(GuiCommands.OPEN_ARCHIVE_TASK_DIALOG)
             return
         }
 

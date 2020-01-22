@@ -128,22 +128,22 @@
                             </h:outputFormat>
                         </ui:fragment>
 
-                        <!-- reportIntent needed -->
-                        <!-- reportIntent needed = green -->
+                        <!-- diagnosis needed -->
+                        <!-- diagnosis needed = green -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListDiagnosis}">
                             <h:outputFormat value=" ({0})" style="color:green;">
                                 <f:param value="#{msg['body.worklist.patient.diagnosisPhase.diagnosisNeeded']}"/>
                             </h:outputFormat>
                         </ui:fragment>
 
-                        <!-- re-reportIntent needed = orange -->
-                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListDiagnosis}">
+                        <!-- re-diagnosis needed = orange -->
+                        <ui:fragment rendered="#{task.taskStatus.listStatus.inListReDiagnosis}">
                             <h:outputFormat value=" ({0})" style="color:orange;">
                                 <f:param value="#{msg['body.worklist.patient.diagnosisPhase.reDiagnosisNeeded']}"/>
                             </h:outputFormat>
                         </ui:fragment>
 
-                        <!-- no reportIntent needed = purple -->
+                        <!-- no diagnosis needed = purple -->
                         <ui:fragment rendered="#{task.taskStatus.listStatus.inListStayInDiagnosis}">
                             <h:outputFormat value=" ({0})" style="color:purple;">
                                 <f:param value="#{msg['body.worklist.patient.diagnosisPhase.inList']}"/>

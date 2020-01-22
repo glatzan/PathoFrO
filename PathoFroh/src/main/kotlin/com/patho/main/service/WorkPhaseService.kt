@@ -126,9 +126,6 @@ open class WorkPhaseService @Autowired constructor(
     open fun endNotificationPhase(task: Task, removeFromList: Boolean): Task {
         var tmp = task
 
-        if (tmp.diagnosisRevisions.any { !it.isNotified })
-            throw NotificationNotCompletedException()
-
         tmp.notificationCompletionDate = Instant.now()
         tmp = taskRepository.save(tmp, resourceBundle.get("log.phase.notification.end", tmp), tmp.patient)
 

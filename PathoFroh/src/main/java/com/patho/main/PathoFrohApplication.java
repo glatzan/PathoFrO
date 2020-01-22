@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableSpringConfigured
 @EnableScheduling
 @EnableConfigurationProperties
-@Import({MessageConfig.class, DatabaseConfig.class, LdapConfig.class, PushConfig.class, ThreadConfig.class})
+@Import({MessageConfig.class, DatabaseConfig.class, LdapConfig.class, ThreadConfig.class})
 public class PathoFrohApplication {
     public static void main(String[] args) {
         SpringApplication.run(PathoFrohApplication.class, args);

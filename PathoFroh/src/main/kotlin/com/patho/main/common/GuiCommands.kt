@@ -35,5 +35,17 @@ class GuiCommands {
          */
         @JvmStatic
         val OPEN_END_STAINING_PHASE_FROM_NOTIFICATION_DIALOG: String = "clickButtonFromBean('adminForm:openEndStainingPhaseBtn')"
+
+        /**
+         * Opens the task archive dialog from the notification dialog
+         */
+        @JvmStatic
+        val OPEN_ARCHIVE_TASK_DIALOG_FROM_NOTIFICATION_DIALOG: String = "clickButtonFromBean('adminForm:openArchiveTaskBtm')"
+
+        /**
+         * Opens the task archive dialog from the main ui
+         */
+        @JvmStatic
+        val OPEN_ARCHIVE_TASK_DIALOG: String = "clickButtonFromBean('headerForm:archiveTaskBtn')"
     }
 }
