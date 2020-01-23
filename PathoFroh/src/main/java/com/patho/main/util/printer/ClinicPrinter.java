@@ -46,13 +46,13 @@ public class ClinicPrinter extends AbstractPrinter {
 
         // getting ip
         Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
-        Matcher matcher = pattern.matcher(cupsPrinter.getDeviceURI());
-
-        if (matcher.find()) {
-            this.deviceUri = matcher.group();
-        } else {
-            this.deviceUri = "0.0.0.0";
-        }
+//        Matcher matcher = pattern.matcher(cupsPrinter.getDeviceURI());
+//
+//        if (matcher.find()) {
+//            this.deviceUri = matcher.group();
+//        } else {
+//            this.deviceUri = "0.0.0.0";
+//        }
     }
 
     /**

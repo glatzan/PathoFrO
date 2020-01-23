@@ -239,14 +239,14 @@
             <version>3.6</version>
         </dependency>
 
-        <!-- cups -->
-        <dependency>
-            <groupId>cups</groupId>
-            <artifactId>cups</artifactId>
-            <scope>system</scope>
-            <version>1.0</version>
-            <systemPath>${project.basedir}/src/main/resources/lib/cups-1.0.jar</systemPath>
-        </dependency>
+<!--        &lt;!&ndash; cups &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.cups4j.CupsClient</groupId>-->
+<!--            <artifactId>cups</artifactId>-->
+<!--            <scope>system</scope>-->
+<!--            <version>1.0</version>-->
+<!--            <systemPath>${project.basedir}/src/main/resources/lib/cups-1.0.jar</systemPath>-->
+<!--        </dependency>-->
 
         <!-- mail validator -->
         <dependency>
@@ -356,6 +356,12 @@
         <!--            <artifactId>atmosphere-runtime</artifactId>-->
         <!--            <version>2.5.3</version>-->
         <!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.cups4j</groupId>
+            <artifactId>cups4j</artifactId>
+            <version>0.7.6</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -371,6 +377,7 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.joinfaces</groupId>
                 <artifactId>joinfaces-maven-plugin</artifactId>
@@ -383,28 +390,29 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>install-external-non-maven1-jar</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <repositoryLayout>default</repositoryLayout>
-                            <groupId>cups</groupId>
-                            <artifactId>cups</artifactId>
-                            <version>1.0</version>
-                            <file>${project.basedir}/src/main/resources/lib/cups-1.0.jar</file>
-                            <packaging>jar</packaging>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-install-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>install-external-non-maven1-jar</id>-->
+<!--                        <phase>clean</phase>-->
+<!--                        <configuration>-->
+<!--                            <repositoryLayout>default</repositoryLayout>-->
+<!--                            <groupId>cups</groupId>-->
+<!--                            <artifactId>cups</artifactId>-->
+<!--                            <version>1.0</version>-->
+<!--                            <file>${project.basedir}/src/main/resources/lib/cups-1.0.jar</file>-->
+<!--                            <packaging>jar</packaging>-->
+<!--                            <generatePom>true</generatePom>-->
+<!--                        </configuration>-->
+<!--                        <goals>-->
+<!--                            <goal>install-file</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -525,6 +533,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.patho.main.PathoFrohApplication</mainClass>
+                </configuration>
             </plugin>
 
             <plugin>

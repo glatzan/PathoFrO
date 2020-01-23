@@ -35,7 +35,6 @@ public class PrintService extends AbstractService {
 
     private LablePrinterHandler lablePrinter;
 
-    @PostConstruct
     public void initializePrinters() {
         getCupsPrinter().initialize();
         getLablePrinter().initialize();
@@ -171,14 +170,14 @@ public class PrintService extends AbstractService {
 
                 if (container.size() > 0) {
                     RoomContainer firstConatiner = container.get(0);
-
-                    for (ClinicPrinter printer : getPrinter()) {
-                        if (HistoUtil.isNotNullOrEmpty(firstConatiner.getPrinter())
-                                && firstConatiner.getPrinter().equals(printer.getDeviceUri())) {
-                            logger.debug("Printer found for room " + ip + "; printer = " + printer.getName());
-                            return printer;
-                        }
-                    }
+                    // TODO reanable printer for room
+//                    for (ClinicPrinter printer : getPrinter()) {
+//                        if (HistoUtil.isNotNullOrEmpty(firstConatiner.getPrinter())
+//                                && firstConatiner.getPrinter().equals(printer.getDeviceUri())) {
+//                            logger.debug("Printer found for room " + ip + "; printer = " + printer.getName());
+//                            return printer;
+//                        }
+//                    }
                 }
 
             }

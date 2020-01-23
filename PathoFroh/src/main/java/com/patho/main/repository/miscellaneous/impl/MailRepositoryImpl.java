@@ -38,8 +38,7 @@ public class MailRepositoryImpl implements MailRepository {
 
     private MailTemplate[] mails;
 
-    @PostConstruct
-    private void initializeDocuments() {
+    public void initializeDocuments() {
         for (MailTemplate mail : mails) {
             logger.debug(
                     "Initilizing " + mail.getName() + " - " + mail.getType() + " - Default " + mail.getDefaultOfType());

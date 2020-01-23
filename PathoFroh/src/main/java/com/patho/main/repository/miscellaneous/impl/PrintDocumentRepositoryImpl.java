@@ -35,8 +35,7 @@ public class PrintDocumentRepositoryImpl implements PrintDocumentRepository {
 
     private PrintDocument[] documents;
 
-    @PostConstruct
-    private void initializeDocuments() {
+    public void initializeDocuments() {
         for (PrintDocument printDocument : documents) {
             logger.debug("Initilizing " + printDocument.getName() + " - " + printDocument.getType() + " - Default "
                     + printDocument.getDefaultOfType());

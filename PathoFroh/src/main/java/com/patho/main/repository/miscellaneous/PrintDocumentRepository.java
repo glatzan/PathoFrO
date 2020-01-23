@@ -134,4 +134,5 @@ public interface PrintDocumentRepository {
         return result;
     }
 
+    public void initializeDocuments();
 }

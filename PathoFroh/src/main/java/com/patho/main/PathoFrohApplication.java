@@ -21,3 +21,4 @@ public class PathoFrohApplication {
         SpringApplication.run(PathoFrohApplication.class, args);
     }
 }
+

@@ -86,7 +86,7 @@ abstract class AbstractTemplate : AbstractPersistable(), Cloneable {
     /**
      * Initializes values for the velocity template engine
      */
-    open fun initialize(vararg token: DocumentToken): Pair<out AbstractTemplate, Context> {
+    open fun initialize(vararg token: DocumentToken): Pair<AbstractTemplate, Context> {
         return initialize(hashMapOf(*token.map { it.key to it.value }.toTypedArray()))
     }
 

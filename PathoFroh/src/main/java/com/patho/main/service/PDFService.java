@@ -321,7 +321,7 @@ public class PDFService extends AbstractService {
     }
 
     public File createThumbnail(File output, File input, int pageNo, int dpi) {
-        byte[] load = mediaRepository.getBytes(input);
+        byte[] load = mediaRepository.getBytes(input.getPath());
         return createThumbnail(output, load, pageNo, dpi);
     }
 
@@ -331,7 +331,7 @@ public class PDFService extends AbstractService {
     }
 
     public BufferedImage gerateThumbnail(File path, int pageNo, int dpi) {
-        return gerateThumbnail(mediaRepository.getBytes(path), pageNo, dpi);
+        return gerateThumbnail(mediaRepository.getBytes(path.getPath()), pageNo, dpi);
     }
 
     /**

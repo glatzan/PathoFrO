@@ -44,4 +44,6 @@ public interface MailRepository {
         }
         return copy;
     }
+
+    public void initializeDocuments();
 }

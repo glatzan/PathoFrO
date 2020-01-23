@@ -52,32 +52,17 @@ public class PDFCreator {
     /**
      * Directory for creating a new pdf
      */
-    private File absoluteTargetDirectory;
-
-    /**
-     * Directory for creating a new pdf
-     */
-    private File relaviteTargetDirectory;
-
-    /**
-     * Target file
-     */
-    private File absoulteTargetFile;
+    private File targetDirectory;
 
     /**
      * Relative path to the object. Used for saving in database.
      */
-    private String relativeTargetFile;
-
-    /**
-     * Target Image file
-     */
-    private File absoluteTargetImg;
+    private String targetFile;
 
     /**
      * Relative path to the object. Used for saving in database.
      */
-    private String relativeTargetImg;
+    private String targetImageFile;
 
     public PDFCreator() {
         this(null);
@@ -87,26 +72,24 @@ public class PDFCreator {
         if (workdirectory == null)
             workdirectory = new File(SpringContextBridge.services().getPathoConfig().getFileSettings().getPrintDirectory());
 
-        this.relaviteTargetDirectory = workdirectory;
-        this.absoluteTargetDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(workdirectory);
+        this.targetDirectory = workdirectory;
 
-        this.workingDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(SpringContextBridge.services().getPathoConfig().getFileSettings().getWorkDirectory());
-        this.auxDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(SpringContextBridge.services().getPathoConfig().getFileSettings().getAuxDirectory());
-        this.errorDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(SpringContextBridge.services().getPathoConfig().getFileSettings().getErrorDirectory());
+        this.workingDirectory = new File(SpringContextBridge.services().getPathoConfig().getFileSettings().getWorkDirectory());
+        this.auxDirectory = new File(SpringContextBridge.services().getPathoConfig().getFileSettings().getAuxDirectory());
+        this.errorDirectory = new File(SpringContextBridge.services().getPathoConfig().getFileSettings().getErrorDirectory());
     }
 
     public PDFContainer createPDF(PrintDocument template) throws FileNotFoundException {
-        return createPDF(template, relaviteTargetDirectory, false);
+        return createPDF(template, targetDirectory, false);
     }
 
     public PDFContainer createPDF(PrintDocument template, File relaviteTargetDirectory) throws FileNotFoundException {
         return createPDF(template, relaviteTargetDirectory, false);
     }
 
-    public PDFContainer createPDF(PrintDocument template, File relaiveTargetDirectory, boolean generateThumbnail)
+    public PDFContainer createPDF(PrintDocument template, File targetDirectory, boolean generateThumbnail)
             throws FileNotFoundException {
-        this.relaviteTargetDirectory = relaiveTargetDirectory;
-        this.absoluteTargetDirectory = SpringContextBridge.services().getMediaRepository().getWriteFile(relaiveTargetDirectory);
+        this.targetDirectory = targetDirectory;
 
         PDFContainer container = getNewUniquePDF(generateThumbnail);
         container.setType(template.getDocumentType());
@@ -116,7 +99,7 @@ public class PDFCreator {
     }
 
     public String createPDFNonBlocking(PrintDocument template, LazyPDFReturnHandler returnHandler) {
-        return createPDFNonBlocking(template, relaviteTargetDirectory, false, returnHandler);
+        return createPDFNonBlocking(template, targetDirectory, false, returnHandler);
     }
 
     public String createPDFNonBlocking(PrintDocument template, File relaviteTargetDirectory,
@@ -154,10 +137,7 @@ public class PDFCreator {
     }
 
     public PDFContainer updateExistingPDF(PrintDocument template, PDFContainer container, boolean generateThumbnail) {
-        this.absoluteTargetDirectory = SpringContextBridge.services().getMediaRepository()
-                .getParentDirectory(SpringContextBridge.services().getMediaRepository().getWriteFile(container.getPath()));
-        this.relaviteTargetDirectory = SpringContextBridge.services().getMediaRepository().getParentDirectory(container.getPath());
-
+        this.targetDirectory = new File((!container.getPath().startsWith("file:")) ? "file:" : "" + container.getPath());
         return runPDFCreation(template, container, generateThumbnail);
     }
 
@@ -191,10 +171,8 @@ public class PDFCreator {
     }
 
     private PDFContainer runPDFCreation(PrintDocument template, PDFContainer container, boolean generateThumbnail) {
-        this.absoulteTargetFile = SpringContextBridge.services().getMediaRepository().getWriteFile(container.getPath());
-        this.relativeTargetFile = container.getPath();
-        this.absoluteTargetImg = SpringContextBridge.services().getMediaRepository().getWriteFile(container.getThumbnail());
-        this.relativeTargetImg = container.getThumbnail();
+        this.targetFile = container.getPath();
+        this.targetImageFile = container.getThumbnail();
 
         boolean created = run(template.getFinalContent(), generateThumbnail);
 
@@ -238,11 +216,11 @@ public class PDFCreator {
                     throw new IOException("Could not create Thumbnail");
             }
 
-            if (!absoluteTargetDirectory.equals(workingDirectory)) {
-                if (!moveFileToTargetDestination(helper.outputFile, absoulteTargetFile))
+            if (!targetDirectory.equals(workingDirectory)) {
+                if (!moveFileToTargetDestination(helper.outputFile, targetDirectory))
                     throw new IOException("Could not move PDF File");
 
-                if (createThumbnail && !moveFileToTargetDestination(helper.outputThumbnail, absoluteTargetImg))
+                if (createThumbnail && !moveFileToTargetDestination(helper.outputThumbnail, new File(targetImageFile)))
                     throw new IOException("Could not move Thumbnail");
             }
 
@@ -269,6 +247,7 @@ public class PDFCreator {
 
     private boolean validateEnvironment() throws FileNotFoundException {
         // checking directories
+
         if (!workingDirectory.isDirectory() && !workingDirectory.mkdirs()) {
             logger.error("Error directory not found: work directory {}", workingDirectory.getAbsolutePath());
             throw new FileNotFoundException(
@@ -281,7 +260,7 @@ public class PDFCreator {
                     "Error directory not found: aux directory " + auxDirectory.getAbsolutePath());
         }
 
-        if (!absoluteTargetDirectory.isDirectory() && !absoluteTargetDirectory.mkdirs()) {
+        if (!targetDirectory.isDirectory() && !absoluteTargetDirectory.mkdirs()) {
             logger.error("Error directory not found: output directory {}", absoluteTargetDirectory.getAbsolutePath());
             throw new FileNotFoundException(
                     "Error directory not found: output directory " + absoluteTargetDirectory.getAbsolutePath());
@@ -384,9 +363,9 @@ public class PDFCreator {
     }
 
     private PDFContainer getNewUniquePDF(boolean thumbnail) throws FileNotFoundException {
-        String outPutName = SpringContextBridge.services().getMediaRepository().getUniqueName(absoluteTargetDirectory, ".pdf");
-        File outFile = new File(relaviteTargetDirectory, outPutName);
-        File outImg = new File(relaviteTargetDirectory, outPutName.replace(".pdf", ".png"));
+        String outPutName = "file:" + SpringContextBridge.services().getMediaRepository().getUniqueName(absoluteTargetDirectory, ".pdf");
+        File outFile = new File(targetDirectory, outPutName);
+        File outImg = new File(targetDirectory, outPutName.replace(".pdf", ".png"));
 
         logger.debug("PDF with output file " + outFile.getPath() + " dir " + absoluteTargetDirectory.getPath());
         PDFContainer pdfContainer = new PDFContainer();

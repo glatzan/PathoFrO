@@ -142,33 +142,41 @@ patho:
         templateName: org.histo.template.mail.SuccessUnlockMail
         defaultOfType: true
         name: Benutzer-Freischaltung erfolgt
-        content: classpath:templates/mail/successUnlock.txt
+        content: workDirectory:templates/mail/successUnlock.txt
       - id: 1
         templateName: org.histo.template.mail.RequestUnlockMail
         name: Benutzer-Freischaltung erbeten
         defaultOfType: true
-        content: classpath:templates/mail/requestUnlock.txt
+        content: workDirectory:templates/mail/requestUnlock.txt
       - id: 2
         templateName: org.histo.template.mail.DiagnosisReportMail
         name: Diagnose-Benachrichtigung
         defaultOfType: true
-        content: classpath:templates/mail/diagnosisReport.txt
+        content: workDirectory:templates/mail/diagnosisReport.txt
       - id: 3
         templateName: org.histo.template.mail.ErrorMail
         name: Fehlermeldung!
         defaultOfType: true
-        content: classpath:templates/mail/error.txt
+        content: workDirectory:templates/mail/error.txt
     fileSettings:
       thumbnailDPI: 50
-      fileRepository: D:/patho
-      workDirectory: fileRepository:pdf
+      fileRepository: file:D:/patho
+      workDirectory: file:D:/patho/pdf
       auxDirectory: fileRepository:pdf/tmp
       errorDirectory: fileRepository:pdf/error
       printDirectory: fileRepository:pdf/print
       programInfo: fileRepository:.patho
       programVersionInfo: classpath:settings/version.txt
-      copyFromClasspathToWorkDirectory:
-        - "classpath:templates/print/_*"
+      copyOnFirstStartToWorkDirectory:
+        -
+          source: templates/print/*
+          target: workDirectory:templates/print/
+        -
+          source: templates/mail/*
+          target: workDirectory:templates/mail/
+        -
+          source: templates/print_label/*
+          target: workDirectory:templates/print_label/
       cleanup: true
       keepErrorFiles: true
     defaultDocuments:
@@ -184,9 +192,9 @@ patho:
       slideLabelDocument: 100
       slideLableTestDocument: 150
       printerTestDocument: 0
-      emptyPage: classpath:templates/print/emptyPage.pdf
+      emptyPage: workDirectory:templates/print/emptyPage.pdf
       lablePrinterTestPage: test.zpl
-      cupsPrinterTestPage: classpath:templates/print/testPage.pdf
+      cupsPrinterTestPage: workDirectory:templates/print/testPage.pdf
     defaultNotification:
       defaultNotifications:
         - role: SURGEON
@@ -206,7 +214,7 @@ patho:
     documents:
       - id: 0
         name: Eingangsbogen
-        content: classpath:templates/print/USchein_full.tex
+        content: workDirectory:templates/print/USchein_full.tex
         alternateContent:
         type: U_REPORT
         attributes:
@@ -218,7 +226,7 @@ patho:
         sharedContextGroup: 2
       - id: 1
         name: Eingangsbogen bedrucken
-        content: classpath:templates/print/USchein_empty.tex
+        content: workDirectory:templates/print/USchein_empty.tex
         alternateContent: ""
         type: U_REPORT_EMTY
         attributes:
@@ -230,7 +238,7 @@ patho:
         sharedContextGroup: 2
       - id: 2
         name: Eingangsbogen bedrucken, umgekehrt
-        content: classpath:templates/print/USchein_empty_rotated180.tex
+        content: workDirectory:templates/print/USchein_empty_rotated180.tex
         alternateContent: ""
         type: U_REPORT_EMTY
         attributes: media:keyword:default,tray1
@@ -242,7 +250,7 @@ patho:
         sharedContextGroup: 2
       - id: 10
         name: Befundbericht
-        content: classpath:templates/print/Report_Intern.tex
+        content: workDirectory:templates/print/Report_Intern.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT
         attributes: sides:keyword:one-side
@@ -256,7 +264,7 @@ patho:
         sharedContextGroup: 1
       - id: 11
         name: Befundbericht - ohne Logo
-        content: classpath:templates/print/Report_Intern_noLogo.tex
+        content: workDirectory:templates/print/Report_Intern_noLogo.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT
         attributes: "sides:keyword:one-side#media:keyword:default,tray2"
@@ -270,7 +278,7 @@ patho:
         sharedContextGroup: 1
       - id: 20
         name: Befundbericht extern
-        content: classpath:templates/print/Report_Extern.tex
+        content: workDirectory:templates/print/Report_Extern.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT_EXTERN
         attributes: sides:keyword:one-side
@@ -284,7 +292,7 @@ patho:
         sharedContextGroup: 1
       - id: 21
         name: Befundbericht extern - ohne Logo
-        content: classpath:templates/print/Report_Extern_noLogo.tex
+        content: workDirectory:templates/print/Report_Extern_noLogo.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT_EXTERN
         attributes: "sides:keyword:one-side#media:keyword:default,tray2"
@@ -298,7 +306,7 @@ patho:
         sharedContextGroup: 1
       - id: 50
         name: Konsil
-        content: classpath:templates/print/council.tex
+        content: workDirectory:templates/print/council.tex
         alternateContent: ""
         type: COUNCIL_REQUEST
         attributes:
@@ -309,7 +317,7 @@ patho:
         hidden: false
       - id: 100
         name: Default Slide Lable
-        content: classpath:templates/print_label/defaultLable.zpl
+        content: workDirectory:templates/print_label/defaultLable.zpl
         alternateContent: ""
         type: LABLE
         attributes:
@@ -319,7 +327,7 @@ patho:
         hidden: false
       - id: 150
         name: Test Slide Lable
-        content: classpath:templates/print_label/testLable.zpl
+        content: workDirectory:templates/print_label/testLable.zpl
         alternateContent: ""
         type: TEST_LABLE
         attributes:
@@ -329,7 +337,7 @@ patho:
         hidden: false
       - id: 1000
         name: Send Report
-        content: classpath:templates/print/SendReport.tex
+        content: workDirectory:templates/print/SendReport.tex
         alternateContent: ""
         attributes:
         type: NOTIFICATION_SEND_REPORT
