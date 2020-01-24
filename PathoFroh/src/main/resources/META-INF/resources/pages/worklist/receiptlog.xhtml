@@ -823,7 +823,6 @@
                                 actionListener="#{deleteTaskEntityDialog.initAndPrepareBean(stainingRow.entity).advancedHeader('dialog.delete.slide.headline',stainingRow.entity.slideID).advancedText('dialog.delete.slide.text',stainingRow.entity.slideID)}">
                             <i class="fa fa-fw fa-times-circle"/>
                             <p:ajax event="dialogReturn"
-                                    oncomplete="updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane')"
                                     listener="#{dialogReturnHandler.onDeleteTaskEntityReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                         </p:commandLink>

@@ -454,7 +454,8 @@
 
                     <!-- extende text input -->
                     <h:panelGroup id="extendedTextParent">
-                        <p:inputTextarea style="width:99%" id="extendedText" rows="15" onfocus="disabledEventPropagation(event);"
+                        <p:inputTextarea style="width:99%" id="extendedText" rows="15"
+                                         onfocus="disabledEventPropagation(event);"
                                          disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                          value="#{revision.text}">
                             <p:ajax event="keyup" process="@this" delay="1000"
@@ -714,8 +715,7 @@
                                      actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
                         <p:ajax event="dialogReturn"
                                 listener="#{dialogReturnHandler.onDefaultReturn}"
-                                update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
+                                update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                     </p:commandButton>
 
                     <h:panelGroup>
@@ -883,13 +883,11 @@
 
     <script type="application/javascript">
 
-        function disabledEventPropagation(event)
-        {
-            if (event.stopPropagation){
+        function disabledEventPropagation(event) {
+            if (event.stopPropagation) {
                 event.stopPropagation();
-            }
-            else if(window.event){
-                window.event.cancelBubble=true;
+            } else if (window.event) {
+                window.event.cancelBubble = true;
             }
         }
     </script>
