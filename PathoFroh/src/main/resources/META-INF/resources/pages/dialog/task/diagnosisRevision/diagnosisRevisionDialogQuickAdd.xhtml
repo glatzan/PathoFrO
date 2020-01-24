@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:h="http://xmlns.jcp.org/jsf/html"
-	  xmlns:f="http://xmlns.jcp.org/jsf/core"
-	  xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title><h:outputFormat
-            value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.headline.'.concat(dialog.quickAddDiagnosisRevisionDialog.type)]}"/>
+            value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.headline.'.concat(quickDiagnosisRecordDialog.type)]}"/>
     </title>
     <h:outputStylesheet name="style.css" value="style.css" library="css"/>
     <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
@@ -21,10 +20,10 @@
             <h:panelGrid style="width:100%;" columns="2"
                          styleClass="defaultHistoTable">
                 <h:outputLabel
-                        value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.headline.'.concat(dialog.quickAddDiagnosisRevisionDialog.type)]}"/>
+                        value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.headline.'.concat(quickDiagnosisRecordDialog.type)]}"/>
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
                                styleClass="noUnderlineAtLink"
-                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                               onclick="PF('closeBtn').jq.click();return false;">
                     <i class="fa fa-fw fa-times"/>
                 </p:commandLink>
             </h:panelGrid>
@@ -33,14 +32,14 @@
         <div class="dialogContent">
             <h:panelGrid columns="1" styleClass="defaultHistoTable">
                 <h:outputLabel
-                        value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.text.'.concat(dialog.quickAddDiagnosisRevisionDialog.type)]}"/>
+                        value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.text.'.concat(quickDiagnosisRecordDialog.type)]}"/>
             </h:panelGrid>
 
             <h:panelGrid columns="2" styleClass="defaultHistoTable">
                 <h:outputLabel
                         value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.renameOldDiagnoses']}"/>
                 <p:selectBooleanCheckbox
-                        value="#{dialog.quickAddDiagnosisRevisionDialog.renameOldDiagnoses}"></p:selectBooleanCheckbox>
+                        value="#{quickDiagnosisRecordDialog.renameOldDiagnoses}"/>
             </h:panelGrid>
         </div>
 
@@ -54,16 +53,14 @@
                     <!-- Save button -->
                     <p:commandButton
                             value="#{msg['dialog.diagnosisRevisionDialogQuickAdd.button.create']}"
-                            icon="fa fa-plus-circle">
-                        <f:actionListener
-                                binding="#{dialog.quickAddDiagnosisRevisionDialog.createDiagnosisAndHide()}"></f:actionListener>
+                            icon="fa fa-plus-circle"
+                            actionListener="#{quickDiagnosisRecordDialog.createDiagnosisAndHide()}">
                     </p:commandButton>
 
                     <!-- Close button -->
-                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-                                     icon="fa fa-times-circle">
-                        <f:actionListener
-                                binding="#{dialog.quickAddDiagnosisRevisionDialog.hideDialog()}"></f:actionListener>
+                    <p:commandButton value="#{msg['general.abort']}" id="closeBtn" widgetVar="closeBtn"
+                                     icon="fa fa-times-circle"
+                                     actionListener="#{quickDiagnosisRecordDialog.hideDialog()}">
                     </p:commandButton>
                 </h:panelGrid>
             </h:panelGrid>

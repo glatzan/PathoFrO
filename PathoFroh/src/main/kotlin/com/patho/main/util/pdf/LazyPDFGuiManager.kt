@@ -5,6 +5,8 @@ import com.patho.main.model.PDFContainer
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
+import com.patho.main.util.pdf.creator.PDFCreator
+import com.patho.main.util.pdf.creator.PDFCreatorNonBlocking
 import lombok.Synchronized
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -80,7 +82,7 @@ class LazyPDFGuiManager() : IPDFStreamContainer, LazyPDFReturnHandler {
      * Starts rendering in other thread
      */
     fun startRendering(template: PrintDocument, outputPath: File) {
-        currentTaskUuid = PDFCreator().createPDFNonBlocking(template, outputPath, this)
+        currentTaskUuid = PDFCreatorNonBlocking().create(template, outputPath.path, false, this)
         stopPoll.set(false)
         autoStartPoll.set(true)
     }

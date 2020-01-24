@@ -93,7 +93,7 @@ abstract class AbstractTemplate : AbstractPersistable(), Cloneable {
     /**
      * Initializes values for the velocity template engine
      */
-    open fun initialize(content: HashMap<String, Any?>): Pair<out AbstractTemplate, Context> {
+    open fun initialize(content: HashMap<String, Any?>): Pair<AbstractTemplate, Context> {
         AbstractTemplate.initVelocity()
 
         /* create a context and add data */

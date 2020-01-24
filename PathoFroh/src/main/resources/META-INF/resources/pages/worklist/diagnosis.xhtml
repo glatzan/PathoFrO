@@ -454,10 +454,10 @@
 
                     <!-- extende text input -->
                     <h:panelGroup id="extendedTextParent">
-                        <p:inputTextarea style="width:99%" id="extendedText" rows="15"
+                        <p:inputTextarea style="width:99%" id="extendedText" rows="15" onfocus="disabledEventPropagation(event);"
                                          disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                          value="#{revision.text}">
-                            <p:ajax event="keyup" execute="@this" delay="1000"
+                            <p:ajax event="keyup" process="@this" delay="1000"
                                     listener="#{diagnosisView.save(revision.task, 'log.diagnosisRevision.edit.histologicalRecord',revision,revision.text)}"/>
                         </p:inputTextarea>
                     </h:panelGroup>
@@ -882,12 +882,16 @@
     </p:panel>
 
     <script type="application/javascript">
-        $(document)
-            .ready(
-                function () {
-                    // updating scrollElement for displaying the scroll bar correctly
-                    updateAndAutoScrollToSelectedElement('contentForm:contentScrollPane');
-                });
+
+        function disabledEventPropagation(event)
+        {
+            if (event.stopPropagation){
+                event.stopPropagation();
+            }
+            else if(window.event){
+                window.event.cancelBubble=true;
+            }
+        }
     </script>
 
 </ui:composition>

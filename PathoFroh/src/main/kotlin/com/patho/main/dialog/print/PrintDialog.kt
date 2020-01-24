@@ -17,7 +17,7 @@ import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.pdf.LazyPDFGuiManager
-import com.patho.main.util.pdf.PDFCreator
+import com.patho.main.util.pdf.creator.PDFCreator
 import com.patho.main.util.pdf.PrintOrder
 import com.patho.main.util.print.PrintPDFBearer
 import org.springframework.beans.factory.annotation.Autowired
@@ -211,7 +211,7 @@ class PrintDialog @Autowired constructor(
             var pdf: PDFContainer? = null
 
             try {
-                pdf = PDFCreator().createPDF(container!!.documentTemplate)
+                pdf = PDFCreator().create(container!!.documentTemplate)
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
                 MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.error.creatingPDF")

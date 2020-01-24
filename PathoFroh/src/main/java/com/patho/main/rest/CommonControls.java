@@ -12,7 +12,6 @@ import com.patho.main.repository.jpa.UserRepository;
 import com.patho.main.repository.miscellaneous.LDAPRepository;
 import com.patho.main.service.AuthenticationService;
 import com.patho.main.service.PDFService;
-import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.exceptions.TaskNotFoundException;
@@ -189,9 +188,7 @@ public class CommonControls {
                         Task task = taskRepository.findByTaskID(taskID, false, false, true, false, false);
                         String name = fileName != null ? fileName : new PrintDocument(documentType).getGeneratedFileName();
 
-                        pdfService.createAndAttachPDF(task,
-                                new PDFInfo(name, documentType == null ? PrintDocumentType.UNKNOWN : documentType),
-                                file.getBytes(), true);
+                        pdfService.createPDFAndAddToDataList(task, file.getBytes(), true, name, documentType == null ? PrintDocumentType.UNKNOWN : documentType, "", "", task.getFileRepositoryBase().getPath());
 
                         logger.debug("Success: Uploading to task successful. (Task ID: {}, Filename: {})", taskID, name);
                         return resourceBundle.get("rest.upload.success.task", taskID, name);
@@ -213,9 +210,7 @@ public class CommonControls {
 
                     String name = fileName != null ? fileName : new PrintDocument(documentType).getGeneratedFileName();
 
-                    pdfService.createAndAttachPDF(p.get(),
-                            new PDFInfo(name, documentType == null ? PrintDocumentType.UNKNOWN : documentType),
-                            file.getBytes(), true);
+                    pdfService.createPDFAndAddToDataList(p.get(), file.getBytes(), true, name, documentType == null ? PrintDocumentType.UNKNOWN : documentType, "", "", p.get().getFileRepositoryBase().getPath());
 
                     logger.debug("Success: Uploading to patient successful. (Patient PIZ: {}, Filename: {})", piz,
                             name);

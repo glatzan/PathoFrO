@@ -70,17 +70,17 @@ open class ReportView : AbstractTaskView(), IPDFThumbnailListStreamContainer {
 
             val c = PDFService.findDiagnosisReport(task, revision)
 
-            if (!c.isPresent && revision.completed) {
+            if (c == null && revision.completed) {
                 logger.debug("No report present, generating new report")
                 val returnHandler = DiagnosisReportReturnHandler(revision, true)
                 // TODO updating task globally?
                 this.task = DiagnosisReportUpdater().updateDiagnosisReportNoneBlocking(task, revision, returnHandler)
                 // serach for created pdfcontainer
-                returnHandler.pdf = PDFService.findDiagnosisReport(task, revision).get()
+                returnHandler.pdf = PDFService.findDiagnosisReport(task, revision)
                 data.add(returnHandler)
                 generatingPDFs = true
             } else if (revision.completed) {
-                data.add(DiagnosisReportReturnHandler(revision, c.get(), false))
+                data.add(DiagnosisReportReturnHandler(revision, c, false))
             } else {
                 val container = PDFContainer(PrintDocumentType.DIAGNOSIS_REPORT_NOT_APPROVED,
                         revision.name, PathoConfig.REPORT_NOT_APPROVED_PDF, PathoConfig.REPORT_NOT_APPROVED_IMG)

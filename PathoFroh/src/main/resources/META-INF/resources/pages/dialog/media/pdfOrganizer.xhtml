@@ -58,10 +58,10 @@
                                             update="dialogContent:content dialogContent:printBtnContainer dialogContent:buttonBtnContainer dialogContent:pdfInfo"
                                             listener="#{pdfOrganizerDialog.displaySelectedContainer()}"/>
 
-                                    <p:ajax event="dragdrop" onstart="setMouseEnterEvents(false)"
+                                    <p:ajax event="dragdrop"
                                             listener="#{pdfOrganizerDialog.onDragDrop}"
                                             update="dialogContent:menuTree"
-                                            oncomplete="setMouseEnterEvents(true)"/>
+                                    />
 
                                     <!-- root -->
                                     <p:treeNode expandedIcon="ui-icon-folder-open"
@@ -276,8 +276,6 @@
                 </h:panelGrid>
             </h:panelGrid>
         </div>
-
-
     </h:form>
 </h:body>
 </html>

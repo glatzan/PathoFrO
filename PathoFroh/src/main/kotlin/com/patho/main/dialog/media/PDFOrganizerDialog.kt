@@ -33,7 +33,8 @@ open class PDFOrganizerDialog @Autowired constructor(
         private val patientRepository: PatientRepository,
         private val pdfService: PDFService,
         private val bioBankRepository: BioBankRepository,
-        private val dialogHandler: DialogHandler) : AbstractDialog_(Dialog.PDF_ORGANIZER) {
+        private val dialogHandler: DialogHandler,
+        private val pdfDeleteDialog: PDFDeleteDialog) : AbstractDialog_(Dialog.PDF_ORGANIZER) {
 
     open lateinit var patient: Patient
 
@@ -109,7 +110,7 @@ open class PDFOrganizerDialog @Autowired constructor(
         updateTree()
 
         // unloading pdf is it was selected
-        if (stream.displayPDF != null && PDFService.getParentOfPDF(dataLists, stream.displayPDF) == null) {
+        if (stream.displayPDF != null && PDFService.getParentDatalistOfPDF(dataLists, stream.displayPDF as PDFContainer) == null) {
             selectedNode = null
             stream.resetPDF()
         }
@@ -194,10 +195,10 @@ open class PDFOrganizerDialog @Autowired constructor(
         }
 
         val pdf = dragNode.data as PDFContainer
-        val from = PDFService.getParentOfPDF(dataLists, pdf)
+        val from = PDFService.getParentDatalistOfPDF(dataLists, pdf)
         val to = dropNode.data as DataList
 
-        pdfService.movePdf(from, to, pdf)
+        pdfService.movePDF(from as DataList, to, pdf)
 
         logger.debug("Moving PDF")
 
@@ -215,15 +216,14 @@ open class PDFOrganizerDialog @Autowired constructor(
         try {
             logger.debug("Uploading to Patient: " + patient.id)
 
-            val uploadList = PDFService.getDatalistFromDatalists(dataLists, uploadTarget)
+            val uploadList = PDFService.findDataList(dataLists, uploadTarget)
 
             if (uploadList == null) {
                 MessageHandler.sendGrowlMessagesAsResource("growl.media.noUpload.headline", "growl.media.noUpload.text", FacesMessage.SEVERITY_ERROR)
                 return
             }
 
-            val res = pdfService.createAndAttachPDF(uploadList,
-                    PDFService.PDFInfo(file.fileName, uploadDocumentType), file.contents, true)
+            val res = pdfService.createPDFAndAddToDataList(uploadList, file.contents, true, file.fileName, uploadDocumentType, "", "")
 
             MessageHandler.sendGrowlMessagesAsResource("growl.media.success.headline", "growl.media.success.text", res.container.name)
         } catch (e: IllegalAccessError) {
@@ -274,8 +274,8 @@ open class PDFOrganizerDialog @Autowired constructor(
      */
     fun deletePDFContainer(container: PDFContainer) {
         logger.debug("Deleting container")
-        dialogHandler.deletePDFDialog.initAndPrepareBean(container,
-                PDFService.getParentOfPDF(dataLists, container))
+        val dataList = PDFService.getParentDatalistOfPDF(dataLists, container) ?: return
+        pdfDeleteDialog.initAndPrepareBean(container, dataList)
     }
 
     /**

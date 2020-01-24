@@ -7,8 +7,9 @@ import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.helper.HistoUtil;
-import com.patho.main.util.pdf.PDFCreator;
+import com.patho.main.util.pdf.creator.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
+import com.patho.main.util.pdf.creator.PDFManipulator;
 import com.patho.main.util.print.LoadedPrintPDFBearer;
 import com.patho.main.util.print.PrintPDFBearer;
 import lombok.Getter;
@@ -25,7 +26,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Setter
@@ -107,10 +107,10 @@ public class ClinicPrinter extends AbstractPrinter {
         logger.debug("Printing xtimes: " + printOrder.getCopies());
 
         // adding additional page if duplex print an odd pages are provided
-        if (PDFCreator.countPDFPages(printOrder.getPdfContainer()) % 2 != 0 && printOrder.isDuplex()) {
+        if (PDFManipulator.countPDFPages(printOrder.getPdfContainer()) % 2 != 0 && printOrder.isDuplex()) {
 
             // Merging with empty page
-            LoadedPrintPDFBearer cont = PDFCreator.mergePdfs(
+            LoadedPrintPDFBearer cont = PDFManipulator.mergePDFs(
                     Arrays.asList(printOrder.getPdfContainer(),
                             new LoadedPrintPDFBearer(new PDFContainer(PrintDocumentType.EMPTY, "",
                                     SpringContextBridge.services().getPathoConfig().getDefaultDocuments().getEmptyPage(), ""))),

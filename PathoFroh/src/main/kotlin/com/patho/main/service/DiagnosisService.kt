@@ -137,10 +137,10 @@ open class DiagnosisService constructor(
      * needed diagnoses
      */
     @Transactional
-    open fun createDiagnosisRevision(task: Task, type: DiagnosisRevisionType, internalReference: String): Task {
+    open fun createDiagnosisRevision(task: Task, type: DiagnosisRevisionType, intern: String): Task {
         return createDiagnosisRevision(task, type,
                 TaskUtil.getDiagnosisRevisionName(task.diagnosisRevisions, DiagnosisRevision("", type)),
-                internalReference)
+                intern)
     }
 
     /**
@@ -148,7 +148,7 @@ open class DiagnosisService constructor(
      * needed diagnoses
      */
     @Transactional
-    open fun createDiagnosisRevision(task: Task, type: DiagnosisRevisionType, name: String, internalReference: String): Task {
+    open fun createDiagnosisRevision(task: Task, type: DiagnosisRevisionType, name: String, intern: String): Task {
         logger.info("Creating new diagnosisRevision")
 
         val diagnosisRevision = DiagnosisRevision()
@@ -156,7 +156,7 @@ open class DiagnosisService constructor(
         diagnosisRevision.signatureOne = Signature()
         diagnosisRevision.signatureTwo = Signature()
         diagnosisRevision.name = name
-        diagnosisRevision.intern = internalReference
+        diagnosisRevision.intern = intern
 
         return addDiagnosisRevision(task, diagnosisRevision)
     }

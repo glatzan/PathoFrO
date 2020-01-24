@@ -7,7 +7,5 @@ import com.patho.main.repository.jpa.custom.BioBankRepositoryCustom;
 import java.util.Optional;
 
 public interface BioBankRepository extends BaseRepository<BioBank, Long>, BioBankRepositoryCustom {
-
     public Optional<BioBank> findOptionalByTask(Task task);
-
 }

@@ -132,7 +132,7 @@ class MediaRepositoryImpl @Autowired constructor(
     }
 
     override fun getStrings(file: String): List<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return getStrings(File(file))
     }
 
     override fun getStrings(file: File): List<String> {
@@ -196,7 +196,7 @@ class MediaRepositoryImpl @Autowired constructor(
     }
 
     override fun isDirectoryCreateIfNotPresent(path: String, create: Boolean): Boolean {
-        return return isDirectoryCreateIfNotPresent(path, true)
+        return return isDirectoryCreateIfNotPresent(File(path), true)
     }
 
     override fun isDirectoryCreateIfNotPresent(path: File, create: Boolean): Boolean {
@@ -295,7 +295,7 @@ class MediaRepositoryImpl @Autowired constructor(
         val srcFilePath = getFileForPath(srcFile.path)
         val destFilePath = getFileForPath(destFile.path)
         try {
-            Files.copy(srcFilePath.toPath(), destFilePath.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            FileUtils.copyFile(srcFilePath, destFilePath)
         } catch (e: IOException) {
             e.printStackTrace()
             return false

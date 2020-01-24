@@ -2,7 +2,8 @@ package com.patho.main.template.print
 
 import com.patho.main.model.PDFContainer
 import com.patho.main.template.PrintDocument
-import com.patho.main.util.pdf.PDFCreator
+import com.patho.main.util.pdf.creator.PDFCreator
+import com.patho.main.util.pdf.creator.PDFManipulator
 import com.patho.main.util.print.LoadedPrintPDFBearer
 import com.patho.main.util.report.ui.ReportIntentNotificationUIContainer
 import org.apache.velocity.context.Context
@@ -78,7 +79,7 @@ class SendReport(printDocument: PrintDocument) : PrintDocument(printDocument) {
         if (usePhone && phonenumbers.isEmpty())
             attachPdf.addAll(phonenumbers.filter { p -> p.pdf != null }.map { LoadedPrintPDFBearer(it.pdf!!) })
 
-        container = creator.mergePDFs(container, attachPdf)
+        container = PDFManipulator.mergePDFs(container, attachPdf)
 
         return container
     }

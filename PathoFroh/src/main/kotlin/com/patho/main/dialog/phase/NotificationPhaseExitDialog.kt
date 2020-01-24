@@ -134,7 +134,7 @@ open class NotificationPhaseExitDialog @Autowired constructor(
 
         removeFromWorklist.set(!isMoreThenOneNotificationPerformedOrPendingException, true, false, false)
 
-        archiveTask = object : CheckBoxStatus(!isMoreThenOneNotificationOverallNecessary, true, isMoreThenOneNotificationOverallNecessary , isMoreThenOneNotificationOverallNecessary) {
+        archiveTask = object : CheckBoxStatus(!isMoreThenOneNotificationOverallNecessary, true, isMoreThenOneNotificationOverallNecessary, isMoreThenOneNotificationOverallNecessary) {
             override fun onClick() {
             }
         }
@@ -143,10 +143,13 @@ open class NotificationPhaseExitDialog @Autowired constructor(
     }
 
     private val isMoreThenOneNotificationCurrentlyNecessary
-        get() = (selectedDiagnosisRevisionStatus?.diagnosisRevision?.isNotificationNecessary == true && countNotificationCurrentlyNecessary > 1) || (selectedDiagnosisRevisionStatus?.diagnosisRevision?.isNotificationNecessary == false && countNotificationCurrentlyNecessary > 0)
+        get() = countNotificationCurrentlyNecessary(selectedDiagnosisRevisionStatus?.diagnosisRevision) > 0
 
-    private val countNotificationCurrentlyNecessary
-        get() = diagnosisNotificationStatus.diagnoses.count { it.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
+    private fun countNotificationCurrentlyNecessary(current: DiagnosisRevision?): Int {
+        return if (current == null) diagnosisNotificationStatus.diagnoses.count { it.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING }
+        else
+            diagnosisNotificationStatus.diagnoses.count { it.diagnosisRevision.notificationStatus == NotificationStatus.NOTIFICATION_PENDING && it.diagnosisRevision.id != current.id }
+    }
 
     private val isMoreThenOneNotificationOverallNecessary
         get() = (selectedDiagnosisRevisionStatus?.diagnosisRevision?.isNotificationNecessary == true && countNotificationOverallNecessary > 1) || (selectedDiagnosisRevisionStatus?.diagnosisRevision?.isNotificationNecessary == false && countNotificationOverallNecessary > 0)

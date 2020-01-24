@@ -4,7 +4,6 @@ import com.patho.main.model.PDFContainer;
 import com.patho.main.model.patient.DiagnosisRevision;
 import com.patho.main.model.patient.Task;
 import com.patho.main.service.PDFService;
-import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.DocumentToken;
@@ -16,7 +15,6 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -55,29 +53,22 @@ public class DiagnosisReportUpdater {
                 new DocumentToken("patient", diagnosisRevision.getPatient()), new DocumentToken("address", ""),
                 new DocumentToken("subject", ""));
 
-        Optional<PDFContainer> pdf = PDFService.findDiagnosisReport(task, diagnosisRevision);
+        PDFContainer pdf = PDFService.findDiagnosisReport(task, diagnosisRevision);
 
         // generating new pdf
-        if (!pdf.isPresent()) {
+        if (pdf == null) {
             logger.debug("Creating new PDF for report");
             PDFReturn res;
-            try {
-                res = SpringContextBridge.services().getPdfService().createAndAttachPDF(
-                        task, printDocument, new PDFInfo(diagnosisRevision.getName(),
-                                PrintDocumentType.DIAGNOSIS_REPORT_COMPLETED, "", PDFContainer.MARKER_DIAGNOSIS
-                                .replace("$id", String.valueOf(diagnosisRevision.getId()))),
-                        true, true, returnHandler);
-                task = (Task) res.getDataList();
-            } catch (FileNotFoundException e) {
-                // TODO Handle error
-                e.printStackTrace();
-            }
+            res = SpringContextBridge.services().getPdfService().createPDFAndAddToDataList(
+                    task, printDocument, true, diagnosisRevision.getName(), PrintDocumentType.DIAGNOSIS_REPORT_COMPLETED, "", PDFContainer.MARKER_DIAGNOSIS.replace("$id", String.valueOf(diagnosisRevision.getId())),
+                    task.getFileRepositoryBase().getPath(), true, returnHandler);
+
+            task = (Task) res.getDataList();
         } else {
             logger.debug("Updating pdf for report");
-            PDFContainer container = pdf.get();
-            container.setName(diagnosisRevision.getName());
+            pdf.setName(diagnosisRevision.getName());
             task = SpringContextBridge.services().getTaskRepository().save(task);
-            SpringContextBridge.services().getPdfService().updateAttachedPDF(container, printDocument, true, true);
+            SpringContextBridge.services().getPdfService().updatePDF(pdf, printDocument, true, true, null);
         }
 
         return task;

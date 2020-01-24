@@ -3,7 +3,6 @@ package com.patho.main.action.dialog;
 import com.patho.main.action.dialog.biobank.BioBankDialog;
 import com.patho.main.action.dialog.council.CouncilDialog;
 import com.patho.main.action.dialog.diagnosis.*;
-import com.patho.main.action.dialog.media.DeletePDFDialog;
 import com.patho.main.action.dialog.media.EditPDFDialog;
 import com.patho.main.action.dialog.media.UploadDialog;
 import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
@@ -46,12 +45,10 @@ public class DialogHandler {
     private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
     private CreateSampleDialog createSampleDialog = new CreateSampleDialog();
     private SlideNamingDialog slideNamingDialog = new SlideNamingDialog();
-    private QuickAddDiagnosisRevisionDialog quickAddDiagnosisRevisionDialog = new QuickAddDiagnosisRevisionDialog();
     private CreateTaskDialog createTaskDialog = new CreateTaskDialog();
     private SearchPatientDialog searchPatientDialog = new SearchPatientDialog();
     private UploadDialog uploadDialog = new UploadDialog();
     private EditPDFDialog editPDFDialog = new EditPDFDialog();
-    private DeletePDFDialog deletePDFDialog = new DeletePDFDialog();
     private DiagnosisPhaseExitDialog diagnosisPhaseExitDialog = new DiagnosisPhaseExitDialog();
     private CreateDiagnosisRevisionDialog createDiagnosisRevisionDialog = new CreateDiagnosisRevisionDialog();
     private EditDiagnosisRevisionsDialog editDiagnosisRevisionsDialog = new EditDiagnosisRevisionsDialog();
@@ -101,10 +98,6 @@ public class DialogHandler {
         return this.slideNamingDialog;
     }
 
-    public QuickAddDiagnosisRevisionDialog getQuickAddDiagnosisRevisionDialog() {
-        return this.quickAddDiagnosisRevisionDialog;
-    }
-
     public CreateTaskDialog getCreateTaskDialog() {
         return this.createTaskDialog;
     }
@@ -121,9 +114,6 @@ public class DialogHandler {
         return this.editPDFDialog;
     }
 
-    public DeletePDFDialog getDeletePDFDialog() {
-        return this.deletePDFDialog;
-    }
 
     public DiagnosisPhaseExitDialog getDiagnosisPhaseExitDialog() {
         return this.diagnosisPhaseExitDialog;

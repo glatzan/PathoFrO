@@ -6,7 +6,6 @@ import com.patho.main.common.Dialog;
 import com.patho.main.model.interfaces.DataList;
 import com.patho.main.model.interfaces.ID;
 import com.patho.main.model.patient.Patient;
-import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.PDFService.PDFReturn;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocumentType;
@@ -120,14 +119,11 @@ public class UploadDialog extends AbstractDialog {
         try {
             logger.debug("Uploadgin to Patient: " + patient.getId());
 
-            PDFReturn res = SpringContextBridge.services().getPdfService().createAndAttachPDF(selectedDatalist.getDataList(),
-                    new PDFInfo(file.getFileName(), getFileType()), file.getContents(), true);
+            PDFReturn res = SpringContextBridge.services().getPdfService().createPDFAndAddToDataList(selectedDatalist.getDataList(), file.getContents(), true, file.getFileName(), getFileType(), "", "", selectedDatalist.getDataList().getFileRepositoryBase().getPath());
 
             getSelectedDatalist().setDataList(res.getDataList());
             MessageHandler.sendGrowlMessagesAsResource("growl.upload.success.headline", "growl.upload.success.text", res.getContainer().getName());
         } catch (IllegalAccessError e) {
-            MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed.headline", "growl.upload.failed.text", FacesMessage.SEVERITY_ERROR);
-        } catch (FileNotFoundException e) {
             MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed.headline", "growl.upload.failed.text", FacesMessage.SEVERITY_ERROR);
         }
     }

@@ -15,7 +15,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.miscellaneous.Council;
 import com.patho.main.repository.miscellaneous.PrintDocumentRepository;
 import com.patho.main.service.PDFService;
-import com.patho.main.service.PDFService.PDFInfo;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
@@ -384,13 +383,10 @@ public class CouncilDialog extends AbstractDialog {
         try {
             logger.debug("Uploadgin to Council: " + getSelectedCouncil().getId());
 
-            PDFService.PDFReturn res = SpringContextBridge.services().getPdfService().createAndAttachPDF(getSelectedCouncil().getCouncil(),
-                    new PDFInfo(file.getFileName(), PrintDocumentType.COUNCIL_REPLY), file.getContents(), true);
+            PDFService.PDFReturn res = SpringContextBridge.services().getPdfService().createPDFAndAddToDataList(getSelectedCouncil().getCouncil(), file.getContents(), true, file.getFileName(), PrintDocumentType.COUNCIL_REPLY, "", "", getSelectedCouncil().getCouncil().getFileRepositoryBase().getPath());
 
             MessageHandler.sendGrowlMessagesAsResource("growl.upload.success.headline", "growl.upload.success.text", res.getContainer().getName());
         } catch (IllegalAccessError e) {
-            MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed.headline", "growl.upload.failed.text", FacesMessage.SEVERITY_ERROR);
-        } catch (FileNotFoundException e) {
             MessageHandler.sendGrowlMessagesAsResource("growl.upload.failed.headline", "growl.upload.failed.text", FacesMessage.SEVERITY_ERROR);
         }
 

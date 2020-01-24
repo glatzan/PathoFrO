@@ -154,6 +154,10 @@ TODO:
 Create Material and Staining for external samples
 
 SQL:
+/* pdf container set intern and commentary to empty (kotlin)*/
+update pdfcontainer set commentary = '' where commentary is NULL;
+update pdfcontainer set intern = '' where intern is NULL;
+
 /* deleting accounting table*/
 alter table task drop constraint fk668fdat9n9qrjbohxo1kj1ujs ;
 DROP TABLE accounting;
@@ -355,8 +359,8 @@ Alter table pdfcontainer_aud add restricted boolean;
 update pdfcontainer set restricted = false;
 update pdfcontainer_aud set restricted = false;
 /* interal commentary for associating pdf to diagnoses*/
-Alter table pdfcontainer add internal character varying(10);
-Alter table pdfcontainer_aud add internal character varying(10);
+Alter table pdfcontainer add intern character varying(10);
+Alter table pdfcontainer_aud add intern character varying(10);
 
 
 /* View For task display*/

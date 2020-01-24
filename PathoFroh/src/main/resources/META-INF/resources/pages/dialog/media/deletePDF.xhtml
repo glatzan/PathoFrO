@@ -32,7 +32,7 @@
         <div class="dialogContent">
             <h:panelGrid styleClass="defaultHistoTable" columns="1">
                 <h:outputFormat value="#{msg['dialog.deletePDF.text']}">
-                    <f:param value="#{dialog.deletePDFDialog.container.name}"/>
+                    <f:param value="#{pdfDeleteDialog.container.name}"/>
                 </h:outputFormat>
             </h:panelGrid>
         </div>
@@ -47,11 +47,11 @@
                     <!-- delete -->
                     <p:commandButton value="#{msg['general.delete']}"
                                      icon="fa fa-times-circle"
-                                     actionListener="#{dialog.deletePDFDialog.deleteAndHide()}"/>
+                                     actionListener="#{pdfDeleteDialog.deleteAndHide()}"/>
                     <!-- close -->
                     <p:commandButton value="#{msg['general.close']}" id="closeBtn"
                                      icon="fa fa-times-circle"
-                                     actionListener="#{dialog.deletePDFDialog.hideDialog()}"/>
+                                     actionListener="#{pdfDeleteDialog.hideDialog()}"/>
                 </h:panelGrid>
             </h:panelGrid>
         </div>

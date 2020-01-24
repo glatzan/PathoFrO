@@ -13,10 +13,7 @@ import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.SlideService
 import com.patho.main.ui.StainingTableChooser
-import com.patho.main.util.dialog.event.StainingPhaseExitEvent
-import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent
-import com.patho.main.util.dialog.event.TaskEntityDeleteEvent
-import com.patho.main.util.dialog.event.TaskReloadEvent
+import com.patho.main.util.dialog.event.*
 import com.patho.main.util.task.TaskStatus
 import org.primefaces.event.SelectEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -137,15 +134,24 @@ open class SlideOverviewDialog @Autowired constructor(
     }
 
     /**
-     * Subdialog return event
+     * sub dialog return event
      */
     override fun onSubDialogReturn(event: SelectEvent) {
-        if (event.`object` is TaskReloadEvent) {
-            logger.debug("Reload task event, reloading")
-            update(true)
-        } else {
-            // unknown event
-            logger.debug("Unknow event closing dialog")
+        when {
+            event.`object` is TaskReloadEvent -> {
+                logger.debug("Reload task event, reloading")
+                update(true)
+            }
+            // event for sub dialog QuickDiagnosisRecordDialog
+            event.getObject() is QuickDiagnosisAddEvent -> {
+                logger.debug("Diagnosis add event, reloading")
+                update(true)
+            }
+            else -> {
+                // unknown event
+                logger.debug("Unknown event closing dialog")
+                hideDialog()
+            }
         }
     }
 

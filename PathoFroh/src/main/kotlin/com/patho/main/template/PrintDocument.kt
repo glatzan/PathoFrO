@@ -3,7 +3,7 @@ package com.patho.main.template
 import com.patho.main.model.PDFContainer
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.helper.TimeUtil
-import com.patho.main.util.pdf.PDFCreator
+import com.patho.main.util.pdf.creator.PDFCreator
 import org.apache.velocity.app.Velocity
 import org.apache.velocity.context.Context
 import java.io.StringWriter

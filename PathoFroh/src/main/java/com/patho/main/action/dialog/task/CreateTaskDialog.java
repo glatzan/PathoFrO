@@ -12,6 +12,7 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.patient.miscellaneous.BioBank;
+import com.patho.main.service.PDFService;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.DocumentToken;
 import com.patho.main.template.PrintDocument;
@@ -22,8 +23,8 @@ import com.patho.main.util.exception.CustomNotUniqueReqest;
 import com.patho.main.util.exceptions.TaskNotFoundException;
 import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.helper.TaskUtil;
-import com.patho.main.util.pdf.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
+import com.patho.main.util.pdf.creator.PDFCreator;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
@@ -137,7 +138,7 @@ public class CreateTaskDialog extends AbstractDialog {
 
                     bioBank.setInformedConsentType(getTaskData().getBioBank().getInformedConsentType());
 
-                    SpringContextBridge.services().getPdfService().movePdf(SpringContextBridge.services().getPdfService().getDataListsOfPatient(p), bioBank,
+                    SpringContextBridge.services().getPdfService().movePDF(PDFService.flatListOfDataLists(p), bioBank,
                             getTaskData().getBioBank().getContainer());
 
                 }
@@ -173,8 +174,8 @@ public class CreateTaskDialog extends AbstractDialog {
 
                 PDFContainer container = null;
                 try {
-                    container = new PDFCreator().createPDF(printDocument.get());
-                } catch (FileNotFoundException e) {
+                    container = new PDFCreator().create(printDocument.get(), SpringContextBridge.services().getPathoConfig().getFileSettings().getWorkDirectory(), false);
+                } catch (Exception e) {
                     e.printStackTrace();
                     MessageHandler.sendGrowlErrorAsResource("growl.error.critical", "growl.print.error.creatingPDF");
                     return;

@@ -4,6 +4,7 @@ import com.patho.main.action.handler.CurrentUserHandler
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
+import com.patho.main.model.interfaces.DataList
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.repository.jpa.TaskRepository
@@ -13,7 +14,7 @@ import com.patho.main.template.PrintDocument
 import com.patho.main.util.exceptions.DiagnosisRevisionNotFoundException
 import com.patho.main.util.exceptions.PDFCreationFailedException
 import com.patho.main.util.exceptions.TemplateNotFoundException
-import com.patho.main.util.pdf.PDFCreator
+import com.patho.main.util.pdf.creator.PDFCreator
 import com.patho.main.util.print.PrintPDFBearer
 import com.patho.main.util.report.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -259,7 +260,7 @@ open class ReportService @Autowired constructor(
         try {
             feedback.setFeedback("report.feedback.generationSendReport")
             logger.debug("Creating send report")
-            val pdfReturn = pdfService.createAndAttachPDF(execute.diagnosisRevision.task, document.get(), true)
+            val pdfReturn = pdfService.createPDFAndAddToDataList(execute.diagnosisRevision.task as DataList, document.get(),true)
             return Pair(pdfReturn.dataList as Task, pdfReturn.container)
         } catch (e: FileNotFoundException) {
             logger.debug("Creating send report failed")
@@ -313,7 +314,7 @@ open class ReportService @Autowired constructor(
                 DocumentToken("subject", ""))
 
         try {
-            return PrintPDFBearer(PDFCreator().createPDF(printDocument), printDocument)
+            return PrintPDFBearer(PDFCreator().create(printDocument), printDocument)
         } catch (e: Exception) {
             throw PDFCreationFailedException()
         }

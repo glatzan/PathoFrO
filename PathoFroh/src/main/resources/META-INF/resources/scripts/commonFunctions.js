@@ -410,7 +410,7 @@ var commonFunctions = {
         $(idDataTbl).jScrollPane({
             mouseWheelSpeed: speed,
             resizeSensor: sensor,
-            autoReinitialise: !sensor
+            autoReinitialise: !sensor,
         });
     }
 
