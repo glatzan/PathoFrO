@@ -216,10 +216,12 @@ public class Worklist {
 
         boolean isSelected = isSelected(task);
 
+        // patient is also selected
         add(task.getPatient(), select);
 
         // updating if
         if (select || isSelected) {
+            logger.debug("Setting as selected Task");
             setSelectedTask(task);
 
             // only setting new task info if task has changed, this way data ca persists

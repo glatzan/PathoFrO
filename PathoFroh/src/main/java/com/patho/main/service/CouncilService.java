@@ -9,15 +9,13 @@ import com.patho.main.repository.jpa.CouncilRepository;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.HashSet;
 
 @Service
@@ -43,7 +41,7 @@ public class CouncilService extends AbstractService {
     public CouncilReturn createCouncil(Task task, boolean addToFavList) {
 
         Council council = new Council(task);
-        council.setDateOfRequest(DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH));
+        council.setDateOfRequest(LocalDate.now());
         council.setName(generateCouncilName(council));
         council.setAttachedPdfs(new HashSet<PDFContainer>());
         council.setNotificationMethod(Council.CouncilNotificationMethod.MTA);
@@ -75,14 +73,17 @@ public class CouncilService extends AbstractService {
         if (council.getCouncilPhysician() != null)
             str.append(council.getCouncilPhysician().getPerson().getFullName());
         else
-            str.append(resourceBundle.get("dialog.council.data.newCouncil"));
+            str.append(resourceBundle.get("dialog.consultation.data.newCouncil"));
 
         str.append(" ");
+        try {
+            LocalDateTime ldt = council.getDateOfRequest().atStartOfDay();
+            // adding date
+            str.append(ldt.format(DateTimeFormatter.ofPattern(DateFormat.GERMAN_DATE.getDateFormat())));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
-        LocalDateTime ldt = LocalDateTime.ofInstant(council.getDateOfRequest().toInstant(), ZoneId.systemDefault());
-
-        // adding date
-        str.append(ldt.format(DateTimeFormatter.ofPattern(DateFormat.GERMAN_DATE.getDateFormat())));
 
         return str.toString();
     }
@@ -95,10 +96,10 @@ public class CouncilService extends AbstractService {
      */
     public CouncilReturn endCouncilRequest(Task task, Council council) {
         council.setCouncilRequestCompleted(true);
-        council.setCouncilRequestCompletedDate(new Date());
+        council.setCouncilRequestCompletedDate(LocalDate.now());
 
         if (council.getNotificationMethod() == Council.CouncilNotificationMethod.SECRETARY)
-            council.setSampleShippedCommentary(resourceBundle.get("dialog.council.sampleShipped.option.noSample"));
+            council.setSampleShippedCommentary(resourceBundle.get("dialog.consultation.sampleShipped.option.noSample"));
 
         council = councilRepository.save(council,
                 resourceBundle.get("log.patient.task.council.phase.request.end", task, council.getName()),
@@ -126,7 +127,7 @@ public class CouncilService extends AbstractService {
 
     public CouncilReturn endReplyReceived(Task task, Council council) {
         council.setReplyReceived(true);
-        council.setReplyReceivedDate(new Date());
+        council.setReplyReceivedDate(LocalDate.now());
 
         council = councilRepository.save(council,
                 resourceBundle.get("log.patient.task.council.phase.reply.received", task, council.getName()),
@@ -158,7 +159,7 @@ public class CouncilService extends AbstractService {
 
     public CouncilReturn endCouncil(Task task, Council council) {
         council.setCouncilCompleted(true);
-        council.setCouncilCompletedDate(new Date());
+        council.setCouncilCompletedDate(LocalDate.now());
 
         council = councilRepository.save(council,
                 resourceBundle.get("log.patient.task.council.phase.end", task, council.getName()), task.getPatient());
@@ -177,14 +178,28 @@ public class CouncilService extends AbstractService {
         return new CouncilReturn(task, council);
     }
 
-    @Getter
-    @Setter
     public static class CouncilReturn {
         protected Task task;
         protected Council council;
 
         public CouncilReturn(Task task, Council council) {
             this.task = task;
+            this.council = council;
+        }
+
+        public Task getTask() {
+            return this.task;
+        }
+
+        public Council getCouncil() {
+            return this.council;
+        }
+
+        public void setTask(Task task) {
+            this.task = task;
+        }
+
+        public void setCouncil(Council council) {
             this.council = council;
         }
     }

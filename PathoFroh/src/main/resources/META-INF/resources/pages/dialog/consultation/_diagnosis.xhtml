@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:outputPanel styleClass="headerPannel" id="header">
+        <h:outputFormat value="#{msg['dialog.consultation.reportIntent']}"
+                        escape="false">
+            <f:param value="#{consultationDialog.selectedConsultation.consultation.name}"/>
+        </h:outputFormat>
+    </p:outputPanel>
+
+    <p:outputPanel styleClass="bodyPannel" style="padding:10px;">
+
+        <h:panelGrid styleClass="defaultHistoTable" columns="2"
+                     columnClasses="columnWidth150">
+
+            <!-- request -->
+            <h:outputLabel value="#{msg['dialog.consultation.reportIntent.requst']}"/>
+            <h:panelGroup>
+                <h:outputText
+                        rendered="#{consultationDialog.selectedConsultation.consultation.councilRequestCompleted}"
+                        value="#{consultationDialog.selectedConsultation.consultation.councilRequestCompletedDate}">
+                    <f:converter converterId="localDateConverter"/>
+                    <f:attribute name="pattern" value="dd.MM.yyyy"/>
+                </h:outputText>
+
+                <h:outputText
+                        rendered="#{!consultationDialog.selectedConsultation.consultation.councilRequestCompleted}"
+                        value="#{msg['dialog.consultation.reportIntent.noCompleted']}"
+                        styleClass="icon-red">
+                </h:outputText>
+
+            </h:panelGroup>
+
+            <!-- ship -->
+            <h:outputLabel value="#{msg['dialog.consultation.reportIntent.ship']}"/>
+            <h:panelGroup>
+                <h:outputText
+                        rendered="#{consultationDialog.selectedConsultation.consultation.sampleShipped}"
+                        value="#{consultationDialog.selectedConsultation.consultation.sampleShippedDate}">
+                    <f:converter converterId="localDateConverter"/>
+                    <f:attribute name="pattern" value="dd.MM.yyyy"/>
+                </h:outputText>
+                <h:outputText
+                        rendered="#{!consultationDialog.selectedConsultation.consultation.sampleShipped}"
+                        value="#{msg['dialog.consultation.reportIntent.noCompleted']}"
+                        styleClass="icon-red">
+                </h:outputText>
+            </h:panelGroup>
+
+            <!-- reply -->
+            <h:outputLabel value="#{msg['dialog.consultation.reportIntent.reply']}"/>
+            <h:panelGroup>
+                <h:outputText
+                        rendered="#{consultationDialog.selectedConsultation.consultation.replyReceived}"
+                        value="#{consultationDialog.selectedConsultation.consultation.replyReceivedDate}">
+                    <f:converter converterId="localDateConverter"/>
+                    <f:attribute name="pattern" value="dd.MM.yyyy"/>
+                </h:outputText>
+
+                <h:outputText
+                        rendered="#{!consultationDialog.selectedConsultation.consultation.replyReceived}"
+                        value="#{msg['dialog.consultation.reportIntent.noCompleted']}"
+                        styleClass="icon-red">
+                </h:outputText>
+            </h:panelGroup>
+        </h:panelGrid>
+
+    </p:outputPanel>
+
+
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
+
+            <h:panelGrid columns="1" styleClass="left">
+                <p:commandButton value="#{msg['dialog.consultation.button.create']}"
+                                 icon="fa fa-check-circle-o" update="@form"
+                                 disabled="#{!consultationDialog.editable}"
+                                 actionListener="#{consultationDialog.createConsultation()}"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="3" styleClass="right">
+
+                <!-- end council -->
+                <p:commandButton value="#{msg['dialog.consultation.button.endCouncil']}"
+                                 style="margin-right:30px !important;" update="@form"
+                                 rendered="#{!consultationDialog.selectedConsultation.consultation.councilCompleted}"
+                                 disabled="#{!(consultationDialog.selectedConsultation.consultation.replyReceived and consultationDialog.selectedConsultation.consultation.sampleShipped and consultationDialog.selectedConsultation.consultation.councilRequestCompleted)}"
+                                 icon="fa fa-check-circle-o"
+                                 actionListener="#{consultationDialog.onCouncilCompleted()}">
+                </p:commandButton>
+
+                <!-- print -->
+                <p:commandButton value="#{msg['general.print']}"
+                                 icon="fa fa-print" actionListener="#{consultationDialog.printCouncilReport()}" />
+
+                <!-- Close Button -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle"
+                                 immediate="true"
+                                 actionListener="#{consultationDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
+</ui:composition>

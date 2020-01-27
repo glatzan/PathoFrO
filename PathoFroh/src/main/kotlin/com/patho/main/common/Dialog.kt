@@ -43,7 +43,7 @@ enum class Dialog {
     PRINT("/pages/dialog/print/print", null, 1280, 720, false, false, true), // 16:9
     PRINT_ADDRESS("/pages/dialog/print/address", null, 480, 272, false, false, true),                                                                                        // OK
     PRINT_FAX("/pages/dialog/print/fax", null, 480, 272, false, false, true),                                                                                                // OK
-    COUNCIL("/pages/dialog/council/council", null, 1280, 720, false, false, true),                                                                                        // OK
+    CONSULTATION("/pages/dialog/consultation/consultationDialog", null, 1280, 720, false, false, true),                                                                                        // OK
     USER_SETTINGS("/pages/dialog/userSettings/userSettings", null, 1024, 600, false, false, true),                                                                        // OK
     USER_SETTINGS_SAVE("/pages/dialog/userSettings/confirmSave", null, 480, 272, false, false, true),                                                                        // OK
     MEDICAL_FINDINGS("/pages/dialog/medicalFindings/medicalFindings", null, 1024, 600, false, false, true),  // 16:9

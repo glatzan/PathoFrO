@@ -1,0 +1,212 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <p:outputPanel styleClass="headerPannel" id="header">
+        <h:outputFormat value="#{msg['dialog.consultation.request']}"
+                        escape="false">
+            <f:param value="#{consultationDialog.selectedConsultation.consultation.name}"/>
+        </h:outputFormat>
+    </p:outputPanel>
+
+    <p:outputPanel styleClass="bodyPannel" style="padding:10px;">
+
+        <h:panelGrid styleClass="defaultHistoTable" columns="2"
+                     id="councilRequestData">
+
+            <!-- name -->
+            <h:outputLabel value="#{msg['dialog.consultation.name']}"/>
+            <h:outputLabel id="councilName"
+                           value="#{consultationDialog.selectedConsultation.consultation.name}"/>
+
+            <!-- requesting text -->
+            <h:outputLabel value="#{msg['dialog.consultation.requestText']}"/>
+            <p:inputTextarea style="width: 700px;" rows="20"
+                             disabled="#{(consultationDialog.selectedConsultation.consultation.councilRequestCompleted and !consultationDialog.selectedConsultation.forceEditRequest) or !consultationDialog.editable}"
+                             value="#{consultationDialog.selectedConsultation.consultation.councilText}">
+                <p:ajax event="keyup" delay="200" process="@form"
+                        listener="#{consultationDialog.saveSelectedConsultation()}"/>
+            </p:inputTextarea>
+
+            <!-- Consultant -->
+            <h:outputLabel value="#{msg['dialog.consultation.consultant']}"/>
+
+            <h:panelGrid columns="2" style="width: auto"
+                         styleClass="listingHistoHiddenTableContainer">
+
+                <!-- Consultant list -->
+                <p:selectOneMenu
+                        value="#{consultationDialog.selectedConsultation.consultation.councilPhysician}"
+                        panelStyleClass="iconFixForSelectOneMenu"
+                        disabled="#{(consultationDialog.selectedConsultation.consultation.councilRequestCompleted and !consultationDialog.selectedConsultation.forceEditRequest) or !consultationDialog.editable}"
+                        converter="#{consultationDialog.consultantTransformer}"
+                        filter="true" filterMatchMode="contains">
+
+                    <f:selectItem
+                            itemLabel="#{msg['dialog.consultation.consultant.choose']}"
+                            itemValue="#{null}"/>
+
+                    <f:selectItems value="#{consultationDialog.consultantList}"
+                                   var="physician" itemLabel="#{physician.person.getFullName()}"
+                                   itemValue="#{physician}"/>
+
+                    <p:ajax event="change" update="header councilName navigationTable"
+                            process="@form" listener="#{consultationDialog.onConsultantOrDateChange()}"/>
+
+                </p:selectOneMenu>
+
+                <!-- edit physicians -->
+                <p:commandLink title="#{msg['dialog.consultation.consultant.edit']}"
+                               style="margin-left:10px;" styleClass="noUnderlineAtLink icon-grey"
+                               actionListener="#{dialog.settingsDialog.initAndPrepareBean('PhysicianSettingsTab')}">
+                    <i class="fa fa-fw fa-cog icon-grey"/>
+                    <p:ajax event="dialogReturn"
+                            listener="#{consultationDialog.updatePhysicianLists()}"/>
+                </p:commandLink>
+
+            </h:panelGrid>
+
+            <!-- originator requesting physician -->
+            <h:outputLabel value="#{msg['dialog.consultation.physician.requesting']}"/>
+            <h:panelGrid columns="2" style="width: auto"
+                         styleClass="listingHistoHiddenTableContainer">
+                <!-- originator requesting council -->
+                <p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
+                                 disabled="#{(consultationDialog.selectedConsultation.consultation.councilRequestCompleted and !consultationDialog.selectedConsultation.forceEditRequest) or !consultationDialog.editable}"
+                                 value="#{consultationDialog.selectedConsultation.consultation.physicianRequestingCouncil}"
+                                 converter="#{consultationDialog.originatorListTransformer}"
+                                 filter="true" filterMatchMode="contains">
+
+                    <f:selectItem itemLabel="#{msg['dialog.consultation.physician.choose']}"
+                                  itemValue="#{null}"/>
+
+                    <f:selectItems
+                            value="#{consultationDialog.originatorList}"
+                            var="physicianToSign"
+                            itemLabel="#{physicianToSign.person.getFullName()}"
+                            itemValue="#{physicianToSign}"/>
+
+                    <p:ajax event="change" process="@form"
+                            listener="#{consultationDialog.saveSelectedConsultation()}"/>
+
+                </p:selectOneMenu>
+
+                <!-- edit physician list -->
+                <p:commandLink title="#{msg['dialog.consultation.physician.edit']}"
+                               style="margin-left:10px;" styleClass="noUnderlineAtLink"
+                               actionListener="#{dialog.settingsDialog.initAndPrepareBean('PhysicianSettingsTab')}">
+                    <i class="fa fa-fw fa-cog icon-grey"/>
+                    <p:ajax event="dialogReturn" update="@form"
+                            listener="#{consultationDialog.updatePhysicianLists()}"/>
+                </p:commandLink>
+            </h:panelGrid>
+
+            <!-- Date -->
+            <h:outputLabel value="#{msg['dialog.consultation.date']}"/>
+            <p:calendar
+                    disabled="#{(consultationDialog.selectedConsultation.consultation.councilRequestCompleted and !consultationDialog.selectedConsultation.forceEditRequest) or !consultationDialog.editable}"
+                    value="#{consultationDialog.selectedConsultation.consultation.dateOfRequest}"
+                    tabindex="4" locale="de" pattern="dd.MM.yyyy" mask="true" converter="localDateConverter">
+
+                <p:ajax event="dateSelect"
+                        update="header councilName navigationTable" process="@form"
+                        listener="#{consultationDialog.onConsultantOrDateChange()}"/>
+
+                <p:ajax event="change" update="header councilName navigationTable"
+                        process="@form" listener="#{consultationDialog.onConsultantOrDateChange()}"/>
+            </p:calendar>
+
+            <!-- council request -->
+            <h:outputLabel value="#{msg['dialog.consultation.shippingby']}"/>
+            <p:selectOneMenu panelStyleClass="iconFixForSelectOneMenu"
+                             disabled="#{(consultationDialog.selectedConsultation.consultation.councilRequestCompleted and !consultationDialog.selectedConsultation.forceEditRequest) or !consultationDialog.editable}"
+                             value="#{consultationDialog.selectedConsultation.consultation.notificationMethod}"
+                             filter="true" filterMatchMode="contains">
+
+                <f:selectItem
+                        itemLabel="#{msg['enum.councilNotificationMethod.MTA']}"
+                        itemValue="MTA"/>
+                <f:selectItem
+                        itemLabel="#{msg['enum.councilNotificationMethod.SECRETARY']}"
+                        itemValue="SECRETARY"/>
+                <f:selectItem
+                        itemLabel="#{msg['enum.councilNotificationMethod.NONE']}"
+                        itemValue="#{null}"/>
+
+                <p:ajax event="change" process="@form"
+                        listener="#{consultationDialog.saveSelectedConsultation()}"/>
+
+            </p:selectOneMenu>
+
+            <!-- internal commentary -->
+            <h:outputLabel value="#{msg['dialog.consultation.internalCommentary']}"/>
+            <p:inputTextarea style="width: 700px;" rows="5"
+                             disabled="#{!consultationDialog.editable}"
+                             value="#{consultationDialog.selectedConsultation.consultation.commentary}">
+                <p:ajax event="keyup" delay="200" process="@form"
+                        listener="#{consultationDialog.saveSelectedConsultation()}"/>
+            </p:inputTextarea>
+
+        </h:panelGrid>
+    </p:outputPanel>
+
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
+
+            <h:panelGrid columns="1" styleClass="left">
+                <p:commandButton value="#{msg['dialog.consultation.button.create']}"
+                                 icon="fa fa-check-circle-o" update="@form"
+                                 disabled="#{!consultationDialog.editable}"
+                                 actionListener="#{consultationDialog.createConsultation()}"/>
+            </h:panelGrid>
+            <h:panelGrid columns="3" styleClass="right">
+
+                <h:panelGroup style="margin-right:30px;" id="buttonContainer"
+                              rendered="#{consultationDialog.editable}">
+
+                    <!-- finalize request -->
+                    <p:commandButton
+                            value="#{msg['dialog.consultation.button.sendRequest']}"
+                            style="margin-right:30px" icon="fa fa-check-circle-o"
+                            actionListener="#{quickDiagnosisRecordDialog.initAndPrepareBean(consultationDialog.task,'DIAGNOSIS_COUNCIL','c:'.concat(consultationDialog.selectedConsultation.consultation.id))}"
+                            rendered="#{!consultationDialog.selectedConsultation.consultation.councilRequestCompleted}">
+                        <p:ajax event="dialogReturn" update="@form"
+                                listener="#{consultationDialog.onEndRequestState}"/>
+                    </p:commandButton>
+
+                    <!-- edit changes changes -->
+                    <p:commandButton
+                            value="#{msg['dialog.consultation.button.editRequest']}"
+                            rendered="#{consultationDialog.selectedConsultation.consultation.councilRequestCompleted and !consultationDialog.selectedConsultation.forceEditRequest}"
+                            icon="fa fa-check-circle-o"
+                            update="councilRequestData dialogContent:buttonContainer"
+                            actionListener="#{consultationDialog.selectedConsultation.setForceEditRequest(true)}">
+                    </p:commandButton>
+
+                    <!-- save changes changes -->
+                    <p:commandButton
+                            value="#{msg['dialog.consultation.button.saveRequest']}"
+                            rendered="#{consultationDialog.selectedConsultation.consultation.councilRequestCompleted and consultationDialog.selectedConsultation.forceEditRequest}"
+                            icon="fa fa-check-circle-o"
+                            update="councilRequestData dialogContent:buttonContainer"
+                            actionListener="#{consultationDialog.selectedConsultation.setForceEditRequest(false)}">
+                    </p:commandButton>
+
+                </h:panelGroup>
+
+                <!-- print -->
+                <p:commandButton value="#{msg['general.print']}"
+                                 icon="fa fa-print" actionListener="#{consultationDialog.printCouncilReport()}" />
+
+                <!-- Close Button -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle"
+                                 immediate="true"
+                                 actionListener="#{consultationDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
+</ui:composition>

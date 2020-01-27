@@ -21,6 +21,11 @@ abstract class AbstractDialog_(val dialog: Dialog) {
     protected lateinit var resourceBundle: ResourceBundle
 
     /**
+     * If the content of the dialog should be editable, this has to be true
+     */
+    var editable = true
+
+    /**
      * ID for unique requests
      */
     protected var uniqueRequestID = UniqueRequestID()

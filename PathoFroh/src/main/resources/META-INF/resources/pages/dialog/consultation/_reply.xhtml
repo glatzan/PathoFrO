@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:histo="http://java.sun.com/jsf/composite/components">
+
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputFormat value="#{msg['dialog.consultation.reply']}" escape="false">
+            <f:param value="#{consultationDialog.selectedConsultation.consultation.name}"/>
+        </h:outputFormat>
+    </p:outputPanel>
+
+    <p:outputPanel styleClass="bodyPannel" style="padding:10px;">
+
+        <h:panelGrid styleClass="defaultHistoTable" columns="2">
+
+            <!-- reply received -->
+            <h:outputLabel value="#{msg['dialog.consultation.repy']}" />
+            <p:selectBooleanCheckbox
+                    title="#{msg['dialog.consultation.sampleShipped.text']}"
+                    value="#{consultationDialog.selectedConsultation.consultation.replyReceived}">
+                <p:ajax event="change" update="@form" process="@form"
+                        listener="#{consultationDialog.onReplyReceived()}"/>
+            </p:selectBooleanCheckbox>
+
+            <!-- reply received date -->
+            <h:outputLabel value=""/>
+            <h:panelGrid columns="2"
+                         styleClass="listingHistoHiddenTableContainer">
+                <h:outputLabel value="#{msg['dialog.consultation.repy.date']}" />
+
+                <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
+                            value="#{consultationDialog.selectedConsultation.consultation.replyReceivedDate}">
+
+                    <p:ajax event="dateSelect"
+                            listener="#{consultationDialog.saveSelectedConsultation()}"/>
+                    <p:ajax event="change"
+                            listener="#{consultationDialog.saveSelectedConsultation()}"/>
+                </p:calendar>
+            </h:panelGrid>
+
+            <!-- PDFs -->
+            <h:outputLabel value="#{msg['dialog.consultation.repy.files']}"/>
+            <histo:pdfTable tableWidth="710px" id="pdfTableList"
+                            pdfSource="#{consultationDialog.selectedConsultation.consultation.attachedPdfs}"
+                            pdfOrganizier="#{pdfOrganizerDialog}"
+                            patient="#{consultationDialog.task.patient}" nameLength="20"
+                            commentaryLength="30"/>
+
+            <!-- internal commentary -->
+            <h:outputLabel value="#{msg['dialog.consultation.internalCommentary']}" />
+            <p:inputTextarea style="width: 700px;" rows="5"
+                             value="#{consultationDialog.selectedConsultation.consultation.commentary}">
+                <p:ajax event="keyup" delay="1000" process="@form" update="@form"
+                        listener="#{consultationDialog.saveSelectedConsultation()}"/>
+            </p:inputTextarea>
+
+            <!-- media -->
+            <h:outputLabel value="#{msg['dialog.consultation.repy.media']}"/>
+            <p:fileUpload style="width:300px;" update="dialogContent:scrollBody dialogContent:pdfTableList:attachedPdfList" process="@this"
+                          fileUploadListener="#{consultationDialog.handleFileUpload}"
+                          mode="advanced" auto="true" sizeLimit="10000000"/>
+        </h:panelGrid>
+    </p:outputPanel>
+
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
+
+            <h:panelGrid columns="1" styleClass="left">
+                <p:commandButton value="#{msg['dialog.consultation.button.create']}"
+                                 icon="fa fa-check-circle-o" update="@form"
+                                 disabled="#{!consultationDialog.editable}"
+                                 actionListener="#{consultationDialog.createConsultation()}"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" styleClass="right">
+
+                <!-- print -->
+                <p:commandButton value="#{msg['general.print']}"
+                                 icon="fa fa-print" actionListener="#{consultationDialog.printCouncilReport()}" />
+
+
+                <!-- Close Button -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle"
+                                 actionListener="#{consultationDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
+</ui:composition>

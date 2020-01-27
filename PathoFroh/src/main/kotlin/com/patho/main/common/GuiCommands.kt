@@ -7,6 +7,12 @@ class GuiCommands {
     companion object {
 
         /**
+         *  UI Refresh on version conflict
+         */
+        @JvmStatic
+        val REFRESH_UI: String = "clickButtonFromBean('pw:refreshContentBtn')"
+
+        /**
          *  Staining phase exit dialog
          */
         @JvmStatic

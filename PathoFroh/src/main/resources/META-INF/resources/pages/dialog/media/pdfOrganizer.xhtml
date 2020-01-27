@@ -45,7 +45,7 @@
                     <p:row>
                         <p:column styleClass="columnTop">
                             <!-- scrolling -->
-                            <p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody"
+                            <p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody" widgetVar="scrollBody"
                                            style="height:400px;margin-bottom: 5px">
                                 <!-- navigation tree -->
                                 <p:tree value="#{pdfOrganizerDialog.root}" var="node"
@@ -276,6 +276,11 @@
                 </h:panelGrid>
             </h:panelGrid>
         </div>
+        <script>
+            $(document).ready(function () {
+                commonFunctions.initializeCustomScrollPanel("dialogContent:scrollBody");
+            });
+        </script>
     </h:form>
 </h:body>
 </html>

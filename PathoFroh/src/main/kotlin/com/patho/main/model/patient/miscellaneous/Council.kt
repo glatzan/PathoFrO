@@ -12,6 +12,7 @@ import com.patho.main.model.util.audit.AuditListener
 import com.patho.main.util.helper.TextToLatexConverter
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
+import java.time.LocalDate
 import java.util.*
 import javax.persistence.*
 import kotlin.collections.HashSet
@@ -58,8 +59,7 @@ open class Council : AbstractPersistable, DataList, AuditAble {
     /**
      * Date of request
      */
-    @Temporal(TemporalType.DATE)
-    open var dateOfRequest: Date? = null
+    open var dateOfRequest: LocalDate? = null
 
     /**
      * Text of council
@@ -76,8 +76,7 @@ open class Council : AbstractPersistable, DataList, AuditAble {
     /**
      * Date of request completed
      */
-    @Temporal(TemporalType.DATE)
-    open var councilRequestCompletedDate: Date? = null
+    open var councilRequestCompletedDate: LocalDate? = null
 
     /**
      * State of the council
@@ -94,8 +93,7 @@ open class Council : AbstractPersistable, DataList, AuditAble {
     /**
      * Date of request
      */
-    @Temporal(TemporalType.DATE)
-    open var sampleShippedDate: Date? = null
+    open var sampleShippedDate: LocalDate? = null
 
     /**
      * Attached slides of the council
@@ -118,8 +116,7 @@ open class Council : AbstractPersistable, DataList, AuditAble {
     /**
      * Date of request
      */
-    @Temporal(TemporalType.DATE)
-    open var sampleReturnedDate: Date? = null
+    open var sampleReturnedDate: LocalDate? = null
 
     /**
      * Commentary
@@ -136,8 +133,7 @@ open class Council : AbstractPersistable, DataList, AuditAble {
     /**
      * Date of return
      */
-    @Temporal(TemporalType.DATE)
-    open var replyReceivedDate: Date? = null
+    open var replyReceivedDate: LocalDate? = null
 
     /**
      * True if sample is returned
@@ -148,8 +144,7 @@ open class Council : AbstractPersistable, DataList, AuditAble {
     /**
      * Date of request
      */
-    @Temporal(TemporalType.DATE)
-    open var councilCompletedDate: Date? = null
+    open var councilCompletedDate: LocalDate? = null
 
     /**
      * Commentary

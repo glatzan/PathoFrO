@@ -18,7 +18,6 @@
                      selection="#{taskView.selectedTask}">
 
             <p:ajax event="rowSelect"
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight', 'contentForm:contentScrollPane')"
                     listener="#{worklistHandler.addTaskToWorklist(taskView.selectedTask.id)}"
                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
 
@@ -174,6 +173,9 @@
 
         <p:commandButton value="Expor" icon="fa fa-plus"
                          actionListener="#{mainHandlerAction.importCSV()}">
+        </p:commandButton>
+
+        <p:commandButton value="Refrec" icon="fa fa-plus" onclick="clickButtonFromBean('pw:refreshContentBtn')">
         </p:commandButton>
 
         <p:inputText value="#{mainHandlerAction.number}"/>

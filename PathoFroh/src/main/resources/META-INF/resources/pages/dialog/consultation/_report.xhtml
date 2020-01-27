@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+>
+
+    <p:outputPanel styleClass="headerPannel">
+        <h:outputFormat value="#{msg['dialog.consultation.reply']}" escape="false">
+            <f:param value="#{consultationDialog.selectedConsultation.consultation.name}"/>
+        </h:outputFormat>
+    </p:outputPanel>
+
+    <p:outputPanel styleClass="bodyPannel" style="padding:10px;">
+        <!-- document viewer -->
+        <h:panelGrid
+                styleClass="defaultHistoHiddenTableContainer noupdate"
+                style="width:calc(100% - 5px)">
+            <!--  pe meida is bugged with dynmaic include, starts print dialog-->
+            <p:media height="620" style="margin-left:5px;width:100%" player="pdf"
+                     class="noupdate"
+                     rendered="#{consultationDialog.stream.renderPDF}"
+                     value="#{consultationDialog.stream.getPDFStream()}"
+                     download="#{consultationDialog.stream.displayPDF.name}"/>
+        </h:panelGrid>
+    </p:outputPanel>
+
+    <div class="buttonContainer">
+        <h:panelGrid columns="2">
+
+            <h:panelGrid columns="1" styleClass="left">
+                <p:commandButton value="#{msg['dialog.consultation.button.create']}"
+                                 icon="fa fa-check-circle-o" update="@form"
+                                 disabled="#{!consultationDialog.editable}"
+                                 actionListener="#{consultationDialog.createConsultation()}"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="1" styleClass="right">
+                <!-- Close Button -->
+                <p:commandButton value="#{msg['general.close']}"
+                                 widgetVar="closeBtn" icon="fa fa-times-circle"
+                                 immediate="true"
+                                 actionListener="#{consultationDialog.hideDialog()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
+</ui:composition>

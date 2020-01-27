@@ -1,7 +1,6 @@
 package com.patho.main.action.dialog;
 
 import com.patho.main.action.dialog.biobank.BioBankDialog;
-import com.patho.main.action.dialog.council.CouncilDialog;
 import com.patho.main.action.dialog.diagnosis.*;
 import com.patho.main.action.dialog.media.EditPDFDialog;
 import com.patho.main.action.dialog.media.UploadDialog;
@@ -40,6 +39,7 @@ import org.springframework.stereotype.Component;
 
 @Component("dialog")
 @Scope(value = "session")
+@Deprecated
 public class DialogHandler {
 
     private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
@@ -60,7 +60,6 @@ public class DialogHandler {
     private ContactNotificationDialog contactNotificationDialog = new ContactNotificationDialog();
     private ProgrammVersionDialog programmVersionDialog = new ProgrammVersionDialog();
     private CustomAddressDialog customAddressDialog = new CustomAddressDialog();
-    private CouncilDialog councilDialog = new CouncilDialog();
     private SettingsDialog settingsDialog = new SettingsDialog();
     private FavouriteListEditDialog favouriteListEditDialog = new FavouriteListEditDialog();
     private FaxDocumentDialog faxDocumentDialog = new FaxDocumentDialog();
@@ -157,10 +156,6 @@ public class DialogHandler {
 
     public CustomAddressDialog getCustomAddressDialog() {
         return this.customAddressDialog;
-    }
-
-    public CouncilDialog getCouncilDialog() {
-        return this.councilDialog;
     }
 
     public SettingsDialog getSettingsDialog() {

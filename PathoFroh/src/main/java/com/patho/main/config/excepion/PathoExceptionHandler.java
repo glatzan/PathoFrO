@@ -1,8 +1,10 @@
 package com.patho.main.config.excepion;
 
 import com.patho.main.action.handler.MessageHandler;
+import com.patho.main.common.GuiCommands;
 import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
+import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
@@ -97,16 +99,16 @@ public class PathoExceptionHandler extends ExceptionHandlerWrapper {
                     }
 
                     closeDialogs();
-//					SpringContextBridge.services().getCentralHandler().reloadUIData();
-                    MessageHandler.executeScript("clickButtonFromBean('globalCommandsForm:refreshContentBtn')");
+					SpringContextBridge.services().getCentralHandler().reloadUIData();
+                    MessageHandler.executeScript(GuiCommands.getREFRESH_UI());
                     MessageHandler.sendGrowlMessagesAsResource("growl.error.version", "growl.error.version.text");
 
                     hanled = true;
                 } else if (cause instanceof InvalidDataAccessApiUsageException) {
 
                     closeDialogs();
-//					SpringContextBridge.services().getCentralHandler().reloadUIData();
-                    MessageHandler.executeScript("clickButtonFromBean('globalCommandsForm:refreshContentBtn')");
+					SpringContextBridge.services().getCentralHandler().reloadUIData();
+                    MessageHandler.executeScript(GuiCommands.getREFRESH_UI());
                     MessageHandler.sendGrowlMessagesAsResource("growl.error.save", "growl.error.save.text");
 
                     hanled = true;
