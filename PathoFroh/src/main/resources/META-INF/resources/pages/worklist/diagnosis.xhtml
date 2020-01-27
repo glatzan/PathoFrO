@@ -714,8 +714,7 @@
                                      actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
                         <p:ajax event="dialogReturn"
                                 listener="#{dialogReturnHandler.onDefaultReturn}"
-                                update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll','contentForm:contentScrollPane')"/>
+                                update="navigationForm:patientList contentForm:contentPanel headerForm"/>
                     </p:commandButton>
 
                     <h:panelGroup>

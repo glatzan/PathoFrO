@@ -39,7 +39,7 @@
         <!-- name -->
         <p:column style="width:30%">
             <f:facet name="header">
-                <h:outputLabel value="#{msg['component.pdfTable.pdf']}"></h:outputLabel>
+                <h:outputLabel value="#{msg['component.pdfTable.pdf']}"/>
             </f:facet>
 
             <h:outputLabel value="#{attachedPdf.name}"
@@ -53,7 +53,7 @@
         <!-- date -->
         <p:column style="width:18%">
             <f:facet name="header">
-                <h:outputLabel value="#{msg['component.pdfTable.dateOfUPload']}"></h:outputLabel>
+                <h:outputLabel value="#{msg['component.pdfTable.dateOfUPload']}"/>
             </f:facet>
             <h:outputText value="#{attachedPdf.audit.createdOn}">
                 <f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
@@ -63,7 +63,7 @@
         <!-- type -->
         <p:column style="width:10%">
             <f:facet name="header">
-                <h:outputLabel value="#{msg['component.pdfTable.type']}"></h:outputLabel>
+                <h:outputLabel value="#{msg['component.pdfTable.type']}"/>
             </f:facet>
             <h:outputLabel
                     value="#{msg['enum.documentType.'.concat(attachedPdf.type)]}"
@@ -77,7 +77,7 @@
         <!-- comentary -->
         <p:column style="auto">
             <f:facet name="header">
-                <h:outputLabel value="#{msg['component.pdfTable.commentary']}"></h:outputLabel>
+                <h:outputLabel value="#{msg['component.pdfTable.commentary']}"/>
             </f:facet>
             <h:outputLabel value="#{attachedPdf.commentary}"
                            title="#{attachedPdf.commentary}">
@@ -93,14 +93,14 @@
                                rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA') and cc.attrs.showUpload}"
                                actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient)}">
                     <p:ajax event="dialogReturn" update="@form"/>
-                    <i class="fa fa-plus"></i>
+                    <i class="fa fa-plus"/>
                 </p:commandLink>
             </f:facet>
             <p:commandLink
                     rendered="#{userService.userHasPermission('PATIENT_EDIT_UPLOAD_DATA')}"
-                    actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient).setPDFToDisplay(attachedPdf)}">
+                    actionListener="#{cc.attrs.pdfOrganizier.initAndPrepareBean(cc.attrs.patient,attachedPdf)}">
                 <p:ajax event="dialogReturn" update="@form"/>
-                <i class="fa fa-search"></i>
+                <i class="fa fa-search"/>
             </p:commandLink>
         </p:column>
     </p:dataTable>

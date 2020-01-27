@@ -93,7 +93,7 @@ open class PrintDocument : AbstractTemplate {
     /**
      * Initializes values for the velocity template engine
      */
-    override fun initialize(vararg token: DocumentToken): Pair<out PrintDocument, Context> {
+    override fun initialize(vararg token: DocumentToken): Pair<PrintDocument, Context> {
         return initialize(hashMapOf(*token.map { it.key to it.value }.toTypedArray()))
     }
 

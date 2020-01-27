@@ -247,7 +247,7 @@ Alter table biobank add commentary character varying;
 Alter table biobank_aud add commentary character varying;
 
 /* replacing old command*/
-update favouritelist set command = 'dialog:dialog.councilDialog' where command like 'dialog:councilDialogHandler';
+update favouritelist set command = 'dialog:consultationDialog' where command like 'dialog:councilDialogHandler';
 
 /* request completed date */
 Alter table council add councilRequestCompletedDate date;

@@ -22,20 +22,7 @@ function disableButton(disable) {
  * @returns
  */
 function updateGlobalGrowl(name) {
-
-    var windowElement = window;
-
-    var i = 0;
-
-    // searching for growl with name, going up the parent docuemntes (max 10
-    // times) to finde it
-    do {
-        i++;
-    } while (PrimeFaces.widgets[name] == null
-    && (windowElement != windowElement.parent)
-    && (windowElement = windowElement.parent) != null && i < 10)
-
-    var growl = windowElement.PF(name);
+    var growl = getFindElementInDialogStack(name)
 
     if (growl != null) {
         if (arguments.length == 2)
@@ -59,7 +46,26 @@ function updateGlobalGrowl(name) {
  * @returns
  */
 function clickButtonFromBean(btn) {
-    $(getAlteredID(btn)).click();
+    // is widgetwar
+    if(btn.startsWith("pw:"))
+        getFindElementInDialogStack(btn.substring(3)).jq.click()
+    else
+        $(getAlteredID(btn)).click();
+}
+
+function getFindElementInDialogStack(name){
+    var windowElement = window;
+
+    var i = 0;
+    // searching for growl with name, going up the parent docuemntes (max 10
+    // times) to finde it
+    do {
+        i++;
+    } while (PrimeFaces.widgets[name] == null
+    && (windowElement != windowElement.parent)
+    && (windowElement = windowElement.parent) != null && i < 10)
+
+    return windowElement.PF(name);
 }
 
 /**

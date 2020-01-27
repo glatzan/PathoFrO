@@ -7,6 +7,7 @@ import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractDialog_
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
+import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.DiagnosisService
 import com.patho.main.service.impl.SpringContextBridge.Companion.services
 import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent
@@ -25,6 +26,7 @@ import java.util.*
 @Scope(value = "session")
 open class QuickDiagnosisRecordDialog @Autowired constructor(
         private val diagnosisService: DiagnosisService,
+        private val taskRepository: TaskRepository,
         private val transactionTemplate: TransactionTemplate) : AbstractDialog_(Dialog.DIAGNOSIS_REVISION_ADD) {
 
     /**
@@ -46,20 +48,21 @@ open class QuickDiagnosisRecordDialog @Autowired constructor(
      * Internal reference, currently not used
      * TODO: use oder remove
      */
-    var intern : String = ""
+    var intern: String = ""
 
     private val internalReference: String? = null
 
-    open fun initAndPrepareBean(task: Task, diagnosisRevisionType: DiagnosisRevisionType): QuickDiagnosisRecordDialog {
-        if (initBean(task, diagnosisRevisionType))
+    open fun initAndPrepareBean(task: Task, diagnosisRevisionType: DiagnosisRevisionType, intern: String = ""): QuickDiagnosisRecordDialog {
+        if (initBean(task, diagnosisRevisionType, intern))
             prepareDialog()
         return this
     }
 
-    open fun initBean(task: Task, diagnosisRevisionType: DiagnosisRevisionType): Boolean {
-        this.task = task
+    open fun initBean(task: Task, diagnosisRevisionType: DiagnosisRevisionType, intern : String): Boolean {
+        this.task = taskRepository.findByID(task.id, false, true, false, false, false);
         this.type = diagnosisRevisionType
         this.renameOldDiagnoses = true
+        this.intern = intern
         return super.initBean()
     }
 
@@ -76,8 +79,8 @@ open class QuickDiagnosisRecordDialog @Autowired constructor(
                 task = services().diagnosisService.createDiagnosisRevision(task, type, intern)
             }
         })
-        
-        MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.create.success","growl.diagnosis.create.quickDiagnosis", task.diagnosisRevisions.last().name)
+
+        MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.create.success", "growl.diagnosis.create.quickDiagnosis", task.diagnosisRevisions.last().name)
         hideDialog(QuickDiagnosisAddEvent(true))
     }
 

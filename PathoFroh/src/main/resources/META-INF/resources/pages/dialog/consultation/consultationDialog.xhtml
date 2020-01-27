@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:histo="http://java.sun.com/jsf/composite/components"
+      xmlns:histoPDF="http://java.sun.com/jsf/composite/components/pdf">
+
+<h:head>
+    <title><h:outputFormat
+            value="#{msg['dialog.consultation.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
+    <h:outputScript library="scripts" name="updateAndScrollScrollPanel.js"></h:outputScript>
+</h:head>
+
+<h:body styleClass="histoTabDialogStyle councilDialog">
+    <h:form id="dialogContent">
+
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.consultation.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               immediate="true"
+                               actionListener="#{consultationDialog.hideDialog()}">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
+
+        <h:panelGrid columns="2" styleClass="dialogContainer"
+                     columnClasses="navColumn300">
+            <p:outputPanel id="navigationTable" styleClass="navigationTable">
+                <p:panelGrid styleClass="defaultHistoHiddenTableContainer"
+                             style="background: black; height: 655px;width:100%">
+                    <p:row>
+                        <p:column styleClass="columnTop" style="height:505px">
+                            <!-- scrolling -->
+                            <p:scrollPanel styleClass="histoScrollPanelStyle" id="scrollBody"
+                                           style="height:500px;width:285px !important">
+                                <!-- navigation tree -->
+                                <p:tree value="#{consultationDialog.root}" var="node"
+                                        dynamic="true" styleClass="histoTree" style="width:99%"
+                                        id="menuTree" selectionMode="single"
+                                        selection="#{consultationDialog.selectedTreeNode}">
+
+                                    <p:ajax event="select" partialSubmit="true" process="@this"
+                                            listener="#{consultationDialog.onTreeNodeSelectionChange}"
+                                            update="dialogContent:content dialogContent:councilInfo"/>
+
+                                    <!-- root -->
+                                    <p:treeNode expandedIcon="ui-icon-folder-open"
+                                                collapsedIcon="ui-icon-folder-collapsed">
+                                        <h:outputText value="#{node}"/>
+                                    </p:treeNode>
+
+                                    <!-- Task -->
+                                    <p:treeNode type="task" expandedIcon="ui-icon-folder-open"
+                                                collapsedIcon="ui-icon-folder-collapsed">
+                                        <h:outputText value="#{node.taskID}"/>
+                                    </p:treeNode>
+
+                                    <!-- coucil -->
+                                    <p:treeNode type="consultation" expandedIcon="fa fa-comment-o"
+                                                collapsedIcon="fa fa-comment-o">
+                                        <h:outputText value="#{node.consultation.name}" title="#{node.consultation}">
+                                            <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                                            <f:attribute name="truncateAt" value="35"/>
+                                            <f:attribute name="continuationMark" value="..."/>
+                                        </h:outputText>
+                                    </p:treeNode>
+
+                                    <!-- consultation request -->
+                                    <p:treeNode type="consultation_request" icon="fa fa-edit">
+                                        <h:outputText value="#{msg['dialog.consultation.tree.request']}"/>
+
+                                        <!-- completed -->
+                                        <ui:fragment rendered="#{node.consultation.councilRequestCompleted}">
+                                            <i class="fa fa-check-circle icon-green"
+                                               title="#{msg['dialog.consultation.tree.request.completed.info']}"/>
+                                        </ui:fragment>
+                                    </p:treeNode>
+
+                                    <!-- consultation request -->
+                                    <p:treeNode type="consultation_ship" icon="fa fa-envelope">
+                                        <h:outputText value="#{msg['dialog.consultation.tree.ship']}"/>
+
+                                        <!-- waiting for shipment -->
+                                        <ui:fragment
+                                                rendered="#{node.consultation.councilRequestCompleted and node.consultation.isShippentExpected() and !node.consultation.sampleShipped}">
+                                            <i class="fa fa-exclamation-circle icon-red"
+                                               title="#{msg['dialog.consultation.tree.ship.expected.info']}"/>
+                                        </ui:fragment>
+
+                                        <!-- shipment completed -->
+                                        <ui:fragment rendered="#{node.consultation.sampleShipped}">
+                                            <i class="fa fa-check-circle icon-green"
+                                               title="#{msg['dialog.consultation.tree.ship.completed.info']}"/>
+                                        </ui:fragment>
+
+                                        <!-- waiting for return -->
+                                        <ui:fragment
+                                                rendered="#{node.consultation.expectSampleReturn and !node.consultation.sampleReturned}">
+                                            <i class="fa fa-undo icon-red"
+                                               title="#{msg['dialog.consultation.tree.return.expected.info']}"/>
+                                        </ui:fragment>
+
+                                        <!-- shipment and return completed  -->
+                                        <ui:fragment
+                                                rendered="#{node.consultation.expectSampleReturn and node.consultation.sampleReturned}">
+                                            <i class="fa fa-check-circle icon-green"
+                                               title="#{msg['dialog.consultation.tree.return.completed.info']}"/>
+                                        </ui:fragment>
+                                    </p:treeNode>
+
+                                    <!-- reply-->
+                                    <p:treeNode type="consultation_reply" icon="fa fa-user-md">
+                                        <h:outputText value="#{msg['dialog.consultation.tree.reply']}"/>
+                                        <!-- reply pending -->
+                                        <ui:fragment
+                                                rendered="#{node.consultation.councilRequestCompleted and !node.consultation.replyReceived}">
+                                            <i class="fa fa-exclamation-circle icon-red"
+                                               title="#{msg['dialog.consultation.tree.reply.pending.info']}"/>
+                                        </ui:fragment>
+
+                                        <!-- reply received -->
+                                        <ui:fragment rendered="#{node.consultation.replyReceived}">
+                                            <i class="fa fa-check-circle icon-green"
+                                               title="#{msg['dialog.consultation.tree.reply.completed.info']}"/>
+                                        </ui:fragment>
+                                    </p:treeNode>
+
+                                    <!-- finalize node-->
+                                    <p:treeNode type="consultation_diagnosis" icon="fa fa-edit">
+                                        <h:outputText value="#{msg['dialog.consultation.tree.finalize']}"/>
+
+                                        <!-- not finalized -->
+                                        <ui:fragment
+                                                rendered="#{node.consultation.councilRequestCompleted and !node.consultation.councilCompleted}">
+                                            <i class="fa fa-exclamation-circle icon-red"
+                                               title="#{msg['dialog.consultation.tree.finalize.pending.info']}"/>
+                                        </ui:fragment>
+
+                                        <!-- finalized -->
+                                        <ui:fragment rendered="#{node.consultation.councilRequestCompleted and node.consultation.councilCompleted}">
+                                            <i class="fa fa-check-circle icon-green"
+                                               title="#{msg['dialog.consultation.tree.finalize.completed.info']}"/>
+                                        </ui:fragment>
+                                    </p:treeNode>
+
+                                    <!-- data node-->
+                                    <p:treeNode type="data_node" expandedIcon="ui-icon-folder-open"
+                                                collapsedIcon="ui-icon-folder-collapsed">
+                                        <h:outputText value="#{msg['dialog.consultation.tree.files']}"/>
+                                    </p:treeNode>
+
+                                    <!-- pdf -->
+                                    <p:treeNode type="pdf_node" icon="fa fa-file-pdf-o"
+                                                styleClass="pdfInfoOverlayPanelTrigger triggerCommand_showOVerlay#{node.container.id}">
+
+                                        <h:panelGrid columns="2" styleClass="mouseEntryEventElemnt"
+                                                     id="bine">
+                                            <f:passThroughAttribute name="tvalue"
+                                                                    value="#{node.container.id}"/>
+                                            <!-- name -->
+                                            <h:outputText value="#{node.container.name}" id="treeNode">
+                                                <f:converter converterId="org.histo.ui.TruncateConverter"/>
+                                                <f:attribute name="truncateAt" value="20"/>
+                                                <f:attribute name="continuationMark" value="..."/>
+                                            </h:outputText>
+
+                                            <!-- download -->
+                                            <p:commandLink
+                                                    action="#{consultationDialog.stream.openPDFinNewWindow()}"
+                                                    ajax="false" title="#{msg['dialog.print.button.open.text']}"
+                                                    oncomplete="return false;" target="_blank">
+                                                <i class="fa fa-eye" title=""/>
+                                            </p:commandLink>
+
+                                        </h:panelGrid>
+
+                                        <p:remoteCommand name="showOVerlay#{node.container.id}" process="@form"
+                                                         partialSubmit="true"
+                                                         update="dialogContent:pdfInfoOverlayPanelBearer:pdfInfoOverlayPanel"
+                                                         actionListener="#{consultationDialog.stream.renderThumbnail(node.container)}"
+                                                         oncomplete="commonFunctions.showOverlayPanelParentByClass('pdfInfoOverlayPanel', 'pdfInfoOverlayParent')"/>
+
+                                    </p:treeNode>
+                                </p:tree>
+                            </p:scrollPanel>
+
+                            <!-- overlay for preview info-->
+                            <histoPDF:pdfInfoOverlay wid="pdfInfoOverlayPanel"
+                                                     triggerClass="pdfInfoOverlayPanelTrigger"
+                                                     pdf="#{consultationDialog.stream.thumbnail}"
+                                                     stream="#{consultationDialog.stream.thumbnailStream()}"
+                                                     id="pdfInfoOverlayPanelBearer"
+                                                     displayClass="pdfInfoOverlayParent"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="columnTop">
+                            <!-- audit table -->
+                            <histo:auditTable id="councilInfo"
+                                              rendered="#{consultationDialog.selectedConsultation ne null}"
+                                              auditElement="#{consultationDialog.selectedConsultation.consultation.audit}"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:outputPanel>
+            <p:outputPanel id="content" styleClass="dialogContent">
+                <ui:include src="#{consultationDialog.getCenterInclude()}"/>
+            </p:outputPanel>
+        </h:panelGrid>
+
+
+
+        <ui:include src="../../../template/blockUi.xhtml"/>
+
+        <script>
+            $(document).ready(function () {
+                setMouseEnterEvents(true);
+                commonFunctions.initializeCustomScrollPanel("dialogContent:scrollBody");
+            });
+
+            // mouse entry event for tree nodes
+            function setMouseEnterEvents() {
+                $(".mouseEntryEventElemnt").each(function (index) {
+
+                    $(this).mouseenter(function () {
+                        eval("updateToolTip" + $(this).attr("tvalue") + "()");
+                        //PF('tooltipOverlay').show($(this).attr("id"));
+                    });
+
+                    $(this).mouseleave(function () {
+                        //PF('tooltipOverlay').hide();
+                    });
+
+                });
+            }
+        </script>
+    </h:form>
+</h:body>
+</html>

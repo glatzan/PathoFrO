@@ -1,6 +1,7 @@
 package com.patho.main.action.handler
 
 import com.patho.main.action.views.*
+import com.patho.main.common.GuiCommands
 import com.patho.main.common.View
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
@@ -77,7 +78,13 @@ open class CentralHandler @Autowired constructor(
         logger.debug("Force Reload of all data")
         genericViewData.loadView()
         navigationData.updateData()
-        worklistHandler.current.updateWorklist(true)
+        worklistHandler.current.updateWorklist(false)
+
+        if (worklistHandler.current.isTaskSelected)
+            onSelectTaskAndPatient(worklistHandler.current.selectedTask, true)
+        else if (worklistHandler.current.isPatientSelected)
+            onSelectPatient(worklistHandler.selectedPatient, true)
+
     }
 
     open fun goToNavigation() {
@@ -322,7 +329,7 @@ open class CentralHandler @Autowired constructor(
                     onSelectPatient(worklistHandler.selectedPatient)
                     MessageHandler.sendGrowlMessagesAsResource("growl.error", "growl.error.taskNoFound")
                     PrimeFaces.current()
-                            .executeScript("clickButtonFromBean('#globalCommandsForm\\\\:refreshContentBtn')")
+                            .executeScript(GuiCommands.REFRESH_UI)
                 }
                 return
             }

@@ -31,7 +31,6 @@ open class DialogReturnHandler @Autowired constructor(
 
     open fun onDefaultReturn(event: SelectEvent) {
         logger.debug("Default Return Handler")
-        event ?: return;
 
         val obj = event.`object`
 
