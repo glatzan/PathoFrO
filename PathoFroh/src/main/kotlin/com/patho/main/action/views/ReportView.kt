@@ -6,6 +6,7 @@ import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.model.util.audit.Audit
 import com.patho.main.service.PDFService
+import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.task.DiagnosisReportUpdater
 import com.patho.main.util.pdf.IPDFThumbnailListStreamContainer
@@ -83,7 +84,7 @@ open class ReportView : AbstractTaskView(), IPDFThumbnailListStreamContainer {
                 data.add(DiagnosisReportReturnHandler(revision, c, false))
             } else {
                 val container = PDFContainer(PrintDocumentType.DIAGNOSIS_REPORT_NOT_APPROVED,
-                        revision.name, PathoConfig.REPORT_NOT_APPROVED_PDF, PathoConfig.REPORT_NOT_APPROVED_IMG)
+                        revision.name, SpringContextBridge.services().pathoConfig.pdfErrorFiles.reportNotApprovedPDF, SpringContextBridge.services().pathoConfig.pdfErrorFiles.reportNotApprovedIMG)
 
                 container.audit = Audit()
                 container.audit?.createdOn = revision.audit?.createdOn ?: System.currentTimeMillis()

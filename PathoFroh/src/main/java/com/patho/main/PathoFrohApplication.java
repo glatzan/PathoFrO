@@ -12,7 +12,6 @@ import org.springframework.data.ldap.repository.config.EnableLdapRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableSpringConfigured
 @EnableScheduling
 @EnableConfigurationProperties
 @Import({MessageConfig.class, DatabaseConfig.class, LdapConfig.class, ThreadConfig.class})

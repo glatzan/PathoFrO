@@ -154,10 +154,6 @@ TODO:
 Create Material and Staining for external samples
 
 SQL:
-/* pdf container set intern and commentary to empty (kotlin)*/
-update pdfcontainer set commentary = '' where commentary is NULL;
-update pdfcontainer set intern = '' where intern is NULL;
-
 /* deleting accounting table*/
 alter table task drop constraint fk668fdat9n9qrjbohxo1kj1ujs ;
 DROP TABLE accounting;
@@ -705,6 +701,10 @@ Alter table patient_aud add updatedBy character varying(10);
 UPDATE patient_aud SET createdOn = creationDate;
 update patient_aud set updatedOn = 0;
 alter table patient_aud drop column creationDate;
+
+/* pdf container set intern and commentary to empty (kotlin)*/
+update pdfcontainer set commentary = '' where commentary is NULL;
+update pdfcontainer set intern = '' where intern is NULL;
 
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien

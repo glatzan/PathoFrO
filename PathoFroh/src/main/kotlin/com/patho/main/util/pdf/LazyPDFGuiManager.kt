@@ -99,7 +99,7 @@ class LazyPDFGuiManager() : IPDFStreamContainer, LazyPDFReturnHandler {
                 render(container)
             } else {
                 render(
-                        PDFContainer(PrintDocumentType.PRINT_DOCUMENT, "RenderError.pdf", PathoConfig.RENDER_ERROR_PDF, ""))
+                        PDFContainer(PrintDocumentType.PRINT_DOCUMENT, "RenderError.pdf", SpringContextBridge.services().pathoConfig.pdfErrorFiles.renderErrorPDF, ""))
             }
 
             sRenderPDF.set(true)

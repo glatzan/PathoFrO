@@ -160,8 +160,8 @@ patho:
         content: workDirectory:templates/mail/error.txt
     fileSettings:
       thumbnailDPI: 50
-      fileRepository: file:D:/patho
-      workDirectory: file:D:/patho/pdf
+      fileRepository: file:D:/patho/
+      workDirectory: file:D:/patho/pdf/
       auxDirectory: fileRepository:pdf/tmp
       errorDirectory: fileRepository:pdf/error
       printDirectory: fileRepository:pdf/print
@@ -169,16 +169,22 @@ patho:
       programVersionInfo: classpath:settings/version.txt
       copyOnFirstStartToWorkDirectory:
         -
-          source: templates/print/*
+          source: classpath:templates/print/*
           target: workDirectory:templates/print/
         -
-          source: templates/mail/*
+          source: classpath:templates/mail/*
           target: workDirectory:templates/mail/
         -
-          source: templates/print_label/*
+          source: classpath:templates/print_label/*
           target: workDirectory:templates/print_label/
-      cleanup: true
+      cleanup: false
       keepErrorFiles: true
+    pdfErrorFiles:
+      pdfNotFoundPDF: fileRepository:templates/print/pdfnotfound.pdf
+      pdfNotFoundIMG: fileRepository:templates/print/pdfnotfound.pdf
+      reportNotApprovedPDF: fileRepository:templates/print/reportnotapproved.pdf
+      reportNotApprovedIMG: fileRepository:templates/print/reportnotapproved.png
+      renderErrorPDF: fileRepository:templates/print/pdfnotfound.pdf
     defaultDocuments:
       diagnosisApprovedDocument: 10
       diagnosisReportForUsers: 10
