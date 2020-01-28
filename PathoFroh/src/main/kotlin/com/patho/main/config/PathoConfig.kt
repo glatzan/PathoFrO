@@ -4,7 +4,6 @@ import com.patho.main.common.ContactRole
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.repository.miscellaneous.MediaRepository
 import com.patho.main.util.config.VersionContainer
-import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -17,20 +16,6 @@ import java.util.*
 @ConfigurationProperties(prefix = "patho.settings")
 public open class PathoConfig @Autowired @Lazy constructor(
         var mediaRepository: MediaRepository) {
-
-    companion object {
-        val PDF_NOT_FOUND_PDF = "classpath:templates/print/pdfnotfound.pdf"
-
-        val PDF_NOT_FOUND_IMG = "classpath:templates/print/pdfnotfound.png"
-
-        val REPORT_NOT_APPROVED_PDF = "classpath:templates/print/reportnotapproved.pdf"
-
-        val REPORT_NOT_APPROVED_IMG = "classpath:templates/print/reportnotapproved.png"
-
-        val RENDER_ERROR_PDF = "classpath:templates/print/pdfnotfound.pdf"
-
-        val LOGIN_PAGE = "/login.xhtml"
-    }
 
     protected val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -45,6 +30,8 @@ public open class PathoConfig @Autowired @Lazy constructor(
     var schedule: Schedule = Schedule()
 
     var mailSettings: MailSettings = MailSettings()
+
+    var pdfErrorFiles: PDFErrorFiles = PDFErrorFiles()
 
     init {
         fileSettings = FileSettings();
@@ -62,50 +49,74 @@ public open class PathoConfig @Autowired @Lazy constructor(
         val fileRepository = mediaRepository.getFileForPath(fileSettings.fileRepository)
 
         // checking directories
-        if (!fileRepository.isDirectory() && !fileRepository.mkdirs()) {
-            logger.error("Error directory not found: fileRepository " + fileRepository.getAbsolutePath())
-        }
+        if (!fileRepository.isDirectory && !fileRepository.mkdirs()) {
+            logger.error("Error directory not found: fileRepository " + fileRepository.absolutePath)
+        } else
+            logger.debug("Directory found: fileRepository " + fileRepository.absolutePath)
 
         val workDirectory = mediaRepository.getFileForPath(fileSettings.workDirectory)
 
         // checking directories
-        if (!workDirectory.isDirectory() && !workDirectory.mkdirs()) {
-            logger.error("Error directory not found: workDirectory " + workDirectory.getAbsolutePath())
-        }
+        if (!workDirectory.isDirectory && !workDirectory.mkdirs()) {
+            logger.error("Error directory not found: workDirectory " + workDirectory.absolutePath)
+        } else
+            logger.debug("Directory found: workDirectory " + workDirectory.absolutePath)
 
         val auxDirectory = mediaRepository.getFileForPath(fileSettings.auxDirectory)
 
         // checking directories
-        if (!auxDirectory.isDirectory() && !auxDirectory.mkdirs()) {
-            logger.error("Error directory not found: auxDirectory " + auxDirectory.getAbsolutePath())
-        }
+        if (!auxDirectory.isDirectory && !auxDirectory.mkdirs()) {
+            logger.error("Error directory not found: auxDirectory " + auxDirectory.absolutePath)
+        } else
+            logger.debug("Directory found: auxDirectory " + auxDirectory.absolutePath)
 
         val errorDirectory = mediaRepository.getFileForPath(fileSettings.errorDirectory)
 
         // checking directories
-        if (!errorDirectory.isDirectory() && !errorDirectory.mkdirs()) {
-            logger.error("Error directory not found: errorDirectory " + errorDirectory.getAbsolutePath())
-        }
+        if (!errorDirectory.isDirectory && !errorDirectory.mkdirs()) {
+            logger.error("Error directory not found: errorDirectory " + errorDirectory.absolutePath)
+        } else
+            logger.debug("Directory found: errorDirectory " + errorDirectory.absolutePath)
 
         val printDirectory = mediaRepository.getFileForPath(fileSettings.printDirectory)
 
         // checking directories
-        if (!printDirectory.isDirectory() && !printDirectory.mkdirs()) {
-            logger.error("Error directory not found: errorDirectory " + printDirectory.getAbsolutePath())
-        }
+        if (!printDirectory.isDirectory && !printDirectory.mkdirs()) {
+            logger.error("Error directory not found: printDirectory " + printDirectory.absolutePath)
+        } else
+            logger.debug("Directory found: printDirectory " + printDirectory.absolutePath)
+
 
         val programInfo = mediaRepository.getFileForPath(fileSettings.programInfo)
 
         // copy resources to working dir
         if (!programInfo.isFile) {
+            logger.debug("###########################################")
+            logger.debug("###########################################")
+            logger.debug("############### First start ###############")
+            logger.debug("###########################################")
+
             logger.debug("Copying files to working directory...")
+
+            val copyRes = mediaRepository.getFilesOfDirectory("classpath:*");
+
+            //TODO read from jar
+            for (srcFile in copyRes) {
+                logger.debug("Classpath... " + File(srcFile.filename).path + " " +File(srcFile.filename).absolutePath)
+            }
+
+            logger.debug("Classpath End")
 
             for (copyStr in fileSettings.copyOnFirstStartToWorkDirectory) {
                 val targetDir = mediaRepository.getResource(copyStr.target).file
-                if (!targetDir.isDirectory() && !targetDir.mkdirs()) {
-                    logger.error("Error directory not found: errorDirectory " + targetDir.getAbsolutePath())
+                if (!targetDir.isDirectory && !targetDir.mkdirs()) {
+                    logger.error("Error directory not found: errorDirectory " + targetDir.absolutePath)
                 } else {
-                    val copyRes = mediaRepository.getFilesOfDirectory("classpath:" + copyStr.source)
+                    val copyRes = mediaRepository.getFilesOfDirectory(copyStr.source)
+
+                    logger.debug("Found... ${copyRes.size} in ${copyStr.source} ")
+                    logger.debug("Source ${copyStr.source}, Target ${copyStr.target}")
+
                     for (srcFile in copyRes) {
                         logger.debug("Copying... " + File(targetDir, srcFile.filename).path)
                         mediaRepository.copyResourceToFile(srcFile, File(targetDir, srcFile.filename))
@@ -113,8 +124,6 @@ public open class PathoConfig @Autowired @Lazy constructor(
                 }
 
                 mediaRepository.getResource(copyStr.target).file.mkdir()
-                logger.debug("Copying files from '$copyStr' to working directory...")
-                logger.debug(copyStr.source + " " + copyStr.target)
             }
 
             // marking als initialized
@@ -307,6 +316,14 @@ public open class PathoConfig @Autowired @Lazy constructor(
         constructor(role: ContactRole) {
             this.role = role
         }
+    }
+
+    class PDFErrorFiles {
+        var pdfNotFoundPDF = ""
+        var pdfNotFoundIMG = ""
+        var reportNotApprovedPDF = ""
+        var reportNotApprovedIMG = ""
+        var renderErrorPDF = ""
     }
 
 

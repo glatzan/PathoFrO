@@ -46,6 +46,8 @@
         <hibernate.version>5.4.10.Final</hibernate.version>
 
         <postgresql.version>42.2.9</postgresql.version>
+
+        <pdfbox.version>2.0.18</pdfbox.version>
     </properties>
 
     <dependencies>
@@ -276,7 +278,7 @@
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>2.0.11</version>
+            <version>${pdfbox.version}}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->

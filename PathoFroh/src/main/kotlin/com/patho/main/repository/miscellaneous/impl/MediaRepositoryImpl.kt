@@ -20,6 +20,7 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import javax.imageio.ImageIO
+import kotlin.coroutines.coroutineContext
 
 @Service
 class MediaRepositoryImpl @Autowired constructor(
@@ -33,11 +34,15 @@ class MediaRepositoryImpl @Autowired constructor(
      * Replaces wildcards like fileRepository and workingDirectory
      */
     fun checkPath(path: String): String? {
-        return if (path.startsWith("fileRepository:")) {
-            path.replace("fileRepository:", "file:D:/patho/")
+        var result = path
+        logger.debug("Forming Path: $path")
+        if (path.startsWith("fileRepository:")) {
+            result= path.replace("fileRepository:", pathoConfig.fileSettings.fileRepository)
         } else if (path.startsWith("workDirectory:")) {
-            path.replace("workDirectory:", "file:D:/patho/pdf/")
-        } else path
+            result= path.replace("workDirectory:", pathoConfig.fileSettings.workDirectory)
+        }
+        logger.debug("Forming Path: $path to $result")
+        return result
     }
 
     override fun getResource(path: String): Resource {

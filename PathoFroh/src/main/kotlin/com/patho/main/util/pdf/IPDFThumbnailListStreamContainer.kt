@@ -2,6 +2,7 @@ package com.patho.main.util.pdf
 
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
+import com.patho.main.service.impl.SpringContextBridge
 import org.primefaces.model.StreamedContent
 import javax.faces.context.FacesContext
 
@@ -41,7 +42,7 @@ interface IPDFThumbnailListStreamContainer : IPDFStreamContainer {
         val pdf = thumbnailList.firstOrNull { it.thumbnail == id }
 
         val r = getStream(pdf?.thumbnail ?: "", pdf?.name ?: "", "image/png")
-                ?: getStream(PathoConfig.PDF_NOT_FOUND_IMG, "", "image/png")
+                ?: getStream(SpringContextBridge.services().pathoConfig.pdfErrorFiles.pdfNotFoundIMG, "", "image/png")
 
         return r as StreamedContent
     }

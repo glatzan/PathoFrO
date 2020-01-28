@@ -114,6 +114,7 @@ open class PDFCreator(val workDirectory: String = services().pathoConfig.fileSet
         localProcessBuilder.redirectErrorStream(true)
         localProcessBuilder.directory(services().mediaRepository.getFileForPath(workDirectory))
 
+        logger.debug("Running pdflatex ${parameter1}, ${parameter2} , ${parameter3}, ${parameter4}, ${parameter5} ")
         val loops = 2
 
         for (i in 1..loops) {

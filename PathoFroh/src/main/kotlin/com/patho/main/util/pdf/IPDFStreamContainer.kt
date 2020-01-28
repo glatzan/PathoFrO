@@ -1,6 +1,5 @@
 package com.patho.main.util.pdf
 
-import com.patho.main.config.PathoConfig
 import com.patho.main.model.PDFContainer
 import com.patho.main.service.impl.SpringContextBridge
 import org.primefaces.model.DefaultStreamedContent
@@ -55,7 +54,7 @@ interface IPDFStreamContainer {
     fun getPDFStream(): StreamedContent {
         val t = displayPDF
         val r = getStream(t?.path ?: "", t?.name ?: "", "application/pdf")
-                ?: getStream(PathoConfig.PDF_NOT_FOUND_PDF, "", "application/pdf")
+                ?: getStream(SpringContextBridge.services().pathoConfig.pdfErrorFiles.pdfNotFoundPDF, "", "application/pdf")
 
         return r as StreamedContent
     }
@@ -96,7 +95,7 @@ interface IPDFStreamContainer {
             val file = if (pdf?.path != null && SpringContextBridge.services().mediaRepository.isFile(pdf.path))
                 SpringContextBridge.services().mediaRepository.getBytes(pdf.path)
             else
-                SpringContextBridge.services().mediaRepository.getBytes(PathoConfig.PDF_NOT_FOUND_PDF)
+                SpringContextBridge.services().mediaRepository.getBytes(SpringContextBridge.services().pathoConfig.pdfErrorFiles.pdfNotFoundPDF)
 
             // Init servlet response.
             response.reset()
