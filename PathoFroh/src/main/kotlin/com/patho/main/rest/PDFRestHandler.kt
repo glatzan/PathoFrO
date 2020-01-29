@@ -15,12 +15,13 @@ import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping(value = ["/data"])
+@RequestMapping(value = ["/rest"])
 open class PDFRestHandler @Autowired constructor(
         private val patientRepository: PatientRepository,
         private val taskRepository: TaskRepository,
@@ -32,6 +33,7 @@ open class PDFRestHandler @Autowired constructor(
     override fun loadHandler() {
     }
 
+    @RequestMapping(value = ["/pdf"], method = [RequestMethod.POST])
     open fun handlePDFUpload(@RequestParam("file") file: MultipartFile,
                              @RequestParam(value = "piz", required = false) piz: String = "",
                              @RequestParam(value = "taskID", required = false) caseID: String = "",

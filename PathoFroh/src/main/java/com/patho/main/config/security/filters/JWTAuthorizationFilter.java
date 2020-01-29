@@ -34,7 +34,6 @@ public class JWTAuthorizationFilter extends AbstractAuthenticationProcessingFilt
         this.tokenPrefix = ctx.getEnvironment().getProperty("patho.jwt.tokenPrefix");
         this.headerString = ctx.getEnvironment().getProperty("patho.jwt.headerString");
 
-        System.out.println("tuuuuuuuuuuuuu " + tokenPrefix + " " + headerString);
         setAuthenticationFailureHandler(failureHandler);
         setAuthenticationManager(authenticationManager);
 
