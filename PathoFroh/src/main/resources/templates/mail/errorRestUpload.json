@@ -1,0 +1,4 @@
+{
+	"subject": "Fehler beim Rest-Datenupload",
+	"body": "Reason: $reason \r\n\r\n PIZ: $piz \r\n CaseID: $caseID \r\n FileName: $fileName \r\n Type: $documentType"
+}

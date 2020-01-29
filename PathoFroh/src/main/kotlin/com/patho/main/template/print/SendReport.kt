@@ -1,10 +1,11 @@
 package com.patho.main.template.print
 
 import com.patho.main.model.PDFContainer
+import com.patho.main.model.transitory.PDFContainerLoaded
+import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocument
 import com.patho.main.util.pdf.creator.PDFCreator
 import com.patho.main.util.pdf.creator.PDFManipulator
-import com.patho.main.util.print.LoadedPrintPDFBearer
 import com.patho.main.util.report.ui.ReportIntentNotificationUIContainer
 import org.apache.velocity.context.Context
 import java.util.*
@@ -62,24 +63,29 @@ class SendReport(printDocument: PrintDocument) : PrintDocument(printDocument) {
     }
 
     override fun onAfterPDFCreation(container: PDFContainer, creator: PDFCreator): PDFContainer {
-        var container = container
-        val attachPdf = ArrayList<LoadedPrintPDFBearer>()
+        val attachPdf = ArrayList<PDFContainerLoaded>()
 
-        attachPdf.add(LoadedPrintPDFBearer(container))
+        attachPdf.add(PDFContainerLoaded(container))
 
         if (useMail && mails.isEmpty())
-            attachPdf.addAll(mails.filter { p -> p.pdf != null }.map { LoadedPrintPDFBearer(it.pdf!!) })
+            attachPdf.addAll(mails.filter { p -> p.pdf != null }.map { PDFContainerLoaded(it.pdf!!) })
 
         if (useFax && faxes.isEmpty())
-            attachPdf.addAll(faxes.filter { p -> p.pdf != null }.map { LoadedPrintPDFBearer(it.pdf!!) })
+            attachPdf.addAll(faxes.filter { p -> p.pdf != null }.map { PDFContainerLoaded(it.pdf!!) })
 
         if (useLetters && letters.isEmpty())
-            attachPdf.addAll(letters.filter { p -> p.pdf != null }.map { LoadedPrintPDFBearer(it.pdf!!) })
+            attachPdf.addAll(letters.filter { p -> p.pdf != null }.map { PDFContainerLoaded(it.pdf!!) })
 
         if (usePhone && phonenumbers.isEmpty())
-            attachPdf.addAll(phonenumbers.filter { p -> p.pdf != null }.map { LoadedPrintPDFBearer(it.pdf!!) })
+            attachPdf.addAll(phonenumbers.filter { p -> p.pdf != null }.map { PDFContainerLoaded(it.pdf!!) })
 
-        container = PDFManipulator.mergePDFs(container, attachPdf)
+        val result = PDFManipulator.mergePDFs(attachPdf, container.isThumbnailPreset)
+
+        SpringContextBridge.services().mediaRepository.saveBytes(result.pdfData, container.path)
+
+        val thumbnailData = result.thumbnailData
+        if (container.isThumbnailPreset && thumbnailData != null)
+            SpringContextBridge.services().mediaRepository.saveBytes(thumbnailData, container.thumbnail)
 
         return container
     }

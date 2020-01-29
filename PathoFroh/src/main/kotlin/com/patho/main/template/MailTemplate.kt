@@ -42,12 +42,6 @@ open class MailTemplate : AbstractTemplate {
      */
     var finalBody: String = ""
 
-    /**
-     * Returns the mail type as an enum object
-     */
-    val documentType
-        get() = MailType.fromString(type);
-
     constructor()
 
     constructor(mailTemplate: MailTemplate) {
@@ -66,8 +60,8 @@ open class MailTemplate : AbstractTemplate {
     /**
      * Makes clone public
      */
-    override fun clone(): Any {
-        return super.clone()
+    public override fun clone(): Any {
+        return super<AbstractTemplate>.clone()
     }
 
     /**

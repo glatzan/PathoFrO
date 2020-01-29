@@ -23,9 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.awt.image.BufferedImage
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.util.*
+import javax.imageio.ImageIO
 
 
 @Service()
@@ -322,6 +324,14 @@ open class PDFService @Autowired constructor(
     }
 
     /**
+     * Generates a thumbnail from a byteArry (pdf content). Reads pdf from disk
+     */
+    @Transactional
+    open fun generateThumbnail(content: ByteArray, pageNo: Int): BufferedImage? {
+        return generateThumbnail(content, pageNo, SpringContextBridge.services().pathoConfig.fileSettings.thumbnailDPI)
+    }
+
+    /**
      * Generates a thumbnail from a byteArray (pdf content)
      */
     @Transactional
@@ -341,6 +351,16 @@ open class PDFService @Autowired constructor(
             }
         }
         return null
+    }
+
+    /**
+     * Returns an images as an bytearray
+     */
+    open fun thumbnailToByteArray(image: BufferedImage): ByteArray {
+        val baos = ByteArrayOutputStream()
+        ImageIO.write(image, "png", baos)
+        baos.flush()
+        return baos.toByteArray()
     }
 
     /**

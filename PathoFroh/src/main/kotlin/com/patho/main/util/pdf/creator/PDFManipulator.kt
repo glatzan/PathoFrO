@@ -1,65 +1,69 @@
 package com.patho.main.util.pdf.creator
 
-import com.lowagie.text.Document
-import com.lowagie.text.DocumentException
-import com.lowagie.text.pdf.PdfReader
-import com.lowagie.text.pdf.PdfWriter
 import com.patho.main.model.PDFContainer
+import com.patho.main.model.transitory.PDFContainerLoaded
 import com.patho.main.service.impl.SpringContextBridge.Companion.services
 import com.patho.main.template.PrintDocumentType
-import com.patho.main.util.print.LoadedPrintPDFBearer
+import com.patho.main.util.exceptions.PDFMergeException
+import com.patho.main.util.exceptions.ThumbnailCreateException
+import org.apache.pdfbox.multipdf.PDFMergerUtility
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.slf4j.LoggerFactory
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.IOException
+
 
 class PDFManipulator {
 
     companion object {
 
+        private val logger = LoggerFactory.getLogger(this.javaClass)
+
+        @JvmStatic
+        fun mergePDFs(containers: List<PDFContainerLoaded>, createThumbnail: Boolean): PDFContainerLoaded {
+            val loadedPDFs = containers.map { PDFContainerLoaded(it) }
+            return mergeLoadedPDFs(loadedPDFs, createThumbnail)
+        }
+
         /**
          * Merges a list of loaded pdfs and saves them.
          */
         @JvmStatic
-        fun mergePDFs(target: PDFContainer, containers: List<LoadedPrintPDFBearer>): PDFContainer {
-            val loadedContainer: LoadedPrintPDFBearer? = mergePDFs(containers, "", target.type)
-                    ?: throw IOException("Could not merge PDFs")
+        fun mergeLoadedPDFs(containers: List<PDFContainerLoaded>, createThumbnail: Boolean): PDFContainerLoaded {
 
-            services().mediaRepository.saveBytes(loadedContainer?.pdfData!!, target.path)
+            val result = mergePDFs(containers, "", PrintDocumentType.UNKNOWN)
 
-            if (target.thumbnail.isNotEmpty()) services().pdfService.generateAndSaveThumbnail(loadedContainer?.pdfData!!, target.thumbnail)
+            if (result.pdfData.isEmpty()) {
+                logger.error("Error while merging pdfs!")
+                throw PDFMergeException()
+            }
 
-            return target
+            if (createThumbnail) {
+                val img = services().pdfService.generateThumbnail(result.pdfData, 0)
+                if (img != null)
+                    result.thumbnailData = services().pdfService.thumbnailToByteArray(img)
+                else {
+                    logger.error("Error while creating thumbnail!")
+                    throw ThumbnailCreateException()
+                }
+            }
+            return PDFContainerLoaded(PrintDocumentType.UNKNOWN, "", result.pdfData, result.thumbnailData)
         }
+
 
         /**
          * Merges a list of loaded pdfs.
          */
         @JvmStatic
-        fun mergePDFs(containers: List<LoadedPrintPDFBearer>, name: String, type: PrintDocumentType): LoadedPrintPDFBearer? {
-            return try {
-                val document = Document()
-                val out = ByteArrayOutputStream()
-                val writer = PdfWriter.getInstance(document, out)
-                document.open()
-                val cb = writer.directContent
-                for (pdfContainer in containers) {
-                    val pdfReader = PdfReader(pdfContainer.pdfData)
-                    for (i in 1..pdfReader.numberOfPages) {
-                        document.newPage()
-                        // import the page from source pdf
-                        val page = writer.getImportedPage(pdfReader, i)
-                        // add the page to the destination pdf
-                        cb.addTemplate(page, 0f, 0f)
-                    }
-                }
-                document.close()
-                LoadedPrintPDFBearer(type!!, name!!, out.toByteArray(), null)
-            } catch (e: DocumentException) {
-                e.printStackTrace()
-                null
-            } catch (e: IOException) {
-                e.printStackTrace()
-                null
-            }
+        fun mergePDFs(containers: List<PDFContainerLoaded>, name: String, type: PrintDocumentType): PDFContainerLoaded {
+            val outPut = ByteArrayOutputStream()
+
+            val merger = PDFMergerUtility()
+            merger.destinationStream = outPut
+            merger.addSources(containers.map { ByteArrayInputStream(it.pdfData) })
+            merger.mergeDocuments();
+
+            return PDFContainerLoaded(type, name, outPut.toByteArray(), null)
         }
 
 
@@ -67,15 +71,12 @@ class PDFManipulator {
          * Counts pages of the pdf
          */
         @JvmStatic
-        fun countPDFPages(container: LoadedPrintPDFBearer): Int {
-            return try {
-                val pdfReader = PdfReader(container.pdfData)
-                pdfReader.close()
-                pdfReader.numberOfPages
-            } catch (e: IOException) {
-                e.printStackTrace()
-                0
-            }
+        fun countPDFPages(container: PDFContainerLoaded): Int {
+            val doc: PDDocument = PDDocument.load(ByteArrayInputStream(container.pdfData))
+            val count = doc.numberOfPages
+            logger.debug("Counted $count pages!!")
+            doc.close()
+            return count
         }
 
     }

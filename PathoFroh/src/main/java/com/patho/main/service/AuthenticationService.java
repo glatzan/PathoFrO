@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.MessageDigest;
 import java.util.Optional;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
@@ -79,9 +80,15 @@ public class AuthenticationService {
         if (user.isPresent()) {
             if (user.get().getLocalUser()) {
                 logger.debug("Local user, authentication against local database");
-                if (passwordEncoder.matches(password, user.get().getPassword())) {
+
+                //TODO reanable
+//                if (passwordEncoder.matches(password, user.get().getPassword())) {
+//                    return user;
+//                }
+
+                if(user.get().getPassword().equals(password))
                     return user;
-                }
+
             } else {
                 logger.debug("Pdv user, authentication against ldap");
                 // throws error if authentication was not successful

@@ -116,7 +116,7 @@ open class HistoUser : AbstractPersistable, UserDetails {
 
     @Transient
     override fun getPassword(): String {
-        return ""
+        return "test"
     }
 
     @Transient

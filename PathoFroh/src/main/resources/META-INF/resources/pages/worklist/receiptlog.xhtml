@@ -177,10 +177,10 @@
                     <h:panelGrid columns="2"
                                  styleClass="listingHistoHiddenTableContainer">
                         <p:inputText disabled="true"
-                                     value="#{diagnosisView.task.taskID}"/>
+                                     value="#{receiptLogView.task.taskID}"/>
                         <p:commandLink title="#{msg['body.diagnosis.taskNumber.change']}"
                                        rendered="#{userService.userHasPermission('TASK_EDIT_ID')}"
-                                       disabled="#{!diagnosisView.task.taskStatus.editable}"
+                                       disabled="#{!receiptLogView.task.taskStatus.editable}"
                                        actionListener="#{dialog.changeTaskIDDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
                             <i class="fa fa-fw fa-cog"/>
                             <p:ajax event="dialogReturn"

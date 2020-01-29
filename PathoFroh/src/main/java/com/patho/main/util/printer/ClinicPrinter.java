@@ -3,11 +3,11 @@ package com.patho.main.util.printer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.patho.main.model.PDFContainer;
+import com.patho.main.model.transitory.PDFContainerLoaded;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.template.PrintDocument;
 import com.patho.main.template.PrintDocumentType;
 import com.patho.main.util.helper.HistoUtil;
-import com.patho.main.util.pdf.creator.PDFCreator;
 import com.patho.main.util.pdf.PrintOrder;
 import com.patho.main.util.pdf.creator.PDFManipulator;
 import com.patho.main.util.print.LoadedPrintPDFBearer;
@@ -22,7 +22,7 @@ import org.cups4j.PrintJob;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -105,23 +105,24 @@ public class ClinicPrinter extends AbstractPrinter {
 
     public boolean print(PrintOrder printOrder) {
         logger.debug("Printing xtimes: " + printOrder.getCopies());
+        // adding addition
+        // al page if duplex print an odd pages are provided
+        if (PDFManipulator.countPDFPages((PDFContainerLoaded) printOrder.getPdfContainer().getPdfContainer()) % 2 != 0 && printOrder.isDuplex()) {
 
-        // adding additional page if duplex print an odd pages are provided
-        if (PDFManipulator.countPDFPages(printOrder.getPdfContainer()) % 2 != 0 && printOrder.isDuplex()) {
+            // mergin with empty page
+            ArrayList<PDFContainerLoaded> list = new ArrayList<PDFContainerLoaded>();
+            list.add((PDFContainerLoaded) printOrder.getPdfContainer().getPdfContainer());
+            list.add(new PDFContainerLoaded(new PDFContainer(PrintDocumentType.EMPTY, "",
+                    SpringContextBridge.services().getPathoConfig().getDefaultDocuments().getEmptyPage(), "")));
 
-            // Merging with empty page
-            LoadedPrintPDFBearer cont = PDFManipulator.mergePDFs(
-                    Arrays.asList(printOrder.getPdfContainer(),
-                            new LoadedPrintPDFBearer(new PDFContainer(PrintDocumentType.EMPTY, "",
-                                    SpringContextBridge.services().getPathoConfig().getDefaultDocuments().getEmptyPage(), ""))),
-                    "", PrintDocumentType.PRINT_DOCUMENT);
+            PDFContainerLoaded result = PDFManipulator.mergeLoadedPDFs(list, false);
 
-            printOrder.setPdfContainer(cont);
+            printOrder.setPdfContainer(new LoadedPrintPDFBearer(result, printOrder.getPdfContainer().getPrintDocument()));
 
             logger.debug("Printing in duplex mode, adding empty page at the end");
         }
 
-        PrintJob printJob = new PrintJob.Builder(new ByteArrayInputStream(printOrder.getPdfContainer().getPdfData()))
+        PrintJob printJob = new PrintJob.Builder(new ByteArrayInputStream(((PDFContainerLoaded) printOrder.getPdfContainer().getPdfContainer()).getPdfData()))
                 .duplex(printOrder.isDuplex()).copies(printOrder.getCopies()).build();
 
         if (HistoUtil.isNotNullOrEmpty(printOrder.getArgs())) {

@@ -86,7 +86,7 @@ open class PrintDocument : AbstractTemplate {
     /**
      * Makes clone public
      */
-    override open fun clone(): Any {
+    public open override fun clone(): Any {
         return super.clone()
     }
 
@@ -101,7 +101,7 @@ open class PrintDocument : AbstractTemplate {
      * Initializes values for the velocity template engine. Generates a
      * final document version and saves this version into finalContent
      */
-    override fun initialize(content: HashMap<String, Any?>): Pair<out PrintDocument, Context> {
+    override fun initialize(content: HashMap<String, Any?>): Pair<PrintDocument, Context> {
         val context = super.initialize(content).second
 
         /* now render the template into a StringWriter */

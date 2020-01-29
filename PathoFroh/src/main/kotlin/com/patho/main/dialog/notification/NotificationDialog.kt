@@ -357,7 +357,7 @@ class NotificationDialog @Autowired constructor(
 
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmailDocument).orElse(null)
 
-            mailTemplate = mailRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail).orElse(null)
+            mailTemplate = mailRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail)
 
             mailTemplate?.initialize(
                     DocumentToken("patient", task.patient),

@@ -38,3 +38,6 @@ WorklistSearchExtended
 
 -> printdialog dos not show physicians
 -> custom address for physician will not work -> printDialog.selectedTemplate.onCustomAddressReturn
+-> birthday is mandatory in physician settings dialog
+-> change task storage to GlobalTaskBearer
+-> fix sendreport

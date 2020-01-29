@@ -23,3 +23,17 @@ class TemplateNotFoundException : DialogException("Template not found",
 class PDFCreationFailedException : DialogException("PDF could not be created",
         SpringContextBridge.services().resourceBundle["exceptions.pdfCreationFailed.headline"]
         , SpringContextBridge.services().resourceBundle["exceptions.pdfCreationFailed.text"])
+
+/**
+ * Exception is thrown if pdf merge failed
+ */
+class PDFMergeException : DialogException("PDF could not merged",
+        SpringContextBridge.services().resourceBundle["exceptions.pdfMergeException.headline"]
+        , SpringContextBridge.services().resourceBundle["exceptions.pdfMergeException.text"])
+
+/**
+ * Exception is thrown if thumbnail could not be created
+ */
+class ThumbnailCreateException : DialogException("Thumbnail could not be created",
+        SpringContextBridge.services().resourceBundle["exceptions.pdfMergeException.headline"]
+        , SpringContextBridge.services().resourceBundle["exceptions.pdfMergeException.text"])

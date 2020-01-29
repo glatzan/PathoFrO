@@ -3,6 +3,7 @@ package com.patho.main.config
 import com.patho.main.common.ContactRole
 import com.patho.main.model.patient.notification.NotificationTyp
 import com.patho.main.repository.miscellaneous.MediaRepository
+import com.patho.main.template.PrintDocumentType
 import com.patho.main.util.config.VersionContainer
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,9 +34,11 @@ public open class PathoConfig @Autowired @Lazy constructor(
 
     var pdfErrorFiles: PDFErrorFiles = PDFErrorFiles()
 
-    init {
-        fileSettings = FileSettings();
-    }
+    var externalDocumentMapper : MutableList<ExternalDocumentMapper> = mutableListOf<ExternalDocumentMapper>()
+
+//    init {
+//        fileSettings = FileSettings();
+//    }
 
     /**
      * Container for providing version information
@@ -279,6 +282,11 @@ public open class PathoConfig @Autowired @Lazy constructor(
          * Test page for cups printer
          */
         var cupsPrinterTestPage: String? = null
+
+        /**
+         * Default email for rest upload error
+         */
+        var restUploadErrorEmail : Long = 0
     }
 
     class ProgramInfo {
@@ -326,5 +334,9 @@ public open class PathoConfig @Autowired @Lazy constructor(
         var renderErrorPDF = ""
     }
 
+    class ExternalDocumentMapper{
+        lateinit var externalIdentifier : String
+        lateinit var internalIdentifier : PrintDocumentType
+    }
 
 }

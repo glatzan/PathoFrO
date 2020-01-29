@@ -13,6 +13,17 @@ server:
     session:
       timeout: 8H
 spring:
+  mail:
+    host: smtp.ukl.uni-freiburg.de
+    port: 465
+    properties:
+      mail:
+        debug: true
+        smtp:
+          starttls.enable: true
+          ssl.trust: smtp.ukl.uni-freiburg.de
+          auth: false
+    protocol: smtps
   main:
     allow-bean-definition-overriding: true
   servlet:
@@ -127,10 +138,6 @@ patho:
   settings:
     ####### MAIL #######
     mailSettings:
-      server: smtp.ukl.uni-freiburg.de
-      port: 465
-      ssl: true
-      debug: false
       systemMail: augenklinik.histologie@uniklinik-freiburg.de
       systemName: Histologisches Labor der Augenklinik Freiburg
       adminAddresses:
@@ -139,25 +146,30 @@ patho:
         - andreas.glatz@uniklinik-freiburg.de
     mails:
       - id: 0
-        templateName: org.histo.template.mail.SuccessUnlockMail
+        templateName: org.histo.template.MailTemplate
         defaultOfType: true
         name: Benutzer-Freischaltung erfolgt
-        content: workDirectory:templates/mail/successUnlock.txt
+        content: fileRepository:templates/mail/successUnlock.json
       - id: 1
-        templateName: org.histo.template.mail.RequestUnlockMail
+        templateName: org.histo.template.MailTemplate
         name: Benutzer-Freischaltung erbeten
         defaultOfType: true
-        content: workDirectory:templates/mail/requestUnlock.txt
+        content: fileRepository:templates/mail/requestUnlock.json
       - id: 2
-        templateName: org.histo.template.mail.DiagnosisReportMail
+        templateName: org.histo.template.MailTemplate
         name: Diagnose-Benachrichtigung
         defaultOfType: true
-        content: workDirectory:templates/mail/diagnosisReport.txt
+        content: fileRepository:templates/mail/diagnosisReport.json
       - id: 3
-        templateName: org.histo.template.mail.ErrorMail
+        templateName: org.histo.template.MailTemplate
         name: Fehlermeldung!
         defaultOfType: true
-        content: workDirectory:templates/mail/error.txt
+        content: fileRepository:templates/mail/error.json
+      - id: 4
+        templateName: org.histo.template.MailTemplate
+        name: Fehler beim Upload eines Dokuments!
+        defaultOfType: true
+        content: fileRepository:templates/mail/errorRestUpload.json
     fileSettings:
       thumbnailDPI: 50
       fileRepository: file:D:/patho/
@@ -170,13 +182,16 @@ patho:
       copyOnFirstStartToWorkDirectory:
         -
           source: classpath:templates/print/*
-          target: workDirectory:templates/print/
+          target: fileRepository:templates/print/
         -
           source: classpath:templates/mail/*
-          target: workDirectory:templates/mail/
+          target: fileRepository:templates/mail/
         -
           source: classpath:templates/print_label/*
-          target: workDirectory:templates/print_label/
+          target: fileRepository:templates/print_label/
+        -
+          source: classpath:templates/print/_*
+          target: "workDirectory:"
       cleanup: false
       keepErrorFiles: true
     pdfErrorFiles:
@@ -198,9 +213,10 @@ patho:
       slideLabelDocument: 100
       slideLableTestDocument: 150
       printerTestDocument: 0
-      emptyPage: workDirectory:templates/print/emptyPage.pdf
+      emptyPage: fileRepository:templates/print/emptyPage.pdf
       lablePrinterTestPage: test.zpl
-      cupsPrinterTestPage: workDirectory:templates/print/testPage.pdf
+      cupsPrinterTestPage: fileRepository:templates/print/testPage.pdf
+      restUploadErrorEmail: 4
     defaultNotification:
       defaultNotifications:
         - role: SURGEON
@@ -216,11 +232,16 @@ patho:
       phoneRegex: "^\\s*(?:[\\+#]?(\\d{1,3}))?([-. ()/\\\\]*(\\d*))*?\\s*$"
     schedule:
       pdfCleanupCron: '5 21 * * * *'
+    externalDocumentMapper:
+      -
+        externalIdentifier: 60114293
+        internalIdentifier: U_REPORT_COMPLETED
+
     ####### Print Documents #######
     documents:
       - id: 0
         name: Eingangsbogen
-        content: workDirectory:templates/print/USchein_full.tex
+        content: fileRepository:templates/print/USchein_full.tex
         alternateContent:
         type: U_REPORT
         attributes:
@@ -232,7 +253,7 @@ patho:
         sharedContextGroup: 2
       - id: 1
         name: Eingangsbogen bedrucken
-        content: workDirectory:templates/print/USchein_empty.tex
+        content: fileRepository:templates/print/USchein_empty.tex
         alternateContent: ""
         type: U_REPORT_EMTY
         attributes:
@@ -244,7 +265,7 @@ patho:
         sharedContextGroup: 2
       - id: 2
         name: Eingangsbogen bedrucken, umgekehrt
-        content: workDirectory:templates/print/USchein_empty_rotated180.tex
+        content: fileRepository:templates/print/USchein_empty_rotated180.tex
         alternateContent: ""
         type: U_REPORT_EMTY
         attributes: media:keyword:default,tray1
@@ -256,7 +277,7 @@ patho:
         sharedContextGroup: 2
       - id: 10
         name: Befundbericht
-        content: workDirectory:templates/print/Report_Intern.tex
+        content: fileRepository:templates/print/Report_Intern.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT
         attributes: sides:keyword:one-side
@@ -270,7 +291,7 @@ patho:
         sharedContextGroup: 1
       - id: 11
         name: Befundbericht - ohne Logo
-        content: workDirectory:templates/print/Report_Intern_noLogo.tex
+        content: fileRepository:templates/print/Report_Intern_noLogo.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT
         attributes: "sides:keyword:one-side#media:keyword:default,tray2"
@@ -284,7 +305,7 @@ patho:
         sharedContextGroup: 1
       - id: 20
         name: Befundbericht extern
-        content: workDirectory:templates/print/Report_Extern.tex
+        content: fileRepository:templates/print/Report_Extern.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT_EXTERN
         attributes: sides:keyword:one-side
@@ -298,7 +319,7 @@ patho:
         sharedContextGroup: 1
       - id: 21
         name: Befundbericht extern - ohne Logo
-        content: workDirectory:templates/print/Report_Extern_noLogo.tex
+        content: fileRepository:templates/print/Report_Extern_noLogo.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT_EXTERN
         attributes: "sides:keyword:one-side#media:keyword:default,tray2"
@@ -312,7 +333,7 @@ patho:
         sharedContextGroup: 1
       - id: 50
         name: Konsil
-        content: workDirectory:templates/print/council.tex
+        content: fileRepository:templates/print/council.tex
         alternateContent: ""
         type: COUNCIL_REQUEST
         attributes:
@@ -323,7 +344,7 @@ patho:
         hidden: false
       - id: 100
         name: Default Slide Lable
-        content: workDirectory:templates/print_label/defaultLable.zpl
+        content: fileRepository:templates/print_label/defaultLable.zpl
         alternateContent: ""
         type: LABLE
         attributes:
@@ -333,7 +354,7 @@ patho:
         hidden: false
       - id: 150
         name: Test Slide Lable
-        content: workDirectory:templates/print_label/testLable.zpl
+        content: fileRepository:templates/print_label/testLable.zpl
         alternateContent: ""
         type: TEST_LABLE
         attributes:
@@ -343,7 +364,7 @@ patho:
         hidden: false
       - id: 1000
         name: Send Report
-        content: workDirectory:templates/print/SendReport.tex
+        content: fileRepository:templates/print/SendReport.tex
         alternateContent: ""
         attributes:
         type: NOTIFICATION_SEND_REPORT

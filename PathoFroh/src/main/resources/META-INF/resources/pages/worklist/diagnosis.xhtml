@@ -458,7 +458,7 @@
                                          onfocus="disabledEventPropagation(event);"
                                          disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                          value="#{revision.text}">
-                            <p:ajax event="keyup" process="@this" delay="1000"
+                            <p:ajax event="keyup" process="@this" delay="250"
                                     listener="#{diagnosisView.save(revision.task, 'log.diagnosisRevision.edit.histologicalRecord',revision,revision.text)}"/>
                         </p:inputTextarea>
                     </h:panelGroup>

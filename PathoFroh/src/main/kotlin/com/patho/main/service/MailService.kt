@@ -1,105 +1,55 @@
 package com.patho.main.service
 
 import com.patho.main.config.PathoConfig
+import com.patho.main.model.transitory.PDFContainerLoaded
 import com.patho.main.repository.miscellaneous.MediaRepository
 import com.patho.main.template.MailTemplate
-import org.apache.commons.mail.EmailException
-import org.apache.commons.mail.MultiPartEmail
-import org.apache.commons.mail.SimpleEmail
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
-import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.util.*
-import javax.mail.util.ByteArrayDataSource
 
 @Service
 class MailService @Autowired constructor(
         private val mediaRepository: MediaRepository,
+        private val emailSender: JavaMailSender,
         private val pathoConfig: PathoConfig) : AbstractService() {
 
     fun sendErrorMail(mail: MailTemplate): Boolean {
-        return sendMail(pathoConfig.mailSettings.errorAddresses, pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, mail)
+        return sendMail(pathoConfig.mailSettings.errorAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, mail)
     }
 
     fun sendAdminMail(mail: MailTemplate): Boolean {
-        return sendMail(pathoConfig.mailSettings.adminAddresses, pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, mail)
+        return sendMail(pathoConfig.mailSettings.adminAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, mail)
     }
 
     fun sendMail(mailTo: String, template: MailTemplate): Boolean {
-        return sendMail(arrayOf(mailTo), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, template)
+        return sendMail(listOf(mailTo), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, template)
     }
 
     fun sendMail(mailTo: List<String>, template: MailTemplate): Boolean {
         return sendMail(mailTo, pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, template)
     }
 
-    fun sendMail(mailTo: Array<String>, mailFrom: String, nameFrom: String, mail: MailTemplate): Boolean {
-        return sendMail(Arrays.asList(*mailTo), mailFrom, nameFrom, mail)
-    }
+    fun sendMail(mailTo: List<String>, mailFrom: String, systemName: String, mail: MailTemplate): Boolean {
 
-    fun sendMail(mailTo: List<String>, mailFrom: String, nameFrom: String, mail: MailTemplate): Boolean {
+        val message = emailSender.createMimeMessage()
+        val helper = MimeMessageHelper(message, true)
 
-        if (mail.attachment == null) {
-            val email = SimpleEmail()
+        helper.setTo(mailTo.toTypedArray())
+        helper.setSubject(mail.finalSubject)
+        helper.setFrom(mailFrom, systemName)
+        helper.setText(mail.finalBody)
 
-            email.hostName = pathoConfig.mailSettings.server
-            email.setDebug(pathoConfig.mailSettings.debug)
-            email.setSmtpPort(pathoConfig.mailSettings.port)
-            email.isSSLOnConnect = pathoConfig.mailSettings.ssl
-
-            try {
-                for (to in mailTo) {
-                    email.addTo(to)
-                }
-                email.setFrom(mailFrom, nameFrom)
-                email.subject = mail.subject
-                email.setMsg(mail.body)
-                email.send()
-            } catch (e: EmailException) {
-                e.printStackTrace()
-                return false
-            }
-
-        } else {
-            // Create the email message
-            val email = MultiPartEmail()
-
-            email.hostName = pathoConfig.mailSettings.server
-            email.setDebug(pathoConfig.mailSettings.debug)
-            email.setSmtpPort(pathoConfig.mailSettings.port)
-            email.isSSLOnConnect = pathoConfig.mailSettings.ssl
-
-            try {
-                for (to in mailTo) {
-                    email.addTo(to)
-                }
-                email.setFrom(mailFrom, nameFrom)
-
-                email.subject = mail.subject
-                email.setMsg(mail.body)
-
-                val `is` = ByteArrayInputStream(mediaRepository.getBytes(mail.attachment?.path as String))
-
-                val source = ByteArrayDataSource(`is`, "application/pdf")
-
-                // add the attachment
-                email.attach(source, mail.attachment?.name, "")
-
-                // send the email
-                email.send()
-
-                `is`.close()
-            } catch (e: EmailException) {
-                e.printStackTrace()
-                return false
-            } catch (e: IOException) {
-                e.printStackTrace()
-                return false
-            }
-
+        val attachment = mail.attachment
+        if (attachment != null) {
+            if (attachment is PDFContainerLoaded)
+                helper.addAttachment(attachment.name, ByteArrayResource(attachment.pdfData), "application/pdf")
+            else
+                helper.addAttachment(attachment.name, ByteArrayResource(mediaRepository.getBytes(mail.attachment!!.path)), "application/pdf")
         }
-
+        emailSender.send(message)
         return true
     }
 
