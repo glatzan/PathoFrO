@@ -55,7 +55,7 @@ open class PDFDeleteDialog @Autowired constructor(
         logger.debug("Deleting container")
         MessageHandler.sendGrowlMessagesAsResource("log.pdf.delete", "log.pdf.delete.text", container.name)
         services().pdfService.removeAndDeletePDF(parent, container)
-        hideDialog(ReloadEvent())
+        super.hideDialog(ReloadEvent())
     }
 
     override fun hideDialog() {

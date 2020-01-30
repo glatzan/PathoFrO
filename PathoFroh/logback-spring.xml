@@ -3,24 +3,12 @@
 
     <appender name="STDOUT"
               class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are by default assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
         <encoder>
-            <pattern>%relative [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n
-            </pattern>
+            <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="STDOUT_Patho"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are by default assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
-        <encoder>
-            <!-- <pattern>%relative [%thread] %highlight(%-5level) %magenta(%logger) - %msg %n -->
-            <pattern>%class - %msg %n
-            </pattern>
-        </encoder>
-    </appender>
-
-    <appender name="rollingFile"
+    <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -58,14 +46,16 @@
         <asynchronousSending>false</asynchronousSending>
     </appender>
 
-    <logger name="com.patho.main" level="debug" additivity="false">
+    <logger name="com.patho.main" level="trace" additivity="false">
+        <appender-ref ref="STDOUT"/>
         <appender-ref ref="MAIL"/>
-        <appender-ref ref="STDOUT_Patho"/>
+        <appender-ref ref="FILE" />
     </logger>
 
     <root level="info">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="MAIL"/>
+        <appender-ref ref="FILE" />
     </root>
 
 

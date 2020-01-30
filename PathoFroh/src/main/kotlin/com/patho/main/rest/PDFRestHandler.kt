@@ -34,16 +34,16 @@ open class PDFRestHandler @Autowired constructor(
     }
 
     @RequestMapping(value = ["/pdf"], method = [RequestMethod.POST])
-    open fun handlePDFUpload(@RequestParam("file") file: MultipartFile,
-                             @RequestParam(value = "piz", required = false) piz: String = "",
-                             @RequestParam(value = "taskID", required = false) caseID: String = "",
-                             @RequestParam(value = "fileName", required = false) fileName: String = "",
-                             @RequestParam(value = "documentType", required = false) documentType: String = ""): String {
+    open fun handlePDFUpload(@RequestParam(value = "user-file") file: MultipartFile,
+                             @RequestParam(value = "piz", required = false) piz: String? = "",
+                             @RequestParam(value = "caseID", required = false) caseID: String? = "",
+                             @RequestParam(value = "fileName", required = false) fileName: String? = "",
+                             @RequestParam(value = "documentType", required = false) documentType: String? = ""): String {
 
 
         if (!file.isEmpty) {
 
-            if (piz.isEmpty() && caseID.isEmpty()) {
+            if (piz.isNullOrEmpty() && caseID.isNullOrEmpty()) {
                 logger.error("Error: No Target for uploading the file was provided!")
                 //mailService.sendAdminMail()
                 return resourceBundle["rest.upload.error.noTarget"]
@@ -53,10 +53,10 @@ open class PDFRestHandler @Autowired constructor(
             var task: Task? = null
 
             // piz
-            if (piz.isNotEmpty()) {
+            if (!piz.isNullOrEmpty()) {
 
-                if (!piz.matches(Regex("[0-9]]{8,}"))) {
-                    logger.error("Error: No Target for uploading the file was provided!")
+                if (!piz.matches(Regex("[0-9]{8,}"))) {
+                    logger.error("Error: Piz does not match requirements = $piz!")
                     return resourceBundle["rest.upload.error.wrongPiz", piz]
                 }
 
@@ -64,14 +64,15 @@ open class PDFRestHandler @Autowired constructor(
                 val patientList = patientRepository.findByPiz(piz, true, true, true)
 
                 if (patientList.size == 0) {
-                    logger.error("Error: No Target for uploading the file was provided!")
+                    logger.error("Error: No Patient found!")
                     return resourceBundle["rest.upload.error.patientNotFound", piz]
                 }
 
                 patient = patientList.first()
             }
 
-            if (piz.isNotEmpty()) {
+            // case id
+            if (!caseID.isNullOrEmpty()) {
                 if (!caseID.matches(Regex("[0-9]{6,}"))) {
                     logger.error("Error: No Target for uploading the file was provided!")
                     return resourceBundle["rest.upload.error.wrongCaseID", caseID]
@@ -79,7 +80,12 @@ open class PDFRestHandler @Autowired constructor(
 
 
                 task = if (patient != null)
-                    patient.tasks.firstOrNull { it.taskID == caseID }
+                    if (patient.tasks.any { it.taskID == caseID }) {
+                        taskRepository.findByTaskID(caseID, false, false, true, false, false)
+                    } else {
+                        logger.error("Error: Task was not found. (Task ID: $caseID)")
+                        return resourceBundle["rest.upload.error.taskNotFound", caseID]
+                    }
                 else
                     taskRepository.findByTaskID(caseID, false, false, true, false, false)
 
@@ -89,7 +95,7 @@ open class PDFRestHandler @Autowired constructor(
                 }
             }
 
-            val document: PrintDocumentType? = if (documentType.isEmpty()) PrintDocumentType.UNKNOWN else pathoConfig.externalDocumentMapper.firstOrNull {
+            val document: PrintDocumentType? = if (documentType.isNullOrEmpty()) PrintDocumentType.UNKNOWN else pathoConfig.externalDocumentMapper.firstOrNull {
                 it.externalIdentifier == documentType
             }?.internalIdentifier
 
@@ -98,17 +104,25 @@ open class PDFRestHandler @Autowired constructor(
                 return resourceBundle["rest.upload.error.documentTypeNotRecognized", documentType]
             }
 
-            val name = if (fileName.isEmpty()) PrintDocument(document).generatedFileName else fileName
+            val name = if (fileName.isNullOrEmpty()) PrintDocument(document).generatedFileName else fileName
 
-            if (task != null)
-                pdfService.createPDFAndAddToDataList(task, file.bytes, true, name, document,
-                        "", "", task.fileRepositoryBase.path)
-            else if (patient != null) {
-                pdfService.createPDFAndAddToDataList(patient, file.bytes, true, name, document,
-                        "", "", patient.fileRepositoryBase.path)
-            } else {
-                logger.debug("Error: No Target for uploading the file was provided!")
-                return resourceBundle["rest.upload.error.noTarget"]
+            when {
+                task != null -> {
+                    pdfService.createPDFAndAddToDataList(task, file.bytes, true, name, document,
+                            "", "", task.fileRepositoryBase.path)
+                    logger.debug("Success: Upload to task = ${task.taskID} succeeded")
+                    return resourceBundle["rest.upload.success.task", task.taskID, name]
+                }
+                patient != null -> {
+                    pdfService.createPDFAndAddToDataList(patient, file.bytes, true, name, document,
+                            "", "", patient.fileRepositoryBase.path)
+                    logger.debug("Success: Upload to patient = ${patient.piz} succeeded")
+                    return resourceBundle["rest.upload.success.patient", patient.piz, name]
+                }
+                else -> {
+                    logger.debug("Error: No Target for uploading the file was provided!")
+                    return resourceBundle["rest.upload.error.noTarget"]
+                }
             }
         }
 

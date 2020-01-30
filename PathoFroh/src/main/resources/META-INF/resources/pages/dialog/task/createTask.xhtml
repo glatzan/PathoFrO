@@ -43,8 +43,8 @@
                     <h:panelGrid columns="2"
                                  styleClass="listingHistoHiddenTableContainer" id="taskIdContainer">
                         <p:inputText required="true" maxlength="6" id="taskIDInput"
-                                     validator="#{dialog.createTaskDialog.validateTaskID}"
-                                     value="#{dialog.createTaskDialog.taskData.taskID}">
+                                     validator="#{createTaskDialog.validateTaskID}"
+                                     value="#{createTaskDialog.taskData.taskID}">
                             <p:ajax delay="500" event="keyup" update="taskIdContainer"/>
                         </p:inputText>
                         <p:message for="taskIDInput" display="icon"
@@ -54,23 +54,23 @@
                     <!-- Task Date -->
                     <h:outputLabel value="#{msg['dialog.createTask.taskEDate']}"/>
                     <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
-                                value="#{dialog.createTaskDialog.taskData.receiptDate}">
+                                value="#{createTaskDialog.taskData.receiptDate}">
                     </p:calendar>
 
                     <!-- Auto nomenclature -->
                     <h:outputLabel value="#{msg['dialog.createTask.autoNomenclature']}"/>
                     <p:selectBooleanCheckbox id="autoNomenclature"
                                              title="#{msg['dialog.createTask.autoNomenclature.text']}"
-                                             value="#{dialog.createTaskDialog.taskData.useAutoNomenclature}">
+                                             value="#{createTaskDialog.taskData.useAutoNomenclature}">
                         <p:ajax update="sampleTable"
-                                listener="#{dialog.createTaskDialog.taskData.updateSampleNames()}"></p:ajax>
+                                listener="#{createTaskDialog.taskData.updateSampleNames()}"/>
                     </p:selectBooleanCheckbox>
 
 
                     <!-- priority -->
                     <h:outputLabel value="#{msg['dialog.createTask.priority']}"/>
                     <p:selectOneRadio
-                            value="#{dialog.createTaskDialog.taskData.taskPriority}">
+                            value="#{createTaskDialog.taskData.taskPriority}">
                         <f:selectItem itemLabel="#{msg['enum.taskPriority.LOW']}"
                                       itemValue="NONE"/>
                         <f:selectItem itemLabel="#{msg['enum.taskPriority.HIGHT']}"
@@ -78,7 +78,7 @@
                         <f:selectItem itemLabel="#{msg['enum.taskPriority.TIME']}"
                                       itemValue="TIME"/>
 
-                        <p:ajax update="@form" process="@form"></p:ajax>
+                        <p:ajax update="@form" process="@form"/>
                     </p:selectOneRadio>
 
                     <h:outputLabel value=""/>
@@ -89,8 +89,8 @@
                                 value="#{msg['dialog.createTask.priority.dueDate']}"/>
                         <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
                                     style="margin-left:10px"
-                                    disabled="#{dialog.createTaskDialog.taskData.taskPriority ne 'TIME'}"
-                                    value="#{dialog.createTaskDialog.taskData.dueDate}">
+                                    disabled="#{createTaskDialog.taskData.taskPriority ne 'TIME'}"
+                                    value="#{createTaskDialog.taskData.dueDate}">
                         </p:calendar>
                     </h:panelGrid>
                 </h:panelGrid>
@@ -108,10 +108,10 @@
                         <h:outputLabel
                                 value="#{msg['dialog.createTask.bioBank.informedConsent.signed']}"/>
                         <p:commandLink style="margin-left:5px;"
-                                       actionListener="#{pdfOrganizerDialog.initAndPrepareBean(dialog.createTaskDialog.patient).selectMode()}">
+                                       actionListener="#{pdfOrganizerDialog.initAndPrepareBean(createTaskDialog.patient).selectMode()}">
                             <p:ajax event="dialogReturn" update="@form" process="@form"
-                                    listener="#{dialog.createTaskDialog.taskData.bioBank.onMediaSelectReturn}"/>
-                            <i class="fa fa-search icon-grey"></i>
+                                    listener="#{createTaskDialog.taskData.bioBank.onMediaSelectReturn}"/>
+                            <i class="fa fa-search icon-grey"/>
                         </p:commandLink>
                     </h:panelGrid>
 
@@ -122,12 +122,12 @@
                     <h:panelGrid columns="2"
                                  styleClass="listingHistoHiddenTableContainer">
                         <p:commandLink
-                                rendered="#{dialog.createTaskDialog.taskData.bioBank.isPDFSelected()}"
-                                actionListener="#{pdfOrganizerDialog.initAndPrepareBean(dialog.createTaskDialog.patient).selectMode().setPDFToDisplay(dialog.createTaskDialog.taskData.bioBank.container)}">
+                                rendered="#{createTaskDialog.taskData.bioBank.isPDFSelected()}"
+                                actionListener="#{pdfOrganizerDialog.initAndPrepareBean(createTaskDialog.patient).selectMode().setPDFToDisplay(createTaskDialog.taskData.bioBank.container)}">
                             <p:ajax event="dialogReturn" update="@form" process="@form"
-                                    listener="#{dialog.createTaskDialog.taskData.bioBank.onMediaSelectReturn}"/>
+                                    listener="#{createTaskDialog.taskData.bioBank.onMediaSelectReturn}"/>
                             <h:outputLabel
-                                    value="#{dialog.createTaskDialog.taskData.bioBank.container.name}">
+                                    value="#{createTaskDialog.taskData.bioBank.container.name}">
                                 <f:converter converterId="org.histo.ui.TruncateConverter"/>
                                 <f:attribute name="truncateAt" value="35"/>
                                 <f:attribute name="continuationMark" value="..."/>
@@ -137,9 +137,9 @@
                         <!-- remove -->
                         <p:commandLink style="margin-left:5px;" update="@form"
                                        process="@form"
-                                       rendered="#{dialog.createTaskDialog.taskData.bioBank.isPDFSelected()}"
-                                       actionListener="#{dialog.createTaskDialog.taskData.bioBank.setContainer(null)}">
-                            <i class="fa fa-remove icon-grey"></i>
+                                       rendered="#{createTaskDialog.taskData.bioBank.isPDFSelected()}"
+                                       actionListener="#{createTaskDialog.taskData.bioBank.setContainer(null)}">
+                            <i class="fa fa-remove icon-grey"/>
                         </p:commandLink>
                     </h:panelGrid>
 
@@ -147,8 +147,8 @@
                     <h:outputLabel
                             value="#{msg['dialog.createTask.bioBank.informedConsent.type']}"/>
                     <p:selectOneMenu id="consentType" styleClass="smallInput"
-                                     value="#{dialog.createTaskDialog.taskData.bioBank.informedConsentType}"
-                                     disabled="#{!dialog.createTaskDialog.taskData.bioBank.isPDFSelected()}">
+                                     value="#{createTaskDialog.taskData.bioBank.informedConsentType}"
+                                     disabled="#{!createTaskDialog.taskData.bioBank.isPDFSelected()}">
                         <f:selectItems value="#{enumProvider.informedConsentTypes}"
                                        var="type"
                                        itemLabel="#{msg['enum.informedConsentType.'.concat(type)]}"
@@ -173,18 +173,18 @@
                              columnClasses="columnWidth150 columnHeading,">
 
                     <!-- external material -->
-                    <h:outputLabel value="#{msg['dialog.createTask.external']}"></h:outputLabel>
+                    <h:outputLabel value="#{msg['dialog.createTask.external']}"/>
                     <p:selectBooleanCheckbox
                             title="#{msg['dialog.createTask.external.text']}"
-                            value="#{dialog.createTaskDialog.taskData.externalSamples}">
+                            value="#{createTaskDialog.taskData.externalSamples}">
                         <p:ajax event="change" process="@form" update="@form"/>
                     </p:selectBooleanCheckbox>
 
                     <!-- external commentary  -->
-                    <h:outputLabel value="#{msg['dialog.createTask.external.return']}"></h:outputLabel>
+                    <h:outputLabel value="#{msg['dialog.createTask.external.return']}"/>
                     <p:inputTextarea rows="4" cols="35"
-                                     value="#{dialog.createTaskDialog.taskData.exnternalSampleCommentary}"
-                                     disabled="#{!dialog.createTaskDialog.taskData.externalSamples}"></p:inputTextarea>
+                                     value="#{createTaskDialog.taskData.externalSampleCommentary}"
+                                     disabled="#{!createTaskDialog.taskData.externalSamples}"/>
 
                 </h:panelGrid>
 
@@ -202,14 +202,14 @@
                         <h:panelGroup layout="block" style="float:right;">
                             <!-- add -->
                             <p:commandLink update="sampleTable" style="margin-left:5px;"
-                                           actionListener="#{dialog.createTaskDialog.taskData.addSample()}">
+                                           actionListener="#{createTaskDialog.taskData.addSample()}">
                                 <i class="fa fa-plus-square icon-grey"
                                    title="#{msg['dialog.createTask.sampels.remove']}"/>
                             </p:commandLink>
 
                             <!-- remove -->
                             <p:commandLink update="sampleTable"
-                                           actionListener="#{dialog.createTaskDialog.taskData.removeSample()}">
+                                           actionListener="#{createTaskDialog.taskData.removeSample()}">
                                 <i class="fa fa-minus-square icon-grey"
                                    title="#{msg['dialog.createTask.sampels.add']}"/>
                             </p:commandLink>
@@ -221,7 +221,7 @@
                                  id="sampleTable"
                                  columnClasses="columnWidth150 columnHeading columnTop">
                         <c:forEach var="sample" varStatus="sampleIndex"
-                                   items="#{dialog.createTaskDialog.taskData.samples}">
+                                   items="#{createTaskDialog.taskData.samples}">
 
                             <h:outputFormat value="#{msg['dialog.createTask.sample']}">
                                 <f:param value="#{sample.sampleID}"/>
@@ -254,7 +254,7 @@
                                             styleClass="histoOverlayPanel"
                                             for="materialName#{sampleIndex.index}" hideEffect="fade"
                                             hideEvent="none" showEvent="none">
-                                        <p:dataTable value="#{dialog.createTaskDialog.materialList}"
+                                        <p:dataTable value="#{createTaskDialog.materialList}"
                                                      var="item" styleClass="defaultHistoDataTable"
                                                      scrollable="true" scrollHeight="200" rowKey="#{item.id}"
                                                      filterDelay="50" selection="#{sample.materialPreset}"
@@ -297,19 +297,17 @@
 
                     <!-- confirm -->
                     <p:commandButton value="#{msg['general.create']}" update="@form"
+                                     actionListener="#{createTaskDialog.createAndHide()}"
                                      widgetVar="confirmBtn" process="@form" icon="fa fa-check-circle-o">
-                        <f:actionListener
-                                binding="#{dialog.createTaskDialog.createAndHide()}"></f:actionListener>
                     </p:commandButton>
 
                     <!-- print ureport -->
                     <p:commandButton
                             value="#{msg['dialog.createTask.button.print.UReport']}"
                             style="margin-left:20px !important;"
+                            actionListener="#{createTaskDialog.createPrintAndHide()}"
                             widgetVar="confirmAndPrintBtn" update="@form" process="@form"
                             icon="fa fa-print">
-                        <f:actionListener
-                                binding="#{dialog.createTaskDialog.createPrintAndHide()}"></f:actionListener>
                     </p:commandButton>
 
                     <!-- select printer -->
@@ -322,22 +320,21 @@
                         <f:selectItems value="#{printService.cupsPrinter.printer}"
                                        var="printer" itemLabel="#{printer.name}" itemValue="#{printer}"/>
 
-                        <p:ajax event="change" process="@this"></p:ajax>
+                        <p:ajax event="change" process="@this"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
 
                 <h:panelGrid columns="1" styleClass="right">
                     <!-- Abort button -->
                     <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
+                                     actionListener="#{createTaskDialog.hideDialog()}"
                                      widgetVar="abortBtn" immediate="true" icon="fa fa-times-circle">
-                        <f:actionListener
-                                binding="#{dialog.createTaskDialog.hideDialog()}"></f:actionListener>
                     </p:commandButton>
                 </h:panelGrid>
             </h:panelGrid>
         </div>
 
-        <ui:include src="../../../template/blockUi.xhtml"></ui:include>
+        <ui:include src="../../../template/blockUi.xhtml"/>
     </h:form>
 </h:body>
 </html>

@@ -706,6 +706,10 @@ alter table patient_aud drop column creationDate;
 update pdfcontainer set commentary = '' where commentary is NULL;
 update pdfcontainer set intern = '' where intern is NULL;
 
+/* add password field for local user */
+alter table histouser add column _password varchar(70);
+alter table histouser_aud add column _password varchar(70);
+
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien
 

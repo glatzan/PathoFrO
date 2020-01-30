@@ -20,7 +20,6 @@ public class JWTAuthorizationFailureHandler implements AuthenticationFailureHand
 
         String errorMessage = ExceptionUtils.getMessage(e);
 
-        System.out.println("hallo --- ss");
         sendError(httpServletResponse, HttpServletResponse.SC_UNAUTHORIZED, errorMessage, e);
     }
 

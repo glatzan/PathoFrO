@@ -14,7 +14,12 @@
     <p:outputPanel styleClass="bodyPannel">
         <!-- person mask -->
         <histo:personSettingGeneral
-                person="#{dialog.searchPatientDialog.externalPatientTab.patient.person}"/>
+                birthdayRequired="true"
+                genderRequired="true"
+                townRequired="true"
+                zipRequired="true"
+                streetRequired="true"
+                person="#{searchAndAddPatientDialog.externalPatientTab.patient.person}"/>
     </p:outputPanel>
 
     <div class="buttonContainer">
@@ -25,20 +30,22 @@
 
             <h:panelGrid columns="2" styleClass="right">
                 <!-- Add button -->
-                <p:commandButton
-                        actionListener="#{confirmExternalPatientDataDialog.initAndPrepareBean(dialog.searchPatientDialog.externalPatientTab.patient)}"
-                        value="#{msg['dialog.searchPatient.add.button.add']}"
-                        widgetVar="addExternalPatient" update="@form" process="@form"
-                        icon="fa fa-fw fa-user-plus" partialSubmit="true">
+                <p:commandButton id="addButton"
+                                 actionListener="#{confirmPatientDataDialog.initAndPrepareBean(searchAndAddPatientDialog.externalPatientTab.patient)}"
+                                 value="#{msg['dialog.searchPatient.add.button.add']}"
+                                 oncomplete="PF('addButton').enable();PF('closeBtn').enable()"
+                                 onclick="PF('addButton').disable();PF('closeBtn').disable()"
+                                 widgetVar="addExternalPatient" update="@form" process="@form"
+                                 icon="fa fa-fw fa-user-plus" partialSubmit="true">
                     <p:ajax event="dialogReturn" update="@form"
-                            listener="#{dialog.searchPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}"/>
+                            listener="#{searchAndAddPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}"/>
                 </p:commandButton>
 
                 <!-- Close Button -->
                 <p:commandButton value="#{msg['general.close']}"
                                  widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
                                  immediate="true"
-                                 actionListener="#{dialog.searchPatientDialog.hideDialog()}"/>
+                                 actionListener="#{searchAndAddPatientDialog.hideDialog()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </div>

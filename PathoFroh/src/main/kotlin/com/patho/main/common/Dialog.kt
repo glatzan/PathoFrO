@@ -4,7 +4,7 @@ enum class Dialog {
 
     WORKLIST_SEARCH("/pages/dialog/worklist/worklistSearch/worklistSearch", null, 1280, 720, false, false, true),                                                            // OK -> extended search missing, disable on load
     WORKLIST_EXPORT("/pages/dialog/export/exportDialog", null, 1024, 600, false, false, true), // 16:9
-    PATIENT_ADD("/pages/dialog/patient/searchPatient/searchPatient", null, 1024, 600, false, false, true),                                                                    // OK
+    PATIENT_ADD("/pages/dialog/patient/searchAndAddPatient/searchAndAddPatient", null, 1024, 600, false, false, true),                                                                    // OK
     PATIENT_DATA_CONFIRM("/pages/dialog/patient/confirmExternalPatientData/confirmExternalPatientData", null, 640, 360, false, false, true),                                // OK
     PATIENT_MERGE("/pages/dialog/patient/merge/mergePatient", null, 858, 484, false, false, true), // 16:9
     PATIENT_EDIT("/pages/dialog/patient/editPatient", null, 1024, 600, false, false, true), // 16:9

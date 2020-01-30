@@ -10,7 +10,11 @@
 
 <composite:interface>
     <composite:attribute name="person" required="true"/>
-    <!-- ContactRole[] allRoles; -->
+    <composite:attribute name="birthdayRequired" default="false"/>
+    <composite:attribute name="genderRequired" default="false"/>
+    <composite:attribute name="streetRequired" default="false"/>
+    <composite:attribute name="zipRequired" default="false"/>
+    <composite:attribute name="townRequired" default="false"/>
 </composite:interface>
 
 <composite:implementation>
@@ -39,7 +43,7 @@
         <!-- birthday -->
         <p:outputLabel
                 value="#{msg['component.personSettingsGeneral.birthday']}"/>
-        <p:calendar id="birthday" name="bday" autocomplete="bday"
+        <p:calendar id="birthday" name="bday" autocomplete="bday" required="#{cc.attrs.birthdayRequired}"
                     value="#{cc.attrs.person.birthday}" locale="de"
                     converter="localDateConverter"
                     navigator="true" pattern="dd.MM.yyyy" mask="true"/>
@@ -53,13 +57,14 @@
         <!-- gender -->
         <p:outputLabel
                 value="#{msg['component.personSettingsGeneral.gender']}"/>
-        <p:selectOneMenu style="width:100px" name="sex" autocomplete="sex"
+        <p:selectOneMenu style="width:100px" name="sex" autocomplete="sex" required="#{cc.attrs.genderRequired}"
                          value="#{cc.attrs.person.gender}">
             <f:selectItem
                     itemLabel="#{msg['component.personSettingsGeneral.gender.select']}"
                     itemValue="#{null}"/>
             <f:selectItem
                     itemLabel="#{msg['component.personSettingsGeneral.gender.unknown']}"
+                    noSelectionOption="true"
                     itemValue="UNKNOWN"/>
             <f:selectItem
                     itemLabel="#{msg['component.personSettingsGeneral.gender.male']}"
@@ -90,7 +95,7 @@
         <!-- street -->
         <p:outputLabel
                 value="#{msg['component.personSettingsGeneral.contact.street']}"/>
-        <p:inputText name="street-address" autocomplete="street-address"
+        <p:inputText name="street-address" autocomplete="street-address" required="#{cc.attrs.streetRequired}"
                      value="#{cc.attrs.person.contact.street}"/>
 
         <h:outputText value=""/>
@@ -111,14 +116,14 @@
         <!-- Postcode -->
         <p:outputLabel
                 value="#{msg['component.personSettingsGeneral.address.plz']}"/>
-        <p:inputText style="width:75px;"
+        <p:inputText style="width:75px;" required="#{cc.attrs.zipRequired}"
                      value="#{cc.attrs.person.contact.postcode}"
                      name="postal-code" autocomplete="postal-code"/>
 
         <!-- Town -->
         <p:outputLabel
                 value="#{msg['component.personSettingsGeneral.contact.town']}"/>
-        <p:inputText name="city" autocomplete="address-level2"
+        <p:inputText name="city" autocomplete="address-level2" required="#{cc.attrs.townRequired}"
                      value="#{cc.attrs.person.contact.town}"/>
 
     </h:panelGrid>

@@ -62,6 +62,9 @@ open class HistoUser : AbstractPersistable, UserDetails {
     @Transient
     open var credentialsNonExpired = true
 
+    @Column
+    open var _password : String? = null
+
     /**
      *  Transient settings for changing with no permanent effect
      */
@@ -115,8 +118,8 @@ open class HistoUser : AbstractPersistable, UserDetails {
     }
 
     @Transient
-    override fun getPassword(): String {
-        return "test"
+    override fun getPassword(): String? {
+        return _password
     }
 
     @Transient

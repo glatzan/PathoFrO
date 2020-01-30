@@ -118,6 +118,7 @@ open class PrintDocument : AbstractTemplate {
      * Is called if afterPDFCreationHook is set and the pdf was created.
      */
     open fun onAfterPDFCreation(container: PDFContainer, creator: PDFCreator): PDFContainer {
+        logger.trace("OnAfterCreationHook end")
         return container
     }
 

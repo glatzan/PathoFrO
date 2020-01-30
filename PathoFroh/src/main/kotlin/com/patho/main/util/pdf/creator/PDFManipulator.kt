@@ -20,7 +20,7 @@ class PDFManipulator {
         private val logger = LoggerFactory.getLogger(this.javaClass)
 
         @JvmStatic
-        fun mergePDFs(containers: List<PDFContainerLoaded>, createThumbnail: Boolean): PDFContainerLoaded {
+        fun mergePDFs(containers: List<PDFContainer>, createThumbnail: Boolean): PDFContainerLoaded {
             val loadedPDFs = containers.map { PDFContainerLoaded(it) }
             return mergeLoadedPDFs(loadedPDFs, createThumbnail)
         }

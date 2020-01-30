@@ -25,7 +25,7 @@
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
                                immediate="true">
                     <f:actionListener
-                            binding="#{dialog.searchPatientDialog.hideDialog()}"/>
+                            binding="#{searchAndAddPatientDialog.hideDialog()}"/>
                     <i class="fa fa-fw fa-times icon-grey"/>
                 </p:commandLink>
             </h:panelGrid>
@@ -33,18 +33,18 @@
 
         <h:panelGrid columns="2" styleClass="dialogContainer">
             <p:outputPanel id="navigationTable" styleClass="navigationTable">
-                <c:forEach items="#{dialog.searchPatientDialog.tabs}" var="tab"
+                <c:forEach items="#{searchAndAddPatientDialog.tabs}" var="tab"
                            varStatus="loop">
                     <p:commandButton value="#{msg[tab.name]}" immediate="true"
                                      disabled="#{tab.disabled}"
-                                     styleClass="#{tab eq dialog.searchPatientDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
-                                     actionListener="#{dialog.searchPatientDialog.onTabChange(tab)}"
+                                     styleClass="#{tab eq searchAndAddPatientDialog.selectedTab ? 'selectedButton' : ''} tabBtn"
+                                     actionListener="#{searchAndAddPatientDialog.onTabChange(tab)}"
                                      update="navigationTable dialogContent"/>
                 </c:forEach>
             </p:outputPanel>
             <p:outputPanel id="dialogContent" styleClass="dialogContent">
                 <ui:include
-                        src="#{dialog.searchPatientDialog.selectedTab.centerInclude}"/>
+                        src="#{searchAndAddPatientDialog.selectedTab.centerInclude}"/>
             </p:outputPanel>
         </h:panelGrid>
     </h:form>

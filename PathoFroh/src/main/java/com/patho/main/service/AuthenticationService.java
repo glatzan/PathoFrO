@@ -80,15 +80,10 @@ public class AuthenticationService {
         if (user.isPresent()) {
             if (user.get().getLocalUser()) {
                 logger.debug("Local user, authentication against local database");
-
-                //TODO reanable
-//                if (passwordEncoder.matches(password, user.get().getPassword())) {
-//                    return user;
-//                }
-
-                if(user.get().getPassword().equals(password))
+                //logger.debug(passwordEncoder.encode(password));
+                if (passwordEncoder.matches(password, user.get().getPassword())) {
                     return user;
-
+                }
             } else {
                 logger.debug("Pdv user, authentication against ldap");
                 // throws error if authentication was not successful

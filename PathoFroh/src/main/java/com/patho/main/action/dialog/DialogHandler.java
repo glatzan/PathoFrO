@@ -31,7 +31,6 @@ import com.patho.main.action.dialog.slides.AddSlidesDialog;
 import com.patho.main.action.dialog.slides.SlideNamingDialog;
 import com.patho.main.action.dialog.task.ChangeTaskIDDialog;
 import com.patho.main.action.dialog.task.CreateSampleDialog;
-import com.patho.main.action.dialog.task.CreateTaskDialog;
 import com.patho.main.action.dialog.worklist.WorklistSettingsDialog;
 import com.patho.main.action.dialog.worklist.WorklistSortDialog;
 import org.springframework.context.annotation.Scope;
@@ -45,8 +44,6 @@ public class DialogHandler {
     private AddSlidesDialog addSlidesDialog = new AddSlidesDialog();
     private CreateSampleDialog createSampleDialog = new CreateSampleDialog();
     private SlideNamingDialog slideNamingDialog = new SlideNamingDialog();
-    private CreateTaskDialog createTaskDialog = new CreateTaskDialog();
-    private SearchPatientDialog searchPatientDialog = new SearchPatientDialog();
     private UploadDialog uploadDialog = new UploadDialog();
     private EditPDFDialog editPDFDialog = new EditPDFDialog();
     private DiagnosisPhaseExitDialog diagnosisPhaseExitDialog = new DiagnosisPhaseExitDialog();
@@ -97,13 +94,6 @@ public class DialogHandler {
         return this.slideNamingDialog;
     }
 
-    public CreateTaskDialog getCreateTaskDialog() {
-        return this.createTaskDialog;
-    }
-
-    public SearchPatientDialog getSearchPatientDialog() {
-        return this.searchPatientDialog;
-    }
 
     public UploadDialog getUploadDialog() {
         return this.uploadDialog;

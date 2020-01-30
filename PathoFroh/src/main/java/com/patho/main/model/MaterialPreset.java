@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.patho.main.model.interfaces.EditAbleEntity;
 import com.patho.main.model.interfaces.ID;
-import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
 @Setter
 @SelectBeforeUpdate(true)
 @SequenceGenerator(name = "materialPreset_sequencegenerator", sequenceName = "materialPreset_sequence")
@@ -78,4 +76,27 @@ public class MaterialPreset implements EditAbleEntity<MaterialPreset>, ID, Seria
         return gson.toJson(this);
     }
 
+    public long getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getCommentary() {
+        return this.commentary;
+    }
+
+    public List<StainingPrototype> getStainingPrototypes() {
+        return this.stainingPrototypes;
+    }
+
+    public int getPriorityCount() {
+        return this.priorityCount;
+    }
+
+    public boolean isArchived() {
+        return this.archived;
+    }
 }

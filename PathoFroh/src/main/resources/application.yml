@@ -68,8 +68,9 @@ spring:
     basename: messages/messages
 
 logging:
-  file: test.log
-  path: D:/
+  file: "logs/patho.log"
+  pattern:
+    file: "%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n"
   level:
     org:
       springframework:
@@ -289,6 +290,7 @@ patho:
         duplexPrinting: true
         printEvenPageCount: true
         sharedContextGroup: 1
+        afterPDFCreationHook : true
       - id: 11
         name: Befundbericht - ohne Logo
         content: fileRepository:templates/print/Report_Intern_noLogo.tex
@@ -303,6 +305,7 @@ patho:
         duplexPrinting: true
         printEvenPageCount: true
         sharedContextGroup: 1
+        afterPDFCreationHook : true
       - id: 20
         name: Befundbericht extern
         content: fileRepository:templates/print/Report_Extern.tex
@@ -317,6 +320,7 @@ patho:
         duplexPrinting: true
         printEvenPageCount: true
         sharedContextGroup: 1
+        afterPDFCreationHook : true
       - id: 21
         name: Befundbericht extern - ohne Logo
         content: fileRepository:templates/print/Report_Extern_noLogo.tex
@@ -331,6 +335,7 @@ patho:
         duplexPrinting: true
         printEvenPageCount: true
         sharedContextGroup: 1
+        afterPDFCreationHook : true
       - id: 50
         name: Konsil
         content: fileRepository:templates/print/council.tex
@@ -372,5 +377,6 @@ patho:
         defaultOfType: true
         transientContent: false
         hidden: false
+        afterPDFCreationHook : true
       
            

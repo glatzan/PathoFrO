@@ -172,7 +172,7 @@
                     <f:facet name="header">
                         <p:commandLink
                                 rendered="#{userService.userHasPermission('TASK_EDIT_NEW')}"
-                                actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                                actionListener="#{createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                             <p:ajax event="dialogReturn"
                                     listener="#{dialogReturnHandler.onDefaultReturn}"
                                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
@@ -256,7 +256,7 @@
                         value="#{msg['body.worklist.patient.button.newTask']}"
                         icon="fa fa-plus"
                         rendered="#{userService.userHasPermission('TASK_EDIT_NEW')}"
-                        actionListener="#{dialog.createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
+                        actionListener="#{createTaskDialog.initAndPrepareBean(worklistHandler.current.selectedPatient)}">
                     <p:ajax event="dialogReturn"
                             listener="#{dialogReturnHandler.onDefaultReturn}"
                             update="navigationForm:patientList contentForm:contentPanel headerForm"/>

@@ -42,7 +42,7 @@ open class Person : AbstractPersistable, FullName {
     open var birthName: String = ""
 
     @Column
-    open var birthday: LocalDate = LocalDate.now()
+    open var birthday: LocalDate? = null
 
     @Column(columnDefinition = "VARCHAR")
     open var language: String = ""

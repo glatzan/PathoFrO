@@ -37,7 +37,6 @@ open class DialogReturnHandler @Autowired constructor(
         when (obj) {
             // Patient reload event
             //TODO Test CreateTaskDialog
-            //TODO Test SearchPatientDialog
             is PatientReloadEvent -> {
                 logger.debug("Patient reload event")
 

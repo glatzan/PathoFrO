@@ -1,7 +1,6 @@
 package com.patho.main.template.print
 
 import com.patho.main.model.PDFContainer
-import com.patho.main.model.transitory.PDFContainerLoaded
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.PrintDocument
 import com.patho.main.util.pdf.creator.PDFCreator
@@ -63,21 +62,21 @@ class SendReport(printDocument: PrintDocument) : PrintDocument(printDocument) {
     }
 
     override fun onAfterPDFCreation(container: PDFContainer, creator: PDFCreator): PDFContainer {
-        val attachPdf = ArrayList<PDFContainerLoaded>()
+        val attachPdf = ArrayList<PDFContainer>()
 
-        attachPdf.add(PDFContainerLoaded(container))
+        attachPdf.add(container)
 
         if (useMail && mails.isEmpty())
-            attachPdf.addAll(mails.filter { p -> p.pdf != null }.map { PDFContainerLoaded(it.pdf!!) })
+            attachPdf.addAll(mails.filter { p -> p.pdf != null }.map { it.pdf!! })
 
         if (useFax && faxes.isEmpty())
-            attachPdf.addAll(faxes.filter { p -> p.pdf != null }.map { PDFContainerLoaded(it.pdf!!) })
+            attachPdf.addAll(faxes.filter { p -> p.pdf != null }.map { it.pdf!! })
 
         if (useLetters && letters.isEmpty())
-            attachPdf.addAll(letters.filter { p -> p.pdf != null }.map { PDFContainerLoaded(it.pdf!!) })
+            attachPdf.addAll(letters.filter { p -> p.pdf != null }.map { it.pdf!! })
 
         if (usePhone && phonenumbers.isEmpty())
-            attachPdf.addAll(phonenumbers.filter { p -> p.pdf != null }.map { PDFContainerLoaded(it.pdf!!) })
+            attachPdf.addAll(phonenumbers.filter { p -> p.pdf != null }.map { it.pdf!! })
 
         val result = PDFManipulator.mergePDFs(attachPdf, container.isThumbnailPreset)
 

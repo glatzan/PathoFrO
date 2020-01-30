@@ -33,7 +33,7 @@
             <p:commandButton
                     value="#{msg['body.worklist.header.button.searchForOrAddPatient']}"
                     styleClass="searchPatientButton"
-                    actionListener="#{dialog.searchPatientDialog.initAndPrepareBean().externalMode().persistPatient()}">
+                    actionListener="#{searchAndAddPatientDialog.initAndPrepareBean().externalMode().persistPatient()}">
                 <p:ajax event="dialogReturn"
                         listener="#{dialogReturnHandler.onSearchForPatientReturn}"
                         oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"

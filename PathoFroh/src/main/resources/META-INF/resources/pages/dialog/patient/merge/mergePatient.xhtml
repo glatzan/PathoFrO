@@ -39,7 +39,7 @@
                     <!-- name -->
                     <h:outputLabel value="#{msg['dialog.mergePatientDialog.source']}"/>
                     <p:commandLink icon="fa fa-fw fa-user"
-                                   actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
+                                   actionListener="#{searchAndAddPatientDialog.initAndPrepareBean()}"
                                    title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
                         <p:ajax event="dialogReturn" update="@form" process="@form"
                                 listener="#{dialog.mergePatientDialog.onReturnSelectSource}"></p:ajax>
@@ -72,7 +72,7 @@
                     <!-- name -->
                     <h:outputLabel value="#{msg['dialog.mergePatientDialog.target']}"/>
                     <p:commandLink
-                            actionListener="#{dialog.searchPatientDialog.initAndPrepareBean()}"
+                            actionListener="#{searchAndAddPatientDialog.initAndPrepareBean()}"
                             title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
                         <p:ajax event="dialogReturn" update="@form" process="@form"
                                 listener="#{dialog.mergePatientDialog.onReturnSelectTarget}"></p:ajax>
