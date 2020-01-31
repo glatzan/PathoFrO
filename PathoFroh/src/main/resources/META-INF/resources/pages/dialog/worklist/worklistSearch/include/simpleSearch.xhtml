@@ -13,7 +13,7 @@
             var="SimpleListSearchCriterion" allSuffix="ALL_ENUM_VALUES"/>
 
     <p:outputPanel styleClass="headerPannel">
-        <h:outputLabel value="#{msg['dialog.worklistsearch.simple']}"/>
+        <h:outputLabel value="#{msg['dialog.worklistsearch.simple.tabName']}"/>
     </p:outputPanel>
 
     <p:outputPanel styleClass="bodyPannelFull">
@@ -24,67 +24,67 @@
             <!-- 0 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.staininglist']}"
-                    itemValue="#{SimpleSearchOption.STAINING_LIST}"/>
+                    itemValue="#{SimpleSearchOption.STAINING_LIST.name()}"/>
 
             <!-- 1 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.diagnosislist']}"
-                    itemValue="#{SimpleSearchOption.DIAGNOSIS_LIST}"/>
+                    itemValue="#{SimpleSearchOption.DIAGNOSIS_LIST.name()}"/>
 
             <!-- 2 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.today']}"
-                    itemValue="#{SimpleSearchOption.TODAY}"/>
+                    itemValue="#{SimpleSearchOption.TODAY.name()}"/>
 
             <!-- 3 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.yesterday']}"
-                    itemValue="#{SimpleSearchOption.YESTERDAY}"/>
+                    itemValue="#{SimpleSearchOption.YESTERDAY.name()}"/>
 
             <!-- 4 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.thisweek']}"
-                    itemValue="#{SimpleSearchOption.CURRENTWEEK}"/>
+                    itemValue="#{SimpleSearchOption.CURRENTWEEK.name()}"/>
 
             <!-- 5 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.lastweek']}"
-                    itemValue="#{SimpleSearchOption.LASTWEEK}"/>
+                    itemValue="#{SimpleSearchOption.LASTWEEK.name()}"/>
 
             <!-- 6 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.lastmonth']}"
-                    itemValue="#{SimpleSearchOption.LASTMONTH}"/>
+                    itemValue="#{SimpleSearchOption.LASTMONTH.name()}"/>
 
             <!-- 7 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.day']}"
-                    itemValue="#{SimpleSearchOption.DAY}"/>
+                    itemValue="#{SimpleSearchOption.DAY.name()}"/>
 
             <!-- 8 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.month']}"
-                    itemValue="#{SimpleSearchOption.MONTH}"/>
+                    itemValue="#{SimpleSearchOption.MONTH.name()}"/>
 
             <!-- 9 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.timespan']}"
-                    itemValue="#{SimpleSearchOption.TIME}"/>
+                    itemValue="#{SimpleSearchOption.TIME.name()}"/>
 
             <!-- 10 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.timespan']}"
-                    itemValue="#{SimpleSearchOption.NOTIFICATION_LIST}"/>
+                    itemValue="#{SimpleSearchOption.NOTIFICATION_LIST.name()}"/>
 
             <!-- 11 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.timespan']}"
-                    itemValue="#{SimpleSearchOption.CUSTOM_LIST}"/>
+                    itemValue="#{SimpleSearchOption.CUSTOM_LIST.name()}"/>
 
             <!-- 12 -->
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.date.timespan']}"
-                    itemValue="#{SimpleSearchOption.CURRENTMONTH}"/>
+                    itemValue="#{SimpleSearchOption.CURRENTMONTH.name()}"/>
 
             <p:ajax update="@form"
                     listener="#{searchWorklistDialog.simpleSearchTab.search.updateWithSearchOptions()}"
@@ -202,7 +202,7 @@
                         value="#{searchWorklistDialog.simpleSearchTab.search.day}"
                         locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true"
                         converter="localDateConverter"
-                        disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.DAY}">
+                        disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.DAY.name()}">
                     <p:ajax event="change" process="@this"/>
                     <p:ajax event="dateSelect" process="@this"/>
                 </p:calendar>
@@ -217,7 +217,7 @@
 
                 <p:selectOneMenu id="month_pick" style="width:125px"
                                  value="#{searchWorklistDialog.simpleSearchTab.search.month}"
-                                 disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.MONTH}">
+                                 disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.MONTH.name()}">
 
                     <f:selectItems value="#{enumProvider.month}" var="month"
                                    itemValue="#{month}"
@@ -227,7 +227,7 @@
 
                 <p:selectOneMenu id="year_pick" style="width:125px"
                                  value="#{searchWorklistDialog.simpleSearchTab.search.year}"
-                                 disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.MONTH}">
+                                 disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.MONTH.name()}">
                     <f:selectItems
                             value="#{searchWorklistDialog.simpleSearchTab.search.years}"/>
                     <p:ajax event="change" process="@this"/>
@@ -245,7 +245,7 @@
                 <p:calendar
                         converter="localDateConverter"
                         value="#{searchWorklistDialog.simpleSearchTab.search.searchFrom}"
-                        disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.TIME}"
+                        disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.TIME.name()}"
                         locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true">
                     <p:ajax event="change" process="@this"/>
                     <p:ajax event="dateSelect" process="@this"/>
@@ -256,7 +256,7 @@
                         converter="localDateConverter"
                         value="#{searchWorklistDialog.simpleSearchTab.search.searchTo}"
                         locale="de"
-                        disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.TIME}"
+                        disabled="#{searchWorklistDialog.simpleSearchTab.search.simpleSearchOption != SimpleSearchOption.TIME.name()}"
                         navigator="true" pattern="dd.MM.yyyy" mask="true">
                     <p:ajax event="change" process="@this"/>
                     <p:ajax event="dateSelect" process="@this"/>
@@ -271,19 +271,19 @@
                           layout="custom">
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.filter.task']}"
-                    itemValue="#{SimpleListSearchCriterion.TaskCreated}"/>
+                    itemValue="#{SimpleListSearchCriterion.TaskCreated.name()}"/>
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.filter.staining']}"
-                    itemValue="#{SimpleListSearchCriterion.StainingCompleted}"/>
+                    itemValue="#{SimpleListSearchCriterion.StainingCompleted.name()}"/>
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.filter.diagnosis']}"
-                    itemValue="#{SimpleListSearchCriterion.DiagnosisCompleted}"/>
+                    itemValue="#{SimpleListSearchCriterion.DiagnosisCompleted.name()}"/>
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.filter.notification']}"
-                    itemValue="#{SimpleListSearchCriterion.NotificationComplteted}"/>
+                    itemValue="#{SimpleListSearchCriterion.NotificationComplteted.name()}"/>
             <f:selectItem
                     itemLabel="#{msg['dialog.worklistsearch.simple.filter.finalized']}"
-                    itemValue="#{SimpleListSearchCriterion.TaskCompleted}"/>
+                    itemValue="#{SimpleListSearchCriterion.TaskCompleted.name()}"/>
         </p:selectOneRadio>
 
         <h:panelGrid columns="14" styleClass="defaultHistoTable"

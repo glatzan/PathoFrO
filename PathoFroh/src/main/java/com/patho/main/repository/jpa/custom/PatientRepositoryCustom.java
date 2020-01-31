@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -132,7 +133,7 @@ public interface PatientRepositoryCustom {
      * @param birthday
      * @return
      */
-    public List<Patient> findByNameAndFirstnameAndBirthday(String name, String firstname, Date birthday);
+    public List<Patient> findByNameAndFirstnameAndBirthday(String name, String firstname, LocalDate birthday);
 
     /**
      * Returns a list of patients with the given name, firstname and birthday
@@ -142,7 +143,7 @@ public interface PatientRepositoryCustom {
      * @param birthday
      * @return
      */
-    public List<Patient> findByNameAndFirstnameAndBirthday(String name, String firstname, Date birthday,
+    public List<Patient> findByNameAndFirstnameAndBirthday(String name, String firstname, LocalDate birthday,
                                                            boolean initializeTasks, boolean initializeFiles, boolean irgnoreArchived);
 
     /**

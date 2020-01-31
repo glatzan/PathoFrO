@@ -7,6 +7,7 @@ import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ApplicationContextProvider
 import com.patho.main.config.util.ResourceBundle
 import com.patho.main.repository.jpa.*
+import com.patho.main.repository.miscellaneous.HttpRestRepository
 import com.patho.main.repository.miscellaneous.LDAPRepository
 import com.patho.main.repository.miscellaneous.MediaRepository
 import com.patho.main.repository.miscellaneous.PrintDocumentRepository
@@ -183,6 +184,9 @@ class SpringContextBridge : SpringContextBridgedServices {
 
     @Autowired
     override lateinit var blockService: BlockService
+
+    @Autowired
+    override lateinit var httpRestRepository: HttpRestRepository
 
     companion object {
         @JvmStatic

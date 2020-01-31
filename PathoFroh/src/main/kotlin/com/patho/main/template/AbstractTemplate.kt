@@ -111,6 +111,13 @@ abstract class AbstractTemplate : AbstractPersistable(), Cloneable {
         return Pair(this, context)
     }
 
+    /**
+     * Makes clone public
+     */
+    public override fun clone(): Any {
+        return super.clone()
+    }
+
     companion object {
         /**
          * Removes velocity logger

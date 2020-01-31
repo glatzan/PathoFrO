@@ -104,9 +104,11 @@ patho:
     tokenPrefix: Bearer
     headerString: Authorization
   ####### JSON #######
-  json:
+  rest:
     patientByPizUrl: http://auginfo/piz/$piz
     patientByNameSurnameBirthday: http://auginfo/piz?name=$name&vorname=$surname&geburtsdatum=$birthday
+    createPatientInPDV: http://augimageserver:3006/BK/piz_generieren?ldap=glatza
+    requestTimeout: 50000
   ###### FAX  ######
   fax:
     faxPost: http://augimageserver:3033/$number
@@ -137,40 +139,6 @@ patho:
           timeout: 1000
   ####### SETTINGS #######
   settings:
-    ####### MAIL #######
-    mailSettings:
-      systemMail: augenklinik.histologie@uniklinik-freiburg.de
-      systemName: Histologisches Labor der Augenklinik Freiburg
-      adminAddresses:
-        - andreas.glatz@uniklinik-freiburg.de
-      errorAddresses:
-        - andreas.glatz@uniklinik-freiburg.de
-    mails:
-      - id: 0
-        templateName: org.histo.template.MailTemplate
-        defaultOfType: true
-        name: Benutzer-Freischaltung erfolgt
-        content: fileRepository:templates/mail/successUnlock.json
-      - id: 1
-        templateName: org.histo.template.MailTemplate
-        name: Benutzer-Freischaltung erbeten
-        defaultOfType: true
-        content: fileRepository:templates/mail/requestUnlock.json
-      - id: 2
-        templateName: org.histo.template.MailTemplate
-        name: Diagnose-Benachrichtigung
-        defaultOfType: true
-        content: fileRepository:templates/mail/diagnosisReport.json
-      - id: 3
-        templateName: org.histo.template.MailTemplate
-        name: Fehlermeldung!
-        defaultOfType: true
-        content: fileRepository:templates/mail/error.json
-      - id: 4
-        templateName: org.histo.template.MailTemplate
-        name: Fehler beim Upload eines Dokuments!
-        defaultOfType: true
-        content: fileRepository:templates/mail/errorRestUpload.json
     fileSettings:
       thumbnailDPI: 50
       fileRepository: file:D:/patho/
@@ -218,6 +186,10 @@ patho:
       lablePrinterTestPage: test.zpl
       cupsPrinterTestPage: fileRepository:templates/print/testPage.pdf
       restUploadErrorEmail: 4
+      # id of miscellaneousDocument, document for creating patient in database
+      createPDVPatientRequestDocument: 0
+      # id of the mail that is send to admins on pdv patient creation
+      createPDVPatientStatusMail: 5
     defaultNotification:
       defaultNotifications:
         - role: SURGEON
@@ -231,13 +203,52 @@ patho:
             - LETTER
     miscellaneous:
       phoneRegex: "^\\s*(?:[\\+#]?(\\d{1,3}))?([-. ()/\\\\]*(\\d*))*?\\s*$"
+      noticeAdminOnPDVPatientCreation: true
     schedule:
       pdfCleanupCron: '5 21 * * * *'
     externalDocumentMapper:
       -
         externalIdentifier: 60114293
         internalIdentifier: U_REPORT_COMPLETED
-
+    miscellaneousDocuments:
+      - id: 0
+        name: Create-Patient
+        templateName: org.histo.template.MailTemplate
+        content: fileRepository:templates/miscellaneous/createPatient.json
+        defaultOfType: true
+    ####### MAIL #######
+    mailSettings:
+      systemMail: augenklinik.histologie@uniklinik-freiburg.de
+      systemName: Histologisches Labor der Augenklinik Freiburg
+      adminAddresses:
+        - andreas.glatz@uniklinik-freiburg.de
+      errorAddresses:
+        - andreas.glatz@uniklinik-freiburg.de
+    mails:
+      - id: 0
+        templateName: org.histo.template.MailTemplate
+        name: Benutzer-Freischaltung erfolgt
+        content: fileRepository:templates/mail/successUnlock.json
+      - id: 1
+        templateName: org.histo.template.MailTemplate
+        name: Benutzer-Freischaltung erbeten
+        content: fileRepository:templates/mail/requestUnlock.json
+      - id: 2
+        templateName: org.histo.template.MailTemplate
+        name: Diagnose-Benachrichtigung
+        content: fileRepository:templates/mail/diagnosisReport.json
+      - id: 3
+        templateName: org.histo.template.MailTemplate
+        name: Fehlermeldung!
+        content: fileRepository:templates/mail/error.json
+      - id: 4
+        templateName: org.histo.template.MailTemplate
+        name: Fehler beim Upload eines Dokuments!
+        content: fileRepository:templates/mail/errorRestUpload.json
+      - id: 5
+        templateName: org.histo.template.MailTemplate
+        name: Patient erstellt
+        content: fileRepository:templates/mail/patientCreated.json
     ####### Print Documents #######
     documents:
       - id: 0

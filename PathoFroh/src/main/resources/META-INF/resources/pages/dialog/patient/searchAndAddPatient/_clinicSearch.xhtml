@@ -1,8 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:histoPatient="http://java.sun.com/jsf/composite/components/patient">
 
     <p:outputPanel styleClass="headerPannel">
         <h:outputLabel value="#{msg['dialog.searchPatient.search']}"/>
@@ -22,7 +22,7 @@
                 <p:inputMask
                         value="#{searchAndAddPatientDialog.clinicSearchTab.patientPiz}"
                         id="pizInput" tabindex="1" mask="99999999">
-                    <p:ajax process="@form" update="patientList toManyMatches"
+                    <p:ajax process="@form" update="patientListTable:patientDatatable toManyMatches"
                             delay="300" event="keyup"
                             listener="#{searchAndAddPatientDialog.clinicSearchTab.searchForClinicPatients()}"/>
                 </p:inputMask>
@@ -33,7 +33,7 @@
             <p:inputText
                     value="#{searchAndAddPatientDialog.clinicSearchTab.patientName}"
                     tabindex="2">
-                <p:ajax process="@form" update="patientList toManyMatches"
+                <p:ajax process="@form" update="patientListTable:patientDatatable toManyMatches"
                         delay="300" event="keyup"
                         listener="#{searchAndAddPatientDialog.clinicSearchTab.searchForClinicPatients()}"/>
             </p:inputText>
@@ -44,8 +44,8 @@
             <p:outputLabel value="#{msg['dialog.searchPatient.search.birthday']}"/>
             <p:calendar
                     value="#{searchAndAddPatientDialog.clinicSearchTab.patientBirthday}"
-                    tabindex="4" locale="de" pattern="dd.MM.yyyy" mask="true">
-                <p:ajax process="@form" update="patientList toManyMatches"
+                    tabindex="4" locale="de" pattern="dd.MM.yyyy" mask="true" converter="localDateConverter">
+                <p:ajax process="@form" update="patientListTable:patientDatatable toManyMatches"
                         delay="300" event="keyup"
                         listener="#{searchAndAddPatientDialog.clinicSearchTab.searchForClinicPatients()}"/>
             </p:calendar>
@@ -54,95 +54,24 @@
             <p:outputLabel value="#{msg['dialog.searchPatient.search.firstName']}"/>
             <p:inputText tabindex="3"
                          value="#{searchAndAddPatientDialog.clinicSearchTab.patientSurname}">
-                <p:ajax process="@form" update="patientList toManyMatches"
+                <p:ajax process="@form" update="patientListTable:patientDatatable toManyMatches"
                         delay="300" event="keyup"
                         listener="#{searchAndAddPatientDialog.clinicSearchTab.searchForClinicPatients()}"/>
-
             </p:inputText>
 
         </h:panelGrid>
 
-
-        <p:dataTable var="patientList" id="patientList" scrollHeight="370"
-                     styleClass="defaultHistoDataTable" scrollable="true"
-                     style="margin-top: 20px;" selectionMode="single"
-                     rowKey="#{patientList.id}"
-                     selection="#{searchAndAddPatientDialog.clinicSearchTab.selectedPatientListItem}"
-                     value="#{searchAndAddPatientDialog.clinicSearchTab.patientList}">
-
-            <!-- Name -->
-            <p:column headerText="#{msg['dialog.searchPatient.search.name']}"
-                      sortBy="#{patientList.listItem.person.lastName}">
-                <h:outputText value="#{patientList.listItem.person.lastName}"/>
-            </p:column>
-
-            <!-- Surname -->
-            <p:column headerText="#{msg['dialog.searchPatient.search.firstName']}"
-                      sortBy="#{patientList.listItem.person.firstName}">
-                <h:outputText value="#{patientList.listItem.person.firstName}"/>
-            </p:column>
-
-            <!-- Birthday -->
-            <p:column
-                    headerText="#{msg['dialog.searchPatient.search.birthday.short']}"
-                    sortBy="#{patientList.listItem.person.birthday}">
-                <h:outputText
-                        rendered="#{patientList.listItem.person.birthday ne null}"
-                        value="#{patientList.listItem.person.birthday}">
-                    <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
-                </h:outputText>
-            </p:column>
-
-            <!-- gender -->
-            <p:column sortBy="#{patientList.listItem.person.gender}">
-                <f:facet name="header">
-                    <h:outputText value="#{msg['dialog.searchPatient.search.gender']}"
-                                  title="#{msg['dialog.searchPatient.search.gender.info']}"/>
-                </f:facet>
-                <h:outputText
-                        value="#{patientList.listItem.person.gender eq 'FEMALE' ? msg['dialog.searchPatient.search.gender.female'] : msg['dialog.searchPatient.search.gender.male']}"/>
-            </p:column>
-
-            <!-- databse -->
-            <p:column sortBy="#{patientList.listItem.inDatabase}">
-                <f:facet name="header">
-                    <h:outputText value="#{msg['dialog.searchPatient.search.database']}"
-                                  title="#{msg['dialog.searchPatient.search.database.info']}"/>
-                </f:facet>
-
-                <ui:fragment rendered="#{patientList.listItem.inDatabase}">
-                    <i class="fa fa-fw fa-check-circle icon-green"
-                       title="#{msg['dialog.searchPatient.search.database.clinic']}"/>
-                </ui:fragment>
-
-                <ui:fragment rendered="#{!patientList.listItem.inDatabase}">
-                    <i class="fa fa-fw fa-times-circle icon-red"
-                       title="#{msg['dialog.searchPatient.search.database.histo']}"/>
-                </ui:fragment>
-            </p:column>
-
-            <!-- piz -->
-            <p:column headerText="#{msg['dialog.searchPatient.search.piz']}"
-                      sortBy="#{patientList.listItem.piz}">
-                <h:outputText value="#{patientList.listItem.piz}"/>
-            </p:column>
-
-            <!-- select patient -->
-            <p:ajax event="rowSelect" update="adminForm:buttonContainer"/>
-
-            <!-- double click, submit -->
-            <p:ajax event="rowDblselect"
-                    oncomplete="sumbitOnDblSelect();return false;"/>
-
-        </p:dataTable>
-
-        <p:remoteCommand name="sumbitOnDblSelect"
-                         actionListener="#{searchAndAddPatientDialog.clinicSearchTab.hideDialogAndSelectPatient()}"/>
+        <!-- datatable for search results -->
+        <histoPatient:patientTable dataProvider="#{searchAndAddPatientDialog.clinicSearchTab}"
+                                   id="patientListTable"
+                                   scrollHeight="370"
+                                   updateOnPatientSelect="adminForm:buttonContainer"/>
 
         <p:commandButton name="onQuickSubmit" id="onQuickSubmit"
                          style="display:none"
                          actionListener="#{searchAndAddPatientDialog.clinicSearchTab.onQuickSubmit()}"/>
 
+        <!-- command executed by clicking enter-->
         <p:defaultCommand target="onQuickSubmit"/>
     </p:outputPanel>
 
@@ -158,9 +87,9 @@
             <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
                 <!-- Add button -->
                 <p:commandButton
-                        value="#{searchAndAddPatientDialog.clinicSearchTab.selectedPatientListItem.listItem.inDatabase ? msg['dialog.searchPatient.add.button.invoke'] : msg['dialog.searchPatient.add.button.add']}"
+                        value="#{searchAndAddPatientDialog.clinicSearchTab.selectedPatient.listItem.inDatabase ? msg['dialog.searchPatient.add.button.invoke'] : msg['dialog.searchPatient.add.button.add']}"
                         widgetVar="clinicSearchBtn" id="submitAddButton"
-                        disabled="#{searchAndAddPatientDialog.clinicSearchTab.selectedPatientListItem eq null}"
+                        disabled="#{!searchAndAddPatientDialog.clinicSearchTab.patientSelected}"
                         icon="fa fa-fw fa-user-plus"
                         oncomplete="PF('clinicSearchBtn').enable();PF('closeBtn').enable()"
                         onclick="PF('clinicSearchBtn').disable();PF('closeBtn').disable()"

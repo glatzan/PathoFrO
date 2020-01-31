@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:histo="http://java.sun.com/jsf/composite/components">
+      xmlns:histoPerson="http://java.sun.com/jsf/composite/components/person">
 
 
 <composite:interface>
@@ -17,7 +17,7 @@
 
 <composite:implementation>
 
-    <histo:personSettingGeneral person="#{cc.attrs.physician.person}"/>
+    <histoPerson:personDataInput person="#{cc.attrs.physician.person}"/>
 
     <!-- Separator -->
     <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">

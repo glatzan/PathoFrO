@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- Element for person data edit-->
+<!-- Interface (optional) com.patho.main.util.ui.jsfcomponents.IPersonDataChangeListener -->
+<composite:interface>
+    <composite:attribute name="person" required="true" type="com.patho.main.model.person.Person"/>
+    <composite:attribute name="birthdayRequired" default="false"/>
+    <composite:attribute name="genderRequired" default="false"/>
+    <composite:attribute name="streetRequired" default="false"/>
+    <composite:attribute name="zipRequired" default="false"/>
+    <composite:attribute name="townRequired" default="false"/>
+
+    <!--  if true if input is disabled  -->
+    <composite:attribute name="disabled" default="false"/>
+
+    <!-- optional listener which is fired if data are changed   -->
+    <composite:attribute name="onPersonDataChangeListener" default="#{null}" required="false"
+                         type="com.patho.main.util.ui.jsfcomponents.IPersonDataChangeListener"/>
+
+    <!-- componentes that should be updated on person data change -->
+    <composite:attribute name="onPersonDataChangeUpdate" default="" required="false"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <h:panelGrid columns="1" styleClass="defaultHistoTable">
+        <h:outputLabel value="#{msg['component.personSettingsGeneral.person']}"
+                       styleClass="headline"/>
+    </h:panelGrid>
+
+    <h:panelGrid columns="4" styleClass="defaultHistoTable" id="personData"
+                 columnClasses="columnWidth125, , columnWidth125,">
+        <!-- Title -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.title']}"/>
+        <p:selectOneMenu style="width:100px" editable="true" disabled="#{cc.attrs.disabled}"
+                         value="#{cc.attrs.person.title}" id="personTitel">
+            <f:selectItem itemLabel="" itemValue=""/>
+            <f:selectItem
+                    itemLabel="#{msg['component.personSettingsGeneral.title.dr']}"
+                    itemValue="#{msg['component.personSettingsGeneral.title.dr']}"/>
+            <f:selectItem
+                    itemLabel="#{msg['component.personSettingsGeneral.title.prof']}"
+                    itemValue="#{msg['component.personSettingsGeneral.title.prof']}"/>
+
+            <p:ajax process="personTitel @this" listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:selectOneMenu>
+
+        <!-- birthday -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.birthday']}"/>
+        <p:calendar id="birthday" name="bday" autocomplete="bday" required="#{cc.attrs.birthdayRequired}"
+                    value="#{cc.attrs.person.birthday}" locale="de"
+                    converter="localDateConverter" disabled="#{cc.attrs.disabled}"
+                    navigator="true" pattern="dd.MM.yyyy" mask="true">
+            <p:ajax process="birthday @this" listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="change" partialSubmit="true"/>
+            <p:ajax process="birthday @this" listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    event="dateSelect" partialSubmit="true"/>
+        </p:calendar>
+
+        <!-- Name -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.lastname']}"/>
+        <p:inputText name="lname" autocomplete="family-name" required="true" id="lname" disabled="#{cc.attrs.disabled}"
+                     value="#{cc.attrs.person.lastName}">
+            <p:ajax process="lname @this" listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+        <!-- gender -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.gender']}"/>
+        <p:selectOneMenu style="width:100px" name="sex" autocomplete="sex" required="#{cc.attrs.genderRequired}"
+                         value="#{cc.attrs.person.gender}" disabled="#{cc.attrs.disabled}" id="sexSelect">
+            <f:selectItem
+                    itemLabel="#{msg['component.personSettingsGeneral.gender.select']}"
+                    itemValue="#{null}"/>
+            <f:selectItem
+                    itemLabel="#{msg['component.personSettingsGeneral.gender.unknown']}"
+                    noSelectionOption="true"
+                    itemValue="UNKNOWN"/>
+            <f:selectItem
+                    itemLabel="#{msg['component.personSettingsGeneral.gender.male']}"
+                    itemValue="MALE"/>
+            <f:selectItem
+                    itemLabel="#{msg['component.personSettingsGeneral.gender.female']}"
+                    itemValue="FEMALE"/>
+            <p:ajax process="sexSelect @this" listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    event="change" partialSubmit="true"/>
+        </p:selectOneMenu>
+
+        <!-- firstName -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.firstName']}"/>
+        <p:inputText name="fname" autocomplete="given-name" required="true" id="fname" disabled="#{cc.attrs.disabled}"
+                     value="#{cc.attrs.person.firstName}">
+            <p:ajax process="fname @this" listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+    </h:panelGrid>
+
+    <!-- Separator -->
+    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+        <p:separator/>
+        <h:outputLabel
+                value="#{msg['component.personSettingsGeneral.address']}"/>
+    </h:panelGrid>
+
+    <!-- address -->
+    <h:panelGrid columns="4" styleClass="defaultHistoTable"
+                 columnClasses="columnWidth125, , columnWidth125,">
+        <!-- street -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.contact.street']}"/>
+        <p:inputText name="street-address" autocomplete="street-address" required="#{cc.attrs.streetRequired}"
+                     id="street-address"
+                     value="#{cc.attrs.person.contact.street}" disabled="#{cc.attrs.disabled}">
+            <p:ajax process="street-address @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+        <h:outputText value=""/>
+        <h:outputText value=""/>
+
+        <!-- address addition one -->
+        <h:outputLabel
+                value="#{msg['component.personSettingsGeneral.contact.additionOne']}"/>
+        <p:inputText id="addresAdd1"
+                     value="#{cc.attrs.person.contact.addressadditon}" disabled="#{cc.attrs.disabled}">
+            <p:ajax process="addresAdd1 @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+        <!-- address addition two -->
+        <h:outputLabel
+                value="#{msg['component.personSettingsGeneral.contact.additionTwo']}"/>
+        <p:inputText id="addresAdd2"
+                     value="#{cc.attrs.person.contact.addressadditon2}" disabled="#{cc.attrs.disabled}">
+            <p:ajax process="addresAdd2 @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+        <!-- Postcode -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.address.plz']}"/>
+        <p:inputText style="width:75px;" required="#{cc.attrs.zipRequired}"
+                     value="#{cc.attrs.person.contact.postcode}" id="postcode"
+                     name="postal-code" autocomplete="postal-code" disabled="#{cc.attrs.disabled}">
+            <p:ajax process="postcode @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+        <!-- Town -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.contact.town']}"/>
+        <p:inputText name="city" autocomplete="address-level2" required="#{cc.attrs.townRequired}" id="town"
+                     value="#{cc.attrs.person.contact.town}" disabled="#{cc.attrs.disabled}">
+            <p:ajax process="town @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+    </h:panelGrid>
+
+    <!-- Separator -->
+    <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
+        <p:separator/>
+        <h:outputLabel
+                value="#{msg['component.personSettingsGeneral.miscellaneous']}"/>
+    </h:panelGrid>
+
+    <!-- contact -->
+    <h:panelGrid columns="4" styleClass="defaultHistoTable"
+                 columnClasses="columnWidth125, , columnWidth125,">
+        <!-- phone -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.contact.phone']}"/>
+        <p:inputText value="#{cc.attrs.person.contact.phone}" disabled="#{cc.attrs.disabled}"
+                     name="phone" autocomplete="tel" id="phone">
+            <p:ajax process="phone @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+        <!-- fax -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.miscellaneous.fax']}"/>
+        <p:inputText value="#{cc.attrs.person.contact.fax}" disabled="#{cc.attrs.disabled}"
+                     name="fax" autocomplete="fax" id="fax">
+            <p:ajax process="fax @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+        <!-- mobile -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.miscellaneous.mobile']}"/>
+        <p:inputText value="#{cc.attrs.person.contact.mobile}" disabled="#{cc.attrs.disabled}"
+                     name="phone" autocomplete="tel" id="mobile">
+            <p:ajax process="mobile @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+        <!-- mail -->
+        <p:outputLabel
+                value="#{msg['component.personSettingsGeneral.miscellaneous.mail']}"/>
+        <p:inputText name="mail" autocomplete="mail" id="mail"
+                     value="#{cc.attrs.person.contact.email}" disabled="#{cc.attrs.disabled}">
+            <p:ajax process="mail @this"
+                    listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
+                    disabled="#{cc.attrs.onPersonDataChangeListener == null}"
+                    update="#{cc.attrs.onPersonDataChangeUpdate}"
+                    delay="300" event="keyup" partialSubmit="true"/>
+        </p:inputText>
+
+    </h:panelGrid>
+
+</composite:implementation>
+</html>

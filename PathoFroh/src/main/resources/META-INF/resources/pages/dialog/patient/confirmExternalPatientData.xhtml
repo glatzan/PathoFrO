@@ -121,11 +121,17 @@
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right">
+
+                    <!-- create patient button -->
                     <p:commandButton widgetVar="createPatientBtn"
-                                     onclick="disableButton(true, 'createPatientBtn', 'closeBtn')"
+                                     oncomplete="PF('createPatientBtn').enable();PF('closeBtn').enable()"
+                                     onclick="PF('createPatientBtn').disable();PF('closeBtn').disable()"
                                      value="#{msg['dialog.confirmExternalPatientData.button.addPatient']}"
-                                     icon="fa fa-fw fa-user-plus"
-                                     actionListener="#{confirmPatientDataDialog.hideDialogAndConfirm()}"/>
+                                     actionListener="#{confirmDialog.initAndPrepareBean('dialog.confirmExternalPatientData.confirm.headline','dialog.confirmExternalPatientData.confirm.text')}"
+                                     icon="fa fa-fw fa-user-plus">
+                        <p:ajax event="dialogReturn"
+                                listener="#{confirmPatientDataDialog.onConfirmDialogReturn}"/>
+                    </p:commandButton>
 
                     <p:commandButton value="#{msg['general.close']}"
                                      widgetVar="closeBtn" partialSubmit="true"

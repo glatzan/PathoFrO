@@ -1,0 +1,13 @@
+{
+    "geschlecht" : "#if($person.gender == 'MALE')M#{else}F#end",
+    "nachname" : "$person.lastName",
+    "vorname" : "$person.firstName",
+    "geburtsdatum" : "$date.format('dd.MM.yyyy', $person.birthday)",
+    "land" : "Deutschland",
+    "land_kodiert" : "D",
+    "plz" : "$person.contact.postcode",
+    "ort" : "$person.contact.town",
+    "strasse" : "$person.contact.street",
+    "telefon" : "$person.contact.phone",
+    "titel" : "$person.title"
+}

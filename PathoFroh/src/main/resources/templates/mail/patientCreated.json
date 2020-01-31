@@ -1,0 +1,4 @@
+{
+	"subject": "Patient wurde erstellt",
+	"body": "Patient wurde erstellt: $success\n Request: $request \n ResponseStatus: $responseStatus \n ResponseBody: $responseBody"
+}

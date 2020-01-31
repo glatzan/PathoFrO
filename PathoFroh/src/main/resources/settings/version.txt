@@ -749,6 +749,11 @@ INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouriteli
 update favouritelist set hideList = true where id = 50;
 update favouritelist set hideList = true where id = 51;
 
+/* removing null values */
+update person set birthname = '' where birthname is null;
+update person set "language" = '' where language is null;
+update person set note = '' where note is null;
+
 ->>>>> bis hier auf server
 
 +v 1.5.1 (06.05.2018)

@@ -1,9 +1,8 @@
 package com.patho.main.config
 
 import com.patho.main.repository.miscellaneous.MailRepository
-import com.patho.main.repository.miscellaneous.MediaRepository
+import com.patho.main.repository.miscellaneous.MiscellaneousDocumentsRepository
 import com.patho.main.repository.miscellaneous.PrintDocumentRepository
-import com.patho.main.repository.miscellaneous.impl.PrintDocumentRepositoryImpl
 import com.patho.main.service.PrintService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,10 +13,11 @@ import org.springframework.stereotype.Component
 
 @Component
 class StartupApplicationListener  @Autowired @Lazy constructor(
-        var pathoConfig: PathoConfig,
-        var printDocumentRepository : PrintDocumentRepository,
-        var mailRepository: MailRepository,
-        var printService : PrintService): ApplicationListener<ContextRefreshedEvent> {
+        private val pathoConfig: PathoConfig,
+        private val printDocumentRepository : PrintDocumentRepository,
+        private val mailRepository: MailRepository,
+        private val printService : PrintService,
+        private val miscellaneousDocumentsRepository: MiscellaneousDocumentsRepository): ApplicationListener<ContextRefreshedEvent> {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -29,8 +29,9 @@ class StartupApplicationListener  @Autowired @Lazy constructor(
         printDocumentRepository.initializeDocuments();
         mailRepository.initializeDocuments();
         printService.initializePrinters();
+        miscellaneousDocumentsRepository.initializeDocuments()
 
-        logger.info("------------------------------- Increment counter")
+        logger.info("Initializing documents ended")
     }
 
 }

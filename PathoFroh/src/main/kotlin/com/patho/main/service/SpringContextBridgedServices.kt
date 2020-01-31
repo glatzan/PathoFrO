@@ -6,6 +6,7 @@ import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.config.util.ResourceBundle
 import com.patho.main.repository.jpa.*
+import com.patho.main.repository.miscellaneous.HttpRestRepository
 import com.patho.main.repository.miscellaneous.LDAPRepository
 import com.patho.main.repository.miscellaneous.MediaRepository
 import com.patho.main.repository.miscellaneous.PrintDocumentRepository
@@ -71,4 +72,5 @@ interface SpringContextBridgedServices {
     var taskExecutor: ThreadPoolTaskExecutor
     var bioBankService: BioBankService
     var blockService: BlockService
+    var httpRestRepository: HttpRestRepository
 }

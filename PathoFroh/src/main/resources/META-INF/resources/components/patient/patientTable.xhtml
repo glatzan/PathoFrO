@@ -4,19 +4,103 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:composite="http://java.sun.com/jsf/composite">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui">
 
 
+<!-- Datatable for patient search result -->
+<!-- Inteface: com.patho.main.util.ui.jsfcomponents.IPatientTableDataProvider-->
+<!-- Is e.g used in searchAndAddPatient Dialog-->
 <composite:interface>
-    <composite:attribute name="rendered" required="false" default="true"/>
-    <composite:attribute name="auditElement" required="true"/>
+    <!-- Dataprovider of type com.patho.main.util.ui.jsfcomponents.IPatientTableDataProvider -->
+    <composite:attribute name="dataProvider" type="com.patho.main.util.ui.jsfcomponents.IPatientTableDataProvider"
+                         required="true"/>
 
-    <composite:attribute name="tableWidth" default="width:100%"
-                         required="false"/>
+    <!-- update of componetens if patient is seleced-->
+    <composite:attribute name="updateOnPatientSelect" required="false" default=""/>
+
+    <!-- scroll hight of the datatable   -->
+    <composite:attribute name="scrollHeight" required="true"/>
 </composite:interface>
 
 <composite:implementation>
+    <p:dataTable var="patientItem" id="patientDatatable" scrollHeight="#{cc.attrs.scrollHeight}"
+                 styleClass="defaultHistoDataTable" scrollable="true"
+                 style="margin-top: 20px;" selectionMode="single"
+                 rowKey="#{patientItem.id}"
+                 selection="#{cc.attrs.dataProvider.selectedPatient}"
+                 value="#{cc.attrs.dataProvider.patientList}">
 
+        <!-- Name -->
+        <p:column headerText="#{msg['dialog.searchPatient.search.name']}"
+                  sortBy="#{patientItem.listItem.person.lastName}">
+            <h:outputText value="#{patientItem.listItem.person.lastName}"/>
+        </p:column>
+
+        <!-- Surname -->
+        <p:column headerText="#{msg['dialog.searchPatient.search.firstName']}"
+                  sortBy="#{patientItem.listItem.person.firstName}">
+            <h:outputText value="#{patientItem.listItem.person.firstName}"/>
+        </p:column>
+
+        <!-- Birthday -->
+        <p:column
+                headerText="#{msg['dialog.searchPatient.search.birthday.short']}"
+                sortBy="#{patientItem.listItem.person.birthday}">
+            <h:outputText
+                    rendered="#{patientItem.listItem.person.birthday ne null}"
+                    value="#{patientItem.listItem.person.birthday}">
+                <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
+            </h:outputText>
+        </p:column>
+
+        <!-- gender -->
+        <p:column sortBy="#{patientItem.listItem.person.gender}">
+            <f:facet name="header">
+                <h:outputText value="#{msg['dialog.searchPatient.search.gender']}"
+                              title="#{msg['dialog.searchPatient.search.gender.info']}"/>
+            </f:facet>
+            <h:outputText
+                    value="#{patientItem.listItem.person.gender eq 'FEMALE' ? msg['dialog.searchPatient.search.gender.female'] : msg['dialog.searchPatient.search.gender.male']}"/>
+        </p:column>
+
+        <!-- databse -->
+        <p:column sortBy="#{patientItem.listItem.inDatabase}">
+            <f:facet name="header">
+                <h:outputText value="#{msg['dialog.searchPatient.search.database']}"
+                              title="#{msg['dialog.searchPatient.search.database.info']}"/>
+            </f:facet>
+
+            <ui:fragment rendered="#{patientItem.listItem.inDatabase}">
+                <i class="fa fa-fw fa-check-circle icon-green"
+                   title="#{msg['dialog.searchPatient.search.database.clinic']}"/>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{!patientItem.listItem.inDatabase}">
+                <i class="fa fa-fw fa-times-circle icon-red"
+                   title="#{msg['dialog.searchPatient.search.database.histo']}"/>
+            </ui:fragment>
+        </p:column>
+
+        <!-- piz -->
+        <p:column headerText="#{msg['dialog.searchPatient.search.piz']}"
+                  sortBy="#{patientItem.listItem.piz}">
+            <h:outputText value="#{patientItem.listItem.piz}"/>
+        </p:column>
+
+        <!-- select patient -->
+        <p:ajax event="rowSelect" update="#{cc.attrs.updateOnPatientSelect}"
+                listener="#{cc.attrs.dataProvider.onSelect()}"/>
+
+        <!-- double click, submit -->
+        <p:ajax event="rowDblselect"
+                oncomplete="sumbitOnDblSelect();return false;"/>
+
+    </p:dataTable>
+
+    <p:remoteCommand name="sumbitOnDblSelect" immediate="true"
+                     actionListener="#{cc.attrs.dataProvider.onDblSelect()}"/>
 
 </composite:implementation>
 </html>

@@ -55,7 +55,7 @@
                     <!-- delete -->
                     <p:commandButton value="#{msg['dialog.deleteTask.button.detele']}"
                                      icon="fa fa-fw fa-trash"
-                                     actionListener="#{dialog.confirmDialog.initAndPrepareBean().header('dialog.removePatient.confirm.headline').ctext('dialog.removePatient.confirm.text',dialog.deletePatientDialog.patient.person.getFullName())}">
+                                     actionListener="#{confirmDialog.initAndPrepareBean().header('dialog.removePatient.confirm.headline').ctext('dialog.removePatient.confirm.text',dialog.deletePatientDialog.patient.person.getFullName())}">
                         <p:ajax event="dialogReturn"
                                 listener="#{dialog.deletePatientDialog.onConfirmDialogReturn}"/>
                     </p:commandButton>

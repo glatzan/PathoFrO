@@ -33,7 +33,7 @@ public class DeletePatientDialog extends AbstractDialog {
     }
 
     public void onConfirmDialogReturn(SelectEvent event) {
-        if (event.getObject() != null && event.getObject() instanceof ConfirmEvent) {
+        if (event.getObject() != null && event.getObject() instanceof ConfirmEvent && ((ConfirmEvent) event.getObject()).getObj()) {
             deleteAndHide();
         }
     }

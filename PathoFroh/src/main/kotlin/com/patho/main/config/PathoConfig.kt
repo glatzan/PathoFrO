@@ -34,7 +34,7 @@ public open class PathoConfig @Autowired @Lazy constructor(
 
     var pdfErrorFiles: PDFErrorFiles = PDFErrorFiles()
 
-    var externalDocumentMapper : MutableList<ExternalDocumentMapper> = mutableListOf<ExternalDocumentMapper>()
+    var externalDocumentMapper: MutableList<ExternalDocumentMapper> = mutableListOf<ExternalDocumentMapper>()
 
 //    init {
 //        fileSettings = FileSettings();
@@ -105,7 +105,7 @@ public open class PathoConfig @Autowired @Lazy constructor(
 
             //TODO read from jar
             for (srcFile in copyRes) {
-                logger.debug("Classpath... " + File(srcFile.filename).path + " " +File(srcFile.filename).absolutePath)
+                logger.debug("Classpath... " + File(srcFile.filename).path + " " + File(srcFile.filename).absolutePath)
             }
 
             logger.debug("Classpath End")
@@ -286,7 +286,17 @@ public open class PathoConfig @Autowired @Lazy constructor(
         /**
          * Default email for rest upload error
          */
-        var restUploadErrorEmail : Long = 0
+        var restUploadErrorEmail: Long = 0
+
+        /**
+         * Default document for creating patient
+         */
+        var createPDVPatientRequestDocument: Long = 0
+
+        /**
+         * Id of the email which should be used to inform the admins of pdv patient creation
+         */
+        var createPDVPatientStatusMail: Long = 0
     }
 
     class ProgramInfo {
@@ -298,7 +308,13 @@ public open class PathoConfig @Autowired @Lazy constructor(
     }
 
     class Miscellaneous {
-        var phoneRegex: String = ""
+
+        lateinit var phoneRegex: String
+
+        /**
+         * If true the admin will be noticed for every Patient that is created in the pdv
+         */
+        var noticeAdminOnPDVPatientCreation: Boolean = true
     }
 
     class DefaultNotification {
@@ -334,9 +350,9 @@ public open class PathoConfig @Autowired @Lazy constructor(
         var renderErrorPDF = ""
     }
 
-    class ExternalDocumentMapper{
-        lateinit var externalIdentifier : String
-        lateinit var internalIdentifier : PrintDocumentType
+    class ExternalDocumentMapper {
+        lateinit var externalIdentifier: String
+        lateinit var internalIdentifier: PrintDocumentType
     }
 
 }

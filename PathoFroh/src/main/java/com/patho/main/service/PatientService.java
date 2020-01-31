@@ -5,7 +5,7 @@ import com.patho.main.model.patient.Patient;
 import com.patho.main.model.patient.Task;
 import com.patho.main.repository.jpa.PatientRepository;
 import com.patho.main.repository.jpa.TaskRepository;
-import com.patho.main.repository.miscellaneous.JSONPatientRepository;
+import com.patho.main.repository.miscellaneous.HttpRestRepository;
 import com.patho.main.util.exception.CustomNullPatientExcepetion;
 import com.patho.main.util.exception.HistoDatabaseInconsistentVersionException;
 import com.patho.main.util.helper.HistoUtil;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PatientService extends AbstractService {
 
     @Autowired
-    private JSONPatientRepository jsonPatientRepository;
+    private HttpRestRepository httpRestRepository;
 
     @Autowired
     private PatientRepository patientRepository;
@@ -58,7 +59,7 @@ public class PatientService extends AbstractService {
         // patient, piz search is more specific
         if (HistoUtil.isNotNullOrEmpty(patient.getPiz()) && update) {
             logger.debug("Getting data from pdv for patient " + patient.getPiz());
-            Optional<Patient> clincPatient = jsonPatientRepository.findByPIZ(patient.getPiz());
+            Optional<Patient> clincPatient = httpRestRepository.findPatientByPIZ(patient.getPiz());
 
             if (clincPatient.isPresent())
                 copyPatientData(clincPatient.get(), patient);
@@ -263,7 +264,7 @@ public class PatientService extends AbstractService {
             if (!patient.isPresent() && localDatabaseOnly)
                 return Optional.empty();
 
-            Optional<Patient> pdvPatient = jsonPatientRepository.findByPIZ(piz);
+            Optional<Patient> pdvPatient = httpRestRepository.findPatientByPIZ(piz);
 
             if (patient.isPresent()) {
                 copyPatientDataAndSave(pdvPatient.get(), patient.get());
@@ -297,7 +298,7 @@ public class PatientService extends AbstractService {
         // clinic backend
         for (Patient patient : patients) {
 
-            Optional<Patient> pdvPatient = jsonPatientRepository.findByPIZ(patient.getPiz());
+            Optional<Patient> pdvPatient = httpRestRepository.findPatientByPIZ(patient.getPiz());
 
             logger.debug("Patient (" + piz + ") found in database, updating with pdv data");
 
@@ -323,7 +324,7 @@ public class PatientService extends AbstractService {
      * @throws CustomNullPatientExcepetion
      */
     public List<Patient> findAllPatientsByNameSurnameBirthdayInDatabaseAndPDV(String name, String surname,
-                                                                              Date birthday, boolean localDatabaseOnly)
+                                                                              LocalDate birthday, boolean localDatabaseOnly)
             throws HistoDatabaseInconsistentVersionException, CustomNullPatientExcepetion {
         return findAllPatientsByNameSurnameBirthdayInDatabaseAndPDV(name, surname, birthday, localDatabaseOnly,
                 new AtomicBoolean(false));
@@ -344,7 +345,7 @@ public class PatientService extends AbstractService {
      * @throws HistoDatabaseInconsistentVersionException
      */
     public List<Patient> findAllPatientsByNameSurnameBirthdayInDatabaseAndPDV(String name, String surname,
-                                                                              Date birthday, boolean localDatabaseOnly, AtomicBoolean toManyEntriesInClinicDatabase)
+                                                                              LocalDate birthday, boolean localDatabaseOnly, AtomicBoolean toManyEntriesInClinicDatabase)
             throws CustomNullPatientExcepetion, HistoDatabaseInconsistentVersionException {
 
         ArrayList<Patient> result = new ArrayList<Patient>();
@@ -356,7 +357,7 @@ public class PatientService extends AbstractService {
 
         if (!localDatabaseOnly) {
             try {
-                clinicPatients = jsonPatientRepository.findByNameAndSurNameAndBirthday(name, surname, birthday);
+                clinicPatients = httpRestRepository.findPatientByNameAndSurNameAndBirthday(name, surname, birthday);
             } catch (ToManyEntriesException e) {
                 toManyEntriesInClinicDatabase.set(true);
                 clinicPatients = new ArrayList<Patient>();

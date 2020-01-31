@@ -3,7 +3,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:histo="http://java.sun.com/jsf/composite/components">
+                xmlns:histopdf="http://java.sun.com/jsf/composite/components/pdf">
 
     <p:outputPanel styleClass="headerPannel">
         <h:outputFormat value="#{msg['dialog.consultation.reply']}" escape="false">
@@ -42,7 +42,7 @@
 
             <!-- PDFs -->
             <h:outputLabel value="#{msg['dialog.consultation.repy.files']}"/>
-            <histo:pdfTable tableWidth="710px" id="pdfTableList"
+            <histopdf:pdfTable tableWidth="710px" id="pdfTableList"
                             pdfSource="#{consultationDialog.selectedConsultation.consultation.attachedPdfs}"
                             pdfOrganizier="#{pdfOrganizerDialog}"
                             patient="#{consultationDialog.task.patient}" nameLength="20"

@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityGraph;
 import javax.persistence.criteria.*;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -147,12 +148,12 @@ public class PatientRepositoryImpl extends AbstractRepositoryCustom implements P
     }
 
     @Override
-    public List<Patient> findByNameAndFirstnameAndBirthday(String name, String firstname, Date birthday) {
+    public List<Patient> findByNameAndFirstnameAndBirthday(String name, String firstname, LocalDate birthday) {
         return findByNameAndFirstnameAndBirthday(name, firstname, birthday, false, false, true);
     }
 
     @Override
-    public List<Patient> findByNameAndFirstnameAndBirthday(String name, String firstname, Date birthday,
+    public List<Patient> findByNameAndFirstnameAndBirthday(String name, String firstname, LocalDate birthday,
                                                            boolean initializeTasks, boolean initializeFiles, boolean irgnoreArchived) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Patient> criteria = builder.createQuery(Patient.class);

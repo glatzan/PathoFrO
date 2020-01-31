@@ -5,7 +5,6 @@ import com.patho.main.repository.miscellaneous.MediaRepository
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang.RandomStringUtils
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
@@ -20,15 +19,12 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import javax.imageio.ImageIO
-import kotlin.coroutines.coroutineContext
 
 @Service
 class MediaRepositoryImpl @Autowired constructor(
         private val resourceLoader: ResourceLoader,
         private val pathoConfig: PathoConfig
-) : MediaRepository {
-
-    private val logger = LoggerFactory.getLogger(this.javaClass)
+) : AbstractMiscellaneousRepositoryImpl(), MediaRepository {
 
     /**
      * Replaces wildcards like fileRepository and workingDirectory
@@ -37,9 +33,9 @@ class MediaRepositoryImpl @Autowired constructor(
         var result = path
         logger.debug("Forming Path: $path")
         if (path.startsWith("fileRepository:")) {
-            result= path.replace("fileRepository:", pathoConfig.fileSettings.fileRepository)
+            result = path.replace("fileRepository:", pathoConfig.fileSettings.fileRepository)
         } else if (path.startsWith("workDirectory:")) {
-            result= path.replace("workDirectory:", pathoConfig.fileSettings.workDirectory)
+            result = path.replace("workDirectory:", pathoConfig.fileSettings.workDirectory)
         }
         logger.debug("Forming Path: $path to $result")
         return result

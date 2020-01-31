@@ -5,7 +5,6 @@ import com.patho.main.action.dialog.diagnosis.*;
 import com.patho.main.action.dialog.media.EditPDFDialog;
 import com.patho.main.action.dialog.media.UploadDialog;
 import com.patho.main.action.dialog.miscellaneous.AccountingDataDialog;
-import com.patho.main.action.dialog.miscellaneous.ConfirmDialog;
 import com.patho.main.action.dialog.notification.ContactDialog;
 import com.patho.main.action.dialog.notification.ContactNotificationDialog;
 import com.patho.main.action.dialog.patient.*;
@@ -80,7 +79,6 @@ public class DialogHandler {
     private MergePatientDialog mergePatientDialog = new MergePatientDialog();
     private EditPatientDialog editPatientDialog = new EditPatientDialog();
     private DeletePatientDialog deletePatientDialog = new DeletePatientDialog();
-    private ConfirmDialog confirmDialog = new ConfirmDialog();
 
     public AddSlidesDialog getAddSlidesDialog() {
         return this.addSlidesDialog;
@@ -238,10 +236,6 @@ public class DialogHandler {
 
     public DeletePatientDialog getDeletePatientDialog() {
         return this.deletePatientDialog;
-    }
-
-    public ConfirmDialog getConfirmDialog() {
-        return this.confirmDialog;
     }
 
 }

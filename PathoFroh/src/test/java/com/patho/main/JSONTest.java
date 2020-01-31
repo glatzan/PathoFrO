@@ -1,7 +1,6 @@
 package com.patho.main;
 
 import com.patho.main.model.patient.Patient;
-import com.patho.main.repository.miscellaneous.JSONPatientRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +14,6 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest
 public class JSONTest {
 
-    private JSONPatientRepository jsonPatientRepository;
 
     @Test
     public void test2() {

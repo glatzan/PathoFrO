@@ -108,7 +108,6 @@ public class AccountingData {
     public AccountingData(long id, LocalDate date, String piz, String taskID, int slideCount, int v4800, int v4802, int v4015, int v4815Imu, boolean extern, String town, String surgeons, int blockcount, int samplecount) {
         this.id = id;
         try {
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             this.date = date;
             this.year = this.date.getYear();
             this.month = this.date.getMonth().getValue();

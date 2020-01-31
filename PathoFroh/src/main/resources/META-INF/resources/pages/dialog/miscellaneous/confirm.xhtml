@@ -4,7 +4,7 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title><h:outputFormat value="#{dialog.confirmDialog.headline}"
+    <title><h:outputFormat value="#{confirmDialog.headline}"
                            escape="false">
     </h:outputFormat></title>
     <h:outputStylesheet name="style.css" value="style.css" library="css"/>
@@ -19,7 +19,7 @@
         <div class="dialogHeader">
             <h:panelGrid style="width:100%;" columns="2"
                          styleClass="defaultHistoTable">
-                <h:outputFormat value="#{dialog.confirmDialog.headline}"
+                <h:outputFormat value="#{confirmDialog.headline}"
                                 escape="false">
                 </h:outputFormat>
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
@@ -32,7 +32,7 @@
 
         <div class="dialogContent">
             <h:panelGrid columns="1" styleClass="defaultHistoTable">
-                <h:outputLabel value="#{dialog.confirmDialog.text}"></h:outputLabel>
+                <h:outputLabel value="#{confirmDialog.text}"/>
             </h:panelGrid>
         </div>
 
@@ -45,13 +45,13 @@
                 <h:panelGrid columns="2" styleClass="right">
                     <p:commandButton value="#{msg['general.confirm']}"
                                      icon="fa fa-fw fa-check-circle-o"
-                                     actionListener="#{dialog.confirmDialog.confirmAndHide()}">
+                                     actionListener="#{confirmDialog.confirmAndHide()}">
                     </p:commandButton>
 
                     <p:commandButton value="#{msg['general.abort']}"
                                      partialSubmit="true" icon="fa fa-fw fa-times-circle" id="closeBtn"
                                      process="@this"
-                                     actionListener="#{dialog.confirmDialog.hideDialog()}"></p:commandButton>
+                                     actionListener="#{confirmDialog.declineAndHide()}"/>
                 </h:panelGrid>
             </h:panelGrid>
         </div>

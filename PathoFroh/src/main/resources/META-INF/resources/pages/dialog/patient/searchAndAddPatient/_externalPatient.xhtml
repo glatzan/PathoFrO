@@ -2,7 +2,8 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:histo="http://java.sun.com/jsf/composite/components">
+                xmlns:histoPerson="http://java.sun.com/jsf/composite/components/person"
+                xmlns:histoPatient="http://java.sun.com/jsf/composite/components/patient">
 
 
     <p:outputPanel styleClass="headerPannel">
@@ -12,39 +13,81 @@
 
 
     <p:outputPanel styleClass="bodyPannel">
+
         <!-- person mask -->
-        <histo:personSettingGeneral
+        <histoPerson:personDataInput
+                id="personDataInput"
                 birthdayRequired="true"
                 genderRequired="true"
                 townRequired="true"
                 zipRequired="true"
                 streetRequired="true"
+                disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
+                onPersonDataChangeUpdate="adminForm:patientListTable:patientDatatable adminForm:toManyMatches adminForm:buttonContainer"
+                onPersonDataChangeListener="#{searchAndAddPatientDialog.externalPatientTab}"
                 person="#{searchAndAddPatientDialog.externalPatientTab.patient.person}"/>
+
+        <!-- datatable for search results -->
+        <histoPatient:patientTable dataProvider="#{searchAndAddPatientDialog.externalPatientTab}"
+                                   scrollHeight="100"
+                                   updateOnPatientSelect="adminForm:personDataInput:personData adminForm:buttonContainer"
+                                   id="patientListTable"/>
+
     </p:outputPanel>
 
     <div class="buttonContainer">
         <h:panelGrid columns="2">
 
-            <h:panelGrid columns="1" styleClass="left">
+            <!-- to many entries -->
+            <h:panelGrid columns="1" styleClass="left" id="toManyMatches">
+                <h:outputLabel value="#{msg['dialog.searchPatient.toManyResults']}"
+                               style="color:red"
+                               rendered="#{searchAndAddPatientDialog.externalPatientTab.toManyMatchesInClinicDatabase}"/>
+
+                <h:panelGroup rendered="#{searchAndAddPatientDialog.externalPatientTab.disableInput}">
+                    <h:outputLabel value="#{msg['dialog.searchPatient.patientCreationRunning']}"/>
+                    <h:graphicImage value="/gfx/ajax-loader1.gif"
+                                    style="margin-left: 10px; vertical-align: middle; height: 10px"/>
+                </h:panelGroup>
             </h:panelGrid>
 
-            <h:panelGrid columns="2" styleClass="right">
+            <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
                 <!-- Add button -->
-                <p:commandButton id="addButton"
-                                 actionListener="#{confirmPatientDataDialog.initAndPrepareBean(searchAndAddPatientDialog.externalPatientTab.patient)}"
-                                 value="#{msg['dialog.searchPatient.add.button.add']}"
-                                 oncomplete="PF('addButton').enable();PF('closeBtn').enable()"
-                                 onclick="PF('addButton').disable();PF('closeBtn').disable()"
-                                 widgetVar="addExternalPatient" update="@form" process="@form"
-                                 icon="fa fa-fw fa-user-plus" partialSubmit="true">
-                    <p:ajax event="dialogReturn" update="@form"
-                            listener="#{searchAndAddPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}"/>
+                <h:panelGroup>
+                    <p:commandButton id="addButton"
+                                     rendered="#{!searchAndAddPatientDialog.externalPatientTab.patientSelected}"
+                                     actionListener="#{confirmPatientDataDialog.initAndPrepareBean(searchAndAddPatientDialog.externalPatientTab.patient)}"
+                                     value="#{msg['dialog.searchPatient.add.button.add']}"
+                                     oncomplete="PF('addButton').enable();PF('closeBtn').enable()"
+                                     onclick="PF('addButton').disable();PF('closeBtn').disable()"
+                                     disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
+                                     widgetVar="addExternalPatient" update="adminForm:personDataInput:personData"
+                                     process="adminForm:personDataInput:personData"
+                                     icon="fa fa-fw fa-user-plus">
+                        <p:ajax event="dialogReturn" update="@form" onstart="blockInput()"
+                                listener="#{searchAndAddPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}"/>
+                    </p:commandButton>
+                    <p:remoteCommand name="blockInput" update="@form"/>
+                </h:panelGroup>
+
+                <!-- Select button, if proposal was selected -->
+                <p:commandButton
+                        value="#{searchAndAddPatientDialog.externalPatientTab.selectedPatient.listItem.inDatabase ? msg['dialog.searchPatient.add.button.invoke'] : msg['dialog.searchPatient.add.button.add']}"
+                        widgetVar="clinicSearchBtn" id="submitAddButton"
+                        rendered="#{searchAndAddPatientDialog.externalPatientTab.patientSelected}"
+                        icon="fa fa-fw fa-user-plus" immediate="true"
+                        disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
+                        oncomplete="PF('clinicSearchBtn').enable();PF('closeBtn').enable()"
+                        onclick="PF('clinicSearchBtn').disable();PF('closeBtn').disable()"
+                        actionListener="#{searchAndAddPatientDialog.externalPatientTab.hideDialogAndSelectPatient()}"
+                        partialSubmit="true" process="@form">
                 </p:commandButton>
 
                 <!-- Close Button -->
                 <p:commandButton value="#{msg['general.close']}"
                                  widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
                                  immediate="true"
+                                 disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
                                  actionListener="#{searchAndAddPatientDialog.hideDialog()}"/>
             </h:panelGrid>
         </h:panelGrid>
