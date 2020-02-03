@@ -45,7 +45,6 @@ class SearchAndAddPatientDialog @Autowired constructor(
         logger.debug("Initializing notification dialog")
         isShowExternalPatientTab = false
         isPersistPatient = false
-        clinicSearchTab.disabled = false
         return super.initBean(true, clinicSearchTab)
     }
 
@@ -57,7 +56,6 @@ class SearchAndAddPatientDialog @Autowired constructor(
         // only enable if forced or user has the permission to add external patients
         if (forceExternalMode || userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN)) {
             tabs = arrayOf(clinicSearchTab, externalPatientTab)
-            externalPatientTab.disabled = false
             externalPatientTab.initTab(true)
         }
         return this
@@ -247,16 +245,10 @@ class SearchAndAddPatientDialog @Autowired constructor(
 
         lateinit var patient: Patient
 
-        /**
-         * True if patient is beeing created an the input shoud be blocked
-         */
-        var disableInput = false
-
         override fun initTab(force: Boolean): Boolean {
             disabled = !userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_EXTERN)
             patient = Patient(Person(Contact()))
             patient.person.gender = Person.Gender.UNKNOWN
-            disableInput = false
             return super.initTab(force)
         }
 
@@ -266,32 +258,27 @@ class SearchAndAddPatientDialog @Autowired constructor(
         open fun onConfirmExternalPatientDialog(event: SelectEvent) {
             val obj = event.getObject()
             if (obj != null && obj is PatientSelectEvent) {
-                println(".....")
-                Thread.sleep(1000);
-//                val patient = obj.obj ?: return hideDialog()
-//                if (isPersistPatient) {
-//                    // creates patient in pdv
-//                    logger.debug("Persist Patient in database")
-//
-//                    this.disableInput = true
-//                    this.disabled = true
-//                    clinicSearchTab.disabled = true
-//
-//                    val piz = SpringContextBridge.services().httpRestRepository.createPatientInPDV(patient)
-//
-//                    if (piz != null) {
-//                        patient.piz = piz
-//                        patient.externalPatient = false
-//                        MessageHandler.sendGrowlMessagesAsResource("growl.patient.createdPDV.headline", "growl.patient.createdPDV.text", piz)
-//                        return hideDialog(PatientSelectEvent(patientService.addPatient(patient, false)))
-//                    } else {
-//                        MessageHandler.sendGrowlMessagesAsResource("growl.patient.errorPDV.headline", "growl.patient.errorPDV.text")
-//                        return hideDialog(ReloadEvent())
-//                    }
-//                } else {
-//                    MessageHandler.sendGrowlMessagesAsResource("growl.patient.createNotPersist.headline", "growl.patient.createNotPersist.text")
-//                    return hideDialog(PatientSelectEvent(patient))
-//                }
+                val patient = obj.obj ?: return hideDialog()
+                if (isPersistPatient) {
+                    // creates patient in pdv
+                    logger.debug("Persist Patient in database")
+
+
+                    val piz = SpringContextBridge.services().httpRestRepository.createPatientInPDV(patient)
+
+                    if (piz != null) {
+                        patient.piz = piz
+                        patient.externalPatient = false
+                        MessageHandler.sendGrowlMessagesAsResource("growl.patient.createdPDV.headline", "growl.patient.createdPDV.text", piz)
+                        return hideDialog(PatientSelectEvent(patientService.addPatient(patient, false)))
+                    } else {
+                        MessageHandler.sendGrowlMessagesAsResource("growl.patient.errorPDV.headline", "growl.patient.errorPDV.text")
+                        return hideDialog(ReloadEvent())
+                    }
+                } else {
+                    MessageHandler.sendGrowlMessagesAsResource("growl.patient.createNotPersist.headline", "growl.patient.createNotPersist.text")
+                    return hideDialog(PatientSelectEvent(patient))
+                }
             } else if (event.`object` is ReloadEvent) {
                 return hideDialog(ReloadEvent())
             } else {

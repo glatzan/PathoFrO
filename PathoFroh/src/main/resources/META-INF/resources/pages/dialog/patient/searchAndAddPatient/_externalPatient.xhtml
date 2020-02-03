@@ -22,7 +22,6 @@
                 townRequired="true"
                 zipRequired="true"
                 streetRequired="true"
-                disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
                 onPersonDataChangeUpdate="adminForm:patientListTable:patientDatatable adminForm:toManyMatches adminForm:buttonContainer"
                 onPersonDataChangeListener="#{searchAndAddPatientDialog.externalPatientTab}"
                 person="#{searchAndAddPatientDialog.externalPatientTab.patient.person}"/>
@@ -44,11 +43,6 @@
                                style="color:red"
                                rendered="#{searchAndAddPatientDialog.externalPatientTab.toManyMatchesInClinicDatabase}"/>
 
-                <h:panelGroup rendered="#{searchAndAddPatientDialog.externalPatientTab.disableInput}">
-                    <h:outputLabel value="#{msg['dialog.searchPatient.patientCreationRunning']}"/>
-                    <h:graphicImage value="/gfx/ajax-loader1.gif"
-                                    style="margin-left: 10px; vertical-align: middle; height: 10px"/>
-                </h:panelGroup>
             </h:panelGrid>
 
             <h:panelGrid columns="2" styleClass="right" id="buttonContainer">
@@ -56,15 +50,15 @@
                 <h:panelGroup>
                     <p:commandButton id="addButton"
                                      rendered="#{!searchAndAddPatientDialog.externalPatientTab.patientSelected}"
-                                     actionListener="#{confirmPatientDataDialog.initAndPrepareBean(searchAndAddPatientDialog.externalPatientTab.patient)}"
                                      value="#{msg['dialog.searchPatient.add.button.add']}"
+                                     widgetVar="addButton"
+                                     update="@form"
+                                     process="@form"
                                      oncomplete="PF('addButton').enable();PF('closeBtn').enable()"
-                                     onstart="PF('blockUIWidget').block();"
-                                     disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
-                                     widgetVar="addExternalPatient"
-                                     process="adminForm:personDataInput:personData"
+                                     onclick="PF('addButton').disable();PF('closeBtn').disable()"
+                                     actionListener="#{confirmPatientDataDialog.initAndPrepareBean(searchAndAddPatientDialog.externalPatientTab.patient)}"
                                      icon="fa fa-fw fa-user-plus">
-                        <p:ajax event="dialogReturn" update="@form" onstart="blockInput()"   oncomplete="PF('blockUIWidget').unblock()"
+                        <p:ajax event="dialogReturn" update="@form" onstart="PF('blockUIWidget').block()"   oncomplete="PF('blockUIWidget').unblock()"
                                 listener="#{searchAndAddPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}"/>
                     </p:commandButton>
                     <p:remoteCommand name="blockInput" update="@form"/>
@@ -76,9 +70,8 @@
                         widgetVar="clinicSearchBtn" id="submitAddButton"
                         rendered="#{searchAndAddPatientDialog.externalPatientTab.patientSelected}"
                         icon="fa fa-fw fa-user-plus" immediate="true"
-                        disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
-                        oncomplete="PF('clinicSearchBtn').enable();PF('closeBtn').enable()"
-                        onclick="PF('clinicSearchBtn').disable();PF('closeBtn').disable()"
+                        oncomplete="PF('submitAddButton').enable();PF('closeBtn').enable()"
+                        onclick="PF('submitAddButton').disable();PF('closeBtn').disable()"
                         actionListener="#{searchAndAddPatientDialog.externalPatientTab.hideDialogAndSelectPatient()}"
                         partialSubmit="true" process="@form">
                 </p:commandButton>
@@ -87,7 +80,6 @@
                 <p:commandButton value="#{msg['general.close']}"
                                  widgetVar="closeBtn" icon="fa fa-times-circle" update="@form"
                                  immediate="true"
-                                 disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
                                  actionListener="#{searchAndAddPatientDialog.hideDialog()}"/>
             </h:panelGrid>
         </h:panelGrid>
