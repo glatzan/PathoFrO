@@ -266,30 +266,32 @@ class SearchAndAddPatientDialog @Autowired constructor(
         open fun onConfirmExternalPatientDialog(event: SelectEvent) {
             val obj = event.getObject()
             if (obj != null && obj is PatientSelectEvent) {
-                val patient = obj.obj ?: return hideDialog()
-                if (isPersistPatient) {
-                    // creates patient in pdv
-                    logger.debug("Persist Patient in database")
-
-                    this.disableInput = true
-                    this.disabled = true
-                    clinicSearchTab.disabled = true
-
-                    val piz = SpringContextBridge.services().httpRestRepository.createPatientInPDV(patient)
-
-                    if (piz != null) {
-                        patient.piz = piz
-                        patient.externalPatient = false
-                        MessageHandler.sendGrowlMessagesAsResource("growl.patient.createdPDV.headline", "growl.patient.createdPDV.text", piz)
-                        return hideDialog(PatientSelectEvent(patientService.addPatient(patient, false)))
-                    } else {
-                        MessageHandler.sendGrowlMessagesAsResource("growl.patient.errorPDV.headline", "growl.patient.errorPDV.text")
-                        return hideDialog(ReloadEvent())
-                    }
-                } else {
-                    MessageHandler.sendGrowlMessagesAsResource("growl.patient.createNotPersist.headline", "growl.patient.createNotPersist.text")
-                    return hideDialog(PatientSelectEvent(patient))
-                }
+                println(".....")
+                Thread.sleep(1000);
+//                val patient = obj.obj ?: return hideDialog()
+//                if (isPersistPatient) {
+//                    // creates patient in pdv
+//                    logger.debug("Persist Patient in database")
+//
+//                    this.disableInput = true
+//                    this.disabled = true
+//                    clinicSearchTab.disabled = true
+//
+//                    val piz = SpringContextBridge.services().httpRestRepository.createPatientInPDV(patient)
+//
+//                    if (piz != null) {
+//                        patient.piz = piz
+//                        patient.externalPatient = false
+//                        MessageHandler.sendGrowlMessagesAsResource("growl.patient.createdPDV.headline", "growl.patient.createdPDV.text", piz)
+//                        return hideDialog(PatientSelectEvent(patientService.addPatient(patient, false)))
+//                    } else {
+//                        MessageHandler.sendGrowlMessagesAsResource("growl.patient.errorPDV.headline", "growl.patient.errorPDV.text")
+//                        return hideDialog(ReloadEvent())
+//                    }
+//                } else {
+//                    MessageHandler.sendGrowlMessagesAsResource("growl.patient.createNotPersist.headline", "growl.patient.createNotPersist.text")
+//                    return hideDialog(PatientSelectEvent(patient))
+//                }
             } else if (event.`object` is ReloadEvent) {
                 return hideDialog(ReloadEvent())
             } else {

@@ -59,12 +59,12 @@
                                      actionListener="#{confirmPatientDataDialog.initAndPrepareBean(searchAndAddPatientDialog.externalPatientTab.patient)}"
                                      value="#{msg['dialog.searchPatient.add.button.add']}"
                                      oncomplete="PF('addButton').enable();PF('closeBtn').enable()"
-                                     onclick="PF('addButton').disable();PF('closeBtn').disable()"
+                                     onstart="PF('blockUIWidget').block();"
                                      disabled="#{searchAndAddPatientDialog.externalPatientTab.disableInput}"
-                                     widgetVar="addExternalPatient" update="adminForm:personDataInput:personData"
+                                     widgetVar="addExternalPatient"
                                      process="adminForm:personDataInput:personData"
                                      icon="fa fa-fw fa-user-plus">
-                        <p:ajax event="dialogReturn" update="@form" onstart="blockInput()"
+                        <p:ajax event="dialogReturn" update="@form" onstart="blockInput()"   oncomplete="PF('blockUIWidget').unblock()"
                                 listener="#{searchAndAddPatientDialog.externalPatientTab.onConfirmExternalPatientDialog}"/>
                     </p:commandButton>
                     <p:remoteCommand name="blockInput" update="@form"/>
