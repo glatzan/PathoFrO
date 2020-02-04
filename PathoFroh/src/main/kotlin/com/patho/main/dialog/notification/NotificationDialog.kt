@@ -16,7 +16,7 @@ import com.patho.main.model.patient.notification.ReportIntentNotification
 import com.patho.main.model.person.Contact
 import com.patho.main.model.person.Person
 import com.patho.main.repository.jpa.TaskRepository
-import com.patho.main.repository.miscellaneous.MailRepository
+import com.patho.main.repository.miscellaneous.DocumentRepository
 import com.patho.main.repository.miscellaneous.PrintDocumentRepository
 import com.patho.main.service.ReportIntentService
 import com.patho.main.template.DocumentToken
@@ -50,7 +50,7 @@ import java.util.*
 class NotificationDialog @Autowired constructor(
         private val printDocumentRepository: PrintDocumentRepository,
         private val pathoConfig: PathoConfig,
-        private val mailRepository: MailRepository,
+        private val documentRepository: DocumentRepository,
         private val printDialog: PrintDialog,
         private val taskRepository: TaskRepository,
         private val reportIntentService: ReportIntentService,
@@ -357,7 +357,7 @@ class NotificationDialog @Autowired constructor(
 
             selectedTemplate = printDocumentRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmailDocument).orElse(null)
 
-            mailTemplate = mailRepository.findByID(pathoConfig.defaultDocuments.notificationDefaultEmail)
+            mailTemplate = documentRepository.findByID<MailTemplate>(pathoConfig.defaultDocuments.notificationDefaultEmail)
 
             mailTemplate?.initialize(
                     DocumentToken("patient", task.patient),

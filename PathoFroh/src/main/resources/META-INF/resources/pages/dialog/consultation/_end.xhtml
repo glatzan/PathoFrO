@@ -12,7 +12,30 @@
     </p:outputPanel>
 
     <p:outputPanel styleClass="bodyPannel" style="padding:10px;">
-        TODO: Diagnose Eintragen
+        <h:panelGrid styleClass="defaultHistoTable" columns="2">
+            <h:outputLabel value="Anfrage gestellt" />
+            <h:outputText rendered="#{consultationDialog.selectedConsultation.consultation.dateOfRequest ne null}"
+                          value="#{consultationDialog.selectedConsultation.consultation.dateOfRequest}">
+                <f:converter converterId="localDateConverter"/>
+                <f:attribute name="pattern" value="dd.MM.yyyy"/>
+            </h:outputText>
+
+            <h:outputLabel value="Anfrage versendet" />
+            <h:outputText rendered="#{consultationDialog.selectedConsultation.consultation.sampleShippedDate ne null}"
+                          value="#{consultationDialog.selectedConsultation.consultation.sampleShippedDate}">
+                <f:converter converterId="localDateConverter"/>
+                <f:attribute name="pattern" value="dd.MM.yyyy"/>
+            </h:outputText>
+
+            <h:outputLabel value="Antwort erhalten" />
+            <h:outputText rendered="#{consultationDialog.selectedConsultation.consultation.replyReceivedDate ne null}"
+                          value="#{consultationDialog.selectedConsultation.consultation.replyReceivedDate}">
+                <f:converter converterId="localDateConverter"/>
+                <f:attribute name="pattern" value="dd.MM.yyyy"/>
+            </h:outputText>
+
+
+        </h:panelGrid>
     </p:outputPanel>
 
     <div class="buttonContainer">

@@ -7,7 +7,6 @@ import com.patho.main.model.patient.Task
 import com.patho.main.model.transitory.PDFContainerLoaded
 import com.patho.main.repository.jpa.PatientRepository
 import com.patho.main.repository.jpa.TaskRepository
-import com.patho.main.repository.miscellaneous.MailRepository
 import com.patho.main.service.MailService
 import com.patho.main.service.PDFService
 import com.patho.main.template.DocumentToken
@@ -27,8 +26,7 @@ open class PDFRestHandler @Autowired constructor(
         private val taskRepository: TaskRepository,
         private val pdfService: PDFService,
         private val pathoConfig: PathoConfig,
-        private val mailService: MailService,
-        private val mailRepository: MailRepository) : AbstractHandler() {
+        private val mailService: MailService) : AbstractHandler() {
 
     override fun loadHandler() {
     }
@@ -131,19 +129,13 @@ open class PDFRestHandler @Autowired constructor(
     }
 
     private fun sendErrorMail(reason: String, piz: String, caseID: String, fileName: String, documentType: String, file: MultipartFile) {
-        val mailTemplate = mailRepository.findByID(pathoConfig.defaultDocuments.restUploadErrorEmail) ?: return
-
-        mailTemplate.initialize(
+        mailService.sendAdminMailNoneBlocking(pathoConfig.defaultDocuments.restUploadErrorEmail,
+                if(!file.isEmpty) PDFContainerLoaded(PrintDocumentType.UNKNOWN, "Upload.pdf", file.bytes, null) else null,
                 DocumentToken("reason", reason),
                 DocumentToken("piz", if (piz.isEmpty()) "--" else piz),
                 DocumentToken("caseID", if (caseID.isEmpty()) "--" else caseID),
                 DocumentToken("fileName", if (fileName.isEmpty()) "--" else fileName),
                 DocumentToken("documentType", if (documentType.isEmpty()) "--" else documentType))
-
-        if (!file.isEmpty)
-            mailTemplate.attachment = PDFContainerLoaded(PrintDocumentType.UNKNOWN, "Upload.pdf", file.bytes, null)
-
-        mailService.sendAdminMail(mailTemplate)
     }
 
 

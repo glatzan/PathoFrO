@@ -6,9 +6,10 @@ import com.patho.main.config.PathoConfig
 import com.patho.main.config.excepion.ToManyEntriesException
 import com.patho.main.model.json.JSONPatientMapper
 import com.patho.main.model.patient.Patient
+import com.patho.main.repository.miscellaneous.DocumentRepository
 import com.patho.main.repository.miscellaneous.HttpRestRepository
-import com.patho.main.repository.miscellaneous.MailRepository
 import com.patho.main.service.MailService
+import com.patho.main.template.DefaultTemplateImpl
 import com.patho.main.template.DocumentToken
 import org.hibernate.boot.model.naming.IllegalIdentifierException
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,8 +33,7 @@ import java.util.stream.Collectors
 @ConfigurationProperties(prefix = "patho.rest")
 open class HttpRestRepositoryImpl @Autowired constructor(
         private val pathoConfig: PathoConfig,
-        private val miscellaneousDocumentsRepositoryRepository: MiscellaneousDocumentsRepositoryRepository,
-        private val mailRepository: MailRepository,
+        private val documentRepository: DocumentRepository,
         private val mailService: MailService) : AbstractMiscellaneousRepositoryImpl(), HttpRestRepository {
 
     lateinit var patientByPizUrl: String
@@ -57,7 +57,7 @@ open class HttpRestRepositoryImpl @Autowired constructor(
                     DocumentToken("responseBody", responseBody))
         }
 
-        val document = miscellaneousDocumentsRepositoryRepository.findByID(pathoConfig.defaultDocuments.createPDVPatientRequestDocument)
+        val document = documentRepository.findByID<DefaultTemplateImpl>(pathoConfig.defaultDocuments.createPDVPatientRequestDocument)
 
         document?.initialize(DocumentToken("person", patient.person))
 

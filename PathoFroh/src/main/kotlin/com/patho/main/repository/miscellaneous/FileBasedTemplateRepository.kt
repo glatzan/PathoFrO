@@ -6,9 +6,9 @@ import com.patho.main.template.AbstractTemplate
  * Generic interface for file based templates
  * TODO: PritnDocumentRepository should use this as well
  */
-interface FileBasedTemplateRepository<T> where T : AbstractTemplate {
+interface FileBasedTemplateRepository {
 
-    fun loadDocument(document: T, cl: Class<T>): T? {
+    fun <T : AbstractTemplate> loadDocument(document: T, cl: Class<T>): T? {
         val copy: T
         copy = if (document.templateName.isNotEmpty()) document.clone() as T else {
             val myClass = Class.forName(document.templateName)

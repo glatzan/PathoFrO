@@ -1,27 +1,26 @@
 package com.patho.main.repository.miscellaneous
 
-import com.patho.main.template.MailTemplate
+import com.patho.main.template.AbstractTemplate
+import com.patho.main.template.DefaultTemplateImpl
 
 /**
- * Repository for acquiring mail templates
+ * Repository for miscellaneous documents templates
  */
-interface MailRepository : FileBasedTemplateRepository<MailTemplate>{
-
+interface DocumentRepository : FileBasedTemplateRepository {
     /**
      * Loads document from the harddrive at startup. The mails array is initialized via configurationProperties
      */
     fun initializeDocuments()
 
     /**
-     * Returns all mailTemplates. Copies of the
+     * Returns all documents. Copies of the
      * original template are returned.
      */
-    fun findAll(): List<MailTemplate>
+    fun <T : AbstractTemplate> findAll() :  List<T>
 
     /**
      * Returns the template with the given id. Copies of the
      * original template are returned.
      */
-    fun findByID(id: Long): MailTemplate?
-
+    fun <T : AbstractTemplate> findByID(id: Long): T?
 }

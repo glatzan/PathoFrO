@@ -1,8 +1,9 @@
 package com.patho.main.service
 
 import com.patho.main.config.PathoConfig
+import com.patho.main.model.PDFContainer
 import com.patho.main.model.transitory.PDFContainerLoaded
-import com.patho.main.repository.miscellaneous.MailRepository
+import com.patho.main.repository.miscellaneous.DocumentRepository
 import com.patho.main.repository.miscellaneous.MediaRepository
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.template.DocumentToken
@@ -17,12 +18,12 @@ import org.springframework.stereotype.Service
 @Service
 class MailService @Autowired constructor(
         private val mediaRepository: MediaRepository,
+        private val documentRepository: DocumentRepository,
         private val emailSender: JavaMailSender,
-        private val pathoConfig: PathoConfig,
-        private val mailRepository: MailRepository) : AbstractService() {
+        private val pathoConfig: PathoConfig) : AbstractService() {
 
     fun sendErrorMail(templateID: Long, vararg tokens: DocumentToken): Boolean {
-        return sendMail(pathoConfig.mailSettings.errorAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID,*tokens))
+        return sendMail(pathoConfig.mailSettings.errorAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID, *tokens))
     }
 
     fun sendErrorMail(mail: MailTemplate): Boolean {
@@ -30,7 +31,7 @@ class MailService @Autowired constructor(
     }
 
     fun sendAdminMail(templateID: Long, vararg tokens: DocumentToken): Boolean {
-        return sendMail(pathoConfig.mailSettings.adminAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID,*tokens))
+        return sendMail(pathoConfig.mailSettings.adminAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID, *tokens))
     }
 
     fun sendAdminMail(mail: MailTemplate): Boolean {
@@ -38,7 +39,7 @@ class MailService @Autowired constructor(
     }
 
     fun sendMail(mailTo: String, templateID: Long, vararg tokens: DocumentToken): Boolean {
-        return sendMail(listOf(mailTo), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID,*tokens))
+        return sendMail(listOf(mailTo), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID, *tokens))
     }
 
     fun sendMail(mailTo: String, template: MailTemplate): Boolean {
@@ -46,7 +47,7 @@ class MailService @Autowired constructor(
     }
 
     fun sendMail(mailTo: List<String>, templateID: Long, vararg tokens: DocumentToken): Boolean {
-        return sendMail(mailTo, pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID,*tokens))
+        return sendMail(mailTo, pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID, *tokens))
     }
 
     fun sendMail(mailTo: List<String>, template: MailTemplate): Boolean {
@@ -74,8 +75,16 @@ class MailService @Autowired constructor(
         return true
     }
 
+
     fun sendErrorMailNoneBlocking(templateID: Long, vararg tokens: DocumentToken): Boolean {
-        return sendMailNoneBlocking(pathoConfig.mailSettings.errorAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID,*tokens))
+        return sendErrorMailNoneBlocking(templateID, null, *tokens)
+    }
+
+    fun sendErrorMailNoneBlocking(templateID: Long, attachment: PDFContainer?, vararg tokens: DocumentToken): Boolean {
+        val temp = getTemplate(templateID, *tokens)
+        if (attachment != null)
+            temp.attachment = attachment
+        return sendMailNoneBlocking(pathoConfig.mailSettings.errorAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, temp)
     }
 
     fun sendErrorMailNoneBlocking(mail: MailTemplate): Boolean {
@@ -83,7 +92,14 @@ class MailService @Autowired constructor(
     }
 
     fun sendAdminMailNoneBlocking(templateID: Long, vararg tokens: DocumentToken): Boolean {
-        return sendMailNoneBlocking(pathoConfig.mailSettings.adminAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID,*tokens))
+        return sendAdminMailNoneBlocking(templateID, null, *tokens)
+    }
+
+    fun sendAdminMailNoneBlocking(templateID: Long, attachment: PDFContainer?, vararg tokens: DocumentToken): Boolean {
+        val temp = getTemplate(templateID, *tokens)
+        if (attachment != null)
+            temp.attachment = attachment
+        return sendMailNoneBlocking(pathoConfig.mailSettings.adminAddresses.toList(), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, temp)
     }
 
     fun sendAdminMailNoneBlocking(mail: MailTemplate): Boolean {
@@ -91,7 +107,7 @@ class MailService @Autowired constructor(
     }
 
     fun sendMailNoneBlocking(mailTo: String, templateID: Long, vararg tokens: DocumentToken): Boolean {
-        return sendMailNoneBlocking(listOf(mailTo), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID,*tokens))
+        return sendMailNoneBlocking(listOf(mailTo), pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID, *tokens))
     }
 
     fun sendMailNoneBlocking(mailTo: String, template: MailTemplate): Boolean {
@@ -99,7 +115,7 @@ class MailService @Autowired constructor(
     }
 
     fun sendMailNoneBlocking(mailTo: List<String>, templateID: Long, vararg tokens: DocumentToken): Boolean {
-        return sendMailNoneBlocking(mailTo, pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID,*tokens))
+        return sendMailNoneBlocking(mailTo, pathoConfig.mailSettings.systemMail, pathoConfig.mailSettings.systemName, getTemplate(templateID, *tokens))
     }
 
 
@@ -123,7 +139,7 @@ class MailService @Autowired constructor(
     }
 
     private fun getTemplate(templateID: Long, vararg token: DocumentToken): MailTemplate {
-        val mail = mailRepository.findByID(pathoConfig.defaultDocuments.createPDVPatientStatusMail)
+        val mail = documentRepository.findByID<MailTemplate>(pathoConfig.defaultDocuments.createPDVPatientStatusMail)
 
         if (mail == null) {
             logger.error("MailTemplate ${pathoConfig.defaultDocuments.createPDVPatientStatusMail} not found!")

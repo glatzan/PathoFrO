@@ -1,8 +1,12 @@
 package com.patho.main.template
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.patho.main.model.PDFContainer
+import com.patho.main.service.impl.SpringContextBridge
 import org.apache.velocity.app.Velocity
 import org.apache.velocity.context.Context
+import java.io.IOException
 import java.io.StringWriter
 import java.util.*
 
@@ -65,6 +69,23 @@ open class MailTemplate : AbstractTemplate {
     }
 
     /**
+     * Loads maildata from Dist
+     */
+    override fun prepareTemplate() :Boolean {
+        logger.debug("Initializing ${name}, ${type}, default: ${defaultOfType}")
+        val jsonContent: String = SpringContextBridge.services().mediaRepository.getString(content)
+        try {
+            val jsonMapper = ObjectMapper().readValue(jsonContent, JSONMailMapper::class.java)
+            this.body = jsonMapper.body ?: ""
+            this.subject = jsonMapper.subject ?: ""
+            return true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    /**
      * Initializes values for the velocity template engine. Generates a
      * final document version and saves this version into finalSubject and
      * finalBody
@@ -84,5 +105,14 @@ open class MailTemplate : AbstractTemplate {
         finalBody = writer.toString()
 
         return Pair(this, context)
+    }
+
+    /**
+     * Mapperclass form mails loaded from disk as json
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    class JSONMailMapper{
+        var subject: String? = null
+        var body: String? = null
     }
 }
