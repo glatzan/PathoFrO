@@ -15,7 +15,7 @@
     <p:outputPanel styleClass="bodyPannel">
 
         <!-- person mask -->
-        <histoPerson:personDataInput formID="adminForm"
+        <histoPerson:personDataInput
                 id="personDataInput"
                 birthdayRequired="true"
                 genderRequired="true"
@@ -29,7 +29,7 @@
         <!-- datatable for search results -->
         <histoPatient:patientTable dataProvider="#{searchAndAddPatientDialog.externalPatientTab}"
                                    scrollHeight="100"
-                                   updateOnPatientSelect="adminForm:personDataInput:personData adminForm:buttonContainer"
+                                   updateOnPatientSelect="adminForm:personDataInput adminForm:buttonContainer"
                                    id="patientListTable"/>
 
     </p:outputPanel>
