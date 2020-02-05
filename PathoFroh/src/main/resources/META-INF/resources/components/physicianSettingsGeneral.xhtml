@@ -12,13 +12,12 @@
 <composite:interface>
     <composite:attribute name="physician" required="true"/>
     <composite:attribute name="dialog" required="true"/>
-    <composite:attribute name="formID" required="true"/>
     <!-- ContactRole[] allRoles; -->
 </composite:interface>
 
 <composite:implementation>
 
-    <histoPerson:personDataInput person="#{cc.attrs.physician.person}" formID="#{cc.attrs.formID}"/>
+    <histoPerson:personDataInput person="#{cc.attrs.physician.person}" />
 
     <!-- Separator -->
     <h:panelGrid columns="1" styleClass="defaultHistoSeperatorTable">
