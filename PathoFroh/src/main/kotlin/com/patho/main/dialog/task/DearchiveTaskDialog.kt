@@ -2,8 +2,9 @@ package com.patho.main.dialog.task
 
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTaskDialog
-import com.patho.main.model.ListItem
 import com.patho.main.model.patient.Task
+import com.patho.main.model.system.ListItem
+import com.patho.main.model.system.ListItemType
 import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.service.TaskService
 import com.patho.main.ui.transformer.DefaultTransformer
@@ -42,7 +43,7 @@ open class DearchiveTaskDialog @Autowired constructor(
     open var commentary: String = ""
 
     override fun initBean(task: Task): Boolean {
-        predefinedListItems = listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.TASK_RESTORE, false)
+        predefinedListItems = listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.TASK_RESTORE, false)
         predefinedListItemTransformer = DefaultTransformer(predefinedListItems)
         commentary = ""
         return super.initBean(task)

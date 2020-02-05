@@ -5,6 +5,9 @@ import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.*;
 import com.patho.main.model.favourites.FavouriteList;
+import com.patho.main.model.system.DiagnosisPreset;
+import com.patho.main.model.system.ListItem;
+import com.patho.main.model.system.ListItemType;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.FavouriteListContainer;
 import com.patho.main.ui.transformer.DefaultTransformer;
@@ -191,13 +194,13 @@ public class WorklistSearchDialog extends AbstractTabDialog {
 
             // case history
             setCaseHistoryList(SpringContextBridge.services().getListItemRepository()
-                    .findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.CASE_HISTORY, false));
+                    .findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.CASE_HISTORY, false));
 
             // Diagnosis presets
             setDiagnosisPresets(SpringContextBridge.services().getDiagnosisPresetRepository().findAllByOrderByIndexInListAsc());
 
             // wardlist
-            setWardList(SpringContextBridge.services().getListItemRepository().findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.WARDS,
+            setWardList(SpringContextBridge.services().getListItemRepository().findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.WARDS,
                     false));
 
             return true;

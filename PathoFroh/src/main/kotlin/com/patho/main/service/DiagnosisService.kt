@@ -2,9 +2,9 @@ package com.patho.main.service
 
 import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog
 import com.patho.main.common.DiagnosisRevisionType
-import com.patho.main.model.DiagnosisPreset
 import com.patho.main.model.Signature
 import com.patho.main.model.patient.*
+import com.patho.main.model.system.DiagnosisPreset
 import com.patho.main.repository.jpa.DiagnosisRepository
 import com.patho.main.repository.jpa.DiagnosisRevisionRepository
 import com.patho.main.repository.jpa.TaskRepository
@@ -312,7 +312,7 @@ open class DiagnosisService constructor(
         logger.debug("Updating reportIntent with prototype")
         diagnosis.diagnosisPrototype = preset
         return updateDiagnosis(task, diagnosis, preset.diagnosis, preset.extendedDiagnosisText,
-                preset.isMalign, preset.icd10)
+                preset.malign, preset.icd10)
     }
 
     /**

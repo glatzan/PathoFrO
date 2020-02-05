@@ -2,7 +2,8 @@ package com.patho.main.action.dialog.settings.listitem;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.ListItem;
+import com.patho.main.model.system.ListItem;
+import com.patho.main.model.system.ListItemType;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class ListItemEditDialog extends AbstractDialog {
 
     private boolean newListItem;
 
-    public ListItemEditDialog initAndPrepareBean(ListItem.StaticList type) {
+    public ListItemEditDialog initAndPrepareBean(ListItemType type) {
         return initAndPrepareBean(new ListItem(type));
     }
 

@@ -4,8 +4,9 @@ import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.Dialog
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.dialog.AbstractTaskDialog
-import com.patho.main.model.ListItem
 import com.patho.main.model.patient.Task
+import com.patho.main.model.system.ListItem
+import com.patho.main.model.system.ListItemType
 import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.TaskService
@@ -77,7 +78,7 @@ open class ArchiveTaskDialog @Autowired constructor(
 
         taskStatus = TotalTaskStatus(tmp)
 
-        predefinedListItems = listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.TASK_ARCHIVE, false)
+        predefinedListItems = listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.TASK_ARCHIVE, false)
 
         predefinedListItemTransformer = DefaultTransformer(predefinedListItems)
 

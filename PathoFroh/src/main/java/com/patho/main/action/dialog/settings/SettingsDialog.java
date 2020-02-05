@@ -10,6 +10,9 @@ import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.log.Log;
 import com.patho.main.model.log.Log_;
 import com.patho.main.model.person.Organization;
+import com.patho.main.model.system.DiagnosisPreset;
+import com.patho.main.model.system.ListItem;
+import com.patho.main.model.system.ListItemType;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.service.impl.SpringContextBridge;
@@ -235,7 +238,7 @@ public class SettingsDialog extends AbstractTabDialog {
         @Override
         public void updateData() {
             setMaterials(
-                    SpringContextBridge.services().getMaterialPresetRepository().findAllIgnoreArchivedOrderByPriorityCountDesc(false, !isShowArchived()));
+                    SpringContextBridge.services().getMaterialPresetRepository().findAllOrderByPriorityCountDesc(false, !isShowArchived()));
         }
 
         public void archiveOrDelete(MaterialPreset m, boolean archive) {
@@ -317,7 +320,7 @@ public class SettingsDialog extends AbstractTabDialog {
         /**
          * Current static list to edit
          */
-        private ListItem.StaticList selectedStaticList = ListItem.StaticList.WARDS;
+        private ListItemType selectedStaticList = ListItemType.WARDS;
 
         /**
          * Content of the current static list

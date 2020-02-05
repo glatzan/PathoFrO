@@ -1,7 +1,8 @@
 package com.patho.main.repository.jpa.custom.impl;
 
-import com.patho.main.model.ListItem;
 import com.patho.main.model.ListItem_;
+import com.patho.main.model.system.ListItem;
+import com.patho.main.model.system.ListItemType;
 import com.patho.main.repository.jpa.custom.ListItemRepositoryCustom;
 
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,7 +14,7 @@ import java.util.List;
 public class ListItemRepositoryImpl extends AbstractRepositoryCustom implements ListItemRepositoryCustom {
 
     @Override
-    public List<ListItem> findAll(ListItem.StaticList listType, boolean irgnoreArchived) {
+    public List<ListItem> findAll(ListItemType listType, boolean irgnoreArchived) {
         CriteriaQuery<ListItem> criteria = getCriteriaBuilder().createQuery(ListItem.class);
         Root<ListItem> root = criteria.from(ListItem.class);
 
@@ -32,7 +33,7 @@ public class ListItemRepositoryImpl extends AbstractRepositoryCustom implements 
         return getSession().createQuery(criteria).getResultList();
     }
 
-    public List<ListItem> findAllOrderByIndex(ListItem.StaticList listType, boolean irgnoreArchived) {
+    public List<ListItem> findAllOrderByIndex(ListItemType listType, boolean irgnoreArchived) {
 
         CriteriaQuery<ListItem> criteria = getCriteriaBuilder().createQuery(ListItem.class);
         Root<ListItem> root = criteria.from(ListItem.class);

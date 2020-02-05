@@ -3,11 +3,11 @@ package com.patho.main.action.views
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.common.GuiCommands
-import com.patho.main.model.DiagnosisPreset
 import com.patho.main.model.Signature
 import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
+import com.patho.main.model.system.DiagnosisPreset
 import com.patho.main.repository.jpa.PhysicianRepository
 import com.patho.main.service.DiagnosisService
 import org.springframework.beans.factory.annotation.Autowired

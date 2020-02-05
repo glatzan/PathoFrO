@@ -73,7 +73,7 @@ open class CreateTaskDialog @Autowired constructor(
         this.patient = patient
 
         // setting material list
-        materialList = materialPresetRepository.findAllIgnoreArchivedOrderByPriorityCountDesc(true, true)
+        materialList = materialPresetRepository.findAllOrderByPriorityCountDesc(true, true)
 
         taskData = TaskTemplate(materialList)
 

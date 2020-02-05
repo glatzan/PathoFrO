@@ -7,12 +7,13 @@ import com.patho.main.common.SortOrder
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.dialog.print.PrintDialog
 import com.patho.main.dialog.print.documentUi.CouncilReportUi
-import com.patho.main.model.ListItem
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.miscellaneous.Council
+import com.patho.main.model.system.ListItem
+import com.patho.main.model.system.ListItemType
 import com.patho.main.repository.jpa.CouncilRepository
 import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.repository.jpa.PhysicianRepository
@@ -143,7 +144,7 @@ open class ConsultationDialog @Autowired constructor(
 
         updatePhysicianLists()
 
-        attachmentList = listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.COUNCIL_ATTACHMENT, false)
+        attachmentList = listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.COUNCIL_ATTACHMENT, false)
 
         if (consultationContainerList.isNotEmpty())
             selectNode(consultationContainerList.last(), 0)

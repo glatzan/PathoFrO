@@ -2,8 +2,8 @@ package com.patho.main.action.handler;
 
 import com.patho.main.action.views.ReceiptLogView;
 import com.patho.main.common.*;
-import com.patho.main.model.ListItem;
 import com.patho.main.model.StainingPrototype;
+import com.patho.main.model.system.ListItemType;
 import com.patho.main.model.user.HistoGroup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -91,8 +91,8 @@ public class EnumProvider {
      *
      * @return
      */
-    public ListItem.StaticList[] getStaticLists() {
-        return ListItem.StaticList.values();
+    public ListItemType[] getStaticLists() {
+        return ListItemType.values();
     }
 
     /**

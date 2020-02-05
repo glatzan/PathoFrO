@@ -5,10 +5,11 @@ import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.common.Dialog
 import com.patho.main.common.GuiCommands
 import com.patho.main.dialog.AbstractTaskDialog
-import com.patho.main.model.ListItem
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
+import com.patho.main.model.system.ListItem
+import com.patho.main.model.system.ListItemType
 import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.SlideService
@@ -52,7 +53,7 @@ open class SlideOverviewDialog @Autowired constructor(
     override fun initBean(task: Task): Boolean {
         val result = super.initBean(task)
         slideCommentary =
-                listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.SLIDES, false);
+                listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.SLIDES, false);
         update(true)
         return result
     }

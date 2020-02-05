@@ -1,7 +1,7 @@
 package com.patho.main.service;
 
-import com.patho.main.model.DiagnosisPreset;
 import com.patho.main.model.interfaces.ListOrder;
+import com.patho.main.model.system.DiagnosisPreset;
 import com.patho.main.repository.jpa.DiagnosisPresetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,6 @@ public class DiagnosisPresetService extends AbstractService {
     /**
      * Tries to delete the reportIntent, if not possible the prototype will be archived
      *
-     * @param p
      */
     @Transactional(propagation = Propagation.NEVER)
     public boolean deleteOrArchive(DiagnosisPreset d) {

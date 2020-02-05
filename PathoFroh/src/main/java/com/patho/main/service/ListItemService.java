@@ -1,8 +1,9 @@
 package com.patho.main.service;
 
-import com.patho.main.model.ListItem;
 import com.patho.main.model.ListItem_;
 import com.patho.main.model.interfaces.ListOrder;
+import com.patho.main.model.system.ListItem;
+import com.patho.main.model.system.ListItemType;
 import com.patho.main.repository.jpa.ListItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,7 +25,7 @@ public class ListItemService extends AbstractService {
     private ListItemRepository listItemRepository;
 
     public ListItem addOrUpdate(ListItem listItem) {
-        ListItem.StaticList type = listItem.getListType();
+        ListItemType type = listItem.getListType();
         if (listItem.getId() == 0) {
 
             long count = listItemRepository.count(new Specification<ListItem>() {
@@ -83,7 +84,7 @@ public class ListItemService extends AbstractService {
                         listItem.getValue(), listItem.getListType()));
     }
 
-    public List<ListItem> updateReoderedList(List<ListItem> staticListContent, ListItem.StaticList type) {
+    public List<ListItem> updateReoderedList(List<ListItem> staticListContent, ListItemType type) {
         ListOrder.reOrderList(staticListContent);
         return listItemRepository.saveAll(staticListContent,
                 resourceBundle.get("log.settings.staticList.list.reoder", type));

@@ -3,11 +3,12 @@ package com.patho.main.action.views
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.SortOrder
-import com.patho.main.model.DiagnosisPreset
-import com.patho.main.model.ListItem
 import com.patho.main.model.MaterialPreset
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
+import com.patho.main.model.system.DiagnosisPreset
+import com.patho.main.model.system.ListItem
+import com.patho.main.model.system.ListItemType
 import com.patho.main.repository.jpa.*
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.bearer.SimplePhysicianBearer
@@ -89,12 +90,12 @@ open class GenericViewData @Autowired constructor(
         logger.debug("Loading generic data")
 
         slideCommentary = listItemRepository
-                .findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.SLIDES, false)
+                .findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.SLIDES, false)
 
         caseHistoryList = listItemRepository
-                .findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.CASE_HISTORY, false)
+                .findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.CASE_HISTORY, false)
 
-        wardList = listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItem.StaticList.WARDS,
+        wardList = listItemRepository.findByListTypeAndArchivedOrderByIndexInListAsc(ListItemType.WARDS,
                 false)
 
         diagnosisPresets = diagnosisPresetRepository.findAllByOrderByIndexInListAsc()
