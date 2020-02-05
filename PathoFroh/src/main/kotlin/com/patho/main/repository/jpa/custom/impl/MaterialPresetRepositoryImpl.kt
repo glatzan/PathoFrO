@@ -1,7 +1,7 @@
 package com.patho.main.repository.jpa.custom.impl
 
-import com.patho.main.model.MaterialPreset
-import com.patho.main.model.MaterialPreset_
+import com.patho.main.model.preset.MaterialPreset
+import com.patho.main.model.preset.MaterialPreset_
 import com.patho.main.repository.jpa.custom.MaterialPresetRepositoryCustom
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

@@ -3,7 +3,7 @@ package com.patho.main.action.dialog.settings.diagnosis;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.DiagnosisPreset;
+import com.patho.main.model.preset.DiagnosisPreset;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import com.patho.main.util.dialog.event.SlideSelectEvent;

@@ -2,8 +2,8 @@ package com.patho.main.action.dialog.task;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.preset.MaterialPreset;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.StainingPhaseUpdateEvent;

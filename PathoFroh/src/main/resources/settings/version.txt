@@ -212,12 +212,10 @@ UPDATE materialpreset SET archived = false;
 /* Adding prioritycount for material*/
 alter table materialpreset add priorityCount int;
 UPDATE materialpreset SET priorityCount = 0;
-alter table materialpreset drop indexInList;
 
 /* Adding prioritycount for stainingprototype*/
 Alter table stainingprototype add priorityCount int;
 UPDATE stainingprototype SET priorityCount = 0;
-Alter table stainingprototype drop indexInList;
 
 /* Adding field for biobank*/
 Alter table biobank add createdOn bigint;

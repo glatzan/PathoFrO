@@ -2,8 +2,8 @@ package com.patho.main.action.dialog.settings.listitem;
 
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
-import com.patho.main.model.system.ListItem;
-import com.patho.main.model.system.ListItemType;
+import com.patho.main.model.preset.ListItem;
+import com.patho.main.model.preset.ListItemType;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.util.dialog.event.ReloadEvent;
 import lombok.Getter;

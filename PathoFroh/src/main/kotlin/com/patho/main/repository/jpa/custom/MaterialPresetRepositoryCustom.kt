@@ -1,6 +1,7 @@
 package com.patho.main.repository.jpa.custom
 
-import com.patho.main.model.MaterialPreset
+import com.patho.main.model.preset.MaterialPreset
+
 
 interface MaterialPresetRepositoryCustom {
 

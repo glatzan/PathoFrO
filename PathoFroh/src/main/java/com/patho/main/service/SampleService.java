@@ -1,8 +1,8 @@
 package com.patho.main.service;
 
-import com.patho.main.model.MaterialPreset;
 import com.patho.main.model.patient.Sample;
 import com.patho.main.model.patient.Task;
+import com.patho.main.model.preset.MaterialPreset;
 import com.patho.main.repository.jpa.SampleRepository;
 import com.patho.main.repository.jpa.TaskRepository;
 import com.patho.main.util.task.TaskTreeTools;

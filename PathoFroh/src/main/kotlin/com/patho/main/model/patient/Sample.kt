@@ -1,9 +1,9 @@
 package com.patho.main.model.patient
 
 import com.patho.main.model.AbstractPersistable
-import com.patho.main.model.MaterialPreset
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.interfaces.Parent
+import com.patho.main.model.preset.MaterialPreset
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode

@@ -1,7 +1,7 @@
 package com.patho.main.service;
 
 import com.patho.main.model.interfaces.ListOrder;
-import com.patho.main.model.system.DiagnosisPreset;
+import com.patho.main.model.preset.DiagnosisPreset;
 import com.patho.main.repository.jpa.DiagnosisPresetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 package com.patho.main.repository.jpa.custom;
 
 
-import com.patho.main.model.system.ListItem;
-import com.patho.main.model.system.ListItemType;
+import com.patho.main.model.preset.ListItem;
+import com.patho.main.model.preset.ListItemType;
 
 import java.util.List;
 

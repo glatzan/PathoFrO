@@ -4,7 +4,7 @@ import com.patho.main.action.dialog.diagnosis.CreateDiagnosisRevisionDialog
 import com.patho.main.common.DiagnosisRevisionType
 import com.patho.main.model.Signature
 import com.patho.main.model.patient.*
-import com.patho.main.model.system.DiagnosisPreset
+import com.patho.main.model.preset.DiagnosisPreset
 import com.patho.main.repository.jpa.DiagnosisRepository
 import com.patho.main.repository.jpa.DiagnosisRevisionRepository
 import com.patho.main.repository.jpa.TaskRepository

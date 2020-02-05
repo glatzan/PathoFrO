@@ -1,6 +1,6 @@
 package com.patho.main.service;
 
-import com.patho.main.model.MaterialPreset;
+import com.patho.main.model.preset.MaterialPreset;
 import com.patho.main.repository.jpa.MaterialPresetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,9 +50,6 @@ public class MaterialPresetService extends AbstractService {
     /**
      * Archived or dearchives a prototype
      *
-     * @param p
-     * @param archive
-     * @return
      */
     public MaterialPreset archive(MaterialPreset m, boolean archive) {
         m.setArchived(archive);

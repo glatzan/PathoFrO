@@ -1,4 +1,4 @@
-package com.patho.main.model.system
+package com.patho.main.model.preset
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.StainingPrototype
@@ -18,14 +18,14 @@ open class MaterialPreset : ListOrder<MaterialPreset>, AbstractPersistable {
     override var id: Long = 0
 
     @Column
-    var name: String? = null
+    open var name: String = ""
 
     @Column(columnDefinition = "text")
-    var commentary: String? = null
+    open var commentary: String = ""
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
-    var stainingPrototypes: MutableList<StainingPrototype> = mutableListOf()
+    open var stainingPrototypes: MutableList<StainingPrototype> = mutableListOf()
 
     /**
      * On every selection of the material, this number will be increased. The
@@ -33,13 +33,20 @@ open class MaterialPreset : ListOrder<MaterialPreset>, AbstractPersistable {
      * will be displayed first.
      */
     @Column
-    var priorityCount = 0
+    open var priorityCount = 0
 
     @Column
     override var indexInList = 0
 
     @Column
-    var archived = false
+    open var archived = false
 
     constructor()
+
+    constructor(preset : MaterialPreset){
+        this.id = preset.id
+        this.name = preset.name
+        this.commentary = preset.commentary
+        this.stainingPrototypes = preset.stainingPrototypes.toMutableList()
+    }
 }

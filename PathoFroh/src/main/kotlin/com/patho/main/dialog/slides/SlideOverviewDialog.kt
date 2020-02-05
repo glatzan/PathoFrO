@@ -8,8 +8,8 @@ import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
-import com.patho.main.model.system.ListItem
-import com.patho.main.model.system.ListItemType
+import com.patho.main.model.preset.ListItem
+import com.patho.main.model.preset.ListItemType
 import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.SlideService

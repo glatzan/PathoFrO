@@ -5,10 +5,10 @@ import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.*
 import com.patho.main.config.PathoConfig
 import com.patho.main.dialog.AbstractDialog_
-import com.patho.main.model.MaterialPreset
 import com.patho.main.model.PDFContainer
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
+import com.patho.main.model.preset.MaterialPreset
 import com.patho.main.repository.jpa.MaterialPresetRepository
 import com.patho.main.repository.jpa.PatientRepository
 import com.patho.main.repository.jpa.TaskRepository

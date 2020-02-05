@@ -1,9 +1,9 @@
 package com.patho.main.service;
 
-import com.patho.main.model.ListItem_;
 import com.patho.main.model.interfaces.ListOrder;
-import com.patho.main.model.system.ListItem;
-import com.patho.main.model.system.ListItemType;
+import com.patho.main.model.preset.ListItem;
+import com.patho.main.model.preset.ListItemType;
+import com.patho.main.model.preset.ListItem_;
 import com.patho.main.repository.jpa.ListItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;

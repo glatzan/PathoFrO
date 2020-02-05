@@ -3,12 +3,12 @@ package com.patho.main.action.views
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.SortOrder
-import com.patho.main.model.MaterialPreset
 import com.patho.main.model.Physician
 import com.patho.main.model.patient.Task
-import com.patho.main.model.system.DiagnosisPreset
-import com.patho.main.model.system.ListItem
-import com.patho.main.model.system.ListItemType
+import com.patho.main.model.preset.DiagnosisPreset
+import com.patho.main.model.preset.ListItem
+import com.patho.main.model.preset.ListItemType
+import com.patho.main.model.preset.MaterialPreset
 import com.patho.main.repository.jpa.*
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.bearer.SimplePhysicianBearer

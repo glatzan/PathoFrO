@@ -12,8 +12,8 @@ import com.patho.main.model.Physician
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.miscellaneous.Council
-import com.patho.main.model.system.ListItem
-import com.patho.main.model.system.ListItemType
+import com.patho.main.model.preset.ListItem
+import com.patho.main.model.preset.ListItemType
 import com.patho.main.repository.jpa.CouncilRepository
 import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.repository.jpa.PhysicianRepository

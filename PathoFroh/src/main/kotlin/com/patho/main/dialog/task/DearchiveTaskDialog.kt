@@ -3,8 +3,8 @@ package com.patho.main.dialog.task
 import com.patho.main.common.Dialog
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
-import com.patho.main.model.system.ListItem
-import com.patho.main.model.system.ListItemType
+import com.patho.main.model.preset.ListItem
+import com.patho.main.model.preset.ListItemType
 import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.service.TaskService
 import com.patho.main.ui.transformer.DefaultTransformer

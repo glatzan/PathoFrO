@@ -5,15 +5,14 @@ import com.patho.main.common.Dialog
 import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.dialog.AbstractTaskDialog
 import com.patho.main.model.patient.Task
-import com.patho.main.model.system.ListItem
-import com.patho.main.model.system.ListItemType
+import com.patho.main.model.preset.ListItem
+import com.patho.main.model.preset.ListItemType
 import com.patho.main.repository.jpa.ListItemRepository
 import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.TaskService
 import com.patho.main.ui.transformer.DefaultTransformer
 import com.patho.main.util.dialog.event.PatientReloadEvent
 import com.patho.main.util.dialog.event.RemovePatientFromWorklistEvent
-import com.patho.main.util.dialog.event.TaskReloadEvent
 import com.patho.main.util.status.ExtendedNotificationStatus
 import com.patho.main.util.status.TotalTaskStatus
 import org.springframework.beans.factory.annotation.Autowired

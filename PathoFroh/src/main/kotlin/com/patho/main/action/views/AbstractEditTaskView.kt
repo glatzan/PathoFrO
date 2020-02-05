@@ -2,11 +2,11 @@ package com.patho.main.action.views
 
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.common.ContactRole
-import com.patho.main.model.ListItem
-import com.patho.main.model.MaterialPreset
 import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Task
 import com.patho.main.model.person.Person
+import com.patho.main.model.preset.ListItem
+import com.patho.main.model.preset.MaterialPreset
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.util.bearer.SimplePhysicianBearer
 

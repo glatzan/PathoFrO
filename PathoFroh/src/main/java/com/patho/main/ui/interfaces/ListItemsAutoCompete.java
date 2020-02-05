@@ -1,6 +1,7 @@
 package com.patho.main.ui.interfaces;
 
-import com.patho.main.model.ListItem;
+
+import com.patho.main.model.preset.ListItem;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.patho.main.model.system
+package com.patho.main.model.preset
 
 import com.patho.main.common.ContactRole
 import com.patho.main.model.AbstractPersistable
@@ -22,37 +22,37 @@ open class DiagnosisPreset : ListOrder<DiagnosisPreset>, AbstractPersistable {
      * Category of the diagnosis
      */
     @Column(columnDefinition = "VARCHAR")
-    var category: String = ""
+    open var category: String = ""
 
     /**
      * icd10
      */
     @Column(columnDefinition = "VARCHAR")
-    var icd10: String = ""
+    open var icd10: String = ""
 
     /**
      * malign
      */
     @Column(columnDefinition = "VARCHAR")
-    var malign = false
+    open var malign = false
 
     /**
      * diagnosis as string
      */
     @Column(columnDefinition = "text")
-    var diagnosis: String = ""
+    open var diagnosis: String = ""
 
     /**
      * long diagnosis text
      */
     @Column(columnDefinition = "text")
-    var extendedDiagnosisText: String = ""
+    open var extendedDiagnosisText: String = ""
 
     /**
      * commentary
      */
     @Column(columnDefinition = "text")
-    var commentary: String = ""
+    open var commentary: String = ""
 
     /**
      * for sorting
@@ -64,13 +64,13 @@ open class DiagnosisPreset : ListOrder<DiagnosisPreset>, AbstractPersistable {
     @Enumerated(EnumType.STRING)
     @Fetch(value = FetchMode.SUBSELECT)
     @Cascade(value = [CascadeType.ALL])
-    var diagnosisReportAsLetter: MutableSet<ContactRole> = mutableSetOf()
+    open var diagnosisReportAsLetter: MutableSet<ContactRole> = mutableSetOf()
 
     @Column
-    var archived = false
+    open var archived = false
 
     @Transient
-    val diagnosisReportAsLetterAsArray = diagnosisReportAsLetter.toTypedArray()
+    open val diagnosisReportAsLetterAsArray = diagnosisReportAsLetter.toTypedArray()
 
     constructor()
 

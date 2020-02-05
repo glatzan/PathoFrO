@@ -1,4 +1,4 @@
-package com.patho.main.model.system
+package com.patho.main.model.preset
 
 import com.patho.main.model.AbstractPersistable
 import com.patho.main.model.interfaces.ListOrder
@@ -18,16 +18,16 @@ open class ListItem : ListOrder<ListItem>, AbstractPersistable {
     override var id: Long = 0
 
     @Enumerated(EnumType.STRING)
-    var listType: ListItemType? = null
+    open var listType: ListItemType? = null
 
     @Column(columnDefinition = "VARCHAR")
-    var value: String = ""
+    open var value: String = ""
 
     @Column
     override var indexInList = 0
 
     @Column
-    var archived = false
+    open var archived = false
 
     constructor()
 

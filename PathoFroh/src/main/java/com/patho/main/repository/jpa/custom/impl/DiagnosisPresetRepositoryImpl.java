@@ -1,7 +1,7 @@
 package com.patho.main.repository.jpa.custom.impl;
 
-import com.patho.main.model.DiagnosisPreset;
-import com.patho.main.model.DiagnosisPreset_;
+import com.patho.main.model.preset.DiagnosisPreset;
+import com.patho.main.model.preset.DiagnosisPreset_;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

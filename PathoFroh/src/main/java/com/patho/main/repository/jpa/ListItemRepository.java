@@ -1,7 +1,7 @@
 package com.patho.main.repository.jpa;
 
-import com.patho.main.model.system.ListItem;
-import com.patho.main.model.system.ListItemType;
+import com.patho.main.model.preset.ListItem;
+import com.patho.main.model.preset.ListItemType;
 import com.patho.main.repository.jpa.custom.ListItemRepositoryCustom;
 
 import java.util.List;
