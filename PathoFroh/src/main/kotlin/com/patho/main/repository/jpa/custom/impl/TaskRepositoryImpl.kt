@@ -4,12 +4,12 @@ import com.patho.main.common.Eye
 import com.patho.main.model.Physician
 import com.patho.main.model.Signature
 import com.patho.main.model.Signature_
-import com.patho.main.model.StainingPrototype
 import com.patho.main.model.patient.*
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.patient.notification.ReportIntent_
 import com.patho.main.model.person.Person
 import com.patho.main.model.person.Person_
+import com.patho.main.model.preset.StainingPrototype
 import com.patho.main.repository.jpa.custom.TaskRepositoryCustom
 import com.patho.main.util.exceptions.TaskNotFoundException
 import com.patho.main.util.search.settings.ExtendedSearch

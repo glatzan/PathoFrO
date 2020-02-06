@@ -1,7 +1,7 @@
 package com.patho.main.repository.jpa;
 
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototype.StainingType;
+import com.patho.main.model.preset.StainingPrototype;
+import com.patho.main.model.preset.StainingPrototypeType;
 import com.patho.main.repository.jpa.custom.StainingPrototypeRepositoryCustom;
 
 import java.util.List;
@@ -11,5 +11,5 @@ public interface StainingPrototypeRepository
 
     List<StainingPrototype> findAllByOrderByPriorityCountDesc();
 
-    List<StainingPrototype> findAllByTypeOrderByPriorityCountDesc(StainingType type);
+    List<StainingPrototype> findAllByTypeOrderByPriorityCountDesc(StainingPrototypeType type);
 }

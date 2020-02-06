@@ -9,47 +9,7 @@ SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 
 INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (1, NULL, NULL, 'andreas.glatz@uniklinik-freiburg.de', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (23, NULL, NULL, 'bastian.grundel@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4057', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (2, NULL, NULL, 'sylvia.zeitler@uniklinik-freiburg.de', NULL, NULL, NULL, NULL, '+49 761 270 40580', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (3, NULL, NULL, 'brigitte.joos@uniklinik-freiburg.de', NULL, NULL, NULL, NULL, '+49 761 270 40580', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (22, NULL, NULL, 'nikolai.gross@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4011', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (21, NULL, NULL, 'alexandra.anton@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4052', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (31, NULL, NULL, 'clemens.lange@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4042', '+49 761 270 40511', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (4, NULL, NULL, 'thomas.reinhard@uniklinik-freiburg.de', NULL, NULL, NULL, NULL, '+49 761 270 40060', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (6, NULL, NULL, 'claudia.auw-haedrich@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4058', '+49 761 270 41950', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (7, NULL, NULL, 'hansjuergen.agostini@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4046', '+49 761 270 40460', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (8, NULL, NULL, 'wolf.lagreze@uniklinik-freiburg.de', NULL, NULL, NULL, NULL, '+49 761 270 40100', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (9, NULL, NULL, 'philip.maier@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4116', '+49 761 270 40990', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (30, NULL, NULL, 'thomas.wecker@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4059', '+49 761 270 40520', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (29, NULL, NULL, 'Christoph.Reichel@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4077', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (28, NULL, NULL, 'thomas.ness@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4053', '+49 761 270 40518', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (27, NULL, NULL, 'Lutz.Joachimsen@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4067', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (26, NULL, NULL, 'sabine.reichl@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4047', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (24, NULL, NULL, 'andreas.stahl@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4026', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (19, NULL, NULL, 'milena.stech@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4043', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (18, NULL, NULL, 'franziska.ludwig@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4064', NULL, NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (11, NULL, NULL, 'philipp.eberwein@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4066', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (12, NULL, NULL, 'stefan.lang@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4082', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (14, NULL, NULL, 'thabo.lapp@uniklinik-freiburg.de', NULL, NULL, NULL, NULL, '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (16, NULL, NULL, 'vanessa.frommherz@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4099', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (17, NULL, NULL, 'Tim.Bleul@uniklinik-freiburg.de', NULL, NULL, NULL, '12-4006', '+49 761 270 40010', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (40, NULL, NULL, 'susanne.issleib@uniklinik-freiburg.de', '', NULL, NULL, NULL, '+49 761 270 40010', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (33, NULL, NULL, 'kristina.schoelles@uniklinik-freiburg.de', '', NULL, NULL, NULL, '+49 761 270 40010', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (5, NULL, NULL, 'hans.mittelviefhaus@uniklinik-freiburg.de', '', NULL, NULL, '12-4051', '+49 761 270 40510', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (10, NULL, NULL, 'laura.gasser@uniklinik-freiburg.de', '', NULL, NULL, '12-4093', '+49 761 270 40010', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (13, NULL, NULL, 'jan.luebke@uniklinik-freiburg.de', '', NULL, NULL, '12-4092', '+49 761 270 40010', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (15, NULL, NULL, 'lisa.zimmermann@uniklinik-freiburg.de', '', NULL, NULL, '12-4065', '+49 761 270 40010', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (25, NULL, NULL, 'charlotte.evers@uniklinik-freiburg.de', '', NULL, NULL, '12-4014', '+49 761 270 40010', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (20, NULL, NULL, 'marie-christine.bruender@uniklinik-freiburg.de', '', NULL, NULL, '12-4091', '+49 761 270 40010', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (82, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (83, NULL, NULL, 'kristin.technau@uniklinik-freiburg.de', NULL, NULL, NULL, '12-6745', '+49 761 270 67400', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (85, NULL, NULL, 'annette.schmitt-graeff@uniklinik-freiburg.de', NULL, NULL, NULL, '12-8066', '+49 761 270 80660', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (86, NULL, NULL, 'martin.werner@uniklinik-freiburg.de', NULL, NULL, NULL, NULL, '+49 761 270 80050', NULL, NULL, NULL);
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (87, NULL, NULL, '', '07541 6044 10', NULL, NULL, NULL, '', '88048', 'Siemensstraße 6/1', 'Friedrichshafen');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (88, NULL, NULL, '', '', NULL, NULL, NULL, '', '53127', 'Ernst-Abbe-Straße 2', 'Bonn');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (39, '', NULL, '', '', '', NULL, NULL, '', '', '', '');
-INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (32, '', NULL, '', '', '', NULL, NULL, '', '', '', '');
+INSERT INTO contact (id, building, country, email, fax, homepage, mobile, pager, phone, postcode, street, town) VALUES (2, '', NULL, '', '', '', NULL, NULL, '', '', '', '');
 
 SELECT setval('contact_sequence', (SELECT MAX(id) FROM contact));
 
@@ -58,43 +18,6 @@ SELECT setval('contact_sequence', (SELECT MAX(id) FROM contact));
 --
 
 INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (1, false, NULL, NULL, 'Andreas', 1, NULL, 'Glatz', NULL, 'Dr.', 0, 1);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (21, false, NULL, NULL, 'Alexandra', 1, NULL, 'Anton', NULL, 'Dr.', 0, 21);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (22, false, NULL, NULL, 'Nikolai', 0, NULL, 'Gross', NULL, 'Dr.', 0, 22);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (11, false, NULL, NULL, 'Philipp', 0, NULL, 'Eberwein', NULL, 'PD Dr.', 0, 11);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (12, false, NULL, NULL, 'Stefan', 0, NULL, 'Lang', NULL, 'Dr.', 0, 12);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (13, false, NULL, NULL, 'Jan', 0, NULL, 'Lübke', NULL, 'Dr.', 0, 13);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (14, false, NULL, NULL, 'Benjamin Thabo', 0, NULL, 'Lapp', NULL, 'Dr.', 0, 14);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (15, false, NULL, NULL, 'Lisa', 1, NULL, 'Zimmermann', NULL, 'Dr.', 0, 15);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (16, false, NULL, NULL, 'Vanessa', 1, NULL, 'Frommherz', NULL, 'Dr.', 0, 16);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (17, false, NULL, NULL, 'Tim', 0, NULL, 'Bleul', NULL, 'Dr.', 0, 17);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (18, false, NULL, NULL, 'Franziska', 1, NULL, 'Ludwig', NULL, 'Dr.', 0, 18);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (19, false, NULL, NULL, 'Milena', 1, NULL, 'Stech', NULL, 'Dr.', 0, 19);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (2, false, NULL, NULL, 'Sylvia', 1, NULL, 'Zeitler', NULL, NULL, 0, 2);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (3, false, NULL, NULL, 'Brigitte', 1, NULL, 'Joos', NULL, NULL, 0, 3);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (4, false, NULL, NULL, 'Thomas', 0, NULL, 'Reinhard', NULL, 'Prof.Dr.', 0, 4);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (6, false, NULL, NULL, 'Claudia', 1, NULL, 'Auw-Hädrich', NULL, 'Apl.Prof.Dr.', 0, 6);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (7, false, NULL, NULL, 'Hansjürgen', 0, NULL, 'Agostini', NULL, 'Apl.Prof.Dr.', 0, 7);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (8, false, NULL, NULL, 'Wolf Alexander', 0, NULL, 'Lagrèze', NULL, 'Prof. Dr.', 0, 8);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (9, false, NULL, NULL, 'Philip', 0, NULL, 'Maier', NULL, 'PD Dr.', 0, 9);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (28, false, NULL, NULL, 'Thomas', 0, NULL, 'Neß', NULL, 'PD Dr.', 0, 28);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (27, false, NULL, NULL, 'Lutz', 0, NULL, 'Joachimsen', NULL, 'Dr.', 0, 27);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (26, false, NULL, NULL, 'Sabine', 1, NULL, 'Reichl', NULL, 'Dr.', 0, 26);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (25, false, NULL, NULL, 'Charlotte', 1, NULL, 'Evers', NULL, 'Dr.', 0, 25);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (24, false, NULL, NULL, 'Andreas', 0, NULL, 'Stahl', NULL, 'Apl.Prof.Dr.', 0, 24);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (23, false, NULL, NULL, 'Bastian', 0, NULL, 'Grundel', NULL, 'Dr.', 0, 23);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (31, false, NULL, NULL, 'Clemens', 0, NULL, 'Lange', NULL, 'PD Dr. Dr.', 0, 31);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (30, false, NULL, NULL, 'Thomas', 0, NULL, 'Wecker', NULL, 'Dr.', 0, 30);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (29, false, NULL, NULL, 'Christoph', 0, NULL, 'Reichel', NULL, 'Dr.', 0, 29);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (20, false, NULL, NULL, 'Marie-Christine', 1, NULL, 'Bründer', NULL, 'Dr.', 0, 20);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (32, false, NULL, NULL, 'Kristina', 1, NULL, 'Schölles', NULL, 'Dr.', 0, 33);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (38, false, NULL, NULL, 'Susanne', 1, NULL, 'Ißleib', NULL, '', 0, 40);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (5, false, NULL, NULL, 'Hans', 0, NULL, 'Mittelviefhaus', NULL, 'Prof.Dr.', 0, 5);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (10, false, NULL, NULL, 'Laura', 1, NULL, 'Gasser', NULL, 'PD Dr.', 0, 10);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (82, false, NULL, NULL, 'Kristin', 1, NULL, 'Technau-Hafsi', NULL, 'Dr.', 0, 83);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (83, false, NULL, NULL, 'Annette', 1, NULL, 'Schmitt-Gräff', NULL, 'Prof.Dr.', 0, 85);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (84, false, NULL, NULL, 'Martin', 0, NULL, 'Werner', NULL, 'Prof.Dr.', 0, 86);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (85, false, NULL, NULL, 'Thomas', 0, NULL, 'Mentzel', NULL, 'Prof.', 0, 87);
-INSERT INTO person (id, archived, birthname, birthday, firstname, gender, language, lastname, note, title, version, contact_id) VALUES (86, false, NULL, NULL, 'Karin', 1, NULL, 'Löffler', NULL, 'Prof.', 0, 88);
 
 SELECT setval('person_sequence', (SELECT MAX(id) FROM person));
 
@@ -137,43 +60,6 @@ INSERT INTO materialpreset (id, commentary, indexinlist, name) VALUES (35, '', 0
 SELECT setval('materialpreset_sequence', (SELECT MAX(id) FROM materialpreset));
 
 INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (1, false, false, 'Arzt', '1-30038224-0', 'glatza', 0, 1);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (2, false, false, 'Techn. Assistentin Med.', '1-30014504-0', 'zeitler', 0, 2);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (3, false, false, 'Techn. Assistentin Med.', '1-27901941-0', 'joosb', 0, 3);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (4, false, false, 'Ärztlicher Direktor', '1-30006999-0', 'treinhar', 0, 4);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (5, false, false, 'Oberarzt', '1-26604181-0', 'mvh', 0, 5);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (6, false, false, 'Oberärztin', '1-27304491-0', 'auw', 0, 6);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (7, false, false, 'Leitender Oberarzt', '1-28108201-0', 'agostini', 0, 7);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (8, false, false, 'Sektionsleiter', '1-27472961-0', 'lagreze', 0, 8);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (9, false, false, 'Oberarzt', '1-30003406-0', 'maierphi', 0, 9);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (10, false, false, 'Funktionsoberärztin', '1-30012620-0', 'gasser', 0, 10);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (11, false, false, 'Oberarzt', '1-30009182-0', 'eberwein', 0, 11);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (12, false, false, 'Funktionsoberarzt', '1-30022472-0', 'langst', 0, 12);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (13, false, false, 'Arzt', '1-30028879-0', 'luebkej', 0, 13);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (14, false, false, 'Funktionsoberarzt', '1-30018756-0', 'lapp', 0, 14);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (15, false, false, 'Ärztin', '1-30011238-0', 'zimmeli', 0, 15);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (16, false, false, 'Ärztin', '1-30019294-0', 'frommhev', 0, 16);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (17, false, false, 'Arzt', '1-30037716-0', 'bleult', 0, 17);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (18, false, false, 'Ärztin', '1-30023875-0', 'ludwigfr', 0, 18);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (19, false, false, 'Ärztin', '1-30028878-0', 'stech', 0, 19);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (20, false, false, 'Ärztin', '1-30017062-0', 'bruender', 0, 20);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (21, false, false, 'Fachärztin', '1-30015342-0', 'anton', 0, 21);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (22, false, false, 'Funktionsoberarzt', '1-30012696-0', 'grossnik', 0, 22);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (23, false, false, 'Facharzt', '1-30017059-0', 'grundel', 0, 23);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (24, false, false, 'Oberarzt', '1-30011235-0', 'astahl', 0, 24);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (25, false, false, 'Ärztin', '1-30025750-0', 'eversc', 0, 25);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (26, false, false, 'Ärztin', '1-30028609-0', 'reichl', 0, 26);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (27, false, false, 'Funktionsoberarzt', '1-30036972-0', 'joachims', 0, 27);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (28, false, false, 'Oberarzt', '1-27362821-0', 'ness', 0, 28);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (29, false, false, 'Arzt', '1-30022069-0', 'reichelc', 0, 29);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (30, false, false, 'Funktionsoberarzt', '1-30023645-0', 'wecker', 0, 30);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (31, false, false, 'Oberarzt', '1-30011659-0', 'clelange', 0, 31);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (32, false, false, 'Ärztin', '1-30038747-0', 'schoelle', 0, 32);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (38, false, false, 'Ärztin', '1-30024710-0', 'issleibs', 0, 38);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (82, false, false, 'Oberärztin', '1-30001338-0', 'krtech', 0, 82);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (83, false, false, 'Oberärztin', '1-27959521-0', 'ahsg', 0, 83);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (84, false, false, 'Geschäftsf. Direktor', '1-30004765-0', 'wernerm', 0, 84);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (85, false, false, NULL, NULL, NULL, 0, 85);
-INSERT INTO physician (id, archived, manuallyAltered, clinicrole, employeenumber, uid, version, person_id) VALUES (86, false, false, NULL, NULL, NULL, 0, 86);
 
 SELECT setval('physician_sequence', (SELECT MAX(id) FROM physician));
 
@@ -235,17 +121,7 @@ INSERT INTO diagnosispreset (id, category, commentary, diagnosis, extendeddiagno
 SELECT setval('diagnosispreset_sequence', (SELECT MAX(id) FROM diagnosispreset));
 
 INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (1,0,false, true, true, 9, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (2,0,false, true, true, 8, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 0, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (3,0,false, true, true, 8, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 0, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (4,0,false, true, true, 9, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (5,0,false, true, true, 9, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (6,0,false, true, true, 9, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (7,0,false, true, true, 1, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (8,0,false, true, true, 3, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (9,0,false, true, true, 8, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 0, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (10,0,false, true, true, 9, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (11,0,false, true, true, 9, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
-INSERT INTO histosettings (id, version, alternatepatientaddmode, autoselectedpreferedlabelprinter, autoselectedpreferedprinter, defaultview, inputfieldcolor, inputfieldfontcolor, preferedlabelpritner, preferedprinter,worklistautoupdate, worklisthidenoneactivetasks, worklistsortorder, worklistsortorderasc, worklisttoload, pdfpreviewondiagnosisapproval) VALUES (12,0,false, true, true, 9, 'ffffff', '000000', NULL, NULL,false, true, 0, true, 1, false);
+
 
 SELECT setval('settings_sequence', (SELECT MAX(id) FROM histosettings));
 
@@ -509,10 +385,7 @@ INSERT INTO materialpreset_stainingprototype (materialpreset_id, stainingprototy
 INSERT INTO materialpreset_stainingprototype (materialpreset_id, stainingprototypes_id) VALUES (35, 11);
 
 
-INSERT INTO organization (id, intern, name, note, version, contact_id) VALUES (3, true, 'Klinik für Dermatologie und Venerologie', NULL, 0, 82);
-INSERT INTO organization (id, intern, name, note, version, contact_id) VALUES (4, true, 'Institut für Klinische Pathologie', NULL, 0, 84);
-INSERT INTO organization (id, intern, name, note, version, contact_id) VALUES (2, true, 'Klinik für Augenheilkunde Klinische Forschung', '', 0, 39);
-INSERT INTO organization (id, intern, name, note, version, contact_id) VALUES (1, true, 'Klinik für Augenheilkunde', '', 0, 32);
+INSERT INTO organization (id, intern, name, note, version, contact_id) VALUES (1, true, 'Klinik für Augenheilkunde', '', 0, 2);
 
  SELECT setval('organization_sequence', (SELECT MAX(id) FROM organization));
  
@@ -527,46 +400,4 @@ INSERT INTO person_organization (person_id, organization_id) VALUES (83, 4);
 INSERT INTO person_organization (person_id, organization_id) VALUES (84, 4);
 
 INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (1, 'OTHER_PHYSICIAN');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (2, 'OTHER_PHYSICIAN');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (3, 'OTHER_PHYSICIAN');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (7, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (8, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (9, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (11, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (12, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (14, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (16, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (17, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (18, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (19, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (21, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (22, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (23, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (24, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (26, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (27, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (28, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (29, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (30, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (21, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (38, 'SIGNATURE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (32, 'SIGNATURE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (4, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (5, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (6, 'SIGNATURE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (6, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (10, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (10, 'SIGNATURE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (13, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (13, 'SIGNATURE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (15, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (15, 'SIGNATURE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (25, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (25, 'SIGNATURE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (20, 'SURGEON');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (20, 'SIGNATURE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (82, 'CASE_CONFERENCE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (83, 'CASE_CONFERENCE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (84, 'CASE_CONFERENCE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (85, 'CASE_CONFERENCE');
-INSERT INTO physician_associatedroles (physician_id, associatedroles) VALUES (86, 'CASE_CONFERENCE');
+

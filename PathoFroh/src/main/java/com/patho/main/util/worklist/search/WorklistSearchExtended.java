@@ -2,8 +2,8 @@ package com.patho.main.util.worklist.search;
 
 import com.patho.main.common.Eye;
 import com.patho.main.model.Physician;
-import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.patient.Patient;
+import com.patho.main.model.preset.StainingPrototype;
 import lombok.Getter;
 import lombok.Setter;
 

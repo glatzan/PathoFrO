@@ -1,7 +1,8 @@
 package com.patho.main.service;
 
-import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.StainingPrototypeDetails;
+import com.patho.main.model.preset.StainingPrototype;
+import com.patho.main.model.preset.StainingPrototypeDetails;
 import com.patho.main.repository.jpa.StainingPrototypeDetailsRepository;
 import com.patho.main.repository.jpa.StainingPrototypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ public class StainingPrototypeService extends AbstractService {
     @Autowired
     private StainingPrototypeRepository stainingPrototypeRepository;
 
-    @Autowired
-    private StainingPrototypeDetailsRepository stainingPrototypeDetailsRepository;
 
     public StainingPrototype addOrUpdate(StainingPrototype p, List<StainingPrototypeDetails> removeDetails) {
 

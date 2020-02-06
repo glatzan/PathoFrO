@@ -3,11 +3,7 @@ VM Arguments:
 -Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider
 -Dfile.encoding=UTF8
 
-Hotswap, legacy
--javaagent:${m2_repo}/org/springframework/spring-instrument/5.1.4.RELEASE/spring-instrument-5.1.4.RELEASE.jar
--javaagent:${m2_repo}/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
-
-PLV8 Javascript Postgres 
+PLV8 Javascript Postgres
 -> Postgres 10 -> http://www.postgresonline.com/journal/archives/379-PLV8-binaries-for-PostgreSQL-10-windows-both-32-bit-and-64-bit.html
 -> Postgres 11 -> https://github.com/plv8/plv8/issues/220#issuecomment-434436117
 -> Overview -> http://www.postgresonline.com/winextensions.php
@@ -16,7 +12,7 @@ PLV8 Javascript Postgres
 PDFLatex
 -> Miktex -> https://miktex.org/
 
-JPA MEtamodel (eclipse, legacy now with marven)
+JPA MEtamodel (eclipse, legacy with marven)
 -> Projekt Settings -> Java Compiler -> Annotation Processing -> Enable prject specific settings, source direcotry: target\generated-sources\annotations, test source directory target\generated-test-sources\test-annotations
 -> Projekt Settings -> Java Compiler -> Annotation Processing -> Factory Path -> .m2\repository\org\hibernate\hibernate-jpamodelgen\5.2.17.Final
 
@@ -36,8 +32,22 @@ WorklistSearchExtended
 -> getPatients
 
 
+:: 06.02.2020
 -> printdialog dos not show physicians
 -> custom address for physician will not work -> printDialog.selectedTemplate.onCustomAddressReturn
 -> birthday is mandatory in physician settings dialog
 -> change task storage to GlobalTaskBearer
 -> fix sendreport
+-> sort stanings by alphabet
+-> if more surgeons are present, in diagnosis and receiptlog, show a number: e.g. +2
+-> in the printed diagnosis report the id of the physician object is shown instead of the name
+-> Send email if material for a consultation was send (to claudia)
+-> marry slidescanner with pathofro (new external application)
+-> biobank consent check if present (daniel)
+-> tumorpass was send
+-> receiptlog ort and organization (enable organization as contact)
+-> archvie / delete tasks
+-> !! copie new reports from histo2016
+-> if a case is removed from worklist do not show the next task, show a empty page
+-> search option for cases that haven be removed from worklist (e.g diagnosis stage had been left)
+-> show caseNumber in receiptlog more prominent

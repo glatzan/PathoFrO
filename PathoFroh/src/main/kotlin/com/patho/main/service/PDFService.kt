@@ -168,9 +168,8 @@ open class PDFService @Autowired constructor(
     open fun saveAndAttachPDFToList(dataList: DataList, pdfContainer: PDFContainer): DataList {
         if (!dataList.attachedPdfs.contains(pdfContainer)) {
             dataList.attachedPdfs.add(pdfContainer)
-            return saveDataList(dataList, resourceBundle.get("log.pdf.uploaded", pdfContainer.name))
         }
-        return dataList
+        return saveDataList(dataList, resourceBundle.get("log.pdf.uploaded", pdfContainer.name))
     }
 
     /**

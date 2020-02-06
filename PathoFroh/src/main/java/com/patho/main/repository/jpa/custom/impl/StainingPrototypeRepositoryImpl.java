@@ -1,8 +1,8 @@
 package com.patho.main.repository.jpa.custom.impl;
 
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototype.StainingType;
-import com.patho.main.model.StainingPrototype_;
+import com.patho.main.model.preset.StainingPrototype;
+import com.patho.main.model.preset.StainingPrototypeType;
+import com.patho.main.model.preset.StainingPrototype_;
 import com.patho.main.repository.jpa.custom.StainingPrototypeRepositoryCustom;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +38,7 @@ public class StainingPrototypeRepositoryImpl extends AbstractRepositoryCustom
         return Optional.ofNullable(stainingPrototypes.size() > 0 ? stainingPrototypes.get(0) : null);
     }
 
-    public List<StainingPrototype> findAllByTypeIgnoreArchivedOrderByPriorityCountDesc(StainingType type,
+    public List<StainingPrototype> findAllByTypeIgnoreArchivedOrderByPriorityCountDesc(StainingPrototypeType type,
                                                                                        boolean initializeBatch, boolean irgnoreArchived) {
         CriteriaQuery<StainingPrototype> criteria = getCriteriaBuilder().createQuery(StainingPrototype.class);
         Root<StainingPrototype> root = criteria.from(StainingPrototype.class);

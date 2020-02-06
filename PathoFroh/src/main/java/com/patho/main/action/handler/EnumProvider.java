@@ -120,8 +120,7 @@ public class EnumProvider {
      * Returns an array with all values of the {@link CouncilState} enum
      *
      * @return
-     */
-    public CouncilState[] getCouncilStates() {
+     public CouncilState[] getCouncilStates() {
         return CouncilState.values();
     }
 

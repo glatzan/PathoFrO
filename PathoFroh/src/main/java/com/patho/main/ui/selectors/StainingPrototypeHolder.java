@@ -1,7 +1,8 @@
 package com.patho.main.ui.selectors;
 
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototypeDetails;
+import com.patho.main.model.preset.StainingPrototype;
+import com.patho.main.model.preset.StainingPrototypeDetails;
+import com.patho.main.model.preset.StainingPrototypeType;
 
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class StainingPrototypeHolder extends StainingPrototype {
         this.prototype.setId(id);
     }
 
-    public StainingType getType() {
+    public StainingPrototypeType getType() {
         return this.prototype.getType();
     }
 
@@ -80,12 +81,12 @@ public class StainingPrototypeHolder extends StainingPrototype {
         return this.prototype.getId();
     }
 
-    public void setType(StainingType type) {
+    public void setType(StainingPrototypeType type) {
         this.prototype.setType(type);
     }
 
     public boolean isArchived() {
-        return this.prototype.isArchived();
+        return this.prototype.getArchived();
     }
 
     public int getPriorityCount() {

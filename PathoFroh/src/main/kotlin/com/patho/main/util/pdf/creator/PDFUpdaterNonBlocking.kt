@@ -20,22 +20,20 @@ class PDFUpdaterNonBlocking(workDirectory: String = SpringContextBridge.services
     fun update(template: PrintDocument, container: PDFContainer, createThumbnail: Boolean = false, returnHandler: LazyPDFReturnHandler): String {
         val uuid = UUID.randomUUID().toString()
 
-        SpringContextBridge.services().taskExecutor.execute(object : Thread() {
-            override fun run() {
-                try {
-                    logger.debug("Starting PDF Update in new Thread")
-                    lock.acquire()
-                    val returnPDF: PDFContainer = update(template, container, createThumbnail)
-                    returnHandler.returnPDFContent(returnPDF, uuid)
-                    logger.debug("PDF Update completed, thread ended")
-                } catch (e: Exception) {
-                    logger.debug("Error")
-                    e.printStackTrace()
-                } finally {
-                    lock.release()
-                }
+        SpringContextBridge.services().taskExecutor.execute {
+            try {
+                logger.debug("Starting PDF Update in new Thread")
+                lock.acquire()
+                val returnPDF: PDFContainer = update(template, container, createThumbnail)
+                returnHandler.returnPDFContent(returnPDF, uuid)
+                logger.debug("PDF Update completed, thread ended")
+            } catch (e: Exception) {
+                logger.debug("Error")
+                e.printStackTrace()
+            } finally {
+                lock.release()
             }
-        })
+        }
         return uuid
     }
 }

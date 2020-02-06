@@ -1,7 +1,7 @@
 package com.patho.main.repository.jpa.custom;
 
-import com.patho.main.model.StainingPrototype;
-import com.patho.main.model.StainingPrototype.StainingType;
+import com.patho.main.model.preset.StainingPrototype;
+import com.patho.main.model.preset.StainingPrototypeType;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +17,8 @@ public interface StainingPrototypeRepositoryCustom {
     Optional<StainingPrototype> findOptionalByIdAndInitilize(Long id, boolean initializeBatch);
 
     /**
-     * @param type
-     * @param ignoreArchived
      * @return
      */
-    List<StainingPrototype> findAllByTypeIgnoreArchivedOrderByPriorityCountDesc(StainingType type,
+    List<StainingPrototype> findAllByTypeIgnoreArchivedOrderByPriorityCountDesc(StainingPrototypeType type,
                                                                                 boolean initializeBatch, boolean irgnoreArchived);
 }

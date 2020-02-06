@@ -1,11 +1,6 @@
 [{"printer":"10.250.3.227","tuerschild":"10.250.0.101","ip":"10.250.0.252","bemerkung":"Amulanz\/EG W2-U01 (Fenster)   aktuell:   18:03:73:1E:85:AD     AUG-11961 ","roomid":361,"aktiv":"A","aufrufwartekreis":"AUG-EG-W-2","laufrichtung":"L","zeitpunkt":"2015-05-18 07:31:01","aufruftext":"U1"}]
 http://10.210.21.11:3009/DB/PLS/ip2room/ip/10.250.0.252
 
--> less https://github.com/palantir/eclipse-less
---> your-project/.settings/com.palantir.less.prefs
---> srcFiles=WebContent/resources/style/style.less;WebContent/resources/style/specificStyle.less;WebContent/resources/style/common.less
--> atmosphere https://forum.primefaces.org/viewtopic.php?t=48289
--> plink windows set PATH=C:\path\to\putty\directory;%PATH%
 -> https://vladmihalcea.com/2015/02/09/hibernate-locking-patterns-how-does-optimistic_force_increment-lock-mode-work/
 -> Session Refresh: http://stackoverflow.com/questions/3642919/javax-faces-application-viewexpiredexception-view-could-not-be-restored
 
@@ -32,7 +27,6 @@ left join contact on contact.id= person.contact_id
 where task.ward ilike '%auswärtig%'
 group by taskID, receiptdate
 
-
 select flist.id, flist.name, coalesce(bool_or(fitem.task_id = 1),false) As containsTask from favouritelist flist 
 left join favouritepermissionsgroup fgroup on fgroup.favouritelist_id = flist.id  
 left join favouritepermissionsuser fuser on fuser.favouritelist_id = flist.id
@@ -50,11 +44,9 @@ Alt  + B: Notification
 Alt + Shift + S: Settings
 
 Tasks:
--> fix council dialog
 -> notification exit dialog, archive dialog commands
 -> biobank dialog -> media dialog select mode is not initilized
 -> fix accounting dialog
-
 
 -> Add Sending Physicians in surgeon select dialog (!)  
 -> Make organizations choosable als suregons
@@ -82,26 +74,16 @@ Tasks:
 
 Next Changes:
 -> wenn konsil aussteht keine archivirung
--> Task archivieren nur wenn befunder angegeben ist
--> Nach 3 monaten soll dearchiviertung nicht mehr möglich sein 
+-> Nach 3 monaten soll dearchiviertung nicht mehr möglich sein
 
-
--> erstellen von patientin in der pdv
 -> Ärzte aus klinikbackend übernehmen
 
 -> patienten 1502 und 1503 löschen
 
--> Diangosen benachrichtigung per brief bei jedem einstellen
-
 -> suche mit umlauten -> daniel
 -> suche mit umlauten in quick search regex alpha (erkennt kein ö usw)
 
--> versehendlich ausgeführte benachrichtigungen, markieren, kontakt dialog verbessern
-
 -> contentForm:contentPanel fest, das jede seite diese hat, udpate im header von contentForm:contentPanel anstelle von contentform
-
--> Aus Uitl in Selectors kopieren  
--> Benchrichtigung: Im Service Telefonnummern aktivieren
 
 -> pdf beim drucken ggf speicher
 
@@ -707,6 +689,11 @@ update pdfcontainer set intern = '' where intern is NULL;
 /* add password field for local user */
 alter table histouser add column _password varchar(70);
 alter table histouser_aud add column _password varchar(70);
+
+/* stainingprototypedetails to json */
+alter table stainingprototype add column details jsonb;
+drop table stainingprototypedetails;
+drop sequence stainingprototypedetails_sequence;
 
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien

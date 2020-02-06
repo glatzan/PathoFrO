@@ -1,10 +1,10 @@
 package com.patho.main.service
 
-import com.patho.main.model.StainingPrototype
 import com.patho.main.model.patient.Block
 import com.patho.main.model.patient.Sample
 import com.patho.main.model.patient.Slide
 import com.patho.main.model.patient.Task
+import com.patho.main.model.preset.StainingPrototype
 import com.patho.main.repository.jpa.SlideRepository
 import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.ui.selectors.StainingPrototypeHolder
@@ -24,12 +24,12 @@ open class SlideService @Autowired constructor(
      * Creates a lists of slides for a block
      */
     @Transactional
-    open fun createSlides(stainingPrototypes: List<StainingPrototype>, block: Block, labelText: String = "",
+    open fun createSlides(stainingPrototypes: List<StainingPrototypeHolder>, block: Block, labelText: String = "",
                           commentary: String = "", isRestaining: Boolean = false, autoNaming: Boolean = true,
                           completed: Boolean = false, save: Boolean = true): Task {
         stainingPrototypes.forEach { createSlide(it, block, labelText, commentary, isRestaining, autoNaming, completed, false) }
 
-        return if (save) taskRepository.save<Task>(block.task, resourceBundle.get("log.task.slide.new", block.task, block), block.patient) else block.task!!
+        return if (save) taskRepository.save<Task>(block.task, resourceBundle["log.task.slide.new", block.task, block], block.patient) else block.task!!
     }
 
     /**
@@ -44,7 +44,7 @@ open class SlideService @Autowired constructor(
                 createSlide(it, block, labelText, commentary, isRestaining, autoNaming, completed, false)
         }
 
-        return if (save) taskRepository.save<Task>(block.task, resourceBundle.get("log.task.slide.new", block.task, block), block.patient) else block.task!!
+        return if (save) taskRepository.save<Task>(block.task, resourceBundle["log.task.slide.new", block.task, block], block.patient) else block.task!!
     }
 
     /**
@@ -55,7 +55,7 @@ open class SlideService @Autowired constructor(
                          commentary: String = "", isRestaining: Boolean = false, autoNaming: Boolean = true,
                          completed: Boolean = false, save: Boolean = true): Task {
 
-        logger.debug("Creating new slide " + stainingPrototype.getName())
+        logger.debug("Creating new slide " + stainingPrototype.name)
 
         val slide = Slide()
 
@@ -81,7 +81,7 @@ open class SlideService @Autowired constructor(
         }
 
         // saving task, slide is saved as well and the unqiue slide id counter is // updated
-        return if (save) taskRepository.save<Task>(slide.task, resourceBundle.get("log.task.slide.new", slide.task, slide), block.patient) else slide.task!!
+        return if (save) taskRepository.save<Task>(slide.task, resourceBundle["log.task.slide.new", slide.task, slide], block.patient) else slide.task!!
     }
 
     /**
@@ -97,8 +97,8 @@ open class SlideService @Autowired constructor(
         parent.slides.forEach { p -> TaskTreeTools.updateNamesInTree(p, p.task!!.useAutoNomenclature, false) }
 
         if (save) {
-            t = taskRepository.save<Task>(slide.task, resourceBundle.get("log.task.slide.deleted", slide.task, slide), slide.patient)
-            slideRepository.delete(slide, resourceBundle.get("log.task.slide.deleted", slide.task, slide), slide.patient)
+            t = taskRepository.save<Task>(slide.task, resourceBundle["log.task.slide.deleted", slide.task, slide], slide.patient)
+            slideRepository.delete(slide, resourceBundle["log.task.slide.deleted", slide.task, slide], slide.patient)
         }
 
         return t!!
@@ -112,7 +112,7 @@ open class SlideService @Autowired constructor(
         task.samples.forEach { completeStaining(it, complete) }
 
         if (save)
-            return taskRepository.save(task, resourceBundle.get("log.task.slide.completedTask", task, task), task.patient)
+            return taskRepository.save(task, resourceBundle["log.task.slide.completedTask", task, task], task.patient)
         return task
     }
 
@@ -124,7 +124,7 @@ open class SlideService @Autowired constructor(
         sample.blocks.forEach { completeStaining(it, complete) }
 
         if (save)
-            return taskRepository.save(sample.task!!, resourceBundle.get("log.task.slide.completedSample", sample.task, sample), sample.patient)
+            return taskRepository.save(sample.task!!, resourceBundle["log.task.slide.completedSample", sample.task, sample], sample.patient)
         return sample.task!!
     }
 
@@ -136,7 +136,7 @@ open class SlideService @Autowired constructor(
         block.slides.forEach { completeStaining(it, complete) }
 
         if (save)
-            return taskRepository.save(block.task!!, resourceBundle.get("log.task.slide.completedBlock", block.task, block), block.patient)
+            return taskRepository.save(block.task!!, resourceBundle["log.task.slide.completedBlock", block.task, block], block.patient)
         return block.task!!
     }
 
@@ -149,7 +149,7 @@ open class SlideService @Autowired constructor(
         slide.completionDate = if (complete) System.currentTimeMillis() else 0
 
         if (save)
-            return taskRepository.save(slide.task!!, resourceBundle.get("log.task.slide.completedSlide", slide.task, slide), slide.patient)
+            return taskRepository.save(slide.task!!, resourceBundle["log.task.slide.completedSlide", slide.task, slide], slide.patient)
         return slide.task!!
     }
 

@@ -8,8 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 
-@Getter
-@Setter
 public class DataBaseConverter {
 
     @PersistenceContext
@@ -24,6 +22,18 @@ public class DataBaseConverter {
     }
 
     public void start() {
+//        val pipe = ArrayChannel<Deferred<ImageFile>>(20)
+//        launch {
+//            while (!(pipe.isEmpty && pipe.isClosedForSend)) {
+//                imageFiles.add(pipe.receive().await())
+//            }
+//            println("pipe closed")
+//        }
+//        File("/Users/me/").walkTopDown()
+//                .onFail { file, ex -> println("ERROR: $file caused $ex") }
+//        .forEach { pipe.send(async { ImageFile.fromFile(it) }) }
+//        pipe.close()
+
 //		List<PDFContainer> ignoredContainer = new ArrayList<PDFContainer>();
 //		List<Patient> p = patientRepository.findAll();
 //
@@ -93,7 +103,7 @@ public class DataBaseConverter {
 //						for (int y = 0; y < council.getAttachedPdfs().size(); y++) {
 //
 //							PDFContainer c2 = HistoUtil.getNElement(council.getAttachedPdfs(), y);
-//							
+//
 //							if (c2.getName() != null && !c2.getName().matches("^((.*\\.pdf)|([A-Za-z0-9 ]*))$")) {
 //								System.out.println("ignoring " + c2.getName());
 //								ignoredContainer.add(c2);

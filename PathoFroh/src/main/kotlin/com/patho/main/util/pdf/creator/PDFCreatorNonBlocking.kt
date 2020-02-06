@@ -22,22 +22,20 @@ class PDFCreatorNonBlocking(workDirectory: String = SpringContextBridge.services
 
         val uuid = UUID.randomUUID().toString()
 
-        services().taskExecutor.execute(object : Thread() {
-            override fun run() {
-                try {
-                    logger.debug("Starting PDF Generation in new Thread")
-                    lock.acquire()
-                    val returnPDF: PDFContainer = create(template, targetDirectory, createThumbnail)
-                    returnHandler.returnPDFContent(returnPDF, uuid)
-                    logger.debug("PDF Generation completed, thread ended")
-                } catch (e: Exception) {
-                    logger.debug("Error")
-                    e.printStackTrace()
-                } finally {
-                    lock.release()
-                }
+        services().taskExecutor.execute {
+            try {
+                logger.debug("Starting PDF Generation in new Thread")
+                lock.acquire()
+                val returnPDF: PDFContainer = create(template, targetDirectory, createThumbnail)
+                returnHandler.returnPDFContent(returnPDF, uuid)
+                logger.debug("PDF Generation completed, thread ended")
+            } catch (e: Exception) {
+                logger.debug("Error")
+                e.printStackTrace()
+            } finally {
+                lock.release()
             }
-        })
+        }
         return uuid
     }
 }

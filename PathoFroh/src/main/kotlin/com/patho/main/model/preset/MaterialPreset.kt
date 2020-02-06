@@ -1,7 +1,6 @@
 package com.patho.main.model.preset
 
 import com.patho.main.model.AbstractPersistable
-import com.patho.main.model.StainingPrototype
 import com.patho.main.model.interfaces.ListOrder
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
@@ -17,12 +16,21 @@ open class MaterialPreset : ListOrder<MaterialPreset>, AbstractPersistable {
     @Column(unique = true, nullable = false)
     override var id: Long = 0
 
+    /**
+     * Name
+     */
     @Column
     open var name: String = ""
 
+    /**
+     * Commentary
+     */
     @Column(columnDefinition = "text")
     open var commentary: String = ""
 
+    /**
+     * Staining prototypes
+     */
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     open var stainingPrototypes: MutableList<StainingPrototype> = mutableListOf()
@@ -35,9 +43,15 @@ open class MaterialPreset : ListOrder<MaterialPreset>, AbstractPersistable {
     @Column
     open var priorityCount = 0
 
+    /**
+     * Index for manually sorting
+     */
     @Column
     override var indexInList = 0
 
+    /**
+     * Archived
+     */
     @Column
     open var archived = false
 
