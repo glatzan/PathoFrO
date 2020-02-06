@@ -701,6 +701,13 @@ update person set "language" = '' where language is null;
 update person set note = '' where note is null;
 update diagnosispreset set extendeddiagnosistext = '' where extendeddiagnosistext is null
 
+/* fixing names */
+update materialpreset set name = 'Resektat' where id = 8;
+update sample set materialpreset_id = 136 where id = 1216;
+delete from materialpreset where id = 187;
+update materialpreset set name = 'Papillom' where id = 286;
+delete from slide where id = 123;
+
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien
 
