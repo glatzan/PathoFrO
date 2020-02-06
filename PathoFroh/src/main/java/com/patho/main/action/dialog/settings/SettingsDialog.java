@@ -5,15 +5,11 @@ import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.ContactRole;
 import com.patho.main.common.Dialog;
 import com.patho.main.model.*;
-import com.patho.main.model.StainingPrototype.StainingType;
 import com.patho.main.model.favourites.FavouriteList;
 import com.patho.main.model.log.Log;
 import com.patho.main.model.log.Log_;
 import com.patho.main.model.person.Organization;
-import com.patho.main.model.preset.DiagnosisPreset;
-import com.patho.main.model.preset.ListItem;
-import com.patho.main.model.preset.ListItemType;
-import com.patho.main.model.preset.MaterialPreset;
+import com.patho.main.model.preset.*;
 import com.patho.main.model.user.HistoGroup;
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.service.impl.SpringContextBridge;
@@ -282,9 +278,9 @@ public class SettingsDialog extends AbstractTabDialog {
         public void updateData() {
             getContainer().clear();
             // adding tabs dynamically
-            for (StainingType type : StainingType.values()) {
+            for (StainingPrototypeType type : StainingPrototypeType.values()) {
                 getContainer().add(new StainingContainer(type, SpringContextBridge.services().getStainingPrototypeRepository()
-                        .findAllByTypeIgnoreArchivedOrderByPriorityCountDesc(type, false, !isShowArchived())));
+                        .findAllByTypeIgnoreArchivedOrderByPriorityCountDesc(type, !isShowArchived())));
             }
         }
 
@@ -304,10 +300,10 @@ public class SettingsDialog extends AbstractTabDialog {
         @Getter
         @Setter
         public class StainingContainer {
-            private StainingType type;
+            private StainingPrototypeType type;
             private List<StainingPrototype> prototpyes;
 
-            public StainingContainer(StainingType type, List<StainingPrototype> prototypes) {
+            public StainingContainer(StainingPrototypeType type, List<StainingPrototype> prototypes) {
                 this.type = type;
                 this.prototpyes = prototypes;
             }
@@ -365,7 +361,7 @@ public class SettingsDialog extends AbstractTabDialog {
         }
 
         public void onReorderList(ReorderEvent event) {
-            SpringContextBridge.services().getListItemService().updateReoderedList(getStaticListContent(), getSelectedStaticList());
+            SpringContextBridge.services().getListItemService().updateReorderedList(getStaticListContent(), getSelectedStaticList());
             updateData();
         }
     }

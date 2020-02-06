@@ -41,12 +41,12 @@ open class GenericViewData @Autowired constructor(
     /**
      * Contains all available case histories
      */
-    open var slideCommentary: MutableList<ListItem> = mutableListOf()
+    open var slideCommentary: List<ListItem> = listOf()
 
     /**
      * List of all reportIntent presets
      */
-    open var diagnosisPresets: MutableList<DiagnosisPreset> = mutableListOf()
+    open var diagnosisPresets: List<DiagnosisPreset> = listOf()
 
     /**
      * List of physicians which have the role signature
@@ -66,12 +66,12 @@ open class GenericViewData @Autowired constructor(
     /**
      * Contains all available case histories
      */
-    open var caseHistoryList: MutableList<ListItem> = mutableListOf()
+    open var caseHistoryList: List<ListItem> = listOf()
 
     /**
      * Contains all available wards
      */
-    open var wardList: MutableList<ListItem> = mutableListOf()
+    open var wardList: List<ListItem> = listOf()
 
     /**
      * List of all surgeons
@@ -103,7 +103,7 @@ open class GenericViewData @Autowired constructor(
         physiciansToSignList = physicianRepository.findAllByRole(ContactRole.SIGNATURE, true)
         physiciansToSignListTransformer = DefaultTransformer(physiciansToSignList)
 
-        materialList = materialPresetRepository.findAll(true)
+        materialList = materialPresetRepository.findAllOrderByIndexInListAsc(true,true)
     }
 
     /**

@@ -8,7 +8,7 @@ import java.time.LocalDate
  * Details for staining batches
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-open class StainingPrototypeDetails() : Serializable {
+open class StainingPrototypeDetails() : Serializable, Cloneable {
 
     open var name: String = ""
 
@@ -34,11 +34,11 @@ open class StainingPrototypeDetails() : Serializable {
      */
     open var storage: String = ""
 
-    open var bestBefore: LocalDate = LocalDate.now()
+    open var bestBefore: LocalDate? = LocalDate.now()
 
-    open var deliveryDate: LocalDate = LocalDate.now()
+    open var deliveryDate: LocalDate? = LocalDate.now()
 
-    open var emptyDate: LocalDate = LocalDate.now()
+    open var emptyDate: LocalDate? = LocalDate.now()
 
     /**
      * e.g firm
@@ -57,4 +57,7 @@ open class StainingPrototypeDetails() : Serializable {
 
     open var commentary: String = ""
 
+    public override fun clone(): Any {
+        return super.clone()
+    }
 }

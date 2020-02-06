@@ -36,11 +36,19 @@
                 </h:outputLabel>
             </p:column>
 
-            <!-- priority -->
+            <!-- sorted -->
+            <p:column style="width:9%" sortBy="#{material.indexInList}"
+                      headerText="#{msg['dialog.settings.material.order.text']}"
+                      styleClass="centerChildElements">
+                <h:outputLabel value="#{material.indexInList}"
+                               title="#{msg['dialog.settings.material.order.info']}"/>
+            </p:column>
+
+            <!-- usage -->
             <p:column style="width:9%" sortBy="#{material.priorityCount}"
                       headerText="#{msg['dialog.settings.material.priority']}"
                       styleClass="centerChildElements">
-                <h:outputLabel value="#{material.priorityCount}"></h:outputLabel>
+                <h:outputLabel value="#{material.priorityCount}" />
             </p:column>
 
             <!-- archived -->
@@ -104,14 +112,23 @@
                             listener="#{dialog.settingsDialog.materialTab.updateData()}"/>
                 </p:selectBooleanCheckbox>
                 <h:outputLabel
-                        value="#{msg['dialog.settings.material.backend.archived']}"/>
+                        value="#{msg['dialog.settings.material.checkbox.archived']}"/>
             </h:panelGrid>
 
-            <h:panelGrid columns="2" styleClass="right">
+            <h:panelGrid columns="3" styleClass="right">
                 <!-- new material -->
                 <p:commandButton value="#{msg['dialog.settings.material.new']}"
                                  icon="fa fa-fw fa-plus-circle"
                                  actionListener="#{dialog.materialEditDialog.initAndPrepareBean()}">
+                    <p:ajax event="dialogReturn" update="@form"
+                            listener="#{dialog.settingsDialog.materialTab.updateData()}"/>
+                </p:commandButton>
+
+                <!-- list order -->
+                <p:commandButton value="#{msg['dialog.settings.material.listOrder.text']}"
+                                 title="#{msg['dialog.settings.material.listOrder.info']}"
+                                 icon="fa fa-fw fa-sort-amount-asc" partialSubmit="true" process="@this"
+                                 actionListener="#{materialSortDialog.initAndPrepareBean()}">
                     <p:ajax event="dialogReturn" update="@form"
                             listener="#{dialog.settingsDialog.materialTab.updateData()}"/>
                 </p:commandButton>

@@ -12,6 +12,9 @@ enum class Dialog {
     WORKLIST_ORDER("/pages/dialog/worklist/worklistOrder", null, 480, 272, false, false, true),                                                                            // OK
     WORKLIST_SETTINGS("/pages/dialog/worklist/worklistSettings", null, 480, 272, false, false, true),                                                                        // OK
     PATIENT_LOG("/pages/dialog/history/patientLog", null, 1024, 600, false, false, true),                                                                                    // OK
+    /**
+     * Create task (Kotlin)
+     */
     TASK_CREATE("/pages/dialog/task/createTask", null, 1024, 600, false, false, true),                                                                                        // OK
     TASK_DELETE("/pages/dialog/task/delete/deleteTask", null, 480, 272, false, false, true), // 16:9
     TASK_CHANGE_ID("/pages/dialog/task/chagneTaskID", null, 480, 272, false, false, true),                                                                                    // OK
@@ -27,8 +30,19 @@ enum class Dialog {
     SETTINGS("/pages/dialog/globalSettings/settings", null, 1024, 600, false, false, true),                                                                                    // OK
     SETTINGS_PHYSICIAN_SEARCH("/pages/dialog/settings/physician/physicianSearch/physicianSearch", null, 1280, 720, false, false, true),                                    // OK
     SETTINGS_PHYSICIAN_EDIT("/pages/dialog/settings/physician/physicianEdit", null, 1280, 740, false, false, true),                                                        // OK
+    /**
+     * Edit staining prototypes (kotlin)
+     */
     SETTINGS_STAINING_EDIT("/pages/dialog/settings/staining/stainingEdit", null, 1024, 600, false, false, true),                                                            // OK
+    /**
+     * Sorting staining list (Kotlin)
+     */
+    SETTINGS_STAINING_SORT("/pages/dialog/settings/staining/stainingSort", null, 1024, 600, false, false, true),                                                            // OK
     SETTINGS_MATERIAL_EDIT("/pages/dialog/settings/material/materialEdit", null, 1024, 600, false, false, true),                                                            // OK
+    /**
+     * Sorting material list (Kotlin)
+     */
+    SETTINGS_MATERIAL_SORT("/pages/dialog/settings/material/materialSort", null, 1024, 600, false, false, true),                                                            // OK
     SETTINGS_DIAGNOSIS_EDIT("/pages/dialog/settings/reportIntent/diagnosisEdit", null, 1024, 600, false, false, true),                                                        // OK
     SETTINGS_GROUP_LIST("/pages/dialog/settings/groups/groupList", null, 1024, 600, false, false, true),                                                                    // OK
     SETTINGS_GROUP_EDIT("/pages/dialog/settings/groups/groupEdit", null, 1024, 600, false, false, true),                                                                    // OK
@@ -38,6 +52,9 @@ enum class Dialog {
     SETTINGS_ORGANIZATION_EDIT("/pages/dialog/settings/organization/organizationEdit", null, 1280, 720, false, false, true),                                                // OK
     SETTINGS_ORGANIZATION_LIST("/pages/dialog/settings/organization/organizationList", null, 858, 484, false, false, true),                                                // OK
     SETTINGS_FAVOURITE_LIST_EDIT("/pages/dialog/settings/favouriteList/favouriteListEdit", null, 1024, 600, false, false, true),                                            // OK
+    /**
+     * Edit list items (Kotlin)
+     */
     SETTINGS_LISTITEM_EDIT("/pages/dialog/settings/listItems/listItemEdit", null, 480, 272, false, false, true),                                                            // OK
     FAVOURITE_LIST_ITEM_REMOVE("/pages/dialog/settings/favouriteList/favouriteListItemRemove", null, 480, 272, false, false, true), // 16:9
     PRINT("/pages/dialog/print/print", null, 1280, 720, false, false, true), // 16:9

@@ -35,10 +35,8 @@ WorklistSearchExtended
 :: 06.02.2020
 -> printdialog dos not show physicians
 -> custom address for physician will not work -> printDialog.selectedTemplate.onCustomAddressReturn
--> birthday is mandatory in physician settings dialog
 -> change task storage to GlobalTaskBearer
 -> fix sendreport
--> sort stanings by alphabet
 -> if more surgeons are present, in diagnosis and receiptlog, show a number: e.g. +2
 -> in the printed diagnosis report the id of the physician object is shown instead of the name
 -> Send email if material for a consultation was send (to claudia)

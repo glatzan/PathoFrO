@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component
 
 
 @Component()
-@Scope(value = "session")
 open class SlideOverviewDialog @Autowired constructor(
         private val taskRepository: TaskRepository,
         private val listItemRepository: ListItemRepository,

@@ -13,6 +13,7 @@ open class ListItem : ListOrder<ListItem>, AbstractPersistable {
 
     @Id
     @GeneratedValue(generator = "listItem_sequencegenerator")
+    @SequenceGenerator(name = "listItem_sequencegenerator", sequenceName = "listItem_sequence")
     @Column(unique = true, nullable = false)
     @RevisionNumber
     override var id: Long = 0

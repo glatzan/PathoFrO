@@ -3,11 +3,11 @@ package com.patho.main.action.dialog.slides;
 import com.patho.main.action.dialog.AbstractDialog;
 import com.patho.main.common.Dialog;
 import com.patho.main.common.PredefinedFavouriteList;
-import com.patho.main.model.StainingPrototype.StainingType;
 import com.patho.main.model.patient.Block;
 import com.patho.main.model.patient.Task;
 import com.patho.main.model.preset.ListItem;
 import com.patho.main.model.preset.ListItemType;
+import com.patho.main.model.preset.StainingPrototypeType;
 import com.patho.main.service.impl.SpringContextBridge;
 import com.patho.main.ui.selectors.StainingPrototypeHolder;
 import com.patho.main.util.dialog.event.SlideSelectEvent;
@@ -105,7 +105,7 @@ public class AddSlidesDialog extends AbstractDialog {
         setContainer(new ArrayList<StainingTypeContainer>());
 
         // adding tabs dynamically
-        for (StainingType type : StainingType.values()) {
+        for (StainingPrototypeType type : StainingPrototypeType.values()) {
             getContainer().add(new StainingTypeContainer(type,
                     SpringContextBridge.services().getStainingPrototypeRepository().findAllByTypeOrderByPriorityCountDesc(type).stream()
                             .map(p -> new StainingPrototypeHolder(p)).collect(Collectors.toList())));
@@ -163,11 +163,11 @@ public class AddSlidesDialog extends AbstractDialog {
     @Getter
     @Setter
     public static class StainingTypeContainer {
-        private StainingType type;
+        private StainingPrototypeType type;
         private List<StainingPrototypeHolder> prototpyes;
         private List<StainingPrototypeHolder> selectedPrototypes;
 
-        public StainingTypeContainer(StainingType type, List<StainingPrototypeHolder> prototypes) {
+        public StainingTypeContainer(StainingPrototypeType type, List<StainingPrototypeHolder> prototypes) {
             this.type = type;
             this.prototpyes = prototypes;
             this.selectedPrototypes = new ArrayList<StainingPrototypeHolder>();

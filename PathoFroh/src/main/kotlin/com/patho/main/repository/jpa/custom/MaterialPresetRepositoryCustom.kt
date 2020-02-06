@@ -1,6 +1,7 @@
 package com.patho.main.repository.jpa.custom
 
 import com.patho.main.model.preset.MaterialPreset
+import com.patho.main.model.preset.StainingPrototype
 
 
 interface MaterialPresetRepositoryCustom {
@@ -11,4 +12,8 @@ interface MaterialPresetRepositoryCustom {
 
     fun findAllOrderByPriorityCountDesc(loadStainings: Boolean,
                                         irgnoreArchived: Boolean): List<MaterialPreset>
+
+
+    fun findAllOrderByIndexInListAsc(loadStainings: Boolean,
+                                       irgnoreArchived: Boolean) : List<MaterialPreset>
 }

@@ -14,15 +14,15 @@ import javax.faces.convert.FacesConverter
 class LocalDateConverter : CalendarConverter<LocalDate>() {
     override fun getAsObject(context: FacesContext, component: UIComponent, value: String?): LocalDate? {
         val formatter = DateTimeFormatter.ofPattern(extractPattern(component, context))
-        try {
+        return try {
             val result = LocalDate.parse(value, formatter)
-            return result;
+            result;
         }catch (e : DateTimeParseException){
-            return null
+            null
         }
     }
 
-    override fun getAsString(context: FacesContext, component: UIComponent, date: LocalDate): String {
-        return date.format(DateTimeFormatter.ofPattern(extractPattern(component, context)))
+    override fun getAsString(context: FacesContext, component: UIComponent, date: LocalDate?): String {
+        return date?.format(DateTimeFormatter.ofPattern(extractPattern(component, context))) ?: ""
     }
 }

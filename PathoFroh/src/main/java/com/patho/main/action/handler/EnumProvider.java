@@ -2,8 +2,9 @@ package com.patho.main.action.handler;
 
 import com.patho.main.action.views.ReceiptLogView;
 import com.patho.main.common.*;
-import com.patho.main.model.StainingPrototype;
 import com.patho.main.model.preset.ListItemType;
+import com.patho.main.model.preset.StainingPrototype;
+import com.patho.main.model.preset.StainingPrototypeType;
 import com.patho.main.model.user.HistoGroup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -129,8 +130,8 @@ public class EnumProvider {
      *
      * @return
      */
-    public StainingPrototype.StainingType[] getStainingTypes() {
-        return StainingPrototype.StainingType.values();
+    public StainingPrototypeType[] getStainingTypes() {
+        return StainingPrototypeType.values();
     }
 
     public HistoGroup.AuthRole[] getAuthRoles() {

@@ -695,6 +695,12 @@ alter table stainingprototype add column details jsonb;
 drop table stainingprototypedetails;
 drop sequence stainingprototypedetails_sequence;
 
+/* removing null values */
+update person set birthname = '' where birthname is null;
+update person set "language" = '' where language is null;
+update person set note = '' where note is null;
+update diagnosispreset set extendeddiagnosistext = '' where extendeddiagnosistext is null
+
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien
 
@@ -733,12 +739,6 @@ INSERT INTO favouritepermissionsgroup (id,admin, editable, readable, favouriteli
 
 update favouritelist set hideList = true where id = 50;
 update favouritelist set hideList = true where id = 51;
-
-/* removing null values */
-update person set birthname = '' where birthname is null;
-update person set "language" = '' where language is null;
-update person set note = '' where note is null;
-update diagnosispreset set extendeddiagnosistext = '' where extendeddiagnosistext is null
 
 ->>>>> bis hier auf server
 

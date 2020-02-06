@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -20,7 +17,7 @@
 
             <p:tab title="#{msg['enum.stainingType.'.concat(container.type)]}">
                 <p:dataTable var="staining" styleClass="defaultHistoDataTable"
-                             rowKey="#{staining.id}" scrollHeight="430" scrollable="true"
+                             rowKey="#{staining.id}" scrollHeight="420" scrollable="true"
                              value="#{container.prototpyes}">
 
                     <!-- name -->
@@ -48,11 +45,20 @@
                         </h:outputText>
                     </p:column>
 
-                    <!-- priority -->
-                    <p:column style="width:9%" sortBy="#{staining.priorityCount}"
-                              headerText="#{msg['dialog.settings.stainings.priority']}"
+                    <!-- sorted -->
+                    <p:column style="width:9%" sortBy="#{staining.indexInList}"
+                              headerText="#{msg['dialog.settings.stainings.order.text']}"
                               styleClass="centerChildElements">
-                        <h:outputLabel value="#{staining.priorityCount}"></h:outputLabel>
+                        <h:outputLabel value="#{staining.indexInList}"
+                                       title="#{msg['dialog.settings.stainings.order.info']}"/>
+                    </p:column>
+
+                    <!-- usage -->
+                    <p:column style="width:9%" sortBy="#{staining.priorityCount}"
+                              headerText="#{msg['dialog.settings.stainings.usage.text']}"
+                              styleClass="centerChildElements">
+                        <h:outputLabel value="#{staining.priorityCount}"
+                                       title="#{msg['dialog.settings.stainings.usage.info']}"/>
                     </p:column>
 
                     <!-- archived -->
@@ -76,7 +82,7 @@
                         <!-- edit -->
                         <p:commandLink title="#{msg['dialog.settings.stainings.edit']}"
                                        partialSubmit="true" process="@this"
-                                       actionListener="#{dialog.stainingEditDialog.initAndPrepareBean(staining)}">
+                                       actionListener="#{stainingEditDialog.initAndPrepareBean(staining)}">
                             <i class="fa fa-cog"/>
 
                             <p:ajax event="dialogReturn" update="@form"
@@ -118,14 +124,24 @@
                             listener="#{dialog.settingsDialog.stainingTab.updateData()}"/>
                 </p:selectBooleanCheckbox>
                 <h:outputLabel
-                        value="#{msg['dialog.settings.stainings.backend.archived']}"/>
+                        value="#{msg['dialog.settings.stainings.checkbox.archived']}"/>
             </h:panelGrid>
 
-            <h:panelGrid columns="2" styleClass="right">
+            <h:panelGrid columns="3" styleClass="right">
                 <!-- new -->
-                <p:commandButton value="#{msg['dialog.settings.stainings.new']}"
+                <p:commandButton value="#{msg['dialog.settings.stainings.new.text']}"
+                                 title="#{msg['dialog.settings.stainings.new.info']}"
                                  icon="fa fa-fw fa-picture-o" partialSubmit="true" process="@this"
-                                 actionListener="#{dialog.stainingEditDialog.initAndPrepareBean()}">
+                                 actionListener="#{stainingEditDialog.initAndPrepareBean()}">
+                    <p:ajax event="dialogReturn" update="@form"
+                            listener="#{dialog.settingsDialog.stainingTab.updateData()}"/>
+                </p:commandButton>
+
+                <!-- list order -->
+                <p:commandButton value="#{msg['dialog.settings.stainings.listOrder.text']}"
+                                 title="#{msg['dialog.settings.stainings.listOrder.info']}"
+                                 icon="fa fa-fw fa-sort-amount-asc" partialSubmit="true" process="@this"
+                                 actionListener="#{stainingSortDialog.initAndPrepareBean()}">
                     <p:ajax event="dialogReturn" update="@form"
                             listener="#{dialog.settingsDialog.stainingTab.updateData()}"/>
                 </p:commandButton>

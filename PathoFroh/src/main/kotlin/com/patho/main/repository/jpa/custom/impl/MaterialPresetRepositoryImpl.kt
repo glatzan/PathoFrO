@@ -44,4 +44,17 @@ open class MaterialPresetRepositoryImpl : AbstractRepositoryCustom(), MaterialPr
         criteria.distinct(true)
         return session.createQuery(criteria).resultList
     }
+
+    @Transactional
+    override fun findAllOrderByIndexInListAsc(loadStainings: Boolean,
+                                                irgnoreArchived: Boolean) : List<MaterialPreset>{
+        val criteria = criteriaBuilder.createQuery(MaterialPreset::class.java)
+        val root = criteria.from(MaterialPreset::class.java)
+        criteria.select(root)
+        if (loadStainings) root.fetch(MaterialPreset_.stainingPrototypes, JoinType.LEFT)
+        if (irgnoreArchived) criteria.where(criteriaBuilder.equal(root.get(MaterialPreset_.archived), false))
+        criteria.orderBy(criteriaBuilder.asc(root.get(MaterialPreset_.indexInList)))
+        criteria.distinct(true)
+        return session.createQuery(criteria).resultList
+    }
 }

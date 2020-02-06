@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -9,7 +6,7 @@
 
     <p:outputPanel styleClass="headerPannel">
         <h:outputLabel
-                value="#{msg['dialog.settings.reportIntent.list.headline']}"/>
+                value="#{msg['dialog.settings.diagnosis.list.headline']}"/>
     </p:outputPanel>
 
     <p:outputPanel styleClass="bodyPannelFull">
@@ -19,16 +16,16 @@
                      value="#{dialog.settingsDialog.diagnosisTab.diagnosisPresets}"
                      styleClass="defaultHistoDataTable">
 
-            <!-- reportIntent name -->
+            <!-- diagnosis name -->
             <p:column sortBy="#{diagnosisPreset.diagnosisText}"
-                      headerText="#{msg['dialog.settings.reportIntent.list.reportIntent']}"
+                      headerText="#{msg['dialog.settings.diagnosis.list.diagnosis']}"
                       style="width:35%">
                 <h:outputText value="#{diagnosisPreset.diagnosis}"/>
             </p:column>
 
-            <!-- reportIntent category -->
+            <!-- diagnosis category -->
             <p:column sortBy="#{diagnosisPreset.name}"
-                      headerText="#{msg['dialog.settings.reportIntent.list.category']}"
+                      headerText="#{msg['dialog.settings.diagnosis.list.category']}"
                       style="width:15%">
                 <h:outputLabel value="#{diagnosisPreset.category}"
                                title="#{diagnosisPreset.category}">
@@ -41,7 +38,7 @@
 
             <!-- commentary -->
             <p:column
-                    headerText="#{msg['dialog.settings.reportIntent.list.commentary']}"
+                    headerText="#{msg['dialog.settings.diagnosis.list.commentary']}"
                     style="width:atuo">
                 <h:outputLabel value="#{diagnosisPreset.commentary}">
                     <f:converter converterId="org.histo.ui.TruncateConverter"
@@ -53,13 +50,13 @@
 
             <!-- archived -->
             <p:column
-                    headerText="#{msg['dialog.settings.reportIntent.list.archived']}"
+                    headerText="#{msg['dialog.settings.diagnosis.list.archived']}"
                     styleClass="centerChildElements"
                     sortBy="#{diagnosisPreset.archived}" style="width:80px;"
                     rendered="#{dialog.settingsDialog.diagnosisTab.showArchived}">
                 <ui:fragment rendered="#{diagnosisPreset.archived}">
                     <i class="fa fa-archive icon-red"
-                       title="#{msg['dialog.settings.reportIntent.list.archived.info']}"/>
+                       title="#{msg['dialog.settings.diagnosis.list.archived.info']}"/>
                 </ui:fragment>
             </p:column>
 
@@ -68,12 +65,12 @@
                       styleClass="centerChildElements centerHeaderChildElements">
                 <f:facet name="header">
                     <i class="fa fa-cog"
-                       title="#{msg['dialog.settings.reportIntent.list.options']}"/>
+                       title="#{msg['dialog.settings.diagnosis.list.options']}"/>
                 </f:facet>
 
                 <!-- edit -->
                 <p:commandLink
-                        title="#{msg['dialog.settings.reportIntent.list.options.edit']}"
+                        title="#{msg['dialog.settings.diagnosis.list.options.edit']}"
                         actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean(diagnosisPreset)}">
                     <i class="fa fa-fw fa-cog"/>
                     <p:ajax event="dialogReturn"
@@ -83,7 +80,7 @@
 
                 <!-- archive -->
                 <p:commandLink
-                        title="#{msg['dialog.settings.reportIntent.list.archive']}"
+                        title="#{msg['dialog.settings.diagnosis.list.archive']}"
                         rendered="#{!diagnosisPreset.archived}"
                         actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, true)}"
                         update="@form">
@@ -92,7 +89,7 @@
 
                 <!-- dearchive -->
                 <p:commandLink
-                        title="#{msg['dialog.settings.reportIntent.list.dearchive']}"
+                        title="#{msg['dialog.settings.diagnosis.list.dearchive']}"
                         rendered="#{diagnosisPreset.archived}"
                         actionListener="#{dialog.settingsDialog.diagnosisTab.archiveOrDelete(diagnosisPreset, false)}"
                         update="@form">
@@ -116,13 +113,13 @@
                             listener="#{dialog.settingsDialog.diagnosisTab.updateData()}"/>
                 </p:selectBooleanCheckbox>
                 <h:outputLabel
-                        value="#{msg['dialog.settings.reportIntent.list.backend.archived']}"/>
+                        value="#{msg['dialog.settings.diagnosis.checkbox.archived']}"/>
             </h:panelGrid>
 
             <h:panelGrid columns="2" styleClass="right">
                 <!-- new -->
                 <p:commandButton
-                        value="#{msg['dialog.settings.reportIntent.list.button.new']}"
+                        value="#{msg['dialog.settings.diagnosis.list.button.new']}"
                         icon="fa fa-fw fa-plus-circle"
                         actionListener="#{dialog.diagnosisPresetEditDialog.initAndPrepareBean()}">
                     <p:ajax event="dialogReturn"

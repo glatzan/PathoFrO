@@ -13,7 +13,7 @@
         <h:panelGrid columns="2" styleClass="defaultHistoTable"
                      style="width:100%">
 
-            <h:outputLabel value="#{msg['dialog.settings.list.list']}"></h:outputLabel>
+            <h:outputLabel value="#{msg['dialog.settings.list.list']}" />
 
             <p:selectOneMenu title="#{msg['body.worklist.header.view']}"
                              value="#{dialog.settingsDialog.staticListTab.selectedStaticList}">
@@ -23,7 +23,7 @@
 
                 <p:ajax event="change" process="@form" partialSubmit="true"
                         listener="#{dialog.settingsDialog.staticListTab.updateData()}"
-                        update="@form"></p:ajax>
+                        update="@form" />
             </p:selectOneMenu>
         </h:panelGrid>
 
@@ -57,7 +57,7 @@
 
                 <!-- edit -->
                 <p:commandLink title="#{msg['dialog.settings.list.edit']}"
-                               actionListener="#{dialog.listItemEditDialog.initAndPrepareBean(item)}"
+                               actionListener="#{listItemEditDialog.initAndPrepareBean(item)}"
                                update="@form" process="@this" partialSubmit="true">
                     <i class="fa fa-fw fa-cog"/>
                     <p:ajax event="dialogReturn"
@@ -101,14 +101,14 @@
                             listener="#{dialog.settingsDialog.staticListTab.updateData()}"/>
                 </p:selectBooleanCheckbox>
                 <h:outputLabel
-                        value="#{msg['dialog.settings.list.backend.archived']}"/>
+                        value="#{msg['dialog.settings.list.checkbox.archived']}"/>
             </h:panelGrid>
 
             <h:panelGrid columns="2" styleClass="right">
                 <!-- new -->
                 <p:commandButton value="#{msg['dialog.settings.list.new']}"
                                  icon="fa fa-fw fa-list-ol" process="@this" partialSubmit="true"
-                                 actionListener="#{dialog.listItemEditDialog.initAndPrepareBean(dialog.settingsDialog.staticListTab.selectedStaticList)}"
+                                 actionListener="#{listItemEditDialog.initAndPrepareBean(dialog.settingsDialog.staticListTab.selectedStaticList)}"
                                  update="@form">
                     <p:ajax event="dialogReturn"
                             listener="#{dialog.settingsDialog.staticListTab.updateData()}"

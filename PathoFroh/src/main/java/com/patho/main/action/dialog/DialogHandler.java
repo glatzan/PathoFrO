@@ -16,13 +16,11 @@ import com.patho.main.action.dialog.settings.diagnosis.DiagnosisPresetEditDialog
 import com.patho.main.action.dialog.settings.favourites.FavouriteListEditDialog;
 import com.patho.main.action.dialog.settings.groups.GroupEditDialog;
 import com.patho.main.action.dialog.settings.groups.GroupListDialog;
-import com.patho.main.action.dialog.settings.listitem.ListItemEditDialog;
 import com.patho.main.action.dialog.settings.material.MaterialEditDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationEditDialog;
 import com.patho.main.action.dialog.settings.organization.OrganizationListDialog;
 import com.patho.main.action.dialog.settings.physician.PhysicianEditDialog;
 import com.patho.main.action.dialog.settings.physician.PhysicianSearchDialog;
-import com.patho.main.action.dialog.settings.slide.StainingEditDialog;
 import com.patho.main.action.dialog.settings.users.ConfirmUserDeleteDialog;
 import com.patho.main.action.dialog.settings.users.EditUserDialog;
 import com.patho.main.action.dialog.settings.users.UserListDialog;
@@ -65,8 +63,6 @@ public class DialogHandler {
     private OrganizationEditDialog organizationEditDialog = new OrganizationEditDialog();
     private PhysicianEditDialog physicianEditDialog = new PhysicianEditDialog();
     private PhysicianSearchDialog physicianSearchDialog = new PhysicianSearchDialog();
-    private ListItemEditDialog listItemEditDialog = new ListItemEditDialog();
-    private StainingEditDialog stainingEditDialog = new StainingEditDialog();
     private MaterialEditDialog materialEditDialog = new MaterialEditDialog();
     private DiagnosisPresetEditDialog diagnosisPresetEditDialog = new DiagnosisPresetEditDialog();
     private GroupEditDialog groupEditDialog = new GroupEditDialog();
@@ -180,14 +176,6 @@ public class DialogHandler {
 
     public PhysicianSearchDialog getPhysicianSearchDialog() {
         return this.physicianSearchDialog;
-    }
-
-    public ListItemEditDialog getListItemEditDialog() {
-        return this.listItemEditDialog;
-    }
-
-    public StainingEditDialog getStainingEditDialog() {
-        return this.stainingEditDialog;
     }
 
     public MaterialEditDialog getMaterialEditDialog() {

@@ -7,7 +7,7 @@
 
 <h:head>
     <title><h:outputFormat
-            value="#{dialog.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}"/>
+            value="#{stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}"/>
     </title>
     <h:outputStylesheet name="style.css" value="style.css" library="css"/>
     <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
@@ -23,7 +23,7 @@
             <h:panelGrid style="width:100%;" columns="2"
                          styleClass="defaultHistoTable">
                 <h:outputLabel
-                        value="#{dialog.stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}"/>
+                        value="#{stainingEditDialog.newStaining ? msg['dialog.stainingEdit.new.headline'] : msg['dialog.stainingEdit.edit.headline']}"/>
                 <p:commandLink title="#{msg['general.close']}" style="float:right;"
                                onclick="$('#dialogContent\\:closeBtn').click();return false;">
                     <i class="fa fa-fw fa-times"/>
@@ -37,19 +37,19 @@
             <h:panelGrid columns="2" styleClass="defaultHistoTable"
                          columnClasses="columnWidth150, ">
                 <!-- name -->
-                <h:outputLabel value="#{msg['dialog.stainingEdit.name']}"></h:outputLabel>
+                <h:outputLabel value="#{msg['dialog.stainingEdit.name']}"/>
                 <p:inputText style="widht: 200px"
-                             value="#{dialog.stainingEditDialog.stainingPrototype.name}"></p:inputText>
+                             value="#{stainingEditDialog.stainingPrototype.name}"/>
 
                 <!-- commentary -->
-                <h:outputLabel value="#{msg['dialog.stainingEdit.commentary']}"></h:outputLabel>
+                <h:outputLabel value="#{msg['dialog.stainingEdit.commentary']}"/>
                 <p:inputTextarea rows="3" style="width:80%"
-                                 value="#{dialog.stainingEditDialog.stainingPrototype.commentary}"/>
+                                 value="#{stainingEditDialog.stainingPrototype.commentary}"/>
 
                 <!-- type -->
-                <h:outputLabel value="#{msg['dialog.stainingEdit.type']}"></h:outputLabel>
+                <h:outputLabel value="#{msg['dialog.stainingEdit.type']}"/>
                 <p:selectOneMenu
-                        value="#{dialog.stainingEditDialog.stainingPrototype.type}">
+                        value="#{stainingEditDialog.stainingPrototype.type}">
 
                     <f:selectItems value="#{enumProvider.stainingTypes}"
                                    var="stainingType"
@@ -57,9 +57,9 @@
                 </p:selectOneMenu>
 
                 <!-- priority -->
-                <h:outputLabel value="#{msg['dialog.stainingEdit.priority']}"></h:outputLabel>
+                <h:outputLabel value="#{msg['dialog.stainingEdit.priority']}"/>
                 <p:inputText
-                        value="#{dialog.stainingEditDialog.stainingPrototype.priorityCount}"/>
+                        value="#{stainingEditDialog.stainingPrototype.priorityCount}"/>
             </h:panelGrid>
 
             <!-- Separator -->
@@ -74,7 +74,7 @@
                 <p:dataTable var="batch" scrollable="true" scrollHeight="310"
                              rowStatePreserved="true" rowIndexVar="rowIdx" id="batchList"
                              styleClass="defaultHistoDataTable"
-                             value="#{dialog.stainingEditDialog.stainingPrototype.batchDetails}">
+                             value="#{stainingEditDialog.stainingPrototype.batchDetails}">
 
                     <!-- toggler -->
                     <p:column style="width:16px">
@@ -85,7 +85,7 @@
                     <p:column headerText="#{msg['dialog.stainingEdit.batch.name']}">
                         <h:outputLabel value="#{batch.supplier} "/>
                         <h:outputLabel value="#{batch.deliveryDate}">
-                            <f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy"/>
+                            <f:convertDateTime type="localDate" pattern="dd.MM.yyyy" timeZone="Europe/Berlin"/>
                         </h:outputLabel>
                     </p:column>
 
@@ -94,14 +94,14 @@
                               styleClass="centerHeaderChildElements">
                         <!-- clone -->
                         <p:commandLink title="#{msg['dialog.stainingEdit.batch.clone']}"
-                                       actionListener="#{dialog.stainingEditDialog.cloneBatch(batch)}"
+                                       actionListener="#{stainingEditDialog.cloneBatch(batch)}"
                                        update="@form" process="@this" partialSubmit="true">
                             <i class="fa fa-fw fa-copy"/>
                         </p:commandLink>
 
                         <!-- remove -->
                         <p:commandLink title="#{msg['dialog.stainingEdit.batch.remove']}"
-                                       actionListener="#{dialog.stainingEditDialog.removeBatch(batch)}"
+                                       actionListener="#{stainingEditDialog.removeBatch(batch)}"
                                        update="@form" process="@this" partialSubmit="true">
                             <i class="fa fa-fw fa-times-circle"/>
                         </p:commandLink>
@@ -114,17 +114,17 @@
                             <!-- supplier -->
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.supplier']}"/>
-                            <p:inputText value="#{batch.supplier}"></p:inputText>
+                            <p:inputText value="#{batch.supplier}" />
 
                             <!-- quantity -->
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.quantityDelivered']}"/>
-                            <p:inputText value="#{batch.quantityDelivered}"></p:inputText>
+                            <p:inputText value="#{batch.quantityDelivered}"/>
 
                             <!-- storage -->
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.storage']}"/>
-                            <p:inputText value="#{batch.storage}"></p:inputText>
+                            <p:inputText value="#{batch.storage}"/>
 
                             <!--  -->
                             <h:outputLabel value="#{msg['dialog.stainingEdit.batch.host']}"/>
@@ -133,49 +133,54 @@
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.specifity']}"/>
-                            <p:inputText value="#{batch.specifity}"></p:inputText>
+                            <p:inputText value="#{batch.specifity}"/>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.incubationTime']}"/>
-                            <p:inputText value="#{batch.incubationTime}"></p:inputText>
+                            <p:inputText value="#{batch.incubationTime}"/>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.deliveryDate']}"/>
-                            <p:calendar value="#{batch.deliveryDate}" locale="de"
-                                        navigator="true" pattern="dd.MM.yyyy" mask="true">
+                            <p:calendar
+                                    value="#{batch.deliveryDate}"
+                                    locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true"
+                                    converter="localDateConverter">
                             </p:calendar>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.bestBefore']}"/>
-                            <p:calendar value="#{batch.bestBefore}" locale="de"
-                                        navigator="true" pattern="dd.MM.yyyy" mask="true">
+                            <p:calendar value="#{batch.bestBefore}"
+                                        locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true"
+                                        converter="localDateConverter">
                             </p:calendar>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.deliveryDate']}"/>
-                            <p:calendar value="#{batch.emptyDate}" locale="de"
-                                        navigator="true" pattern="dd.MM.yyyy" mask="true">
+                            <p:calendar
+                                    value="#{batch.emptyDate}"
+                                    locale="de" navigator="true" pattern="dd.MM.yyyy" mask="true"
+                                    converter="localDateConverter">
                             </p:calendar>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.treatment']}"/>
-                            <p:inputText value="#{batch.treatment}"></p:inputText>
+                            <p:inputText value="#{batch.treatment}"/>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.dilution']}"/>
-                            <p:inputText value="#{batch.dilution}"></p:inputText>
+                            <p:inputText value="#{batch.dilution}"/>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.standardDilution']}"/>
-                            <p:inputText value="#{batch.standardDilution}"></p:inputText>
+                            <p:inputText value="#{batch.standardDilution}"/>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.positiveControl']}"/>
-                            <p:inputText value="#{batch.positiveControl}"></p:inputText>
+                            <p:inputText value="#{batch.positiveControl}"/>
 
                             <h:outputLabel
                                     value="#{msg['dialog.stainingEdit.batch.process']}"/>
-                            <p:inputText value="#{batch.process}"></p:inputText>
+                            <p:inputText value="#{batch.process}"/>
                         </h:panelGrid>
                     </p:rowExpansion>
                 </p:dataTable>
@@ -190,19 +195,19 @@
                     <p:commandButton
                             value="#{msg['dialog.stainingEdit.button.newBatch']}"
                             icon="fa fa-bullseye" update="@form"
-                            actionListener="#{dialog.stainingEditDialog.addBatch()}">
+                            actionListener="#{stainingEditDialog.addBatch()}">
                     </p:commandButton>
                 </h:panelGrid>
 
                 <h:panelGrid columns="2" styleClass="right">
                     <!-- Save button -->
                     <p:commandButton value="#{msg['general.save']}" icon="fa fa-save"
-                                     actionListener="#{dialog.stainingEditDialog.saveAndHide()}">
+                                     actionListener="#{stainingEditDialog.saveAndHide()}">
                     </p:commandButton>
 
                     <!-- Close button -->
                     <p:commandButton value="#{msg['general.abort']}" id="closeBtn"
-                                     actionListener="#{dialog.stainingEditDialog.hideDialog()}"
+                                     actionListener="#{stainingEditDialog.hideDialog()}"
                                      icon="fa fa-times-circle">
                     </p:commandButton>
                 </h:panelGrid>

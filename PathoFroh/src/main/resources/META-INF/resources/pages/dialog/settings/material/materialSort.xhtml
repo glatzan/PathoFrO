@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title><h:outputFormat value="#{msg['dialog.stainingSort.headline']}"/>
+    </title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
+</h:head>
+
+<h:body styleClass="histoDialogStyle">
+
+    <h:form enctype="multipart/form-data" id="dialogContent">
+
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.materialSortDialog.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="PF('closeBtn').jq.click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
+
+
+        <div class="dialogContent">
+            <h:panelGrid columns="1" styleClass="defaultHistoTable">
+                <p:dataTable var="item" style="width:100%;" scrollable="true"
+                             scrollHeight="450" draggableRows="true"
+                             styleClass="defaultHistoDataTable"
+                             value="#{materialSortDialog.materialPresets}">
+
+                    <!-- name -->
+                    <p:column headerText="#{msg['dialog.materialSortDialog.list.name']}">
+                        <h:outputText value="#{item.name}"/>
+                    </p:column>
+
+                    <!-- sorted -->
+                    <p:column style="width:9%" sortBy="#{item.indexInList}"
+                              headerText="#{msg['dialog.materialSortDialog.order.text']}"
+                              styleClass="centerChildElements">
+                        <h:outputLabel value="#{item.indexInList}"
+                                       title="#{msg['dialog.materialSortDialog.order.info']}"/>
+                    </p:column>
+
+                    <p:ajax event="rowReorder" update="@form" process="@form"
+                            listener="#{materialSortDialog.onReorderList}"/>
+                </p:dataTable>
+            </h:panelGrid>
+        </div>
+
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+                <h:panelGrid columns="1" styleClass="left">
+                    <h:outputLabel value="#{msg['dialog.materialSortDialog.hint']}"/>
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" styleClass="right">
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.close']}" id="closeBtn" widgetVar="closeBtn"
+                                     actionListener="#{stainingEditDialog.hideDialog()}"
+                                     icon="fa fa-times-circle">
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:form>
+</h:body>
+</html>

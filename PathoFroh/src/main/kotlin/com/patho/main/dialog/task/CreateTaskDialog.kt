@@ -73,7 +73,7 @@ open class CreateTaskDialog @Autowired constructor(
         this.patient = patient
 
         // setting material list
-        materialList = materialPresetRepository.findAllOrderByPriorityCountDesc(true, true)
+        materialList = materialPresetRepository.findAllOrderByIndexInListAsc(true, true)
 
         taskData = TaskTemplate(materialList)
 
@@ -191,11 +191,11 @@ open class CreateTaskDialog @Autowired constructor(
         val bioBank: BioBankTempData = BioBankTempData()
 
         init {
-            samples.add(SampleTempData(materialList.first()))
+            samples.add(SampleTempData(materialList.firstOrNull()))
         }
 
         fun addSample() {
-            samples.add(SampleTempData(materialList.first()))
+            samples.add(SampleTempData(materialList.firstOrNull()))
             updateSampleNames()
         }
 
@@ -214,9 +214,13 @@ open class CreateTaskDialog @Autowired constructor(
 
         class SampleTempData(var materialPreset: MaterialPreset?) {
             var sampleID: String = ""
-            var material: String = ""
+            var material: String = materialPreset?.name ?: ""
             var showStainings: Boolean = false
             val stainings: MutableList<StainingPrototypeHolder> = mutableListOf()
+
+            init {
+                onMaterialPresetChange()
+            }
 
             fun onMaterialPresetChange() {
                 material = materialPreset?.name ?: ""

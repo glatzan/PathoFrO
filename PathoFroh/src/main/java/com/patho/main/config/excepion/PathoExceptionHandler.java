@@ -112,6 +112,13 @@ public class PathoExceptionHandler extends ExceptionHandlerWrapper {
                     MessageHandler.sendGrowlMessagesAsResource("growl.error.save", "growl.error.save.text");
 
                     hanled = true;
+                }else{
+                    closeDialogs();
+                    SpringContextBridge.services().getCentralHandler().reloadUIData();
+                    MessageHandler.executeScript(GuiCommands.getREFRESH_UI());
+                    MessageHandler.sendGrowlMessagesAsResource("growl.error.save", "growl.error.save.text");
+
+                    hanled = true;
                 }
             }
 //
