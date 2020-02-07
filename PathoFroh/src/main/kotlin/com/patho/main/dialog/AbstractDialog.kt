@@ -71,13 +71,13 @@ abstract class AbstractDialog_(val dialog: Dialog) {
     open fun prepareDialog(dialog: Dialog) {
         val options = HashMap<String, Any>()
 
-        if (dialog.width != 0) {
+        if (dialog.width != "0") {
             options["width"] = dialog.width
             options["contentWidth"] = dialog.width
         } else
             options["width"] = "auto"
 
-        if (dialog.height != 0) {
+        if (dialog.height != "0") {
             options["contentHeight"] = dialog.height
             options["height"] = dialog.height
         } else

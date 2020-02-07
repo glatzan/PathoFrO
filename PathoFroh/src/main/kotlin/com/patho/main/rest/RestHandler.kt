@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping(value = ["/rest"])
-open class PDFRestHandler @Autowired constructor(
+open class RestHandler @Autowired constructor(
         private val patientRepository: PatientRepository,
         private val taskRepository: TaskRepository,
         private val pdfService: PDFService,
@@ -126,6 +126,14 @@ open class PDFRestHandler @Autowired constructor(
 
         logger.error("Error: Upload failed, file is empty.")
         return resourceBundle["rest.upload.error.fileEmpty"]
+    }
+
+    @RequestMapping(value = ["/slide"], method = [RequestMethod.POST])
+    open fun handelSlideScanInfo(@RequestParam(value = "caseID", required = false) caseID: String = "",
+                                 @RequestParam(value = "slides", required = false) slides: Array<String> = emptyArray()) : String {
+
+        logger.debug("Post with $caseID -> ${slides.joinToString { "$it "}}")
+        return "was"
     }
 
     private fun sendErrorMail(reason: String, piz: String, caseID: String, fileName: String, documentType: String, file: MultipartFile) {

@@ -99,13 +99,13 @@ public abstract class AbstractDialog {
     public void prepareDialog(Dialog dialog) {
         HashMap<String, Object> options = new HashMap<String, Object>();
 
-        if (dialog.getWidth() != 0) {
+        if (!dialog.getWidth().equals("0")) {
             options.put("width", dialog.getWidth());
             options.put("contentWidth", dialog.getWidth());
         } else
             options.put("width", "auto");
 
-        if (dialog.getHeight() != 0) {
+        if (!dialog.getHeight().equals("0")) {
             options.put("contentHeight", dialog.getHeight());
             options.put("height", dialog.getHeight());
         } else

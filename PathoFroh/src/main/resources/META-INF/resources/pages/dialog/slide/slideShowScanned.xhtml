@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<h:head>
+    <title><h:outputFormat
+            value="#{msg['dialog.slideOverview.headline']}"/></title>
+    <h:outputStylesheet name="style.css" value="style.css" library="css"/>
+    <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
+                        library="css"/>
+    <h:outputScript library="scripts" name="commonFunctions.js"/>
+</h:head>
+
+<h:body styleClass="histoDialogStyle">
+
+    <h:form enctype="multipart/form-data" id="dialogContent">
+
+        <div class="dialogHeader">
+            <h:panelGrid style="width:100%;" columns="2"
+                         styleClass="defaultHistoTable">
+                <h:outputLabel value="#{msg['dialog.slideOverview.headline']}"/>
+                <p:commandLink title="#{msg['general.close']}" style="float:right;"
+                               onclick="$('#dialogContent\\:closeBtn').click();return false;">
+                    <i class="fa fa-fw fa-times"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </div>
+
+        <div class="dialogContent">
+            <iframe src="http://192.168.10.130:5000/2000/20001/test.ndpi"  style="height: 100vh; width: 100vw"/>
+        </div>
+
+
+        <div class="buttonContainer">
+            <h:panelGrid columns="2">
+                <h:panelGrid columns="1" styleClass="left">
+                </h:panelGrid>
+
+                <h:panelGrid columns="1" styleClass="right" id="buttonContainer">
+                    <!-- Close button -->
+                    <p:commandButton value="#{msg['general.close']}" id="closeBtn"
+                                     icon="fa fa-check-circle-o" actionListener="#{SlideShowScannedDialog.hideDialog()}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+
+    </h:form>
+</h:body>
+</html>

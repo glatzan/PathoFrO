@@ -20,9 +20,15 @@ enum class Dialog {
     TASK_CHANGE_ID("/pages/dialog/task/chagneTaskID", null, 480, 272, false, false, true),                                                                                    // OK
     SAMPLE_CREATE("/pages/dialog/task/sample/createSample", null, 480, 272, false, false, true),                                                                            // OK				// TEST OK
     BIO_BANK("/pages/dialog/biobank/biobank", null, 858, 484, false, false, true),                                                                                            // OK
-    SLIDE_OVERVIEW("/pages/dialog/task/staining/slideOverview", null, 1024, 600, false, false, true),                                                                        // OK 				// TEST OK
-    SLIDE_NAMING("/pages/dialog/task/staining/slideNaming", null, 430, 270, false, false, true),                                                                            // OK				// TEST OK
-    SLIDE_CREATE("/pages/dialog/task/staining/addSlide", null, 858, 484, false, false, true),                                                                                // OK				// TEST OK
+    SLIDE_OVERVIEW("/pages/dialog/slide/slideOverview", null, 1024, 600, false, false, true),
+
+    /**
+     * Dialog for displaying slides
+     */
+    SLIDE_SHOW_SCANNED("/pages/dialog/slide/slideShowScanned", null, "90vw", "90vh", false, false, true),        // OK 				// TEST OK
+
+    SLIDE_NAMING("/pages/dialog/slide/slideNaming", null, 430, 270, false, false, true),                                                                            // OK				// TEST OK
+    SLIDE_CREATE("/pages/dialog/slide/addSlide", null, 858, 484, false, false, true),                                                                                // OK				// TEST OK
     DIAGNOSIS_RECORD_OVERWRITE("/pages/dialog/diagnosis/diagnosisRecordOverwrite", null, 480, 272, false, false, true),                                                // OK				// TEST OK
     CONTACTS("/pages/dialog/contact/contacts", null, 1024, 600, false, false, true),                                                                                        // OK				// TEST OK
     CONTACTS_NOTIFICATION("/pages/dialog/contact/contactNotification", null, 858, 484, false, false, true),                                                                // OK				// TEST OK
@@ -104,38 +110,22 @@ enum class Dialog {
     val useOptions: Boolean
     val header: String?
 
-    val width: Int
-    val height: Int
+    val width: String
+    val height: String
     val resizeable: Boolean
     val draggable: Boolean
     val modal: Boolean
 
-    constructor(path: String) {
-        this.path = path
-        this.width = 0
-        this.height = 0
-        this.resizeable = false
-        this.draggable = false
-        this.modal = false
-        this.useOptions = false
-        this.header = null
-    }
+    constructor(path: String) : this(path, null, 0, 0, false, false, false)
 
-    constructor(path: String, width: Int, heigt: Int) {
+    constructor(path: String, width: String, height: String) : this(path, null, width, height, true, true, false)
+
+    constructor(path: String, header: String?, width: Int, height: Int, resizeable: Boolean, draggable: Boolean, modal: Boolean) : this(path, header, width.toString(), height.toString(), resizeable, draggable, modal)
+
+    constructor(path: String, header: String?, width: String, height: String, resizeable: Boolean, draggable: Boolean, modal: Boolean) {
         this.path = path
         this.width = width
-        this.height = heigt
-        this.resizeable = true
-        this.draggable = true
-        this.modal = false
-        this.useOptions = true
-        this.header = null
-    }
-
-    constructor(path: String, header: String?, width: Int, heigt: Int, resizeable: Boolean, draggable: Boolean, modal: Boolean) {
-        this.path = path
-        this.width = width
-        this.height = heigt
+        this.height = height
         this.resizeable = resizeable
         this.draggable = draggable
         this.modal = modal
