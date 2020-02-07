@@ -23,8 +23,8 @@
         </triggeringPolicy>
         <encoder
                 class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-            <layout class="ch.qos.logback.classic.html.HTMLLayout">
-                <pattern>%thread%level%logger%msg</pattern>
+            <layout class="com.patho.main.util.logging.HTMLLayoutWithUserContext">
+                <pattern>%d{HH:mm:ss.SSS}%user%thread%level%logger%msg</pattern>
             </layout>
         </encoder>
     </appender>
@@ -36,8 +36,8 @@
         <to>andreas.glatz@uniklinik-freiburg.de</to>
         <from>augenklinik.histologie@uniklinik-freiburg.de</from>
         <subject>Log of messages</subject>
-        <layout class="ch.qos.logback.classic.html.HTMLLayout">
-            <pattern>%date%level%logger{24}%msg</pattern>
+        <layout class="com.patho.main.util.logging.HTMLLayoutWithUserContext">
+            <pattern>%d{HH:mm:ss.SSS}%user%thread%level%logger%msg</pattern>
         </layout>
         <cyclicBufferTracker
                 class="ch.qos.logback.core.spi.CyclicBufferTracker">
@@ -49,13 +49,13 @@
     <logger name="com.patho.main" level="trace" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="MAIL"/>
-        <appender-ref ref="FILE" />
+        <appender-ref ref="FILE"/>
     </logger>
 
     <root level="info">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="MAIL"/>
-        <appender-ref ref="FILE" />
+        <appender-ref ref="FILE"/>
     </root>
 
 

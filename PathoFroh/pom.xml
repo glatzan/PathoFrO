@@ -325,11 +325,13 @@
             <version>3.2.10</version>
         </dependency>
 
+        <!-- cups4j -->
         <dependency>
             <groupId>org.cups4j</groupId>
             <artifactId>cups4j</artifactId>
             <version>0.7.6</version>
         </dependency>
+
     </dependencies>
 
     <repositories>

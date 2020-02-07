@@ -103,7 +103,7 @@ class PathoVersion2DatabaseConverter {
     }
 
     private fun convertPDF(patient: Patient, pdf: PDFContainer, targetFolder: File): Boolean {
-        if (!pdf.name.matches(Regex("^((.*\\\\.pdf)|([A-Za-z0-9 ]*))\$"))) {
+        if (!pdf.name.matches(Regex("^((.*\\.pdf)|([A-Za-z0-9 ]*))\$"))) {
             logger.error("${patient.piz} ----File not supported, ignoring.. ${pdf.name}, ${pdf.id}")
             return false
         }

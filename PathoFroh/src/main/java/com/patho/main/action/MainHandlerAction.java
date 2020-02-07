@@ -7,6 +7,7 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.jpa.PDFRepository;
 import com.patho.main.repository.jpa.TaskRepository;
 import com.patho.main.util.FileMakerImporter;
+import com.patho.main.util.PathoVersion2DatabaseConverter;
 import com.patho.main.util.helper.TimeUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -74,6 +75,7 @@ public class MainHandlerAction {
 
 
     public void test() {
+        (new PathoVersion2DatabaseConverter()).convertDatabaseToVersion2();
 //		DataBaseConverter b = new DataBaseConverter();
 //		b.start();
 //		new testClass().test();
