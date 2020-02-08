@@ -1,4 +1,4 @@
 {
 	"subject": "Histologische Befundung ($task.taskID, $!patient.person.fullName, $!date.format('dd.MM.yyyy', $!patient.person.birthday)) abgeschlossen!",
-	"body": "Die Histologische Befundung ($task.taskID, $!patient.person.fullName, $!date.format('dd.MM.yyyy', $!patient.person.birthday)) abgeschlossen! \\r\\n Der Befund kann unter http://aughisto?goto=result&taskID=$task.taskID eingesehen werden."
+	"body": "Die Histologische Befundung ($task.taskID, $!patient.person.fullName, $!date.format('dd.MM.yyyy', $!patient.person.birthday)) abgeschlossen! \n Der Befund kann unter http://aughisto?goto=result&taskID=$task.taskID eingesehen werden."
 }

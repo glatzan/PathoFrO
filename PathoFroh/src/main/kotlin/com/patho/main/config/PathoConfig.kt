@@ -297,6 +297,11 @@ public open class PathoConfig @Autowired @Lazy constructor(
          * Id of the email which should be used to inform the admins of pdv patient creation
          */
         var createPDVPatientStatusMail: Long = 0
+
+        /**
+         * Id of the email which is send if a scanned slide could not be match to a slide in the database
+         */
+        var scannedSlidesAdded : Long = 0
     }
 
     class ProgramInfo {
@@ -312,9 +317,14 @@ public open class PathoConfig @Autowired @Lazy constructor(
         lateinit var phoneRegex: String
 
         /**
-         * If true the admin will be noticed for every Patient that is created in the pdv
+         * If true the admin will be notified for every Patient that is created in the pdv
          */
-        var noticeAdminOnPDVPatientCreation: Boolean = true
+        var noticeAdminOnPDVPatientCreation: Boolean = false
+
+        /**
+         * If true the admin will be notified for every scanned slide that is added
+         */
+        var noticeAdminOnScannedSlideAdded: Boolean = false
     }
 
     class DefaultNotification {

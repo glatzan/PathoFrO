@@ -68,7 +68,6 @@ open class StainingPrototype() : ListOrder<MaterialPreset>, AbstractPersistable(
      * Details of the batch
      */
     @Type(type = "jsonb")
-    @Lazy
     @Column(columnDefinition = "jsonb")
     open var batchDetails: MutableList<StainingPrototypeDetails> = mutableListOf()
         get() {

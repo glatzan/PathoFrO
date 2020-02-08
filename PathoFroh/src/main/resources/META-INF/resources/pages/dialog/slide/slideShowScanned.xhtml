@@ -12,6 +12,64 @@
     <h:outputStylesheet name="specificStyle.css" value="specificStyle.css"
                         library="css"/>
     <h:outputScript library="scripts" name="commonFunctions.js"/>
+    <style type="text/css">
+        .notice {
+            font-style: italic;
+        }
+        div#images {
+            position: absolute;
+            width: 15%;
+        }
+        div#images h2 {
+            font-size: 1em;
+            margin: 0;
+        }
+        .associated-images {
+            margin-left: 1.5em;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-left: 0;
+        }
+        div#images li {
+            list-style-type: none;
+        }
+        .current-slide {
+            background-color: #ccf;
+        }
+        div#view {
+            width: 90vw;
+            height: 90vh;
+            background-color: black;
+            border: 1px solid #000;
+            color: white;
+        }
+        div#view.fullpage {
+            left: 0%;
+            border: 0;
+        }
+        div#properties {
+            position: absolute;
+            left: 75%;
+            width: 24.5%;
+            height: 98%;
+            overflow: auto;
+        }
+        div#properties-inner {
+            display: inline-block;
+        }
+        div#properties dl {
+            font-size: small;
+            margin: 0;
+        }
+        div#properties dt {
+            font-weight: bold;
+            border-top: 1px solid #000;
+            background-color: #eee;
+        }
+        div#properties dd {
+            margin-left: 0;
+        }
+    </style>
 </h:head>
 
 <h:body styleClass="histoDialogStyle">
@@ -30,7 +88,49 @@
         </div>
 
         <div class="dialogContent">
-            <iframe src="http://192.168.10.130:5000/2000/20001/test.ndpi"  style="height: 100vh; width: 100vw"/>
+
+            <div id="view"></div>
+            <h:outputScript library="scripts" name="openSeadragon/openseadragon.js"/>
+            <h:outputScript library="scripts" name="openSeadragon/openseadragon-scalebar.js"/>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    var viewer = new OpenSeadragon({
+                        id: "view",
+                        tileSources: "http://192.168.10.130:5000/2000/20001/test.ndpi.dzi",
+                        prefixUrl: "http://192.168.10.130:5000/static/images/",
+                        showNavigator: true,
+                        showRotationControl: true,
+                        animationTime: 0.5,
+                        blendTime: 0.1,
+                        constrainDuringPan: true,
+                        maxZoomPixelRatio: 2,
+                        minZoomLevel: 1,
+                        visibilityRatio: 1,
+                        zoomPerScroll: 2,
+                        timeout: 120000,
+                    });
+                    viewer.addHandler("open", function() {
+                        // To improve load times, ignore the lowest-resolution Deep Zoom
+                        // levels.  This is a hack: we can't configure the minLevel via
+                        // OpenSeadragon configuration options when the viewer is created
+                        // from DZI XML.
+                        viewer.source.minLevel = 8;
+                    });
+
+                    var mpp = parseFloat("2.0");
+                    viewer.scalebar({
+                        pixelsPerMeter: mpp ? (1e6 / mpp) : 0,
+                        xOffset: 10,
+                        yOffset: 10,
+                        barThickness: 3,
+                        color: '#555555',
+                        fontColor: '#333333',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                    });
+                });
+            </script>
+
+       <!-- <iframe src="http://192.168.10.130:5000/2000/20001/test.ndpi"  style="height: 100vh; width: 100vw"/>-->
         </div>
 
 

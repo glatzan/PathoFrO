@@ -9,6 +9,7 @@ import com.patho.main.repository.jpa.PatientRepository
 import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.service.MailService
 import com.patho.main.service.PDFService
+import com.patho.main.service.ScannedTaskService
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
@@ -26,7 +27,8 @@ open class RestHandler @Autowired constructor(
         private val taskRepository: TaskRepository,
         private val pdfService: PDFService,
         private val pathoConfig: PathoConfig,
-        private val mailService: MailService) : AbstractHandler() {
+        private val mailService: MailService,
+        private val scannedTaskService: ScannedTaskService) : AbstractHandler() {
 
     override fun loadHandler() {
     }
@@ -133,7 +135,10 @@ open class RestHandler @Autowired constructor(
                                  @RequestParam(value = "slides", required = false) slides: Array<String> = emptyArray()) : String {
 
         logger.debug("Post with $caseID -> ${slides.joinToString { "$it "}}")
-        return "was"
+
+        scannedTaskService.addScannedSlidesToTask(caseID,slides)
+
+        return resourceBundle["rest.upload.scannedSlides.success", caseID]
     }
 
     private fun sendErrorMail(reason: String, piz: String, caseID: String, fileName: String, documentType: String, file: MultipartFile) {

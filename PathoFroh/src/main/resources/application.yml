@@ -186,6 +186,8 @@ patho:
       lablePrinterTestPage: test.zpl
       cupsPrinterTestPage: fileRepository:templates/print/testPage.pdf
       restUploadErrorEmail: 4
+      # id of the error mail if an scanned slide from the slidescanner was not found in the database
+      scannedSlidesAdded: 6
       # id of miscellaneousDocument, document for creating patient in database
       createPDVPatientRequestDocument: 100
       # id of the mail that is send to admins on pdv patient creation
@@ -204,6 +206,7 @@ patho:
     miscellaneous:
       phoneRegex: "^\\s*(?:[\\+#]?(\\d{1,3}))?([-. ()/\\\\]*(\\d*))*?\\s*$"
       noticeAdminOnPDVPatientCreation: true
+      noticeAdminOnScannedSlideAdded: true
     schedule:
       pdfCleanupCron: '5 21 * * * *'
     externalDocumentMapper:
@@ -235,6 +238,10 @@ patho:
         templateName: org.histo.template.MailTemplate
         name: Patient erstellt
         content: fileRepository:templates/mail/patientCreated.json
+      - id: 6 # Mail template
+        templateName: org.histo.template.MailTemplate
+        name: Scanned Slides hinzugefügt
+        content: fileRepository:templates/mail/scannedSlidesAdded.json
       - id: 100 # json template
         name: Create-Patient
         templateName: org.histo.template.DefaultTemplateImpl

@@ -1,0 +1,4 @@
+{
+	"subject": "Eingescanne Objekträger in der Datenbank bekannt gemacht",
+	"body": "Auftragl $taskID \n Nicht gefundene Objekträger:\n #foreach ($notFoundSlide in $notFoundSlides) -> $notFoundSlide; #end \n Slides in Task: #foreach ($slide in $slides) -> $slide.slideID - $slide.id; #end \n Mapped: #foreach ($scannedSlide in $scannedSlides) -> $scannedSlide.name --> $scannedSlide.slideID ; #end"
+}

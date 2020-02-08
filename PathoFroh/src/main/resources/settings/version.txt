@@ -708,6 +708,18 @@ delete from materialpreset where id = 187;
 update materialpreset set name = 'Papillom' where id = 286;
 delete from slide where id = 123;
 
+/* adding scannedtask table */
+CREATE TABLE public.scannedtask (
+    slides jsonb,
+    task_id bigint NOT NULL
+);
+ALTER TABLE ONLY public.scannedtask
+    ADD CONSTRAINT scannedtask_pkey PRIMARY KEY (task_id);
+ALTER TABLE ONLY public.scannedtask
+    ADD CONSTRAINT fkgohnwr9veh1krr4ha1bgo7f4y FOREIGN KEY (task_id) REFERENCES public.task(id);
+
+
+/* ############################################################################### */
 
 +v 1.5.4 (10.05.2018)
 ++++: Favouriten-Listen kategorien
