@@ -1,5 +1,6 @@
 package com.patho.main.rest
 
+import com.google.gson.Gson
 import com.patho.main.action.handler.AbstractHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.patient.Patient
@@ -7,12 +8,14 @@ import com.patho.main.model.patient.Task
 import com.patho.main.model.transitory.PDFContainerLoaded
 import com.patho.main.repository.jpa.PatientRepository
 import com.patho.main.repository.jpa.TaskRepository
+import com.patho.main.rest.data.SlideInfoResult
 import com.patho.main.service.MailService
 import com.patho.main.service.PDFService
 import com.patho.main.service.ScannedTaskService
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
+import com.patho.main.util.exceptions.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -132,18 +135,39 @@ open class RestHandler @Autowired constructor(
 
     @RequestMapping(value = ["/slide"], method = [RequestMethod.POST])
     open fun handelSlideScanInfo(@RequestParam(value = "caseID", required = false) caseID: String = "",
-                                 @RequestParam(value = "slides", required = false) slides: Array<String> = emptyArray()) : String {
+                                 @RequestParam(value = "slides", required = false) slides: Array<String> = emptyArray()): String {
 
-        logger.debug("Post with $caseID -> ${slides.joinToString { "$it "}}")
+        logger.debug("Post with $caseID -> ${slides.joinToString { "$it " }}")
 
-        scannedTaskService.addScannedSlidesToTask(caseID,slides)
+        scannedTaskService.addScannedSlidesToTask(caseID, slides)
 
         return resourceBundle["rest.upload.scannedSlides.success", caseID]
     }
 
+    /**
+     * Returns the slide name if taskID and uniqueSlideId is provided
+     */
+    @RequestMapping(value = ["/slide/info"], method = [RequestMethod.POST])
+    open fun handleSlideInfoRequest(@RequestParam taskID: String?, @RequestParam uniqueSlideID: String?): String {
+        if (taskID == null || uniqueSlideID == null)
+            return resourceBundle["rest.upload.slideinfo.requestNotValid"]
+
+        val task = try {
+            taskRepository.findByTaskID(taskID)
+        } catch (e: TaskNotFoundException) {
+            return resourceBundle["rest.upload.slideinfo.taskNotFound"]
+        }
+
+        val slide = task.samples.flatMap { it.blocks.flatMap { it.slides } }.find { it.uniqueIDinTask.toString() == uniqueSlideID }
+                ?: return resourceBundle["rest.upload.slideinfo.sampleNotFound"]
+
+        return Gson().toJson(SlideInfoResult(slide.slideID))
+    }
+
+
     private fun sendErrorMail(reason: String, piz: String, caseID: String, fileName: String, documentType: String, file: MultipartFile) {
         mailService.sendAdminMailNoneBlocking(pathoConfig.defaultDocuments.restUploadErrorEmail,
-                if(!file.isEmpty) PDFContainerLoaded(PrintDocumentType.UNKNOWN, "Upload.pdf", file.bytes, null) else null,
+                if (!file.isEmpty) PDFContainerLoaded(PrintDocumentType.UNKNOWN, "Upload.pdf", file.bytes, null) else null,
                 DocumentToken("reason", reason),
                 DocumentToken("piz", if (piz.isEmpty()) "--" else piz),
                 DocumentToken("caseID", if (caseID.isEmpty()) "--" else caseID),
