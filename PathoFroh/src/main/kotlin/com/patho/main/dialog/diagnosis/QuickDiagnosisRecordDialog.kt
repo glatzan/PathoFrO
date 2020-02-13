@@ -52,7 +52,11 @@ open class QuickDiagnosisRecordDialog @Autowired constructor(
 
     private val internalReference: String? = null
 
-    open fun initAndPrepareBean(task: Task, diagnosisRevisionType: DiagnosisRevisionType, intern: String = ""): QuickDiagnosisRecordDialog {
+    open fun initAndPrepareBean(task: Task, diagnosisRevisionType: DiagnosisRevisionType): QuickDiagnosisRecordDialog {
+        return initAndPrepareBean(task, diagnosisRevisionType, "")
+    }
+
+    open fun initAndPrepareBean(task: Task, diagnosisRevisionType: DiagnosisRevisionType, intern: String): QuickDiagnosisRecordDialog {
         if (initBean(task, diagnosisRevisionType, intern))
             prepareDialog()
         return this

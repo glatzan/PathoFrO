@@ -133,38 +133,6 @@ open class RestHandler @Autowired constructor(
         return resourceBundle["rest.upload.error.fileEmpty"]
     }
 
-    @RequestMapping(value = ["/slide"], method = [RequestMethod.POST])
-    open fun handelSlideScanInfo(@RequestParam(value = "caseID", required = false) caseID: String = "",
-                                 @RequestParam(value = "slides", required = false) slides: Array<String> = emptyArray()): String {
-
-        logger.debug("Post with $caseID -> ${slides.joinToString { "$it " }}")
-
-        scannedTaskService.addScannedSlidesToTask(caseID, slides)
-
-        return resourceBundle["rest.upload.scannedSlides.success", caseID]
-    }
-
-    /**
-     * Returns the slide name if taskID and uniqueSlideId is provided
-     */
-    @RequestMapping(value = ["/slide/info"], method = [RequestMethod.POST])
-    open fun handleSlideInfoRequest(@RequestParam taskID: String?, @RequestParam uniqueSlideID: String?): String {
-        if (taskID == null || uniqueSlideID == null)
-            return resourceBundle["rest.upload.slideinfo.requestNotValid"]
-
-        val task = try {
-            taskRepository.findByTaskID(taskID)
-        } catch (e: TaskNotFoundException) {
-            return resourceBundle["rest.upload.slideinfo.taskNotFound"]
-        }
-
-        val slide = task.samples.flatMap { it.blocks.flatMap { it.slides } }.find { it.uniqueIDinTask.toString() == uniqueSlideID }
-                ?: return resourceBundle["rest.upload.slideinfo.sampleNotFound"]
-
-        return Gson().toJson(SlideInfoResult(slide.slideID))
-    }
-
-
     private fun sendErrorMail(reason: String, piz: String, caseID: String, fileName: String, documentType: String, file: MultipartFile) {
         mailService.sendAdminMailNoneBlocking(pathoConfig.defaultDocuments.restUploadErrorEmail,
                 if (!file.isEmpty) PDFContainerLoaded(PrintDocumentType.UNKNOWN, "Upload.pdf", file.bytes, null) else null,

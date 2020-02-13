@@ -17,7 +17,7 @@ interface TaskRepositoryCustom {
                  loadPDFs: Boolean, loadContacts: Boolean, loadParent: Boolean): Task
 
     @Throws(TaskNotFoundException::class)
-    fun findByTaskID(taskID: String, loadCouncils: Boolean = false, loadDiagnoses: Boolean = false,
+    fun  findByTaskID(taskID: String, loadCouncils: Boolean = false, loadDiagnoses: Boolean = false,
                      loadPDFs: Boolean = false, loadContacts: Boolean = false, loadParent: Boolean = false): Task
 
     @Throws(TaskNotFoundException::class)
