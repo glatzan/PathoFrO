@@ -24,7 +24,7 @@ open class StainingEditDialog @Autowired constructor(
         get() = stainingPrototype.id == 0L
 
     override fun initAndPrepareBean(): StainingEditDialog {
-        return  initAndPrepareBean(StainingPrototype())
+        return initAndPrepareBean(StainingPrototype())
     }
 
     open fun initAndPrepareBean(prototype: StainingPrototype): StainingEditDialog {
@@ -40,7 +40,7 @@ open class StainingEditDialog @Autowired constructor(
             val oStainingPrototype = stainingPrototypeRepository.findOptionalByIdAndInitialize(this.stainingPrototype.id)
 
             if (!oStainingPrototype.isPresent)
-                throw EntityNotFoundException()
+                throw EntityNotFoundException("No staining prototype found")
             else
                 this.stainingPrototype = oStainingPrototype.get()
         }

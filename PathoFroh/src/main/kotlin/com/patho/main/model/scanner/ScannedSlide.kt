@@ -7,4 +7,5 @@ import java.io.Serializable
 open class ScannedSlide : Serializable, Cloneable {
     var name : String = ""
     var slideID : Long = 0
+    var path : String = ""
 }

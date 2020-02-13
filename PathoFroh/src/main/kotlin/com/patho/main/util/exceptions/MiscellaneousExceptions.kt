@@ -40,13 +40,13 @@ class ThumbnailCreateException : DialogException("Thumbnail could not be created
 /**
  * Exception is thrown if a database entity was not found
  */
-class EntityNotFoundException : DialogException("Entity could not be found",
+class EntityNotFoundException(cause : String) : DialogException(cause,
         SpringContextBridge.services().resourceBundle["exceptions.entityNotFount.headline"]
         , SpringContextBridge.services().resourceBundle["exceptions.entityNotFount.text"])
 
 /**
  * Exception is thrown if entity could not be saved to the database
  */
-class EntityPersistException : DialogException("Entity could not be saved",
+class EntityPersistException(cause : String) : DialogException(cause,
         SpringContextBridge.services().resourceBundle["exceptions.entityPersistError.headline"]
         , SpringContextBridge.services().resourceBundle["exceptions.entityPersistError.text"])

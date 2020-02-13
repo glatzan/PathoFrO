@@ -9,4 +9,5 @@ import java.io.Serializable
 class SlideInfoResult constructor(val slide : Slide) : Serializable{
     val name = slide.slideID
     val uniqueID = slide.uniqueIDinTask
+    val slideID = slide.id
 }

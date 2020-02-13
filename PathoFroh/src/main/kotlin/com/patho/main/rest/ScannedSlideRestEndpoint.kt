@@ -6,6 +6,7 @@ import com.patho.main.repository.jpa.TaskRepository
 import com.patho.main.rest.data.ScannedSlideData
 import com.patho.main.rest.data.SlideInfoResult
 import com.patho.main.service.ScannedTaskService
+import com.patho.main.util.exceptions.EntityNotFoundException
 import com.patho.main.util.exceptions.SlideNotFoundException
 import com.patho.main.util.exceptions.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,9 +25,9 @@ open class ScannedSlideRestEndpoint @Autowired constructor(
     override fun loadHandler() {
     }
 
-    @RequestMapping(value = ["/slide"], method = [RequestMethod.POST])
-    open fun handelSlideScanInfo(@RequestParam(value = "caseID", required = false) caseID: String = "",
-                                 @RequestParam(value = "slides", required = false) slides: Array<ScannedSlideData> = emptyArray()): String {
+    @RequestMapping(value = ["/add"], method = [RequestMethod.POST])
+    open fun handelSlideScanAdd(@RequestParam(value = "caseID", required = false) caseID: String = "",
+                                @RequestParam(value = "slides", required = false) slides: Array<ScannedSlideData> = emptyArray()): String {
 
         logger.debug("Post with $caseID -> ${slides.joinToString { "$it " }}")
 
@@ -44,8 +45,12 @@ open class ScannedSlideRestEndpoint @Autowired constructor(
     /**
      * Returns the slide name if taskID and uniqueSlideId is provided
      */
-    @RequestMapping(value = ["/slide/info"], method = [RequestMethod.GET])
+    @RequestMapping(value = ["/info"], method = [RequestMethod.GET])
     open fun handleSlideInfoRequest(@RequestParam caseID: String?, @RequestParam uniqueSlideID: String?): String {
+
+        if (caseID == null || uniqueSlideID == null)
+            return resourceBundle["rest.scannedSlides.requestNotValid"]
+
         return try {
             val slide = scannedTaskService.getSlideFromUniqueID(caseID, uniqueSlideID)
             Gson().toJson(SlideInfoResult(slide))
@@ -53,8 +58,6 @@ open class ScannedSlideRestEndpoint @Autowired constructor(
             resourceBundle["rest.scannedSlides.taskNoFound", caseID]
         } catch (e: SlideNotFoundException) {
             resourceBundle["rest.scannedSlides.noslide"]
-        } catch (e: IllegalArgumentException) {
-            resourceBundle["rest.scannedSlides.requestNotValid"]
         }
     }
 
@@ -62,9 +65,16 @@ open class ScannedSlideRestEndpoint @Autowired constructor(
      * Removes a slide from the scanned slide list
      */
     @RequestMapping(value = ["/remove"], method = [RequestMethod.GET])
-    open fun handleScannedSlideRemoveRequest(@RequestParam caseID: String?, @RequestParam uniqueSlideID: String?): String {
-scannedTaskService.removeScannedSlideFromTask()
+    open fun handleScannedSlideRemoveRequest(@RequestParam caseID: String?, @RequestParam slideName: String?): String {
 
-        return "success"
+        if (caseID == null || slideName == null)
+            return resourceBundle["rest.scannedSlides.requestNotValid"]
+
+        return try {
+            scannedTaskService.removeScannedSlideFromTask(caseID, slideName)
+            resourceBundle["rest.scannedSlide.removeSuccess"]
+        }catch (e : EntityNotFoundException){
+            resourceBundle["rest.scannedSlide.removeFailed"]
+        }
     }
 }

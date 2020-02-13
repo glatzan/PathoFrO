@@ -7,5 +7,7 @@ import java.io.Serializable
  */
 class ScannedSlideData : Serializable {
     var name: String = ""
-    var uniqueSlideID: Int = 0
+    var uniqueSlideID: Long = 0
+    var slideID: Long = 0
+    var path : String = ""
 }

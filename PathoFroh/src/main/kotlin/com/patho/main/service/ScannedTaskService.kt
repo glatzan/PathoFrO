@@ -29,10 +29,7 @@ open class ScannedTaskService @Autowired constructor(
      * Gets a slide from the database by caseID an unique slideID
      */
     @Throws(SlideNotFoundException::class, IllegalArgumentException::class, TaskNotFoundException::class)
-    open fun getSlideFromUniqueID(caseID: String?, uniqueSlideID: String?): Slide {
-        if (caseID == null || uniqueSlideID == null)
-            throw IllegalArgumentException("No caseID or slideID provided")
-
+    open fun getSlideFromUniqueID(caseID: String, uniqueSlideID: String): Slide {
         val task = taskRepository.findByTaskID(caseID)
 
         return task.samples.flatMap { it.blocks.flatMap { it.slides } }.find { it.uniqueIDinTask.toString() == uniqueSlideID }
@@ -69,7 +66,7 @@ open class ScannedTaskService @Autowired constructor(
             val slidesList = task.samples.flatMap { it.blocks.flatMap { it.slides } }
 
             // checking if unique id matches
-            val foundSlide = slidesList.firstOrNull { it.uniqueIDinTask == slide.uniqueSlideID }
+            val foundSlide = slidesList.firstOrNull { it.id == slide.slideID }
 
             if (foundSlide == null) {
                 notFoundList.add(slide)
@@ -81,6 +78,7 @@ open class ScannedTaskService @Autowired constructor(
             val scannedSlide = ScannedSlide()
             scannedSlide.name = slide.name
             scannedSlide.slideID = foundSlide?.id ?: 0
+            scannedSlide.path = slide.path
             scannedTask.slides.add(scannedSlide)
         }
 
@@ -95,25 +93,31 @@ open class ScannedTaskService @Autowired constructor(
         return scannedTaskRepository.save(scannedTask, resourceBundle["log.scannedSlide.removed", scannedTask.task.taskID], scannedTask.task.parent)
     }
 
+    /**
+     * Removes a scanned slide from a scannedTask. Name is used because scannedSlides can have no associated slide
+     */
     @Throws(EntityNotFoundException::class)
-    open fun removeScannedSlideFromTask(caseID: String, uniqueSlideID: String): ScannedTask {
+    open fun removeScannedSlideFromTask(caseID: String, sideName: String): ScannedTask {
         val scannedTask = scannedTaskRepository.findOptionalByIdAndInitializeTask(caseID.toLong())
 
-        if(!scannedTask.isPresent)
-            throw EntityNotFoundException()
+        if (!scannedTask.isPresent)
+            throw EntityNotFoundException("No scanned Task was found!")
 
-        scannedTask.get().slides.firstOrNull { it.slideID ==  }
+        val scannedSlide = scannedTask.get().slides.firstOrNull { it.name == sideName }
+                ?: throw EntityNotFoundException("Scanned slide was not found!")
+
+        return removeScannedSlideFromTask(scannedTask.get(), scannedSlide)
     }
 
     /**
      * Removes a scannedSlide from the scanned Task table. Saves data to the database.
      */
-    @Throws(EntityPersistException::class)
+    @Throws(EntityNotFoundException::class)
     open fun removeScannedSlideFromTask(scannedTask: ScannedTask, scannedSlide: ScannedSlide): ScannedTask {
         val result = scannedTask.slides.remove(scannedSlide)
 
         if (!result)
-            throw EntityPersistException()
+            throw EntityNotFoundException("Scanned Slide could not been removed")
 
         return scannedTaskRepository.save(scannedTask, resourceBundle["log.scannedSlide.removed", scannedTask.task.taskID, scannedSlide.slideID], scannedTask.task.parent)
     }
