@@ -49,3 +49,12 @@ WorklistSearchExtended
 -> if a case is removed from worklist do not show the next task, show a empty page
 -> search option for cases that haven be removed from worklist (e.g diagnosis stage had been left)
 -> show caseNumber in receiptlog more prominent
+-> in search and return lists (overlays in diagnosis view etc) the type chars are delete if return is pressed before update
+-> adding of new diagnosis protoypes not possible
+-> delete consultations
+-> check consultation dialog, always the first consultation is used.
+-> add Schnitte scannen to other lists, council
+-> load consultation tasks with worklist (secretary -> send letter, mta -> mat + secretray)
+-> show Taks with counsultation where material was send in mta worklist
+-> List or button for closed case (diagnosis was made etc.)
+-> Selecting surgeon, show town in overlay
