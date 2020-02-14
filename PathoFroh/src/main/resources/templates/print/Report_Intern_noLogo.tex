@@ -43,6 +43,7 @@
 	{Seite \thepage\ / \pageref{LastPage}}
 }
 
+\cfoot{ }
 
 \lhead{
 	\footnotesize 
@@ -55,9 +56,10 @@
 \setcounter{secnumdepth}{0}
 
 \begin{document}
+%\ThisCenterWallPaper{1}{D:/latex/intern_v21.pdf}
 \ThisCenterWallPaper{1}{_background_noLogo.pdf}
 %
- \input{_code128.tex}
+\input{_code128.tex}
 
 
 \baselineskip10pt
@@ -88,7 +90,7 @@ $!patient.piz\\
 \setstretch{1.0}
 \noindent 
 \textbf{$!subject} \\\\
-$!latexTextConverter.convertToTex($address) \\
+$address \\
 
 \end{textblock}
 }
@@ -132,7 +134,7 @@ $!latexTextConverter.convertToTex($address) \\
 			\renewcommand{\arraystretch}{1}
 			\begin{tabular}[t]{p{0.38\linewidth}p{0.62\linewidth-8\tabcolsep}}
 
-				Eingangsdatum &  $date.format('dd.MM.yyyy', $!task.receiptDate) \\
+				Eingangsdatum &  $!date.format('dd.MM.yyyy', $!task.receiptDate) \\
 				Eingangsnummer & \textbf{$!task.taskID} \\
 				~ & 
 					\X=.30mm        % The width of code will be greater
@@ -187,17 +189,17 @@ $!latexTextConverter.convertToTex($address) \\
 					$\Box$ 
 				#end \\ 
 				
-				#set($externalSurgeon = $task.getPrimaryContactAsString("EXTERNAL_SURGEON"))
+				#set($externalSurgeon = $taskTool.getPrimaryContactFromString("EXTERNAL_SURGEON"))
 				#if($externalSurgeon)
 					Einsender & $!externalSurgeon \\
 				#end
 				
-				#set($surgeon = $task.getPrimaryContactAsString("SURGEON"))
+				#set($surgeon = $taskTool.getPrimaryContactFromString("SURGEON"))
 				#if($surgeon)
 					Operateur & $!surgeon \\
 				#end
 				
-				#set($privatePhysician = $task.getPrimaryContactAsString("PRIVATE_PHYSICIAN"))
+				#set($privatePhysician = $taskTool.getPrimaryContactFromString("PRIVATE_PHYSICIAN"))
 				#if($privatePhysician)
 					Augenarzt & $!privatePhysician \\
 				#end

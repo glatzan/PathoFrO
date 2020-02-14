@@ -271,27 +271,6 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
         return taskPriority == TaskPriority.TIME
     }
 
-    @Transient
-    fun getPrimaryContactAsString(vararg contactRole: String): ReportIntent? {
-        return getPrimaryContact(*contactRole.map { p -> ContactRole.valueOf(p) }.toTypedArray())
-    }
-
-    /**
-     * Returns a associatedContact marked als primary with the given role.
-     *
-     * @param contactRole
-     * @return
-     */
-    @Transient
-    fun getPrimaryContact(vararg contactRole: ContactRole): ReportIntent? {
-        for (associatedContact in contacts) {
-            for (i in contactRole.indices) {
-                if (associatedContact.role == contactRole[i])
-                    return associatedContact
-            }
-        }
-        return null
-    }
 
     /**
      * Creates linear list of all slides of the given task. The StainingTableChosser

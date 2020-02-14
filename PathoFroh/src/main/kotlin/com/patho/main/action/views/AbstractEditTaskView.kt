@@ -8,7 +8,9 @@ import com.patho.main.model.person.Person
 import com.patho.main.model.preset.ListItem
 import com.patho.main.model.preset.MaterialPreset
 import com.patho.main.service.impl.SpringContextBridge
+import com.patho.main.service.impl.SpringSessionContextBridge
 import com.patho.main.util.bearer.SimplePhysicianBearer
+import com.patho.main.util.ui.jsfcomponents.ISelectPhysicianOverlay
 
 abstract class AbstractEditTaskView : AbstractTaskView() {
 
@@ -51,6 +53,39 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
      * Private physician filter
      */
     open var selectedPrivatePhysicianFilter: String = ""
+
+
+    open var surgeons = object : ISelectPhysicianOverlay {
+
+        override val physicians: List<SimplePhysicianBearer>
+            get() = SpringSessionContextBridge.services().genericViewData.surgeons
+
+        override var selectedPhysician: SimplePhysicianBearer? = null
+
+        override var filter: String = ""
+
+        override fun onSelect() {
+            val tmp = selectedPhysician
+            if (tmp != null)
+                addReportIntentToTask(tmp.physician.person, ContactRole.SURGEON)
+        }
+    }
+
+    open var privatePhysician = object : ISelectPhysicianOverlay {
+
+        override val physicians: List<SimplePhysicianBearer>
+            get() = SpringSessionContextBridge.services().genericViewData.privatePhysicians
+
+        override var selectedPhysician: SimplePhysicianBearer? = null
+
+        override var filter: String = ""
+
+        override fun onSelect() {
+            val tmp = selectedPhysician
+            if (tmp != null)
+                addReportIntentToTask(tmp.physician.person, ContactRole.FAMILY_PHYSICIAN)
+        }
+    }
 
     /**
      * Resets all filters an select fields

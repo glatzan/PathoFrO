@@ -2,14 +2,19 @@ package com.patho.main.action.views
 
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorklistHandler
+import com.patho.main.common.ContactRole
 import com.patho.main.common.GuiCommands
 import com.patho.main.model.Signature
 import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
+import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.preset.DiagnosisPreset
 import com.patho.main.repository.jpa.PhysicianRepository
 import com.patho.main.service.DiagnosisService
+import com.patho.main.util.bearer.SimplePhysicianBearer
+import com.patho.main.util.task.TaskTools
+import com.patho.main.util.ui.jsfcomponents.ISelectPhysicianOverlay
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -59,6 +64,21 @@ open class DiagnosisView @Autowired constructor(
             diagnosisFilter += Array<String>(revision.diagnoses.size) { "" }
             selectedDiagnosisPresets += Array<DiagnosisPreset?>(revision.diagnoses.size) { null }
         }
+    }
+
+    /**
+     * Returns the primary contact for the current role
+     */
+    fun getPrimaryContactForRole(vararg contactRoles: String): ReportIntent? {
+        return TaskTools.getPrimaryContactFromString(task, *contactRoles)
+    }
+
+    /**
+     * Counts the amount of contacts with the given role
+     */
+    fun countContactsForRole(vararg contactRoles: String): Int {
+        val contactRole = contactRoles.map { p -> ContactRole.valueOf(p) }.toTypedArray()
+        return task.contacts.count { contactRole.contains(it.role) }
     }
 
     /**

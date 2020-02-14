@@ -35,13 +35,15 @@
 
 \lfoot{
 	\footnotesize 
-	Dies ist ein technisch validierter Befundbericht, der erst durch eine ärztliche Unterschrift fachlich validiert ist.   
+	Dies ist ein technisch validierter Befundbericht, der erst durch eine ärztliche Unterschrift fachlich validiert ist.
 }
 
 \rfoot{
 	\footnotesize 
 	{Seite \thepage\ / \pageref{LastPage}}
 }
+
+\cfoot{ }
 
 
 \lhead{
@@ -54,10 +56,10 @@
 
 \setcounter{secnumdepth}{0}
 
+
 \begin{document}
 \ThisCenterWallPaper{1}{_background.pdf}
-%
- \input{_code128.tex}
+\input{_code128.tex}
 
 
 \baselineskip10pt
@@ -70,13 +72,13 @@
 % pat block
 {
 \scriptsize
-\begin{textblock}{100}(19, 8) 
+\begin{textblock}{100}(19, 8)
 \noindent $!patient.person.fullName\\
 $date.format('dd.MM.yyyy', $!patient.person.birthday)\\
 $!patient.person.contact.street \\
 $!patient.person.contact.postcode $!patient.person.contact.town\\
-\X=.35mm        
-\barheight=1cm 
+\X=.35mm
+\barheight=1cm
 \code{#if($patient.piz == "") 0 #else $!patient.piz #end}\\
 $!patient.piz\\
 \end{textblock}
@@ -84,11 +86,11 @@ $!patient.piz\\
 
 % add block
 {
-\begin{textblock}{100}(22, 50) 
+\begin{textblock}{100}(22, 50)
 \setstretch{1.0}
-\noindent 
+\noindent
 \textbf{$!subject} \\\\
-$!latexTextConverter.convertToTex($address) \\
+$address \\
 
 \end{textblock}
 }
@@ -99,42 +101,42 @@ $!latexTextConverter.convertToTex($address) \\
 {\huge Histologisches Gutachten} \\
 
 {
-	\centering 
+	\centering
 	\RaggedRight
 	\renewcommand{\arraystretch}{0}
 	\setlength{\tabcolsep}{.16667em}
 	\begin{tabular}{p{0.47\linewidth}p{0.53\linewidth}}
-	
+
 		{
 			\renewcommand{\arraystretch}{1}
 			\begin{tabular}[t]{p{0.3\linewidth}p{0.67\linewidth}}
-				
+
 	 				#foreach ($sample in $task.samples)
 						#if( $foreach.index == 0 )
 		   				 	Präparat & $!sample.sampleID $!sample.getMaterial() \\
 		   				#else
-							~ & $!sample.sampleID $!sample.getMaterial() \\	   				
+							~ & $!sample.sampleID $!sample.getMaterial() \\
 		   				#end
 					#end
- 				
- 			
- 				
+
+
+
  				Auge & #if($task.eye == "UNKNOWN")  ? #elseif($task.eye == "RIGHT") RA #elseif($task.eye == "LEFT" ) LA #else BA #end  \\
  				\\
- 				\multicolumn{2}{l}{Vorgeschichte} \\ 
- 				\multicolumn{2}{p{\linewidth-8\tabcolsep}}{$!task.caseHistory} \\ 
+ 				\multicolumn{2}{l}{Vorgeschichte} \\
+ 				\multicolumn{2}{p{\linewidth-8\tabcolsep}}{$!task.caseHistory} \\
  				\multicolumn{2}{l}
-			
+
 			\end{tabular}
-		} 
-		& 
+		}
+		&
 		{
 			\renewcommand{\arraystretch}{1}
 			\begin{tabular}[t]{p{0.38\linewidth}p{0.62\linewidth-8\tabcolsep}}
 
 				Eingangsdatum &  $date.format('dd.MM.yyyy', $!task.receiptDate) \\
 				Eingangsnummer & \textbf{$!task.taskID} \\
-				~ & 
+				~ &
 					\X=.30mm        % The width of code will be greater
 					\barheight=1cm % the height will be smaller.
 					\code{$!task.taskID} \\
@@ -142,27 +144,27 @@ $!latexTextConverter.convertToTex($address) \\
 					{
 						\setlength{\tabcolsep}{0em}
 						\begin{tabular}{c c c c }
-						
+
 						#if( !$patient.privateInsurance)
 						$\boxtimes$
 						#else
 						$\Box$
 						#end
-						
-						&~regulär~ & 
-						
+
+						&~regulär~ &
+
 						#if($patient.privateInsurance)
 						$\boxtimes$
 						#else
 						$\Box$
 						#end
  						& ~privat
-										
+
 						\end{tabular}
 					}\\
 				Station & $!task.ward \\
-			
-				Maligner Tumor & 
+
+				Maligner Tumor &
 				#set($str = "")
 				#set($malign = false)
 				#foreach ($diagnosisRevision in $diagnosisRevisions)
@@ -174,38 +176,38 @@ $!latexTextConverter.convertToTex($address) \\
 							#else
 								#set($str = "{$str}, $diagnosis.sample.sampleID")
 							#end
-						#end 
+						#end
 					#end
 				#end
-				
-				#if($malign) 	
+
+				#if($malign)
 					$\boxtimes$
 					#if($str != "")
 						\,Probe: $str
 					#end
-				#else 
-					$\Box$ 
-				#end \\ 
-				
-				#set($externalSurgeon = $task.getPrimaryContactAsString("EXTERNAL_SURGEON"))
+				#else
+					$\Box$
+				#end \\
+
+				#set($externalSurgeon = $taskTool.getPrimaryContactFromString("EXTERNAL_SURGEON"))
 				#if($externalSurgeon)
-					Einsender & $!externalSurgeon \\
+					Einsender & $!externalSurgeon.person.fullName \\
 				#end
-				
-				#set($surgeon = $task.getPrimaryContactAsString("SURGEON"))
+
+				#set($surgeon = $taskTool.getPrimaryContactFromString("SURGEON"))
 				#if($surgeon)
-					Operateur & $!surgeon \\
+					Operateur & $!surgeon.person.fullName \\
 				#end
-				
-				#set($privatePhysician = $task.getPrimaryContactAsString("PRIVATE_PHYSICIAN"))
+
+				#set($privatePhysician = $taskTool.getPrimaryContactFromString("PRIVATE_PHYSICIAN"))
 				#if($privatePhysician)
-					Augenarzt & $!privatePhysician \\
+					Augenarzt & $!privatePhysician.person.fullName \\
 				#end
-			 
+
 			\end{tabular}
 		}
 		\tabularnewline
-		
+
 	\end{tabular}
 }
 
@@ -230,7 +232,7 @@ $!latexTextConverter.convertToTex($address) \\
 #foreach ($diagnosis in $diagnosisRevision.diagnoses)
 	$!diagnosis.sample.sampleID & $!latexTextConverter.convertToTex($diagnosis.diagnosis)  \\
 #end
-\end{longtable}	
+\end{longtable}
 }
 
 \begin{center}
@@ -242,7 +244,7 @@ $!latexTextConverter.convertToTex($address) \\
 
 \end{tabular}
 \end{center}
-		
+
 #end
 
 

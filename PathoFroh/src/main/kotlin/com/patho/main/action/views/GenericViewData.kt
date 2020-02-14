@@ -15,11 +15,12 @@ import com.patho.main.util.bearer.SimplePhysicianBearer
 import org.primefaces.model.menu.MenuModel
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
+import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Component
 import javax.faces.component.html.HtmlPanelGroup
 
 @Component
-@Scope(value = "session")
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 open class GenericViewData @Autowired constructor(
         private val listItemRepository: ListItemRepository,
         private val diagnosisPresetRepository: DiagnosisPresetRepository,
@@ -103,7 +104,7 @@ open class GenericViewData @Autowired constructor(
         physiciansToSignList = physicianRepository.findAllByRole(ContactRole.SIGNATURE, true)
         physiciansToSignListTransformer = DefaultTransformer(physiciansToSignList)
 
-        materialList = materialPresetRepository.findAllOrderByIndexInListAsc(true,true)
+        materialList = materialPresetRepository.findAllOrderByIndexInListAsc(true, true)
     }
 
     /**

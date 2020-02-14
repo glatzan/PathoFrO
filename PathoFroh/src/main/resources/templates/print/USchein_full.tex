@@ -8,7 +8,6 @@
 \usepackage{everypage}
 \usepackage{helvet}
 \usepackage{setspace}
-\usepackage{qrcode}
 
 \usepackage{wallpaper}
 
@@ -25,7 +24,7 @@
 
 
 \ThisCenterWallPaper{1}{_U-Schein-neu-Vorlage-1-1.pdf}
- \input{_code128.tex}
+\input{_code128.tex}
  
 \baselineskip10pt
 
@@ -45,15 +44,7 @@ $!patient.person.contact.postcode $!patient.person.contact.town\\
 \X=.35mm        
 \barheight=1cm 
 \code{#if($patient.piz == "") 0 #else $!patient.piz #end}\\
-$!patient.piz  Auftrags Nr. $!task.taskID\\
-\end{textblock}
-}
-
-%qrcode
-{
-\begin{textblock}{100}(90, 270) 
-\qrset{height=1.75cm}%
-\qrcode{$!patient.piz;$!task.taskID;60114293}
+$!patient.piz\\
 \end{textblock}
 }
 

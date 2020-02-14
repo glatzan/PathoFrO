@@ -5,6 +5,7 @@ import com.patho.main.util.DateTool
 import com.patho.main.util.VelocityNoOutputLogger
 import com.patho.main.util.helper.HistoUtil
 import com.patho.main.util.helper.TextToLatexConverter
+import com.patho.main.util.task.TaskTools
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
 import org.apache.velocity.context.Context
@@ -113,6 +114,7 @@ open class AbstractTemplate : AbstractPersistable, Cloneable {
         context.put("date", DateTool())
         context.put("latexTextConverter", TextToLatexConverter())
         context.put("histoUtil", HistoUtil())
+        context.put("taskTook", TaskTools())
 
         return Pair(this, context)
     }

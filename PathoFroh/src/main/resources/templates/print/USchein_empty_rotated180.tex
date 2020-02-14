@@ -10,7 +10,6 @@
 \usepackage{setspace}
 \usepackage[rotate]{crop}
 \usepackage{wallpaper}
-\usepackage{qrcode}
 
 \usepackage{array}
 
@@ -24,8 +23,8 @@
 \begin{document}
 
 
-%\ThisCenterWallPaper{1}{U-Schein-neu-Vorlage-1-1.pdf}
- \input{_code128.tex}
+%\ThisCenterWallPaper{1}{_U-Schein-neu-Vorlage-1-1.pdf}
+\input{_code128.tex}
  
 \baselineskip10pt
 
@@ -39,21 +38,13 @@
 \scriptsize
 \begin{textblock}{100}(20, 15) 
 \noindent $!patient.person.fullName\\
-$date.format('dd.MM.yyyy', $!patient.person.birthday)\\
+$!date.format('dd.MM.yyyy', $!patient.person.birthday)\\
 $!patient.person.contact.street \\
 $!patient.person.contact.postcode $!patient.person.contact.town\\
 \X=.35mm        
 \barheight=1cm 
 \code{#if($patient.piz == "") 0 #else $!patient.piz #end}\\
 $!patient.piz\\
-\end{textblock}
-}
-
-%qrcode
-{
-\begin{textblock}{100}(90, 270) 
-\qrset{height=1.75cm}%
-\qrcode{$!patient.piz;$!task.taskID;60114293}
 \end{textblock}
 }
 
@@ -74,7 +65,7 @@ $!task.taskID
 \large
 \begin{textblock}{140}(125,144) 
 \noindent 
-$date.format('dd.MM.yyyy', $!task.receiptDate)
+$!date.format('dd.MM.yyyy', $!task.receiptDate)
 \end{textblock}
 }
 

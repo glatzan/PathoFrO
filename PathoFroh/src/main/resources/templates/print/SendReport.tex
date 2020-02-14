@@ -40,9 +40,10 @@
 
 
 \begin{document}
-%\ThisCenterWallPaper{1}{background.pdf}
+%\ThisCenterWallPaper{1}{D:/latex/intern_v21.pdf}
+%\ThisCenterWallPaper{1}{_background.pdf}
 %
- \input{_code128.tex}
+\input{_code128.tex}
 
 
 \baselineskip10pt
@@ -69,11 +70,11 @@ $!patient.piz\\
 
 
 \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}\\\\
-{\huge Sendebericht vom $date.format('HH:mm dd.MM.yyyy', $reportDate)} \\\\
+{\huge #if($temporarayNotification) Vorläufiger Sendebericht #else Sendebericht #end, vom $date.format('HH:mm dd.MM.yyyy', $reportDate)} \\\\
 {\normalsize \fs Email-Benachrichtigung\\
 	\begin{tabular}[t]{p{0.8\linewidth}p{0.2\linewidth}}
 	#if($useMail)
-		#foreach( $email in $mails)
+		#foreach( $email in $mailHolders)
 			 \fs $!email.contact.person.fullName ($!email.contactAddress) & \fs #if ($email.notification.performed) #if(!$email.notification.failed) \textcolor{green}{OK #if($email.pdf) (PDF) #end} #else \textcolor{red}{$!email.notification.commentary} #end #else - #end \\
 		#end
 	#else
@@ -86,7 +87,7 @@ $!patient.piz\\
 {\normalsize Fax-Benachrichtigung\\
 	\begin{tabular}[t]{p{0.8\linewidth}p{0.2\linewidth}}
 	#if($useFax)
-		#foreach( $fax in $faxes)
+		#foreach( $fax in $faxHolders)
 			 \fs $!fax.contact.person.fullName ($!fax.contactAddress) & \fs #if ($fax.notification.performed) #if(!$fax.notification.failed) \textcolor{green}{OK} #else \textcolor{red}{$!fax.notification.commentary} #end #else - #end \\
 		#end
 	#else
@@ -99,7 +100,7 @@ $!patient.piz\\
 {\normalsize Brief-Benachrichtigung\\
 	\begin{tabular}[t]{p{0.8\linewidth}p{0.2\linewidth}}
 	#if($useLetter)
-		#foreach( $letter in $letters)
+		#foreach( $letter in $letterHolders)
 			 \fs $!letter.contact.person.fullName & \fs #if ($letter.notification.performed) #if(!$letter.notification.failed) \textcolor{green}{OK} #else \textcolor{red}{$!letter.notification.commentary} #end #else - #end \\
 		#end
 	#else
@@ -112,7 +113,7 @@ $!patient.piz\\
 {\normalsize \fs Telefon-Benachrichtigung\\
 	\begin{tabular}[t]{p{0.8\linewidth}p{0.2\linewidth}}
 	#if($usePhone)
-		#foreach( $phone in $phonenumbers)
+		#foreach( $phone in $phoneHolders)
 			\fs $!phone.contact.person.fullName ($!phone.contactAddress) & \fs - \\
 		#end
 	#else
