@@ -215,36 +215,36 @@ patho:
         internalIdentifier: U_REPORT_COMPLETED
     documentTemplates:
       - id: 0 # Mail template
-        templateName: org.histo.template.MailTemplate
+        templateName: com.patho.main.template.MailTemplate
         name: Benutzer-Freischaltung erfolgt
         content: fileRepository:templates/mail/successUnlock.json
       - id: 1 # Mail template
-        templateName: org.histo.template.MailTemplate
+        templateName: com.patho.main.template.MailTemplate
         name: Benutzer-Freischaltung erbeten
         content: fileRepository:templates/mail/requestUnlock.json
       - id: 2 # Mail template
-        templateName: org.histo.template.MailTemplate
+        templateName: com.patho.main.template.MailTemplate
         name: Diagnose-Benachrichtigung
         content: fileRepository:templates/mail/diagnosisReport.json
       - id: 3 # Mail template
-        templateName: org.histo.template.MailTemplate
+        templateName: com.patho.main.template.MailTemplate
         name: Fehlermeldung!
         content: fileRepository:templates/mail/error.json
       - id: 4 # Mail template
-        templateName: org.histo.template.MailTemplate
+        templateName: com.patho.main.template.MailTemplate
         name: Fehler beim Upload eines Dokuments!
         content: fileRepository:templates/mail/errorRestUpload.json
       - id: 5 # Mail template
-        templateName: org.histo.template.MailTemplate
+        templateName: com.patho.main.template.MailTemplate
         name: Patient erstellt
         content: fileRepository:templates/mail/patientCreated.json
       - id: 6 # Mail template
-        templateName: org.histo.template.MailTemplate
+        templateName: com.patho.main.template.MailTemplate
         name: Scanned Slides hinzugefügt
         content: fileRepository:templates/mail/scannedSlidesAdded.json
       - id: 100 # json template
         name: Create-Patient
-        templateName: org.histo.template.DefaultTemplateImpl
+        templateName: com.patho.main.template.DefaultTemplateImpl
         content: fileRepository:templates/miscellaneous/createPatient.json
         defaultOfType: true
     ####### MAIL #######

@@ -48,8 +48,10 @@ open class MailTemplate : AbstractTemplate {
 
     constructor()
 
-    constructor(mailTemplate: MailTemplate) {
-        copyIntoDocument(mailTemplate)
+    constructor(template: AbstractTemplate) {
+        super.copyIntoDocument(template)
+        if (template is MailTemplate)
+            copyIntoDocument(template)
     }
 
     /**
@@ -71,7 +73,7 @@ open class MailTemplate : AbstractTemplate {
     /**
      * Loads maildata from Dist
      */
-    override fun prepareTemplate() :Boolean {
+    override fun prepareTemplate(): Boolean {
         logger.debug("Initializing ${name}, ${type}, default: ${defaultOfType}")
         val jsonContent: String = SpringContextBridge.services().mediaRepository.getString(content)
         try {
@@ -111,7 +113,7 @@ open class MailTemplate : AbstractTemplate {
      * Mapperclass form mails loaded from disk as json
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    class JSONMailMapper{
+    class JSONMailMapper {
         var subject: String? = null
         var body: String? = null
     }

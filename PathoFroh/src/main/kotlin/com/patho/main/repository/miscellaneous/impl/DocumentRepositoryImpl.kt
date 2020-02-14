@@ -16,9 +16,16 @@ class DocumentRepositoryImpl @Autowired constructor(
     var documentTemplates: Array<AbstractTemplate> = emptyArray()
 
     override fun initializeDocuments() {
-        for (document in documentTemplates) {
+        for ((i, document) in documentTemplates.withIndex()) {
             logger.debug("Initializing ${document.name}, ${document.type}, default: ${document.defaultOfType}")
-            document.prepareTemplate()
+
+            if(document.templateName.isNotEmpty()) {
+                val myClass = Class.forName(document.templateName)
+                val constructor = myClass.getConstructor(*arrayOf<Class<AbstractTemplate>>(AbstractTemplate::class.java))
+                documentTemplates[i] = constructor.newInstance(*arrayOf<Any>(document)) as AbstractTemplate
+            }
+
+            documentTemplates[i].prepareTemplate()
         }
     }
 

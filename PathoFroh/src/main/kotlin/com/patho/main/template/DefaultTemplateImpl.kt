@@ -6,7 +6,7 @@ import org.apache.velocity.context.Context
 import java.io.StringWriter
 import java.util.*
 
-class DefaultTemplateImpl : AbstractTemplate() {
+class DefaultTemplateImpl : AbstractTemplate {
 
     /**
      * Raw file content from hdd
@@ -17,6 +17,10 @@ class DefaultTemplateImpl : AbstractTemplate() {
      * Processed final document
      */
     var finalContent: String = ""
+
+    constructor(template: AbstractTemplate) {
+        super.copyIntoDocument(template)
+    }
 
     /**
      * Loads the content from the disk

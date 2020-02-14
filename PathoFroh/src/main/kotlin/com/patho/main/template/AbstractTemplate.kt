@@ -16,7 +16,7 @@ import java.util.*
 //@DynamicUpdate(true)
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //@SequenceGenerator(name = "template_sequencegenerator", sequenceName = "template_sequence")
-open class AbstractTemplate : AbstractPersistable(), Cloneable {
+open class AbstractTemplate : AbstractPersistable, Cloneable {
 
     /**
      * ID of the template
@@ -62,6 +62,12 @@ open class AbstractTemplate : AbstractPersistable(), Cloneable {
      * Addition atributes, e.g. for printing
      */
     var attributes: String = ""
+
+    constructor()
+
+    constructor(template : AbstractTemplate){
+        copyIntoDocument(template)
+    }
 
     /**
      * Prepares the template and loads data from disk
