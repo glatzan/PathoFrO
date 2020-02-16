@@ -2,7 +2,10 @@ package com.patho.main.util.ui.jsfcomponents
 
 import com.patho.main.util.bearer.SimplePhysicianBearer
 
-interface ISelectPhysicianOverlay {
+/**
+ * Interface for physician select overlay component (physicianSelectOverlay.xhtml)
+ */
+interface IPhysicianSelectOverlay {
 
     /**
      * List of all physicians
@@ -22,5 +25,10 @@ interface ISelectPhysicianOverlay {
     /**
      * Function is called on select
      */
-    fun onSelect()
+    fun onSelect() {}
+
+    /**
+     * Function is called on show
+     */
+    fun onShow() {}
 }

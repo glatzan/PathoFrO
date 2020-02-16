@@ -5,8 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
->
+      xmlns:p="http://primefaces.org/ui">
 
 
 <h:body>
@@ -24,18 +23,11 @@
         </ui:define>
 
         <ui:define name="content">
-            <p:scrollPanel styleClass="bodyScrollPanelStyle" id="contentScrollPane" mode="native">
+            <p:scrollPanel styleClass="bodyScrollPanelStyle" id="contentScrollPane">
                 <h:panelGroup id="contentPanel">
                     <ui:include src="#{centralHandler.navigationData.getCenterView()}"></ui:include>
                 </h:panelGroup>
             </p:scrollPanel>
-
-<!--            &lt;!&ndash; scrollspeed of scrollpane &ndash;&gt;-->
-<!--            <script type="text/javascript">-->
-<!--                $(document).ready(function () {-->
-<!--                    commonFunctions.initializeCustomScrollPanel("contentForm:contentScrollPane");-->
-<!--                });-->
-<!--            </script>-->
         </ui:define>
 
         <ui:define name="globalInclude">

@@ -120,6 +120,8 @@ public class PathoExceptionHandler extends ExceptionHandlerWrapper {
 
                     hanled = true;
                 }
+
+                cause.printStackTrace();
             }
 //
 //				if (cause instanceof CustomNotUniqueReqest) {

@@ -10,19 +10,12 @@ import com.patho.main.model.preset.MaterialPreset
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.service.impl.SpringSessionContextBridge
 import com.patho.main.util.bearer.SimplePhysicianBearer
-import com.patho.main.util.ui.jsfcomponents.ISelectPhysicianOverlay
+import com.patho.main.util.ui.jsfcomponents.ICaseHistorySelectOverlay
+import com.patho.main.util.ui.jsfcomponents.IMaterialSelectOverlay
+import com.patho.main.util.ui.jsfcomponents.IMaterialSelectTable
+import com.patho.main.util.ui.jsfcomponents.IPhysicianSelectOverlay
 
-abstract class AbstractEditTaskView : AbstractTaskView() {
-
-    /**
-     * Search string for case history
-     */
-    open var caseHistoryFilter: String = ""
-
-    /**
-     * Selected List item form caseHistory list
-     */
-    open var selectedCaseHistoryItem: ListItem? = null
+abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectTable {
 
     /**
      * Selected material presets
@@ -35,27 +28,9 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
     open var selectedMaterialPresetFilter: Array<String> = arrayOf<String>()
 
     /**
-     * Selected surgeon
+     * Object for selecting new surgeons quickly by overlay
      */
-    open var selectedSurgeon: SimplePhysicianBearer? = null
-
-    /**
-     * Surgeon filter
-     */
-    open var selectedSurgeonFilter: String = ""
-
-    /**
-     * Private physician surgeon
-     */
-    open var selectedPrivatePhysician: SimplePhysicianBearer? = null
-
-    /**
-     * Private physician filter
-     */
-    open var selectedPrivatePhysicianFilter: String = ""
-
-
-    open var surgeons = object : ISelectPhysicianOverlay {
+    open val surgeons = object : IPhysicianSelectOverlay {
 
         override val physicians: List<SimplePhysicianBearer>
             get() = SpringSessionContextBridge.services().genericViewData.surgeons
@@ -71,7 +46,10 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
         }
     }
 
-    open var privatePhysician = object : ISelectPhysicianOverlay {
+    /**
+     * Object for selecting new private physicians quickly by overlay
+     */
+    open val privatePhysician = object : IPhysicianSelectOverlay {
 
         override val physicians: List<SimplePhysicianBearer>
             get() = SpringSessionContextBridge.services().genericViewData.privatePhysicians
@@ -83,8 +61,52 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
         override fun onSelect() {
             val tmp = selectedPhysician
             if (tmp != null)
-                addReportIntentToTask(tmp.physician.person, ContactRole.FAMILY_PHYSICIAN)
+                addReportIntentToTask(tmp.physician.person, ContactRole.PRIVATE_PHYSICIAN)
         }
+
+        override fun onShow() {
+            this.filter = ""
+            this.selectedPhysician = null
+        }
+    }
+
+    /**
+     * Object for changing the case history by overlay
+     */
+    open val caseHistory = object : ICaseHistorySelectOverlay {
+
+        override var selectedItem: ListItem? = null
+
+        override val items: List<ListItem>
+            get() = SpringSessionContextBridge.services().genericViewData.caseHistoryList
+
+        override var filter: String = ""
+
+        override fun onShow() {
+            this.filter = ""
+            this.selectedItem = null
+        }
+    }
+
+    /**
+     * Object for changing the material by overlay
+     */
+    override val material = object : IMaterialSelectOverlay {
+
+        override var selectedMaterial: MaterialPreset? = null
+
+        override val presets: List<MaterialPreset>
+            get() = SpringSessionContextBridge.services().genericViewData.materialList
+
+        override var filter: String = ""
+
+        override var parentSample: Sample? = null
+
+        override fun onShow() {
+            this.filter = ""
+            this.selectedMaterial = null
+        }
+
     }
 
     /**
@@ -92,18 +114,6 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
      */
     override fun loadView(task: Task) {
         super.loadView(task)
-
-        selectedCaseHistoryItem = null
-        caseHistoryFilter = ""
-
-        selectedMaterialPresets = Array<MaterialPreset?>(task.samples.size) { _ -> null }
-        selectedMaterialPresetFilter = Array<String>(task.samples.size) { _ -> "" }
-
-        selectedSurgeon = null
-        selectedSurgeonFilter = ""
-
-        selectedPrivatePhysician = null
-        selectedPrivatePhysicianFilter = ""
     }
 
     /**
@@ -127,7 +137,7 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
     /**
      * Saves dynamic name changes of task entities
      */
-    open fun save(task: Task, resourcesKey: String, vararg arr: Any) {
+    override fun save(task: Task, resourcesKey: String, vararg arr: Any) {
         logger.debug("Saving task " + task.taskID)
         val t = SpringContextBridge.services().taskRepository.save(task, resourceBundle.get(resourcesKey, task, *arr), task.patient)
         SpringContextBridge.services().worklistHandler.replaceTaskInWorklist(t, true, reloadStaticData = false)
@@ -145,7 +155,7 @@ abstract class AbstractEditTaskView : AbstractTaskView() {
     /**
      * Changes the material of the sample.
      */
-    fun updateMaterialOfSample(sample: Sample, materialPreset: MaterialPreset?, materialPresetString: String, resourcesKey: String, vararg arr: Any) {
+    override fun updateMaterialOfSample(sample: Sample, materialPreset: MaterialPreset?, materialPresetString: String, resourcesKey: String, vararg arr: Any) {
         logger.debug("Change material of sample with preset")
         val t = SpringContextBridge.services().sampleService.updateMaterialOfSample(sample, materialPresetString, materialPreset, false)
         save(t, resourcesKey, *arr)

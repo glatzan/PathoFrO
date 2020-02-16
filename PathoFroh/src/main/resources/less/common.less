@@ -6,7 +6,7 @@
 @table_body_height: 100px;
 @defualt_padding: 4px 4px;
 @default_font: Verdana, Arial, "Trebuchet MS", sans-serif;
-@table_header_background: #e6e6e6 url(/Histo2016/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x;
+@table_header_background: #e6e6e6 url(/javax.faces.resource/images/ui-bg_glass_75_e6e6e6_1x400.png.xhtml?ln=primefaces-smoothness) 50% 50% repeat-x;
 @table_header_color: #d3d3d3;
 
 // default font
@@ -43,6 +43,15 @@
   }
 }
 
+.histo_gravatar {
+  height: 15px;
+  width: 20px;
+  background-color: @alternate_row_background_color;
+  border-radius: 50%;
+  padding-left: 2px;
+  display: inline-block;
+}
+
 @icon-colors: green, purple, orange, #555555, red, blue;
 @icon-names: icon-green, icon-purple, icon-orange, icon-grey, icon-red, icon-blue;
 @icon-length: length(@icon-colors);
@@ -62,7 +71,7 @@
  * common classes for tables
  */
 .tableCommonClasses {
-  W:focus {
+  :focus {
     outline: none ! important;
   }
 
@@ -127,6 +136,10 @@
 
   .columnWidthAuto {
     width: auto;
+  }
+
+  .columnWidthMax {
+    width: 99%;
   }
 }
 

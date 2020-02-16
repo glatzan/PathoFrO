@@ -9,12 +9,11 @@ import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportIntent
+import com.patho.main.model.person.Person
 import com.patho.main.model.preset.DiagnosisPreset
 import com.patho.main.repository.jpa.PhysicianRepository
 import com.patho.main.service.DiagnosisService
-import com.patho.main.util.bearer.SimplePhysicianBearer
 import com.patho.main.util.task.TaskTools
-import com.patho.main.util.ui.jsfcomponents.ISelectPhysicianOverlay
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -74,11 +73,11 @@ open class DiagnosisView @Autowired constructor(
     }
 
     /**
-     * Counts the amount of contacts with the given role
+     * Returns a list of person with the given contact roles
      */
-    fun countContactsForRole(vararg contactRoles: String): Int {
+    fun getContactsForRole(vararg contactRoles: String): List<Person>{
         val contactRole = contactRoles.map { p -> ContactRole.valueOf(p) }.toTypedArray()
-        return task.contacts.count { contactRole.contains(it.role) }
+        return task.contacts.filter { contactRole.contains(it.role) }.mapNotNull { it.person }
     }
 
     /**

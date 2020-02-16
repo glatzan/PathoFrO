@@ -253,13 +253,6 @@
 
     </p:scrollPanel>
 
-    <!-- scrollspeed of scrollpane -->
-    <script type="text/javascript">
-        $(document).ready(function () {
-            commonFunctions.initializeCustomScrollPanel("navigationForm:patientNavigationScroll");
-        });
-    </script>
-
     <p:contextMenu for="patientList">
         <p:menuitem value="Entfernen" icon="ui-icon-close"
                     actionListener="#{worklistHandler.removePatientFromWorklist(worklistHandler.selectedPatient)}"

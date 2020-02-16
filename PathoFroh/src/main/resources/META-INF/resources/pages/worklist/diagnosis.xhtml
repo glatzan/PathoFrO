@@ -4,25 +4,11 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:c="http://java.sun.com/jsp/jstl/core"
-                xmlns:pe="http://primefaces.org/ui/extensions"
-                xmlns:histoPhysician="http://java.sun.com/jsf/composite/components/physician">
+                xmlns:hm="http://java.sun.com/jsf/composite/components/miscellaneous">
 
     <h:outputScript library="scripts" name="closeOverlayPanelOnReturn.js"/>
 
     <ui:include src="include/navigationBar.xhtml"/>
-
-    <script type="text/javascript">
-        // disables the autofocus for the caseHistoryOverlayplpanel
-        (function () {
-            var proxied = PrimeFaces.widget.OverlayPanel.prototype.applyFocus;
-            PrimeFaces.widget.OverlayPanel.prototype.applyFocus = function () {
-                if (this.jq.hasClass("histoOverlayPanel")) {
-                    return;
-                }
-                return proxied.apply(this, arguments);
-            };
-        })();
-    </script>
 
     <p:panel style="width: 80%"
              styleClass="defaultHistoHiddenTableContainer">
@@ -37,73 +23,9 @@
             <!-- Left Column -->
             <h:panelGrid columns="1" styleClass="defaultHistoTable">
 
-                <h:panelGrid columns="1"
-                             styleClass="defaultHistoHiddenTableContainer">
-
-                    <!-- material -->
-                    <c:forEach items="#{diagnosisView.task.samples}"
-                               var="sample" varStatus="loopCount">
-
-                        <h:panelGrid columns="2" styleClass="defaultHistoTable"
-                                     columnClasses="columnWidth75,">
-
-                            <h:outputLabel
-                                    value="#{msg['body.diagnosis.sample']} #{sample.sampleID}"/>
-
-                            <h:panelGroup>
-                                <!-- Material Name -->
-                                <p:inputText value="#{sample.material}"
-                                             id="materialInput#{loopCount.index}"
-                                             disabled="#{!diagnosisView.task.taskStatus.editable}"
-                                             tabindex="1" styleClass="customBackground"
-                                             onclick="commonFunctions.showAndUpdateOverlayPanel('materialOverlayPanel#{loopCount.index}', '#{component.clientId}' ,null, 'materialOverlayPanelDataTable#{loopCount.index}', 0, submitUpdateMaterial#{loopCount.index});"
-                                             style="width:200px;float:right;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}">
-
-                                    <p:ajax event="change" execute="@this"
-                                            listener="#{diagnosisView.save(sample.task, 'log.sample.edit.material',sample,sample.material)}"/>
-                                </p:inputText>
-
-                                <!-- material overlay panel -->
-                                <p:overlayPanel id="materialOverlayPanel#{loopCount.index}"
-                                                widgetVar="materialOverlayPanel#{loopCount.index}"
-                                                styleClass="histoOverlayPanel" hideEffect="fade"
-                                                style="width:500px" hideEvent="mousedown" showEvent="none"
-                                                onkeypress="return false;">
-                                    <p:dataTable filterDelay="50"
-                                                 id="materialOverlayPanelDataTable#{loopCount.index}"
-                                                 widgetVar="materialOverlayPanelDataTable#{loopCount.index}"
-                                                 value="#{genericViewData.materialList}"
-                                                 var="preset" styleClass="defaultHistoDataTable"
-                                                 scrollable="true" scrollHeight="200" rowKey="#{preset.id}"
-                                                 selection="#{diagnosisView.selectedMaterialPresets[loopCount.index]}"
-                                                 selectionMode="single">
-
-                                        <p:column filterBy="#{preset.name}" filterMatchMode="contains"
-                                                  filterValue="#{diagnosisView.selectedMaterialPresetFilter[loopCount.index]}"
-                                                  id="presetName">
-                                            <h:outputText value="#{preset.name}"/>
-                                        </p:column>
-
-                                        <p:ajax event="rowSelect"
-                                                process="contentForm:materialOverlayPanel#{loopCount.index}"
-                                                partialSubmit="true"
-                                                update="contentForm:materialInput#{loopCount.index}"
-                                                listener="#{diagnosisView.updateMaterialOfSample(sample, diagnosisView.selectedMaterialPresets[loopCount.index],diagnosisView.selectedMaterialPresets[loopCount.index].name,'log.patient.task.sample.material.update',sample, diagnosisView.selectedMaterialPresets[loopCount.index].name)}"
-                                                oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();"/>
-                                    </p:dataTable>
-                                </p:overlayPanel>
-
-                                <p:remoteCommand name="submitUpdateMaterial#{loopCount.index}"
-                                                 partialSubmit="true"
-                                                 update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                                 actionListener="#{diagnosisView.updateMaterialOfSample(sample, null, diagnosisView.selectedMaterialPresetFilter[loopCount.index],'log.patient.task.sample.material.update',sample, diagnosisView.selectedMaterialPresetFilter[loopCount.index])}"
-                                                 oncomplete="PF('materialOverlayPanel#{loopCount.index}').hide();"/>
-
-                            </h:panelGroup>
-                        </h:panelGrid>
-                    </c:forEach>
-                </h:panelGrid>
                 <!-- material -->
+                <hm:materialSelectTable editable="#{diagnosisView.task.taskStatus.editable}" source="#{diagnosisView}" id="materialTable" />
+
 
                 <!-- Eye -->
                 <h:panelGrid columns="2" styleClass="defaultHistoTable">
@@ -133,44 +55,28 @@
                                          title="#{msg['body.diagnosis.story.watermark']}"
                                          disabled="#{!diagnosisView.task.taskStatus.editable}"
                                          id="caseHistoryInput" style="width:90%"
-                                         onclick="commonFunctions.showAndUpdateOverlayPanel('caseHistoryOverlayPanel', '#{component.clientId}' ,null, 'caseHistoryOverlayPanelDataTable', 0,submitNewCustomCaseHistory);"
-                                         onkeypress="PF('caseHistoryOverlayPanel').hide();">
+                                         onclick="PF('caseHistoryOverlay').showAndFocus('#{component.clientId}', submitCustomCaseHistory)"
+                                         onkeypress="PF('caseHistoryOverlay').hide();">
                             <p:ajax event="change"
                                     listener="#{diagnosisView.save(diagnosisView.task, 'log.task.edit.caseHistory',diagnosisView.task.caseHistory)}"/>
                         </p:inputTextarea>
 
-                        <p:overlayPanel id="caseHistoryOverlayPanel"
-                                        styleClass="histoOverlayPanel"
-                                        widgetVar="caseHistoryOverlayPanel" hideEffect="fade"
-                                        style="width:500px" hideEvent="mousedown" showEvent="none"
-                                        onkeypress="return false;">
-                            <p:dataTable id="caseHistoryOverlayPanelDataTable"
-                                         widgetVar="caseHistoryOverlayPanelDataTable" filterDelay="50"
-                                         value="#{genericViewData.caseHistoryList}"
-                                         var="item" styleClass="defaultHistoDataTable" scrollable="true"
-                                         scrollHeight="200" rowKey="#{item.id}"
-                                         selection="#{diagnosisView.selectedCaseHistoryItem}"
-                                         selectionMode="single">
+                        <hm:caseHistorySelectOverlay id="caseHistoryOverlay" widgetVar="caseHistoryOverlay"
+                                                     source="#{diagnosisView.caseHistory}">
+                            <p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
+                                    process="contentForm:caseHistoryOverlay:caseHistoryOverlay_contentDatatable"
+                                    partialSubmit="true"
+                                    listener="#{diagnosisView.updateCaseHistoryWithName(diagnosisView.task, diagnosisView.caseHistory.selectedItem.value,'log.task.edit.caseHistory',diagnosisView.caseHistory.selectedItem.value)}"
+                                    oncomplete="PF('caseHistoryOverlay').hide();"/>
+                        </hm:caseHistorySelectOverlay>
 
-                                <p:column filterBy="#{item.value}" filterMatchMode="contains"
-                                          filterValue="#{diagnosisView.caseHistoryFilter}"
-                                          id="valueColumn">
-                                    <h:outputText value="#{item.value}"/>
-                                </p:column>
-
-                                <p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
-                                        process="contentForm:caseHistoryOverlayPanel"
-                                        partialSubmit="true"
-                                        listener="#{diagnosisView.updateCaseHistoryWithName(diagnosisView.task, diagnosisView.selectedCaseHistoryItem.value,'log.task.edit.caseHistory',diagnosisView.selectedCaseHistoryItem.value)}"
-                                        oncomplete="PF('caseHistoryOverlayPanel').hide();"/>
-                            </p:dataTable>
-                        </p:overlayPanel>
-
-                        <p:remoteCommand name="submitNewCustomCaseHistory"
-                                         update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                         actionListener="#{diagnosisView.updateCaseHistoryWithName(diagnosisView.task, diagnosisView.caseHistoryFilter,'log.task.edit.caseHistory',diagnosisView.caseHistoryFilter)}"
-                                         oncomplete="PF('caseHistoryOverlayPanel').hide();"/>
-
+                        <p:remoteCommand name="submitCustomCaseHistory"
+                                         update="contentForm:caseHistoryInput"
+                                         process="@this contentForm:caseHistoryOverlay:caseHistoryOverlay_contentDatatable"
+                                         partialSubmit="true"
+                                         actionListener="#{diagnosisView.updateCaseHistoryWithName(diagnosisView.task, diagnosisView.caseHistory.filter,'log.task.edit.caseHistory',diagnosisView.caseHistory.filter)}"
+                                         oncomplete="PF('caseHistoryOverlay').hide();">
+                        </p:remoteCommand>
                     </h:panelGroup>
                 </h:panelGrid>
             </h:panelGrid>
@@ -254,109 +160,84 @@
                     </p:selectOneMenu>
 
                     <!-- surgeon -->
-                    <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
+                    <h:panelGroup layout="block" style="margin: 6px 0 3px 0;">
                         <h:outputLabel value="#{msg['body.diagnosis.surgeon']}"/>
                     </h:panelGroup>
 
-                    <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
-                        <h:panelGrid columns="3" styleClass="defaultHistoHiddenTableContainer" style="">
-                            <h:outputLabel style="margin-left:10px;" id="surgeonLabel"
-                                           value="#{diagnosisView.getPrimaryContactForRole('SURGEON', 'EXTERNAL_SURGEON').person.fullName}"/>
-                            <pe:letterAvatar height="12" width="17" style="margin-left:10px"
-                                             value="+ #{diagnosisView.countContactsForRole('SURGEON', 'EXTERNAL_SURGEON')}"/>
+                    <h:panelGrid columns="3" styleClass="defaultHistoHiddenTableContainer"
+                                 columnClasses="columnWidthMin ,columnWidthMax, columnWidthMin"
+                                 style="margin: 6px 0 3px 0; width: 100%">
+                        <h:outputLabel style="margin-left:10px;" id="surgeonLabel"
+                                       value="#{diagnosisView.getPrimaryContactForRole('SURGEON', 'EXTERNAL_SURGEON').person.fullName}"/>
 
-                            <h:panelGroup>
-                                <p:commandLink style="float: right; margin-right:5px;"
-                                               tabindex="9"
-                                               onclick="commonFunctions.showAndUpdateOverlayPanel('surgeonPhysicianOverlayPanel', '#{component.clientId}' , null, 'surgeonPhysicianOverlayPanelDataTable', 0 ,null);"
-                                               title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
-                                               disabled="#{!diagnosisView.task.taskStatus.editable}">
-                                    <i class="fa fa-fw fa-scissors"/>
-                                </p:commandLink>
+                        <!-- display more than one surgeon -->
+                        <hm:physiciansShowAddtitional
+                                persons="#{diagnosisView.getContactsForRole('SURGEON', 'EXTERNAL_SURGEON')}"
+                                cID="additionalSurgeons"/>
 
-                                <histoPhysician:selectPhysicianOverlay source="#{diagnosisView.surgeons}"
-                                                                       id="surgeonPhysicianOverlayPanel"/>
+                        <!--  add surgenon -->
+                        <h:panelGroup style="float: right; margin-right:5px;">
+                            <p:commandLink tabindex="9"
+                                           onclick="PF('surgeonOverlay').showAndFocus('#{component.clientId}')"
+                                           title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
+                                           disabled="#{!diagnosisView.task.taskStatus.editable}">
+                                <i class="fa fa-fw fa-scissors"/>
+                            </p:commandLink>
 
-                            </h:panelGroup>
-                        </h:panelGrid>
-                    </h:panelGroup>
+                            <hm:physicianSelectOverlay source="#{diagnosisView.surgeons}"
+                                                       widgetVar="surgeonOverlay"
+                                                       id="surgeonOverlay">
+                                <p:ajax event="rowSelect"
+                                        partialSubmit="true"
+                                        update="contentForm:contentPanel"
+                                        process="contentForm:surgeonOverlay:surgeonOverlay_contentDatatable"
+                                        listener="#{diagnosisView.surgeons.onSelect()}"
+                                        oncomplete="PF('surgeonOverlay').hide();"/>
+                            </hm:physicianSelectOverlay>
+                        </h:panelGroup>
+                    </h:panelGrid>
 
 
                     <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
                         <h:outputLabel value="#{msg['body.diagnosis.privatePhysician']}"/>
                     </h:panelGroup>
 
-                    <h:panelGroup layout="block" style="margin: 6px 0px 3px 0px;">
+                    <h:panelGrid columns="3" styleClass="defaultHistoHiddenTableContainer"
+                                 columnClasses="columnWidthMin ,columnWidthMax, columnWidthMin"
+                                 style="margin: 6px 0 3px 0; width: 100%">
+                        <!-- name -->
                         <h:outputLabel style="margin-left:10px;"
                                        value="#{diagnosisView.getPrimaryContactForRole('PRIVATE_PHYSICIAN').person.fullName}"/>
 
+                        <!-- display more than one private physician -->
+                        <hm:physiciansShowAddtitional
+                                persons="#{diagnosisView.getContactsForRole('PRIVATE_PHYSICIAN')}"
+                                cID="additionalSurgeons"/>
+
+                        <!--  add private physician -->
                         <h:panelGroup>
                             <p:commandLink style="float: right; margin-right:5px;"
                                            tabindex="9"
-                                           onclick="commonFunctions.showAndUpdateOverlayPanel('privatePhysicianPhysicianOverlayPanel', '#{component.clientId}' , null, 'privatePhysicianPhysicianOverlayPanelDataTable', 0 ,null);"
+                                           onclick="PF('privatePhysicianOverlay').showAndFocus('#{component.clientId}')"
                                            title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
                                            disabled="#{!diagnosisView.task.taskStatus.editable}">
                                 <i class="fa fa-fw fa-eye"/>
                             </p:commandLink>
 
                             <!-- private physician overlay panel -->
-                            <p:overlayPanel id="privatePhysicianPhysicianOverlayPanel"
-                                            styleClass="histoOverlayPanel"
-                                            widgetVar="privatePhysicianPhysicianOverlayPanel"
-                                            hideEffect="fade" style="width:500px" hideEvent="mousedown"
-                                            showEvent="none" onkeypress="return false;">
+                            <hm:physicianSelectOverlay source="#{diagnosisView.privatePhysician}"
+                                                       widgetVar="privatePhysicianOverlay"
+                                                       id="privatePhysicianOverlay">
+                                <p:ajax event="rowSelect"
+                                        partialSubmit="true"
+                                        update="contentForm:contentPanel"
+                                        process="contentForm:privatePhysicianOverlay:privatePhysicianOverlay_contentDatatable"
+                                        listener="#{diagnosisView.privatePhysician.onSelect()}"
+                                        oncomplete="PF('privatePhysicianOverlay').hide();"/>
+                            </hm:physicianSelectOverlay>
 
-                                <p:dataTable id="privatePhysicianPhysicianOverlayPanelDataTable"
-                                             widgetVar="privatePhysicianPhysicianOverlayPanelDataTable"
-                                             disabledSelection="#{physicianSelector.contactOfTask}"
-                                             selection="#{diagnosisView.selectedPrivatePhysician}"
-                                             selectionMode="single"
-                                             value="#{genericViewData.privatePhysicians}"
-                                             var="physicianSelector" styleClass="defaultHistoDataTable"
-                                             scrollable="true" scrollHeight="200"
-                                             rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
-
-                                    <!-- name -->
-                                    <p:column style="width:auto"
-                                              filterValue="#{diagnosisView.selectedPrivatePhysicianFilter}"
-                                              filterBy="#{physicianSelector.physician.person.getFullName()}"
-                                              filterMatchMode="contains">
-                                        <h:outputText
-                                                style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
-                                                value="#{physicianSelector.physician.person.getFullName()}"/>
-                                    </p:column>
-
-                                    <!-- role -->
-                                    <p:column style="width: 30%">
-                                        <h:outputText
-                                                style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
-                                                value="#{physicianSelector.physician.clinicRole}"/>
-                                    </p:column>
-
-                                    <!-- already selected -->
-                                    <p:column style="width:5%; text-align:center;">
-                                        <f:facet name="header">
-                                            <i class="fa fa-check-square-o"/>
-                                        </f:facet>
-
-                                        <ui:fragment rendered="#{physicianSelector.contactOfTask}">
-                                            <i class="fa fa-check icon-green"/>
-                                        </ui:fragment>
-
-                                    </p:column>
-
-
-                                    <p:ajax event="rowSelect"
-                                            update="navigationForm:patientList contentForm:contentPanel headerForm"
-                                            process="contentForm:privatePhysicianPhysicianOverlayPanel"
-                                            partialSubmit="true"
-                                            listener="#{diagnosisView.addReportIntentToTask(diagnosisView.selectedPrivatePhysician.physician.person, 'PRIVATE_PHYSICIAN')}"
-                                            oncomplete="PF('privatePhysicianPhysicianOverlayPanel').hide();"/>
-
-                                </p:dataTable>
-                            </p:overlayPanel>
                         </h:panelGroup>
-                    </h:panelGroup>
+                    </h:panelGrid>
                 </h:panelGrid>
             </h:panelGrid>
             <!-- Right Column -->
@@ -843,6 +724,7 @@
                 window.event.cancelBubble = true;
             }
         }
+
     </script>
 
 </ui:composition>

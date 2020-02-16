@@ -400,24 +400,5 @@ var commonFunctions = {
             // removing the identifier class on mouse out
             this.className = this.className.replace(identifierClass, "").trim()
         })
-    },
-    /**
-     * Sets the scrollspeet to an custom scrollbar
-     *
-     * @param id
-     * @param speed
-     * @param sensor
-     * @returns
-     */
-    initializeCustomScrollPanel: function (id, speed = 100, sensor = true) {
-
-        var idDataTbl = getAlteredID(id);
-
-        $(idDataTbl).jScrollPane({
-            mouseWheelSpeed: speed,
-            resizeSensor: sensor,
-            autoReinitialise: !sensor,
-        });
     }
-
 }
