@@ -5,9 +5,9 @@ import com.patho.main.model.preset.MaterialPreset
 import javassist.tools.rmi.Sample
 
 /**
- *  Interface for material select inputs (materialSelectTable.xhtml)
+ *  Interface for material select inputs (materialSelectComponent.xhtml)
  */
-interface IMaterialSelectTable {
+interface IMaterialSelectComponent {
 
     /**
      * List of samples

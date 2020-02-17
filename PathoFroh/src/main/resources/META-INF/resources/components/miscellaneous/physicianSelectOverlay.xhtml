@@ -23,75 +23,79 @@
     <!--            process="contentForm:#{cc.attrs.clientId}:contentDatatable"-->
     <!--            listener="#{diagnosisView.surgeons.onSelect()}"-->
     <!--            oncomplete="PF('${cc.attrs.widgetVar}').hide();"/>-->
-    <composite:clientBehavior event="rowSelect" name="rowSelect" targets="#{cc.clientId}:content:datatable"
+    <composite:clientBehavior event="rowSelect" name="rowSelect" targets="#{cc.id}:datatable"
                               default="true"/>
 
 </composite:interface>
 
 <composite:implementation>
 
-    <h:outputScript library="scripts" name="widgets/PhysicianSelectOverlay.js"/>
+    <h:outputScript library="scripts" name="widgets/DatatableOverlayExtend.js"/>
 
-    <!-- physician overlay panel -->
-    <p:overlayPanel
-            id="#{cc.attrs.widgetVar}"
-            styleClass="histoOverlayPanel"
-            widgetVar="#{cc.attrs.widgetVar}" hideEffect="fade"
-            style="width:500px" hideEvent="mousedown" showEvent="none"
-            onShow="#{cc.attrs.widgetVar}_onShow()"
-            onkeypress="return false;">
-        <h:panelGroup id="Content" layout="block">
-            <!-- datatable -->
-            <p:dataTable id="datatable"
-                         widgetVar="#{cc.attrs.widgetVar}_datatable"
-                         disabledSelection="#{physicianSelector.contactOfTask}"
-                         selection="#{cc.attrs.source.selectedPhysician}"
-                         selectionMode="single"
-                         value="#{cc.attrs.source.physicians}"
-                         var="physicianSelector" styleClass="defaultHistoDataTable"
-                         scrollable="true" scrollHeight="200"
-                         rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
-                !-- name -->
-                <p:column id="nameColumn" style="width:auto"
-                          filterValue="#{cc.attrs.source.filter}"
-                          filterBy="#{physicianSelector.physician.person.getFullName()}"
-                          filterMatchMode="contains">
-                    <h:outputText
-                            style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
-                            value="#{physicianSelector.physician.person.getFullName()}"/>
-                </p:column>
+    <div id="#{cc.clientId}">
+        <p:overlayPanel
+                id="overlay"
+                styleClass="histoOverlayPanel"
+                widgetVar="#{cc.attrs.widgetVar}"
+                hideEffect="fade"
+                style="width:500px"
+                hideEvent="mousedown"
+                showEvent="none"
+                onShow="#{cc.attrs.clientId}_onShow()"
+                onkeypress="return false;">
 
-                <!-- role -->
-                <p:column style="width: 30%">
-                    <h:outputText
-                            style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
-                            value="#{physicianSelector.physician.clinicRole}"/>
-                </p:column>
+            <h:panelGroup id="content">
+                <p:dataTable id="datatable"
+                             widgetVar="#{cc.attrs.widgetVar}_datatable"
+                             disabledSelection="#{physicianSelector.contactOfTask}"
+                             selection="#{cc.attrs.source.selectedPhysician}"
+                             selectionMode="single"
+                             value="#{cc.attrs.source.physicians}"
+                             var="physicianSelector" styleClass="defaultHistoDataTable"
+                             scrollable="true" scrollHeight="200"
+                             rowKey="#{physicianSelector.id}" rowIndexVar="rowId">
+                    !-- name -->
+                    <p:column id="nameColumn" style="width:auto"
+                              filterValue="#{cc.attrs.source.filter}"
+                              filterBy="#{physicianSelector.physician.person.getFullName()}"
+                              filterMatchMode="contains">
+                        <h:outputText
+                                style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
+                                value="#{physicianSelector.physician.person.getFullName()}"/>
+                    </p:column>
 
-                <!-- already selected -->
-                <p:column style="width:5%; text-align:center;">
-                    <f:facet name="header">
-                        <i class="fa fa-check-square-o"/>
-                    </f:facet>
+                    <!-- role -->
+                    <p:column style="width: 30%">
+                        <h:outputText
+                                style="#{physicianSelector.contactOfTask ? 'opacity: 0.3;' : ''}"
+                                value="#{physicianSelector.physician.clinicRole}"/>
+                    </p:column>
 
-                    <ui:fragment rendered="#{physicianSelector.contactOfTask}">
-                        <i class="fa fa-check icon-green"/>
-                    </ui:fragment>
-                </p:column>
+                    <!-- already selected -->
+                    <p:column style="width:5%; text-align:center;">
+                        <f:facet name="header">
+                            <i class="fa fa-check-square-o"/>
+                        </f:facet>
 
-            </p:dataTable>
+                        <ui:fragment rendered="#{physicianSelector.contactOfTask}">
+                            <i class="fa fa-check icon-green"/>
+                        </ui:fragment>
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup>
 
             <!-- command for updating the content-->
-            <p:remoteCommand update="#{cc.attrs.widgetVar}" name="#{cc.attrs.widgetVar}_onShow"
+            <p:remoteCommand update="content" name="#{cc.attrs.clientId}_onShow"
                              actionListener="#{cc.attrs.source.onShow}"/>
-        </h:panelGroup>
-    </p:overlayPanel>
+        </p:overlayPanel>
 
-    <script type="application/javascript">
-        $(document).ready(function () {
-            selectPhysicianOverlay.init('#{cc.attrs.widgetVar}');
-        });
-    </script>
+        <script type="application/javascript">
+            $(document).ready(function () {
+                datatableOverlayExtend.init('#{cc.attrs.widgetVar}');
+            });
+        </script>
+    </div>
 
 </composite:implementation>
 </html>

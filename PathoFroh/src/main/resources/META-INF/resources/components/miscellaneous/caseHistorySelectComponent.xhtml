@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:hm="http://java.sun.com/jsf/composite/components/miscellaneous">
+
+<composite:interface>
+    <!-- source type: com.patho.main.util.ui.jsfcomponents.IMaterialSelectOverlay -->
+    <composite:attribute name="source" required="true"
+                         type="com.patho.main.util.ui.jsfcomponents.ICaseHistoryComponent"/>
+
+
+    <composite:attribute name="editable" required="true" default="false"/>
+
+    <!-- widget var-->
+    <composite:attribute name="widgetVar" required="true"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <div id="#{cc.attrs.clientId}">
+
+        <p:inputTextarea styleClass="customBackground"
+                         value="#{cc.attrs.source.task.caseHistory}"
+                         title="#{msg['body.diagnosis.story.watermark']}"
+                         disabled="#{!cc.attrs.editable}"
+                         id="caseHistoryInput" style="width:90%"
+                         onclick="PF('#{cc.attrs.widgetVar}_caseHistoryOverlay').showAndFocus('#{component.clientId}', #{cc.attrs.widgetVar}_submitCustomCaseHistory)"
+                         onkeypress="PF('caseHistoryOverlay').hide();">
+            <p:ajax event="change" process="@this"
+                    listener="#{cc.attrs.source.save(cc.attrs.source.task, 'log.task.edit.caseHistory',cc.attrs.source.task.caseHistory)}"/>
+        </p:inputTextarea>
+
+        <hm:caseHistorySelectOverlay widgetVar="#{cc.attrs.widgetVar}_caseHistoryOverlay"
+                                     id="caseHistoryOverlay"
+                                     source="#{cc.attrs.source.caseHistory}">
+            <p:ajax event="rowSelect" update="#{cc.attrs.clientId}:caseHistoryInput"
+                    process="@this #{cc.attrs.clientId}:caseHistoryOverlay:content"
+                    partialSubmit="true"
+                    listener="#{cc.attrs.source.updateCaseHistoryWithName(cc.attrs.source.task, cc.attrs.source.caseHistory.selectedItem.value,'log.task.edit.caseHistory',cc.attrs.source.caseHistory.selectedItem.value)}"
+                    oncomplete="PF('#{cc.attrs.widgetVar}_caseHistoryOverlay').hide();"/>
+        </hm:caseHistorySelectOverlay>
+
+        <p:remoteCommand name="#{cc.attrs.widgetVar}_submitCustomCaseHistory"
+                         update="#{cc.attrs.clientId}:caseHistoryInput"
+                         process="@this #{cc.attrs.clientId}:caseHistoryOverlay:content"
+                         partialSubmit="true"
+                         actionListener="#{cc.attrs.source.updateCaseHistoryWithName(cc.attrs.source.task, cc.attrs.source.caseHistory.filter,'log.task.edit.caseHistory',cc.attrs.source.caseHistory.filter)}"
+                         oncomplete="PF('#{cc.attrs.widgetVar}_caseHistoryOverlay').hide();">
+        </p:remoteCommand>
+    </div>
+
+</composite:implementation>
+</html>

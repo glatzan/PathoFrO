@@ -10,12 +10,9 @@ import com.patho.main.model.preset.MaterialPreset
 import com.patho.main.service.impl.SpringContextBridge
 import com.patho.main.service.impl.SpringSessionContextBridge
 import com.patho.main.util.bearer.SimplePhysicianBearer
-import com.patho.main.util.ui.jsfcomponents.ICaseHistorySelectOverlay
-import com.patho.main.util.ui.jsfcomponents.IMaterialSelectOverlay
-import com.patho.main.util.ui.jsfcomponents.IMaterialSelectTable
-import com.patho.main.util.ui.jsfcomponents.IPhysicianSelectOverlay
+import com.patho.main.util.ui.jsfcomponents.*
 
-abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectTable {
+abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectComponent, ICaseHistoryComponent {
 
     /**
      * Selected material presets
@@ -73,7 +70,7 @@ abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectTable {
     /**
      * Object for changing the case history by overlay
      */
-    open val caseHistory = object : ICaseHistorySelectOverlay {
+    override val caseHistory = object : ICaseHistorySelectOverlay {
 
         override var selectedItem: ListItem? = null
 
@@ -146,7 +143,7 @@ abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectTable {
     /**
      * Updates the case history and saves the task
      */
-    open fun updateCaseHistoryWithName(task: Task, caseHistory: String, resourcesKey: String, vararg arr: Any) {
+    override fun updateCaseHistoryWithName(task: Task, caseHistory: String, resourcesKey: String, vararg arr: Any) {
         logger.debug("Updating case History setting to $caseHistory")
         task.caseHistory = caseHistory
         save(task, resourcesKey, *arr)

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<composite:interface>
+    <!-- source type: com.patho.main.util.ui.jsfcomponents.IMaterialSelectOverlay -->
+    <composite:attribute name="diagnosis" required="true"
+                         type="com.patho.main.model.patient.Diagnosis"/>
+
+    <!-- editable -->
+    <composite:attribute name="editable" required="true" default="false"/>
+
+    <!-- widget var-->
+    <composite:attribute name="widgetVar" required="true"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <div class="ui-g ui-g-nopad" id="#{cc.attrs.clientId}">
+
+        <!-- ##################### name and summary ##################### -->
+        <div class="ui-g-10">
+            <h:outputLabel
+                    value="#{msg['body.diagnosis.sample']} #{cc.attrs.diagnosis.sample.sampleID}"/>
+            <h:panelGroup>
+                <!-- copy diagnosis text -->
+                <p:commandLink style="margin-left:20px;"
+                               disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision) or cc.attrs.diagnosis.diagnosisPrototype.extendedDiagnosisText eq ''}"
+                               title="#{cc.attrs.diagnosis.diagnosisPrototype.extendedDiagnosisText eq '' ? msg['body.diagnosis.histologicalRecordPreset.text.none'] : msg['body.diagnosis.histologicalRecordPreset.text']}"
+                               rendered="#{cc.attrs.diagnosis.diagnosisPrototype ne null}"
+                               process="@this"
+                               actionListener="#{diagnosisView.setSelectedDiagnosis(cc.attrs.diagnosis)}"
+                               oncomplete="copyHistologicalRecordCommand()">
+                    <i class="fa fa-copy"/>
+                </p:commandLink>
+                <!-- commandlink will set the selected diagnosis, this will call the function -->
+                <p:remoteCommand
+                        actionListener="#{diagnosisView.copyHistologicalRecord(diagnosisView.selectedDiagnosis)}"
+                        update="contentForm:contentPanel" name="copyHistologicalRecordCommand"/>
+            </h:panelGroup>
+        </div>
+        <div class="ui-g-10">
+            <h:outputLabel value="#{msg['body.diagnosis.malign']}"/>
+            <p:selectBooleanCheckbox value="#{cc.attrs.diagnosis.malign}"
+                                     disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
+                                     style="margin:3px 0px 0px 3px;">
+                <p:ajax event="change"
+                        listener="#{diagnosisView.save(cc.attrs.diagnosis.task, 'log.diagnosis.edit.malign',cc.attrs.diagnosis,cc.attrs.diagnosis.malign)}"/>
+            </p:selectBooleanCheckbox>
+        </div>
+        <div class="ui-g-12">
+            <!-- diagnosis text -->
+            <p:inputTextarea value="#{diagnosis.diagnosis}"
+                             onkeypress="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"
+                             onclick="commonFunctions.showAndUpdateOverlayPanel('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}', '#{component.clientId}' , null, 'diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}', 'contentForm:diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}:diagnosisColumn:filter',submitNewCustomDiagnosis#{varCounterOuter.index}#{varCounterInner.index});"
+                             filterDelay="50"
+                             id="diagnosisText#{varCounterOuter.index}#{varCounterInner.index}"
+                             disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
+                             style="width:99%">
+                <p:watermark
+                        for="diagnosisText#{varCounterOuter.index}#{varCounterInner.index}"
+                        value="#{msg['body.receiptlog.tab.diangonsis.data.diangosis.watermark']}"/>
+                <f:ajax event="change" execute="@this"
+                        listener="#{diagnosisView.save(diagnosis.task, 'log.diagnosis.edit.diagnosisText',diagnosis,diagnosis.diagnosis)}"/>
+            </p:inputTextarea>
+        </div>
+    </div>
+</composite:implementation>
+</html>

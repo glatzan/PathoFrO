@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:hm="http://java.sun.com/jsf/composite/components/miscellaneous">
+
+<composite:interface>
+    <!-- source for physicians -->
+    <composite:attribute name="physicanSource" required="true"
+                         type="com.patho.main.util.ui.jsfcomponents.IPhysicianSelectOverlay"/>
+
+    <!-- primary contact -->
+    <composite:attribute name="primaryContact" required="true"
+                         type="com.patho.main.model.person.Person"/>
+
+    <!-- other contacts with the same role, list of persons-->
+    <composite:attribute name="otherContactsOfSameRole" required="true"
+                         type="java.util.List"/>
+
+    <!-- editable -->
+    <composite:attribute name="editable" required="true" default="false"/>
+
+    <!-- widget var-->
+    <composite:attribute name="widgetVar" required="true"/>
+
+    <!-- icon for add button-->
+    <composite:attribute name="addIcon" required="false" default="fa-eye"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <div id="#{cc.attrs.clientId}" class="ui-g ui-g-nopad">
+        <div class="ui-g-6 vCenter">
+            <!-- name -->
+            <h:outputLabel
+                    value="#{cc.attrs.primaryContact.fullName}"/>
+
+            <!-- display more than one private physician -->
+            <hm:physiciansShowAddtitional
+                    persons="#{cc.attrs.otherContactsOfSameRole}"
+                    widgetVar="#{cc.attrs.widgetVar}_otherphysicians"/>
+        </div>
+        <div class="ui-g-6 vCenter">
+            <!--  add private physician -->
+            <p:commandLink
+                    partialSubmit="@this"
+                    process="@this"
+                    onclick="PF('#{cc.attrs.widgetVar}_privatePhysicianOverlay').showAndFocus('#{component.clientId}')"
+                    title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
+                    disabled="#{!cc.attrs.editable}">
+                <i class="fa fa-fw #{cc.attrs.addIcon}"/>
+            </p:commandLink>
+
+            <!-- private physician overlay panel -->
+            <hm:physicianSelectOverlay source="#{cc.attrs.physicanSource}"
+                                       widgetVar="#{cc.attrs.widgetVar}_privatePhysicianOverlay"
+                                       id="privatePhysicianOverlay">
+                <p:ajax event="rowSelect"
+                        partialSubmit="true"
+                        update="contentForm:contentPanel"
+                        process="@this #{cc.attrs.clientId}:privatePhysicianOverlay:content"
+                        listener="#{cc.attrs.physicanSource.onSelect()}"
+                        oncomplete="PF('#{cc.attrs.widgetVar}_privatePhysicianOverlay').hide();"/>
+            </hm:physicianSelectOverlay>
+        </div>
+    </div>
+</composite:implementation>
+</html>

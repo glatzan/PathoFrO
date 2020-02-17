@@ -11,7 +11,7 @@
 <composite:interface>
     <!-- source type: com.patho.main.util.ui.jsfcomponents.IMaterialSelectOverlay -->
     <composite:attribute name="source" required="true"
-                         type="com.patho.main.util.ui.jsfcomponents.IMaterialSelectTable"/>
+                         type="com.patho.main.util.ui.jsfcomponents.IMaterialSelectComponent"/>
 
 
     <composite:attribute name="editable" required="true" default="false"/>
@@ -24,16 +24,16 @@
 
     <div id="#{cc.attrs.clientId}">
 
-        <div class="ui-g">
+        <div class="ui-g ui-g-nopad">
             <!-- material -->
             <c:forEach items="#{cc.attrs.source.task.samples}"
                        var="sample" varStatus="loopCount">
 
-                <div class="ui-g-3">
+                <div class="ui-g-4 vCenter">
                     <h:outputLabel
                             value="#{msg['body.diagnosis.sample']} #{sample.sampleID}"/>
                 </div>
-                <div class="ui-g-9">
+                <div class="ui-g-8">
                     <!-- Material Name -->
                     <p:inputText value="#{sample.material}"
                                  id="materialInput#{loopCount.index}"
@@ -41,7 +41,7 @@
                                  tabindex="1" styleClass="customBackground"
                                  onclick="PF('#{cc.attrs.widgetVar}_materialOverlay').showAndFocus('#{component.clientId}', #{cc.attrs.widgetVar}_submitCustomMaterial)"
                                  onfocus="selectSample#{loopCount.index}();"
-                                 style="width:200px;float:right;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}">
+                                 style="width:200px;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}">
 
                         <p:ajax event="change" process="@this"
                                 listener="#{cc.attrs.source.save(sample.task, 'log.sample.edit.material',sample,sample.material)}"/>
@@ -59,14 +59,14 @@
                                   widgetVar="#{cc.attrs.widgetVar}_materialOverlay">
             <p:ajax event="rowSelect" update="contentForm:contentPanel"
                     partialSubmit="true"
-                    process="@this #{cc.attrs.clientId}:materialOverlay:datatable"
+                    process="@this #{cc.attrs.clientId}:materialOverlay:content"
                     listener="#{cc.attrs.source.updateMaterialOfSample(cc.attrs.source.material.parentSample, cc.attrs.source.material.selectedMaterial,cc.attrs.source.material.selectedMaterial.name,'log.patient.task.sample.material.update',cc.attrs.source.material.parentSample, cc.attrs.source.material.selectedMaterial.name)}"
                     oncomplete="PF('#{cc.attrs.widgetVar}_materialOverlay').hide();"/>
         </hm:materialSelectOverlay>
 
         <p:remoteCommand name="#{cc.attrs.widgetVar}_submitCustomMaterial"
                          partialSubmit="true"
-                         process="@this #{cc.attrs.clientId}:materialOverlay:datatable"
+                         process="@this #{cc.attrs.clientId}:materialOverlay:content"
                          update="contentForm:contentPanel"
                          actionListener="#{cc.attrs.source.updateMaterialOfSample(cc.attrs.source.material.parentSample, null, cc.attrs.source.material.filter,'log.patient.task.sample.material.update',cc.attrs.source.material.parentSample,  cc.attrs.source.material.filter)}"
                          oncomplete="PF('#{cc.attrs.widgetVar}_materialOverlay').hide();"/>

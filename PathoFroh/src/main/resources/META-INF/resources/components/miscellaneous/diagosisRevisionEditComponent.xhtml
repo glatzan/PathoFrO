@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<composite:interface>
+    <!-- source type: com.patho.main.util.ui.jsfcomponents.IMaterialSelectOverlay -->
+    <composite:attribute name="diagnosisRevison" required="true"
+                         type="com.patho.main.model.patient.DiagnosisRevision"/>
+
+    <!-- editable -->
+    <composite:attribute name="editable" required="true" default="false"/>
+
+    <!-- widget var-->
+    <composite:attribute name="widgetVar" required="true"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <h:outputScript library="scripts" name="widgets/DiagnosisContainerComponentExtend.js"/>
+
+    <div class="ui-g ui-g-nopad" id="#{cc.attrs.clientId}">
+
+        <!-- ##################### name and summary ##################### -->
+        <!-- diagonsis name-->
+        <div class="ui-g-2">
+
+            <div style="width: 98%; min-height:16px; #{cc.attrs.diagnosisRevison.name == '' ? 'background: #fcf1b8' : ''}"
+                 onclick="PF('#{cc.attrs.widgetVar}_overlay').showAndFocus('#{component.clientId}')">
+                <h:outputLabel value="#{cc.attrs.diagnosisRevison.name}"/>
+            </div>
+
+            <p:overlayPanel id="overlay"
+                            onHide="#{cc.attrs.widgetVar}_save()"
+                            styleClass="histoOverlayPanel"
+                            widgetVar="#{cc.attrs.widgetVar}_overlay"
+                            hideEffect="fade" hideEvent="none" showEvent="none">
+                <h:panelGroup id="content">
+                    <p:inputText
+                            id="diagnosisName"
+                            disabled="#{!cc.attrs.editable}"
+                            value="#{cc.attrs.diagnosisRevison.name}"/>
+                </h:panelGroup>
+            </p:overlayPanel>
+
+            <p:remoteCommand
+                    oncomplete="alert('')"
+                    actionListener="#{diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.name',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.name)}"
+                    name="#{cc.attrs.widgetVar}_save"
+                    update="#{cc.attrs.clientId}"/>
+
+        </div>
+        <!-- summary text -->
+        <div class="ui-g-10">
+            <p:inputTextarea style="width:99%" id="text" rows="15"
+                             onfocus="disabledEventPropagation(event);"
+                             disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(cc.attrs.diagnosisRevison)}"
+                             value="#{cc.attrs.diagnosisRevison.text}">
+                <p:ajax event="keyup" process="@this" delay="250"
+                        listener="#{diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.histologicalRecord',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.text)}"/>
+            </p:inputTextarea>
+        </div>
+
+        <!-- ##################### diagnoses ##################### -->
+        <div class="ui-g-2">
+            <h:outputLabel value="#{msg['body.diagnosis.diagnoses']}"/>
+        </div>
+        <div class="ui-g-10">
+
+        </div>
+
+        <script type="application/javascript">
+            $(document).ready(function () {
+                diagnosisContainerComponentExtend.init('#{cc.attrs.widgetVar}');
+            });
+        </script>
+    </div>
+</composite:implementation>
+</html>

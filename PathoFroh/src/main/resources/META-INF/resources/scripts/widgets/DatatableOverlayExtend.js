@@ -1,60 +1,41 @@
 datatableOverlayExtend = {
     init: function (widgetVar) {
+
         if (!PrimeFaces.widgets[widgetVar] || !PrimeFaces.widgets[widgetVar + "_datatable"]) {
             PrimeFaces.error("Widget for var '" + widgetVar + "' not available!");
             return
         }
 
+        // overwrite refresh
+        PrimeFaces.widgets[widgetVar + "_datatable"].crefresh = function (cfg) {
+            this._refresh(cfg);
+            if (PrimeFaces.widgets[widgetVar + "_datatable"].executeOnEnter != null) {
+                let filters = this.jq.find("[id$='filter']");
+                filters.off("keydown");
+                filters.on("keydown", function (e) {
+                    if (e.which === 13) {
+                        e.preventDefault();
+                        PrimeFaces.widgets[widgetVar + "_datatable"].executeOnEnter();
+                        return false;
+                    }
+                });
+            }
+        };
+
+
+        if(PrimeFaces.widgets[widgetVar + "_datatable"]._refresh == null) {
+            PrimeFaces.widgets[widgetVar + "_datatable"]._refresh = PrimeFaces.widgets[widgetVar + "_datatable"].refresh;
+        }
+
+        PrimeFaces.widgets[widgetVar + "_datatable"].refresh = PrimeFaces.widgets[widgetVar + "_datatable"].crefresh
+
+        // show and focus
         PrimeFaces.widgets[widgetVar].showAndFocus = function (parentID, executeOnEnter) {
             this.show(parentID);
-            console.log("----")
-            console.log(executeOnEnter)
-            // PF(widgetVar + "_datatable").clearFilters();
-            // PF(widgetVar + "_datatable").unselectAllRows();
-
-            console.log(PF(widgetVar + "_datatable"))
-
-            // let filters = PF(widgetVar + "_datatable").jq.find("[id$='filter']");
-            PF(widgetVar + "_datatable").jq.find("[id$='filter']").on("keydown",  function(e){alert('afd')});
-            // console.log("----1")
-            //
-            // console.log(filters)
-            // filters[0].value = "asdsdas"
-            //
-            // // if (filters.length > 0) {
-            //     setTimeout(function () {
-            //         // filters[0].focus();
-            //         //filters[0].value = filters[0].value;
-            //         filters[0].value = "asdsdas"
-            //     }, 500);
-            //
-            // // filters.off("keydown");
-            // filters.on("keydown", function (e) {
-            //     console.log("asfdasdfaaa")
-            //     if (e.which === 13) {
-            //         e.preventDefault();
-            //         console.log("was")
-            //         //executeOnEnter();
-            //         return false;
-            //     }
-            // });
-
-                // console.log("----2")
-                // if (executeOnEnter != null) {
-                //     console.log(filters)
-                //     console.log("----3")
-                //     filters.off("keydown");
-                //     filters.on("keypress", function (e) {
-                //         console.log("asfdasdfaaa")
-                //         if (e.which === 13) {
-                //             e.preventDefault();
-                //             //executeOnEnter();
-                //             return false;
-                //         }
-                //     });
-                // }
-            // }
-
+            PrimeFaces.widgets[widgetVar + "_datatable"].clearFilters();
+            PrimeFaces.widgets[widgetVar + "_datatable"].unselectAllRows();
+            PrimeFaces.widgets[widgetVar + "_datatable"].executeOnEnter = executeOnEnter
         };
+
     }
 };

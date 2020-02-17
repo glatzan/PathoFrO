@@ -23,7 +23,7 @@
     <!--            listener="#{diagnosisView.surgeons.onSelect()}"-->
     <!--            oncomplete="PF('${cc.attrs.widgetVar}').hide();"/>-->
     <composite:clientBehavior event="rowSelect" name="rowSelect"
-                              targets="datatable"
+                              targets="#{cc.id}:datatable"
                               default="true"/>
 
 </composite:interface>
@@ -39,29 +39,27 @@
                         onShow="#{cc.attrs.clientId}_onShow()"
                         showEvent="none" onkeypress="return false;">
 
-            <p:dataTable id="datatable"
-                         widgetVar="#{cc.attrs.widgetVar}_datatable" filterDelay="50"
-                         value="#{cc.attrs.source.presets}"
-                         var="item" styleClass="defaultHistoDataTable" scrollable="true"
-                         scrollHeight="200" rowKey="#{item.id}"
-                         selection="#{cc.attrs.source.selectedMaterial}"
-                         selectionMode="single">
+            <h:panelGroup id="content">
+                <p:dataTable id="datatable"
+                             widgetVar="#{cc.attrs.widgetVar}_datatable" filterDelay="50"
+                             value="#{cc.attrs.source.presets}"
+                             var="item" styleClass="defaultHistoDataTable" scrollable="true"
+                             scrollHeight="200" rowKey="#{item.id}"
+                             selection="#{cc.attrs.source.selectedMaterial}"
+                             selectionMode="single">
 
-                <p:column filterBy="#{item.name}" filterMatchMode="contains"
-                          filterValue="#{cc.attrs.source.filter}"
-                          id="valueColumn">
-                    <h:outputText value="#{item.name}"/>
-                </p:column>
+                    <p:column filterBy="#{item.name}" filterMatchMode="contains"
+                              filterValue="#{cc.attrs.source.filter}"
+                              id="valueColumn">
+                        <h:outputText value="#{item.name}"/>
+                    </p:column>
 
-            </p:dataTable>
+                </p:dataTable>
+            </h:panelGroup>
 
             <!-- command for updating the content-->
-            <p:remoteCommand update="#{cc.attrs.clientId}:datatable" name="#{cc.attrs.clientId}_onShow"
+            <p:remoteCommand update="content" name="#{cc.attrs.clientId}_onShow"
                              actionListener="#{cc.attrs.source.onShow}"/>
-
-            <p:defaultCommand target="_submit" id="test" />
-
-            <p:remoteCommand id="_submit" name="_submit" oncomplete="alert('----')"/>
 
         </p:overlayPanel>
 
@@ -71,7 +69,5 @@
             });
         </script>
     </div>
-
-
 </composite:implementation>
 </html>
