@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+>
 
 <!-- Compontent shows the number of addtional physicians and if the mouse is over the letterAvatar an overlay with all names is shown-->
 <composite:interface>
@@ -13,7 +13,7 @@
     <composite:attribute name="persons" required="true"
                          type="java.util.List"/>
 
-    <composite:attribute name="cID" required="true"/>
+    <composite:attribute name="widgetVar" required="true"/>
 </composite:interface>
 
 <composite:implementation>
@@ -21,14 +21,14 @@
 
         <!-- number of physicians -->
         <h:panelGroup styleClass="histo_gravatar" style="margin-left:10px;"
-                      id="#{cc.attrs.cID}"
+                      id="#{cc.attrs.widgetVar}"
                       rendered="#{cc.attrs.persons.size() > 1}">
             <h:outputLabel value="+#{cc.attrs.persons.size()-1}"/>
         </h:panelGroup>
 
         <!-- overlay list-->
-        <p:overlayPanel for="#{cc.attrs.cID}" showEvent="mouseover" hideEvent="mouseout"
-                        id="#{cc.attrs.clientID}_overlay"
+        <p:overlayPanel for="#{cc.attrs.widgetVar}" showEvent="mouseover" hideEvent="mouseout"
+                        id="#{cc.attrs.widgetVar}_overlay"
                         rendered="#{cc.attrs.persons.size() > 1}">
             <p:dataTable style="width: 300px"
                          value="#{cc.attrs.persons}"

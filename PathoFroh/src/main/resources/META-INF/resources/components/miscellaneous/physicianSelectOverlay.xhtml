@@ -23,7 +23,7 @@
     <!--            process="contentForm:#{cc.attrs.clientId}:contentDatatable"-->
     <!--            listener="#{diagnosisView.surgeons.onSelect()}"-->
     <!--            oncomplete="PF('${cc.attrs.widgetVar}').hide();"/>-->
-    <composite:clientBehavior event="rowSelect" name="rowSelect" targets="#{cc.attrs.clientId}:#{cc.attrs.widgetVar}_contentDatatable"
+    <composite:clientBehavior event="rowSelect" name="rowSelect" targets="#{cc.clientId}:content:datatable"
                               default="true"/>
 
 </composite:interface>
@@ -38,11 +38,11 @@
             styleClass="histoOverlayPanel"
             widgetVar="#{cc.attrs.widgetVar}" hideEffect="fade"
             style="width:500px" hideEvent="mousedown" showEvent="none"
-            onShow="#{cc.attrs.clientId}_onShow()"
+            onShow="#{cc.attrs.widgetVar}_onShow()"
             onkeypress="return false;">
-        <div id="#{cc.attrs.clientId}">
+        <h:panelGroup id="Content" layout="block">
             <!-- datatable -->
-            <p:dataTable id="#{cc.attrs.widgetVar}_contentDatatable"
+            <p:dataTable id="datatable"
                          widgetVar="#{cc.attrs.widgetVar}_datatable"
                          disabledSelection="#{physicianSelector.contactOfTask}"
                          selection="#{cc.attrs.source.selectedPhysician}"
@@ -82,8 +82,9 @@
             </p:dataTable>
 
             <!-- command for updating the content-->
-            <p:remoteCommand update="#{cc.attrs.clientId}" name="#{cc.attrs.clientId}_onShow" actionListener="#{cc.attrs.source.onShow}"/>
-        </div>
+            <p:remoteCommand update="#{cc.attrs.widgetVar}" name="#{cc.attrs.widgetVar}_onShow"
+                             actionListener="#{cc.attrs.source.onShow}"/>
+        </h:panelGroup>
     </p:overlayPanel>
 
     <script type="application/javascript">

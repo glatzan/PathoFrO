@@ -128,7 +128,7 @@
                     <hm:caseHistorySelectOverlay id="caseHistoryOverlay" widgetVar="caseHistoryOverlay"
                                                  source="#{receiptLogView.caseHistory}">
                         <p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
-                                process="contentForm:caseHistoryOverlay:caseHistoryOverlay_contentDatatable"
+                                process="contentForm:caseHistoryOverlay:content"
                                 partialSubmit="true"
                                 listener="#{receiptLogView.updateCaseHistoryWithName(receiptLogView.task, receiptLogView.caseHistory.selectedItem.value,'log.task.edit.caseHistory',receiptLogView.caseHistory.selectedItem.value)}"
                                 oncomplete="PF('caseHistoryOverlay').hide();"/>
@@ -136,7 +136,7 @@
 
                     <p:remoteCommand name="submitCustomCaseHistory"
                                      update="contentForm:caseHistoryInput"
-                                     process="@this contentForm:caseHistoryOverlay:caseHistoryOverlay_contentDatatable"
+                                     process="@this contentForm:caseHistoryOverlay:content"
                                      partialSubmit="true"
                                      actionListener="#{receiptLogView.updateCaseHistoryWithName(receiptLogView.task, receiptLogView.caseHistory.filter,'log.task.edit.caseHistory',receiptLogView.caseHistory.filter)}"
                                      oncomplete="PF('caseHistoryOverlay').hide();">
@@ -215,7 +215,7 @@
                                           widgetVar="materialOverlay"
                                           id="materialOverlay">
                     <p:ajax event="rowSelect" update="contentForm:contentPanel"
-                            process="contentForm:materialOverlay:materialOverlay_contentDatatable"
+                            process="contentForm:materialOverlay:content"
                             partialSubmit="true"
                             listener="#{receiptLogView.updateMaterialOfSample(receiptLogView.material.parentSample, receiptLogView.material.selectedMaterial,receiptLogView.material.selectedMaterial.name,'log.patient.task.sample.material.update',receiptLogView.material.parentSample, receiptLogView.material.selectedMaterial.name)}"
                             oncomplete="PF('materialOverlay').hide();"/>
@@ -223,7 +223,7 @@
 
                 <p:remoteCommand name="submitCustomMaterial"
                                  partialSubmit="true"
-                                 process="@this contentForm:materialOverlay:materialOverlay_contentDatatable"
+                                 process="@this contentForm:materialOverlay:content"
                                  update="contentForm:contentPanel"
                                  actionListener="#{receiptLogView.updateMaterialOfSample(receiptLogView.material.parentSample, null, receiptLogView.material.filter,'log.patient.task.sample.material.update',receiptLogView.material.parentSample,  receiptLogView.material.filter)}"
                                  oncomplete="PF('materialOverlay').hide();"/>

@@ -13,66 +13,64 @@
     <composite:attribute name="source" required="true"
                          type="com.patho.main.util.ui.jsfcomponents.IMaterialSelectTable"/>
 
-    <!-- widget var-->
+
     <composite:attribute name="editable" required="true" default="false"/>
 
+    <!-- widget var-->
+    <composite:attribute name="widgetVar" required="true"/>
 </composite:interface>
 
 <composite:implementation>
 
-    <h:panelGroup id="#{cc.attrs.clientId}">
-        <h:panelGrid columns="1"
-                     styleClass="defaultHistoHiddenTableContainer">
+    <div id="#{cc.attrs.clientId}">
 
+        <div class="ui-g">
             <!-- material -->
             <c:forEach items="#{cc.attrs.source.task.samples}"
                        var="sample" varStatus="loopCount">
 
-                <h:panelGrid columns="2" styleClass="defaultHistoTable"
-                             columnClasses="columnWidth75,">
-
+                <div class="ui-g-3">
                     <h:outputLabel
                             value="#{msg['body.diagnosis.sample']} #{sample.sampleID}"/>
+                </div>
+                <div class="ui-g-9">
+                    <!-- Material Name -->
+                    <p:inputText value="#{sample.material}"
+                                 id="materialInput#{loopCount.index}"
+                                 disabled="#{!cc.attrs.editable}"
+                                 tabindex="1" styleClass="customBackground"
+                                 onclick="PF('#{cc.attrs.widgetVar}_materialOverlay').showAndFocus('#{component.clientId}', #{cc.attrs.widgetVar}_submitCustomMaterial)"
+                                 onfocus="selectSample#{loopCount.index}();"
+                                 style="width:200px;float:right;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}">
 
-                    <h:panelGroup>
-                        <!-- Material Name -->
-                        <p:inputText value="#{sample.material}"
-                                     id="materialInput#{loopCount.index}"
-                                     disabled="#{!cc.attrs.editable}"
-                                     tabindex="1" styleClass="customBackground"
-                                     onclick="PF('materialOverlay').showAndFocus('#{component.clientId}', submitCustomMaterial)"
-                                     onfocus="selectSample#{loopCount.index}();"
-                                     style="width:200px;float:right;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}">
+                        <p:ajax event="change" process="@this"
+                                listener="#{cc.attrs.source.save(sample.task, 'log.sample.edit.material',sample,sample.material)}"/>
+                    </p:inputText>
 
-                            <p:ajax event="change" process="@this"
-                                    listener="#{cc.attrs.source.save(sample.task, 'log.sample.edit.material',sample,sample.material)}"/>
-                        </p:inputText>
+                    <p:remoteCommand actionListener="#{cc.attrs.source.material.setParentSample(sample)}"
+                                     name="selectSample#{loopCount.index}"/>
 
-                        <p:remoteCommand actionListener="#{cc.attrs.source.material.setParentSample(sample)}"
-                                         name="selectSample#{loopCount.index}"/>
-
-                    </h:panelGroup>
-                </h:panelGrid>
+                </div>
             </c:forEach>
-        </h:panelGrid>
+        </div>
 
         <hm:materialSelectOverlay source="#{cc.attrs.source.material}"
-                                  widgetVar="materialOverlay"
-                                  id="materialOverlay">
+                                  id="materialOverlay"
+                                  widgetVar="#{cc.attrs.widgetVar}_materialOverlay">
             <p:ajax event="rowSelect" update="contentForm:contentPanel"
-                    process="#{cc.attrs.clientId}:materialOverlay:materialOverlay_contentDatatable"
                     partialSubmit="true"
+                    process="@this #{cc.attrs.clientId}:materialOverlay:datatable"
                     listener="#{cc.attrs.source.updateMaterialOfSample(cc.attrs.source.material.parentSample, cc.attrs.source.material.selectedMaterial,cc.attrs.source.material.selectedMaterial.name,'log.patient.task.sample.material.update',cc.attrs.source.material.parentSample, cc.attrs.source.material.selectedMaterial.name)}"
-                    oncomplete="PF('materialOverlay').hide();"/>
+                    oncomplete="PF('#{cc.attrs.widgetVar}_materialOverlay').hide();"/>
         </hm:materialSelectOverlay>
 
-        <p:remoteCommand name="submitCustomMaterial"
+        <p:remoteCommand name="#{cc.attrs.widgetVar}_submitCustomMaterial"
                          partialSubmit="true"
-                         process="@this #{cc.attrs.clientId}:materialOverlay:materialOverlay_contentDatatable"
+                         process="@this #{cc.attrs.clientId}:materialOverlay:datatable"
                          update="contentForm:contentPanel"
                          actionListener="#{cc.attrs.source.updateMaterialOfSample(cc.attrs.source.material.parentSample, null, cc.attrs.source.material.filter,'log.patient.task.sample.material.update',cc.attrs.source.material.parentSample,  cc.attrs.source.material.filter)}"
-                         oncomplete="PF('materialOverlay').hide();"/>
-    </h:panelGroup>
+                         oncomplete="PF('#{cc.attrs.widgetVar}_materialOverlay').hide();"/>
+    </div>
 
 </composite:implementation>
 </html>

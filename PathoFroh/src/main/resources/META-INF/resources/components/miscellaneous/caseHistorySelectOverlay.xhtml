@@ -5,8 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+>
 
 <composite:interface>
     <!-- source type: com.patho.main.util.ui.jsfcomponents.ISelectPhysicianOverlay -->
@@ -24,7 +23,7 @@
     <!--            listener="#{diagnosisView.surgeons.onSelect()}"-->
     <!--            oncomplete="PF('${cc.attrs.widgetVar}').hide();"/>-->
     <composite:clientBehavior event="rowSelect" name="rowSelect"
-                              targets="#{cc.attrs.clientId}:#{cc.attrs.widgetVar}_contentDatatable"
+                              targets="#{cc.attrs.clientId}:content:datatable"
                               default="true"/>
 
 </composite:interface>
@@ -36,11 +35,11 @@
     <p:overlayPanel id="#{cc.attrs.widgetVar}"
                     styleClass="histoOverlayPanel" widgetVar="#{cc.attrs.widgetVar}"
                     hideEffect="fade" style="width:500px" hideEvent="mousedown"
-                    onShow="#{cc.attrs.clientId}_onShow()"
+                    onShow="#{cc.attrs.widgetVar}_onShow()"
                     showEvent="none" onkeypress="return false;">
 
-        <div id="#{cc.attrs.clientId}">
-            <p:dataTable id="#{cc.attrs.widgetVar}_contentDatatable"
+        <h:panelGroup id="Content" layout="block">
+            <p:dataTable id="datatable"
                          widgetVar="#{cc.attrs.widgetVar}_datatable" filterDelay="50"
                          value="#{cc.attrs.source.items}"
                          var="item" styleClass="defaultHistoDataTable" scrollable="true"
@@ -55,10 +54,10 @@
                 </p:column>
 
             </p:dataTable>
-        </div>
+        </h:panelGroup>
 
         <!-- command for updating the content-->
-        <p:remoteCommand update="#{cc.attrs.clientId}" name="#{cc.attrs.clientId}_onShow"
+        <p:remoteCommand update="#{cc.attrs.widgetVar}" name="#{cc.attrs.widgetVar}_onShow"
                          actionListener="#{cc.attrs.source.onShow}"/>
     </p:overlayPanel>
 
