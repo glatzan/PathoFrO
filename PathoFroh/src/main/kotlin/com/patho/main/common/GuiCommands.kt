@@ -31,12 +31,6 @@ class GuiCommands {
         val OPEN_ADD_DIAGNOSIS_REVISION_DIALOG_FROM_SLIDE_OVERVIEW_DIALOG: String = "clickButtonFromBean('dialogContent:addDiagnosisRevisionFromDialog')"
 
         /**
-         * Opens the copy histological record dialog from diagnosis view
-         */
-        @JvmStatic
-        val OPEN_COPY_HISTOLOGICAL_RECORD_DIALOG_FROM_DIAGNOSIS_VIEW: String = "clickButtonFromBean('contentForm:openDiagnosisRecordDialog')"
-
-        /**
          * Opens the end staining phase dialog from the notification dialog
          */
         @JvmStatic

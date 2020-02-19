@@ -4,19 +4,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:p="http://primefaces.org/ui"
->
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:hm="http://java.sun.com/jsf/composite/components/miscellaneous"
+      xmlns:p="http://primefaces.org/ui">
 
 <composite:interface>
-    <!-- source type: com.patho.main.util.ui.jsfcomponents.IMaterialSelectOverlay -->
     <composite:attribute name="diagnosisRevison" required="true"
                          type="com.patho.main.model.patient.DiagnosisRevision"/>
 
     <!-- editable -->
     <composite:attribute name="editable" required="true" default="false"/>
 
+    <!-- diagnosisRevision is editable -->
+    <composite:attribute name="diagnosisRevisionEditable" required="true" default="false"/>
+
     <!-- widget var-->
     <composite:attribute name="widgetVar" required="true"/>
+
+    <composite:attribute name="diagnosisView" type="com.patho.main.util.ui.jsfcomponents.IDiagnosisViewFunction"
+                         required="true"/>
+
+    <!-- diagnosis preset data -->
+    <composite:attribute name="diagnosisPresetData" type="com.patho.main.util.ui.jsfcomponents.IDiagnosisSelectOverlay"
+                         required="true"/>
 </composite:interface>
 
 <composite:implementation>
@@ -48,20 +59,20 @@
             </p:overlayPanel>
 
             <p:remoteCommand
-                    oncomplete="alert('')"
-                    actionListener="#{diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.name',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.name)}"
+                    actionListener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.name',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.name)}"
                     name="#{cc.attrs.widgetVar}_save"
                     update="#{cc.attrs.clientId}"/>
 
         </div>
+
         <!-- summary text -->
+        <!-- onfocus="disabledEventPropagation(event);"-->
         <div class="ui-g-10">
             <p:inputTextarea style="width:99%" id="text" rows="15"
-                             onfocus="disabledEventPropagation(event);"
                              disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(cc.attrs.diagnosisRevison)}"
                              value="#{cc.attrs.diagnosisRevison.text}">
                 <p:ajax event="keyup" process="@this" delay="250"
-                        listener="#{diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.histologicalRecord',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.text)}"/>
+                        listener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.histologicalRecord',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.text)}"/>
             </p:inputTextarea>
         </div>
 
@@ -70,7 +81,59 @@
             <h:outputLabel value="#{msg['body.diagnosis.diagnoses']}"/>
         </div>
         <div class="ui-g-10">
+            <ui:repeat value="#{cc.attrs.diagnosisRevison.diagnoses}" var="diagnosis" varStatus="diangosisIndex">
+                <hm:diagosisEditComponent diagnosisView="#{cc.attrs.diagnosisView}"
+                                          id="diagnosisEdit#{diangosisIndex.index}"
+                                          update="contentForm:contentPanel"
+                                          diagnosisPresetData="#{cc.attrs.diagnosisPresetData}"
+                                          widgetVar="#{cc.attrs.widgetVar.concat('_diagnosisEdit_').concat(diangosisIndex.index)}"
+                                          editable="#{cc.attrs.editable}" diagnosis="#{diagnosis}"/>
+            </ui:repeat>
+        </div>
 
+        <!-- ##################### ##################### signature ##################### ##################### -->
+        <div class="ui-g-2">
+            <h:outputLabel value="#{msg['body.diagnosis.signature.date']}"/>
+        </div>
+        <div class="ui-g-2">
+            <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
+                        disabled="#{!cc.attrs.diagnosisRevisionEditable}"
+                        id="sigantureDate"
+                        value="#{cc.attrs.diagnosisRevison.signatureDate}">
+                <f:ajax event="dateSelect" partialSubmit="true" update="@this" execute="@this"
+                        listener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.signautreDate',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.signatureDate)}"/>
+                <f:ajax event="change" execute="@this" partialSubmit="true" update="@this"
+                        listener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.signautreDate',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.signatureDate)}"/>
+            </p:calendar>
+        </div>
+        <!-- ##################### physician signature ##################### -->
+        <div class="ui-g-1">
+            <h:outputLabel value="#{msg['body.diagnosis.signature.physician']}"/>
+        </div>
+        <div class="ui-g-3">
+            <hm:signatureComponent diagnosisRevision="#{cc.attrs.diagnosisRevison}"
+                                   physicianList="#{genericViewData.physiciansToSignList}"
+                                   signature="#{cc.attrs.diagnosisRevison.signatureOne}"
+                                   editable="#{cc.attrs.editable}"
+                                   update="contentForm:contentPanel"
+                                   id="signaturePhysician"
+                                   physicianTransformer="#{genericViewData.physiciansToSignListTransformer}"
+                                   diagnosisView="#{diagnosisView}"/>
+        </div>
+        <!-- ##################### consultant signature ##################### -->
+        <div class="ui-g-1">
+            <h:outputLabel
+                    value="#{msg['body.diagnosis.signature.consultant']}"/>
+        </div>
+        <div class="ui-g-3">
+            <hm:signatureComponent diagnosisRevision="#{cc.attrs.diagnosisRevison}"
+                                   physicianList="#{genericViewData.physiciansToSignList}"
+                                   signature="#{cc.attrs.diagnosisRevison.signatureTwo}"
+                                   editable="#{cc.attrs.editable}"
+                                   update="contentForm:contentPanel"
+                                   id="signatureConsultant"
+                                   physicianTransformer="#{genericViewData.physiciansToSignListTransformer}"
+                                   diagnosisView="#{cc.attrs.diagnosisView}"/>
         </div>
 
         <script type="application/javascript">

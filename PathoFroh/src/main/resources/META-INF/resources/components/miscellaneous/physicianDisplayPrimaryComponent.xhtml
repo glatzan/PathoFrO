@@ -33,7 +33,7 @@
 <composite:implementation>
 
     <div id="#{cc.attrs.clientId}" class="ui-g ui-g-nopad">
-        <div class="ui-g-6 vCenter">
+        <div class="ui-g-6 ui-g-vCenter">
             <!-- name -->
             <h:outputLabel
                     value="#{cc.attrs.primaryContact.fullName}"/>
@@ -43,7 +43,7 @@
                     persons="#{cc.attrs.otherContactsOfSameRole}"
                     widgetVar="#{cc.attrs.widgetVar}_otherphysicians"/>
         </div>
-        <div class="ui-g-6 vCenter">
+        <div class="ui-g-6 ui-g-vCenter">
             <!--  add private physician -->
             <p:commandLink
                     partialSubmit="@this"

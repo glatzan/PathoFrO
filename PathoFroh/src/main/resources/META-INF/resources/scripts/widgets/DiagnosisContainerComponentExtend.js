@@ -12,6 +12,9 @@ diagnosisContainerComponentExtend = {
         input.on("keydown", function (e) {
             if (e.which === 13) {
                 e.preventDefault();
+                // fire onHide function
+                if (PrimeFaces.widgets[widgetVar + "_overlay"].cfg != null)
+                    PrimeFaces.widgets[widgetVar + "_overlay"].cfg.onHide();
                 PrimeFaces.widgets[widgetVar + "_overlay"].hide();
                 return false;
             }

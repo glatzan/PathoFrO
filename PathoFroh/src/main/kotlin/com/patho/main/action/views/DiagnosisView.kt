@@ -4,6 +4,7 @@ import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorklistHandler
 import com.patho.main.common.ContactRole
 import com.patho.main.common.GuiCommands
+import com.patho.main.dialog.diagnosis.DiagnosisRecordDialog
 import com.patho.main.model.Signature
 import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
@@ -13,7 +14,10 @@ import com.patho.main.model.person.Person
 import com.patho.main.model.preset.DiagnosisPreset
 import com.patho.main.repository.jpa.PhysicianRepository
 import com.patho.main.service.DiagnosisService
+import com.patho.main.service.impl.SpringSessionContextBridge
 import com.patho.main.util.task.TaskTools
+import com.patho.main.util.ui.jsfcomponents.IDiagnosisSelectOverlay
+import com.patho.main.util.ui.jsfcomponents.IDiagnosisViewFunction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -24,22 +28,23 @@ import java.time.LocalDate
 open class DiagnosisView @Autowired constructor(
         private val physicianRepository: PhysicianRepository,
         private val diagnosisService: DiagnosisService,
-        private val worklistHandler: WorklistHandler) : AbstractEditTaskView() {
+        private val worklistHandler: WorklistHandler,
+        private val diagnosisRecordDialog: DiagnosisRecordDialog) : AbstractEditTaskView(), IDiagnosisViewFunction {
 
-    /**
-     * Array for diagnoses filter
-     */
-    open var diagnosisFilter: Array<Array<String>> = arrayOf<Array<String>>()
+    val diagnoses = object : IDiagnosisSelectOverlay {
 
-    /**
-     * Array for selected reportIntent presets
-     */
-    open var selectedDiagnosisPresets: Array<Array<DiagnosisPreset?>> = arrayOf<Array<DiagnosisPreset?>>()
+        override var selectedDiagnosis: DiagnosisPreset? = null
 
-    /**
-     * Diagnosis for copyFing the diagnosis text
-     */
-    open var selectedDiagnosis: Diagnosis? = null
+        override val diagnoses: List<DiagnosisPreset>
+            get() = SpringSessionContextBridge.services().genericViewData.diagnosisPresets
+
+        override var filter: String = ""
+
+        override fun onShow() {
+            selectedDiagnosis = null
+            filter = ""
+        }
+    }
 
     override fun loadView(task: Task) {
         logger.debug("Loading reportIntent data")
@@ -55,14 +60,6 @@ open class DiagnosisView @Autowired constructor(
                 }
             }
         }
-
-        diagnosisFilter = arrayOf<Array<String>>()
-        selectedDiagnosisPresets = arrayOf<Array<DiagnosisPreset?>>()
-
-        for (revision in task.diagnosisRevisions) {
-            diagnosisFilter += Array<String>(revision.diagnoses.size) { "" }
-            selectedDiagnosisPresets += Array<DiagnosisPreset?>(revision.diagnoses.size) { null }
-        }
     }
 
     /**
@@ -75,7 +72,7 @@ open class DiagnosisView @Autowired constructor(
     /**
      * Returns a list of person with the given contact roles
      */
-    fun getContactsForRole(vararg contactRoles: String): List<Person>{
+    fun getContactsForRole(vararg contactRoles: String): List<Person> {
         val contactRole = contactRoles.map { p -> ContactRole.valueOf(p) }.toTypedArray()
         return task.contacts.filter { contactRole.contains(it.role) }.mapNotNull { it.person }
     }
@@ -95,7 +92,7 @@ open class DiagnosisView @Autowired constructor(
             return
         } else if (diagnosis.diagnosisPrototype != null) {
             logger.debug("Extended diagnosis text found, showing dialog")
-            MessageHandler.executeScript(GuiCommands.OPEN_COPY_HISTOLOGICAL_RECORD_DIALOG_FROM_DIAGNOSIS_VIEW)
+            diagnosisRecordDialog.initAndPrepareBean(diagnosis)
         }
     }
 
@@ -119,7 +116,7 @@ open class DiagnosisView @Autowired constructor(
     /**
      * Updates the signatures role
      */
-    fun updatePhysiciansSignature(task: Task, signature: Signature, resourcesKey: String, vararg arr: Any) {
+    override fun updatePhysiciansSignature(task: Task, signature: Signature, resourcesKey: String, vararg arr: Any) {
         signature.role = signature?.physician?.clinicRole ?: ""
         save(task, resourcesKey, *arr)
     }

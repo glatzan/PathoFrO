@@ -10,7 +10,7 @@
 <composite:interface>
     <!-- source type: com.patho.main.util.ui.jsfcomponents.ISelectPhysicianOverlay -->
     <composite:attribute name="source" required="true"
-                         type="com.patho.main.util.ui.jsfcomponents.ICaseHistorySelectOverlay"/>
+                         type="com.patho.main.util.ui.jsfcomponents.IDiagnosisSelectOverlay"/>
 
     <!-- widget var-->
     <composite:attribute name="widgetVar" required="true"/>
@@ -40,30 +40,30 @@
                 hideEffect="fade"
                 style="width:500px"
                 hideEvent="mousedown"
-                onShow="#{cc.attrs.clientId}_onShow()"
+                onShow="#{cc.attrs.widgetVar}_onShow()"
                 showEvent="none"
                 onkeypress="return false;">
 
             <h:panelGroup id="content">
                 <p:dataTable id="datatable"
                              widgetVar="#{cc.attrs.widgetVar}_datatable" filterDelay="50"
-                             value="#{cc.attrs.source.items}"
-                             var="item" styleClass="defaultHistoDataTable" scrollable="true"
-                             scrollHeight="200" rowKey="#{item.id}"
-                             selection="#{cc.attrs.source.selectedItem}"
+                             value="#{cc.attrs.source.diagnoses}"
+                             var="prest" styleClass="defaultHistoDataTable" scrollable="true"
+                             scrollHeight="200" rowKey="#{prest.id}"
+                             selection="#{cc.attrs.source.selectedDiagnosis}"
                              selectionMode="single">
 
-                    <p:column filterBy="#{item.value}" filterMatchMode="contains"
+                    <p:column filterBy="#{prest.diagnosis}" filterMatchMode="contains"
                               filterValue="#{cc.attrs.source.filter}"
                               id="valueColumn">
-                        <h:outputText value="#{item.value}"/>
+                        <h:outputText value="#{prest.diagnosis}"/>
                     </p:column>
 
                 </p:dataTable>
             </h:panelGroup>
 
             <!-- command for updating the content-->
-            <p:remoteCommand update="content" name="#{cc.attrs.clientId}_onShow"
+            <p:remoteCommand update="content" name="#{cc.attrs.widgetVar}_onShow"
                              actionListener="#{cc.attrs.source.onShow}"/>
         </p:overlayPanel>
 

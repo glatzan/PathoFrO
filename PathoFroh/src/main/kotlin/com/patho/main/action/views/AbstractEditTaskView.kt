@@ -15,16 +15,6 @@ import com.patho.main.util.ui.jsfcomponents.*
 abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectComponent, ICaseHistoryComponent {
 
     /**
-     * Selected material presets
-     */
-    open var selectedMaterialPresets: Array<MaterialPreset?> = arrayOf<MaterialPreset?>()
-
-    /**
-     * Material preset filter
-     */
-    open var selectedMaterialPresetFilter: Array<String> = arrayOf<String>()
-
-    /**
      * Object for selecting new surgeons quickly by overlay
      */
     open val surgeons = object : IPhysicianSelectOverlay {
@@ -136,7 +126,7 @@ abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectCompone
      */
     override fun save(task: Task, resourcesKey: String, vararg arr: Any) {
         logger.debug("Saving task " + task.taskID)
-        val t = SpringContextBridge.services().taskRepository.save(task, resourceBundle.get(resourcesKey, task, *arr), task.patient)
+        val t = SpringContextBridge.services().taskRepository.save(task, resourceBundle[resourcesKey, task, arr], task.patient)
         SpringContextBridge.services().worklistHandler.replaceTaskInWorklist(t, true, reloadStaticData = false)
     }
 

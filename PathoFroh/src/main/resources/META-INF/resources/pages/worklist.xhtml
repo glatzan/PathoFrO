@@ -19,13 +19,13 @@
 
         <!-- Navigation -->
         <ui:define name="navigation">
-            <ui:include src="worklist/include/patientList.xhtml"></ui:include>
+            <ui:include src="worklist/include/patientList.xhtml" />
         </ui:define>
 
         <ui:define name="content">
             <p:scrollPanel styleClass="bodyScrollPanelStyle" id="contentScrollPane">
                 <h:panelGroup id="contentPanel">
-                    <ui:include src="#{centralHandler.navigationData.getCenterView()}"></ui:include>
+                    <ui:include src="#{centralHandler.navigationData.getCenterView()}" />
                 </h:panelGroup>
             </p:scrollPanel>
         </ui:define>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<!-- Component for signature + siganture role-->
+<composite:interface>
+    <!-- siganture -->
+    <composite:attribute name="signature" required="true"
+                         type="com.patho.main.model.Signature"/>
+
+    <!-- diagnosis revision -->
+    <composite:attribute name="diagnosisRevision" required="true"
+                         type="com.patho.main.model.patient.DiagnosisRevision"/>
+
+    <!-- handler for saving changes -->
+    <composite:attribute name="diagnosisView" required="true"
+                         type="com.patho.main.util.ui.jsfcomponents.IDiagnosisViewFunction"/>
+
+    <!-- editable -->
+    <composite:attribute name="editable" required="true" default="false"/>
+
+    <!-- physicianList to select from-->
+    <composite:attribute name="physicianList" required="true"
+                         type="java.util.List"/>
+
+    <!-- physician transformer -->
+    <composite:attribute name="physicianTransformer" required="true"
+                         type="com.patho.main.ui.transformer.DefaultTransformer"/>
+
+    <!-- formelements to udpate -->
+    <composite:attribute name="update" required="false"
+                         type="java.lang.String"/>
+
+    <!-- widgetVar -->
+    <composite:attribute name="widgetVar" required="false"
+                         type="java.lang.String"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <p:importEnum
+            type="com.patho.main.common.SignatureRole"
+            var="signatureRoles" allSuffix="ALL_ENUM_VALUES"/>
+
+    <div class="ui-g ui-g-nopad" id="#{cc.attrs.clientId}">
+        <!-- ##################### physician ##################### -->
+        <div class="ui-g-12 ui-g-subtable-nopad-top">
+            <p:selectOneMenu
+                    id="patientSelect"
+                    disabled="#{!cc.attrs.editable}"
+                    style="width:90% !important;"
+                    panelStyleClass="iconFixForSelectOneMenu"
+                    value="#{cc.attrs.signature.physician}"
+                    converter="#{cc.attrs.physicianTransformer}"
+                    filter="true" filterMatchMode="contains">
+
+                <f:selectItem
+                        itemLabel="#{msg['body.diagnosis.signature.physician.select']}"
+                        itemValue="#{null}"/>
+
+                <f:selectItems
+                        value="#{cc.attrs.physicianList}"
+                        var="physician" itemLabel="#{physician.person.getFullName()}"
+                        itemValue="#{physician}"/>
+
+                <p:ajax event="change"
+                        process="@this"
+                        partialSubmit="true"
+                        update="#{cc.attrs.update}"
+                        listener="#{cc.attrs.diagnosisView.updatePhysiciansSignature(cc.attrs.diagnosisRevision.task,cc.attrs.signature,'log.diagnosisRevision.edit.signatureOne.update', cc.attrs.diagnosisRevision, cc.attrs.signature.physician.person.getFullName(), cc.attrs.signature.role)}"/>
+
+            </p:selectOneMenu>
+        </div>
+        <!-- ##################### role ##################### -->
+        <div class="ui-g-12 ui-g-subtable-nopad-line">
+            <p:selectOneMenu id="pysicianToSignRole" editable="true"
+                             style="width:90% !important;"
+                             disabled="#{!cc.attrs.editable}"
+                             value="#{cc.attrs.signature.role}">
+                <f:selectItems value="#{signatureRoles.ALL_ENUM_VALUES}"
+                               var="signatureRole"
+                               itemLabel="#{msg['enum.signatureRole.'.concat(signatureRole.name())]}"
+                               itemValue="#{msg['enum.signatureRole.'.concat(signatureRole.name())]}"/>
+                <p:ajax event="change"
+                        partialSubmit="true"
+                        process="@this"
+                        update="#{cc.attrs.update}"
+                        actionListener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosisRevision.task,'log.diagnosisRevision.edit.signatureOne.role',cc.attrs.diagnosisRevision, cc.attrs.signature.role.toString())}"/>
+            </p:selectOneMenu>
+        </div>
+    </div>
+</composite:implementation>
+</html>

@@ -4,11 +4,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:p="http://primefaces.org/ui"
->
+      xmlns:hm="http://java.sun.com/jsf/composite/components/miscellaneous"
+      xmlns:p="http://primefaces.org/ui">
 
 <composite:interface>
-    <!-- source type: com.patho.main.util.ui.jsfcomponents.IMaterialSelectOverlay -->
+    <!-- diagnosis -->
     <composite:attribute name="diagnosis" required="true"
                          type="com.patho.main.model.patient.Diagnosis"/>
 
@@ -17,57 +17,86 @@
 
     <!-- widget var-->
     <composite:attribute name="widgetVar" required="true"/>
+
+    <!-- save and update functions  -->
+    <composite:attribute name="diagnosisView" type="com.patho.main.util.ui.jsfcomponents.IDiagnosisViewFunction"
+                         required="true"/>
+
+    <!-- diagnosis preset data -->
+    <composite:attribute name="diagnosisPresetData" type="com.patho.main.util.ui.jsfcomponents.IDiagnosisSelectOverlay"
+                         required="true"/>
+
+    <!-- udpate -->
+    <composite:attribute name="update" type="java.lang.String" required="false"/>
 </composite:interface>
 
 <composite:implementation>
 
     <div class="ui-g ui-g-nopad" id="#{cc.attrs.clientId}">
-
         <!-- ##################### name and summary ##################### -->
-        <div class="ui-g-10">
+        <div class="ui-g-1 ui-g-subtable-nopad-top">
             <h:outputLabel
                     value="#{msg['body.diagnosis.sample']} #{cc.attrs.diagnosis.sample.sampleID}"/>
-            <h:panelGroup>
-                <!-- copy diagnosis text -->
-                <p:commandLink style="margin-left:20px;"
-                               disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision) or cc.attrs.diagnosis.diagnosisPrototype.extendedDiagnosisText eq ''}"
-                               title="#{cc.attrs.diagnosis.diagnosisPrototype.extendedDiagnosisText eq '' ? msg['body.diagnosis.histologicalRecordPreset.text.none'] : msg['body.diagnosis.histologicalRecordPreset.text']}"
-                               rendered="#{cc.attrs.diagnosis.diagnosisPrototype ne null}"
-                               process="@this"
-                               actionListener="#{diagnosisView.setSelectedDiagnosis(cc.attrs.diagnosis)}"
-                               oncomplete="copyHistologicalRecordCommand()">
-                    <i class="fa fa-copy"/>
-                </p:commandLink>
-                <!-- commandlink will set the selected diagnosis, this will call the function -->
-                <p:remoteCommand
-                        actionListener="#{diagnosisView.copyHistologicalRecord(diagnosisView.selectedDiagnosis)}"
-                        update="contentForm:contentPanel" name="copyHistologicalRecordCommand"/>
-            </h:panelGroup>
         </div>
-        <div class="ui-g-10">
+        <div class="ui-g-10 ui-g-subtable-nopad-top">
+            <!-- copy diagnosis text -->
+            <p:commandButton
+                    disabled="#{!cc.attrs.editable or cc.attrs.diagnosis.diagnosisPrototype.extendedDiagnosisText eq ''}"
+                    title="#{cc.attrs.diagnosis.diagnosisPrototype.extendedDiagnosisText eq '' ? msg['body.diagnosis.histologicalRecordPreset.text.none'] : msg['body.diagnosis.histologicalRecordPreset.text']}"
+                    rendered="#{cc.attrs.diagnosis.diagnosisPrototype ne null}"
+                    actionListener="#{diagnosisView.copyHistologicalRecord(cc.attrs.diagnosis)}">
+
+                <p:ajax event="dialogReturn" listener="#{dialogReturnHandler.onDefaultReturn}"
+                        update="#{cc.attrs.update}"/>
+                <i class="fa fa-copy"/>
+            </p:commandButton>
+        </div>
+        <!-- malign -->
+        <div class="ui-g-1 ui-g-subtable-nopad-top" style="text-align: right">
             <h:outputLabel value="#{msg['body.diagnosis.malign']}"/>
             <p:selectBooleanCheckbox value="#{cc.attrs.diagnosis.malign}"
-                                     disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
-                                     style="margin:3px 0px 0px 3px;">
+                                     disabled="#{!cc.attrs.editable}"
+                                     style="margin:3px 10px 0 10px;">
                 <p:ajax event="change"
-                        listener="#{diagnosisView.save(cc.attrs.diagnosis.task, 'log.diagnosis.edit.malign',cc.attrs.diagnosis,cc.attrs.diagnosis.malign)}"/>
+                        listener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosis.task, 'log.diagnosis.edit.malign',cc.attrs.diagnosis,cc.attrs.diagnosis.malign)}"/>
             </p:selectBooleanCheckbox>
         </div>
-        <div class="ui-g-12">
+        <!-- ##################### diagnosis  and overlay  ##################### -->
+        <div class="ui-g-12 ui-g-subtable-nopad-line">
             <!-- diagnosis text -->
-            <p:inputTextarea value="#{diagnosis.diagnosis}"
-                             onkeypress="PF('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}').hide();"
-                             onclick="commonFunctions.showAndUpdateOverlayPanel('diagnosisOverlayPanel#{varCounterOuter.index}#{varCounterInner.index}', '#{component.clientId}' , null, 'diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}', 'contentForm:diagnosisOverlayPanelDataTable#{varCounterOuter.index}#{varCounterInner.index}:diagnosisColumn:filter',submitNewCustomDiagnosis#{varCounterOuter.index}#{varCounterInner.index});"
+            <p:inputTextarea value="#{cc.attrs.diagnosis.diagnosis}"
+                             onkeypress="PF('#{cc.attrs.widgetVar}_diagnosisSelect').hide();"
+                             onclick="PF('#{cc.attrs.widgetVar}_diagnosisSelect').showAndFocus('#{component.clientId}', #{cc.attrs.widgetVar}_submitCustomDiagnosis)"
                              filterDelay="50"
-                             id="diagnosisText#{varCounterOuter.index}#{varCounterInner.index}"
-                             disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
+                             id="diagnosisText"
+                             disabled="#{!cc.attrs.editable}"
                              style="width:99%">
                 <p:watermark
-                        for="diagnosisText#{varCounterOuter.index}#{varCounterInner.index}"
+                        for="diagnosisText"
                         value="#{msg['body.receiptlog.tab.diangonsis.data.diangosis.watermark']}"/>
-                <f:ajax event="change" execute="@this"
-                        listener="#{diagnosisView.save(diagnosis.task, 'log.diagnosis.edit.diagnosisText',diagnosis,diagnosis.diagnosis)}"/>
+                <p:ajax event="change" process="@this"
+                        partialSubmit="true"
+                        listener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosis.task, 'log.diagnosis.edit.diagnosisText',cc.attrs.diagnosis,cc.attrs.diagnosis.diagnosis)}"/>
             </p:inputTextarea>
+
+            <!-- select diagnosis overlay -->
+            <hm:diagnosisSelectOverlay source="#{cc.attrs.diagnosisPresetData}"
+                                       widgetVar="#{cc.attrs.widgetVar}_diagnosisSelect"
+                                       id="diagnosisSelectOverlay">
+                <p:ajax event="rowSelect" update="#{cc.attrs.update}"
+                        partialSubmit="true"
+                        process="@this #{cc.attrs.clientId}:diagnosisSelectOverlay:content"
+                        listener="#{diagnosisView.updateDiagnosisPrototype(cc.attrs.diagnosis, cc.attrs.diagnosisPresetData.selectedDiagnosis)}"
+                        oncomplete="PF('#{cc.attrs.widgetVar}_diagnosisSelect').hide();"/>
+            </hm:diagnosisSelectOverlay>
+
+            <!-- remote command on close of overlay dialog, taks filter as new diangosis value-->
+            <p:remoteCommand name="#{cc.attrs.widgetVar}_submitCustomDiagnosis"
+                             actionListener="#{diagnosisView.updateDiagnosisPrototype(cc.attrs.diagnosis, cc.attrs.diagnosisPresetData.filter)}"
+                             partialSubmit="true"
+                             update="#{cc.attrs.update}"
+                             process="@this #{cc.attrs.clientId}:diagnosisSelectOverlay:content"
+                             oncomplete="PF('#{cc.attrs.widgetVar}_diagnosisSelect').hide();"/>
         </div>
     </div>
 </composite:implementation>
