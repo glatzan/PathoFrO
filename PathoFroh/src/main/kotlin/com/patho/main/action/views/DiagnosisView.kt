@@ -122,14 +122,14 @@ open class DiagnosisView @Autowired constructor(
     }
 
 
-    open fun beginDiagnosisAmendment(diagnosisRevision: DiagnosisRevision) {
+    override fun beginDiagnosisAmendment(diagnosisRevision: DiagnosisRevision) {
         // workaround for forcing a persist of the task, even if no changes have been made
         worklistHandler.current.selectedTaskInfo.admendRevision(diagnosisRevision)
         worklistHandler.current.selectedTask.audit?.updatedOn = System.currentTimeMillis()
         save(worklistHandler.current.selectedTask, "log.patient.task.diagnosisRevision.lock", worklistHandler.current.selectedTask.taskID, diagnosisRevision)
     }
 
-    open fun endDiagnosisAmendment(diagnosisRevision: DiagnosisRevision) {
+    override fun endDiagnosisAmendment(diagnosisRevision: DiagnosisRevision) {
         // workaround for forcing a persist of the task, even if no changes have been made
         worklistHandler.current.selectedTaskInfo.lockRevision(diagnosisRevision)
         worklistHandler.current.selectedTask.audit?.updatedOn = System.currentTimeMillis()

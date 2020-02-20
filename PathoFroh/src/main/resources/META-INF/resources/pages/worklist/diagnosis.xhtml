@@ -3,7 +3,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:hm="http://java.sun.com/jsf/composite/components/miscellaneous"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
 
     <h:outputScript library="scripts" name="closeOverlayPanelOnReturn.js"/>
 
@@ -168,7 +169,7 @@
             </div>
 
             <!-- ##################### ##################### Diagnoses ##################### ##################### -->
-            <ui:repeat value="#{diagnosisView.task.diagnosisRevisions}" var="revision" varStatus="revisionCounter">
+            <c:forEach varStatus="revisionCounter" var="revision" items="#{diagnosisView.task.diagnosisRevisions}">
                 <!-- ##################### seperator ##################### -->
                 <div class="ui-g-12">
                     <p:separator/>
@@ -180,9 +181,10 @@
                                                       diagnosisView="#{diagnosisView}"
                                                       diagnosisPresetData="#{diagnosisView.diagnoses}"
                                                       diagnosisRevison="#{revision}"
-                                                      diagnosisRevisionEditable="#{true}"/>
+                                                      update="contentForm:contentPanel"/>
+                    #{revisionCounter.index}
                 </div>
-            </ui:repeat>
+            </c:forEach>
         </div>
 
 

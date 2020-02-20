@@ -40,7 +40,9 @@
         </div>
         <div class="ui-g-10 ui-g-subtable-nopad-top">
             <!-- copy diagnosis text -->
-            <p:commandButton
+            <p:commandLink
+                    id="submitDiangosisBtn"
+                    update="#{cc.attrs.update}"
                     disabled="#{!cc.attrs.editable or cc.attrs.diagnosis.diagnosisPrototype.extendedDiagnosisText eq ''}"
                     title="#{cc.attrs.diagnosis.diagnosisPrototype.extendedDiagnosisText eq '' ? msg['body.diagnosis.histologicalRecordPreset.text.none'] : msg['body.diagnosis.histologicalRecordPreset.text']}"
                     rendered="#{cc.attrs.diagnosis.diagnosisPrototype ne null}"
@@ -49,7 +51,7 @@
                 <p:ajax event="dialogReturn" listener="#{dialogReturnHandler.onDefaultReturn}"
                         update="#{cc.attrs.update}"/>
                 <i class="fa fa-copy"/>
-            </p:commandButton>
+            </p:commandLink>
         </div>
         <!-- malign -->
         <div class="ui-g-1 ui-g-subtable-nopad-top" style="text-align: right">

@@ -4,8 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:hm="http://java.sun.com/jsf/composite/components/miscellaneous"
       xmlns:p="http://primefaces.org/ui">
 
@@ -16,18 +16,20 @@
     <!-- editable -->
     <composite:attribute name="editable" required="true" default="false"/>
 
-    <!-- diagnosisRevision is editable -->
-    <composite:attribute name="diagnosisRevisionEditable" required="true" default="false"/>
-
     <!-- widget var-->
     <composite:attribute name="widgetVar" required="true"/>
 
+    <!-- save and update functions -->
     <composite:attribute name="diagnosisView" type="com.patho.main.util.ui.jsfcomponents.IDiagnosisViewFunction"
                          required="true"/>
 
     <!-- diagnosis preset data -->
     <composite:attribute name="diagnosisPresetData" type="com.patho.main.util.ui.jsfcomponents.IDiagnosisSelectOverlay"
                          required="true"/>
+
+    <!-- udpate -->
+    <composite:attribute name="update" type="java.lang.String" required="false"/>
+
 </composite:interface>
 
 <composite:implementation>
@@ -68,8 +70,8 @@
         <!-- summary text -->
         <!-- onfocus="disabledEventPropagation(event);"-->
         <div class="ui-g-10">
-            <p:inputTextarea style="width:99%" id="text" rows="15"
-                             disabled="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(cc.attrs.diagnosisRevison)}"
+            <p:inputTextarea style="width:99%" id="summaryText" rows="15"
+                             disabled="#{!cc.attrs.editable}"
                              value="#{cc.attrs.diagnosisRevison.text}">
                 <p:ajax event="keyup" process="@this" delay="250"
                         listener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.histologicalRecord',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.text)}"/>
@@ -81,14 +83,14 @@
             <h:outputLabel value="#{msg['body.diagnosis.diagnoses']}"/>
         </div>
         <div class="ui-g-10">
-            <ui:repeat value="#{cc.attrs.diagnosisRevison.diagnoses}" var="diagnosis" varStatus="diangosisIndex">
+            <c:forEach varStatus="diangosisIndex" var="diagnosis" items="#{cc.attrs.diagnosisRevison.diagnoses}">
                 <hm:diagosisEditComponent diagnosisView="#{cc.attrs.diagnosisView}"
                                           id="diagnosisEdit#{diangosisIndex.index}"
-                                          update="contentForm:contentPanel"
+                                          update="#{cc.attrs.update}"
                                           diagnosisPresetData="#{cc.attrs.diagnosisPresetData}"
                                           widgetVar="#{cc.attrs.widgetVar.concat('_diagnosisEdit_').concat(diangosisIndex.index)}"
                                           editable="#{cc.attrs.editable}" diagnosis="#{diagnosis}"/>
-            </ui:repeat>
+            </c:forEach>
         </div>
 
         <!-- ##################### ##################### signature ##################### ##################### -->
@@ -97,7 +99,7 @@
         </div>
         <div class="ui-g-2">
             <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
-                        disabled="#{!cc.attrs.diagnosisRevisionEditable}"
+                        disabled="#{!cc.attrs.editable}"
                         id="sigantureDate"
                         value="#{cc.attrs.diagnosisRevison.signatureDate}">
                 <f:ajax event="dateSelect" partialSubmit="true" update="@this" execute="@this"
@@ -115,7 +117,7 @@
                                    physicianList="#{genericViewData.physiciansToSignList}"
                                    signature="#{cc.attrs.diagnosisRevison.signatureOne}"
                                    editable="#{cc.attrs.editable}"
-                                   update="contentForm:contentPanel"
+                                   update="#{cc.attrs.update}"
                                    id="signaturePhysician"
                                    physicianTransformer="#{genericViewData.physiciansToSignListTransformer}"
                                    diagnosisView="#{diagnosisView}"/>
@@ -130,11 +132,182 @@
                                    physicianList="#{genericViewData.physiciansToSignList}"
                                    signature="#{cc.attrs.diagnosisRevison.signatureTwo}"
                                    editable="#{cc.attrs.editable}"
-                                   update="contentForm:contentPanel"
+                                   update="#{cc.attrs.update}"
                                    id="signatureConsultant"
                                    physicianTransformer="#{genericViewData.physiciansToSignListTransformer}"
                                    diagnosisView="#{cc.attrs.diagnosisView}"/>
         </div>
+
+        <!-- ##################### buttons ##################### -->
+        <div class="ui-g-12">
+            <!-- new diagnosis revision -->
+            <p:commandButton widgetVar="newDiagnosisRevision"
+                             value="#{msg['body.diagnosis.diagnosis.new']}"
+                             icon="fa fa-plus-circle"
+                             actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
+                <p:ajax event="dialogReturn"
+                        listener="#{dialogReturnHandler.onDefaultReturn}"
+                        update="navigationForm:patientList contentForm:contentPanel"/>
+            </p:commandButton>
+
+            <!-- end or reend diagnosis-->
+            <p:splitButton
+                    style="margin-left: 10px"
+                    value="#{!cc.attrs.diagnosisRevison.completed ? msg['body.diagnosis.diagnosis.end'] : msg['body.diagnosis.diagnosis.re_end']}"
+                    rendered="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(cc.attrs.diagnosisRevison) }"
+                    icon="fa fa-eye-slash"
+                    disabled="#{!cc.attrs.editable}"
+                    onclick="PF('#{cc.attrs.widgetVar}_endDiagnosisRevision').jq.click();">
+
+                <!-- amendment -->
+                <p:menuitem value="#{msg['body.diagnosis.diagnosis.amendment']}"
+                            rendered="#{cc.attrs.diagnosisRevison.completed}"
+                            icon="fa fa-edit"
+                            onclick="PF('#{cc.attrs.widgetVar}_admendDiagnosisRevision').jq.click();"
+                            disabled="#{!cc.attrs.editable}"/>
+
+                <!-- rename -->
+                <p:menuitem
+                        value="#{msg['body.diagnosis.diagnosis.rename']}"
+                        onclick="PF('#{cc.attrs.widgetVar}_editDiagnosisRevision').jq.click();"
+                        icon="fa fa-pencil"
+                        disabled="#{!cc.attrs.editable}"/>
+
+                <!-- delete diagnosis -->
+                <p:menuitem value="#{msg['body.diagnosis.diagnosis.delete']}"
+                            icon="fa fa-trash"
+                            onclick="PF('#{cc.attrs.widgetVar}_deleteRevision').jq.click();"
+                            disabled="#{!cc.attrs.editable}"/>
+
+                <p:separator/>
+
+                <!-- new staining -->
+                <p:menuitem value="#{msg['body.diagnosis.diagnosis.slide']}"
+                            icon="fa fa-paint-brush"
+                            onclick="PF('#{cc.attrs.widgetVar}_newStaining').jq.click()"
+                            disabled="#{!cc.attrs.editable}">
+                </p:menuitem>
+
+                <p:separator/>
+
+                <!-- print diagnosis -->
+                <p:menuitem value="#{msg['body.diagnosis.diagnosis.print']}"
+                            icon="fa fa-print" disabled="true"/>
+            </p:splitButton>
+
+            <h:panelGroup>
+                <!-- end diangosis -->
+                <p:commandButton widgetVar="#{cc.attrs.widgetVar}_endDiagnosisRevision"
+                                 style="display:none"
+                                 id="endDiagnosisRevision"
+                                 actionListener="#{diagnosisPhaseExitDialog.initAndPrepareBean(cc.attrs.diagnosisRevison.task, cc.attrs.diagnosisRevison)}">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialogReturnHandler.onDefaultReturn}"
+                            update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                </p:commandButton>
+
+                <!-- adment revision -->
+                <p:commandButton widgetVar="#{cc.attrs.widgetVar}_admendDiagnosisRevision"
+                                 id="admendDiagnosisRevision"
+                                 style="display:none"
+                                 oncomplete="PF('#{cc.attrs.widgetVar}_diagnosisSpotBlocker').show()"
+                                 update="#{cc.clientId}">
+                    <f:actionListener
+                            binding="#{cc.attrs.diagnosisView.beginDiagnosisAmendment(cc.attrs.diagnosisRevison)}"/>
+                </p:commandButton>
+
+                <!-- edit diagnosis revision -->
+                <p:commandButton
+                        widgetVar="#{cc.attrs.widgetVar}_editDiagnosisRevision"
+                        id="editDiagnosisRevision"
+                        style="display:none"
+                        actionListener="#{dialog.editDiagnosisRevisionsDialog.initAndPrepareBean(cc.attrs.diagnosisRevison.task,cc.attrs.diagnosisRevison)}">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialogReturnHandler.onDefaultReturn}"
+                            update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                </p:commandButton>
+
+                <!-- delete diagnosis revision -->
+                <p:commandButton widgetVar="#{cc.attrs.widgetVar}_deleteRevision"
+                                 style="display:none"
+                                 id="deleteRevision"
+                                 actionListener="#{dialog.deleteDiagnosisRevisionDialog.initAndPrepareBean(cc.attrs.diagnosisRevison)}">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialogReturnHandler.onDefaultReturn}"
+                            update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                </p:commandButton>
+
+
+                <!-- new staining -->
+                <p:commandButton widgetVar="#{cc.attrs.widgetVar}_newStaining"
+                                 style="display: none"
+                                 id="newStaining"
+                                 actionListener="#{slideOverviewDialog.initAndPrepareBean(cc.attrs.diagnosisRevison.task)}">
+                    <p:ajax event="dialogReturn"
+                            listener="#{dialogReturnHandler.onDefaultReturn}"
+                            update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                </p:commandButton>
+            </h:panelGroup>
+
+            <!-- save changes -->
+            <p:commandButton value="#{msg['body.diagnosis.diagnosis.lock']}"
+                             rendered="#{worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(cc.attrs.diagnosisRevison) }"
+                             oncomplete="PF('#{cc.attrs.widgetVar}_diagnosisSpotBlocker').hide()"
+                             icon="fa fa-check-circle-o"
+                             update="#{cc.clientId}">
+                <f:actionListener
+                        binding="#{cc.attrs.diagnosisView.endDiagnosisAmendment(cc.attrs.diagnosisRevison)}"/>
+            </p:commandButton>
+
+        </div>
+
+        <p:spotlight target="#{cc.clientId}"
+                     widgetVar="#{cc.attrs.widgetVar}_diagnosisSpotBlocker"/>
+
+<!--                <div class="">-->
+<!--                    &lt;!&ndash; status icons &ndash;&gt;-->
+<!--                    <h:panelGroup id="diagnosisCompleted#{varCounterOuter.index}">-->
+<!--                        <i class="fa fa-fw fa-rss-square fa-lg #{revision.completed ? 'icon-green' : 'icon-grey'}"-->
+<!--                           title=""/>-->
+<!--                        <p:tooltip for="diagnosisCompleted#{varCounterOuter.index}">-->
+<!--                            <h:outputLabel-->
+<!--                                    value="#{revision.completed ? msg['body.diagnosis.diagnosis.approved'] : msg['body.diagnosis.diagnosis.approved.not']} "/>-->
+<!--                            <h:outputText rendered="#{revision.completed}"-->
+<!--                                          value="#{revision.completionDate}">-->
+<!--                                <f:converter converterId="instantDateTimeConverter"/>-->
+<!--                                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>-->
+<!--                            </h:outputText>-->
+<!--                        </p:tooltip>-->
+<!--                    </h:panelGroup>-->
+
+<!--                    &lt;!&ndash; nofitication complete date &ndash;&gt;-->
+<!--                    <h:panelGroup id="notificationsCompleted#{varCounterOuter.index}">-->
+<!--                        <h:panelGroup-->
+<!--                                rendered="#{revision.notificationStatus != 'NO_NOTFICATION'}">-->
+<!--                            <i class="fa fa-fw fa-volume-up fa-lg #{revision.notified ? 'icon-green' : 'icon-grey'}"-->
+<!--                               title=""/>-->
+<!--                            <p:tooltip for="notificationsCompleted#{varCounterOuter.index}">-->
+<!--                                <h:outputLabel-->
+<!--                                        value="#{revision.notified ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} "/>-->
+<!--                                <h:outputText rendered="#{revision.notified}"-->
+<!--                                              value="#{revision.notificationDate}">-->
+<!--                                    <f:converter converterId="instantDateTimeConverter"/>-->
+<!--                                    <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>-->
+<!--                                </h:outputText>-->
+<!--                            </p:tooltip>-->
+<!--                        </h:panelGroup>-->
+
+<!--                        &lt;!&ndash; no notification necessary &ndash;&gt;-->
+<!--                        <h:panelGroup-->
+<!--                                rendered="#{revision.notificationStatus == 'NO_NOTFICATION'}">-->
+<!--                            <i class="fa fa-fw fa-stack-exchange fa-lg icon-orange"/>-->
+<!--                            <p:tooltip for="notificationsCompleted#{varCounterOuter.index}">-->
+<!--                                <h:outputLabel value="Keine Benachrichtigung druchgeführt"/>-->
+<!--                            </p:tooltip>-->
+<!--                        </h:panelGroup>-->
+<!--                    </h:panelGroup>-->
+<!--                </div>-->
+
 
         <script type="application/javascript">
             $(document).ready(function () {
