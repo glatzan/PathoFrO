@@ -1,0 +1,25 @@
+watcher:
+  dirToWatch: file:/home/andi/patho/watch/test/*.pdf
+  appendToPrevPageDetectionThreshold: 3
+
+  moveProcessedFiles: true
+  processedFilesDir: file:/home/andi/patho/watch/test/processed
+
+  moveOriginalFiles: true
+  originalFilesDir: file:/home/andi/patho/watch/test/original
+
+  uploadData: true
+  uploadTarget: http://127.0.0.1:8080/rest/pdf
+  useAuthentication: true
+  authenticationToken: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnbGF0emEiLCJpc3N1ZURhdGUiOjE1ODAzNjkyMzgyNzN9.AVaNFQSFuPh2RgrHCn2tSvS_UpOPOqjXRBtqXkZYw5uyI_TI3nj39Q-3U9p4YBMVg1ERNIROocsJTotEU7VPVQ"
+
+  errorAddresses:
+    - andreas.glatz@uniklinik-freiburg.de
+
+  schedule:
+    enable: true
+    cron: "1 * * * * *"
+logging:
+  file: "watcher.log"
+  pattern:
+    file: "%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n"

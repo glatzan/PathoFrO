@@ -1,0 +1,13 @@
+logging:
+  file: "patho.log"
+  pattern:
+    file: "%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n"
+patho:
+  settings:
+    fileSettings:
+      thumbnailDPI: 50
+      fileRepository: file:/home/andi/patho/patho/workdir/
+      workDirectory: file:/home/andi/patho/patho/workdir/pdf/
+      auxDirectory: fileRepository:pdf
+      errorDirectory: fileRepository:pdf/error
+      printDirectory: fileRepository:pdf/print

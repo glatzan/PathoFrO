@@ -117,7 +117,7 @@ class PathoVersion2DatabaseConverter {
 
             logger.debug("${patient.piz} ----Saving pdf to disk ${pdf.name}")
             SpringContextBridge.services().mediaRepository.saveBytes(data, pdf.path)
-            SpringContextBridge.services().pdfService.generateAndSaveThumbnail(data, pdf.path)
+            SpringContextBridge.services().pdfService.generateAndSaveThumbnail(data, pdf.thumbnail)
             SpringContextBridge.services().pdfRepository.save(pdf)
         } else {
             logger.debug("${patient.piz} ----!!! skipping is new file ${pdf.name}")

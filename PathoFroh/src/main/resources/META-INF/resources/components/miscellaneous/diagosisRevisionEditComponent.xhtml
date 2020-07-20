@@ -152,7 +152,7 @@
 
             <!-- end or reend diagnosis-->
             <p:splitButton
-                    style="margin-left: 10px"
+                    style="margin-left: 5px"
                     value="#{!cc.attrs.diagnosisRevison.completed ? msg['body.diagnosis.diagnosis.end'] : msg['body.diagnosis.diagnosis.re_end']}"
                     rendered="#{!worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionInEditAmendmentMode(cc.attrs.diagnosisRevison) }"
                     icon="fa fa-eye-slash"
@@ -259,55 +259,50 @@
                         binding="#{cc.attrs.diagnosisView.endDiagnosisAmendment(cc.attrs.diagnosisRevison)}"/>
             </p:commandButton>
 
+            <!-- status icons -->
+            <h:panelGroup id="diagnosisCompleted">
+                <i class="fa fa-fw fa-rss-square fa-lg #{cc.attrs.diagnosisRevison.completed ? 'icon-green' : 'icon-grey'}"
+                   title=""/>
+                <p:tooltip for="diagnosisCompleted">
+                    <h:outputLabel
+                            value="#{cc.attrs.diagnosisRevison.completed ? msg['body.diagnosis.diagnosis.approved'] : msg['body.diagnosis.diagnosis.approved.not']} "/>
+                    <h:outputText rendered="#{cc.attrs.diagnosisRevison.completed}"
+                                  value="#{cc.attrs.diagnosisRevison.completionDate}">
+                        <f:converter converterId="instantDateTimeConverter"/>
+                        <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>
+                    </h:outputText>
+                </p:tooltip>
+            </h:panelGroup>
+
+            <!-- nofitication complete date -->
+            <h:panelGroup id="notificationsCompleted"
+                          rendered="#{cc.attrs.diagnosisRevison.notificationStatus != 'NO_NOTFICATION'}">
+                <i class="fa fa-fw fa-volume-up fa-lg #{cc.attrs.diagnosisRevison.notified ? 'icon-green' : 'icon-grey'}"
+                   title=""/>
+                <p:tooltip for="notificationsCompleted">
+                    <h:outputLabel
+                            value="#{cc.attrs.diagnosisRevison.notified ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} "/>
+                    <h:outputText rendered="#{cc.attrs.diagnosisRevison.notified}"
+                                  value="#{cc.attrs.diagnosisRevison.notificationDate}">
+                        <f:converter converterId="instantDateTimeConverter"/>
+                        <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>
+                    </h:outputText>
+                </p:tooltip>
+            </h:panelGroup>
+
+            <!-- no notification necessary -->
+            <h:panelGroup
+                    rendered="#{cc.attrs.diagnosisRevison.notificationStatus == 'NO_NOTFICATION'}">
+                <i class="fa fa-fw fa-stack-exchange fa-lg icon-orange"/>
+                <p:tooltip for="notificationsCompleted}">
+                    <h:outputLabel value="Keine Benachrichtigung druchgeführt"/>
+                </p:tooltip>
+            </h:panelGroup>
+
         </div>
 
         <p:spotlight target="#{cc.clientId}"
                      widgetVar="#{cc.attrs.widgetVar}_diagnosisSpotBlocker"/>
-
-<!--                <div class="">-->
-<!--                    &lt;!&ndash; status icons &ndash;&gt;-->
-<!--                    <h:panelGroup id="diagnosisCompleted#{varCounterOuter.index}">-->
-<!--                        <i class="fa fa-fw fa-rss-square fa-lg #{revision.completed ? 'icon-green' : 'icon-grey'}"-->
-<!--                           title=""/>-->
-<!--                        <p:tooltip for="diagnosisCompleted#{varCounterOuter.index}">-->
-<!--                            <h:outputLabel-->
-<!--                                    value="#{revision.completed ? msg['body.diagnosis.diagnosis.approved'] : msg['body.diagnosis.diagnosis.approved.not']} "/>-->
-<!--                            <h:outputText rendered="#{revision.completed}"-->
-<!--                                          value="#{revision.completionDate}">-->
-<!--                                <f:converter converterId="instantDateTimeConverter"/>-->
-<!--                                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>-->
-<!--                            </h:outputText>-->
-<!--                        </p:tooltip>-->
-<!--                    </h:panelGroup>-->
-
-<!--                    &lt;!&ndash; nofitication complete date &ndash;&gt;-->
-<!--                    <h:panelGroup id="notificationsCompleted#{varCounterOuter.index}">-->
-<!--                        <h:panelGroup-->
-<!--                                rendered="#{revision.notificationStatus != 'NO_NOTFICATION'}">-->
-<!--                            <i class="fa fa-fw fa-volume-up fa-lg #{revision.notified ? 'icon-green' : 'icon-grey'}"-->
-<!--                               title=""/>-->
-<!--                            <p:tooltip for="notificationsCompleted#{varCounterOuter.index}">-->
-<!--                                <h:outputLabel-->
-<!--                                        value="#{revision.notified ? msg['body.diagnosis.diagnosis.notification'] : msg['body.diagnosis.diagnosis.notification.not']} "/>-->
-<!--                                <h:outputText rendered="#{revision.notified}"-->
-<!--                                              value="#{revision.notificationDate}">-->
-<!--                                    <f:converter converterId="instantDateTimeConverter"/>-->
-<!--                                    <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>-->
-<!--                                </h:outputText>-->
-<!--                            </p:tooltip>-->
-<!--                        </h:panelGroup>-->
-
-<!--                        &lt;!&ndash; no notification necessary &ndash;&gt;-->
-<!--                        <h:panelGroup-->
-<!--                                rendered="#{revision.notificationStatus == 'NO_NOTFICATION'}">-->
-<!--                            <i class="fa fa-fw fa-stack-exchange fa-lg icon-orange"/>-->
-<!--                            <p:tooltip for="notificationsCompleted#{varCounterOuter.index}">-->
-<!--                                <h:outputLabel value="Keine Benachrichtigung druchgeführt"/>-->
-<!--                            </p:tooltip>-->
-<!--                        </h:panelGroup>-->
-<!--                    </h:panelGroup>-->
-<!--                </div>-->
-
 
         <script type="application/javascript">
             $(document).ready(function () {

@@ -175,18 +175,31 @@
                     <p:separator/>
                 </div>
                 <div class="ui-g-12">
-                    <hm:diagosisRevisionEditComponent editable="#{diagnosisView.task.taskStatus.editable}"
+                    <hm:diagosisRevisionEditComponent editable="#{worklistHandler.current.selectedTaskInfo.isDiagnosisRevisionEditable(revision)}"
                                                       widgetVar="diagnosis_#{revisionCounter.index}"
                                                       id="diagnosis_#{revisionCounter.index}"
                                                       diagnosisView="#{diagnosisView}"
                                                       diagnosisPresetData="#{diagnosisView.diagnoses}"
                                                       diagnosisRevison="#{revision}"
                                                       update="contentForm:contentPanel"/>
-                    #{revisionCounter.index}
                 </div>
             </c:forEach>
         </div>
+    </p:panel>
 
+    <script type="application/javascript">
+
+        function disabledEventPropagation(event) {
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            } else if (window.event) {
+                window.event.cancelBubble = true;
+            }
+        }
+
+    </script>
+
+</ui:composition>
 
         <!--        &lt;!&ndash; Diagnoses &ndash;&gt;-->
         <!--        <c:forEach-->
@@ -646,19 +659,3 @@
         <!--            </h:panelGrid>-->
         <!--        </c:forEach>-->
         <!-- commands -->
-    </p:panel>
-
-    <script type="application/javascript">
-
-        function disabledEventPropagation(event) {
-            if (event.stopPropagation) {
-                event.stopPropagation();
-            } else if (window.event) {
-                window.event.cancelBubble = true;
-            }
-        }
-
-    </script>
-
-</ui:composition>
-

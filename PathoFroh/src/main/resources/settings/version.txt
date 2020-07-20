@@ -358,55 +358,69 @@ Select
 		left join patient pat on pat.id = task.parent_id 
 		left join person as pers on pers.id = pat.person_id;
 
-/* PLv8 extension*/
-CREATE EXTENSION plv8;
+/* python extension */
+create extension plpythonu;
 
 /* level function */
-create or replace function get_slide_count_level(str text) returns int as $$ 
-	var reg = /^(I*)([a-zA-Z]?)([0-9]*)$/;
-	var arr = reg.exec(str);
- 
-	if(arr != null){
-   		if(arr[3] != '')
-    		return 3;
-   		else if(arr[2] != '')
-    		return 2;
-   		else if(arr[1] != '')
-    		return 1;
-	}
- 	return 0;
-$$ language plv8;
+create or replace function get_slide_count_level(str text)
+    returns int
+AS $$
+	import re
+	# First Level I*, Second Level a-z, Third Level 0-9
+	arr = re.search("^(I*)([a-zA-Z]?)([0-9]*)$", str)
 
- /* Counting function */
-create or replace function get_slide_count(str text) returns int as $$
-	var res = str.split(/[ ,\+]+/);
+	plpy.info(arr.group())
 
-	if(res.length == 1){
-		return 1;
-	}else{
-		var counter = 0;
-  		var level = 0;
+	if arr != None:
+		if arr.group(3):
+			return 3
+		elif arr.group(2):
+			return 2
+		elif arr.group(1):
+			return 1
+	return 0
+$$ language plpythonu;
 
-    	for(i = 0; i < res.length; i++){
-      		var t = res[i];
-      		var next =  i+1 < res.length ? res[i+1] : null;
+/* Counting function */
+create or replace function get_slide_count(str text)
+	RETURNS integer
+AS $$
+	import re
+	# splitting string at space or +. Example IIIa 2,3 + Ib 1
+	arr = re.split("[ ,\+]+", str)
+	plpy.info(arr)
+	if len(arr) == 1:
+		return 1
+	else:
+		c = 0
 
-      		var levelT = plv8.execute('SELECT get_slide_count_level(\'' + t + '\')')[0]['get_slide_count_level'];
-      		var levelN = next != null ? plv8.execute( 'SELECT get_slide_count_level(\''+next+'\')')[0]['get_slide_count_level'] : 0;
-      
-      		//plv8.elog(NOTICE,"Level vs " +levelT + " ("+t+") " + levelN +" ("+next+")");
-		
-     		if(levelT >= levelN){
-        		counter++;
-      		}
-      
-      		if(levelN == 0)
-        		break;
+		for i in range(0, len(arr)):
+			t = arr[i]
+			next = arr[i + 1] if i+1 < len(arr) else None
 
-    	}
-    	return counter;
-    }
-$$ language plv8;
+            # getting the level of the current splitted char sequence
+			levelT = plpy.execute('SELECT get_slide_count_level(\'' + t + '\')')[0]['get_slide_count_level_2']
+			levelN = plpy.execute('SELECT get_slide_count_level(\''+next+'\')')[0]['get_slide_count_level_2'] if next != None else 0
+
+			plpy.info(levelT)
+
+            # if the current level is bigger then the next count +1
+            # Example Ia2 (I: level = 1, a: level = 2, 2: level 3) => count as 1
+            # Example a, b, c 2+3 (a: level =2, b: level = 2, c: level = 2, 2: level = 3, 3: level = 3) =>  count as a + b + 2 +3 = 4
+			if levelT >= levelN:
+				c = c+1
+
+			if levelN == 0:
+				break
+
+		return c
+$$ LANGUAGE plpythonu;
+
+/* Tests */
+/* = 4*/
+select get_slide_count_2('a b c 2+3');
+/* = 5*/
+select get_slide_count_2('IIIa b c 2+3 IIa');
 
 /* update diangosis revision*/
 alter table DiagnosisRevision add column tmp date;
@@ -466,7 +480,7 @@ update DiagnosisRevision_aud set updatedOn = 0;
 alter table DiagnosisRevision_aud drop column creationDate;
 
 /* converting timestamps to date*/
-/* drop view taskoverview; */
+drop view taskoverview;
 /* drop table taskoverview; */
 
 /* dates of task*/
