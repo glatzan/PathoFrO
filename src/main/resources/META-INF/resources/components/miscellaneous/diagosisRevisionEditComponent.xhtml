@@ -13,8 +13,11 @@
     <composite:attribute name="diagnosisRevison" required="true"
                          type="com.patho.main.model.patient.DiagnosisRevision"/>
 
-    <!-- editable -->
+    <!-- task editable -->
     <composite:attribute name="editable" required="true" default="false"/>
+
+    <!-- diagnosis editable -->
+    <composite:attribute name="diagnosisEditable" required="true" default="false"/>
 
     <!-- widget var-->
     <composite:attribute name="widgetVar" required="true"/>
@@ -55,7 +58,7 @@
                 <h:panelGroup id="content">
                     <p:inputText
                             id="diagnosisName"
-                            disabled="#{!cc.attrs.editable}"
+                            disabled="#{!cc.attrs.editable or !cc.attrs.diagnosisEditable}"
                             value="#{cc.attrs.diagnosisRevison.name}"/>
                 </h:panelGroup>
             </p:overlayPanel>
@@ -68,10 +71,9 @@
         </div>
 
         <!-- summary text -->
-        <!-- onfocus="disabledEventPropagation(event);"-->
         <div class="ui-g-10">
             <p:inputTextarea style="width:99%" id="summaryText" rows="15"
-                             disabled="#{!cc.attrs.editable}"
+                             disabled="#{!cc.attrs.editable or !cc.attrs.diagnosisEditable}"
                              value="#{cc.attrs.diagnosisRevison.text}">
                 <p:ajax event="keyup" process="@this" delay="250"
                         listener="#{cc.attrs.diagnosisView.save(cc.attrs.diagnosisRevison.task, 'log.diagnosisRevision.edit.histologicalRecord',cc.attrs.diagnosisRevison,cc.attrs.diagnosisRevison.text)}"/>
@@ -89,7 +91,7 @@
                                           update="#{cc.attrs.update}"
                                           diagnosisPresetData="#{cc.attrs.diagnosisPresetData}"
                                           widgetVar="#{cc.attrs.widgetVar.concat('_diagnosisEdit_').concat(diangosisIndex.index)}"
-                                          editable="#{cc.attrs.editable}" diagnosis="#{diagnosis}"/>
+                                          editable="#{cc.attrs.diagnosisEditable}" diagnosis="#{diagnosis}"/>
             </c:forEach>
         </div>
 
@@ -99,7 +101,7 @@
         </div>
         <div class="ui-g-2">
             <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
-                        disabled="#{!cc.attrs.editable}"
+                        disabled="#{!cc.attrs.editable or !cc.attrs.diagnosisEditable}"
                         id="sigantureDate"
                         value="#{cc.attrs.diagnosisRevison.signatureDate}">
                 <f:ajax event="dateSelect" partialSubmit="true" update="@this" execute="@this"
@@ -116,7 +118,7 @@
             <hm:signatureComponent diagnosisRevision="#{cc.attrs.diagnosisRevison}"
                                    physicianList="#{genericViewData.physiciansToSignList}"
                                    signature="#{cc.attrs.diagnosisRevison.signatureOne}"
-                                   editable="#{cc.attrs.editable}"
+                                   editable="#{cc.attrs.diagnosisEditable}"
                                    update="#{cc.attrs.update}"
                                    id="signaturePhysician"
                                    physicianTransformer="#{genericViewData.physiciansToSignListTransformer}"
@@ -131,7 +133,7 @@
             <hm:signatureComponent diagnosisRevision="#{cc.attrs.diagnosisRevison}"
                                    physicianList="#{genericViewData.physiciansToSignList}"
                                    signature="#{cc.attrs.diagnosisRevison.signatureTwo}"
-                                   editable="#{cc.attrs.editable}"
+                                   editable="#{cc.attrs.diagnosisEditable}"
                                    update="#{cc.attrs.update}"
                                    id="signatureConsultant"
                                    physicianTransformer="#{genericViewData.physiciansToSignListTransformer}"
@@ -142,6 +144,7 @@
         <div class="ui-g-12">
             <!-- new diagnosis revision -->
             <p:commandButton widgetVar="newDiagnosisRevision"
+                             disabled="#{!cc.attrs.editable}"
                              value="#{msg['body.diagnosis.diagnosis.new']}"
                              icon="fa fa-plus-circle"
                              actionListener="#{dialog.createDiagnosisRevisionDialog.initAndPrepareBean(diagnosisView.task)}">
