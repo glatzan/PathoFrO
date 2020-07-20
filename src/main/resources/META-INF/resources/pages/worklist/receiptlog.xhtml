@@ -12,287 +12,259 @@
 
     <ui:include src="include/navigationBar.xhtml"/>
 
-    <script type="text/javascript">
-        // disables the autofocus for the caseHistoryOverlayplpanel
-        (function () {
-            var proxied = PrimeFaces.widget.OverlayPanel.prototype.applyFocus;
-            PrimeFaces.widget.OverlayPanel.prototype.applyFocus = function () {
-                if (this.jq.hasClass("histoOverlayPanel"))
-                    return;
-                return proxied.apply(this, arguments);
-            };
-        })();
-    </script>
-
     <p:panel style="width: 80%"
              styleClass="defaultHistoHiddenTableContainer">
 
-        <h:outputLabel
-                value="#{msg['body.receiptlog.taskId']} #{receiptLogView.task.taskID}"
-                style="font-size:1.5em;"/>
+        <h:outputLabel value="#{msg['body.receiptlog.taskId']} #{receiptLogView.task.taskID}"
+                       style="font-size:1.5em;"/>
+        <div class="ui-g ui-g-nopad">
+
+            <!-- ##################### LEFT ##################### -->
+            <div class="ui-g-4">
+                <div class="ui-g ui-g-nopad">
+                    <!-- ##################### Receipt Date ##################### -->
+                    <div class="ui-g-4 ui-g-vCenter">
+                        <h:outputLabel value="#{msg['body.receiptlog.taskEDate']}"/>
+                    </div>
+                    <div class="ui-g-8">
+                        <p:calendar pattern="dd.MM.yyyy" mask="true" id="receiptDate" converter="localDateConverter"
+                                    style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}"
+                                    styleClass="customBackground"
+                                    disabled="#{!receiptLogView.task.taskStatus.editable}"
+                                    value="#{receiptLogView.task.receiptDate}">
+                            <p:ajax event="dateSelect"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.receiptDate',receiptLogView.task.receiptDate)}"
+                                    update="receiptDate"/>
+                            <f:ajax event="change" execute="@this" render="receiptDate"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.receiptDate',receiptLogView.task.receiptDate)}"/>
+                        </p:calendar>
+                    </div>
+                    <!-- ##################### Termin Date ##################### -->
+                    <div class="ui-g-4 ui-g-vCenter">
+                        <h:outputLabel value="#{msg['body.receiptlog.taskDueDate']}"/>
+                    </div>
+                    <div class="ui-g-1 ui-g-vCenter">
+                        <p:selectBooleanCheckbox style="padding-right:5px;"
+                                                 disabled="#{!receiptLogView.task.taskStatus.editable}"
+                                                 title="#{msg['body.receiptlog.taskDueDate.hint']}"
+                                                 value="#{receiptLogView.task.dueDateSelected}">
+                            <p:ajax event="change" execute="@this"
+                                    update="navigationForm:patientList contentForm:contentPanel"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.use',receiptLogView.task.dueDateSelected)}">
+                            </p:ajax>
+
+                        </p:selectBooleanCheckbox>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:calendar pattern="dd.MM.yyyy" mask="true" id="dueDate"
+                                    style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
+                                    styleClass="customBackground" converter="localDateConverter"
+                                    value="#{receiptLogView.task.dueDate}"
+                                    disabled="#{!receiptLogView.task.dueDateSelected or !receiptLogView.task.taskStatus.editable}">
+                            <p:ajax event="dateSelect"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.date',receiptLogView.task.dueDate)}"
+                                    update="dueDate"/>
+                            <f:ajax event="change" execute="@this" render="dueDate"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.date',receiptLogView.task.dueDate)}"/>
+                        </p:calendar>
+                    </div>
+                    <!-- ##################### ward ##################### -->
+                    <div class="ui-g-4 ui-g-vCenter">
+                        <h:outputLabel value="#{msg['body.diagnosis.ward']}"/>
+                    </div>
+                    <div class="ui-g-8">
+                        <p:selectOneMenu id="wards"
+                                         value="#{receiptLogView.task.ward}"
+                                         style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
+                                         styleClass="customBackground" editable="true"
+                                         disabled="#{!receiptLogView.task.taskStatus.editable}">
+                            <f:selectItems
+                                    value="#{genericViewData.wardList}"
+                                    itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward"/>
+                            <p:ajax event="change" execute="@this"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.ward',receiptLogView.task.ward)}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <!-- ##################### EYE ##################### -->
+                    <div class="ui-g-4 ui-g-vCenter">
+                        <h:outputLabel value="#{msg['body.receiptlog.eye']}"/>
+                    </div>
+                    <div class="ui-g-8">
+                        <p:selectOneMenu
+                                style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
+                                styleClass="customBackground"
+                                value="#{receiptLogView.task.eye}"
+                                disabled="#{!receiptLogView.task.taskStatus.editable}">
+
+                            <f:selectItems value="#{enumProvider.eyes}" var="eye"
+                                           itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}"/>
+
+                            <p:ajax event="change" execute="@this"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.eye',receiptLogView.task.eye)}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <!-- ##################### History ##################### -->
+                    <div class="ui-g-4 ui-g-vCenter">
+                        <h:outputLabel value="#{msg['body.receiptlog.story']}"/>
+                    </div>
+                    <div class="ui-g-8">
+                        <p:inputTextarea styleClass="customBackground"
+                                         disabled="#{!receiptLogView.task.taskStatus.editable}"
+                                         value="#{receiptLogView.task.caseHistory}"
+                                         title="#{msg['body.diagnosis.story.watermark']}"
+                                         id="caseHistoryInput" style="width:90%"
+                                         onclick="PF('caseHistoryOverlay').showAndFocus('#{component.clientId}', submitCustomCaseHistory)"
+                                         onkeypress="PF('caseHistoryOverlay').hide();">
+                            <p:ajax event="change"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.caseHistory',receiptLogView.task.caseHistory)}"> </p:ajax>
+                        </p:inputTextarea>
+
+                        <hm:caseHistorySelectOverlay id="caseHistoryOverlay" widgetVar="caseHistoryOverlay"
+                                                     source="#{receiptLogView.caseHistory}">
+                            <p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
+                                    process="contentForm:caseHistoryOverlay:content"
+                                    partialSubmit="true"
+                                    listener="#{receiptLogView.updateCaseHistoryWithName(receiptLogView.task, receiptLogView.caseHistory.selectedItem.value,'log.task.edit.caseHistory',receiptLogView.caseHistory.selectedItem.value)}"
+                                    oncomplete="PF('caseHistoryOverlay').hide();"/>
+                        </hm:caseHistorySelectOverlay>
+
+                        <p:remoteCommand name="submitCustomCaseHistory"
+                                         update="contentForm:caseHistoryInput"
+                                         process="@this contentForm:caseHistoryOverlay:content"
+                                         partialSubmit="true"
+                                         actionListener="#{receiptLogView.updateCaseHistoryWithName(receiptLogView.task, receiptLogView.caseHistory.filter,'log.task.edit.caseHistory',receiptLogView.caseHistory.filter)}"
+                                         oncomplete="PF('caseHistoryOverlay').hide();">
+                        </p:remoteCommand>
+                    </div>
+                    <!-- ##################### commentary ##################### -->
+                    <div class="ui-g-4 ui-g-vCenter">
+                        <h:outputLabel value="#{msg['body.receiptlog.commentary']}"/>
+                    </div>
+                    <div class="ui-g-8">
+                        <p:inputTextarea styleClass="customBackground"
+                                         disabled="#{!receiptLogView.task.taskStatus.editable}"
+                                         value="#{receiptLogView.task.commentary}"
+                                         style="width:90%">
+                            <p:ajax event="change"
+                                    listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.commentary',receiptLogView.task.commentary)}"/>
+                        </p:inputTextarea>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-4">
+                <div class="ui-g ui-g-nopad">
+                    <!-- ##################### Task Number ##################### -->
+                    <div class="ui-g-12 ui-md-6 ui-lg-4 ui-g-vCenter">
+                        <h:outputLabel value="#{msg['body.diagnosis.taskNumber']}"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-6 ui-lg-4 ui-g-vCenter">
+                        <p:inputText disabled="true"
+                                     value="#{receiptLogView.task.taskID}"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-6 ui-lg-4 ui-g-vCenter">
+                        <p:commandLink title="#{msg['body.diagnosis.taskNumber.change']}"
+                                       rendered="#{userService.userHasPermission('TASK_EDIT_ID')}"
+                                       disabled="#{!receiptLogView.task.taskStatus.editable}"
+                                       actionListener="#{dialog.changeTaskIDDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
+                            <i class="fa fa-fw fa-cog"/>
+                            <p:ajax event="dialogReturn"
+                                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                                    update="navigationForm:patientList contentForm:contentPanel headerForm"/>
+                        </p:commandLink>
+                    </div>
+                    <!-- ##################### material ##################### -->
+                    <div class="ui-g-12">
+                        <p:outputLabel value="#{msg['body.receiptlog.material']}"
+                                       styleClass="bigFont"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <hm:materialSelectComponent editable="#{receiptLogView.task.taskStatus.editable}"
+                                                    source="#{receiptLogView}"
+                                                    widgetVar="materialComponent" id="materialComponent"/>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-4">
+                <!-- ##################### contacts ##################### -->
+                <div class="ui-g ui-g-nopad">
+                    <div class="ui-g-10">
+                        <h:outputLabel value="#{msg['body.receiptlog.notification']}"
+                                       styleClass="bigFont"/>
+                    </div>
+                    <div class="ui-g-2">
+
+                        <div class="ui-g ui-g-nopad">
+                            <!-- ##################### quickContact surgeon ##################### -->
+                            <div class="ui-g-4">
+                                <p:commandLink
+                                        onclick="PF('surgeonOverlay').showAndFocus('#{component.clientId}')"
+                                        title="#{msg['body.receiptlog.notification.surgeon.hint']}"
+                                        partialSubmit="@this"
+                                        process="@this"
+                                        disabled="#{!receiptLogView.task.taskStatus.editable}">
+                                    <i class="fa fa-fw fa-scissors"/>
+                                </p:commandLink>
+
+                                <hm:physicianSelectOverlay source="#{receiptLogView.surgeons}"
+                                                           widgetVar="surgeonOverlay"
+                                                           id="surgeonOverlay">
+                                    <p:ajax event="rowSelect"
+                                            partialSubmit="true"
+                                            update="contentForm:contentPanel"
+                                            process="@this contentForm:surgeonOverlay:content"
+                                            listener="#{receiptLogView.surgeons.onSelect()}"
+                                            oncomplete="PF('surgeonOverlay').hide();"/>
+                                </hm:physicianSelectOverlay>
+                            </div>
+                            <div class="ui-g-4">
+                                <!-- ##################### quickcontact private physician ##################### -->
+                                <p:commandLink
+                                        onclick="PF('privatePhysicianOverlay').showAndFocus('#{component.clientId}')"
+                                        title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
+                                        disabled="#{!receiptLogView.task.taskStatus.editable}">
+                                    <i class="fa fa-fw fa-eye"/>
+                                </p:commandLink>
+
+                                <!-- private physician overlay panel -->
+                                <hm:physicianSelectOverlay source="#{receiptLogView.privatePhysician}"
+                                                           widgetVar="privatePhysicianOverlay"
+                                                           id="privatePhysicianOverlay">
+                                    <p:ajax event="rowSelect"
+                                            partialSubmit="true"
+                                            update="contentForm:contentPanel"
+                                            process="@this contentForm:privatePhysicianOverlay:content"
+                                            listener="#{receiptLogView.privatePhysician.onSelect()}"
+                                            oncomplete="PF('privatePhysicianOverlay').hide();"/>
+                                </hm:physicianSelectOverlay>
+                            </div>
+                            <div class="ui-g-4">
+                                <!-- ##################### edit contacts ##################### -->
+                                <p:commandLink title="#{msg['body.receiptlog.notification.hint']}"
+                                               disabled="#{!receiptLogView.task.taskStatus.editable}"
+                                               actionListener="#{contactDialog.initAndPrepareBean(receiptLogView.task)}">
+                                    <i class="fa fa-fw fa-cog"/>
+                                    <p:ajax event="dialogReturn"
+                                            listener="#{dialogReturnHandler.onDefaultReturn}"
+                                            update="navigationForm:patientList contentForm:contentPanel"/>
+                                </p:commandLink>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <h:panelGrid columns="3" style="margin-top:10px; width:100%"
                      styleClass="defaultHistoHiddenTableContainer"
                      columnClasses="columnTop, columnTop, columnTop">
 
-            <!-- Left Column -->
-            <h:panelGrid columns="2" styleClass="defaultHistoTable">
-
-                <!-- Receipt Date -->
-                <h:outputLabel value="#{msg['body.receiptlog.taskEDate']}"/>
-                <p:calendar pattern="dd.MM.yyyy" mask="true" id="receiptDate" converter="localDateConverter"
-                            style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}"
-                            styleClass="customBackground"
-                            disabled="#{!receiptLogView.task.taskStatus.editable}"
-                            value="#{receiptLogView.task.receiptDate}">
-                    <p:ajax event="dateSelect"
-                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.receiptDate',receiptLogView.task.receiptDate)}"
-                            update="receiptDate"/>
-                    <f:ajax event="change" execute="@this" render="receiptDate"
-                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.receiptDate',receiptLogView.task.receiptDate)}"/>
-                </p:calendar>
-
-                <!-- Termin Date -->
-                <h:outputLabel value="#{msg['body.receiptlog.taskDueDate']}"/>
-                <h:panelGrid columns="2"
-                             styleClass="listingHistoHiddenTableContainer">
-
-                    <p:selectBooleanCheckbox style="padding-right:5px;"
-                                             disabled="#{!receiptLogView.task.taskStatus.editable}"
-                                             title="#{msg['body.receiptlog.taskDueDate.hint']}"
-                                             value="#{receiptLogView.task.dueDateSelected}">
-                        <p:ajax event="change" execute="@this"
-                                update="navigationForm:patientList contentForm:contentPanel"
-                                listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.use',receiptLogView.task.dueDateSelected)}">
-                        </p:ajax>
-
-                    </p:selectBooleanCheckbox>
-
-                    <p:calendar pattern="dd.MM.yyyy" mask="true" id="dueDate"
-                                style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
-                                styleClass="customBackground" converter="localDateConverter"
-                                value="#{receiptLogView.task.dueDate}"
-                                disabled="#{!receiptLogView.task.dueDateSelected or !receiptLogView.task.taskStatus.editable}">
-                        <p:ajax event="dateSelect"
-                                listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.date',receiptLogView.task.dueDate)}"
-                                update="dueDate"/>
-                        <f:ajax event="change" execute="@this" render="dueDate"
-                                listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.dueDate.date',receiptLogView.task.dueDate)}"/>
-                    </p:calendar>
-                </h:panelGrid>
-
-                <!-- ward -->
-                <h:outputLabel value="#{msg['body.diagnosis.ward']}"/>
-                <p:selectOneMenu id="wards"
-                                 value="#{receiptLogView.task.ward}"
-                                 style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
-                                 styleClass="customBackground" editable="true"
-                                 disabled="#{!receiptLogView.task.taskStatus.editable}">
-                    <f:selectItems
-                            value="#{genericViewData.wardList}"
-                            itemValue="#{ward.value}" itemLabel="#{ward.value}" var="ward"/>
-                    <p:ajax event="change" execute="@this"
-                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.ward',receiptLogView.task.ward)}"/>
-                </p:selectOneMenu>
-
-
-                <!-- EYE -->
-                <h:outputLabel value="#{msg['body.receiptlog.eye']}"/>
-                <p:selectOneMenu
-                        style="width: 80%;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor};"
-                        styleClass="customBackground"
-                        value="#{receiptLogView.task.eye}"
-                        disabled="#{!receiptLogView.task.taskStatus.editable}">
-
-                    <f:selectItems value="#{enumProvider.eyes}" var="eye"
-                                   itemLabel="#{msg['enum.eye.'.concat(eye)]}" itemValue="#{eye}"/>
-
-                    <p:ajax event="change" execute="@this"
-                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.eye',receiptLogView.task.eye)}"/>
-                </p:selectOneMenu>
-
-                <!-- History -->
-                <h:outputLabel value="#{msg['body.receiptlog.story']}"/>
-                <h:panelGroup>
-                    <p:inputTextarea styleClass="customBackground"
-                                     disabled="#{!receiptLogView.task.taskStatus.editable}"
-                                     value="#{receiptLogView.task.caseHistory}"
-                                     title="#{msg['body.diagnosis.story.watermark']}"
-                                     id="caseHistoryInput" style="width:90%"
-                                     onclick="PF('caseHistoryOverlay').showAndFocus('#{component.clientId}', submitCustomCaseHistory)"
-                                     onkeypress="PF('caseHistoryOverlay').hide();">
-                        <p:ajax event="change"
-                                listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.caseHistory',receiptLogView.task.caseHistory)}"> </p:ajax>
-                    </p:inputTextarea>
-
-                    <hm:caseHistorySelectOverlay id="caseHistoryOverlay" widgetVar="caseHistoryOverlay"
-                                                 source="#{receiptLogView.caseHistory}">
-                        <p:ajax event="rowSelect" update="contentForm:caseHistoryInput"
-                                process="contentForm:caseHistoryOverlay:content"
-                                partialSubmit="true"
-                                listener="#{receiptLogView.updateCaseHistoryWithName(receiptLogView.task, receiptLogView.caseHistory.selectedItem.value,'log.task.edit.caseHistory',receiptLogView.caseHistory.selectedItem.value)}"
-                                oncomplete="PF('caseHistoryOverlay').hide();"/>
-                    </hm:caseHistorySelectOverlay>
-
-                    <p:remoteCommand name="submitCustomCaseHistory"
-                                     update="contentForm:caseHistoryInput"
-                                     process="@this contentForm:caseHistoryOverlay:content"
-                                     partialSubmit="true"
-                                     actionListener="#{receiptLogView.updateCaseHistoryWithName(receiptLogView.task, receiptLogView.caseHistory.filter,'log.task.edit.caseHistory',receiptLogView.caseHistory.filter)}"
-                                     oncomplete="PF('caseHistoryOverlay').hide();">
-                    </p:remoteCommand>
-                </h:panelGroup>
-
-                <!-- commentary -->
-                <h:outputLabel value="#{msg['body.receiptlog.commentary']}"/>
-                <p:inputTextarea styleClass="customBackground"
-                                 disabled="#{!receiptLogView.task.taskStatus.editable}"
-                                 value="#{receiptLogView.task.commentary}"
-                                 style="width:90%">
-                    <p:ajax event="change"
-                            listener="#{receiptLogView.save(receiptLogView.task, 'log.task.edit.commentary',receiptLogView.task.commentary)}"/>
-                </p:inputTextarea>
-
-            </h:panelGrid>
-
-            <!-- middle column -->
-            <h:panelGroup>
-                <h:panelGrid columns="1" styleClass="defaultHistoTable">
-
-                    <h:panelGrid columns="2"
-                                 styleClass="listingHistoHiddenTableContainer">
-                        <!-- Task Number -->
-                        <h:outputLabel value="#{msg['body.diagnosis.taskNumber']}"/>
-                        <h:panelGrid columns="2"
-                                     styleClass="listingHistoHiddenTableContainer">
-                            <p:inputText disabled="true"
-                                         value="#{receiptLogView.task.taskID}"/>
-                            <p:commandLink title="#{msg['body.diagnosis.taskNumber.change']}"
-                                           rendered="#{userService.userHasPermission('TASK_EDIT_ID')}"
-                                           disabled="#{!receiptLogView.task.taskStatus.editable}"
-                                           actionListener="#{dialog.changeTaskIDDialog.initAndPrepareBean(worklistHandler.current.selectedTask)}">
-                                <i class="fa fa-fw fa-cog"/>
-                                <p:ajax event="dialogReturn"
-                                        listener="#{dialogReturnHandler.onDefaultReturn}"
-                                        update="navigationForm:patientList contentForm:contentPanel headerForm"/>
-                            </p:commandLink>
-                        </h:panelGrid>
-                    </h:panelGrid>
-
-                    <h:panelGrid columns="2"
-                                 styleClass="listingHistoHiddenTableContainer">
-                        <!-- material -->
-                        <p:outputLabel value="#{msg['body.receiptlog.material']}"
-                                       styleClass="bigFont"/>
-                    </h:panelGrid>
-
-                    <!-- material -->
-                    <c:forEach items="#{receiptLogView.task.samples}"
-                               var="sample" varStatus="loopCount">
-
-                        <h:panelGrid columns="2"
-                                     styleClass="listingHistoHiddenTableContainer"
-                                     columnClasses="column75px,">
-                            <h:outputLabel
-                                    value="#{msg['body.diagnosis.sample']} #{sample.sampleID}"/>
-                            <h:panelGroup>
-                                <p:inputText value="#{sample.material}"
-                                             id="materialInput#{loopCount.index}"
-                                             disabled="#{!receiptLogView.task.taskStatus.editable}"
-                                             tabindex="1" styleClass="customBackground"
-                                             onclick="commonFunctions.showAndUpdateOverlayPanel('materialOverlayPanel#{loopCount.index}', '#{component.clientId}' ,null, 'materialOverlayPanelDataTable#{loopCount.index}', 0, submitUpdateMaterial#{loopCount.index});"
-                                             style="width:200px;float:right;background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}">
-
-                                    <p:ajax event="change" execute="@this"
-                                            listener="#{receiptLogView.save(sample.task, 'log.sample.edit.material',sample,sample.material)}"/>
-                                </p:inputText>
-
-                            </h:panelGroup>
-                        </h:panelGrid>
-                    </c:forEach>
-                </h:panelGrid>
-                <hm:materialSelectOverlay source="#{receiptLogView.material}"
-                                          widgetVar="materialOverlay"
-                                          id="materialOverlay">
-                    <p:ajax event="rowSelect" update="contentForm:contentPanel"
-                            process="contentForm:materialOverlay:content"
-                            partialSubmit="true"
-                            listener="#{receiptLogView.updateMaterialOfSample(receiptLogView.material.parentSample, receiptLogView.material.selectedMaterial,receiptLogView.material.selectedMaterial.name,'log.patient.task.sample.material.update',receiptLogView.material.parentSample, receiptLogView.material.selectedMaterial.name)}"
-                            oncomplete="PF('materialOverlay').hide();"/>
-                </hm:materialSelectOverlay>
-
-                <p:remoteCommand name="submitCustomMaterial"
-                                 partialSubmit="true"
-                                 process="@this contentForm:materialOverlay:content"
-                                 update="contentForm:contentPanel"
-                                 actionListener="#{receiptLogView.updateMaterialOfSample(receiptLogView.material.parentSample, null, receiptLogView.material.filter,'log.patient.task.sample.material.update',receiptLogView.material.parentSample,  receiptLogView.material.filter)}"
-                                 oncomplete="PF('materialOverlay').hide();"/>
-            </h:panelGroup>
 
             <!-- right column -->
             <h:panelGrid columns="1" styleClass="defaultHistoTable">
                 <h:panelGrid columns="2"
                              styleClass="defaultHistoHiddenTableContainer">
                     <!-- contact -->
-                    <h:outputLabel value="#{msg['body.receiptlog.notification']}"
-                                   styleClass="bigFont"/>
 
-                    <h:panelGrid columns="3" style="margin-left:20px;"
-                                 styleClass="listingHistoHiddenTableContainer">
-                        <!-- quickContact surgeon -->
-                        <h:panelGroup>
-                            <p:commandLink
-                                    onclick="PF('surgeonOverlay').showAndFocus('#{component.clientId}')"
-                                    title="#{msg['body.receiptlog.notification.surgeon.hint']}"
-                                    disabled="#{!receiptLogView.task.taskStatus.editable}">
-                                <i class="fa fa-fw fa-scissors"/>
-                            </p:commandLink>
-
-                            <hm:physicianSelectOverlay source="#{receiptLogView.surgeons}"
-                                                       widgetVar="surgeonOverlay"
-                                                       id="surgeonOverlay">
-                                <p:ajax event="rowSelect"
-                                        partialSubmit="true"
-                                        update="contentForm:contentPanel"
-                                        process="contentForm:surgeonOverlay:surgeonOverlay_contentDatatable"
-                                        listener="#{receiptLogView.surgeons.onSelect()}"
-                                        oncomplete="PF('surgeonOverlay').hide();"/>
-                            </hm:physicianSelectOverlay>
-                        </h:panelGroup>
-
-
-                        <!-- quickcontact private physician  -->
-                        <h:panelGroup>
-                            <p:commandLink
-                                    onclick="PF('privatePhysicianOverlay').showAndFocus('#{component.clientId}')"
-                                    title="#{msg['body.receiptlog.notification.ophthalmologist.hint']}"
-                                    disabled="#{!receiptLogView.task.taskStatus.editable}">
-                                <i class="fa fa-fw fa-eye"/>
-                            </p:commandLink>
-
-                            <!-- private physician overlay panel -->
-                            <hm:physicianSelectOverlay source="#{receiptLogView.privatePhysician}"
-                                                       widgetVar="privatePhysicianOverlay"
-                                                       id="privatePhysicianOverlay">
-                                <p:ajax event="rowSelect"
-                                        partialSubmit="true"
-                                        update="contentForm:contentPanel"
-                                        process="contentForm:privatePhysicianOverlay:privatePhysicianOverlay_contentDatatable"
-                                        listener="#{receiptLogView.privatePhysician.onSelect()}"
-                                        oncomplete="PF('privatePhysicianOverlay').hide();"/>
-                            </hm:physicianSelectOverlay>
-                        </h:panelGroup>
-
-                        <!-- edit contacts -->
-                        <p:commandLink title="#{msg['body.receiptlog.notification.hint']}"
-                                       disabled="#{!receiptLogView.task.taskStatus.editable}"
-                                       actionListener="#{contactDialog.initAndPrepareBean(receiptLogView.task)}">
-                            <i class="fa fa-fw fa-cog"/>
-                            <p:ajax event="dialogReturn"
-                                    listener="#{dialogReturnHandler.onDefaultReturn}"
-                                    update="navigationForm:patientList contentForm:contentPanel"/>
-                        </p:commandLink>
-                    </h:panelGrid>
 
                 </h:panelGrid>
                 <h:panelGroup>
