@@ -68,6 +68,7 @@ spring:
   messages:
     basename: messages/messages
 
+
 logging:
   file: "logs/patho.log"
   pattern:
