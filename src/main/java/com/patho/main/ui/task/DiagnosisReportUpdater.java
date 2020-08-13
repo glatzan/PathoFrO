@@ -47,8 +47,9 @@ public class DiagnosisReportUpdater {
 
     public Task updateDiagnosisReportNoneBlocking(Task task, DiagnosisRevision diagnosisRevision,
                                                   PrintDocument printDocument, LazyPDFReturnHandler returnHandler) {
+        Task t = SpringContextBridge.services().getTaskRepository().findByID(diagnosisRevision.getTask(), false, true, true, false, false);
 
-        printDocument.initialize(new DocumentToken("task", diagnosisRevision.getTask()),
+        printDocument.initialize(new DocumentToken("task", t),
                 new DocumentToken("diagnosisRevisions", Arrays.asList(diagnosisRevision)),
                 new DocumentToken("patient", diagnosisRevision.getPatient()), new DocumentToken("address", ""),
                 new DocumentToken("subject", ""));

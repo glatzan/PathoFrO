@@ -37,6 +37,9 @@ public class JWTUserAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Invalid Password or User");
         }
 
+        if(!user.isPresent())
+            throw new BadCredentialsException("Invalid Password or User");
+
         return new JWTAuthorizationToken(AuthenticationService.generateJWTToken(user.get(), secret));
     }
 

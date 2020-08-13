@@ -26,8 +26,7 @@ public class JWTAuthorizationFailureHandler implements AuthenticationFailureHand
     private void sendError(HttpServletResponse response, int code, String message, Exception e) throws IOException {
         SecurityContextHolder.clearContext();
 
-        Response<String> exceptionResponse = new Response<String>(Response.STATUES_FAILURE, message,
-                ExceptionUtils.getStackTrace(e));
+        Response<String> exceptionResponse = new Response<String>("401", message, "");
 
         exceptionResponse.send(response, code);
     }
