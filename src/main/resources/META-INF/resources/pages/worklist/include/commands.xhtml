@@ -11,84 +11,84 @@
     <!-- mergePatientData -> merge patient : ctrl + m-->
 
     <script>
-        $(document.body).off('keydown').on('keydown', function () {
-            if (event.ctrlKey &amp;&amp; event.altKey) {
-                switch (event.keyCode) {
-                    case 'S'.charCodeAt(0): // settingsDialogBtn -> Settings
-                        PF('settingsDialogBtn').jq.click();
-                        return false;
-                    case 'A'.charCodeAt(0): // accountingDialogBtn -> Accounting
-                        PF('accountingDialogBtn').jq.click();
-                        return false;
-                    case 'U'.charCodeAt(0): // userSettingsDialogBtn
-                        PF('userSettingsDialogBtn').jq.click();
-                        return false;
-                    case 'I'.charCodeAt(0): // infoDialogBtn
-                        PF('infoDialogBtn').jq.click();
-                        return false;
-                }
-            } else if (event.ctrlKey) {
-                switch (event.keyCode) {
-                    case 'B'.charCodeAt(0): // notificationPerformBtn -> Notfication Perform Dialog
-                        PF('notificationPerformBtn').jq.click();
-                        return false;
-                    case 'S'.charCodeAt(0): // addPatientButton -> Search Patient dialog
-                        PF('addPatientButton').jq.click();
-                        return false;
-                    case 'U'.charCodeAt(0): // uploadBtn -> PDF Overview
-                        PF('uploadBtn').jq.click();
-                        return false;
-                    case 'M'.charCodeAt(0): // mergePatientData -> Merge Patient data
-                        PF('mergePatientData').jq.click();
-                        return false;
-                    case 'E'.charCodeAt(0): // editPatientData -> Edit patient data
-                        PF('editPatientData').jq.click();
-                        return false;
-                    case 'T'.charCodeAt(0): // newTaskBtn -> New Task Task button
-                        PF('newTaskBtn').jq.click();
-                        return false;
-                    case 'F'.charCodeAt(0): // stainingOverview -> New Staining
-                        PF('stainingOverview').jq.click();
-                        return false;
-                    case 'D'.charCodeAt(0): // newDiagnosisRevision -> New Diagnosis dialog
-                        PF('newDiagnosisRevision').jq.click();
-                        return false;
-                    case 'C'.charCodeAt(0): // councilBtn -> Council Dialog
-                        PF('councilBtn').jq.click();
-                        return false;
-                    case 'K'.charCodeAt(0): // editContactBtn -> Contact Dialog
-                        PF('editContactBtn').jq.click();
-                        return false;
-                    case 'P'.charCodeAt(0): // editContactBtn -> Contact Dialog
-                        PF('printBtnVar').jq.click();
-                        return false;
-                    case 'L'.charCodeAt(0): // editContactBtn -> Contact Dialog
-                        PF('logBtn').jq.click();
-                        return false;
-                }
-            } else if (event.altKey) {
-                switch (event.keyCode) {
-                    case 'O'.charCodeAt(0): // patient overview in main view
-                        PF('showPatientOverview').jq.click();
-                        return false;
-                    case 'S'.charCodeAt(0): // staining phase exit dialog from main view
-                        PF('stainingPhaseExit').jq.click();
-                        return false;
-                    case 'D'.charCodeAt(0): // diagnosisPhaseExit exit dialog from main view
-                        PF('diagnosisPhaseExit').jq.click();
-                        return false;
-                    case 'N'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
-                        PF('notificationPhaseExit').jq.click();
-                        return false;
-                    case 'A'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
-                        PF('archiveTaskBtn').jq.click();
-                        return false;
-                    case 'B'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
-                        PF('bioBankBtn').jq.click();
-                        return false;
-                }
-            }
-        })
+        // $(document.body).off('keydown').on('keydown', function () {
+        //     if (event.ctrlKey &amp;&amp; event.altKey) {
+        //         switch (event.keyCode) {
+        //             case 'S'.charCodeAt(0): // settingsDialogBtn -> Settings
+        //                 PF('settingsDialogBtn').jq.click();
+        //                 return false;
+        //             case 'A'.charCodeAt(0): // accountingDialogBtn -> Accounting
+        //                 PF('accountingDialogBtn').jq.click();
+        //                 return false;
+        //             case 'U'.charCodeAt(0): // userSettingsDialogBtn
+        //                 PF('userSettingsDialogBtn').jq.click();
+        //                 return false;
+        //             case 'I'.charCodeAt(0): // infoDialogBtn
+        //                 PF('infoDialogBtn').jq.click();
+        //                 return false;
+        //         }
+        //     } else if (event.ctrlKey) {
+        //         switch (event.keyCode) {
+        //             case 'B'.charCodeAt(0): // notificationPerformBtn -> Notfication Perform Dialog
+        //                 PF('notificationPerformBtn').jq.click();
+        //                 return false;
+        //             case 'S'.charCodeAt(0): // addPatientButton -> Search Patient dialog
+        //                 PF('addPatientButton').jq.click();
+        //                 return false;
+        //             case 'U'.charCodeAt(0): // uploadBtn -> PDF Overview
+        //                 PF('uploadBtn').jq.click();
+        //                 return false;
+        //             case 'M'.charCodeAt(0): // mergePatientData -> Merge Patient data
+        //                 PF('mergePatientData').jq.click();
+        //                 return false;
+        //             case 'E'.charCodeAt(0): // editPatientData -> Edit patient data
+        //                 PF('editPatientData').jq.click();
+        //                 return false;
+        //             case 'T'.charCodeAt(0): // newTaskBtn -> New Task Task button
+        //                 PF('newTaskBtn').jq.click();
+        //                 return false;
+        //             case 'F'.charCodeAt(0): // stainingOverview -> New Staining
+        //                 PF('stainingOverview').jq.click();
+        //                 return false;
+        //             case 'D'.charCodeAt(0): // newDiagnosisRevision -> New Diagnosis dialog
+        //                 PF('newDiagnosisRevision').jq.click();
+        //                 return false;
+        //             case 'C'.charCodeAt(0): // councilBtn -> Council Dialog
+        //                 PF('councilBtn').jq.click();
+        //                 return false;
+        //             case 'K'.charCodeAt(0): // editContactBtn -> Contact Dialog
+        //                 PF('editContactBtn').jq.click();
+        //                 return false;
+        //             case 'P'.charCodeAt(0): // editContactBtn -> Contact Dialog
+        //                 PF('printBtnVar').jq.click();
+        //                 return false;
+        //             case 'L'.charCodeAt(0): // editContactBtn -> Contact Dialog
+        //                 PF('logBtn').jq.click();
+        //                 return false;
+        //         }
+        //     } else if (event.altKey) {
+        //         switch (event.keyCode) {
+        //             case 'O'.charCodeAt(0): // patient overview in main view
+        //                 PF('showPatientOverview').jq.click();
+        //                 return false;
+        //             case 'S'.charCodeAt(0): // staining phase exit dialog from main view
+        //                 PF('stainingPhaseExit').jq.click();
+        //                 return false;
+        //             case 'D'.charCodeAt(0): // diagnosisPhaseExit exit dialog from main view
+        //                 PF('diagnosisPhaseExit').jq.click();
+        //                 return false;
+        //             case 'N'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
+        //                 PF('notificationPhaseExit').jq.click();
+        //                 return false;
+        //             case 'A'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
+        //                 PF('archiveTaskBtn').jq.click();
+        //                 return false;
+        //             case 'B'.charCodeAt(0): // notificationPhaseExit exit dialog from main view
+        //                 PF('bioBankBtn').jq.click();
+        //                 return false;
+        //         }
+        //     }
+        // })
     </script>
 
     <h:panelGroup styleClass="hiddenButton">

@@ -9,7 +9,7 @@ joinfaces:
   bootsfaces:
     getBootstrapFromCdn: false
 server:
-  port: 8081
+  port: 8080
   servlet:
     session:
       timeout: 8H
@@ -32,7 +32,7 @@ spring:
       max-file-size: 50MB
       max-request-size: 100MB
   datasource:
-    url: jdbc:postgresql://localhost/histo
+    url: jdbc:postgresql://localhost/pathofro
     username: postgres
     password: postgres
   data:
@@ -52,7 +52,7 @@ spring:
   jpa:
     generate-ddl: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:

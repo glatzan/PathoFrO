@@ -124,7 +124,7 @@ open class HttpRestRepositoryImpl @Autowired constructor(
             val userMapper: List<JSONPatientMapper> = jacksonObjectMapper().readValue(URL(url))
             // catching an error, to many entries
             if (userMapper.size == 1 && userMapper[0].error != null) throw ToManyEntriesException()
-            userMapper.stream().map { p: JSONPatientMapper -> p.getPatient() }.collect(Collectors.toList())
+            userMapper.map { it.getPatient() }
         } catch (e: IllegalIdentifierException) {
             throw ToManyEntriesException()
         } catch (e: IOException) {

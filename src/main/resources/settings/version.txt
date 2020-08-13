@@ -369,8 +369,6 @@ AS $$
 	# First Level I*, Second Level a-z, Third Level 0-9
 	arr = re.search("^(I*)([a-zA-Z]?)([0-9]*)$", str)
 
-	plpy.info(arr.group())
-
 	if arr != None:
 		if arr.group(3):
 			return 3
@@ -399,10 +397,11 @@ AS $$
 			next = arr[i + 1] if i+1 < len(arr) else None
 
             # getting the level of the current splitted char sequence
-			levelT = plpy.execute('SELECT get_slide_count_level(\'' + t + '\')')[0]['get_slide_count_level_2']
-			levelN = plpy.execute('SELECT get_slide_count_level(\''+next+'\')')[0]['get_slide_count_level_2'] if next != None else 0
-
-			plpy.info(levelT)
+			levelT = plpy.execute('SELECT get_slide_count_level(\'' + t + '\')')[0]['get_slide_count_level']
+			if next != None:
+				levelN = plpy.execute('SELECT get_slide_count_level(\''+next+'\')')[0]['get_slide_count_level']
+			else:
+				levelN = 0
 
             # if the current level is bigger then the next count +1
             # Example Ia2 (I: level = 1, a: level = 2, 2: level 3) => count as 1
