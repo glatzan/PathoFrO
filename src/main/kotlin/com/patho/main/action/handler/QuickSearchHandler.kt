@@ -78,15 +78,20 @@ class QuickSearchHandler @Autowired constructor(
 
                 // Searching for patient in pdv and local database
                 var patient: Optional<Patient>
-                try {
-                    patient = patientService.findPatientByPizInDatabaseAndPDV(quickSerach,
+                patient = try {
+                    patientService.findPatientByPizInDatabaseAndPDV(quickSerach,
                             !userService.userHasPermission(HistoPermissions.PATIENT_EDIT_ADD_CLINIC), true,
                             true)
                 } catch (e: Exception) {
-                    patient = Optional.empty()
+                    Optional.empty()
                 }
 
                 if (patient.isPresent) {
+
+                    if(!patient.get().inDatabase){
+                        patientService.addPatient(patient.get())
+                    }
+
                     logger.debug("Found patient $patient and adding to currentworklist")
 
                     worklistHandler.addPatientToWorkList(patient.get(), true, true)

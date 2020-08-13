@@ -271,6 +271,7 @@ public class PatientService extends AbstractService {
                 return patient;
             } else if (pdvPatient.isPresent()) {
                 logger.debug("Patient not in database, returning pdv data");
+                pdvPatient.get().setInDatabase(false);
                 return pdvPatient;
             }
         }

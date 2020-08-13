@@ -28,7 +28,7 @@ public class JWTAuthorizationFilter extends AbstractAuthenticationProcessingFilt
     private String headerString;
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager, ApplicationContext ctx, AuthenticationFailureHandler failureHandler) {
-        super("/rest/*"); // allow any request to contain an authorization header
+        super("/rest/**"); // allow any request to contain an authorization header
 
         // @value does not work in security filters
         this.tokenPrefix = ctx.getEnvironment().getProperty("patho.jwt.tokenPrefix");
