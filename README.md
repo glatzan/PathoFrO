@@ -98,7 +98,72 @@
         sudo chmod 500 PathoFrO.jar
           
         #service
-        sudo ln -s /home/patho/PathoFrO.jar /etc/init.d/PathoFrO
+        sudo vim /etc/systemd/system/pathofro.service
         ```
-    
-  
+        ```
+        [Unit]
+        Description=PathoFro Webservice
+        [Service]
+        User=patho
+        # The configuration file application.properties should be here:
+        #change this to your workspace
+        WorkingDirectory=/home/patho/
+        #path to executable. 
+        #executable is a bash script which calls jar file
+        ExecStart=/home/patho/pathfro
+        SuccessExitStatus=143
+        TimeoutStopSec=10
+        Restart=on-failure
+        RestartSec=5
+        [Install]
+        WantedBy=multi-user.target
+        ```
+        
+        ```
+        # bash script
+        sudo vim /home/patho/pathofro
+        ```
+        ```
+        #!/bin/sh
+        sudo /usr/bin/java -jar PathoFrO.jar -Xms512m -Xmx2G -Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider -Dfile.encoding=UTF8 --spring.config.location=pathofro.yml server 
+        ```
+        ```
+        sudo chown patho:patho /home/patho/pathofro
+        sudo chmod u+x PathoFrO.jar 
+      
+        # start service
+        sudo systemctl daemon-reload
+        sudo systemctl enable pathofro.service
+        sudo systemctl start pathofro
+        sudo systemctl status pathofro       
+             
+        # workdir
+        sudo mkdir workdir
+        sudo mkdir workdir/pdf
+        sudo mkdir workdir/pdf/error
+        sudo mkdir workdir/pdf/print
+        sudo chown patho:patho workdir -R
+      
+        sudo vim /home/patho/pathofro.yml
+        ``` 
+        ```
+        logging:
+          file: "patho.log"
+          pattern:
+            file: "%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n"
+        patho:
+          settings:
+            fileSettings:
+              thumbnailDPI: 50
+              fileRepository: file:/home/patho/workdir/
+              workDirectory: file:/home/patho/workdir/pdf/
+              auxDirectory: fileRepository:pdf
+              errorDirectory: fileRepository:pdf/error
+              printDirectory: fileRepository:pdf/print
+        spring:      
+          datasource:
+            password: pw     
+        ```            
+        ```
+        sudo chmod 500 pathofro.yml
+        ```

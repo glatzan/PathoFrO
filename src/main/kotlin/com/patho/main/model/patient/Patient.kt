@@ -25,7 +25,7 @@ open class Patient : AbstractPersistable, AuditAble, DataList {
     @GeneratedValue(generator = "patient_sequencegenerator")
     @SequenceGenerator(name = "patient_sequencegenerator", sequenceName = "patient_sequence")
     @Column(unique = true, nullable = false)
-    open override var id: Long = 0
+    override var id: Long = 0
 
     @Version
     open var version: Long = 0
@@ -101,7 +101,7 @@ open class Patient : AbstractPersistable, AuditAble, DataList {
     /**
      * Returns this, overwrite from datalist
      */
-    open override val patient: Patient?
+    override val patient: Patient?
         @Transient
         get() = this
 
