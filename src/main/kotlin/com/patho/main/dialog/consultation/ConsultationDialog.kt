@@ -409,6 +409,7 @@ open class ConsultationDialog @Autowired constructor(
     open fun onCouncilCompleted() {
         var c = selectedConsultation?.consultation ?: return
         councilService.endCouncil(c.task, c)
+        MessageHandler.sendGrowlMessages("growl.council.completed.headline", "growl.council.completed.text", FacesMessage.SEVERITY_ERROR)
         update(true)
     }
 
@@ -482,7 +483,6 @@ open class ConsultationDialog @Autowired constructor(
          * If true the request can be edited
          */
         var forceEditRequest = false
-
     }
 
     /**

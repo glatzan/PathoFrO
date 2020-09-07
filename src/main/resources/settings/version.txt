@@ -126,6 +126,8 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.1
+++++: Bugfixes
 
 +v 2.0.0
 ++++: 
@@ -880,7 +882,7 @@ update favouritelist set useicon = true where id = 11;
 update favouritelist set command = 'dialog:councilDialogHandler' where id = 11;
 /*council completet*/
 update favouritelist set icon = 'fa-stethoscope icon-purple' where id = 12;
-update favouritelist set infotext = 'Konsilbericht liegt vor' where id = 12;
+update favouritelist set infotext = 'Konsil erledigt' where id = 12;
 update favouritelist set useicon = true where id = 12;
 update favouritelist set command = 'dialog:councilDialogHandler' where id = 12;
 

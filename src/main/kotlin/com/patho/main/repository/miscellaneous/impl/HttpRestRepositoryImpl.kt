@@ -18,11 +18,13 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.client.SimpleClientHttpRequestFactory
+import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.io.IOException
 import java.net.URL
+import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -64,6 +66,7 @@ open class HttpRestRepositoryImpl @Autowired constructor(
         logger.debug("starting request to $createPatientInPDV")
 
         val restTemplate = RestTemplate()
+        restTemplate.messageConverters.add(0, StringHttpMessageConverter(StandardCharsets.UTF_8));
         (restTemplate.requestFactory as SimpleClientHttpRequestFactory).setReadTimeout(requestTimeout)
         (restTemplate.requestFactory as SimpleClientHttpRequestFactory).setConnectTimeout(requestTimeout)
 

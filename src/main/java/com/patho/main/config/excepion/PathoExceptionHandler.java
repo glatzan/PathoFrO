@@ -47,6 +47,7 @@ public class PathoExceptionHandler extends ExceptionHandlerWrapper {
     private ExceptionHandler wrapped;
 
     public PathoExceptionHandler(ExceptionHandler exception) {
+        super(exception);
         this.wrapped = exception;
     }
 

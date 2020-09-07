@@ -166,10 +166,9 @@ public class CouncilService extends AbstractService {
 
         task = favouriteListService.removeTaskFromList(council.getTask(), false,
                 PredefinedFavouriteList.CouncilWaitingForReply, PredefinedFavouriteList.CouncilReplyPresent,
+                PredefinedFavouriteList.Council,
                 PredefinedFavouriteList.CouncilRequest, PredefinedFavouriteList.CouncilSendRequestMTA,
                 PredefinedFavouriteList.CouncilSendRequestSecretary, PredefinedFavouriteList.CouncilWaitingForReply);
-
-        task = favouriteListService.removeTaskFromList(council.getTask(), PredefinedFavouriteList.Council);
 
         // this is normally done via dumplist of councilWaitingForReply, this catches
         // errors
