@@ -114,15 +114,16 @@ public class PrintService extends AbstractService {
             if (user == null)
                 return getPrinter().get(0);
 
-            if (user.getSettings().getAutoSelectedPreferredPrinter()) {
-                ClinicPrinter printer = getCupsPrinterForRoom();
-                if (printer != null) {
-                    logger.debug("Pritner found, setting auto printer to " + printer.getName());
-                    return printer;
-                } else
-                    logger.debug("No Pritner found!, selecting default printer");
-
-            }
+            // TODO reenable
+//            if (user.getSettings().getAutoSelectedPreferredPrinter()) {
+//                ClinicPrinter printer = getCupsPrinterForRoom();
+//                if (printer != null) {
+//                    logger.debug("Pritner found, setting auto printer to " + printer.getName());
+//                    return printer;
+//                } else
+//                    logger.debug("No Pritner found!, selecting default printer");
+//
+//            }
 
             if (user.getSettings().getPreferredPrinter() == 0) {
                 // dummy printer is always there

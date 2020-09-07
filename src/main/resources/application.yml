@@ -172,7 +172,7 @@ patho:
     defaultDocuments:
       diagnosisApprovedDocument: 10
       diagnosisReportForUsers: 10
-      taskCreationDocument: 2
+      taskCreationDocument: 3
       notificationDefaultEmailDocument: 10
       notificationDefaultEmail: 2
       notificationDefaultFaxDocument: 10
@@ -284,6 +284,18 @@ patho:
       - id: 2
         name: Eingangsbogen bedrucken, umgekehrt
         content: fileRepository:templates/print/USchein_empty_rotated180.tex
+        alternateContent: ""
+        type: U_REPORT_EMTY
+        attributes: media:keyword:default,tray1
+        templateName: com.patho.main.template.print.CaseCertificate
+        uiClass: com.patho.main.dialog.print.documentUi.CaseCertificateUi
+        defaultOfType: false
+        transientContent: true
+        hidden: false
+        sharedContextGroup: 2
+      - id: 3
+        name: Eingangsbogen unbedruckt, umgekehrt
+        content: fileRepository:templates/print/USchein_empty_no_patient_rotated180.tex
         alternateContent: ""
         type: U_REPORT_EMTY
         attributes: media:keyword:default,tray1

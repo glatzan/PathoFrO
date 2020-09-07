@@ -395,4 +395,8 @@ open class WorklistHandler @Autowired @Lazy constructor(
         }
     }
 
+
+    fun autoReloadCurrentWorklist(){
+        // TODO implement
+    }
 }

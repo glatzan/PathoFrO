@@ -13,28 +13,33 @@
 
     <p:outputPanel styleClass="bodyPannel" style="padding:10px;">
         <h:panelGrid styleClass="defaultHistoTable" columns="2">
-            <h:outputLabel value="Anfrage gestellt" />
-            <h:outputText rendered="#{consultationDialog.selectedConsultation.consultation.dateOfRequest ne null}"
-                          value="#{consultationDialog.selectedConsultation.consultation.dateOfRequest}">
-                <f:converter converterId="localDateConverter"/>
-                <f:attribute name="pattern" value="dd.MM.yyyy"/>
-            </h:outputText>
+            <h:outputLabel value="Anfrage gestellt"/>
+            <h:outputLabel value="#{consultationDialog.selectedConsultation.consultation.dateOfRequest}"/>
+<!--            <h:outputText-->
+<!--                    value="#{consultationDialog.selectedConsultation.consultation.dateOfRequest}">-->
+<!--                <f:converter converterId="localDateConverter"/>-->
+<!--                <f:attribute name="pattern" value="dd.MM.yyyy"/>-->
+<!--            </h:outputText>-->
 
-            <h:outputLabel value="Anfrage versendet" />
-            <h:outputText rendered="#{consultationDialog.selectedConsultation.consultation.sampleShippedDate ne null}"
-                          value="#{consultationDialog.selectedConsultation.consultation.sampleShippedDate}">
-                <f:converter converterId="localDateConverter"/>
-                <f:attribute name="pattern" value="dd.MM.yyyy"/>
-            </h:outputText>
+            <h:outputLabel value="Anfrage versendet"/>
+            <h:outputLabel value="#{consultationDialog.selectedConsultation.consultation.sampleShippedDate}"/>
+<!--            <h:outputText-->
+<!--                    value="#{consultationDialog.selectedConsultation.consultation.sampleShippedDate}">-->
+<!--                <f:converter converterId="localDateConverter"/>-->
+<!--                <f:attribute name="pattern" value="dd.MM.yyyy"/>-->
+<!--            </h:outputText>-->
 
-            <h:outputLabel value="Antwort erhalten" />
-            <h:outputText rendered="#{consultationDialog.selectedConsultation.consultation.replyReceivedDate ne null}"
-                          value="#{consultationDialog.selectedConsultation.consultation.replyReceivedDate}">
-                <f:converter converterId="localDateConverter"/>
-                <f:attribute name="pattern" value="dd.MM.yyyy"/>
-            </h:outputText>
+            <h:outputLabel value="Antwort erhalten"/>
+            <h:outputLabel value="#{consultationDialog.selectedConsultation.consultation.replyReceivedDate}"/>
+<!--            <h:outputText-->
+<!--                    value="#{consultationDialog.selectedConsultation.consultation.replyReceivedDate}">-->
+<!--                <f:converter converterId="localDateConverter"/>-->
+<!--                <f:attribute name="pattern" value="dd.MM.yyyy"/>-->
+<!--            </h:outputText>-->
 
 
+            <h:outputLabel value="Abgeschlossen am"/>
+            <h:outputLabel value="#{consultationDialog.selectedConsultation.consultation.councilCompletedDate}"/>
         </h:panelGrid>
     </p:outputPanel>
 
@@ -57,6 +62,7 @@
                             value="#{msg['dialog.consultation.button.endConsultation']}"
                             style="margin-right:30px" icon="fa fa-check-circle-o"
                             actionListener="#{consultationDialog.onCouncilCompleted}"
+                            update="@form"
                             rendered="#{!consultationDialog.selectedConsultation.consultation.councilCompleted and consultationDialog.editable}">
                     </p:commandButton>
                 </h:panelGroup>

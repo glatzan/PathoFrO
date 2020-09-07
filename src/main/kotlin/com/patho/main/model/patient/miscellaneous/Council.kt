@@ -93,7 +93,7 @@ open class Council : AbstractPersistable, DataList, AuditAble {
     /**
      * Date of request
      */
-    open var sampleShippedDate: LocalDate? = null
+    open var sampleShippedDate: LocalDate? = dateOfRequest
 
     /**
      * Attached slides of the council
