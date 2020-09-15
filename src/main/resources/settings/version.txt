@@ -126,8 +126,11 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
-+v 2.0.1
-++++: Bugfixes
++v 2.0.2 (15.09.2020)
++++!: Bugfixes
+
++v 2.0.1 (07.09.2020)
++++!: Bugfixes
 
 +v 2.0.0
 ++++: 
@@ -733,6 +736,19 @@ ALTER TABLE ONLY public.scannedtask
 ALTER TABLE ONLY public.scannedtask
     ADD CONSTRAINT fkgohnwr9veh1krr4ha1bgo7f4y FOREIGN KEY (task_id) REFERENCES public.task(id);
 
+/* updating contacts */
+update contact set building = '' where building is null;
+update contact set country = '' where country is null;
+update contact set fax = '' where fax is null;
+update contact set homepage = '' where homepage is null;
+update contact set mobile = '' where mobile is null;
+update contact set pager = '' where pager is null;
+update contact set phone = '' where phone is null;
+update contact set postcode = '' where postcode is null;
+update contact set street = '' where street is null;
+update contact set town = '' where town is null;
+update contact set addressadditon = '' where addressadditon is null;
+update contact set addressadditon2 = '' where addressadditon2 is null;
 
 /* ############################################################################### */
 

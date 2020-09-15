@@ -1,5 +1,6 @@
 package com.patho.main.action;
 
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.DateFormat;
 import com.patho.main.config.util.ResourceBundle;
 import com.patho.main.model.PDFContainer;
@@ -178,6 +179,10 @@ public class MainHandlerAction {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public void messageTest(){
+        MessageHandler.sendGrowlMessages("hallo", "wuuu");
     }
 
     /**
