@@ -369,11 +369,15 @@ public class PatientService extends AbstractService {
             result.add(hPatient);
             hPatient.setInDatabase(true);
 
+            int z = 0;
+
             Iterator<Patient> i = clinicPatients.iterator();
             while (i.hasNext()) {
                 Patient cPatient = i.next();
                 if (hPatient.getPiz() != null && hPatient.getPiz().equals(cPatient.getPiz())) {
                     logger.debug("found in local database " + cPatient.getPerson().getFullNameAndTitle());
+                    logger.debug(String.valueOf(z));
+                    z++;
                     i.remove();
                     // only save if update is performed
                     copyPatientDataAndSave(hPatient, cPatient);

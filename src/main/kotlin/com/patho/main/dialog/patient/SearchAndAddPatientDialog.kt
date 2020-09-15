@@ -66,11 +66,11 @@ class SearchAndAddPatientDialog @Autowired constructor(
         return this
     }
 
-    fun initializeValues(name: String, surname: String, piz: String, date: LocalDate?): SearchAndAddPatientDialog {
-        clinicSearchTab.patientName = name
+    fun initializeValues(name: String?, surname: String?, piz: String?, date: LocalDate?): SearchAndAddPatientDialog {
+        clinicSearchTab.patientName = name ?: ""
         clinicSearchTab.patientBirthday = date
-        clinicSearchTab.patientSurname = surname
-        clinicSearchTab.patientPiz = piz
+        clinicSearchTab.patientSurname = surname ?: ""
+        clinicSearchTab.patientPiz = piz ?: ""
         clinicSearchTab.searchForClinicPatients()
         return this
     }
@@ -86,14 +86,17 @@ class SearchAndAddPatientDialog @Autowired constructor(
          * Piz of Patient
          */
         var patientPiz: String = ""
+
         /**
          * Name of patient
          */
         var patientName: String = ""
+
         /**
          * Surname of patient
          */
         var patientSurname: String = ""
+
         /**
          * Birthday of patient
          */

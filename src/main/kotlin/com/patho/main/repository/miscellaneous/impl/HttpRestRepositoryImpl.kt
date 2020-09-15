@@ -66,15 +66,16 @@ open class HttpRestRepositoryImpl @Autowired constructor(
         logger.debug("starting request to $createPatientInPDV")
 
         val restTemplate = RestTemplate()
-        restTemplate.messageConverters.add(0, StringHttpMessageConverter(StandardCharsets.UTF_8));
+        // restTemplate.messageConverters.add(0, StringHttpMessageConverter(StandardCharsets.UTF_8));
         (restTemplate.requestFactory as SimpleClientHttpRequestFactory).setReadTimeout(requestTimeout)
         (restTemplate.requestFactory as SimpleClientHttpRequestFactory).setConnectTimeout(requestTimeout)
 
         val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_XML
+        headers.contentType = MediaType.APPLICATION_JSON
         val request = HttpEntity<String>(document?.finalContent, headers)
         try {
-            val response = restTemplate.postForEntity(createPatientInPDV, request, String::class.java)
+            val uri = URL(createPatientInPDV).toURI()
+            val response = restTemplate.postForEntity(uri, request, String::class.java)
             logger.debug("response status: " + response.statusCode)
             logger.debug("response body: " + response.body)
 
@@ -90,7 +91,7 @@ open class HttpRestRepositoryImpl @Autowired constructor(
 
 
         } catch (e: RestClientException) {
-            sendMail(false, document?.finalContent ?: "", "Error", "Error")
+            sendMail(false, document?.finalContent ?: "", "Error", e.message ?: "")
             logger.error("Error, patient could not be created")
             e.printStackTrace()
         }

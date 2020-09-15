@@ -17,14 +17,14 @@
                      styleClass="defaultHistoDataTable">
 
             <!-- diagnosis name -->
-            <p:column sortBy="#{diagnosisPreset.diagnosisText}"
+            <p:column sortBy="#{diagnosisPreset.diagnosis}"
                       headerText="#{msg['dialog.settings.diagnosis.list.diagnosis']}"
                       style="width:35%">
                 <h:outputText value="#{diagnosisPreset.diagnosis}"/>
             </p:column>
 
             <!-- diagnosis category -->
-            <p:column sortBy="#{diagnosisPreset.name}"
+            <p:column sortBy="#{diagnosisPreset.category}"
                       headerText="#{msg['dialog.settings.diagnosis.list.category']}"
                       style="width:15%">
                 <h:outputLabel value="#{diagnosisPreset.category}"
