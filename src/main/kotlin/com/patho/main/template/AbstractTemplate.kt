@@ -114,7 +114,7 @@ open class AbstractTemplate : AbstractPersistable, Cloneable {
         context.put("date", DateTool())
         context.put("latexTextConverter", TextToLatexConverter())
         context.put("histoUtil", HistoUtil())
-        context.put("taskTook", TaskTools())
+        context.put("taskTool", TaskTools())
 
         return Pair(this, context)
     }

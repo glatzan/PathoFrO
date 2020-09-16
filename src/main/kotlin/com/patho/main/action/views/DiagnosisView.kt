@@ -49,17 +49,6 @@ open class DiagnosisView @Autowired constructor(
     override fun loadView(task: Task) {
         logger.debug("Loading reportIntent data")
         super.loadView(task)
-
-        // updating signature date and person to sign
-        for (revision in task.diagnosisRevisions) {
-            if (!revision.completed) {
-                revision.signatureDate = LocalDate.now()
-
-                if (revision.signatureOne.physician == null || revision.signatureTwo.physician == null) {
-                    // TODO set if physician to the left, if consultant to the right
-                }
-            }
-        }
     }
 
     /**

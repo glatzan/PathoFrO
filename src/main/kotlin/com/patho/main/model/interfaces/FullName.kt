@@ -47,6 +47,8 @@ interface FullName {
         else
             result.append(SpringContextBridge.services().resourceBundle.get("enum.gender.MALE_TITLE"))
 
+        result.append(" ")
+
         result.append(getFullName())
 
         return result.substring(0, result.length - 1).replace("Apl.", "")

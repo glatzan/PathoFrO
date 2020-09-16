@@ -90,7 +90,7 @@ $!patient.piz\\
 \setstretch{1.0}
 \noindent
 \textbf{$!subject} \\\\
-$address \\
+$latexTextConverter.convertToTex($address) \\
 
 \end{textblock}
 }
@@ -189,19 +189,19 @@ $address \\
 					$\Box$
 				#end \\
 
-				#set($externalSurgeon = $taskTool.getPrimaryContactFromString("EXTERNAL_SURGEON"))
+				#set($externalSurgeon = $taskTool.getPrimaryContactFromString($task, "EXTERNAL_SURGEON"))
 				#if($externalSurgeon)
-					Einsender & $!externalSurgeon.person.fullName \\
+					Einsender & $!externalSurgeon.person.getFullName() \\
 				#end
 
-				#set($surgeon = $taskTool.getPrimaryContactFromString("SURGEON"))
+				#set($surgeon = $taskTool.getPrimaryContactFromString($task, "SURGEON"))
 				#if($surgeon)
-					Operateur & $!surgeon.person.fullName \\
+					Operateur & $!surgeon.person.getFullName() \\
 				#end
 
-				#set($privatePhysician = $taskTool.getPrimaryContactFromString("PRIVATE_PHYSICIAN"))
+				#set($privatePhysician = $taskTool.getPrimaryContactFromString($task, "PRIVATE_PHYSICIAN"))
 				#if($privatePhysician)
-					Augenarzt & $!privatePhysician.person.fullName \\
+					Augenarzt & $!privatePhysician.person.getFullName() \\
 				#end
 
 			\end{tabular}

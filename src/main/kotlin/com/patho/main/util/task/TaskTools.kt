@@ -21,6 +21,5 @@ class TaskTools {
         fun getPrimaryContactFromString(task: Task, vararg contactRole: String): ReportIntent? {
             return getPrimaryContact(task, *contactRole.map { p -> ContactRole.valueOf(p) }.toTypedArray())
         }
-
     }
 }
