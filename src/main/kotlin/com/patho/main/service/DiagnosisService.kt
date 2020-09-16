@@ -14,6 +14,7 @@ import com.patho.main.util.helper.TaskUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
+import java.time.LocalDate
 import java.util.*
 
 
@@ -157,6 +158,7 @@ open class DiagnosisService constructor(
         diagnosisRevision.signatureTwo = Signature()
         diagnosisRevision.name = name
         diagnosisRevision.intern = intern
+        diagnosisRevision.signatureDate = LocalDate.now()
 
         return addDiagnosisRevision(task, diagnosisRevision)
     }
