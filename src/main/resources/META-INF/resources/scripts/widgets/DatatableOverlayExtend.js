@@ -31,6 +31,9 @@ datatableOverlayExtend = {
 
         // show and focus
         PrimeFaces.widgets[widgetVar].showAndFocus = function (parentID, executeOnEnter) {
+            if(this.isVisible())
+                return false;
+
             this.show(parentID);
             PrimeFaces.widgets[widgetVar + "_datatable"].clearFilters();
             PrimeFaces.widgets[widgetVar + "_datatable"].unselectAllRows();

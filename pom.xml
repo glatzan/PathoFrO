@@ -325,6 +325,11 @@
             <version>3.2.10</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
+
         <!-- cups4j -->
         <dependency>
             <groupId>org.cups4j</groupId>
@@ -332,6 +337,16 @@
             <version>0.7.6</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-hibernate5 -->
+        <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-hibernate5</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -383,6 +398,7 @@
 <!--                    </execution>-->
 <!--                </executions>-->
 <!--            </plugin>-->
+
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -538,6 +554,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>4.0.0</version>
+                <configuration>
+                    <propertyFile>src/main/resources/database/liquibase.properties</propertyFile>
+                </configuration>
             </plugin>
         </plugins>
     </build>

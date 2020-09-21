@@ -74,8 +74,8 @@
                     <p:commandLink
                             actionListener="#{searchAndAddPatientDialog.initAndPrepareBean()}"
                             title="#{msg['dialog.mergePatientDialog.button.selectPatint']}">
-                        <p:ajax event="dialogReturn" update="@form" process="@form"
-                                listener="#{dialog.mergePatientDialog.onReturnSelectTarget}"></p:ajax>
+                        <p:ajax event="dialogReturn" update="@form" process="@this"
+                                listener="#{dialog.mergePatientDialog.onReturnSelectTarget}" />
                         <i class="fa fa-fw fa-search"/>
                     </p:commandLink>
 
@@ -105,7 +105,7 @@
                             styleClass="mergePatientPicklist"
                             converter="#{dialog.mergePatientDialog.taskTransformer}"
                             disabled="#{dialog.mergePatientDialog.taskPickerDisabled}"
-                            var="task" itemLabel="#{task}" itemValue="#{task}">
+                            var="task" itemLabel="#{task.taskID}" itemValue="#{task}">
                     <p:ajax event="transfer"
                             listener="#{dialog.mergePatientDialog.onTaskMoved()}"
                             update="@form"/>

@@ -68,7 +68,7 @@
             <!-- diagnosis text -->
             <p:inputTextarea value="#{cc.attrs.diagnosis.diagnosis}"
                              onkeypress="PF('#{cc.attrs.widgetVar}_diagnosisSelect').hide();"
-                             onclick="PF('#{cc.attrs.widgetVar}_diagnosisSelect').showAndFocus('#{component.clientId}', #{cc.attrs.widgetVar}_submitCustomDiagnosis); console.log(PF('#{cc.attrs.widgetVar}_diagnosisSelect').isVisible())"
+                             onclick="PF('#{cc.attrs.widgetVar}_diagnosisSelect').showAndFocus('#{component.clientId}', #{cc.attrs.widgetVar}_submitCustomDiagnosis);"
                              filterDelay="50"
                              id="diagnosisText"
                              disabled="#{!cc.attrs.editable}"

@@ -1,6 +1,5 @@
 package com.patho.main.rest
 
-import com.google.gson.Gson
 import com.patho.main.action.handler.AbstractHandler
 import com.patho.main.config.PathoConfig
 import com.patho.main.model.patient.Patient
@@ -8,14 +7,11 @@ import com.patho.main.model.patient.Task
 import com.patho.main.model.transitory.PDFContainerLoaded
 import com.patho.main.repository.jpa.PatientRepository
 import com.patho.main.repository.jpa.TaskRepository
-import com.patho.main.rest.data.SlideInfoResult
 import com.patho.main.service.MailService
 import com.patho.main.service.PDFService
-import com.patho.main.service.ScannedTaskService
 import com.patho.main.template.DocumentToken
 import com.patho.main.template.PrintDocument
 import com.patho.main.template.PrintDocumentType
-import com.patho.main.util.exceptions.TaskNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -30,8 +26,7 @@ open class RestHandler @Autowired constructor(
         private val taskRepository: TaskRepository,
         private val pdfService: PDFService,
         private val pathoConfig: PathoConfig,
-        private val mailService: MailService,
-        private val scannedTaskService: ScannedTaskService) : AbstractHandler() {
+        private val mailService: MailService) : AbstractHandler() {
 
     override fun loadHandler() {
     }
