@@ -1,0 +1,1648 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet author="System (generated)" id="1600592039698-1">
+        <createTable tableName="accountingdata">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="accountingdata_pkey"/>
+            </column>
+            <column name="blockcount" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="date"/>
+            <column name="extern" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="month" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="piz" type="VARCHAR(255)"/>
+            <column name="samplecount" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slidecount" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surgeons" type="VARCHAR(255)"/>
+            <column name="taskid" type="VARCHAR(255)"/>
+            <column name="town" type="VARCHAR(255)"/>
+            <column name="v4015" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="v4800" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="v4802" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="v4815imu" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-2">
+        <createTable tableName="histogroup">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histogroup_pkey"/>
+            </column>
+            <column defaultValueBoolean="false" name="archived" type="BOOLEAN"/>
+            <column name="authrole" type="VARCHAR(255)"/>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="settings_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="userdeactivated" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-3">
+        <createTable tableName="histouser">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histouser_pkey"/>
+            </column>
+            <column defaultValueBoolean="false" name="archived" type="BOOLEAN"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="BIGINT"/>
+            <column name="physician_id" type="BIGINT"/>
+            <column name="settings_id" type="BIGINT"/>
+            <column name="lastlogin" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="localuser" type="BOOLEAN"/>
+            <column name="_password" type="VARCHAR(70)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-4">
+        <createTable tableName="histouser_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histouser_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histouser_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column defaultValueBoolean="false" name="archived" type="BOOLEAN"/>
+            <column name="username" type="VARCHAR"/>
+            <column name="physician_id" type="BIGINT"/>
+            <column name="lastlogin" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="localuser" type="BOOLEAN"/>
+            <column name="_password" type="VARCHAR(70)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-5">
+        <createTable tableName="reportintent_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="associatedcontact_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="associatedcontact_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="person_id" type="BIGINT"/>
+            <column name="task_id" type="BIGINT"/>
+            <column name="deleteable" type="BOOLEAN"/>
+            <column name="active" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-6">
+        <createTable tableName="reportintent">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="associatedcontact_pkey"/>
+            </column>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="person_id" type="BIGINT"/>
+            <column name="task_id" type="BIGINT"/>
+            <column name="active" type="BOOLEAN"/>
+            <column name="deleteable" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-7">
+        <createTable tableName="reportintentnotification_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="associatedcontactnotification_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="associatedcontactnotification_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="active" type="BOOLEAN"/>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="contactaddress" type="VARCHAR"/>
+            <column name="failed" type="BOOLEAN"/>
+            <column name="manuallyadded" type="BOOLEAN"/>
+            <column name="notificationtyp" type="VARCHAR(255)"/>
+            <column name="performed" type="BOOLEAN"/>
+            <column name="position" type="INTEGER"/>
+            <column name="contact_id" type="BIGINT"/>
+            <column name="renewed" type="BOOLEAN"/>
+            <column name="dateofaction" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="history" type="JSONB"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-8">
+        <createTable tableName="reportintentnotification">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="associatedcontactnotification_pkey"/>
+            </column>
+            <column name="active" type="BOOLEAN"/>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="contactaddress" type="VARCHAR"/>
+            <column name="failed" type="BOOLEAN"/>
+            <column name="manuallyadded" type="BOOLEAN"/>
+            <column name="notificationtyp" type="VARCHAR(255)"/>
+            <column name="performed" type="BOOLEAN"/>
+            <column name="contact_id" type="BIGINT"/>
+            <column name="position" type="INTEGER"/>
+            <column name="renewed" type="BOOLEAN"/>
+            <column name="dateofaction" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="history" type="JSONB"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-9">
+        <createTable tableName="person">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="person_pkey"/>
+            </column>
+            <column name="archived" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthname" type="VARCHAR"/>
+            <column name="firstname" type="VARCHAR"/>
+            <column name="gender" type="INTEGER"/>
+            <column name="language" type="VARCHAR"/>
+            <column name="lastname" type="VARCHAR"/>
+            <column name="note" type="VARCHAR"/>
+            <column name="title" type="VARCHAR"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="BIGINT"/>
+            <column defaultValueBoolean="true" name="autoupdate" type="BOOLEAN"/>
+            <column name="defaultaddress_id" type="BIGINT"/>
+            <column name="birthday" type="date"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-10">
+        <createTable tableName="biobank_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="biobank_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="biobank_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="informedconsenttype" type="VARCHAR(255)"/>
+            <column name="task_id" type="BIGINT"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="retractiondate" type="date"/>
+            <column name="consentdate" type="date"/>
+            <column name="commentary" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-11">
+        <createTable tableName="biobank_pdfcontainer_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="biobank_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="biobank_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="biobank_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="attachedpdfs_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="biobank_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-12">
+        <createTable tableName="biobank">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="biobank_pkey"/>
+            </column>
+            <column name="informedconsenttype" type="VARCHAR(255)"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="BIGINT"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="retractiondate" type="date"/>
+            <column name="consentdate" type="date"/>
+            <column name="commentary" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-13">
+        <createTable tableName="block_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="block_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="block_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="blockid" type="VARCHAR(255)"/>
+            <column name="creationdate" type="BIGINT"/>
+            <column name="idmanuallyaltered" type="BOOLEAN"/>
+            <column name="parent_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-14">
+        <createTable tableName="block">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="block_pkey"/>
+            </column>
+            <column name="blockid" type="VARCHAR(255)"/>
+            <column name="creationdate" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idmanuallyaltered" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-15">
+        <createTable tableName="contact_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="contact_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="contact_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="building" type="VARCHAR"/>
+            <column name="country" type="VARCHAR"/>
+            <column name="email" type="VARCHAR"/>
+            <column name="fax" type="VARCHAR"/>
+            <column name="homepage" type="VARCHAR"/>
+            <column name="mobile" type="VARCHAR"/>
+            <column name="pager" type="VARCHAR"/>
+            <column name="phone" type="VARCHAR"/>
+            <column name="postcode" type="VARCHAR"/>
+            <column name="street" type="VARCHAR"/>
+            <column name="town" type="VARCHAR"/>
+            <column name="addressadditon" type="VARCHAR"/>
+            <column name="addressadditon2" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-16">
+        <createTable tableName="contact">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="contact_pkey"/>
+            </column>
+            <column name="building" type="VARCHAR"/>
+            <column name="country" type="VARCHAR"/>
+            <column name="email" type="VARCHAR"/>
+            <column name="fax" type="VARCHAR"/>
+            <column name="homepage" type="VARCHAR"/>
+            <column name="mobile" type="VARCHAR"/>
+            <column name="pager" type="VARCHAR"/>
+            <column name="phone" type="VARCHAR"/>
+            <column name="postcode" type="VARCHAR"/>
+            <column name="street" type="VARCHAR"/>
+            <column name="town" type="VARCHAR"/>
+            <column name="addressadditon" type="VARCHAR"/>
+            <column name="addressadditon2" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-17">
+        <createTable tableName="council_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="council_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="council_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="councilstate" type="INTEGER"/>
+            <column name="counciltext" type="TEXT"/>
+            <column name="dateofrequest" type="date"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="samplereturned" type="BOOLEAN"/>
+            <column name="samplereturnedcommentary" type="TEXT"/>
+            <column name="samplereturneddate" type="date"/>
+            <column name="sampleshipped" type="BOOLEAN"/>
+            <column name="sampleshippedcommentary" type="TEXT"/>
+            <column name="sampleshippeddate" type="date"/>
+            <column name="councilphysician_id" type="BIGINT"/>
+            <column name="physicianrequestingcouncil_id" type="BIGINT"/>
+            <column name="task_id" type="BIGINT"/>
+            <column name="councilrequestcompleteddate" type="date"/>
+            <column name="councilcompleted" type="BOOLEAN"/>
+            <column name="councilcompleteddate" type="date"/>
+            <column name="notificationmethod" type="VARCHAR(10)"/>
+            <column name="councilrequestcompleted" type="BOOLEAN"/>
+            <column name="expectsamplereturn" type="BOOLEAN"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="replyreceived" type="BOOLEAN"/>
+            <column name="replyreceiveddate" type="date"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-18">
+        <createTable tableName="council_pdfcontainer_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="council_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="council_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="council_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="attachedpdfs_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="council_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-19">
+        <createTable tableName="council">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="council_pkey"/>
+            </column>
+            <column name="councilstate" type="INTEGER"/>
+            <column name="counciltext" type="TEXT"/>
+            <column name="dateofrequest" type="date"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="samplereturned" type="BOOLEAN"/>
+            <column name="samplereturnedcommentary" type="TEXT"/>
+            <column name="samplereturneddate" type="date"/>
+            <column name="sampleshipped" type="BOOLEAN"/>
+            <column name="sampleshippedcommentary" type="TEXT"/>
+            <column name="sampleshippeddate" type="date"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="councilphysician_id" type="BIGINT"/>
+            <column name="physicianrequestingcouncil_id" type="BIGINT"/>
+            <column name="task_id" type="BIGINT"/>
+            <column name="councilrequestcompleteddate" type="date"/>
+            <column name="councilcompleted" type="BOOLEAN"/>
+            <column name="councilcompleteddate" type="date"/>
+            <column name="notificationmethod" type="VARCHAR(10)"/>
+            <column name="councilrequestcompleted" type="BOOLEAN"/>
+            <column name="expectsamplereturn" type="BOOLEAN"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="replyreceived" type="BOOLEAN"/>
+            <column name="replyreceiveddate" type="date"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-20">
+        <createTable tableName="diagnosis_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="diagnosis_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="diagnosis_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="diagnosis" type="TEXT"/>
+            <column name="icd10" type="VARCHAR(255)"/>
+            <column name="malign" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="sample_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-21">
+        <createTable tableName="diagnosis">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="diagnosis_pkey"/>
+            </column>
+            <column name="diagnosis" type="TEXT"/>
+            <column name="icd10" type="VARCHAR(255)"/>
+            <column name="malign" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="diagnosisprototype_id" type="BIGINT"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="sample_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-22">
+        <createTable tableName="diagnosispreset">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="diagnosispreset_pkey"/>
+            </column>
+            <column name="category" type="VARCHAR"/>
+            <column name="commentary" type="TEXT"/>
+            <column name="diagnosis" type="TEXT"/>
+            <column name="extendeddiagnosistext" type="TEXT"/>
+            <column name="icd10" type="VARCHAR"/>
+            <column name="indexinlist" type="INTEGER"/>
+            <column name="malign" type="VARCHAR"/>
+            <column name="archived" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-23">
+        <createTable tableName="diagnosisrevision_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="diagnosisrevision_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="diagnosisrevision_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="diagnosiscompleted" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="position" type="INTEGER"/>
+            <column name="text" type="TEXT"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="signatureone_id" type="BIGINT"/>
+            <column name="signaturetwo_id" type="BIGINT"/>
+            <column name="notificationpending" type="BOOLEAN"/>
+            <column name="internal" type="VARCHAR(10)"/>
+            <column name="signaturedate" type="date"/>
+            <column name="notificationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="completiondate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="intern" type="VARCHAR(10)"/>
+            <column name="notificationstatus" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-24">
+        <createTable tableName="diagnosisrevision">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="diagnosisrevision_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="position" type="INTEGER"/>
+            <column name="text" type="TEXT"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="signatureone_id" type="BIGINT"/>
+            <column name="signaturetwo_id" type="BIGINT"/>
+            <column name="notificationstatus" type="INTEGER"/>
+            <column name="internal" type="VARCHAR(10)"/>
+            <column name="signaturedate" type="date"/>
+            <column name="notificationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="completiondate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="intern" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-25">
+        <createTable tableName="signature">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="signature_pkey"/>
+            </column>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="physician_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-26">
+        <createTable tableName="task">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_pkey"/>
+            </column>
+            <column name="casehistory" type="VARCHAR"/>
+            <column name="eye" type="VARCHAR(255)"/>
+            <column name="finalized" type="BOOLEAN"/>
+            <column name="taskid" type="VARCHAR(6)"/>
+            <column name="taskpriority" type="INTEGER"/>
+            <column name="typeofoperation" type="SMALLINT"/>
+            <column name="useautonomenclature" type="BOOLEAN"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ward" type="VARCHAR(255)"/>
+            <column name="accounting_id" type="BIGINT"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="insurance" type="VARCHAR"/>
+            <column name="slidecounter" type="INTEGER"/>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="duedate" type="date"/>
+            <column name="receiptdate" type="date"/>
+            <column name="dateofsugery" type="date"/>
+            <column name="finalizationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="notificationcompletiondate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="diagnosiscompletiondate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="stainingcompletiondate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-27">
+        <createTable tableName="favouritelist">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="favouritelist_pkey"/>
+            </column>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="defaultlist" type="BOOLEAN"/>
+            <column name="globalview" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="owner_id" type="BIGINT"/>
+            <column name="dumplist_id" type="BIGINT"/>
+            <column name="usedumplist" type="BOOLEAN"/>
+            <column name="dumpcommentary" type="VARCHAR"/>
+            <column name="useicon" type="BOOLEAN"/>
+            <column name="icon" type="VARCHAR"/>
+            <column name="infotext" type="VARCHAR"/>
+            <column name="command" type="VARCHAR"/>
+            <column name="iconcolor" type="VARCHAR(7)"/>
+            <column name="manueledit" type="BOOLEAN"/>
+            <column name="hidelist" type="BOOLEAN"/>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="blocktaskarchival" type="BOOLEAN"/>
+            <column name="icongroup" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-28">
+        <createTable tableName="favouritelist_histouser">
+            <column name="favouritelist_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="favouritelist_histouser_pkey"/>
+            </column>
+            <column name="hidelistforuser_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="favouritelist_histouser_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-29">
+        <createTable tableName="favouritelistitem">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="favouritelistitem_pkey"/>
+            </column>
+            <column name="commentary" type="VARCHAR(255)"/>
+            <column name="favouritelist_id" type="BIGINT"/>
+            <column name="task_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-30">
+        <createTable tableName="favouritelistmenuitem">
+            <column name="tmp_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="favouritelistmenuitem_pkey"/>
+            </column>
+            <column name="containstask" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="dumplist" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hidden" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-31">
+        <createTable tableName="favouritepermissionsgroup">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="favouritepermissionsgroup_pkey"/>
+            </column>
+            <column name="admin" type="BOOLEAN"/>
+            <column name="editable" type="BOOLEAN"/>
+            <column name="readable" type="BOOLEAN"/>
+            <column name="favouritelist_id" type="BIGINT"/>
+            <column name="group_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-32">
+        <createTable tableName="favouritepermissionsuser">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="favouritepermissionsuser_pkey"/>
+            </column>
+            <column name="admin" type="BOOLEAN"/>
+            <column name="editable" type="BOOLEAN"/>
+            <column name="readable" type="BOOLEAN"/>
+            <column name="favouritelist_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-33">
+        <createTable tableName="materialpreset_stainingprototype">
+            <column name="materialpreset_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stainingprototypes_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-34">
+        <createTable tableName="stainingprototype">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="stainingprototype_pkey"/>
+            </column>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="indexinlist" type="INTEGER"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="prioritycount" type="INTEGER"/>
+            <column name="details" type="JSONB"/>
+            <column name="batchdetails" type="JSONB"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-35">
+        <createTable tableName="pdfcontainer">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pdfcontainer_pkey"/>
+            </column>
+            <column name="commentary" type="TEXT"/>
+            <column name="data" type="BYTEA"/>
+            <column name="finaldocument" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="path" type="VARCHAR(255)"/>
+            <column name="thumbnail" type="VARCHAR(255)"/>
+            <column name="restricted" type="BOOLEAN"/>
+            <column name="intern" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-36">
+        <createTable tableName="task_pdfcontainer">
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attachedpdfs_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-37">
+        <createTable tableName="log">
+            <column name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="log_pkey"/>
+            </column>
+            <column name="logstring" type="TEXT"/>
+            <column name="timestamp" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patient_id" type="BIGINT"/>
+            <column name="histouser_id" type="BIGINT"/>
+            <column name="test" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-38">
+        <createTable tableName="favouritelistitem_slide">
+            <column name="favouritelistitem_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slides_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-39">
+        <createTable tableName="slide">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="slide_pkey"/>
+            </column>
+            <column name="commentary" type="TEXT"/>
+            <column name="completiondate" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creationdate" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idmanuallyaltered" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="restaining" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slideid" type="VARCHAR(255)"/>
+            <column name="stainingcompleted" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uniqueidintask" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="slideprototype_id" type="BIGINT"/>
+            <column name="slidelabeltext" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-40">
+        <createTable tableName="patient">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="patient_pkey"/>
+            </column>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="externalpatient" type="BOOLEAN"/>
+            <column name="insurance" type="VARCHAR(255)"/>
+            <column name="piz" type="VARCHAR(255)"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="person_id" type="BIGINT"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-41">
+        <createTable tableName="physician">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="physician_pkey"/>
+            </column>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="clinicrole" type="VARCHAR"/>
+            <column name="employeenumber" type="VARCHAR"/>
+            <column name="uid" type="VARCHAR"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="person_id" type="BIGINT"/>
+            <column name="prioritycount" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-42">
+        <createTable tableName="sample_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sample_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sample_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="creationdate" type="BIGINT"/>
+            <column name="idmanuallyaltered" type="BOOLEAN"/>
+            <column name="material" type="VARCHAR(255)"/>
+            <column name="restainingphase" type="BOOLEAN"/>
+            <column name="sampleid" type="VARCHAR(255)"/>
+            <column name="parent_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-43">
+        <createTable tableName="histosettings">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histosettings_pkey"/>
+            </column>
+            <column name="alternatepatientaddmode" type="BOOLEAN"/>
+            <column name="autoselectedpreferredlabelprinter" type="BOOLEAN"/>
+            <column name="autoselectedpreferredprinter" type="BOOLEAN"/>
+            <column name="defaultview" type="VARCHAR(255)"/>
+            <column name="inputfieldcolor" type="VARCHAR"/>
+            <column name="inputfieldfontcolor" type="VARCHAR"/>
+            <column name="preferredlabelprinter" type="VARCHAR"/>
+            <column name="preferredprinter" type="BIGINT"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="worklistautoupdate" type="BOOLEAN"/>
+            <column name="worklisthidenoneactivetasks" type="BOOLEAN"/>
+            <column name="worklistsortorder" type="INTEGER"/>
+            <column name="worklistsortorderasc" type="BOOLEAN"/>
+            <column name="worklisttoload" type="VARCHAR(255)"/>
+            <column name="startview" type="VARCHAR(255)"/>
+            <column name="addtaskwithsingleclick" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-44">
+        <createTable tableName="histosettings_availableviews">
+            <column name="histosettings_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histosettings_availableviews_pkey"/>
+            </column>
+            <column name="availableviews" type="VARCHAR(255)"/>
+            <column name="position" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histosettings_availableviews_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-45">
+        <createTable tableName="diagnosispreset_diagnosisreportasletter">
+            <column name="diagnosispreset_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="diagnosisreportasletter" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-46">
+        <createTable tableName="materialpreset">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="materialpreset_pkey"/>
+            </column>
+            <column name="commentary" type="TEXT"/>
+            <column name="indexinlist" type="INTEGER"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="prioritycount" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-47">
+        <createTable tableName="sample">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sample_pkey"/>
+            </column>
+            <column name="creationdate" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idmanuallyaltered" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="material" type="VARCHAR(255)"/>
+            <column name="sampleid" type="VARCHAR(255)"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="materialpreset_id" type="BIGINT"/>
+            <column name="parent_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-48">
+        <createTable tableName="organization">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="organization_pkey"/>
+            </column>
+            <column name="intern" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="note" type="VARCHAR"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="BIGINT"/>
+            <column name="archived" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-49">
+        <createTable tableName="patient_pdfcontainer">
+            <column name="patient_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attachedpdfs_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-50">
+        <createTable tableName="patient_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="patient_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="patient_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="externalpatient" type="BOOLEAN"/>
+            <column name="insurance" type="VARCHAR(255)"/>
+            <column name="piz" type="VARCHAR(255)"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-51">
+        <createTable tableName="histosettings_availableworklists">
+            <column name="histosettings_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histosettings_availableworklists_pkey"/>
+            </column>
+            <column name="availableworklists" type="VARCHAR(255)"/>
+            <column name="position" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histosettings_availableworklists_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-52">
+        <createTable tableName="task_pdfcontainer_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="attachedpdfs_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-53">
+        <createTable tableName="person_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="person_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="person_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="birthname" type="VARCHAR"/>
+            <column name="firstname" type="VARCHAR"/>
+            <column name="gender" type="INTEGER"/>
+            <column name="language" type="VARCHAR"/>
+            <column name="lastname" type="VARCHAR"/>
+            <column name="note" type="VARCHAR"/>
+            <column name="title" type="VARCHAR"/>
+            <column name="contact_id" type="BIGINT"/>
+            <column name="autoupdate" type="BOOLEAN"/>
+            <column name="defaultaddress_id" type="BIGINT"/>
+            <column name="birthday" type="date"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-54">
+        <createTable tableName="person_organization">
+            <column name="person_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organization_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-55">
+        <createTable tableName="organization_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="organization_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="organization_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="intern" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="note" type="VARCHAR"/>
+            <column name="contact_id" type="BIGINT"/>
+            <column name="archived" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-56">
+        <createTable tableName="task_favouritelist">
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="favouritelists_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-57">
+        <createTable tableName="task_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="casehistory" type="VARCHAR"/>
+            <column name="eye" type="VARCHAR(255)"/>
+            <column name="finalized" type="BOOLEAN"/>
+            <column name="taskid" type="VARCHAR(6)"/>
+            <column name="taskpriority" type="INTEGER"/>
+            <column name="typeofoperation" type="SMALLINT"/>
+            <column name="useautonomenclature" type="BOOLEAN"/>
+            <column name="ward" type="VARCHAR(255)"/>
+            <column name="accounting_id" type="BIGINT"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="insurance" type="VARCHAR"/>
+            <column name="slidecounter" type="INTEGER"/>
+            <column name="commentary" type="VARCHAR"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="duedate" type="date"/>
+            <column name="receiptdate" type="date"/>
+            <column name="dateofsugery" type="date"/>
+            <column name="finalizationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="notificationcompletiondate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="diagnosiscompletiondate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="stainingcompletiondate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-58">
+        <createTable tableName="scannedtask">
+            <column name="slides" type="JSONB"/>
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="scannedtask_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-59">
+        <createTable tableName="council_pdfcontainer">
+            <column name="council_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attachedpdfs_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-60">
+        <createTable tableName="physician_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="physician_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="physician_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="clinicrole" type="VARCHAR"/>
+            <column name="employeenumber" type="VARCHAR"/>
+            <column name="manuallyaltered" type="BOOLEAN"/>
+            <column name="uid" type="VARCHAR"/>
+            <column name="person_id" type="BIGINT"/>
+            <column name="prioritycount" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-61">
+        <createTable tableName="listitem_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="listitem_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="listitem_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="indexinlist" type="INTEGER"/>
+            <column name="listtype" type="VARCHAR(255)"/>
+            <column name="value" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-62">
+        <createTable tableName="patient_pdfcontainer_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="patient_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="patient_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="patient_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="attachedpdfs_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="patient_pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-63">
+        <createTable tableName="histogroup_permissions">
+            <column name="histogroup_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permissions" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-64">
+        <createTable tableName="person_organization_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="person_organization_aud_pkey"/>
+            </column>
+            <column name="person_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="person_organization_aud_pkey"/>
+            </column>
+            <column name="organization_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="person_organization_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-65">
+        <createTable tableName="biobank_pdfcontainer">
+            <column name="biobank_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attachedpdfs_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-66">
+        <createTable tableName="physician_associatedroles">
+            <column name="physician_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="associatedroles" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-67">
+        <createTable tableName="physician_associatedroles_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="physician_associatedroles_aud_pkey"/>
+            </column>
+            <column name="physician_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="physician_associatedroles_aud_pkey"/>
+            </column>
+            <column name="associatedroles" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="physician_associatedroles_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-68">
+        <createTable tableName="signature_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="signature_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="signature_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="physician_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-69">
+        <createTable tableName="slide_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="slide_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="slide_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="commentary" type="TEXT"/>
+            <column name="completiondate" type="BIGINT"/>
+            <column name="creationdate" type="BIGINT"/>
+            <column name="idmanuallyaltered" type="BOOLEAN"/>
+            <column name="restaining" type="BOOLEAN"/>
+            <column name="slideid" type="VARCHAR(255)"/>
+            <column name="stainingcompleted" type="BOOLEAN"/>
+            <column name="uniqueidintask" type="INTEGER"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="slidelabeltext" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-70">
+        <createTable tableName="pdfcontainer_aud">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pdfcontainer_aud_pkey"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="commentary" type="TEXT"/>
+            <column name="data" type="BYTEA"/>
+            <column name="finaldocument" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="createdon" type="BIGINT"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="BIGINT"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+            <column name="path" type="VARCHAR(255)"/>
+            <column name="thumbnail" type="VARCHAR(255)"/>
+            <column name="restricted" type="BOOLEAN"/>
+            <column name="intern" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-71">
+        <createTable tableName="listitem">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="listitem_pkey"/>
+            </column>
+            <column name="archived" type="BOOLEAN"/>
+            <column name="indexinlist" type="INTEGER"/>
+            <column name="listtype" type="VARCHAR(255)"/>
+            <column name="value" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-72">
+        <addUniqueConstraint columnNames="settings_id" constraintName="uk_tfgujmderlhbjyt7nm74bsne4" tableName="histogroup"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-73">
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="histouser" constraintName="fkde7jngwbgyb6d13yr328avllj" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histogroup" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-74">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="reportintentnotification" constraintName="fkpr7nwxhpw4hnu46tqfwv2m41l" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="reportintent" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-75">
+        <createView fullDefinition="false" viewName="taskoverview"> SELECT task.id,
+    task.taskid,
+    task.receiptdate,
+        CASE
+            WHEN (task.stainingcompletiondate IS NOT NULL) THEN true
+            ELSE false
+        END AS stainingcompleted,
+        CASE
+            WHEN (task.diagnosiscompletiondate IS NOT NULL) THEN true
+            ELSE false
+        END AS diagnosiscompleted,
+        CASE
+            WHEN (task.notificationcompletiondate IS NOT NULL) THEN true
+            ELSE false
+        END AS notificationcompleted,
+    task.finalized,
+    task.taskpriority,
+    pers.title,
+    pers.firstname,
+    pers.lastname,
+    pers.birthday
+   FROM ((task task
+     LEFT JOIN patient pat ON ((pat.id = task.parent_id)))
+     LEFT JOIN person pers ON ((pers.id = pat.person_id)));</createView>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-76">
+        <addForeignKeyConstraint baseColumnNames="biobank_id" baseTableName="biobank_pdfcontainer" constraintName="fkpg9m8po8paj70l8jfag15nhna" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="biobank" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-77">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="slide" constraintName="fk8bisjpgy4gynmls8o299uje7e" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="block" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-78">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="organization" constraintName="fk794huy9o45hqd41rk5idno08w" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-79">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="person" constraintName="fkbi2pspahr0wcmi26je6si7xve" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-80">
+        <addForeignKeyConstraint baseColumnNames="council_id" baseTableName="council_pdfcontainer" constraintName="fkkc4gx11kubl88epnkelnnct9i" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="council" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-81">
+        <addForeignKeyConstraint baseColumnNames="diagnosispreset_id" baseTableName="diagnosispreset_diagnosisreportasletter" constraintName="fk509tty46sw477mk8jr44wscgx" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="diagnosispreset" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-82">
+        <addForeignKeyConstraint baseColumnNames="diagnosisprototype_id" baseTableName="diagnosis" constraintName="fkgxu9h14yhbasujop4ic2y8x7c" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="diagnosispreset" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-83">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="diagnosis" constraintName="fk32uoy19bfoa2vftn76usitsfw" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="diagnosisrevision" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-84">
+        <addForeignKeyConstraint baseColumnNames="favouritelist_id" baseTableName="favouritelist_histouser" constraintName="fk2vgp7uyrhla4u7a3j37426mn7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="favouritelist" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-85">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="favouritelist" constraintName="fkagos9iqsfep7vhrkattmw6rxs" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histouser" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-86">
+        <addForeignKeyConstraint baseColumnNames="favouritelist_id" baseTableName="favouritepermissionsgroup" constraintName="fkawg0wrspru2j1dugqylik6xo5" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="favouritelist" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-87">
+        <addForeignKeyConstraint baseColumnNames="favouritelist_id" baseTableName="favouritelistitem" constraintName="fkblkbd6uy7xhonhwl7olx3dkjf" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="favouritelist" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-88">
+        <addForeignKeyConstraint baseColumnNames="favouritelists_id" baseTableName="task_favouritelist" constraintName="fkgct8u028tim6qqddmg5lowt38" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="favouritelist" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-89">
+        <addForeignKeyConstraint baseColumnNames="favouritelist_id" baseTableName="favouritepermissionsuser" constraintName="fki1cwwl0mecwrt6txdk3isi9au" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="favouritelist" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-90">
+        <addForeignKeyConstraint baseColumnNames="hidelistforuser_id" baseTableName="favouritelist_histouser" constraintName="fk7saq8n930v7y73afd9mxqtl5y" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histouser" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-91">
+        <addUniqueConstraint columnNames="hidelistforuser_id" constraintName="uk_ixr7sjh1t31vm88ifjgiu8snb" tableName="favouritelist_histouser"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-92">
+        <addForeignKeyConstraint baseColumnNames="favouritelistitem_id" baseTableName="favouritelistitem_slide" constraintName="fkb6l6i6059434tyvq55malm5fm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="favouritelistitem" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-93">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="favouritelistitem" constraintName="fkeb04jt4ss6i0ancf6ntvm67sy" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-94">
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="favouritepermissionsgroup" constraintName="fk8xmqftjuu0etc1bme38vh7dbv" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histogroup" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-95">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="favouritepermissionsuser" constraintName="fk5angacoj36bhu5cpjasoqynwb" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histouser" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-96">
+        <addForeignKeyConstraint baseColumnNames="attachedpdfs_id" baseTableName="task_pdfcontainer" constraintName="fk1nlxc2eyqhwgppy78awmrp7ll" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pdfcontainer" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-97">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="task_pdfcontainer" constraintName="fkllq1uynbi2jd1t9b7ous0skby" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-98">
+        <addUniqueConstraint columnNames="attachedpdfs_id" constraintName="uk_rp12j1tw0yxecu9bt0b0ym72t" tableName="task_pdfcontainer"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-99">
+        <addForeignKeyConstraint baseColumnNames="histouser_id" baseTableName="log" constraintName="fkcfkdnt9q8jyrhtf0k608p4r5u" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histouser" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-100">
+        <addUniqueConstraint columnNames="slides_id" constraintName="uk_o0yirweonp3km3pwmygn25m6l" tableName="favouritelistitem_slide"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-101">
+        <addForeignKeyConstraint baseColumnNames="slideprototype_id" baseTableName="slide" constraintName="fkajlvo5ivb7hno7rule6t7pl9f" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="stainingprototype" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-102">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="patient" constraintName="fkh7t53790pi8m7o71uvl5tdb8b" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="person" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-103">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="physician" constraintName="fk2smdyaolrfpjcbado9x2g41uk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="person" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-104">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sample_aud" constraintName="fk3odrq5c7mto2e475q8mujnnk9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-105">
+        <addForeignKeyConstraint baseColumnNames="histosettings_id" baseTableName="histosettings_availableviews" constraintName="fk44e0ry3auflreyjmu762k0hwe" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histosettings" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-106">
+        <addForeignKeyConstraint baseColumnNames="materialpreset_id" baseTableName="sample" constraintName="fk5mbf4j0w3sglwx0juecjddk1b" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="materialpreset" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-107">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="sample" constraintName="fkb4cvw8cc73wv0aqm9obeav6i2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-108">
+        <addUniqueConstraint columnNames="name" constraintName="uk_griwilufaypfq6nxhupb1jfrv" tableName="organization"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-109">
+        <addForeignKeyConstraint baseColumnNames="patient_id" baseTableName="patient_pdfcontainer" constraintName="fk7aj1kgit6wmfm6yuey492ijnt" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="patient" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-110">
+        <addForeignKeyConstraint baseColumnNames="attachedpdfs_id" baseTableName="patient_pdfcontainer" constraintName="fkkhhdxyw988up7uwkpxuw5flig" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pdfcontainer" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-111">
+        <addUniqueConstraint columnNames="attachedpdfs_id" constraintName="uk_c7n1md70xsclk1c5w9yiaucl9" tableName="patient_pdfcontainer"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-112">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="patient_aud" constraintName="fk9wveqkna7om7o002mk7vme5mo" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-113">
+        <addForeignKeyConstraint baseColumnNames="histosettings_id" baseTableName="histosettings_availableworklists" constraintName="fkaw9l9xxcs2os1g7pyw0w013bi" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histosettings" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-114">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="task_pdfcontainer_aud" constraintName="fkc9rehqelphi08i4fpdmeqmgf8" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-115">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="person_aud" constraintName="fkeg2mwijn6o6kygiq6c8tniui2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-116">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="person_organization" constraintName="fken8rwqcu1baxpshnjf68yeyvp" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="person" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-117">
+        <addForeignKeyConstraint baseColumnNames="organization_id" baseTableName="person_organization" constraintName="fkp3m25qh869ti74bkylewvqt9r" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organization" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-118">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="organization_aud" constraintName="fkfvgxncgqu8s1dctbjuwqf6wsk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-119">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="task_favouritelist" constraintName="fks7r4aldudghru1kbkbhorll5s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-120">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="task_aud" constraintName="fkgikt3dggettub25r90wj7wgyn" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-121">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="scannedtask" constraintName="fkgohnwr9veh1krr4ha1bgo7f4y" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-122">
+        <addForeignKeyConstraint baseColumnNames="attachedpdfs_id" baseTableName="council_pdfcontainer" constraintName="fkgygifkdjafjcv6fahks0j85e1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pdfcontainer" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-123">
+        <addUniqueConstraint columnNames="attachedpdfs_id" constraintName="uk_6ux59funlxk7rbbi0ejs7ir7w" tableName="council_pdfcontainer"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-124">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="physician_aud" constraintName="fkinqd1ki7q7stvp0k7jm8vw9m5" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-125">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="listitem_aud" constraintName="fkk7nlbhsat4yw82npj3e02gwmc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-126">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="patient_pdfcontainer_aud" constraintName="fkmew2grnjbayf2cnuvhgr3dg7g" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-127">
+        <addForeignKeyConstraint baseColumnNames="histogroup_id" baseTableName="histogroup_permissions" constraintName="fknv7rmr3hk1paiqvulknfi0fl6" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histogroup" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-128">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="person_organization_aud" constraintName="fko13f5ofwaw7wqp4dkk623044l" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-129">
+        <addForeignKeyConstraint baseColumnNames="attachedpdfs_id" baseTableName="biobank_pdfcontainer" constraintName="fkqy57gc0ds0waqtrumh8n4dv7t" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pdfcontainer" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-130">
+        <addUniqueConstraint columnNames="attachedpdfs_id" constraintName="uk_8gmung1gnute185q5scwax2kk" tableName="biobank_pdfcontainer"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-131">
+        <addForeignKeyConstraint baseColumnNames="physician_id" baseTableName="physician_associatedroles" constraintName="fkq9nodc92fl7fe2xlido9wmqif" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="physician" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-132">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="physician_associatedroles_aud" constraintName="fkrgp3ahij4vt4y5bf2l4k4gn0u" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-133">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="signature_aud" constraintName="fkrogv0lw5b8og1sorgq6b68qoh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-134">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="slide_aud" constraintName="fksf8pin0d3udyq951nmf082nlm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-135">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="pdfcontainer_aud" constraintName="fkssb8q81x1e0r0gx67ba58h4wr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-136">
+        <addForeignKeyConstraint baseColumnNames="settings_id" baseTableName="histogroup" constraintName="fk7iqeb98rytxv6cfoppmq6ys46" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histosettings" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-137">
+        <addForeignKeyConstraint baseColumnNames="settings_id" baseTableName="histouser" constraintName="fkfnku4sds5jcglih5ayfs9lk86" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="histosettings" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-138">
+        <addForeignKeyConstraint baseColumnNames="physician_id" baseTableName="histouser" constraintName="fkj3gycrvwuc4ieymxa5e4o5nnq" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="physician" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-139">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="histouser_aud" constraintName="fkccrvl08714semjnjjlhiys095" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-140">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="reportintent_aud" constraintName="fkc71fcypig8qm9d8mvii70vsu6" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-141">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="reportintent" constraintName="fk4jun8eg40spt6ulsxjhc0rmft" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-142">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="reportintent" constraintName="fkbfumf3spswbd4k2u11ws90vnt" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="person" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-143">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="reportintentnotification_aud" constraintName="fk1yw6hujxluvlshu7er90ri1i9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-144">
+        <addForeignKeyConstraint baseColumnNames="defaultaddress_id" baseTableName="person" constraintName="fk7nfnlcyd1hif9akbuwm884bnh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organization" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-145">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="biobank_aud" constraintName="fksxc61emsrix3w6539dsiwk9nr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-146">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="biobank_pdfcontainer_aud" constraintName="fk4e0sfxjfwdivmkhb6dyr5o5yv" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-147">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="biobank" constraintName="fkfg5koer6t3khc2gipb6p2ppcs" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-148">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="block_aud" constraintName="fkkdlso10u8w4vr3k89pa29uxw4" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-149">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="block" constraintName="fknrl08qiwf5wc6km7t9ya81ksv" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="sample" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-150">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="contact_aud" constraintName="fk8ahh98o1wrnorbonvi2ok5srr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-151">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="council_aud" constraintName="fkr8lcesu3i1c3g6v0b2jva1p8g" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-152">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="council_pdfcontainer_aud" constraintName="fkark2hgdqwhw6wqd4g1rlgrka1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-153">
+        <addForeignKeyConstraint baseColumnNames="physicianrequestingcouncil_id" baseTableName="council" constraintName="fkevqokctda9dg1goc445v6rphg" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="physician" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-154">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="council" constraintName="fkfyqwvjmwx1q21w8gyykbiocn5" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-155">
+        <addForeignKeyConstraint baseColumnNames="councilphysician_id" baseTableName="council" constraintName="fko0050v5ngk1r2chk30gp9q8b0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="physician" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-156">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="diagnosis_aud" constraintName="fk6bbtlo76a9hk6ytjidbt9fxg" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-157">
+        <addForeignKeyConstraint baseColumnNames="sample_id" baseTableName="diagnosis" constraintName="fkqvhs4cfwunny8954cdkkt4o9w" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="sample" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-158">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="diagnosisrevision_aud" constraintName="fkohlos78oh31yxuafnyyf9rp5g" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="log" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-159">
+        <addForeignKeyConstraint baseColumnNames="signatureone_id" baseTableName="diagnosisrevision" constraintName="diagnosisrevision_signatureone_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="signature" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-160">
+        <addForeignKeyConstraint baseColumnNames="signaturetwo_id" baseTableName="diagnosisrevision" constraintName="diagnosisrevision_signaturetwo_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="signature" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-161">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="diagnosisrevision" constraintName="diagnosisrevision_task_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="task" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-162">
+        <addForeignKeyConstraint baseColumnNames="physician_id" baseTableName="signature" constraintName="fkhqf839wmyl1s8j68tnlfpa5b3" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="physician" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-163">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="task" constraintName="fkikwevoftf7bem1blamb42rs8g" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="patient" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-164">
+        <addForeignKeyConstraint baseColumnNames="dumplist_id" baseTableName="favouritelist" constraintName="favouritelist_dumplist_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="favouritelist" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-165">
+        <addForeignKeyConstraint baseColumnNames="stainingprototypes_id" baseTableName="materialpreset_stainingprototype" constraintName="fk1bst8b00qmn0oj23k8prayqxj" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="stainingprototype" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-166">
+        <addForeignKeyConstraint baseColumnNames="materialpreset_id" baseTableName="materialpreset_stainingprototype" constraintName="fks3k5362frhl4tdjye8iqr6mdf" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="materialpreset" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-167">
+        <addForeignKeyConstraint baseColumnNames="patient_id" baseTableName="log" constraintName="fk2geclw1xdg95arxhgld55ua4d" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="patient" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-168">
+        <addForeignKeyConstraint baseColumnNames="slides_id" baseTableName="favouritelistitem_slide" constraintName="fk2dywsxil46cav4blg6y97w212" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="slide" validate="true"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-169">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="accounting_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-170">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="biobank_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-171">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="block_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-172">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="contact_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-173">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="council_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-174">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="diagnosis_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-175">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="diagnosispreset_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-176">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="diagnosisrevision_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-177">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="favouritelist_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-178">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="favouritelistitem_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-179">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="favouritepermission_sequence" startValue="100"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-180">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="group_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-181">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="hibernate_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-182">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="listitem_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-183">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="log_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-184">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="materialpreset_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-185">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="organization_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-186">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="patient_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-187">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="pdfs_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-188">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="person_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-189">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="physician_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-190">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="reportintent_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-191">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="reportintentnotification_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-192">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="sample_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-193">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="settings_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-194">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="signature_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-195">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="slide_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-196">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="stainingprototype_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-197">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="task_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="System (generated)" id="1600592039698-198">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="user_sequence" startValue="1"/>
+    </changeSet>
+</databaseChangeLog>

@@ -10,6 +10,7 @@ import com.patho.main.ui.transformer.DefaultTransformer;
 import com.patho.main.util.dialog.event.ConfirmEvent;
 import com.patho.main.util.dialog.event.PatientMergeEvent;
 import com.patho.main.util.dialog.event.PatientReloadEvent;
+import com.patho.main.util.dialog.event.PatientSelectEvent;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
@@ -84,8 +85,8 @@ public class MergePatientDialog extends AbstractDialog {
     }
 
     public void onReturnSelectTarget(SelectEvent event) {
-        if (event.getObject() != null && event.getObject() instanceof PatientReloadEvent) {
-            Patient patient = ((PatientReloadEvent) event.getObject()).getPatient();
+        if (event.getObject() != null && event.getObject() instanceof PatientSelectEvent) {
+            Patient patient = ((PatientSelectEvent) event.getObject()).getObj();
             // Reloading patient with tasks
             setTarget(patient.getId() != 0 ? SpringContextBridge.services().getPatientRepository().findOptionalById(patient.getId(), true, false).get()
                     : patient);
@@ -101,10 +102,7 @@ public class MergePatientDialog extends AbstractDialog {
         taskTransformer = new DefaultTransformer<Task>(Stream.of(taskLists.getSource(), taskLists.getTarget())
                 .flatMap(Collection::stream).collect(Collectors.toList()));
 
-        if (getSource() != null && getTarget() != null && getSource().equals(getTarget())) {
-            samePatientForSourceAndTarget = true;
-        } else
-            samePatientForSourceAndTarget = false;
+        samePatientForSourceAndTarget = getSource() != null && getTarget() != null && getSource().equals(getTarget());
 
         setTaskWasMoved(false);
 

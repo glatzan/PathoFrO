@@ -69,6 +69,7 @@ import java.time.format.DateTimeParseException;
                 }
         )
 )
+
 @Entity
 @Immutable
 @Getter

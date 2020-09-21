@@ -18,9 +18,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackages = {"com.patho.main.repository.jpa"},
-        repositoryBaseClass = BaseRepositoryImpl.class
-)
 class PersistenceContext {
 }
 
@@ -29,24 +26,4 @@ public class DatabaseConfig {
     @Autowired
     private DataSource dataSource;
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-        factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("com.patho.main");
-        factory.setDataSource(dataSource);
-
-        return factory;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-        JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(entityManagerFactory);
-        return txManager;
-    }
 }

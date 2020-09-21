@@ -13,7 +13,6 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @ConfigurationProperties(prefix = "patho.ldap")
 @Getter
 @Setter
-@EnableLdapRepositories(basePackages="com.patho.main.repository.miscellaneous")
 public class LdapConfig {
 
     private String ldapUrl;

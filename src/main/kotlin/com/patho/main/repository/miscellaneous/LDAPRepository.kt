@@ -1,13 +1,9 @@
-package com.patho.main.repository.miscellaneous;
+package com.patho.main.repository.miscellaneous
 
-import com.patho.main.model.Physician;
-import org.springframework.stereotype.Repository;
+import com.patho.main.model.Physician
+import java.util.*
 
-import java.util.List;
-import java.util.Optional;
-
-public interface LDAPRepository {
-
+interface LDAPRepository {
     /**
      * Returns an user with the given uid. If not found an empty Optional will be
      * returned.
@@ -15,7 +11,7 @@ public interface LDAPRepository {
      * @param name
      * @return
      */
-    public Optional<Physician> findByUid(String name);
+    fun findByUid(name: String): Optional<Physician>
 
     /**
      * Returns a list with physicians matching the given parameters. It is seached
@@ -24,7 +20,7 @@ public interface LDAPRepository {
      * @param name
      * @return
      */
-    public List<Physician> findAllByName(String... name);
+    fun findAllByName(vararg name: String): List<Physician>
 
     /**
      * Returns a list with physicians matching the given parameters. It is seached
@@ -33,5 +29,5 @@ public interface LDAPRepository {
      * @param names
      * @return
      */
-    public List<Physician> findAllByName(List<String> names);
+    fun findAllByName(names: List<String>): List<Physician>
 }
