@@ -102,6 +102,8 @@ open class MailTemplate : AbstractTemplate {
 
         finalSubject = writer.toString()
 
+        writer.buffer.setLength(0)
+
         Velocity.evaluate(context, writer, "test", body)
 
         finalBody = writer.toString()
