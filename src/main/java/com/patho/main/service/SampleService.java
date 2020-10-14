@@ -77,7 +77,8 @@ public class SampleService extends AbstractService {
             blockService.createBlock(sample, createSlides, false, false);
 
         if (naming)
-            TaskTreeTools.updateNamesInTree(sample, sample.getTask().getUseAutoNomenclature(), false);
+            for(Sample iterSample : task.getSamples())
+            TaskTreeTools.updateNamesInTree(iterSample, sample.getTask().getUseAutoNomenclature(), false);
 
         // creating first default reportIntent
         diagnosisService.synchronizeDiagnosesAndSamples(task, false);

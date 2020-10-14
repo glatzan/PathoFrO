@@ -32,9 +32,9 @@ spring:
       max-file-size: 50MB
       max-request-size: 100MB
   datasource:
-    url: jdbc:postgresql://localhost/pathofro
+    url: jdbc:postgresql://augpatho/pathofrotest
     username: postgres
-    password: postgres
+    password: guaorfohtapdb
   data:
     redis:
       repositories:

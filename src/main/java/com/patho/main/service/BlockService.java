@@ -58,7 +58,8 @@ public class BlockService extends AbstractService {
         }
 
         if (naming)
-            TaskTreeTools.updateNamesInTree(block.getParent(), sample.getTask().getUseAutoNomenclature(), false);
+            for(Block iterBlock : sample.getBlocks())
+                TaskTreeTools.updateNamesInTree(iterBlock, sample.getTask().getUseAutoNomenclature(), false, false);
 
         // saving task
         if (save)

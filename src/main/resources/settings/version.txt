@@ -126,6 +126,11 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.7 (14.10.2020)
++++!: Label-Slide Info is now printed corretly
++++!: Naming of the first sample is now correct if there are more then one sample
+++++: TaskOverview changed task date to dd.mm.yyyy
+
 +v 2.0.6 (12.10.2020)
 +++!: Mail Subject falsely added to Mail Body fixed
 

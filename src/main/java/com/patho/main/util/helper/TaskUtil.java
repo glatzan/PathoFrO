@@ -186,17 +186,11 @@ public class TaskUtil {
         return highest;
     }
 
-
     /**
      * Returns the name of a sample
-     *
-     * @param task
-     * @param sample
-     * @param useAutoNomenclature
-     * @return
      */
-    public static String getSampleName(int sampleCount, int sampleIndex, boolean useAutoNomenclature) {
-        if (useAutoNomenclature && sampleCount > 1)
+    public static String getSampleName(int sampleCount, int sampleIndex, boolean useAutoNomenclature ) {
+        if (useAutoNomenclature &&  sampleCount > 1)
             return TaskUtil.getRomanNumber(sampleIndex);
         return "";
     }
