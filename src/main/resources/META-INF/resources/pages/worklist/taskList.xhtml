@@ -32,7 +32,7 @@
             <p:column headerText="#{msg['body.taskList.table.date']}"
                       style="width:90px">
                 <h:outputText value="#{taskOverview.receiptDate}">
-                    <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" timeZone="Europe/Berlin"/>
+                    <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" timeZone="Europe/Berlin"/>
                 </h:outputText>
             </p:column>
 

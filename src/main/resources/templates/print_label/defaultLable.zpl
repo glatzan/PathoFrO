@@ -14,7 +14,7 @@
 ^FS
 ^FO02,100
 ^A0N,14,14
-^FD$slide.commentary
+^FD$slide.slideLabelText
 ^FS
 ^FO02,118
 ^A0N,14,14
