@@ -12,7 +12,7 @@ class TaskTreeTools {
 
 
         @JvmStatic
-        fun updateNamesInTree(entity: IdManuallyAltered, useAutoNomenclature: Boolean = entity.task?.useAutoNomenclature == true, ignoreManuallyNamedItems: Boolean = false) {
+        fun updateNamesInTree(entity: IdManuallyAltered, useAutoNomenclature: Boolean = entity.task?.useAutoNomenclature == true, ignoreManuallyNamedItems: Boolean = false, multipleEntities : Boolean = false) {
             when (entity) {
                 is Task -> Companion.updateNamesInTree(entity as Task, useAutoNomenclature, ignoreManuallyNamedItems)
                 is Sample -> Companion.updateNamesInTree(entity, useAutoNomenclature, ignoreManuallyNamedItems)
