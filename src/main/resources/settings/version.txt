@@ -126,6 +126,10 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.8 (18.10.2020)
++++!: Individual consultation is selectable
+++++: Consultations can be deleted
+
 +v 2.0.7 (14.10.2020)
 +++!: Label-Slide Info is now printed corretly
 +++!: Naming of the first sample is now correct if there are more then one sample
@@ -1150,7 +1154,7 @@ update favouritelist set useicon = true where id = 11;
 update favouritelist set command = 'dialog:councilDialogHandler' where id = 11;
 /*council completet*/
 update favouritelist set icon = 'fa-stethoscope icon-purple' where id = 12;
-update favouritelist set infotext = 'Konsil erledigt' where id = 12;
+update favouritelist set infotext = 'Konsilbericht liegt vor' where id = 12;
 update favouritelist set useicon = true where id = 12;
 update favouritelist set command = 'dialog:councilDialogHandler' where id = 12;
 

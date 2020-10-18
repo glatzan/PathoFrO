@@ -1,5 +1,6 @@
 package com.patho.main.service;
 
+import com.patho.main.action.handler.MessageHandler;
 import com.patho.main.common.DateFormat;
 import com.patho.main.common.PredefinedFavouriteList;
 import com.patho.main.model.PDFContainer;
@@ -176,6 +177,17 @@ public class CouncilService extends AbstractService {
 
         return new CouncilReturn(task, council);
     }
+
+    public Task deleteCouncil(Task task, Council council) {
+        task.getCouncils().remove(council);
+
+        councilRepository.delete(council,
+                resourceBundle.get("log.patient.task.council.deleted", task, council.getName()), task.getPatient());
+
+        MessageHandler.sendGrowlMessagesAsResource("growl.consultation.deleted.headline", "growl.consultation.deleted.text");
+        return task;
+    }
+
 
     public static class CouncilReturn {
         protected Task task;

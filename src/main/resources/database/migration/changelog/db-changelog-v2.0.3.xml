@@ -39,5 +39,4 @@
         <renameTable newTableName="council_attachedpdfs_aud"
                      oldTableName="council_pdfcontainer_aud"/>
     </changeSet>
-
 </databaseChangeLog>

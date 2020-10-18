@@ -32,7 +32,7 @@ spring:
       max-file-size: 50MB
       max-request-size: 100MB
   datasource:
-    url: jdbc:postgresql://locahost/pathofrotest
+    url: jdbc:postgresql://localhost/histo
     username: postgres
     password: postgres
   data:
@@ -412,5 +412,4 @@ patho:
         hidden: false
         afterPDFCreationHook : true
       
-
-
+           

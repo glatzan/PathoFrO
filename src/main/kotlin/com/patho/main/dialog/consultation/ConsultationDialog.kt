@@ -24,6 +24,7 @@ import com.patho.main.service.PDFService
 import com.patho.main.service.impl.SpringContextBridge.Companion.services
 import com.patho.main.template.PrintDocumentType
 import com.patho.main.ui.transformer.DefaultTransformer
+import com.patho.main.util.dialog.event.ConfirmEvent
 import com.patho.main.util.dialog.event.QuickDiagnosisAddEvent
 import com.patho.main.util.dialog.event.ReloadEvent
 import com.patho.main.util.dialog.event.TaskReloadEvent
@@ -287,6 +288,10 @@ open class ConsultationDialog @Autowired constructor(
      */
     open fun onTreeNodeSelectionChange() {
         val t = selectedTreeNode?.data ?: return
+
+        if (t is ConsultationContainer)
+            this.selectedConsultation = t
+
         if (t is ConsultationPDFContainer) {
             logger.debug("Is pdf container, render pdf")
             stream.render(t.container)
@@ -452,6 +457,26 @@ open class ConsultationDialog @Autowired constructor(
         val c = councilService.createCouncil(task, true)
         update(true)
         selectNode(consultationContainerList.last(), 0)
+    }
+
+    open fun deleteConsultation() {
+        this.councilService.deleteCouncil(this.task, this.selectedConsultation!!.consultation)
+        if (consultationContainerList.isNotEmpty())
+            selectNode(consultationContainerList.last(), 0)
+        else {
+            selectedTreeNode = null
+            selectedConsultation = null
+            lastTeeNode = null
+        }
+
+        update(true)
+
+    }
+
+    open fun onConfirmDialogReturn(event: SelectEvent) {
+        if (event.getObject() != null && event.getObject() is ConfirmEvent && (event.getObject() as ConfirmEvent).obj) {
+            deleteConsultation()
+        }
     }
 
     /**

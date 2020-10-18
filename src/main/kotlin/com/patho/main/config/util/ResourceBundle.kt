@@ -56,7 +56,6 @@ class ResourceBundle @Autowired constructor(private val messageSource: MessageSo
         for (i in params.indices) {
             when {
                 params[i] == null -> {
-
                 }
                 params[i].toString().startsWith("date:") -> {
                 }
