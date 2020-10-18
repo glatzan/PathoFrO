@@ -41,7 +41,7 @@ open class ConfirmDialog : AbstractDialog_(Dialog.CONFIRM_CHANGE) {
     }
 
     open fun ctext(text: String, vararg args: Any): ConfirmDialog {
-        this.text = resourceBundle[text, args]
+        this.text = resourceBundle[text, args.map { it.toString() }]
         return this
     }
 

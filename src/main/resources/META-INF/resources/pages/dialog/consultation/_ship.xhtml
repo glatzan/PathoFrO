@@ -121,11 +121,19 @@
     <div class="buttonContainer">
         <h:panelGrid columns="2">
 
-            <h:panelGrid columns="1" styleClass="left">
+            <h:panelGrid columns="2" styleClass="left">
                 <p:commandButton value="#{msg['dialog.consultation.button.create']}"
                                  icon="fa fa-check-circle-o" update="@form"
                                  disabled="#{!consultationDialog.editable}"
                                  actionListener="#{consultationDialog.createConsultation()}"/>
+
+                <p:commandButton value="#{msg['dialog.consultation.button.delete']}"
+                                 icon="fa fa-fw fa-trash"
+                                 actionListener="#{confirmDialog.initAndPrepareBean().header('dialog.consultation.confirm.headline').ctext('dialog.consultation.confirm.text',consultationDialog.selectedConsultation.consultation.getName())}">
+                    <p:ajax event="dialogReturn"
+                            update="@form"
+                            listener="#{consultationDialog.onConfirmDialogReturn}"/>
+                </p:commandButton>
             </h:panelGrid>
 
             <h:panelGrid columns="2" styleClass="right">
