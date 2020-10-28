@@ -8,7 +8,6 @@ import com.patho.main.model.patient.Task;
 import com.patho.main.repository.jpa.PDFRepository;
 import com.patho.main.repository.jpa.TaskRepository;
 import com.patho.main.util.FileMakerImporter;
-import com.patho.main.util.PathoVersion2DatabaseConverter;
 import com.patho.main.util.helper.TimeUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -76,23 +75,6 @@ public class MainHandlerAction {
 
 
     public void test() {
-        (new PathoVersion2DatabaseConverter()).convertDatabaseToVersion2();
-//		DataBaseConverter b = new DataBaseConverter();
-//		b.start();
-//		new testClass().test();
-//		try {
-//			System.out.println(getBaseURL(FacesContext.getCurrentInstance()));
-//		} catch (MalformedURLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-        Task task = new Task();
-        task.setDateOfSugery(LocalDate.now().minusDays(10));
-        task.setReceiptDate(LocalDate.now().minusDays(5));
-        task.setDueDate(LocalDate.now().minusDays(3));
-
-        taskRepository.save(task);
     }
 
     /**

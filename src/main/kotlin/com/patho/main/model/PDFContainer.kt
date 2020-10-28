@@ -26,10 +26,6 @@ open class PDFContainer : AbstractPersistable, AuditAble {
     @Column(unique = true, nullable = false)
     override open var id: Long = 0
 
-    // TODO remove
-    @Type(type = "org.hibernate.type.BinaryType")
-    open var data: ByteArray = ByteArray(0)
-
     @Enumerated(EnumType.STRING)
     open var type: PrintDocumentType = PrintDocumentType.EMPTY
 
@@ -67,9 +63,8 @@ open class PDFContainer : AbstractPersistable, AuditAble {
 
     constructor()
 
-    constructor(type: PrintDocumentType, name: String = "", data: ByteArray = ByteArray(0)) {
+    constructor(type: PrintDocumentType, name: String = "") {
         this.type = type
-        this.data = data
         this.name = name
     }
 
