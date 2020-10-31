@@ -380,7 +380,7 @@ public class PatientService extends AbstractService {
                     z++;
                     i.remove();
                     // only save if update is performed
-                    copyPatientDataAndSave(hPatient, cPatient);
+                    copyPatientDataAndSave(cPatient, hPatient);
                     break;
                 }
             }

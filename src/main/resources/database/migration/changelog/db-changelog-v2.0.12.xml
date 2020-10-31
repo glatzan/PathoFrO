@@ -1,0 +1,47 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet author="System" id="2.0.12">
+        <!-- remove patient_person constraint -->
+        <dropForeignKeyConstraint baseTableName="patient"
+                                  constraintName="fkh7t53790pi8m7o71uvl5tdb8b"/>
+        <!-- add patient_person constraint -->
+        <addForeignKeyConstraint baseTableName="patient" baseColumnNames="person_id"
+                                 constraintName="patient_person_fk"
+                                 referencedTableName="person"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"/>
+    </changeSet>
+    <changeSet author="System" id="2.0.12.1">
+        <!-- remove task_patient constraint -->
+        <dropForeignKeyConstraint baseTableName="task"
+                                  constraintName="fkikwevoftf7bem1blamb42rs8g"/>
+        <!-- add task_patient constraint -->
+        <addForeignKeyConstraint baseTableName="task" baseColumnNames="parent_id"
+                                 constraintName="task_patient_fk"
+                                 referencedTableName="patient"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"/>
+    </changeSet>
+    <changeSet author="System" id="2.0.12.2">
+        <!-- remove duplicated person_defaultaddress constraint -->
+        <dropForeignKeyConstraint baseTableName="person"
+                                  constraintName="fk7nfnlcyd1hif9akbuwm884bnh"/>
+
+        <!-- remove person_contact constraint -->
+        <dropForeignKeyConstraint baseTableName="person"
+                                  constraintName="fkbi2pspahr0wcmi26je6si7xve"/>
+
+        <!-- add person_contact constraint -->
+        <addForeignKeyConstraint baseTableName="person" baseColumnNames="contact_id"
+                                 constraintName="person_contact_fk"
+                                 referencedTableName="contact"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"/>
+    </changeSet>
+</databaseChangeLog>

@@ -178,6 +178,7 @@ public class CouncilService extends AbstractService {
         return new CouncilReturn(task, council);
     }
 
+    @Transactional
     public Task deleteCouncil(Task task, Council council) {
         task.getCouncils().remove(council);
 
@@ -185,6 +186,14 @@ public class CouncilService extends AbstractService {
                 resourceBundle.get("log.patient.task.council.deleted", task, council.getName()), task.getPatient());
 
         MessageHandler.sendGrowlMessagesAsResource("growl.consultation.deleted.headline", "growl.consultation.deleted.text");
+
+        if (task.getCouncils().size() == 0)
+            favouriteListService.removeTaskFromList(task, false, PredefinedFavouriteList.CouncilWaitingForReply, PredefinedFavouriteList.CouncilReplyPresent,
+                    PredefinedFavouriteList.Council,
+                    PredefinedFavouriteList.CouncilRequest, PredefinedFavouriteList.CouncilSendRequestMTA,
+                    PredefinedFavouriteList.CouncilSendRequestSecretary, PredefinedFavouriteList.CouncilWaitingForReply);
+
+
         return task;
     }
 
