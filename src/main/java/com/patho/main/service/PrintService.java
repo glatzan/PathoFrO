@@ -2,7 +2,6 @@ package com.patho.main.service;
 
 import com.patho.main.model.user.HistoUser;
 import com.patho.main.ui.transformer.DefaultTransformer;
-import com.patho.main.util.helper.HistoUtil;
 import com.patho.main.util.json.JsonHandler;
 import com.patho.main.util.printer.ClinicPrinter;
 import com.patho.main.util.printer.ClinicPrinterDummy;
@@ -18,7 +17,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -233,6 +231,9 @@ public class PrintService extends AbstractService {
         }
 
         public LabelPrinter findPrinterByID(String id) {
+
+            if (id == null || id.equals(""))
+                return null;
 
             for (LabelPrinter labelPrinter : getPrinter()) {
                 if (labelPrinter.getId() == Long.valueOf(id)) {

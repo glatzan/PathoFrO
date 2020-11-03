@@ -119,6 +119,12 @@ open class HistoSettings() : AbstractPersistable(), Cloneable {
     open var addTaskWithSingleClick: Boolean = false
 
     /**
+     * Sortorder for surgeons.
+     */
+    @Column
+    open var surgeonSortOrder: Boolean = false
+
+    /**
      * List of available views
      */
     @ElementCollection(fetch = FetchType.EAGER)

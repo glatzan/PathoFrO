@@ -194,6 +194,14 @@
             <p:ajax event="change" listener="#{cc.attrs.valueChangeAction}"/>
         </p:selectBooleanCheckbox>
 
+        <!-- surgeon sort order-->
+        <h:outputLabel
+                value="#{msg['component.userSettingsGeneral.surgeonSortOrder']}"/>
+        <p:selectBooleanCheckbox
+                value="#{cc.attrs.user.settings.surgeonSortOrder}"
+                title="#{msg['component.userSettingsGeneral.surgeonSortOrder.text']}">
+            <p:ajax event="change" listener="#{cc.attrs.valueChangeAction}"/>
+        </p:selectBooleanCheckbox>
     </h:panelGrid>
 </composite:implementation>
 </html>

@@ -25,73 +25,73 @@ public final class LDAPUserMapper {
      * Full name
      */
     @Attribute(name = "cn")
-    private String fullName;
+    private String fullName = "";
 
     /**
      * Title e.g. Dr.
      */
     @Attribute(name = "personalTitle")
-    private String title;
+    private String title = "";
 
     /**
      * Login name
      */
     @Attribute(name = "uid")
-    private String uid;
+    private String uid = "";
 
     /**
      * last name
      */
     @Attribute(name = "sn")
-    private String lastName;
+    private String lastName = "";
 
     /**
      * Employee Number
      */
     @Attribute(name = "employeeNumber")
-    private String employeeNumber;
+    private String employeeNumber = "";
 
     /**
      * First name
      */
     @Attribute(name = "givenName")
-    private String firstName;
+    private String firstName = "";
 
     /**
      * Email
      */
     @Attribute(name = "mail")
-    private String mail;
+    private String mail = "";
 
     /**
      * phone
      */
     @Attribute(name = "telephonenumber")
-    private String phone;
+    private String phone = "";
 
     /**
      * PAger
      */
     @Attribute(name = "pager")
-    private String pager;
+    private String pager = "";
 
     /**
      * Clinical Role. e.g. consultant
      */
     @Attribute(name = "title")
-    private String clinicRole;
+    private String clinicRole = "";
 
     /**
      * Name of Organization
      */
     @Attribute(name = "ou")
-    private String organization;
+    private String organization = "";
 
     /**
      * SEX, 1 = male, > 1 female
      */
     @Attribute(name = "uklfrPersonType")
-    private String sex;
+    private String sex = "";
 
     public Physician getPhysician() {
         return getPhysician(new Physician(new Person(new Contact())));

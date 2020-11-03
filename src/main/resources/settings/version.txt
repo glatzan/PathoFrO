@@ -126,6 +126,12 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.14 (03.11.2020)
+++++: Option for sorting surgeons alphabetically or priory wise
+
++v 2.0.13 (03.11.2020)
++++!: Adding unknown employees to PathoFrO now working
+
 +v 2.0.12 (30.10.2020)
 +++!: Remove duplicated patient script
 
@@ -141,10 +147,6 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
 +v 2.0.9 (18.10.2020)
 +++!: PDF Upload in PDFOrganizer fixed
-
-TODO neu:
-Auswertige Befunde können nicht archiviert werden
-
 
 +v 2.0.8 (18.10.2020)
 +++!: Individual consultation is selectable

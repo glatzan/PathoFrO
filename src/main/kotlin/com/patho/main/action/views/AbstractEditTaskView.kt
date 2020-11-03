@@ -20,7 +20,12 @@ abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectCompone
     open val surgeons = object : IPhysicianSelectOverlay {
 
         override val physicians: List<SimplePhysicianBearer>
-            get() = SpringSessionContextBridge.services().genericViewData.surgeons
+            get() {
+                return if (SpringContextBridge.services().currentUserHandler.currentUser.settings.surgeonSortOrder)
+                    SpringSessionContextBridge.services().genericViewData.surgeons.sortedBy { it.physician.person.lastName }
+                else
+                    SpringSessionContextBridge.services().genericViewData.surgeons.sortedByDescending { it.physician.priorityCount }
+            }
 
         override var selectedPhysician: SimplePhysicianBearer? = null
 
@@ -39,7 +44,12 @@ abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectCompone
     open val privatePhysician = object : IPhysicianSelectOverlay {
 
         override val physicians: List<SimplePhysicianBearer>
-            get() = SpringSessionContextBridge.services().genericViewData.privatePhysicians
+            get() {
+                return if (SpringContextBridge.services().currentUserHandler.currentUser.settings.surgeonSortOrder)
+                    SpringSessionContextBridge.services().genericViewData.privatePhysicians.sortedBy { it.physician.person.lastName }
+                else
+                    SpringSessionContextBridge.services().genericViewData.privatePhysicians.sortedByDescending { it.physician.priorityCount }
+            }
 
         override var selectedPhysician: SimplePhysicianBearer? = null
 
