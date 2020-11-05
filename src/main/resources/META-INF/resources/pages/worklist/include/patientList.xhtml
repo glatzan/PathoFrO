@@ -211,7 +211,7 @@
                                 <p:repeat var="favouriteList" value="#{task.favouriteLists}">
                                     <p:commandLink
                                             disabled="#{favouriteList.command eq null or favouriteList.command eq ''}"
-                                            style="opacity: 1;margin-left: 5px;"
+                                            style="opacity: 1;margin-left: 5px;pointer-events: all;"
                                             styleClass="noUnderlineAtLink"
                                             rendered="#{favouriteList.useIcon}"
                                             actionListener="#{sharedFunctionHandler.executeCommand(favouriteList.command, task)}"

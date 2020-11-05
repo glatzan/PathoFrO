@@ -126,8 +126,17 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.16 (05.11.2020)
++++*: Change naming of surgeon and external surgeon role
++++*: Change the default material of a new sample in the add sample dialog
++++*: Change the order of materials in the new sample dialog to match the order in task creation dialog
+++++: Added a new list for patient to whom a tumor log was given
+
++v 2.0.15 (04.11.2020)
++++!: Fixed organization update bug
+
 +v 2.0.14 (03.11.2020)
-++++: Option for sorting surgeons alphabetically or priory wise
+++++: Option added for sorting surgeons alphabetically or priory wise
 
 +v 2.0.13 (03.11.2020)
 +++!: Adding unknown employees to PathoFrO now working
@@ -173,14 +182,14 @@ alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 +++!: PrintTemplates custom address fixed
 
 +v 2.0.2 (15.09.2020)
-+++!: Bugfixes
++++!: Many bugfixes
 
 +v 2.0.1 (07.09.2020)
-+++!: Bugfixes
++++!: Many bugfixes
 
 +v 2.0.0
 ++++: 
-++++: Umstellung des Systems auf Spring Boot
+++++: Moved from spring to spring boot
 ++++:
 
 TODO:

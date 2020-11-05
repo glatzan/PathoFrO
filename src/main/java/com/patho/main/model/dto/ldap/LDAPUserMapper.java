@@ -109,12 +109,9 @@ public final class LDAPUserMapper {
         physician.setClinicRole(getClinicRole());
         physician.getPerson().setGender(getSex().equals("1") ? Person.Gender.MALE : Person.Gender.FEMALE);
 
-        if (physician.getPerson().getOrganizsations() == null)
-            physician.getPerson().setOrganizsations(new HashSet<Organization>());
-
         Organization organization = new Organization(getOrganization(), new Contact(), true);
-        if (!physician.getPerson().getOrganizsations().stream()
-                .anyMatch(p -> organization.getName().equals(p.getName())))
+        if (physician.getPerson().getOrganizsations().stream()
+                .noneMatch(p -> organization.getName().equals(p.getName())))
             physician.getPerson().getOrganizsations().add(organization);
 
         return physician;

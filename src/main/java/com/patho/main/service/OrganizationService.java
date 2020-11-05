@@ -156,21 +156,21 @@ public class OrganizationService extends AbstractService {
         List<Organization> result = new ArrayList<Organization>(organizations.size());
 
         // saving new organizations
-        for (int i = 0; i < organizations.size(); i++) {
+        for (Organization organization : organizations) {
 
             // do not reload loaded organizations
-            if (organizations.get(i).getId() == 0) {
+            if (organization.getId() == 0) {
                 Optional<Organization> databaseOrganization = organizationRepository
-                        .findOptionalByName(organizations.get(i).getName());
-                if (!databaseOrganization.isPresent()) {
-                    logger.debug("Organization " + organizations.get(i).getName() + " not found, creating!");
-                    result.add(addOrUpdate(organizations.get(i)));
+                        .findOptionalByName(organization.getName());
+                if (databaseOrganization.isEmpty()) {
+                    logger.debug("Organization " + organization.getName() + " not found, creating!");
+                    result.add(addOrUpdate(organization));
                 } else {
-                    logger.debug("Organization " + organizations.get(i).getName() + " found, replacing in linst!");
+                    logger.debug("Organization " + organization.getName() + " found, replacing in linst!");
                     result.add(databaseOrganization.get());
                 }
             } else {
-                result.add(organizations.get(i));
+                result.add(organization);
             }
         }
 
@@ -184,7 +184,7 @@ public class OrganizationService extends AbstractService {
      * @param organization
      */
     public void addOrganizationToPerson(Person person, Organization organization) {
-        if (!person.getOrganizsations().stream().anyMatch(p -> p.equals(organization)))
+        if (person.getOrganizsations().stream().noneMatch(p -> p.equals(organization)))
             person.getOrganizsations().add(organization);
     }
 }

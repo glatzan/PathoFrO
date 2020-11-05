@@ -70,7 +70,12 @@ public enum PredefinedFavouriteList {
      */
     CouncilReplyPresent(16),
 
-    ScannList(50), ScannCompletedList(51), ReturnSampleList(52);
+    ScannList(50), ScannCompletedList(51), ReturnSampleList(52),
+
+    /**
+     * List of patients to whom a tumor log was givem
+     */
+    TumorLogWasSend(60);
 
     private final long id;
 

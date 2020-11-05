@@ -1,0 +1,82 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet author="System" id="2.0.16">
+        <!-- setting default  sequence for id in favouritelist-->
+        <addDefaultValue
+                tableName="favouritelist"
+                columnName="id"
+                defaultValueSequenceNext="favouritelist_sequence"/>
+        <!-- setting default  sequence for id in favouritepermissionsgroup-->
+        <addDefaultValue
+                tableName="favouritepermissionsgroup"
+                columnName="id"
+                defaultValueSequenceNext="favouritelist_sequence"/>
+        <!-- setting default  sequence for id in favouritepermissionsgroup-->
+        <addDefaultValue
+                tableName="favouritepermissionsgroup"
+                columnName="id"
+                defaultValueSequenceNext="favouritepermission_sequence"/>
+        <!-- setting default  sequence for id in favouritepermissionsuser-->
+        <addDefaultValue
+                tableName="favouritepermissionsuser"
+                columnName="id"
+                defaultValueSequenceNext="favouritepermission_sequence"/>
+        <!-- adding default value for archived in favouritelist-->
+        <addDefaultValue tableName="favouritelist" columnName="archived" defaultValueBoolean=" false"/>
+        <!-- adding default value for blocktaskarchival in favouritelist-->
+        <addDefaultValue tableName="favouritelist" columnName="blocktaskarchival" defaultValueBoolean=" false"/>
+        <!-- adding default value for hidelist in favouritelist-->
+        <addDefaultValue tableName="favouritelist" columnName="hidelist" defaultValueBoolean=" false"/>
+    </changeSet>
+
+    <changeSet author="System" id="2.0.16.1">
+        <!-- adding favourite list for tumor log -->
+        <insert tableName="favouritelist">
+            <column name="id" value="60"/>
+            <column name="defaultlist" value="true"/>
+            <column name="globalview" value="true"/>
+            <column name="name" value="Tumorpass ausgehändigt"/>
+            <column name="manueledit" value="true"/>
+            <column name="useicon" value="true"/>
+            <column name="icon" value="fa-file-text"/>
+            <column name="infotext" value="Tumorpass ausgehändigt "/>
+            <column name="usedumplist" value="false"/>
+            <column name="archived" value="false"/>
+            <column name="blocktaskarchival" value="false"/>
+            <column name="hidelist" value="false"/>
+        </insert>
+
+        <!-- setting favourite list  permission to admin = 7, moderator = 6, physicain = 5, mta = 4 -->
+        <insert tableName="favouritepermissionsgroup">
+            <column name="admin" value="false"/>
+            <column name="editable" value="true"/>
+            <column name="readable" value="true"/>
+            <column name="favouritelist_id" value="60"/>
+            <column name="group_id" value="4"/>
+        </insert>
+        <insert tableName="favouritepermissionsgroup">
+            <column name="admin" value="false"/>
+            <column name="editable" value="true"/>
+            <column name="readable" value="true"/>
+            <column name="favouritelist_id" value="60"/>
+            <column name="group_id" value="5"/>
+        </insert>
+        <insert tableName="favouritepermissionsgroup">
+            <column name="admin" value="false"/>
+            <column name="editable" value="true"/>
+            <column name="readable" value="true"/>
+            <column name="favouritelist_id" value="60"/>
+            <column name="group_id" value="6"/>
+        </insert>
+        <insert tableName="favouritepermissionsgroup">
+            <column name="admin" value="false"/>
+            <column name="editable" value="true"/>
+            <column name="readable" value="true"/>
+            <column name="favouritelist_id" value="60"/>
+            <column name="group_id" value="7"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

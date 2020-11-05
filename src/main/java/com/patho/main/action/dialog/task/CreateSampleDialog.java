@@ -32,10 +32,10 @@ public class CreateSampleDialog extends AbstractDialog {
     public boolean initBean(Task task) {
         super.initBean(task, Dialog.SAMPLE_CREATE);
 
-        setMaterials(SpringContextBridge.services().getMaterialPresetRepository().findAll(true));
-
+        setMaterials(SpringContextBridge.services().getMaterialPresetRepository().findAllOrderByIndexInListAsc(true, true));
         if (!getMaterials().isEmpty()) {
             setMaterialTransformer(new DefaultTransformer<>(getMaterials()));
+            setSelectedMaterial(getMaterials().get(0));
         }
 
         return true;

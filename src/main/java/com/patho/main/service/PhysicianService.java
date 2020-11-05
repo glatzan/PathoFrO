@@ -74,7 +74,7 @@ public class PhysicianService extends AbstractService {
         } else {
             logger.info("Creating new phyisician " + physician.getPerson().getFullName());
 
-            organizationService.synchronizeOrganizations(physician.getPerson().getOrganizsations());
+            physician.getPerson().setOrganizsations(new HashSet<>(organizationService.synchronizeOrganizations(physician.getPerson().getOrganizsations())));
 
             return physicianRepository.save(physician,
                     resourceBundle.get("log.settings.physician.patho.ldap.save", physician.getPerson().getFullName()));
