@@ -8,6 +8,7 @@ import com.patho.main.dialog.diagnosis.DiagnosisRecordDialog
 import com.patho.main.model.Signature
 import com.patho.main.model.patient.Diagnosis
 import com.patho.main.model.patient.DiagnosisRevision
+import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
 import com.patho.main.model.patient.notification.ReportIntent
 import com.patho.main.model.person.Person
@@ -47,7 +48,13 @@ open class DiagnosisView @Autowired constructor(
     }
 
     override fun loadView(task: Task) {
-        logger.debug("Loading reportIntent data")
+        logger.debug("Loading diagnosis data data")
+
+        for(diagnosisRevision in task.diagnosisRevisions){
+            if(diagnosisRevision.notificationStatus == NotificationStatus.NOT_APPROVED)
+                diagnosisRevision.signatureDate = LocalDate.now()
+        }
+
         super.loadView(task)
     }
 

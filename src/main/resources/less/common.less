@@ -56,9 +56,7 @@
 @icon-names: icon-green, icon-purple, icon-orange, icon-grey, icon-red, icon-blue;
 @icon-length: length(@icon-colors);
 // loop for generating icon colors 
-.generate-incon-colors (@names;
-@colors;
-@index) when (iscolor(extract(@colors, @index))) and (@index > 0) {
+.generate-incon-colors (@names;@colors;@index) when (iscolor(extract(@colors, @index))) and (@index > 0) {
   .generate-incon-colors (@names; @colors; (@index - 1));
   @name: extract(@icon-names, @index);
   @color: extract(@icon-colors, @index);

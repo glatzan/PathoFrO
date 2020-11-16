@@ -67,10 +67,7 @@ abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectCompone
         }
     }
 
-    /**
-     * Object for changing the case history by overlay
-     */
-    override val caseHistory = object : ICaseHistorySelectOverlay {
+    val value = object : ICaseHistorySelectOverlay {
 
         override var selectedItem: ListItem? = null
 
@@ -84,6 +81,11 @@ abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectCompone
             this.selectedItem = null
         }
     }
+
+    /**
+     * Object for changing the case history by overlay
+     */
+    override val caseHistory = value
 
     /**
      * Object for changing the material by overlay

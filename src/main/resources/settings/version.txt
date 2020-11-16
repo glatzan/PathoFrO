@@ -126,6 +126,9 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.17 (15.11.2020)
++++*: Diagnosis signature date is updated if Diagnosis is not approved.
+
 +v 2.0.16 (05.11.2020)
 +++*: Change naming of surgeon and external surgeon role
 +++*: Change the default material of a new sample in the add sample dialog
