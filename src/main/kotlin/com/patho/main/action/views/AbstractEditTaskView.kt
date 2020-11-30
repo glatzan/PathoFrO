@@ -34,7 +34,12 @@ abstract class AbstractEditTaskView : AbstractTaskView(), IMaterialSelectCompone
         override fun onSelect() {
             val tmp = selectedPhysician
             if (tmp != null)
-                addReportIntentToTask(tmp.physician.person, ContactRole.SURGEON)
+                addReportIntentToTask(tmp.physician.person,
+                        when {
+                            tmp.physician.associatedRoles.any { it == ContactRole.SURGEON } -> ContactRole.SURGEON
+                            tmp.physician.associatedRoles.any { it == ContactRole.EXTERNAL_SURGEON } -> ContactRole.EXTERNAL_SURGEON
+                            else -> ContactRole.SURGEON
+                        })
         }
     }
 

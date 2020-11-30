@@ -126,6 +126,22 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.21 (30.11.2020)
++++!: Quick Add Surgeon, external surgeon displayed correctly.
+
++v 2.0.20 (19.11.2020)
++++!: Task content scrolling fixed (if task was opend from patient view)
+
++v 2.0.20 (18.11.2020)
++++!: Report view fixed
+
++v 2.0.19 (17.11.2020)
++++!: Malignancy in diagnosis reports is shown correctly
+
++v 2.0.18 (17.11.2020)
++++!: External patient creation fixed.
++++*: Patient edit field width changed.
+
 +v 2.0.17 (15.11.2020)
 +++*: Diagnosis signature date is updated if Diagnosis is not approved.
 

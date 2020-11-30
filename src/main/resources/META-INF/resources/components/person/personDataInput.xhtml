@@ -41,7 +41,7 @@
             <!-- Title -->
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.title']}"/>
-            <p:selectOneMenu style="width:100px" editable="true" disabled="#{cc.attrs.disabled}"
+            <p:selectOneMenu style="width:80%" editable="true" disabled="#{cc.attrs.disabled}"
                              value="#{cc.attrs.person.title}" id="personTitel">
                 <f:selectItem itemLabel="" itemValue=""/>
                 <f:selectItem
@@ -78,7 +78,7 @@
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.lastname']}"/>
             <p:inputText name="lname" autocomplete="family-name" required="true" id="lname"
-                         disabled="#{cc.attrs.disabled}"
+                         disabled="#{cc.attrs.disabled}" style="width:80%"
                          value="#{cc.attrs.person.lastName}">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
@@ -89,7 +89,7 @@
             <!-- gender -->
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.gender']}"/>
-            <p:selectOneMenu style="width:100px" name="sex" autocomplete="sex" required="#{cc.attrs.genderRequired}"
+            <p:selectOneMenu style="width:80%" name="sex" autocomplete="sex" required="#{cc.attrs.genderRequired}"
                              value="#{cc.attrs.person.gender}" disabled="#{cc.attrs.disabled}" id="sexSelect">
                 <f:selectItem
                         itemLabel="#{msg['component.personSettingsGeneral.gender.select']}"
@@ -114,7 +114,7 @@
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.firstName']}"/>
             <p:inputText name="fname" autocomplete="given-name" required="true" id="fname"
-                         disabled="#{cc.attrs.disabled}"
+                         disabled="#{cc.attrs.disabled}" style="width:80%"
                          value="#{cc.attrs.person.firstName}">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
@@ -138,7 +138,7 @@
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.contact.street']}"/>
             <p:inputText name="street-address" autocomplete="street-address" required="#{cc.attrs.streetRequired}"
-                         id="street-address"
+                         id="street-address" style="width:80%"
                          value="#{cc.attrs.person.contact.street}" disabled="#{cc.attrs.disabled}">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
@@ -152,7 +152,7 @@
             <!-- address addition one -->
             <h:outputLabel
                     value="#{msg['component.personSettingsGeneral.contact.additionOne']}"/>
-            <p:inputText id="addresAdd1"
+            <p:inputText id="addresAdd1" style="width:80%"
                          value="#{cc.attrs.person.contact.addressadditon}" disabled="#{cc.attrs.disabled}">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
@@ -163,7 +163,7 @@
             <!-- address addition two -->
             <h:outputLabel
                     value="#{msg['component.personSettingsGeneral.contact.additionTwo']}"/>
-            <p:inputText id="addresAdd2"
+            <p:inputText id="addresAdd2" style="width:80%"
                          value="#{cc.attrs.person.contact.addressadditon2}" disabled="#{cc.attrs.disabled}">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
@@ -174,7 +174,7 @@
             <!-- Postcode -->
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.address.plz']}"/>
-            <p:inputText style="width:75px;" required="#{cc.attrs.zipRequired}"
+            <p:inputText style="width:80%" required="#{cc.attrs.zipRequired}"
                          value="#{cc.attrs.person.contact.postcode}" id="postcode"
                          name="postal-code" autocomplete="postal-code" disabled="#{cc.attrs.disabled}">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
@@ -187,7 +187,7 @@
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.contact.town']}"/>
             <p:inputText name="city" autocomplete="address-level2" required="#{cc.attrs.townRequired}" id="town"
-                         value="#{cc.attrs.person.contact.town}" disabled="#{cc.attrs.disabled}">
+                         value="#{cc.attrs.person.contact.town}" style="width:80%" disabled="#{cc.attrs.disabled}">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
                         update="#{cc.attrs.onPersonDataChangeUpdate}"
@@ -209,7 +209,7 @@
             <!-- phone -->
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.contact.phone']}"/>
-            <p:inputText value="#{cc.attrs.person.contact.phone}" disabled="#{cc.attrs.disabled}"
+            <p:inputText value="#{cc.attrs.person.contact.phone}" disabled="#{cc.attrs.disabled}" style="width:80%"
                          name="phone" autocomplete="tel" id="phone">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
@@ -220,7 +220,7 @@
             <!-- fax -->
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.miscellaneous.fax']}"/>
-            <p:inputText value="#{cc.attrs.person.contact.fax}" disabled="#{cc.attrs.disabled}"
+            <p:inputText value="#{cc.attrs.person.contact.fax}" disabled="#{cc.attrs.disabled}" style="width:80%"
                          name="fax" autocomplete="fax" id="fax">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
@@ -231,7 +231,7 @@
             <!-- mobile -->
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.miscellaneous.mobile']}"/>
-            <p:inputText value="#{cc.attrs.person.contact.mobile}" disabled="#{cc.attrs.disabled}"
+            <p:inputText value="#{cc.attrs.person.contact.mobile}" disabled="#{cc.attrs.disabled}" style="width:80%"
                          name="phone" autocomplete="tel" id="mobile">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"
@@ -242,7 +242,7 @@
             <!-- mail -->
             <p:outputLabel
                     value="#{msg['component.personSettingsGeneral.miscellaneous.mail']}"/>
-            <p:inputText name="mail" autocomplete="mail" id="mail"
+            <p:inputText name="mail" autocomplete="mail" id="mail" style="width:80%"
                          value="#{cc.attrs.person.contact.email}" disabled="#{cc.attrs.disabled}">
                 <p:ajax listener="#{cc.attrs.onPersonDataChangeListener.onPersonDataChange()}"
                         disabled="#{cc.attrs.onPersonDataChangeListener == null}"

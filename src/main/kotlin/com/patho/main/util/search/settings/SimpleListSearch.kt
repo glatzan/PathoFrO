@@ -8,7 +8,23 @@ import java.time.*
 
 open class SimpleListSearch : SearchSettings {
 
-    var lists: Array<out PredefinedFavouriteList> = arrayOf(PredefinedFavouriteList.NotificationList, PredefinedFavouriteList.DiagnosisList, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.ReDiagnosisList, PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.StayInDiagnosisList, PredefinedFavouriteList.StayInStainingList, PredefinedFavouriteList.StayInNotificationList, PredefinedFavouriteList.ScannList)
+    var lists: Array<out PredefinedFavouriteList> = arrayOf(
+            PredefinedFavouriteList.NotificationList,
+            PredefinedFavouriteList.DiagnosisList,
+            PredefinedFavouriteList.StainingList,
+            PredefinedFavouriteList.ReDiagnosisList,
+            PredefinedFavouriteList.ReStainingList,
+            PredefinedFavouriteList.StayInDiagnosisList,
+            PredefinedFavouriteList.StayInStainingList,
+            PredefinedFavouriteList.StayInNotificationList,
+            PredefinedFavouriteList.ScannList,
+            PredefinedFavouriteList.Council,
+            PredefinedFavouriteList.CouncilSendRequestSecretary,
+            PredefinedFavouriteList.CouncilCompleted,
+            PredefinedFavouriteList.CouncilSendRequestMTA,
+            PredefinedFavouriteList.CouncilReplyPresent,
+            PredefinedFavouriteList.CouncilRequest,
+            PredefinedFavouriteList.CouncilWaitingForReply)
 
     var selectedLists: Array<out PredefinedFavouriteList>? = null
 

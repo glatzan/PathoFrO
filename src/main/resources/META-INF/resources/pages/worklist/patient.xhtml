@@ -94,7 +94,7 @@
                          rowKey="#{task.id}">
 
                 <p:ajax event="rowSelect"
-                        update="contentForm:contentPanel headerForm navigationForm:patientList"
+                        update="navigationForm:patientList contentForm headerForm"
                         listener="#{centralHandler.onSelectTaskAndPatient(worklistHandler.current.selectedTask)}"/>
 
                 <p:column headerText="#{msg['body.worklist.patient.tasks']}">

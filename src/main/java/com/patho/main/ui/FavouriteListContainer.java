@@ -42,9 +42,9 @@ public class FavouriteListContainer {
         // only updating if not already true
         for (FavouritePermissionsUser user : favouriteList.getUsers()) {
             if (user.getUser().equals(currentUser)) {
-                this.admin = this.admin ? true : user.isAdmin();
-                this.editable = this.editable ? true : user.isEditable();
-                this.readable = this.readable ? true : user.isReadable();
+                this.admin = this.admin || user.isAdmin();
+                this.editable = this.editable || user.isEditable();
+                this.readable = this.readable || user.isReadable();
                 this.userPermission = true;
 
                 type = type > 0 ? type : PERMISSION_GROUP;
@@ -55,9 +55,9 @@ public class FavouriteListContainer {
         // only updating if not already true
         for (FavouritePermissionsGroup group : favouriteList.getGroups()) {
             if (group.getGroup().equals(currentUser.getGroup())) {
-                this.admin = this.admin ? true : group.isAdmin();
-                this.editable = this.editable ? true : group.isEditable();
-                this.readable = this.readable ? true : group.isReadable();
+                this.admin = this.admin || group.isAdmin();
+                this.editable = this.editable || group.isEditable();
+                this.readable = this.readable || group.isReadable();
                 this.groupPermission = true;
 
                 type = type > 0 ? type : PERMISSION_GROUP;

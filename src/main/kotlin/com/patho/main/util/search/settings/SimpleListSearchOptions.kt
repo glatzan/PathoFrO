@@ -11,58 +11,80 @@ enum class SimpleListSearchOption private constructor(
      * Staining list for laboratory
      */
     STAINING_LIST(1, true, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.StayInStainingList,
-            PredefinedFavouriteList.ReStainingList, PredefinedFavouriteList.CouncilSendRequestMTA,
+            PredefinedFavouriteList.ReStainingList,
+            PredefinedFavouriteList.Council,
+            PredefinedFavouriteList.CouncilSendRequestMTA,
+            PredefinedFavouriteList.CouncilWaitingForReply,
+            PredefinedFavouriteList.CouncilReplyPresent,
             PredefinedFavouriteList.ScannList),
+
     /**
      * Diagnosis list for physicians
      */
     DIAGNOSIS_LIST(1, false, PredefinedFavouriteList.DiagnosisList, PredefinedFavouriteList.ReDiagnosisList,
-            PredefinedFavouriteList.StayInDiagnosisList, PredefinedFavouriteList.CouncilCompleted),
+            PredefinedFavouriteList.StayInDiagnosisList,
+            PredefinedFavouriteList.CouncilWaitingForReply,
+            PredefinedFavouriteList.CouncilReplyPresent,
+            PredefinedFavouriteList.CouncilCompleted),
+
     /**
      * Notification list for secretary
      */
     NOTIFICATION_LIST(1, false, PredefinedFavouriteList.NotificationList,
-            PredefinedFavouriteList.StayInNotificationList, PredefinedFavouriteList.CouncilSendRequestSecretary),
+            PredefinedFavouriteList.StayInNotificationList,
+            PredefinedFavouriteList.CouncilSendRequestSecretary,
+            PredefinedFavouriteList.CouncilWaitingForReply),
+
     /**
      * Custom list
      */
     CUSTOM_LIST(1, false),
+
     /**
      * Empty list
      */
     EMPTY_LIST(2),
+
     /**
      * Search today
      */
     TODAY(2),
+
     /**
      * Search yesterday
      */
     YESTERDAY(2),
+
     /**
      * Search current week
      */
     CURRENTWEEK(2),
+
     /**
      * Search last week
      */
     LASTWEEK(2),
+
     /**
      * Search current month
      */
     CURRENTMONTH(2),
+
     /**
      * Search last month
      */
     LASTMONTH(2),
+
     /**
      * Search specific day
      */
     DAY(2),
+
     /**
      * Search specific month
      */
     MONTH(2),
+
     /**
      * Search user defined time
      */

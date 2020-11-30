@@ -169,7 +169,7 @@ $latexTextConverter.convertToTex($address)  \\
 				#set($malign = false)
 				#foreach ($diagnosisRevision in $diagnosisRevisions)
 					#foreach ($diagnosis in $diagnosisRevision.diagnoses)
-						#if($diagnosis.isMalign())
+						#if($diagnosis.getMalign())
 							#set($malign = true)
 							#if($str == "")
 								#set($str = "$diagnosis.sample.sampleID")

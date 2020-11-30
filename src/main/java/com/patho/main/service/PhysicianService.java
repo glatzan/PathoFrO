@@ -52,7 +52,7 @@ public class PhysicianService extends AbstractService {
     public Physician addOrMergePhysician(Physician physician) {
         // if the physician was added as surgeon the useracc an the
         // physician will be merged
-        Optional<Physician> physicianFromDatabase = physician.getUid() != null
+        Optional<Physician> physicianFromDatabase = !physician.getUid().isBlank()
                 ? physicianRepository.findOptionalByUid(physician.getUid())
                 : Optional.empty();
 
