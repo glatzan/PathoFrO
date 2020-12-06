@@ -83,11 +83,11 @@
                                     style="background:##{userService.currentUser.settings.inputFieldColor};color:##{userService.currentUser.settings.inputFieldFontColor}"
                                     styleClass="customBackground"
                                     disabled="#{!diagnosisView.task.taskStatus.editable}"
-                                    value="#{diagnosisView.task.dateOfSugery}">
+                                    value="#{diagnosisView.task.dateOfSurgery}">
                             <p:ajax event="dateSelect"
-                                    listener="#{diagnosisView.save(diagnosisView.task, 'log.task.edit.dateOfSurgerye',diagnosisView.task.dateOfSugery)}"/>
+                                    listener="#{diagnosisView.save(diagnosisView.task, 'log.task.edit.dateOfSurgerye',diagnosisView.task.dateOfSurgery)}"/>
                             <f:ajax event="change" execute="@this"
-                                    listener="#{diagnosisView.save(diagnosisView.task, 'log.task.edit.dateOfSurgerye',diagnosisView.task.dateOfSugery)}"/>
+                                    listener="#{diagnosisView.save(diagnosisView.task, 'log.task.edit.dateOfSurgerye',diagnosisView.task.dateOfSurgery)}"/>
                         </p:calendar>
                     </div>
 

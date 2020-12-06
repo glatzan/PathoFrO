@@ -69,7 +69,7 @@ open class Task : AbstractPersistable, Parent<Patient>, AuditAble, DataList {
      * The date of the sugery
      */
     @Column
-    open var dateOfSugery: LocalDate = LocalDate.now()
+    open var dateOfSurgery: LocalDate = LocalDate.now()
 
     /**
      * Date of reception of the first material

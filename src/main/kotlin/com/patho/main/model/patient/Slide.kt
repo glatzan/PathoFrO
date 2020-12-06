@@ -1,21 +1,26 @@
 package com.patho.main.model.patient
 
 import com.patho.main.model.AbstractPersistable
+import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.preset.StainingPrototype
+import com.patho.main.model.util.audit.Audit
+import com.patho.main.model.util.audit.AuditListener
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.SelectBeforeUpdate
 import org.hibernate.envers.Audited
 import org.hibernate.envers.NotAudited
+import java.time.Instant
 import javax.persistence.*
 
 @Entity
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
+@EntityListeners(AuditListener::class)
 @SequenceGenerator(name = "slide_sequencegenerator", sequenceName = "slide_sequence")
-open class Slide : AbstractPersistable, Parent<Block>, IdManuallyAltered {
+open class Slide : AbstractPersistable, Parent<Block>, IdManuallyAltered, AuditAble {
 
     @Id
     @GeneratedValue(generator = "slide_sequencegenerator")
@@ -34,11 +39,14 @@ open class Slide : AbstractPersistable, Parent<Block>, IdManuallyAltered {
     @Column
     open override var idManuallyAltered: Boolean = false
 
-    @Column
-    open var creationDate: Long = 0
+    /**
+     * Audit Data
+     */
+    @Embedded
+    override var audit: Audit? = null
 
-    @Column
-    open var completionDate: Long = 0
+    @Column(nullable = true)
+    open var completionDate: Instant? = null
 
     @Column
     open var stainingCompleted: Boolean = false

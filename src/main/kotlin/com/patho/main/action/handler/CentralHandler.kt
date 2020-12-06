@@ -94,15 +94,15 @@ open class CentralHandler @Autowired constructor(
     open fun goToNavigation(view: View?) {
 
         when (view) {
-            View.WORKLIST_TASKS -> {
-                changeView(View.WORKLIST_TASKS)
-                loadViews(View.WORKLIST_TASKS)
+            View.INCLUDE_PAGE_TASKS -> {
+                changeView(View.INCLUDE_PAGE_TASKS)
+                loadViews(View.INCLUDE_PAGE_TASKS)
             }
-            View.WORKLIST_PATIENT -> {
+            View.INCLUDE_PAGE_PATIENT -> {
                 // show patient if selected
                 if (worklistHandler.current.isPatientSelected) {
-                    changeView(View.WORKLIST_PATIENT)
-                    loadViews(View.WORKLIST_PATIENT)
+                    changeView(View.INCLUDE_PAGE_PATIENT)
+                    loadViews(View.INCLUDE_PAGE_PATIENT)
                 } else {
                     // get first patient in worklist, show him
                     val first = worklistHandler.current.firstPatient
@@ -110,11 +110,11 @@ open class CentralHandler @Autowired constructor(
                         onSelectPatient(first, true)
                     } else {
                         // change view to blank
-                        changeView(View.WORKLIST_PATIENT, View.WORKLIST_NOTHING_SELECTED)
+                        changeView(View.INCLUDE_PAGE_PATIENT, View.INCLUDE_PAGE_NOTHING_SELECTED)
                     }
                 }
             }
-            View.WORKLIST_RECEIPTLOG, View.WORKLIST_DIAGNOSIS, View.WORKLIST_REPORT ->
+            View.INCLUDE_PAGE_RECEIPTLOG, View.INCLUDE_PAGE_DIAGNOSIS, View.INCLUDE_PAGE_REPORT ->
                 // if task is select change view
                 if (worklistHandler.current.isTaskSelected) {
                     changeView(view)
@@ -145,7 +145,7 @@ open class CentralHandler @Autowired constructor(
                             onSelectTaskAndPatient(
                                     worklistHandler.current.selectedPatient.tasks.iterator().next())
                         } else {
-                            changeView(view, View.WORKLIST_NOTHING_SELECTED)
+                            changeView(view, View.INCLUDE_PAGE_NOTHING_SELECTED)
                         }
                     }
 
@@ -159,10 +159,10 @@ open class CentralHandler @Autowired constructor(
                         onSelectTaskAndPatient(first)
                     } else {
                         // change view to blank
-                        changeView(view, View.WORKLIST_NOTHING_SELECTED)
+                        changeView(view, View.INCLUDE_PAGE_NOTHING_SELECTED)
                     }
                 }
-            else -> changeView(View.WORKLIST_BLANK)
+            else -> changeView(View.INCLUDE_PAGE_BLANK)
         }
 
     }
@@ -219,26 +219,26 @@ open class CentralHandler @Autowired constructor(
         }
 
         when (view) {
-            View.WORKLIST_RECEIPTLOG -> {
+            View.INCLUDE_PAGE_RECEIPTLOG -> {
                 logger.debug("Loading receiptlog")
                 receiptLogView.loadView(worklistHandler.current.selectedTask)
                 if (!loads.contains(Load.GENERIC_DATA))
                     genericViewData.loadView(worklistHandler.current.selectedTask, !loads.contains(Load.NO_GENERIC_DATA))
             }
-            View.WORKLIST_DIAGNOSIS -> {
+            View.INCLUDE_PAGE_DIAGNOSIS -> {
                 logger.debug("Loading reportIntent view")
                 diagnosisView.loadView(worklistHandler.current.selectedTask)
                 if (!loads.contains(Load.GENERIC_DATA))
                     genericViewData.loadView(worklistHandler.current.selectedTask, !loads.contains(Load.NO_GENERIC_DATA))
             }
-            View.WORKLIST_PATIENT -> {
+            View.INCLUDE_PAGE_PATIENT -> {
                 logger.debug("Loading patient view")
             }
-            View.WORKLIST_TASKS -> {
+            View.INCLUDE_PAGE_TASKS -> {
                 logger.debug("Loading task view")
                 taskView.loadView()
             }
-            View.WORKLIST_REPORT -> {
+            View.INCLUDE_PAGE_REPORT -> {
                 logger.debug("Loading report view")
                 reportView.loadView(worklistHandler.current.selectedTask)
             }
@@ -265,7 +265,7 @@ open class CentralHandler @Autowired constructor(
         if (patient == null) {
             logger.debug("Deselecting patient")
             worklistHandler.current.deselectPatient()
-            changeView(View.WORKLIST_PATIENT, View.WORKLIST_NOTHING_SELECTED)
+            changeView(View.INCLUDE_PAGE_PATIENT, View.INCLUDE_PAGE_NOTHING_SELECTED)
             return
         }
 
@@ -276,7 +276,7 @@ open class CentralHandler @Autowired constructor(
             else {
                 logger.debug("Could not reload patient, abort!")
                 worklistHandler.current.deselectPatient()
-                changeView(View.WORKLIST_PATIENT, View.WORKLIST_NOTHING_SELECTED)
+                changeView(View.INCLUDE_PAGE_PATIENT, View.INCLUDE_PAGE_NOTHING_SELECTED)
                 return
             }
         }
@@ -284,7 +284,7 @@ open class CentralHandler @Autowired constructor(
         // replacing patient, generating task status
         worklistHandler.current.add(mutablePatient, true)
 
-        changeView(View.WORKLIST_PATIENT)
+        changeView(View.INCLUDE_PAGE_PATIENT)
 
         loadViews(Load.MENU_MODEL)
 
@@ -310,7 +310,7 @@ open class CentralHandler @Autowired constructor(
 
         if (task == null) {
             logger.debug("Deselecting task")
-            changeView(View.WORKLIST_BLANK)
+            changeView(View.INCLUDE_PAGE_BLANK)
             return
         }
 
@@ -359,7 +359,7 @@ open class CentralHandler @Autowired constructor(
      */
     open fun onDeselectTask() {
         if (worklistHandler.current.deselectTask())
-            goToNavigation(View.WORKLIST_PATIENT)
+            goToNavigation(View.INCLUDE_PAGE_PATIENT)
     }
 
     enum class Load {
@@ -400,17 +400,17 @@ open class CentralHandler @Autowired constructor(
         /**
          * Selected View in the menu
          */
-        open var displayView: View = View.WORKLIST_BLANK
+        open var displayView: View = View.INCLUDE_PAGE_BLANK
 
         /**
          * Current view which is displayed
          */
-        open var currentView: View = View.WORKLIST_BLANK
+        open var currentView: View = View.INCLUDE_PAGE_BLANK
 
         /**
          * Can be Diagnosis or Receiptlog
          */
-        open var lastDefaultView: View = View.WORKLIST_BLANK
+        open var lastDefaultView: View = View.INCLUDE_PAGE_BLANK
 
         /**
          * Returns the center view if present, otherwise an empty page will be
@@ -420,7 +420,7 @@ open class CentralHandler @Autowired constructor(
             get() = if (displayView != null)
                 displayView?.path
             else
-                View.WORKLIST_BLANK.path
+                View.INCLUDE_PAGE_BLANK.path
 
         /**
          * Loading all data from Backend

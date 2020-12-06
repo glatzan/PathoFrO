@@ -1,0 +1,77 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet author="System" id="2.1.0">
+        <comment>creating sequence for favouriteicongroup</comment>
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" sequenceName="favouriteicongroup_sequence" startValue="2"/>
+    </changeSet>
+
+    <changeSet author="System" id="2.1.1">
+        <comment>creating table favouriteicongroup</comment>
+        <createTable tableName="favouriteicongroup">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="favouriteicongroup_pkey"/>
+            </column>
+            <column name="icon" type="VARCHAR(255)"/>
+            <column name="infotext" type="VARCHAR"/>
+            <column name="defaultcommand" type="VARCHAR(255)" defaultValue="null"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="System" id="2.1.2">
+        <comment>setting default sequence for id in favouritelist</comment>
+        <addDefaultValue
+                tableName="favouriteicongroup"
+                columnName="id"
+                defaultValueSequenceNext="favouriteicongroup_sequence"/>
+    </changeSet>
+
+    <changeSet author="System" id="2.1.3">
+        <comment>adding icongroup for consultation</comment>
+        <insert tableName="favouriteicongroup">
+            <column name="id" value="1"/>
+            <column name="icon" value="fa-stethoscope icon-orange"/>
+            <column name="infotext" value="Konsil nicht abgeschlossen"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="System" id="2.1.4">
+        <comment>changing datatype of icongroup</comment>
+        <dropColumn tableName="favouritelist" columnName="icongroup"/>
+    </changeSet>
+
+    <changeSet author="System" id="2.1.5">
+        <comment>changing datatype of icongroup</comment>
+        <addColumn tableName="favouritelist">
+            <column name="icongroup_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="System" id="2.1.6">
+        <comment>add foreign key</comment>
+        <addForeignKeyConstraint baseColumnNames="icongroup_id"
+                                 baseTableName="favouritelist"
+                                 constraintName="favouritelist_favouriteicongroup_fkey"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="id"
+                                 referencedTableName="favouriteicongroup"/>
+    </changeSet>
+
+    <changeSet author="System" id="2.1.7">
+        <comment>dropping iconcolor</comment>
+        <dropColumn tableName="favouritelist" columnName="iconcolor"/>
+    </changeSet>
+
+    <changeSet author="System" id="2.1.8">
+        <comment>setting consultation icon group</comment>
+        <update tableName="favouritelist">
+            <column name="icongroup_id" value="1"/>
+            <where>id in (9,10,11, 12,14,15,16)</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>

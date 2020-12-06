@@ -186,7 +186,8 @@ open class WorklistHandler @Autowired @Lazy constructor(
      * Replaces the current task in the current worklist
      */
     open fun replaceTaskInWorklist() {
-        replaceTaskInWorklist(current.selectedTask, true)
+        if (current.selectedTask != null)
+            replaceTaskInWorklist(current.selectedTask, true)
     }
 
     /**
@@ -396,7 +397,7 @@ open class WorklistHandler @Autowired @Lazy constructor(
     }
 
 
-    fun autoReloadCurrentWorklist(){
+    fun autoReloadCurrentWorklist() {
         // TODO implement
     }
 }

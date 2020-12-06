@@ -64,7 +64,6 @@ public class SampleService extends AbstractService {
     public Task createSample(Task task, MaterialPreset material, String materialName, boolean createBlock,
                              boolean createSlides, boolean naming, boolean save) {
         Sample sample = new Sample();
-        sample.setCreationDate(System.currentTimeMillis());
         sample.setParent(task);
         sample.setMaterialPreset(material);
         sample.setMaterial(materialName);

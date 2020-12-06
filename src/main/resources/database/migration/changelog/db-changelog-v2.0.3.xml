@@ -4,39 +4,47 @@
                    xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
     <changeSet author="System" id="2.0.3">
+        <comment>Rename to new name schema</comment>
         <renameTable newTableName="materialpreset_stainingprototypes"
                      oldTableName="materialpreset_stainingprototype"/>
     </changeSet>
     <changeSet author="System" id="2.0.3.1">
+        <comment>Rename to new name schema</comment>
         <renameTable newTableName="task_favouritelists"
                      oldTableName="task_favouritelist"/>
     </changeSet>
     <changeSet author="System" id="2.0.3.2">
+        <comment>Rename to new name schema</comment>
         <renameTable newTableName="patient_attachedpdfs"
                      oldTableName="patient_pdfcontainer"/>
         <renameTable newTableName="patient_attachedpdfs_aud"
                      oldTableName="patient_pdfcontainer_aud"/>
     </changeSet>
     <changeSet author="System" id="2.0.3.3">
+        <comment>Rename to new name schema</comment>
         <renameTable newTableName="task_attachedpdfs"
                      oldTableName="task_pdfcontainer"/>
         <renameTable newTableName="task_attachedpdfs_aud"
                      oldTableName="task_pdfcontainer_aud"/>
     </changeSet>
     <changeSet author="System" id="2.0.3.4">
+        <comment>Rename to new name schema</comment>
         <renameTable newTableName="biobank_attachedpdfs"
                      oldTableName="biobank_pdfcontainer"/>
         <renameTable newTableName="biobank_attachedpdfs_aud"
                      oldTableName="biobank_pdfcontainer_aud"/>
     </changeSet>
     <changeSet author="System" id="2.0.3.5">
+        <comment>Rename to new name schema</comment>
         <renameTable newTableName="favouritelistitem_slides"
                      oldTableName="favouritelistitem_slide"/>
     </changeSet>
     <changeSet author="System" id="2.0.3.6">
+        <comment>Rename to new name schema</comment>
         <renameTable newTableName="council_attachedpdfs"
                      oldTableName="council_pdfcontainer"/>
         <renameTable newTableName="council_attachedpdfs_aud"
                      oldTableName="council_pdfcontainer_aud"/>
     </changeSet>
+
 </databaseChangeLog>

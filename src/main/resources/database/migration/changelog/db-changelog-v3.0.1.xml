@@ -1,0 +1,34 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet author="System" id="3.0.1.1">
+        <comment>Kts sequence</comment>
+        <createTable tableName="ktsscript">
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ktsscript_pk"/>
+            </column>
+
+            <column name="script" type="VARCHAR"/>
+
+            <column name="comment" type="VARCHAR"/>
+
+            <column name="forclass" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="defaultscript" type="Boolean" defaultValue="false"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet author="System" id="3.0.1.2">
+        <comment>Add importantForGroup to favouritelist</comment>
+        <addColumn tableName="favouritelist">
+            <column name="importantforgroup" defaultValue="null" type="jsonb"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

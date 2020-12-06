@@ -90,7 +90,7 @@ open class CreateTaskDialog @Autowired constructor(
             var task = taskService.createTask(patient, taskData.taskID, true)
             task.receiptDate = taskData.receiptDate
             task.dueDate = taskData.dueDate
-            task.dateOfSugery = taskData.receiptDate
+            task.dateOfSurgery = taskData.receiptDate
             task.taskPriority = taskData.taskPriority
             task.useAutoNomenclature = taskData.isUseAutoNomenclature
             task = taskRepository.save(task, resourceBundle["log.patient.task.update", task], patient)

@@ -157,9 +157,11 @@
                     <!-- color -->
                     <h:outputLabel
                             value="#{msg['dialog.favouriteListEdit.icon.color']}"></h:outputLabel>
-                    <p:colorPicker
-                            value="#{dialog.favouriteListEditDialog.favouriteList.iconColor}"
-                            disabled="#{!dialog.favouriteListEditDialog.favouriteList.useIcon or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"/>
+                    <h:outputLabel
+                            value="Removed"></h:outputLabel>
+<!--                    <p:colorPicker-->
+<!--                            value="#{dialog.favouriteListEditDialog.favouriteList.iconColor}"-->
+<!--                            disabled="#{!dialog.favouriteListEditDialog.favouriteList.useIcon or (!dialog.favouriteListEditDialog.favouriteList.manuelEdit and dialog.favouriteListEditDialog.favouriteList.defaultList) or !(dialog.favouriteListEditDialog.userPermission.ownerOrAdmin or dialog.favouriteListEditDialog.adminMode)}"/>-->
 
                     <!-- info text -->
                     <h:outputLabel value="#{msg['dialog.favouriteListEdit.icon.text']}"></h:outputLabel>

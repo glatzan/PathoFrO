@@ -209,17 +209,34 @@
                                 </p:commandLink>
 
                                 <p:repeat var="favouriteList" value="#{task.favouriteLists}">
-                                    <p:commandLink
-                                            disabled="#{favouriteList.command eq null or favouriteList.command eq ''}"
-                                            style="opacity: 1;margin-left: 5px;pointer-events: all;"
-                                            styleClass="noUnderlineAtLink"
-                                            rendered="#{favouriteList.useIcon}"
-                                            actionListener="#{sharedFunctionHandler.executeCommand(favouriteList.command, task)}"
-                                            process="@this" update="@this">
-                                        <i style="color: ##{favouriteList.iconColor}"
-                                           class="fa #{favouriteList.icon}"
-                                           title="#{favouriteList.infoText}"/>
-                                    </p:commandLink>
+                                    <ui:fragment rendered="#{favouriteList.id ge 9 and favouriteList.id le 16}">
+                                        <p:commandLink
+                                                disabled="#{favouriteList.command eq null or favouriteList.command eq ''}"
+                                                style="opacity: 1;margin-left: 5px;pointer-events: all"
+                                                styleClass="noUnderlineAtLink"
+                                                rendered="#{favouriteList.useIcon}"
+                                                actionListener="#{consultationDialog.initAndPrepareBean(task)}">
+                                            <i class="fa #{favouriteList.icon}"
+                                               title="#{favouriteList.infoText}"/>
+
+                                            <p:ajax event="dialogReturn"
+                                                    listener="#{dialogReturnHandler.onDefaultReturn}"
+                                                    update="navigationForm:patientList contentForm headerForm"/>
+                                        </p:commandLink>
+                                    </ui:fragment>
+
+                                    <ui:fragment rendered="#{favouriteList.id lt 9 or favouriteList.id gt 16}">
+                                        <p:commandLink
+                                                disabled="#{favouriteList.command eq null or favouriteList.command eq ''}"
+                                                style="opacity: 1;margin-left: 5px;pointer-events: all;"
+                                                styleClass="noUnderlineAtLink"
+                                                rendered="#{favouriteList.useIcon}"
+                                                actionListener="#{sharedFunctionHandler.executeCommand(favouriteList.command, task)}"
+                                                process="@this" update="@this">
+                                            <i class="fa #{favouriteList.icon}"
+                                               title="#{favouriteList.infoText}"/>
+                                        </p:commandLink>
+                                    </ui:fragment>
                                 </p:repeat>
 
                                 <!-- Pendings completed -->

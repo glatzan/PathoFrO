@@ -111,6 +111,7 @@ open class ReceiptLogView @Autowired constructor(
             StainingListAction.PERFORMED, StainingListAction.NOT_PERFORMED -> {
                 logger.debug("Setting staining status of selected slides")
                 slideRows.forEach { p -> slideService.completeStaining(p.entity as Slide, action == StainingListAction.PERFORMED, false) }
+
                 var ntask = taskRepository.save(task, resourceBundle.get("log.task.slide.completedStack", task), task.patient)
                 ntask = workPhaseHandler.updateStainingPhase(ntask).first
                 worklistHandler.replaceTaskInWorklist(ntask)

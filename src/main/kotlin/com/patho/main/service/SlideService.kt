@@ -12,6 +12,7 @@ import com.patho.main.util.task.TaskTreeTools
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 @Service
 open class SlideService @Autowired constructor(
@@ -59,7 +60,6 @@ open class SlideService @Autowired constructor(
 
         val slide = Slide()
 
-        slide.creationDate = System.currentTimeMillis()
         slide.slidePrototype = stainingPrototypeService.incrementPriorityCounter(stainingPrototype)
         slide.parent = block
 
@@ -76,7 +76,7 @@ open class SlideService @Autowired constructor(
         slide.reStaining = isRestaining
 
         if (completed) {
-            slide.completionDate = System.currentTimeMillis()
+            slide.completionDate = Instant.now()
             slide.stainingCompleted = true
         }
 
@@ -146,7 +146,7 @@ open class SlideService @Autowired constructor(
     @Transactional
     open fun completeStaining(slide: Slide, complete: Boolean = true, save: Boolean = true): Task {
         slide.stainingCompleted = complete
-        slide.completionDate = if (complete) System.currentTimeMillis() else 0
+        slide.completionDate = if (complete) Instant.now() else null
 
         if (save)
             return taskRepository.save(slide.task!!, resourceBundle["log.task.slide.completedSlide", slide.task, slide], slide.patient)

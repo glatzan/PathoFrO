@@ -118,8 +118,8 @@ public class GroupEditDialog extends AbstractTabDialog {
         }
 
         public boolean initTab() {
-            setAllViews(new View[]{View.GUEST, View.WORKLIST_TASKS, View.WORKLIST_PATIENT, View.WORKLIST_DIAGNOSIS,
-                    View.WORKLIST_RECEIPTLOG, View.WORKLIST_REPORT});
+            setAllViews(new View[]{View.GUEST, View.INCLUDE_PAGE_TASKS, View.INCLUDE_PAGE_PATIENT, View.INCLUDE_PAGE_DIAGNOSIS,
+                    View.INCLUDE_PAGE_RECEIPTLOG, View.INCLUDE_PAGE_REPORT});
 
             setAllWorklistOptions(
                     new SimpleListSearchOption[]{SimpleListSearchOption.DIAGNOSIS_LIST, SimpleListSearchOption.STAINING_LIST,

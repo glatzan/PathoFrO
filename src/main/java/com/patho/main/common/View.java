@@ -11,14 +11,14 @@ public enum View {
     GUEST("/pages/guest.xhtml"),
     SCIENTIST("/pages/scientist.xhtml"),
     WORKLIST("/pages/worklist.xhtml"),
-    WORKLIST_BLANK("/pages/worklist/blank.xhtml", WORKLIST),
-    WORKLIST_DATA_ERROR("/pages/worklist/dataError.xhtml", WORKLIST),
-    WORKLIST_NOTHING_SELECTED("/pages/worklist/notSelected.xhtml", WORKLIST),
-    WORKLIST_TASKS("/pages/worklist/taskList.xhtml", WORKLIST),
-    WORKLIST_PATIENT("/pages/worklist/patient.xhtml", WORKLIST),
-    WORKLIST_RECEIPTLOG("/pages/worklist/receiptlog.xhtml", WORKLIST, true),
-    WORKLIST_DIAGNOSIS("/pages/worklist/diagnosis.xhtml", WORKLIST, true),
-    WORKLIST_REPORT("/pages/worklist/report.xhtml", WORKLIST, true);
+    INCLUDE_PAGE_BLANK("/pages/worklist/blank.xhtml", WORKLIST),
+    INCLUDE_PAGE_DATA_ERROR("/pages/worklist/dataError.xhtml", WORKLIST),
+    INCLUDE_PAGE_NOTHING_SELECTED("/pages/worklist/notSelected.xhtml", WORKLIST),
+    INCLUDE_PAGE_TASKS("/pages/worklist/taskList.xhtml", WORKLIST),
+    INCLUDE_PAGE_PATIENT("/pages/worklist/patient.xhtml", WORKLIST),
+    INCLUDE_PAGE_RECEIPTLOG("/pages/worklist/receiptlog.xhtml", WORKLIST, true),
+    INCLUDE_PAGE_DIAGNOSIS("/pages/worklist/diagnosis.xhtml", WORKLIST, true),
+    INCLUDE_PAGE_REPORT("/pages/worklist/report.xhtml", WORKLIST, true);
 
     public final String path;
 

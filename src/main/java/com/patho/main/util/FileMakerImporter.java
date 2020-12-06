@@ -331,7 +331,7 @@ public class FileMakerImporter {
 
                         // edate
                         task.setReceiptDate(LocalDate.ofInstant(edateInstant, ZoneId.systemDefault()));
-                        task.setDateOfSugery(LocalDate.ofInstant(edateInstant, ZoneId.systemDefault()));
+                        task.setDateOfSurgery(LocalDate.ofInstant(edateInstant, ZoneId.systemDefault()));
                         task.setCaseHistory(HistoUtil.isNotNullOrEmpty(row[index_history])
                                 ? row[index_history].replaceAll(Character.toString((char) 11), "\r\n")
                                 : "");

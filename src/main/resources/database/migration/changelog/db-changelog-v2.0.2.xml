@@ -4,7 +4,7 @@
                    xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
     <changeSet author="System" id="2.0.2">
-        <!-- scannedslide sequence -->
+        <comment>scannedslide sequence</comment>
         <createSequence sequenceName="scannedslide_sequence"
                         incrementBy="50"
                         cycle="false"
@@ -13,7 +13,7 @@
                         startValue="1"
                         dataType="BIGINT"
                         cacheSize="1"/>
-        <!-- scannedslide -->
+        <comment>scannedslide</comment>
         <createTable tableName="scannedslide">
             <column name="id" type="BIGINT" defaultValueSequenceNext="scannedslide_sequence">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="scannedslide_pk"/>
@@ -26,14 +26,14 @@
             </column>
             <column name="path" type="VARCHAR"/>
         </createTable>
-        <!-- scannedslide task constaint -->
+        <comment>scannedslide task constaint</comment>
         <addForeignKeyConstraint baseTableName="scannedslide" baseColumnNames="task_id"
                                  constraintName="scannedslide_task_constraint"
                                  referencedTableName="task"
                                  referencedColumnNames="id"
                                  onDelete="NO ACTION"
                                  onUpdate="CASCADE"/>
-        <!-- scannedslide slide constaint -->
+        <comment>scannedslide slide constaint</comment>
         <addForeignKeyConstraint baseTableName="scannedslide" baseColumnNames="slide_id"
                                  constraintName="scannedslide_slide_constraint"
                                  referencedTableName="slide"

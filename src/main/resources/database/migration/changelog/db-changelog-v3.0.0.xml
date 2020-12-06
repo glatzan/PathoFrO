@@ -1,0 +1,176 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet author="System" id="3.0.0">
+
+        <comment>Setting informed conent type to unknown if not set</comment>
+
+        <update tableName="biobank">
+            <column name="informedconsenttype" value="UNKNOWN"/>
+            <where>informedconsenttype = null or informedconsenttype = ''</where>
+        </update>
+
+        <comment>adding locale to histouser</comment>
+        <addColumn tableName="histouser">
+            <column name="locale" type="VARCHAR"/>
+        </addColumn>
+
+        <comment>adding locale to histouser</comment>
+        <update tableName="histouser">
+            <column name="locale" value="de_DE"/>
+        </update>
+
+        <comment>updating view names</comment>
+
+        <update tableName="histosettings">
+            <column name="defaultview" valueComputed="replace(defaultview, 'WORKLIST', 'INCLUDE_PAGE')"/>
+        </update>
+
+        <update tableName="histosettings">
+            <column name="startview" valueComputed="replace(startview, 'WORKLIST', 'INCLUDE_PAGE')"/>
+        </update>
+
+        <update tableName="histosettings_availableviews">
+            <column name="availableviews" valueComputed="replace(availableviews, 'WORKLIST', 'INCLUDE_PAGE')"/>
+        </update>
+
+    </changeSet>
+
+    <changeSet id="3.0.0.1" author="System">
+        <comment>Adding default nextValue</comment>
+        <addDefaultValue
+                tableName="task"
+                columnName="id"
+                defaultValueSequenceNext="task_sequence"/>
+    </changeSet>
+
+    <changeSet id="3.0.0.2" author="System">
+        <comment>Setting Audit Object for Sample</comment>
+        <addColumn tableName="sample">
+            <column name="createdon" type="bigint" defaultValue="0"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="bigint" defaultValue="0"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+        </addColumn>
+
+        <update tableName="sample">
+            <column name="createdon" valueComputed="creationdate"/>
+        </update>
+
+        <dropColumn tableName="sample" columnName="creationdate"/>
+    </changeSet>
+
+    <changeSet id="3.0.0.3" author="System">
+        <comment>Setting Audit Object for Sample_Aud</comment>
+        <addColumn tableName="sample_aud">
+            <column name="createdon" type="bigint" defaultValue="0"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="bigint" defaultValue="0"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+        </addColumn>
+
+        <update tableName="sample_aud">
+            <column name="createdon" valueComputed="creationdate"/>
+        </update>
+
+        <dropColumn tableName="sample_aud" columnName="creationdate"/>
+    </changeSet>
+
+    <changeSet id="3.0.0.4" author="System">
+        <comment>Setting Audit Object for Block</comment>
+
+        <addColumn tableName="block">
+            <column name="createdon" type="bigint" defaultValue="0"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="bigint" defaultValue="0"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+        </addColumn>
+
+        <update tableName="block">
+            <column name="createdon" valueComputed="creationdate"/>
+        </update>
+
+        <dropColumn tableName="block" columnName="creationdate"/>
+    </changeSet>
+
+    <changeSet id="3.0.0.5" author="System">
+        <comment>Setting Audit Object for Block_Aud</comment>
+        <addColumn tableName="block_aud">
+            <column name="createdon" type="bigint" defaultValue="0"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="bigint" defaultValue="0"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+        </addColumn>
+
+        <update tableName="block_aud">
+            <column name="createdon" valueComputed="creationdate"/>
+        </update>
+
+        <dropColumn tableName="block_aud" columnName="creationdate"/>
+    </changeSet>
+
+    <changeSet id="3.0.0.7" author="System">
+        <comment>Setting Audit Object for Slide</comment>
+        <addColumn tableName="slide">
+            <column name="createdon" type="bigint" defaultValue="0"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="bigint" defaultValue="0"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+        </addColumn>
+
+        <update tableName="slide">
+            <column name="createdon" valueComputed="creationdate"/>
+        </update>
+
+        <dropColumn tableName="slide" columnName="creationdate"/>
+    </changeSet>
+
+    <changeSet id="3.0.0.8" author="System">
+        <comment>Setting Audit Object for Slide_Aud</comment>
+        <addColumn tableName="slide_aud">
+            <column name="createdon" type="bigint" defaultValue="0"/>
+            <column name="createdby" type="VARCHAR(10)"/>
+            <column name="updatedon" type="bigint" defaultValue="0"/>
+            <column name="updatedby" type="VARCHAR(10)"/>
+        </addColumn>
+
+        <update tableName="slide_aud">
+            <column name="createdon" valueComputed="creationdate"/>
+        </update>
+
+        <dropColumn tableName="slide_aud" columnName="creationdate"/>
+    </changeSet>
+
+    <changeSet id="3.0.0.9" author="System">
+        <comment>Changing Date type of slide completionDate</comment>
+        <sql>
+            Alter table slide alter column completiondate type timestamp without time zone using case when
+            completiondate != 0 or completiondate is not null then
+            TO_TIMESTAMP(completiondate/1000-3600)::date else null end;
+        </sql>
+
+        <dropNotNullConstraint columnName="completiondate"
+                               tableName="slide"/>
+    </changeSet>
+
+
+    <changeSet id="3.0.0.10" author="System">
+        <comment>Changing Date type of slide aud completionDate</comment>
+        <sql>
+            Alter table slide_aud alter column completiondate type timestamp without time zone using case when
+            completiondate != 0 or completiondate is not null then
+            TO_TIMESTAMP(completiondate/1000-3600)::date else null end;
+        </sql>
+
+        <dropNotNullConstraint columnName="completiondate"
+                               tableName="slide_aud"/>
+    </changeSet>
+
+    <changeSet id="3.0.0.11" author="System">
+        <comment>Typo in dateOfSurgery</comment>
+        <renameColumn tableName="task" oldColumnName="dateofsugery" newColumnName="dateofsurgery"/>
+        <renameColumn tableName="task_aud" oldColumnName="dateofsugery" newColumnName="dateofsurgery"/>
+    </changeSet>
+
+</databaseChangeLog>

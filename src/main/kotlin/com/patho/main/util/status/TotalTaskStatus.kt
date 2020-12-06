@@ -56,7 +56,7 @@ class TotalTaskStatus(task: Task) {
             /**
              * date of completion
              */
-            val dateOfCompletion = slide.completionDate
+            val dateOfCompletion = slide.completionDate?.toEpochMilli()
 
             /**
              * slide name
@@ -199,7 +199,7 @@ class TotalTaskStatus(task: Task) {
 
             for (favouriteList in favouriteLists) {
                 val currentGroup: FavouriteGroup = groups.firstOrNull { it.id == favouriteList.iconGroup } ?: run {
-                    val tmp = FavouriteGroup(favouriteList.iconGroup)
+                    val tmp = FavouriteGroup(favouriteList.iconGroup ?: 0)
                     groups.add(tmp)
                     tmp
                 }
@@ -213,7 +213,7 @@ class TotalTaskStatus(task: Task) {
         /**
          * Container for an icon group
          */
-        class FavouriteGroup(val id: String) {
+        class FavouriteGroup(val id: Long) {
             /**
              * List of Favourites
              */

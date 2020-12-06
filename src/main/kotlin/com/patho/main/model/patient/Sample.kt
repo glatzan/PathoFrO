@@ -1,9 +1,12 @@
 package com.patho.main.model.patient
 
 import com.patho.main.model.AbstractPersistable
+import com.patho.main.model.audit.AuditAble
 import com.patho.main.model.interfaces.IdManuallyAltered
 import com.patho.main.model.interfaces.Parent
 import com.patho.main.model.preset.MaterialPreset
+import com.patho.main.model.util.audit.Audit
+import com.patho.main.model.util.audit.AuditListener
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
@@ -19,8 +22,9 @@ import javax.persistence.*
 @Audited
 @SelectBeforeUpdate(true)
 @DynamicUpdate(true)
+@EntityListeners(AuditListener::class)
 @SequenceGenerator(name = "sample_sequencegenerator", sequenceName = "sample_sequence")
-open class Sample : AbstractPersistable, Parent<Task>, IdManuallyAltered {
+open class Sample : AbstractPersistable, Parent<Task>, IdManuallyAltered, AuditAble {
 
     @Id
     @GeneratedValue(generator = "sample_sequencegenerator")
@@ -49,10 +53,10 @@ open class Sample : AbstractPersistable, Parent<Task>, IdManuallyAltered {
     open override var idManuallyAltered: Boolean = false
 
     /**
-     * Date of sample creation
+     * Audit Data
      */
-    @Column
-    open var creationDate: Long = 0
+    @Embedded
+    override var audit: Audit? = null
 
     /**
      * blocks array

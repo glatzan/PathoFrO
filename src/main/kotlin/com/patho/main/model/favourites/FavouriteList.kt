@@ -73,12 +73,6 @@ open class FavouriteList() : AbstractPersistable() {
     open var icon: String = ""
 
     /**
-     * color as hex color
-     */
-    @Column
-    open var iconColor: String = ""
-
-    /**
      * Info text for mouse hover
      */
     @Column
@@ -88,8 +82,8 @@ open class FavouriteList() : AbstractPersistable() {
      * If more then one group has the same iconGroup (as primefaces image)
      * the will be merged under this icon in the patient list.
      */
-    @Column
-    open var iconGroup: String = ""
+    @Column(name = "icongroup_id")
+    open var iconGroup: Long? = 0
 
     /**
      * Listitems of the list
