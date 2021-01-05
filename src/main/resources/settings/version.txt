@@ -126,6 +126,13 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.24 (05.01.2021)
++++!: Archive Dialog Date Error Fixed
++++*: Icons of consultation lists changed
+
++v 2.0.23 (11.12.2020)
++++!: Remove from diagnosis list, if all diagnoses are completed, fixed.
+
 +v 2.0.22 (05.12.2020)
 ++++: Coucil Dialog can be opened via worklist icon
 +++*: Adapted database schema to V3.0

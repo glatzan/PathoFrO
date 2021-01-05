@@ -3,6 +3,7 @@ package com.patho.main.dialog.phase
 import com.patho.main.action.handler.MessageHandler
 import com.patho.main.action.handler.WorkPhaseHandler
 import com.patho.main.common.Dialog
+import com.patho.main.common.PredefinedFavouriteList
 import com.patho.main.model.patient.DiagnosisRevision
 import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Task
@@ -133,7 +134,7 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
         goToNotification.set((competeAllDiagnoses.value && isNotificationNecessary) || isCurrentDiagnosisNotificationNecessary, true, false, false)
 
         // true if selectDiagnosisRevision is the last not approved diagnosis or all should be approved
-        exitPhase.set(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast, true, !(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast), !(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast))
+        exitPhase.set(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast, true, !(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast || isDiagnosisPhaseAndNoDiagnosisToApprove), !(competeAllDiagnoses.value || isCurrentDiagnosisNotApprovedAndLast ||isDiagnosisPhaseAndNoDiagnosisToApprove))
 
         return super.initBean(oTask)
     }
@@ -166,6 +167,8 @@ open class DiagnosisPhaseExitDialog @Autowired constructor(
     private val isCurrentDiagnosisNotApprovedAndLast
         get() = selectedDiagnosisRevisionStatus?.diagnosisRevision?.isNotApproved == true && diagnosisNotificationStatus.diagnoses.count { it.diagnosisRevision.isNotApproved } == 1
 
+    private val isDiagnosisPhaseAndNoDiagnosisToApprove : Boolean
+        get() =  (diagnosisNotificationStatus.diagnoses.count { it.diagnosisRevision.isNotApproved } == 0) and diagnosisNotificationStatus.task.favouriteLists.any { it.id == PredefinedFavouriteList.DiagnosisList.id }
 
     /**
      * Returns true is any diagnosis is missing a notification

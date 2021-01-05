@@ -2,6 +2,7 @@ package com.patho.main.action.handler
 
 import com.patho.main.common.GuiCommands
 import com.patho.main.common.PredefinedFavouriteList
+import com.patho.main.model.patient.NotificationStatus
 import com.patho.main.model.patient.Patient
 import com.patho.main.model.patient.Task
 import com.patho.main.service.DiagnosisService
@@ -106,7 +107,7 @@ open class WorkPhaseHandler @Autowired constructor(
         var tmp = task
 
         if (endPhase) {
-            tmp = workPhaseService.endDiagnosisPhase(tmp, startNotificationPhase)
+            tmp = workPhaseService.endDiagnosisPhase(tmp, startNotificationPhase || task.diagnosisRevisions.all { it.notificationStatus == NotificationStatus.NOTIFICATION_COMPLETED || it.notificationStatus == NotificationStatus.NO_NOTFICATION })
             MessageHandler.sendGrowlMessagesAsResource("growl.diagnosis.endAll.headline",
                     if (startNotificationPhase) "growl.diagnosis.endAll.goToNotification" else "growl.diagnosis.endAll.noNotification")
         }

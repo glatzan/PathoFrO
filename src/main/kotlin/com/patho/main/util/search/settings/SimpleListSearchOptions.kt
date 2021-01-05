@@ -10,22 +10,28 @@ enum class SimpleListSearchOption private constructor(
     /**
      * Staining list for laboratory
      */
-    STAINING_LIST(1, true, PredefinedFavouriteList.StainingList, PredefinedFavouriteList.StayInStainingList,
+    STAINING_LIST(1, true,
+            PredefinedFavouriteList.StainingList,
+            PredefinedFavouriteList.StayInStainingList,
             PredefinedFavouriteList.ReStainingList,
+
             PredefinedFavouriteList.Council,
             PredefinedFavouriteList.CouncilSendRequestMTA,
             PredefinedFavouriteList.CouncilWaitingForReply,
-            PredefinedFavouriteList.CouncilReplyPresent,
             PredefinedFavouriteList.ScannList),
 
     /**
      * Diagnosis list for physicians
      */
-    DIAGNOSIS_LIST(1, false, PredefinedFavouriteList.DiagnosisList, PredefinedFavouriteList.ReDiagnosisList,
+    DIAGNOSIS_LIST(1, false,
+            PredefinedFavouriteList.DiagnosisList,
+            PredefinedFavouriteList.ReDiagnosisList,
             PredefinedFavouriteList.StayInDiagnosisList,
+
+            PredefinedFavouriteList.Council,
+            PredefinedFavouriteList.CouncilRequest,
             PredefinedFavouriteList.CouncilWaitingForReply,
-            PredefinedFavouriteList.CouncilReplyPresent,
-            PredefinedFavouriteList.CouncilCompleted),
+            PredefinedFavouriteList.CouncilReplyPresent),
 
     /**
      * Notification list for secretary

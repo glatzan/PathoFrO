@@ -47,7 +47,7 @@
                        title="#{ consultation.completed ? msg['dialog.dialog.archiveTask.status.council.details.list.completed.completed'] : msg['dialog.archiveTask.status.council.details.list.completed.notCompleted']}"/>
                     <h:outputFormat style="margin-left: 5px" rendered="#{consultation.completed}"
                                     value="#{consultation.dateOfCompletion}">
-                        <f:convertDateTime type="date"/>
+                        <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
                     </h:outputFormat>
                 </h:panelGroup>
             </p:column>

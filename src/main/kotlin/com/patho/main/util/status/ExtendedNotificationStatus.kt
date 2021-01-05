@@ -143,7 +143,7 @@ class ExtendedNotificationStatus(val task: Task) {
      *
      * </pre>
      */
-    class DiagnosisNotificationStatus(task: Task, allDiagnoses: Set<DiagnosisRevision>) {
+    class DiagnosisNotificationStatus(val task: Task, allDiagnoses: Set<DiagnosisRevision>) {
 
         /**
          * List of all diagnoses, including deleted ones. (The deleted diagnoses are extracted from the notification history

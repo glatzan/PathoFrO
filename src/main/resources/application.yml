@@ -9,7 +9,7 @@ joinfaces:
   bootsfaces:
     getBootstrapFromCdn: false
 server:
-  port: 8080
+  port: 8081
   servlet:
     session:
       timeout: 8H
@@ -64,7 +64,7 @@ spring:
       hibernate.jdbc.lob.non_contextual_creation: true
   liquibase:
     change-log: classpath:database/migration/master.xml
-    enabled: true
+    enabled: false
   output:
     ansi:
       enabled: always

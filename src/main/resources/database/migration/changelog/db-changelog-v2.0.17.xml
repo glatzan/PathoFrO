@@ -1,0 +1,73 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet author="System" id="2.0.17">
+        <comment>updating councils, rename active council</comment>
+        <update tableName="favouritelist">
+            <column name="infotext" value="Aktives Konsil"/>
+            <column name="name" value="Aktive Konsile"/>
+            <column name="icon" value="fa-stethoscope icon-grey"/>
+            <where>id = 14</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="System" id="2.0.17.1">
+        <comment>updating councils, updating missing request icon</comment>
+        <update tableName="favouritelist">
+            <column name="icon" value="fa-pencil icon-red"/>
+            <column name="infotext" value="Konsil-Anfrage nicht abgeschlossen (Arzt)"/>
+            <where>id = 11</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="System" id="2.0.17.2">
+        <comment>updating councils, updating send items icons</comment>
+        <update tableName="favouritelist">
+            <column name="icon" value="fa-envelope-open icon-red"/>
+            <column name="infotext" value="Konsil-Anfrage muss versendet werden (MTA)"/>
+            <where>id = 9</where>
+        </update>
+        <update tableName="favouritelist">
+            <column name="icon" value="fa-envelope-open icon-red"/>
+            <column name="infotext" value="Konsil-Anfrage muss versendet werden (Sekretariat)"/>
+            <where>id = 10</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="System" id="2.0.17.3">
+        <comment>updating councils, waiting for reply</comment>
+        <update tableName="favouritelist">
+            <column name="icon" value="fa-spinner icon-orange"/>
+            <column name="infotext" value="Antwort auf Konsil steht aus (Konsiliararzt)"/>
+            <where>id = 15</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="System" id="2.0.17.4">
+        <comment>updating councils, reply present</comment>
+        <update tableName="favouritelist">
+            <column name="icon" value="fa-legal icon-red"/>
+            <column name="infotext" value="Antwort auf Konsil erhalten (Arzt)"/>
+            <where>id = 16</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="System" id="2.0.17.5">
+        <comment>updating councils, council completed</comment>
+        <update tableName="favouritelist">
+            <column name="icon" value="fa-stethoscope icon-green"/>
+            <column name="infotext" value="Konsil abgeschlossen"/>
+            <where>id = 14</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="System" id="2.0.17.6">
+        <comment>updating councils, council completed</comment>
+        <update tableName="favouritelist">
+            <column name="icon" value="fa-cab icon-red"/>
+            <where>id = 52</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>
