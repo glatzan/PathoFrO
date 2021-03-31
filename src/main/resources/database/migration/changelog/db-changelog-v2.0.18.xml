@@ -1,0 +1,26 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet author="System" id="2.0.18">
+        <comment>updating councils, rename active council</comment>
+        <update tableName="favouritelist">
+            <column name="infotext" value="Aktives Konsil"/>
+            <column name="name" value="Aktive Konsile"/>
+            <column name="icon" value="fa-stethoscope icon-grey"/>
+            <where>id = 14</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="System" id="2.0.18.1">
+        <comment>updating councils, council completed</comment>
+        <update tableName="favouritelist">
+            <column name="icon" value="fa-stethoscope icon-green"/>
+            <column name="infotext" value="Konsil abgeschlossen"/>
+            <column name="blocktaskarchival" value="false"/>
+            <where>id = 12</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

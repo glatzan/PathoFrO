@@ -251,7 +251,7 @@
                     <p:commandButton rendered="#{!pdfOrganizerDialog.viewOnly}"
                                      value="#{msg['dialog.pdfOrganizer.button.upload']}"
                                      icon="fa fa-cloud-upload"
-                                     actionListener="#{dialog.uploadDialog.initAndPrepareBean(pdfOrganizerDialog.dataLists,pdfOrganizerDialog.patient).initializeUploadFileTypes()}">
+                                     actionListener="#{dialog.uploadDialog.initAndPrepareBean([pdfOrganizerDialog.uploadTarget],pdfOrganizerDialog.patient).initializeUploadFileTypes()}">
 
                         <p:ajax event="dialogReturn"
                                 listener="#{pdfOrganizerDialog.onDefaultDialogReturn}"
@@ -265,7 +265,6 @@
                             rendered="#{pdfOrganizerDialog.enablePDFSelection and !pdfOrganizerDialog.viewOnly}"
                             disabled="#{!pdfOrganizerDialog.stream.renderPDF}"
                             actionListener="#{pdfOrganizerDialog.selectAndHide()}">
-
                     </p:commandButton>
 
                     <!-- Close button -->

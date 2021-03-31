@@ -24,3 +24,5 @@
 /nbdist/
 /.nb-gradle/
 /logs/
+
+/src/main/resources/database/liquibase.properties_prod

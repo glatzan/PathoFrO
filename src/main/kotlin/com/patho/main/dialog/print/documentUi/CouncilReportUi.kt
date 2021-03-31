@@ -59,7 +59,9 @@ class CouncilReportUi : AbstractTaskReportUi<CouncilReport, CouncilReportUi.Coun
      * Sets the data for the next print
      */
     override fun getNextTemplateConfiguration(): TemplateConfiguration<CouncilReport>? {
-        val address = contactListPointer?.customAddress ?: ""
+        val address = if(contactListPointer?.emptyAddress != true) contactListPointer?.customAddress ?: "" else ""
+
+
         printDocument.initialize(DocumentToken("patient", task.parent), DocumentToken("task", task),
                 DocumentToken("council", sharedData.selectedCouncil),
                 DocumentToken("address", address))

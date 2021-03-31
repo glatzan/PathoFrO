@@ -108,7 +108,7 @@
                         <h:outputLabel
                                 value="#{msg['dialog.createTask.bioBank.informedConsent.signed']}"/>
                         <p:commandLink style="margin-left:5px;"
-                                       actionListener="#{pdfOrganizerDialog.initAndPrepareBean(createTaskDialog.patient).selectMode()}">
+                                       actionListener="#{pdfOrganizerDialog.initAndPrepareBean(createTaskDialog.patient)}">
                             <p:ajax event="dialogReturn" update="@form" process="@form"
                                     listener="#{createTaskDialog.taskData.bioBank.onMediaSelectReturn}"/>
                             <i class="fa fa-search icon-grey"/>

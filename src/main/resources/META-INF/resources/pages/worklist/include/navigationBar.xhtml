@@ -12,7 +12,7 @@
 
             <!-- Name -->
             <h:commandLink
-                    oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+                    oncomplete="updateAndAutoScrollToSelectedElement('#patientNavigationScroll','.ui-state-highlight')"
                     update="navigationForm:patientList contentForm headerForm"
                     actionListener="#{centralHandler.onDeselectTask()}">
                 <h:outputFormat value="#{msg['body.navigation.overview']}">

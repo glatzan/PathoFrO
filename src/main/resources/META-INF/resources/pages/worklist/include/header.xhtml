@@ -26,7 +26,7 @@
 
                 <p:commandButton id="changeView" styleClass="hiddenButton"
                                  update="navigationForm:patientList contentForm headerForm"
-                                 oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+                                 oncomplete="updateAndAutoScrollToSelectedElement('#patientNavigationScroll','.ui-state-highlight')"
                                  actionListener="#{centralHandler.goToNavigation(centralHandler.navigationData.currentView)}"/>
             </h:panelGroup>
 
@@ -36,7 +36,7 @@
                     actionListener="#{searchAndAddPatientDialog.initAndPrepareBean().externalMode().persistPatient()}">
                 <p:ajax event="dialogReturn"
                         listener="#{dialogReturnHandler.onSearchForPatientReturn}"
-                        oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll;;ui-state-highlight')"
+                        oncomplete="updateAndAutoScrollToSelectedElement('#patientNavigationScroll','.ui-state-highlight')"
                         update="navigationForm:patientList contentForm headerForm"/>
             </p:commandButton>
         </h:panelGrid>

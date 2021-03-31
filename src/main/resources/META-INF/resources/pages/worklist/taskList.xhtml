@@ -9,8 +9,7 @@
         <h:outputLabel value="#{msg['body.taskList.headline']}"/>
     </h:panelGrid>
 
-    <p:panel style="width: 80%"
-             styleClass="defaultHistoHiddenTableContainer">
+    <p:panel styleClass="defaultHistoHiddenTableContainer">
         <p:dataTable var="taskOverview"
                      value="#{taskView.taskList}"
                      style="margin-top:10px;" styleClass="bigHistoDataTable"
@@ -19,6 +18,7 @@
 
             <p:ajax event="rowSelect"
                     listener="#{worklistHandler.addTaskToWorklist(taskView.selectedTask.id)}"
+                    oncomplete="updateAndAutoScrollToSelectedElement('#patientNavigationScroll','.ui-state-highlight')"
                     update="navigationForm:patientList contentForm:contentPanel headerForm"/>
 
             <!-- task id -->
@@ -159,29 +159,29 @@
             </h:panelGrid>
         </h:panelGrid>
 
-<!--
-        <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
-                    value="#{mainHandlerAction.localDate}">
-        </p:calendar>
+        <!--
+                <p:calendar pattern="dd.MM.yyyy" mask="true" converter="localDateConverter"
+                            value="#{mainHandlerAction.localDate}">
+                </p:calendar>
 
-        <p:commandButton value="Update DB" icon="fa fa-plus"
-                         actionListener="#{mainHandlerAction.test()}">
-        </p:commandButton>
-        <p:commandButton value="Expor" icon="fa fa-plus"
-                         actionListener="#{mainHandlerAction.test123()}">
-        </p:commandButton>
+                <p:commandButton value="Update DB" icon="fa fa-plus"
+                                 actionListener="#{mainHandlerAction.test()}">
+                </p:commandButton>
+                <p:commandButton value="Expor" icon="fa fa-plus"
+                                 actionListener="#{mainHandlerAction.test123()}">
+                </p:commandButton>
 
-        <p:commandButton value="Expor" icon="fa fa-plus"
-                         actionListener="#{mainHandlerAction.importCSV()}">
-        </p:commandButton>
+                <p:commandButton value="Expor" icon="fa fa-plus"
+                                 actionListener="#{mainHandlerAction.importCSV()}">
+                </p:commandButton>
 
-        <p:commandButton value="Refrec" icon="fa fa-plus" onclick="clickButtonFromBean('pw:refreshContentBtn')">
-        </p:commandButton>
+                <p:commandButton value="Refrec" icon="fa fa-plus" onclick="clickButtonFromBean('pw:refreshContentBtn')">
+                </p:commandButton>
 
-        <p:inputText value="#{mainHandlerAction.number}"/>
+                <p:inputText value="#{mainHandlerAction.number}"/>
 
-        <p:commandButton value="Slide" icon="fa fa-plus" actionListener="#{slideShowScannedDialog.initAndPrepareBean}">
-        </p:commandButton>-->
+                <p:commandButton value="Slide" icon="fa fa-plus" actionListener="#{slideShowScannedDialog.initAndPrepareBean}">
+                </p:commandButton>-->
     </p:panel>
 
 </ui:composition>

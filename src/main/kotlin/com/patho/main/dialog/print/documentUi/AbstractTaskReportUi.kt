@@ -87,7 +87,8 @@ abstract class AbstractTaskReportUi<T : PrintDocument, S : AbstractTaskReportUi.
      * Gets the address of the first selected contact
      */
     fun getAddressOfFirstSelectedContact(): String {
-        return sharedData.contactList.firstOrNull { p -> p.selected }?.customAddress ?: ""
+        val c = sharedData.contactList.firstOrNull { p -> p.selected } ?: return ""
+        return if (c.emptyAddress == false) c.customAddress ?: "" else ""
     }
 
     /**

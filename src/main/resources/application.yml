@@ -315,7 +315,7 @@ patho:
         content: fileRepository:templates/print/Report_Intern.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT
-        attributes: sides:keyword:one-side
+        attributes: "sides:keyword:one-side#fit-to-page:boolean:true"
         templateName: com.patho.main.template.print.DiagnosisReport
         uiClass: com.patho.main.dialog.print.documentUi.DiagnosisReportUi
         defaultOfType: true
@@ -330,7 +330,7 @@ patho:
         content: fileRepository:templates/print/Report_Intern_noLogo.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT
-        attributes: "sides:keyword:one-side#media:keyword:default,tray2"
+        attributes: "sides:keyword:one-side#media:keyword:default,tray2#fit-to-page:boolean:true"
         templateName: com.patho.main.template.print.DiagnosisReport
         uiClass: com.patho.main.dialog.print.documentUi.DiagnosisReportUi
         defaultOfType: false
@@ -345,7 +345,7 @@ patho:
         content: fileRepository:templates/print/Report_Extern.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT_EXTERN
-        attributes: sides:keyword:one-side
+        attributes: "sides:keyword:one-side#fit-to-page:boolean:true"
         templateName: com.patho.main.template.print.DiagnosisReport
         uiClass: com.patho.main.dialog.print.documentUi.DiagnosisReportUi
         defaultOfType: true
@@ -360,7 +360,7 @@ patho:
         content: fileRepository:templates/print/Report_Extern_noLogo.tex
         alternateContent: ""
         type: DIAGNOSIS_REPORT_EXTERN
-        attributes: "sides:keyword:one-side#media:keyword:default,tray2"
+        attributes: "sides:keyword:one-side#media:keyword:default,tray2#fit-to-page:boolean:true"
         templateName: com.patho.main.template.print.DiagnosisReport
         uiClass: com.patho.main.dialog.print.documentUi.DiagnosisReportUi
         defaultOfType: true
@@ -375,7 +375,7 @@ patho:
         content: fileRepository:templates/print/council.tex
         alternateContent: ""
         type: COUNCIL_REQUEST
-        attributes:
+        attributes: "#fit-to-page:boolean:true"
         templateName: com.patho.main.template.print.CouncilReport
         uiClass: com.patho.main.dialog.print.documentUi.CouncilReportUi
         defaultOfType: true
@@ -386,7 +386,7 @@ patho:
         content: fileRepository:templates/print_label/defaultLable.zpl
         alternateContent: ""
         type: LABLE
-        attributes:
+        attributes: "#fit-to-page:boolean:true"
         templateName: com.patho.main.template.print.SlideLable
         defaultOfType: true
         transientContent: false
@@ -396,7 +396,7 @@ patho:
         content: fileRepository:templates/print_label/testLable.zpl
         alternateContent: ""
         type: TEST_LABLE
-        attributes:
+        attributes: "#fit-to-page:boolean:true"
         templateName: com.patho.main.template.print.SlideLable
         defaultOfType: true
         transientContent: false
@@ -405,7 +405,7 @@ patho:
         name: Send Report
         content: fileRepository:templates/print/SendReport.tex
         alternateContent: ""
-        attributes:
+        attributes: "#fit-to-page:boolean:true"
         type: NOTIFICATION_SEND_REPORT
         templateName: com.patho.main.template.print.SendReport
         defaultOfType: true

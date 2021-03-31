@@ -23,18 +23,18 @@
         </ui:define>
 
         <ui:define name="content">
-            <p:scrollPanel styleClass="bodyScrollPanelStyle" id="contentScrollPane">
+            <div id="contentScrollPane" class="bodyScrollPanelStyle">
                 <h:panelGroup id="contentPanel">
                     <ui:include src="#{centralHandler.navigationData.getCenterView()}" />
                 </h:panelGroup>
-            </p:scrollPanel>
+            </div>
         </ui:define>
 
         <ui:define name="globalInclude">
             <h:form id="globalCommandsForm">
                 <!-- update all, for resize update -->
                 <p:remoteCommand name="refreshOnResize" process="@form"
-                                 oncomplete="updateAndAutoScrollToSelectedElement('navigationForm:patientNavigationScroll')"
+                                 oncomplete="updateAndAutoScrollToSelectedElement('#patientNavigationScroll','.ui-state-highlight')"
                                  update="navigationForm:patientList contentForm headerForm growlForm"/>
 
                 <!-- update conten, btn because of click event -->

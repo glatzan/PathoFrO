@@ -202,6 +202,8 @@ public class Worklist {
         if (select && !patient.equals(getSelectedPatient())) {
             selectPatient(patient);
         }
+
+        sortWordklist();
     }
 
     public void add(Task task) {
@@ -231,6 +233,8 @@ public class Worklist {
             else
                 getSelectedTaskInfo().setTask(task);
         }
+
+        sortWordklist();
     }
 
 

@@ -57,8 +57,7 @@ class JSONPatientMapper {
         patient.person.contact.email = ""
         patient.person.contact.phone = tel ?: ""
 
-        // patient.getPerson().setGender(getWeiblich().equals("1") ?
-        // Person.Gender.FEMALE : Person.Gender.MALE);
+        patient.person.gender = if (weiblich.equals("1")) Person.Gender.FEMALE else Person.Gender.MALE;
 
         return patient
     }

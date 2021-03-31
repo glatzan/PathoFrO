@@ -126,6 +126,23 @@ alter table histouser_aud drop constraint fkccrvl08714semjnjjlhiys095;
 alter table person_aud drop constraint fkeg2mwijn6o6kygiq6c8tniui2;
 alter table task_pdfcontainer_aud drop constraint fkc9rehqelphi08i4fpdmeqmgf8;
 
++v 2.0.26 (31.03.2021)
++++!: Changes address length in diagnosis reports
+
++v 2.0.25 (25.02.2021)
++++!: Genders from pdv are parsed correctly
++++!: Fixed address generation for external surgeons
++++!: Fixed empty address for consultations
++++!: Fixed footer of reports
+
+
++v 2.0.24 (31.01.2021)
++++!: Notification Dialog now prints personal letters correctly.
++++!: Scrolling should work correctly.
++++!: Worklist is sorted after new Patient or Task was added.
+++++: Added Quick-Button within Diagnosis-View.
++++!: Fit fit to page printing.
+
 +v 2.0.24 (05.01.2021)
 +++!: Archive Dialog Date Error Fixed
 +++*: Icons of consultation lists changed

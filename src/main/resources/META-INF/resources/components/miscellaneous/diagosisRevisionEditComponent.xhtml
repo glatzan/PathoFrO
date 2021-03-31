@@ -39,7 +39,14 @@
 
     <h:outputScript library="scripts" name="widgets/DiagnosisContainerComponentExtend.js"/>
 
-    <div class="ui-g ui-g-nopad" id="#{cc.attrs.clientId}">
+    <div class="ui-g ui-g-nopad diagnosisRevisionEdit" id="#{cc.attrs.clientId}">
+
+        <p:commandButton icon="fa fa-ellipsis-v" styleClass="option-menu" id="#{cc.attrs.widgetVar}_optionMenu"/>
+
+        <p:menu overlay="true" trigger="#{cc.attrs.widgetVar}_optionMenu" my="left top" at="left bottom">
+            <p:menuitem value="TODO"
+                        icon="fa fa-trash" styleClass="todoImplement"/>
+        </p:menu>
 
         <!-- ##################### name and summary ##################### -->
         <!-- diagonsis name-->

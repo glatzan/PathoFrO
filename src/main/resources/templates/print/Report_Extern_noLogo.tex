@@ -7,7 +7,7 @@
 \usepackage{tabularx} 
 \usepackage[T1]{fontenc}
 \usepackage{supertabular}
-\usepackage[left=2cm,right=2cm,top=3cm,bottom=2cm]{geometry}
+\usepackage[left=2cm,right=2cm,top=3cm,bottom=2.5cm]{geometry}
 \usepackage{amssymb}
 \usepackage{helvet} 
 \usepackage{lipsum} 
@@ -77,7 +77,7 @@
 % pat block
 {
 \scriptsize
-\begin{textblock}{100}(19, 8) 
+\begin{textblock}{75}(19, 8)
 \noindent $!patient.person.fullName\\
 $date.format('dd.MM.yyyy', $!patient.person.birthday)\\
 $!patient.person.contact.street \\

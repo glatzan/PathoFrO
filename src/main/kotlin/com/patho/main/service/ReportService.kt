@@ -212,7 +212,7 @@ open class ReportService @Autowired constructor(
 
 
         // checking address validity
-        if (!ReportAddressValidator.approveFaxAddress(container.contactAddress)) {
+        if (!ReportAddressValidator.approvePostalAddress(container.contactAddress)) {
             container.notification = reportIntentService.addHistoryEntry(execute.task, container.notification, execute.diagnosisRevision, failed = true, commentary = resourceBundle.get("report.feedback.fax.notValid", container.contactAddress), save = true).first
             return false
         }

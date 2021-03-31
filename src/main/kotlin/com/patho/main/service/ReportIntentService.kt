@@ -544,7 +544,7 @@ open class ReportIntentService @Autowired constructor(
         if (!addition1.isNullOrEmpty()) buffer.append("$addition1\r\n")
         if (!addition2.isNullOrEmpty()) buffer.append("$addition2\r\n")
         if (!street.isNullOrEmpty()) buffer.append("$street\r\n")
-        if (!postcode.isNullOrEmpty()) buffer.append("$postcode\r\n")
+        if (!postcode.isNullOrEmpty()) buffer.append("$postcode ")
         if (!town.isNullOrEmpty()) buffer.append("$town\r\n")
 
         return buffer.toString()
