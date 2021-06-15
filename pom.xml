@@ -49,7 +49,7 @@
 
         <postgresql.version>42.2.9</postgresql.version>
 
-        <pdfbox.version>2.0.18</pdfbox.version>
+        <pdfbox.version>2.0.24</pdfbox.version>
     </properties>
 
     <dependencies>
